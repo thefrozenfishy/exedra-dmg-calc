@@ -255,7 +255,7 @@
             <p class="hint-text">The best case against wave {{ waveIdx + 1 }}: every buff and debuff listed under "Buffs
                 &amp; Debuffs" below is active at the same time, at full stacks, with its conditions met. Effects that
                 can't count together count once, whichever gives the most damage: tiers that exclude each other (like
-                "while 5 / 4 / ... / 1 enemies remain" or Light Chain Lv 1-5), and the same kind of buff from a skill
+                Light Chain Lv 1-5), and the same kind of buff from a skill
                 and the switch skill replacing it, or from different follow-ups. Each skill is then launched in the
                 game's battle code against this wave.</p>
 

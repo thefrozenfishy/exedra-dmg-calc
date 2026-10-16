@@ -1,0 +1,4414 @@
+{
+ "generatedAt": "2026-10-16T10:51:18.448Z",
+ "seconds": 42,
+ "rows": [
+  {
+   "name": "A Tale of Cherry Blossoms",
+   "role": "Attacker",
+   "element": "Aqua",
+   "rarity": 5,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 0,
+     "engine": 0,
+     "diff": 0
+    }
+   ],
+   "dealer": {
+    "old": 201463,
+    "engine": 201463,
+    "ratio": 1,
+    "oldCrit": "80",
+    "engineCrit": 90
+   }
+  },
+  {
+   "name": "Absolute Rain",
+   "role": "Attacker",
+   "element": "Aqua",
+   "rarity": 5,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 0,
+     "engine": 0,
+     "diff": 0
+    }
+   ],
+   "dealer": {
+    "old": 397343,
+    "engine": 397343,
+    "ratio": 1,
+    "oldCrit": "30",
+    "engineCrit": 50
+   }
+  },
+  {
+   "name": "Absolute Venus",
+   "role": "Breaker",
+   "element": "Aqua",
+   "rarity": 5,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 40,
+     "engine": 40,
+     "diff": 0
+    },
+    {
+     "identity": "Aqua/-/-",
+     "old": 69.4,
+     "engine": 69.4,
+     "diff": 0
+    }
+   ],
+   "dealer": {
+    "old": 60190,
+    "engine": 60190,
+    "ratio": 1,
+    "oldCrit": "25",
+    "engineCrit": 25
+   }
+  },
+  {
+   "name": "Aqua Tempest",
+   "role": "Buffer",
+   "element": "Aqua",
+   "rarity": 5,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 357.49,
+     "engine": 350.5,
+     "diff": -6.99,
+     "why": [
+      {
+       "type": "UP_BUFF_EFFECT_VALUE",
+       "old": 0,
+       "engine": -31,
+       "diff": -31
+      },
+      {
+       "type": "ADDITIONAL_DAMAGE",
+       "old": 0,
+       "engine": -18,
+       "diff": -18
+      },
+      {
+       "type": "UP_ATK_RATIO",
+       "old": -42.8,
+       "engine": -42.8,
+       "diff": 0
+      },
+      {
+       "type": "UP_WEAK_ELEMENT_DMG_RATIO",
+       "old": -38.5,
+       "engine": -38.5,
+       "diff": 0
+      },
+      {
+       "type": "UP_GIV_DMG_RATIO",
+       "old": -23.1,
+       "engine": -23.1,
+       "diff": 0
+      }
+     ]
+    }
+   ],
+   "dealer": {
+    "old": 165913,
+    "engine": 193566,
+    "ratio": 1.1666716893793736,
+    "oldCrit": "10",
+    "engineCrit": 10
+   },
+   "why": [
+    {
+     "type": "UP_BUFF_EFFECT_VALUE",
+     "old": 0,
+     "engine": -31,
+     "diff": -31
+    },
+    {
+     "type": "ADDITIONAL_DAMAGE",
+     "old": 0,
+     "engine": -5.7,
+     "diff": -5.7
+    },
+    {
+     "type": "UP_WEAK_ELEMENT_DMG_RATIO",
+     "old": -38.5,
+     "engine": -34.1,
+     "diff": 4.4
+    },
+    {
+     "type": "UP_ATK_RATIO",
+     "old": -42.8,
+     "engine": -42.8,
+     "diff": 0
+    },
+    {
+     "type": "UP_GIV_DMG_RATIO",
+     "old": -23.1,
+     "engine": -23.1,
+     "diff": 0
+    }
+   ]
+  },
+  {
+   "name": "Ashley's Kioku",
+   "role": "Attacker",
+   "element": "Dark",
+   "rarity": 3,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 0,
+     "engine": 0,
+     "diff": 0
+    }
+   ],
+   "dealer": {
+    "old": 0,
+    "engine": 0,
+    "ratio": null,
+    "oldCrit": "10",
+    "engineCrit": 0
+   }
+  },
+  {
+   "name": "Assault Paranoia",
+   "role": "Breaker",
+   "element": "Dark",
+   "rarity": 5,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 0,
+     "engine": 0,
+     "diff": 0
+    },
+    {
+     "identity": "-/-/CURSE",
+     "old": 0,
+     "engine": 0,
+     "diff": 0
+    }
+   ],
+   "dealer": {
+    "old": 50290,
+    "engine": 50290,
+    "ratio": 1,
+    "oldCrit": "25",
+    "engineCrit": 45
+   }
+  },
+  {
+   "name": "Asuka's Kioku",
+   "role": "Attacker",
+   "element": "Aqua",
+   "rarity": 3,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 0,
+     "engine": 0,
+     "diff": 0
+    }
+   ],
+   "dealer": {
+    "old": 0,
+    "engine": 0,
+    "ratio": null,
+    "oldCrit": "10",
+    "engineCrit": 0
+   }
+  },
+  {
+   "name": "Atomo Arrabbiato",
+   "role": "Debuffer",
+   "element": "Forest",
+   "rarity": 5,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 63.57,
+     "engine": 55.13,
+     "diff": -8.44,
+     "why": [
+      {
+       "type": "UP_DEBUFF_EFFECT_VALUE",
+       "old": 0,
+       "engine": -11.4,
+       "diff": -11.4
+      },
+      {
+       "type": "DWN_ELEMENT_RESIST_ACCUM_RATIO",
+       "old": -11.5,
+       "engine": -16.3,
+       "diff": -4.8
+      },
+      {
+       "type": "DWN_DEF_RATIO",
+       "old": -13,
+       "engine": -13,
+       "diff": 0
+      },
+      {
+       "type": "UP_RCV_DMG_RATIO",
+       "old": -20.6,
+       "engine": -20.6,
+       "diff": 0
+      }
+     ]
+    },
+    {
+     "identity": "Forest/-/-",
+     "old": 69.31,
+     "engine": 72.01,
+     "diff": 2.7
+    },
+    {
+     "identity": "-/-/POISON",
+     "old": 63.57,
+     "engine": 72.98,
+     "diff": 9.41,
+     "why": [
+      {
+       "type": "UP_DEBUFF_EFFECT_VALUE",
+       "old": 0,
+       "engine": -11.4,
+       "diff": -11.4
+      },
+      {
+       "type": "DWN_ELEMENT_RESIST_ACCUM_RATIO",
+       "old": -11.5,
+       "engine": -16.3,
+       "diff": -4.8
+      },
+      {
+       "type": "DWN_DEF_RATIO",
+       "old": -13,
+       "engine": -13,
+       "diff": 0
+      },
+      {
+       "type": "UP_RCV_DMG_RATIO",
+       "old": -20.6,
+       "engine": -20.6,
+       "diff": 0
+      }
+     ]
+    },
+    {
+     "identity": "Forest/-/POISON",
+     "old": 69.31,
+     "engine": 91.8,
+     "diff": 22.49,
+     "why": [
+      {
+       "type": "UP_DEBUFF_EFFECT_VALUE",
+       "old": 0,
+       "engine": -13.1,
+       "diff": -13.1
+      },
+      {
+       "type": "DWN_ELEMENT_RESIST_ACCUM_RATIO",
+       "old": -14.5,
+       "engine": -24.5,
+       "diff": -10
+      },
+      {
+       "type": "DWN_DEF_RATIO",
+       "old": -13,
+       "engine": -13,
+       "diff": 0
+      },
+      {
+       "type": "UP_RCV_DMG_RATIO",
+       "old": -20.6,
+       "engine": -20.6,
+       "diff": 0
+      }
+     ]
+    }
+   ],
+   "dealer": {
+    "old": 92039,
+    "engine": 89765,
+    "ratio": 0.9752930822803377,
+    "oldCrit": "36",
+    "engineCrit": 36
+   }
+  },
+  {
+   "name": "Ayame's Kioku",
+   "role": "Buffer",
+   "element": "Flame",
+   "rarity": 3,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 43.75,
+     "engine": 43.75,
+     "diff": 0
+    }
+   ],
+   "dealer": {
+    "old": 0,
+    "engine": 0,
+    "ratio": null,
+    "oldCrit": "20",
+    "engineCrit": 0
+   }
+  },
+  {
+   "name": "Baldamente Fortissimo",
+   "role": "Defender",
+   "element": "Aqua",
+   "rarity": 5,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 49.5,
+     "engine": 49.5,
+     "diff": 0
+    }
+   ],
+   "dealer": {
+    "old": 163795,
+    "engine": 163795,
+    "ratio": 1,
+    "oldCrit": "10",
+    "engineCrit": 10
+   }
+  },
+  {
+   "name": "Bebe-O'-Lantern",
+   "role": "Debuffer",
+   "element": "Dark",
+   "rarity": 5,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 124.82,
+     "engine": 124.82,
+     "diff": 0
+    },
+    {
+     "identity": "-/-/CURSE",
+     "old": 202.81,
+     "engine": 202.81,
+     "diff": 0
+    }
+   ],
+   "dealer": {
+    "old": 141313,
+    "engine": 169509,
+    "ratio": 1.1995287057807844,
+    "oldCrit": "10",
+    "engineCrit": 10
+   },
+   "why": [
+    {
+     "type": "UP_DEBUFF_EFFECT_VALUE",
+     "old": 0,
+     "engine": -22.4,
+     "diff": -22.4
+    },
+    {
+     "type": "UP_ATK_ACCUM_RATIO",
+     "old": 0,
+     "engine": -16.6,
+     "diff": -16.6
+    },
+    {
+     "type": "DWN_DEF_RATIO",
+     "old": -32.4,
+     "engine": -45.5,
+     "diff": -13.1
+    },
+    {
+     "type": "UP_RCV_DMG_RATIO",
+     "old": -34.2,
+     "engine": -39.4,
+     "diff": -5.2
+    }
+   ]
+  },
+  {
+   "name": "Brilliant Beam",
+   "role": "Buffer",
+   "element": "Flame",
+   "rarity": 4,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 82.21,
+     "engine": 101.15,
+     "diff": 18.94,
+     "why": [
+      {
+       "type": "UP_BUFF_EFFECT_VALUE",
+       "old": 0,
+       "engine": -9.4,
+       "diff": -9.4
+      },
+      {
+       "type": "UP_ATK_RATIO",
+       "old": -34.1,
+       "engine": -38.4,
+       "diff": -4.2
+      },
+      {
+       "type": "UP_GIV_DMG_RATIO",
+       "old": -16.7,
+       "engine": -19.4,
+       "diff": -2.7
+      }
+     ]
+    }
+   ],
+   "dealer": {
+    "old": 63455,
+    "engine": 70048,
+    "ratio": 1.1039004018595855,
+    "oldCrit": "10",
+    "engineCrit": 10
+   }
+  },
+  {
+   "name": "Buon Natale Grazioso",
+   "role": "Buffer",
+   "element": "Aqua",
+   "rarity": 5,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 272.75,
+     "engine": 272.77,
+     "diff": 0.02
+    }
+   ],
+   "dealer": {
+    "old": 162108,
+    "engine": 162108,
+    "ratio": 1,
+    "oldCrit": "10",
+    "engineCrit": 10
+   }
+  },
+  {
+   "name": "Carnival Cuddleboom",
+   "role": "Buffer",
+   "element": "Void",
+   "rarity": 5,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 212.35,
+     "engine": 212.37,
+     "diff": 0.02
+    },
+    {
+     "identity": "Void/-/-",
+     "old": 341.37,
+     "engine": 341.39,
+     "diff": 0.02
+    }
+   ],
+   "dealer": {
+    "old": 176306,
+    "engine": 176306,
+    "ratio": 1,
+    "oldCrit": "70",
+    "engineCrit": 70
+   }
+  },
+  {
+   "name": "Cherry Ballad",
+   "role": "Debuffer",
+   "element": "Light",
+   "rarity": 5,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 95.48,
+     "engine": 95.48,
+     "diff": 0
+    },
+    {
+     "identity": "Light/-/-",
+     "old": 127.38,
+     "engine": 127.38,
+     "diff": 0
+    },
+    {
+     "identity": "Dark/-/-",
+     "old": 127.38,
+     "engine": 127.38,
+     "diff": 0
+    }
+   ],
+   "dealer": {
+    "old": 103138,
+    "engine": 103138,
+    "ratio": 1,
+    "oldCrit": "10",
+    "engineCrit": 10
+   }
+  },
+  {
+   "name": "Cherry Blizzard",
+   "role": "Breaker",
+   "element": "Dark",
+   "rarity": 5,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 0,
+     "engine": 0,
+     "diff": 0
+    },
+    {
+     "identity": "Light/-/-",
+     "old": 5,
+     "engine": 5,
+     "diff": 0
+    },
+    {
+     "identity": "Dark/-/-",
+     "old": 5,
+     "engine": 5,
+     "diff": 0
+    }
+   ],
+   "dealer": {
+    "old": 40410,
+    "engine": 40410,
+    "ratio": 1,
+    "oldCrit": "10",
+    "engineCrit": 10
+   }
+  },
+  {
+   "name": "Circle Of Fire",
+   "role": "Healer",
+   "element": "Flame",
+   "rarity": 4,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 0,
+     "engine": 0,
+     "diff": 0
+    },
+    {
+     "identity": "Flame/-/-",
+     "old": 0,
+     "engine": 0,
+     "diff": 0
+    }
+   ],
+   "dealer": {
+    "old": 14708,
+    "engine": 14708,
+    "ratio": 1,
+    "oldCrit": "10",
+    "engineCrit": 10
+   }
+  },
+  {
+   "name": "Concentrated Missile Fire",
+   "role": "Attacker",
+   "element": "Dark",
+   "rarity": 5,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 0,
+     "engine": 0,
+     "diff": 0
+    }
+   ],
+   "dealer": {
+    "old": 195332,
+    "engine": 195332,
+    "ratio": 1,
+    "oldCrit": "10",
+    "engineCrit": 10
+   }
+  },
+  {
+   "name": "Crimson Confectioner",
+   "role": "Breaker",
+   "element": "Flame",
+   "rarity": 5,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 35.41,
+     "engine": 35.42,
+     "diff": 0
+    },
+    {
+     "identity": "Flame/-/-",
+     "old": 35.41,
+     "engine": 35.42,
+     "diff": 0
+    }
+   ],
+   "dealer": {
+    "old": 47358,
+    "engine": 47358,
+    "ratio": 1,
+    "oldCrit": "25",
+    "engineCrit": 45
+   }
+  },
+  {
+   "name": "Dark Art Dominion",
+   "role": "Attacker",
+   "element": "Void",
+   "rarity": 5,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 0,
+     "engine": 0,
+     "diff": 0
+    }
+   ],
+   "dealer": {
+    "old": 289379,
+    "engine": 329294,
+    "ratio": 1.1379332985461972,
+    "oldCrit": "70",
+    "engineCrit": 70
+   },
+   "why": [
+    {
+     "type": "UP_CTD_RATIO",
+     "old": 0,
+     "engine": -12.1,
+     "diff": -12.1
+    },
+    {
+     "type": "UP_CTD_ACCUM_RATIO",
+     "old": -17.2,
+     "engine": -15.2,
+     "diff": 2.1
+    },
+    {
+     "type": "UP_GIV_DMG_RATIO",
+     "old": -33.3,
+     "engine": -33.3,
+     "diff": 0
+    },
+    {
+     "type": "UP_ATK_RATIO",
+     "old": -23,
+     "engine": -23,
+     "diff": 0
+    },
+    {
+     "type": "UP_WEAK_ELEMENT_DMG_RATIO",
+     "old": -20,
+     "engine": -20,
+     "diff": 0
+    }
+   ]
+  },
+  {
+   "name": "Diamond Splash",
+   "role": "Breaker",
+   "element": "Aqua",
+   "rarity": 4,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 0,
+     "engine": 0,
+     "diff": 0
+    }
+   ],
+   "dealer": {
+    "old": 24889,
+    "engine": 24889,
+    "ratio": 1,
+    "oldCrit": "10",
+    "engineCrit": 10
+   }
+  },
+  {
+   "name": "Doppel of Invitations",
+   "role": "Breaker",
+   "element": "Light",
+   "rarity": 5,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 0,
+     "engine": 0,
+     "diff": 0
+    },
+    {
+     "identity": "-/Attacker/-",
+     "old": 25,
+     "engine": 25,
+     "diff": 0
+    }
+   ],
+   "dealer": {
+    "old": 45531,
+    "engine": 45531,
+    "ratio": 1,
+    "oldCrit": "30",
+    "engineCrit": 30
+   }
+  },
+  {
+   "name": "Doppel of Silence",
+   "role": "Healer",
+   "element": "Dark",
+   "rarity": 5,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 24.92,
+     "engine": 34.9,
+     "diff": 9.97,
+     "why": [
+      {
+       "type": "UP_ATK_RATIO",
+       "old": -20,
+       "engine": -25.9,
+       "diff": -5.9
+      }
+     ]
+    }
+   ],
+   "dealer": {
+    "old": 68217,
+    "engine": 73663,
+    "ratio": 1.0798334725948078,
+    "oldCrit": "20",
+    "engineCrit": 30
+   }
+  },
+  {
+   "name": "Désintégration",
+   "role": "Debuffer",
+   "element": "Aqua",
+   "rarity": 5,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 111.03,
+     "engine": 132.14,
+     "diff": 21.11,
+     "why": [
+      {
+       "type": "UP_DEBUFF_EFFECT_VALUE",
+       "old": 0,
+       "engine": -16.5,
+       "diff": -16.5
+      },
+      {
+       "type": "DWN_ELEMENT_RESIST_ACCUM_RATIO",
+       "old": 0,
+       "engine": -9.1,
+       "diff": -9.1
+      },
+      {
+       "type": "UP_RCV_DMG_RATIO",
+       "old": -20.6,
+       "engine": -20.6,
+       "diff": 0
+      },
+      {
+       "type": "DWN_DEF_RATIO",
+       "old": -25.9,
+       "engine": -25.9,
+       "diff": 0
+      },
+      {
+       "type": "DWN_DEF_ACCUM_RATIO",
+       "old": -19.4,
+       "engine": -19.4,
+       "diff": 0
+      }
+     ]
+    },
+    {
+     "identity": "Aqua/-/-",
+     "old": 143.7,
+     "engine": 168.07,
+     "diff": 24.37,
+     "why": [
+      {
+       "type": "UP_DEBUFF_EFFECT_VALUE",
+       "old": 0,
+       "engine": -18.7,
+       "diff": -18.7
+      },
+      {
+       "type": "DWN_ELEMENT_RESIST_ACCUM_RATIO",
+       "old": 0,
+       "engine": -9.1,
+       "diff": -9.1
+      },
+      {
+       "type": "UP_RCV_DMG_RATIO",
+       "old": -17.9,
+       "engine": -17.9,
+       "diff": 0
+      },
+      {
+       "type": "UP_AIM_RCV_DMG_RATIO",
+       "old": -13.4,
+       "engine": -13.4,
+       "diff": 0
+      },
+      {
+       "type": "DWN_DEF_RATIO",
+       "old": -25.9,
+       "engine": -25.9,
+       "diff": 0
+      },
+      {
+       "type": "DWN_DEF_ACCUM_RATIO",
+       "old": -19.4,
+       "engine": -19.4,
+       "diff": 0
+      }
+     ]
+    }
+   ],
+   "dealer": {
+    "old": 269384,
+    "engine": 155217,
+    "ratio": 0.5761923499539691,
+    "oldCrit": "10",
+    "engineCrit": 10
+   },
+   "why": [
+    {
+     "type": "UP_DEBUFF_EFFECT_VALUE",
+     "old": 0,
+     "engine": -18.7,
+     "diff": -18.7
+    },
+    {
+     "type": "DWN_ELEMENT_RESIST_ACCUM_RATIO",
+     "old": 0,
+     "engine": -9.1,
+     "diff": -9.1
+    },
+    {
+     "type": "UP_RCV_DMG_RATIO",
+     "old": -17.9,
+     "engine": -17.9,
+     "diff": 0
+    },
+    {
+     "type": "UP_AIM_RCV_DMG_RATIO",
+     "old": -13.4,
+     "engine": -13.4,
+     "diff": 0
+    },
+    {
+     "type": "DWN_DEF_RATIO",
+     "old": -25.9,
+     "engine": -25.9,
+     "diff": 0
+    },
+    {
+     "type": "DWN_DEF_ACCUM_RATIO",
+     "old": -19.4,
+     "engine": -19.4,
+     "diff": 0
+    }
+   ]
+  },
+  {
+   "name": "Evoluzione Presente",
+   "role": "Attacker",
+   "element": "Aqua",
+   "rarity": 5,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 0,
+     "engine": 0,
+     "diff": 0
+    },
+    {
+     "identity": "Aqua/-/-",
+     "old": 30,
+     "engine": 30,
+     "diff": 0
+    },
+    {
+     "identity": "-/Breaker/-",
+     "old": 30,
+     "engine": 30,
+     "diff": 0
+    },
+    {
+     "identity": "Aqua/Breaker/-",
+     "old": 60,
+     "engine": 60,
+     "diff": 0
+    }
+   ],
+   "dealer": {
+    "old": 321871,
+    "engine": 341988,
+    "ratio": 1.0625001941771703,
+    "oldCrit": "80",
+    "engineCrit": 80
+   }
+  },
+  {
+   "name": "Falsified Phenomena",
+   "role": "Attacker",
+   "element": "Dark",
+   "rarity": 5,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 0,
+     "engine": 0,
+     "diff": 0
+    },
+    {
+     "identity": "Dark/-/-",
+     "old": 43,
+     "engine": 43,
+     "diff": 0
+    }
+   ],
+   "dealer": {
+    "old": 220696,
+    "engine": 372735,
+    "ratio": 1.6889069126762606,
+    "oldCrit": "40",
+    "engineCrit": 40
+   },
+   "why": [
+    {
+     "type": "UP_CTD_FIXED",
+     "old": 0,
+     "engine": -25,
+     "diff": -25
+    },
+    {
+     "type": "UP_GIV_DMG_RATIO",
+     "old": -13.3,
+     "engine": -31.6,
+     "diff": -18.2
+    },
+    {
+     "type": "UP_ELEMENT_DMG_RATE_RATIO",
+     "old": -20,
+     "engine": -15.8,
+     "diff": 4.2
+    },
+    {
+     "type": "UP_AIM_RCV_DMG_RATIO",
+     "old": -9.1,
+     "engine": -9.1,
+     "diff": 0
+    },
+    {
+     "type": "UP_ATK_RATIO",
+     "old": -25.9,
+     "engine": -25.9,
+     "diff": 0
+    }
+   ]
+  },
+  {
+   "name": "Final Fatebloom",
+   "role": "Breaker",
+   "element": "Dark",
+   "rarity": 5,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 19.94,
+     "engine": 19.94,
+     "diff": 0
+    },
+    {
+     "identity": "Dark/-/-",
+     "old": 31.93,
+     "engine": 31.93,
+     "diff": 0
+    },
+    {
+     "identity": "-/Attacker/-",
+     "old": 19.94,
+     "engine": 19.95,
+     "diff": 0.02
+    },
+    {
+     "identity": "Dark/Attacker/-",
+     "old": 31.93,
+     "engine": 31.95,
+     "diff": 0.02
+    }
+   ],
+   "dealer": {
+    "old": 48541,
+    "engine": 48541,
+    "ratio": 1,
+    "oldCrit": "20",
+    "engineCrit": 20
+   }
+  },
+  {
+   "name": "Fiore Finale",
+   "role": "Attacker",
+   "element": "Forest",
+   "rarity": 5,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 0,
+     "engine": 0,
+     "diff": 0
+    },
+    {
+     "identity": "Forest/-/-",
+     "old": 0,
+     "engine": 0,
+     "diff": 0
+    }
+   ],
+   "dealer": {
+    "old": 385414,
+    "engine": 442097,
+    "ratio": 1.1470704229737374,
+    "oldCrit": "10",
+    "engineCrit": 10
+   },
+   "why": [
+    {
+     "type": "UP_ELEMENT_DMG_RATE_RATIO",
+     "old": 0,
+     "engine": -12.8,
+     "diff": -12.8
+    },
+    {
+     "type": "UP_GIV_DMG_RATIO",
+     "old": -41.2,
+     "engine": -35.9,
+     "diff": 5.3
+    },
+    {
+     "type": "UP_ATK_RATIO",
+     "old": -33.3,
+     "engine": -33.3,
+     "diff": 0
+    }
+   ]
+  },
+  {
+   "name": "Flame Waltz",
+   "role": "Buffer",
+   "element": "Flame",
+   "rarity": 5,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 198.77,
+     "engine": 236.14,
+     "diff": 37.36,
+     "why": [
+      {
+       "type": "UP_BUFF_EFFECT_VALUE",
+       "old": 0,
+       "engine": -27.5,
+       "diff": -27.5
+      },
+      {
+       "type": "UP_WEAK_ELEMENT_DMG_RATIO",
+       "old": 0,
+       "engine": -11.1,
+       "diff": -11.1
+      },
+      {
+       "type": "UP_ATK_RATIO",
+       "old": -31,
+       "engine": -31,
+       "diff": 0
+      },
+      {
+       "type": "UP_CTD_FIXED",
+       "old": -20.8,
+       "engine": -20.8,
+       "diff": 0
+      },
+      {
+       "type": "UP_GIV_DMG_RATIO",
+       "old": -27.3,
+       "engine": -27.3,
+       "diff": 0
+      },
+      {
+       "type": "UP_CTD_ACCUM_RATIO",
+       "old": -12.5,
+       "engine": -12.5,
+       "diff": 0
+      }
+     ]
+    }
+   ],
+   "dealer": {
+    "old": 125024,
+    "engine": 140652,
+    "ratio": 1.125,
+    "oldCrit": "77.5",
+    "engineCrit": 77.5
+   },
+   "why": [
+    {
+     "type": "UP_BUFF_EFFECT_VALUE",
+     "old": 0,
+     "engine": -27.5,
+     "diff": -27.5
+    },
+    {
+     "type": "UP_WEAK_ELEMENT_DMG_RATIO",
+     "old": 0,
+     "engine": -11.1,
+     "diff": -11.1
+    },
+    {
+     "type": "UP_ATK_RATIO",
+     "old": -31,
+     "engine": -31,
+     "diff": 0
+    },
+    {
+     "type": "UP_CTD_FIXED",
+     "old": -20.8,
+     "engine": -20.8,
+     "diff": 0
+    },
+    {
+     "type": "UP_GIV_DMG_RATIO",
+     "old": -27.3,
+     "engine": -27.3,
+     "diff": 0
+    },
+    {
+     "type": "UP_CTD_ACCUM_RATIO",
+     "old": -12.5,
+     "engine": -12.5,
+     "diff": 0
+    }
+   ]
+  },
+  {
+   "name": "Floral Ironspike",
+   "role": "Attacker",
+   "element": "Forest",
+   "rarity": 5,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 0,
+     "engine": 0,
+     "diff": 0
+    },
+    {
+     "identity": "Forest/-/-",
+     "old": 30,
+     "engine": 30,
+     "diff": 0
+    },
+    {
+     "identity": "-/Breaker/-",
+     "old": 0,
+     "engine": 0,
+     "diff": 0
+    },
+    {
+     "identity": "Forest/Breaker/-",
+     "old": 30,
+     "engine": 30,
+     "diff": 0
+    }
+   ],
+   "dealer": {
+    "old": 409029,
+    "engine": 409029,
+    "ratio": 1,
+    "oldCrit": "40",
+    "engineCrit": 50
+   }
+  },
+  {
+   "name": "Folter Gefängnis",
+   "role": "Defender",
+   "element": "Forest",
+   "rarity": 5,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 16.67,
+     "engine": 16.67,
+     "diff": 0
+    }
+   ],
+   "dealer": {
+    "old": 26353,
+    "engine": 26353,
+    "ratio": 1,
+    "oldCrit": "25",
+    "engineCrit": 25
+   }
+  },
+  {
+   "name": "Glittering Hurricane",
+   "role": "Breaker",
+   "element": "Void",
+   "rarity": 4,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 0,
+     "engine": 0,
+     "diff": 0
+    }
+   ],
+   "dealer": {
+    "old": 15057,
+    "engine": 15057,
+    "ratio": 1,
+    "oldCrit": "10",
+    "engineCrit": 10
+   }
+  },
+  {
+   "name": "Glitterjoy Snow Globe",
+   "role": "Healer",
+   "element": "Flame",
+   "rarity": 5,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 68.66,
+     "engine": 68.67,
+     "diff": 0
+    }
+   ],
+   "dealer": {
+    "old": 65445,
+    "engine": 65445,
+    "ratio": 1,
+    "oldCrit": "10",
+    "engineCrit": 10
+   }
+  },
+  {
+   "name": "Grandioso Sinfonia",
+   "role": "Healer",
+   "element": "Aqua",
+   "rarity": 5,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 50.95,
+     "engine": 50.95,
+     "diff": 0
+    },
+    {
+     "identity": "Aqua/-/-",
+     "old": 66.04,
+     "engine": 66.05,
+     "diff": 0
+    }
+   ],
+   "dealer": {
+    "old": 74230,
+    "engine": 74230,
+    "ratio": 1,
+    "oldCrit": "25",
+    "engineCrit": 35
+   }
+  },
+  {
+   "name": "Groundhog Daze",
+   "role": "Breaker",
+   "element": "Void",
+   "rarity": 5,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 16.67,
+     "engine": 16.67,
+     "diff": 0
+    }
+   ],
+   "dealer": {
+    "old": 62307,
+    "engine": 62307,
+    "ratio": 1,
+    "oldCrit": "10",
+    "engineCrit": 10
+   }
+  },
+  {
+   "name": "Hanna's Kioku",
+   "role": "Breaker",
+   "element": "Dark",
+   "rarity": 3,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 0,
+     "engine": 0,
+     "diff": 0
+    }
+   ],
+   "dealer": {
+    "old": 0,
+    "engine": 0,
+    "ratio": null,
+    "oldCrit": "10",
+    "engineCrit": 0
+   }
+  },
+  {
+   "name": "Hazuki's Kioku",
+   "role": "Debuffer",
+   "element": "Light",
+   "rarity": 3,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 29.33,
+     "engine": 29.34,
+     "diff": 0
+    }
+   ],
+   "dealer": {
+    "old": 0,
+    "engine": 0,
+    "ratio": null,
+    "oldCrit": "10",
+    "engineCrit": 0
+   }
+  },
+  {
+   "name": "Himika's Kioku",
+   "role": "Buffer",
+   "element": "Flame",
+   "rarity": 3,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 22.92,
+     "engine": 27.68,
+     "diff": 4.77
+    }
+   ],
+   "dealer": {
+    "old": 0,
+    "engine": 0,
+    "ratio": null,
+    "oldCrit": "28",
+    "engineCrit": 0
+   }
+  },
+  {
+   "name": "Hollow Woman",
+   "role": "Buffer",
+   "element": "Light",
+   "rarity": 5,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 350.57,
+     "engine": 350.6,
+     "diff": 0.03
+    }
+   ],
+   "dealer": {
+    "old": 230649,
+    "engine": 230649,
+    "ratio": 1,
+    "oldCrit": "10",
+    "engineCrit": 10
+   }
+  },
+  {
+   "name": "Infinite Poseidon",
+   "role": "Breaker",
+   "element": "Aqua",
+   "rarity": 5,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 0,
+     "engine": 0,
+     "diff": 0
+    }
+   ],
+   "dealer": {
+    "old": 45760,
+    "engine": 45760,
+    "ratio": 1,
+    "oldCrit": "10",
+    "engineCrit": 10
+   }
+  },
+  {
+   "name": "Invisible Assassin",
+   "role": "Attacker",
+   "element": "Void",
+   "rarity": 4,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 0,
+     "engine": 0,
+     "diff": 0
+    }
+   ],
+   "dealer": {
+    "old": 95841,
+    "engine": 119744,
+    "ratio": 1.2494026564831335,
+    "oldCrit": "10",
+    "engineCrit": 10
+   },
+   "why": [
+    {
+     "type": "UP_ATK_ACCUM_RATIO",
+     "old": 0,
+     "engine": -20,
+     "diff": -20
+    },
+    {
+     "type": "UP_GIV_DMG_RATIO",
+     "old": -16.7,
+     "engine": -16.7,
+     "diff": 0
+    }
+   ]
+  },
+  {
+   "name": "Judgement Earth",
+   "role": "Healer",
+   "element": "Forest",
+   "rarity": 5,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 20,
+     "engine": 20,
+     "diff": 0
+    }
+   ],
+   "dealer": {
+    "old": 25899,
+    "engine": 25899,
+    "ratio": 1,
+    "oldCrit": "10",
+    "engineCrit": 10
+   }
+  },
+  {
+   "name": "Kako's Kioku",
+   "role": "Attacker",
+   "element": "Forest",
+   "rarity": 3,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 0,
+     "engine": 0,
+     "diff": 0
+    }
+   ],
+   "dealer": {
+    "old": 0,
+    "engine": 0,
+    "ratio": null,
+    "oldCrit": "10",
+    "engineCrit": 0
+   }
+  },
+  {
+   "name": "Karin's Kioku",
+   "role": "Breaker",
+   "element": "Flame",
+   "rarity": 3,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 0,
+     "engine": 0,
+     "diff": 0
+    }
+   ],
+   "dealer": {
+    "old": 0,
+    "engine": 0,
+    "ratio": null,
+    "oldCrit": "10",
+    "engineCrit": 0
+   }
+  },
+  {
+   "name": "Kiss-shot",
+   "role": "Attacker",
+   "element": "Flame",
+   "rarity": 5,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 0,
+     "engine": 0,
+     "diff": 0
+    }
+   ],
+   "dealer": {
+    "old": 264055,
+    "engine": 308064,
+    "ratio": 1.1666660354850316,
+    "oldCrit": "10",
+    "engineCrit": 10
+   },
+   "why": [
+    {
+     "type": "UP_GIV_DMG_RATIO",
+     "old": 0,
+     "engine": -14.3,
+     "diff": -14.3
+    },
+    {
+     "type": "UP_GIV_DMG_ACCUM_RATIO",
+     "old": -16.7,
+     "engine": -14.3,
+     "diff": 2.4
+    },
+    {
+     "type": "UP_ATK_RATIO",
+     "old": -31,
+     "engine": -31,
+     "diff": 0
+    },
+    {
+     "type": "UP_WEAK_ELEMENT_DMG_RATIO",
+     "old": -14.3,
+     "engine": -14.3,
+     "diff": 0
+    }
+   ]
+  },
+  {
+   "name": "Kokoro's Kioku",
+   "role": "Defender",
+   "element": "Light",
+   "rarity": 3,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 0,
+     "engine": 0,
+     "diff": 0
+    }
+   ],
+   "dealer": {
+    "old": 0,
+    "engine": 0,
+    "ratio": null,
+    "oldCrit": "10",
+    "engineCrit": 0
+   }
+  },
+  {
+   "name": "Konoha's Kioku",
+   "role": "Healer",
+   "element": "Aqua",
+   "rarity": 3,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 0,
+     "engine": 0,
+     "diff": 0
+    }
+   ],
+   "dealer": {
+    "old": 0,
+    "engine": 0,
+    "ratio": null,
+    "oldCrit": "10",
+    "engineCrit": 0
+   }
+  },
+  {
+   "name": "Kugatachi",
+   "role": "Attacker",
+   "element": "Flame",
+   "rarity": 5,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 0,
+     "engine": 0,
+     "diff": 0
+    }
+   ],
+   "dealer": {
+    "old": 307171,
+    "engine": 371164,
+    "ratio": 1.2083302134641616,
+    "oldCrit": "10",
+    "engineCrit": 10
+   },
+   "why": [
+    {
+     "type": "UP_WEAK_ELEMENT_DMG_RATIO",
+     "old": 0,
+     "engine": -17.2,
+     "diff": -17.2
+    },
+    {
+     "type": "UP_ATK_RATIO",
+     "old": -37.4,
+     "engine": -37.4,
+     "diff": 0
+    },
+    {
+     "type": "UP_GIV_DMG_RATIO",
+     "old": -33.3,
+     "engine": -33.3,
+     "diff": 0
+    }
+   ]
+  },
+  {
+   "name": "Kush's Kioku",
+   "role": "Attacker",
+   "element": "Dark",
+   "rarity": 3,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 0,
+     "engine": 0,
+     "diff": 0
+    }
+   ],
+   "dealer": {
+    "old": 0,
+    "engine": 0,
+    "ratio": null,
+    "oldCrit": "28",
+    "engineCrit": 0
+   }
+  },
+  {
+   "name": "L'Ombre",
+   "role": "Buffer",
+   "element": "Dark",
+   "rarity": 5,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 218.46,
+     "engine": 256.51,
+     "diff": 38.04,
+     "why": [
+      {
+       "type": "UP_BUFF_EFFECT_VALUE",
+       "old": 0,
+       "engine": -27.3,
+       "diff": -27.3
+      },
+      {
+       "type": "UP_GIV_DMG_RATIO",
+       "old": -40.3,
+       "engine": -46.7,
+       "diff": -6.4
+      },
+      {
+       "type": "UP_WEAK_ELEMENT_DMG_RATIO",
+       "old": -23.8,
+       "engine": -23.8,
+       "diff": 0
+      },
+      {
+       "type": "UP_ATK_CONSUME_RATIO",
+       "old": -31,
+       "engine": -31,
+       "diff": 0
+      }
+     ]
+    },
+    {
+     "identity": "Light/-/-",
+     "old": 218.46,
+     "engine": 256.51,
+     "diff": 38.04,
+     "why": [
+      {
+       "type": "UP_BUFF_EFFECT_VALUE",
+       "old": 0,
+       "engine": -27.3,
+       "diff": -27.3
+      },
+      {
+       "type": "UP_GIV_DMG_RATIO",
+       "old": -40.3,
+       "engine": -46.7,
+       "diff": -6.4
+      },
+      {
+       "type": "UP_WEAK_ELEMENT_DMG_RATIO",
+       "old": -23.8,
+       "engine": -23.8,
+       "diff": 0
+      },
+      {
+       "type": "UP_ATK_CONSUME_RATIO",
+       "old": -31,
+       "engine": -31,
+       "diff": 0
+      }
+     ]
+    },
+    {
+     "identity": "Dark/-/-",
+     "old": 218.46,
+     "engine": 256.51,
+     "diff": 38.04,
+     "why": [
+      {
+       "type": "UP_BUFF_EFFECT_VALUE",
+       "old": 0,
+       "engine": -27.3,
+       "diff": -27.3
+      },
+      {
+       "type": "UP_GIV_DMG_RATIO",
+       "old": -40.3,
+       "engine": -46.7,
+       "diff": -6.4
+      },
+      {
+       "type": "UP_WEAK_ELEMENT_DMG_RATIO",
+       "old": -23.8,
+       "engine": -23.8,
+       "diff": 0
+      },
+      {
+       "type": "UP_ATK_CONSUME_RATIO",
+       "old": -31,
+       "engine": -31,
+       "diff": 0
+      }
+     ]
+    },
+    {
+     "identity": "-/Attacker/-",
+     "old": 317.09,
+     "engine": 367.06,
+     "diff": 49.97,
+     "why": [
+      {
+       "type": "UP_BUFF_EFFECT_VALUE",
+       "old": 0,
+       "engine": -31.8,
+       "diff": -31.8
+      },
+      {
+       "type": "UP_GIV_DMG_RATIO",
+       "old": -40.3,
+       "engine": -46.7,
+       "diff": -6.4
+      },
+      {
+       "type": "UP_WEAK_ELEMENT_DMG_RATIO",
+       "old": -23.8,
+       "engine": -23.8,
+       "diff": 0
+      },
+      {
+       "type": "UP_ATK_RATIO",
+       "old": -23.6,
+       "engine": -23.7,
+       "diff": 0
+      },
+      {
+       "type": "UP_ATK_CONSUME_RATIO",
+       "old": -23.6,
+       "engine": -23.7,
+       "diff": 0
+      }
+     ]
+    },
+    {
+     "identity": "Light/Attacker/-",
+     "old": 317.09,
+     "engine": 367.06,
+     "diff": 49.97,
+     "why": [
+      {
+       "type": "UP_BUFF_EFFECT_VALUE",
+       "old": 0,
+       "engine": -31.8,
+       "diff": -31.8
+      },
+      {
+       "type": "UP_GIV_DMG_RATIO",
+       "old": -40.3,
+       "engine": -46.7,
+       "diff": -6.4
+      },
+      {
+       "type": "UP_WEAK_ELEMENT_DMG_RATIO",
+       "old": -23.8,
+       "engine": -23.8,
+       "diff": 0
+      },
+      {
+       "type": "UP_ATK_RATIO",
+       "old": -23.6,
+       "engine": -23.7,
+       "diff": 0
+      },
+      {
+       "type": "UP_ATK_CONSUME_RATIO",
+       "old": -23.6,
+       "engine": -23.7,
+       "diff": 0
+      }
+     ]
+    },
+    {
+     "identity": "Dark/Attacker/-",
+     "old": 317.09,
+     "engine": 367.06,
+     "diff": 49.97,
+     "why": [
+      {
+       "type": "UP_BUFF_EFFECT_VALUE",
+       "old": 0,
+       "engine": -31.8,
+       "diff": -31.8
+      },
+      {
+       "type": "UP_GIV_DMG_RATIO",
+       "old": -40.3,
+       "engine": -46.7,
+       "diff": -6.4
+      },
+      {
+       "type": "UP_WEAK_ELEMENT_DMG_RATIO",
+       "old": -23.8,
+       "engine": -23.8,
+       "diff": 0
+      },
+      {
+       "type": "UP_ATK_RATIO",
+       "old": -23.6,
+       "engine": -23.7,
+       "diff": 0
+      },
+      {
+       "type": "UP_ATK_CONSUME_RATIO",
+       "old": -23.6,
+       "engine": -23.7,
+       "diff": 0
+      }
+     ]
+    }
+   ],
+   "dealer": {
+    "old": 227793,
+    "engine": 254992,
+    "ratio": 1.119402264336481,
+    "oldCrit": "10",
+    "engineCrit": 10
+   }
+  },
+  {
+   "name": "La Danse Macabre",
+   "role": "Debuffer",
+   "element": "Void",
+   "rarity": 5,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 138.47,
+     "engine": 138.47,
+     "diff": 0.01
+    },
+    {
+     "identity": "Void/-/-",
+     "old": 179.62,
+     "engine": 179.63,
+     "diff": 0
+    }
+   ],
+   "dealer": {
+    "old": 218676,
+    "engine": 306023,
+    "ratio": 1.399435694817904,
+    "oldCrit": "10",
+    "engineCrit": 10
+   },
+   "why": [
+    {
+     "type": "UP_DEBUFF_EFFECT_VALUE",
+     "old": 0,
+     "engine": -21.2,
+     "diff": -21.2
+    },
+    {
+     "type": "UP_ATK_ACCUM_RATIO",
+     "old": 0,
+     "engine": -16.6,
+     "diff": -16.6
+    },
+    {
+     "type": "UP_WEAK_ELEMENT_DMG_RATIO",
+     "old": 0,
+     "engine": -14.3,
+     "diff": -14.3
+    },
+    {
+     "type": "DWN_DEF_RATIO",
+     "old": -25.9,
+     "engine": -25.9,
+     "diff": 0
+    },
+    {
+     "type": "UP_AIM_RCV_DMG_RATIO",
+     "old": -14.7,
+     "engine": -14.7,
+     "diff": 0
+    },
+    {
+     "type": "UP_RCV_DMG_RATIO",
+     "old": -9.8,
+     "engine": -9.8,
+     "diff": 0
+    },
+    {
+     "type": "DWN_DEF_ACCUM_RATIO",
+     "old": -19.4,
+     "engine": -19.4,
+     "diff": 0
+    },
+    {
+     "type": "DWN_ELEMENT_RESIST_ACCUM_RATIO",
+     "old": -20.6,
+     "engine": -20.6,
+     "diff": 0
+    }
+   ]
+  },
+  {
+   "name": "La Lumière",
+   "role": "Defender",
+   "element": "Light",
+   "rarity": 5,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 49.44,
+     "engine": 49.44,
+     "diff": 0
+    }
+   ],
+   "dealer": {
+    "old": 63117,
+    "engine": 63117,
+    "ratio": 1,
+    "oldCrit": "10",
+    "engineCrit": 10
+   }
+  },
+  {
+   "name": "La Porte du Paradis",
+   "role": "Attacker",
+   "element": "Light",
+   "rarity": 5,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 0,
+     "engine": 0,
+     "diff": 0
+    }
+   ],
+   "dealer": {
+    "old": 268416,
+    "engine": 339161,
+    "ratio": 1.2635647651406772,
+    "oldCrit": "48",
+    "engineCrit": 48
+   },
+   "why": [
+    {
+     "type": "UP_ATK_ACCUM_RATIO",
+     "old": 0,
+     "engine": -14.3,
+     "diff": -14.3
+    },
+    {
+     "type": "UP_WEAK_ELEMENT_DMG_RATIO",
+     "old": 0,
+     "engine": -7.7,
+     "diff": -7.7
+    },
+    {
+     "type": "UP_ATK_RATIO",
+     "old": -16.6,
+     "engine": -14.3,
+     "diff": 2.4
+    },
+    {
+     "type": "UP_GIV_DMG_RATIO",
+     "old": -23.1,
+     "engine": -23.1,
+     "diff": 0
+    },
+    {
+     "type": "UP_CTD_FIXED",
+     "old": -33.3,
+     "engine": -33.3,
+     "diff": 0
+    }
+   ]
+  },
+  {
+   "name": "Light of Reckoning",
+   "role": "Attacker",
+   "element": "Void",
+   "rarity": 5,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 0,
+     "engine": 0,
+     "diff": 0
+    }
+   ],
+   "dealer": {
+    "old": 444331,
+    "engine": 444331,
+    "ratio": 1,
+    "oldCrit": "45",
+    "engineCrit": 65
+   }
+  },
+  {
+   "name": "Luce della Speranza",
+   "role": "Buffer",
+   "element": "Dark",
+   "rarity": 5,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 260.97,
+     "engine": 256.44,
+     "diff": -4.53
+    },
+    {
+     "identity": "Dark/-/-",
+     "old": 294.82,
+     "engine": 289.85,
+     "diff": -4.96,
+     "why": [
+      {
+       "type": "UP_ATK_RATIO",
+       "old": -37.4,
+       "engine": 0,
+       "diff": 37.4
+      },
+      {
+       "type": "ADDITIONAL_DAMAGE",
+       "old": -37.4,
+       "engine": 0,
+       "diff": 37.4
+      },
+      {
+       "type": "TSUBAME",
+       "old": -37.4,
+       "engine": 0,
+       "diff": 37.4
+      },
+      {
+       "type": "UP_BUFF_EFFECT_VALUE",
+       "old": 0,
+       "engine": -28.9,
+       "diff": -28.9
+      },
+      {
+       "type": "TSUBAME_LINK",
+       "old": -37.4,
+       "engine": -46.7,
+       "diff": -9.3
+      },
+      {
+       "type": "UP_GIV_DMG_RATIO",
+       "old": -34.3,
+       "engine": -34.3,
+       "diff": 0
+      },
+      {
+       "type": "UP_ELEMENT_DMG_RATE_RATIO",
+       "old": -8.6,
+       "engine": -8.6,
+       "diff": 0
+      },
+      {
+       "type": "UP_WEAK_ELEMENT_DMG_RATIO",
+       "old": -15.8,
+       "engine": -15.8,
+       "diff": 0
+      }
+     ]
+    }
+   ],
+   "dealer": {
+    "old": 156064,
+    "engine": 97637,
+    "ratio": 0.6256215398810744,
+    "oldCrit": "10",
+    "engineCrit": 10
+   },
+   "why": [
+    {
+     "type": "TSUBAME_LINK",
+     "old": -37.4,
+     "engine": 0,
+     "diff": 37.4
+    },
+    {
+     "type": "UP_ATK_RATIO",
+     "old": -37.4,
+     "engine": 0,
+     "diff": 37.4
+    },
+    {
+     "type": "ADDITIONAL_DAMAGE",
+     "old": -37.4,
+     "engine": 0,
+     "diff": 37.4
+    },
+    {
+     "type": "TSUBAME",
+     "old": -37.4,
+     "engine": 0,
+     "diff": 37.4
+    },
+    {
+     "type": "UP_BUFF_EFFECT_VALUE",
+     "old": 0,
+     "engine": -18.8,
+     "diff": -18.8
+    },
+    {
+     "type": "UP_GIV_DMG_RATIO",
+     "old": -34.3,
+     "engine": -34.3,
+     "diff": 0
+    },
+    {
+     "type": "UP_ELEMENT_DMG_RATE_RATIO",
+     "old": -8.6,
+     "engine": -8.6,
+     "diff": 0
+    },
+    {
+     "type": "UP_WEAK_ELEMENT_DMG_RATIO",
+     "old": -15.8,
+     "engine": -15.8,
+     "diff": 0
+    }
+   ]
+  },
+  {
+   "name": "Luminous Tenet",
+   "role": "Attacker",
+   "element": "Dark",
+   "rarity": 5,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 34.81,
+     "engine": 0,
+     "diff": -34.81,
+     "why": []
+    },
+    {
+     "identity": "Dark/-/-",
+     "old": 34.81,
+     "engine": 20,
+     "diff": -14.81,
+     "why": [
+      {
+       "type": "UP_AIM_RCV_DMG_RATIO",
+       "old": 0,
+       "engine": -16.7,
+       "diff": -16.7
+      }
+     ]
+    }
+   ],
+   "dealer": {
+    "old": 249966,
+    "engine": 343154,
+    "ratio": 1.3728027011673587,
+    "oldCrit": "50",
+    "engineCrit": 50
+   },
+   "why": [
+    {
+     "type": "UP_AIM_RCV_DMG_RATIO",
+     "old": 0,
+     "engine": -16.7,
+     "diff": -16.7
+    },
+    {
+     "type": "UP_CTD_FIXED",
+     "old": 0,
+     "engine": -9.1,
+     "diff": -9.1
+    },
+    {
+     "type": "ADDITIONAL_DAMAGE",
+     "old": 0,
+     "engine": -3.8,
+     "diff": -3.8
+    },
+    {
+     "type": "UP_ATK_RATIO",
+     "old": -37.4,
+     "engine": -37.4,
+     "diff": 0
+    },
+    {
+     "type": "UP_GIV_DMG_RATIO",
+     "old": -9.1,
+     "engine": -9.1,
+     "diff": 0
+    },
+    {
+     "type": "UP_WEAK_ELEMENT_DMG_RATIO",
+     "old": -7.7,
+     "engine": -7.7,
+     "diff": 0
+    }
+   ]
+  },
+  {
+   "name": "Lux☆Magica",
+   "role": "Breaker",
+   "element": "Light",
+   "rarity": 5,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 0,
+     "engine": 0,
+     "diff": 0
+    }
+   ],
+   "dealer": {
+    "old": 32016,
+    "engine": 32016,
+    "ratio": 1,
+    "oldCrit": "10",
+    "engineCrit": 10
+   }
+  },
+  {
+   "name": "Lynx Impact",
+   "role": "Healer",
+   "element": "Forest",
+   "rarity": 4,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 0,
+     "engine": 0,
+     "diff": 0
+    },
+    {
+     "identity": "Forest/-/-",
+     "old": 0,
+     "engine": 0,
+     "diff": 0
+    }
+   ],
+   "dealer": {
+    "old": 14644,
+    "engine": 14644,
+    "ratio": 1,
+    "oldCrit": "10",
+    "engineCrit": 10
+   }
+  },
+  {
+   "name": "Madoka-senpai's Kioku",
+   "role": "Attacker",
+   "element": "Light",
+   "rarity": 3,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 0,
+     "engine": 0,
+     "diff": 0
+    }
+   ],
+   "dealer": {
+    "old": 0,
+    "engine": 0,
+    "ratio": null,
+    "oldCrit": "10",
+    "engineCrit": 0
+   }
+  },
+  {
+   "name": "Magic Cake Dish",
+   "role": "Healer",
+   "element": "Light",
+   "rarity": 5,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 23.71,
+     "engine": 23.72,
+     "diff": 0
+    }
+   ],
+   "dealer": {
+    "old": 29499,
+    "engine": 29499,
+    "ratio": 1,
+    "oldCrit": "10",
+    "engineCrit": 10
+   }
+  },
+  {
+   "name": "Marigold Dadaism",
+   "role": "Attacker",
+   "element": "Flame",
+   "rarity": 5,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 0,
+     "engine": 0,
+     "diff": 0
+    },
+    {
+     "identity": "Flame/-/-",
+     "old": 20,
+     "engine": 20,
+     "diff": 0
+    }
+   ],
+   "dealer": {
+    "old": 135255,
+    "engine": 204884,
+    "ratio": 1.5147979741968873,
+    "oldCrit": "10",
+    "engineCrit": 10
+   },
+   "why": [
+    {
+     "type": "UP_GIV_DMG_RATIO",
+     "old": -23.1,
+     "engine": -40.1,
+     "diff": -17
+    },
+    {
+     "type": "UP_GIV_SLIP_DMG_RATIO",
+     "old": 0,
+     "engine": -2.6,
+     "diff": -2.6
+    },
+    {
+     "type": "UP_AIM_RCV_DMG_RATIO",
+     "old": -16.7,
+     "engine": -16.7,
+     "diff": 0
+    },
+    {
+     "type": "UP_ATK_ACCUM_RATIO",
+     "old": -20,
+     "engine": -20,
+     "diff": 0
+    },
+    {
+     "type": "UP_ATK_RATIO",
+     "old": -13.3,
+     "engine": -13.3,
+     "diff": 0
+    }
+   ]
+  },
+  {
+   "name": "Masara's Kioku",
+   "role": "Attacker",
+   "element": "Light",
+   "rarity": 3,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 0,
+     "engine": 0,
+     "diff": 0
+    }
+   ],
+   "dealer": {
+    "old": 0,
+    "engine": 0,
+    "ratio": null,
+    "oldCrit": "10",
+    "engineCrit": 0
+   }
+  },
+  {
+   "name": "Meiyui's Kioku",
+   "role": "Breaker",
+   "element": "Aqua",
+   "rarity": 3,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 0,
+     "engine": 0,
+     "diff": 0
+    }
+   ],
+   "dealer": {
+    "old": 0,
+    "engine": 0,
+    "ratio": null,
+    "oldCrit": "10",
+    "engineCrit": 0
+   }
+  },
+  {
+   "name": "Melodia Appassionata",
+   "role": "Debuffer",
+   "element": "Aqua",
+   "rarity": 5,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 63.58,
+     "engine": 63.59,
+     "diff": 0
+    },
+    {
+     "identity": "-/-/VORTEX",
+     "old": 295.98,
+     "engine": 63.59,
+     "diff": -232.39,
+     "why": [
+      {
+       "type": "UP_DEBUFF_EFFECT_VALUE",
+       "old": 0,
+       "engine": -12.8,
+       "diff": -12.8
+      },
+      {
+       "type": "UP_ATK_ACCUM_RATIO",
+       "old": -12.6,
+       "engine": 0,
+       "diff": 12.6
+      },
+      {
+       "type": "UP_ATK_RATIO",
+       "old": -4.2,
+       "engine": 0,
+       "diff": 4.2
+      },
+      {
+       "type": "DWN_DEF_RATIO",
+       "old": -38.9,
+       "engine": -38.9,
+       "diff": 0
+      }
+     ]
+    }
+   ],
+   "dealer": {
+    "old": 188542,
+    "engine": 223111,
+    "ratio": 1.1833490681121448,
+    "oldCrit": "10",
+    "engineCrit": 10
+   },
+   "why": [
+    {
+     "type": "VORTEX_ATK",
+     "old": 0,
+     "engine": -40.8,
+     "diff": -40.8
+    },
+    {
+     "type": "UP_GIV_DMG_RATIO",
+     "old": 0,
+     "engine": -21.6,
+     "diff": -21.6
+    },
+    {
+     "type": "UP_DEBUFF_EFFECT_VALUE",
+     "old": 0,
+     "engine": -21,
+     "diff": -21
+    },
+    {
+     "type": "UP_GIV_VORTEX_DMG_RATIO",
+     "old": 0,
+     "engine": -6.6,
+     "diff": -6.6
+    },
+    {
+     "type": "DWN_DEF_RATIO",
+     "old": -38.9,
+     "engine": -38.9,
+     "diff": 0
+    },
+    {
+     "type": "UP_ATK_ACCUM_RATIO",
+     "old": -21.4,
+     "engine": -21.4,
+     "diff": 0
+    },
+    {
+     "type": "UP_ATK_RATIO",
+     "old": -7.1,
+     "engine": -7.1,
+     "diff": 0
+    }
+   ]
+  },
+  {
+   "name": "Metallicized Projectile",
+   "role": "Attacker",
+   "element": "Flame",
+   "rarity": 5,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 0,
+     "engine": 0,
+     "diff": 0
+    },
+    {
+     "identity": "Flame/-/-",
+     "old": 43,
+     "engine": 43,
+     "diff": 0
+    }
+   ],
+   "dealer": {
+    "old": 347526,
+    "engine": 420085,
+    "ratio": 1.208787256205291,
+    "oldCrit": "60",
+    "engineCrit": 60
+   },
+   "why": [
+    {
+     "type": "UP_WEAK_ELEMENT_DMG_RATIO",
+     "old": -20,
+     "engine": -29.4,
+     "diff": -9.4
+    },
+    {
+     "type": "UP_ATK_RATIO",
+     "old": -13.3,
+     "engine": -18.7,
+     "diff": -5.4
+    },
+    {
+     "type": "UP_ATK_ACCUM_RATIO",
+     "old": -20,
+     "engine": -18.7,
+     "diff": 1.2
+    },
+    {
+     "type": "UP_GIV_DMG_RATIO",
+     "old": -18.7,
+     "engine": -18.7,
+     "diff": 0
+    },
+    {
+     "type": "UP_AIM_RCV_DMG_RATIO",
+     "old": -9.1,
+     "engine": -9.1,
+     "diff": 0
+    },
+    {
+     "type": "UP_CTD_RATIO",
+     "old": -14.3,
+     "engine": -14.3,
+     "diff": 0
+    },
+    {
+     "type": "UP_ELEMENT_DMG_RATE_RATIO",
+     "old": -18.7,
+     "engine": -18.7,
+     "diff": 0
+    }
+   ]
+  },
+  {
+   "name": "Meteor Punch",
+   "role": "Debuffer",
+   "element": "Flame",
+   "rarity": 4,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 18,
+     "engine": 18,
+     "diff": 0
+    },
+    {
+     "identity": "-/-/BURN",
+     "old": 18,
+     "engine": 18,
+     "diff": 0
+    }
+   ],
+   "dealer": {
+    "old": 48265,
+    "engine": 40839,
+    "ratio": 0.8461410960323216,
+    "oldCrit": "10",
+    "engineCrit": 10
+   },
+   "why": [
+    {
+     "type": "UP_GIV_DMG_RATIO",
+     "old": 0,
+     "engine": -16.7,
+     "diff": -16.7
+    },
+    {
+     "type": "UP_DEBUFF_EFFECT_VALUE",
+     "old": 0,
+     "engine": -2.5,
+     "diff": -2.5
+    },
+    {
+     "type": "UP_RCV_DMG_RATIO",
+     "old": -15.3,
+     "engine": -12.9,
+     "diff": 2.3
+    }
+   ]
+  },
+  {
+   "name": "Mito's Kioku",
+   "role": "Debuffer",
+   "element": "Forest",
+   "rarity": 3,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 6,
+     "engine": 12.82,
+     "diff": 6.83,
+     "why": [
+      {
+       "type": "DWN_DEF_RATIO",
+       "old": 0,
+       "engine": -5,
+       "diff": -5
+      },
+      {
+       "type": "UP_RCV_DMG_RATIO",
+       "old": -5.7,
+       "engine": -6.7,
+       "diff": -1.1
+      },
+      {
+       "type": "UP_DEBUFF_EFFECT_VALUE",
+       "old": 0,
+       "engine": -1.1,
+       "diff": -1.1
+      }
+     ]
+    }
+   ],
+   "dealer": {
+    "old": 0,
+    "engine": 0,
+    "ratio": null,
+    "oldCrit": "10",
+    "engineCrit": 0
+   }
+  },
+  {
+   "name": "My Creations",
+   "role": "Debuffer",
+   "element": "Forest",
+   "rarity": 5,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 52.52,
+     "engine": 52.53,
+     "diff": 0
+    },
+    {
+     "identity": "Forest/-/-",
+     "old": 105.16,
+     "engine": 105.16,
+     "diff": 0
+    },
+    {
+     "identity": "-/-/POISON",
+     "old": 98.28,
+     "engine": 98.28,
+     "diff": 0
+    },
+    {
+     "identity": "Forest/-/POISON",
+     "old": 166.71,
+     "engine": 166.71,
+     "diff": 0
+    }
+   ],
+   "dealer": {
+    "old": 81179,
+    "engine": 81179,
+    "ratio": 1,
+    "oldCrit": "10",
+    "engineCrit": 10
+   }
+  },
+  {
+   "name": "My Gigantic Heart",
+   "role": "Healer",
+   "element": "Flame",
+   "rarity": 5,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 30,
+     "engine": 30,
+     "diff": 0
+    },
+    {
+     "identity": "Flame/-/-",
+     "old": 30,
+     "engine": 30,
+     "diff": 0
+    },
+    {
+     "identity": "-/-/BURN",
+     "old": 30,
+     "engine": 30,
+     "diff": 0
+    },
+    {
+     "identity": "Flame/-/BURN",
+     "old": 30,
+     "engine": 30,
+     "diff": 0
+    }
+   ],
+   "dealer": {
+    "old": 29277,
+    "engine": 29277,
+    "ratio": 1,
+    "oldCrit": "10",
+    "engineCrit": 10
+   }
+  },
+  {
+   "name": "Nanaka's Kioku",
+   "role": "Buffer",
+   "element": "Forest",
+   "rarity": 3,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 41.45,
+     "engine": 47.98,
+     "diff": 6.54,
+     "why": [
+      {
+       "type": "UP_ATK_RATIO",
+       "old": -7.4,
+       "engine": -11.5,
+       "diff": -4.1
+      },
+      {
+       "type": "UP_GIV_DMG_RATIO",
+       "old": -23.7,
+       "engine": -23.7,
+       "diff": 0
+      }
+     ]
+    }
+   ],
+   "dealer": {
+    "old": 0,
+    "engine": 0,
+    "ratio": null,
+    "oldCrit": "10",
+    "engineCrit": 0
+   }
+  },
+  {
+   "name": "Natsuki's Kioku",
+   "role": "Buffer",
+   "element": "Aqua",
+   "rarity": 3,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 43.47,
+     "engine": 53.38,
+     "diff": 9.91,
+     "why": [
+      {
+       "type": "UP_BUFF_EFFECT_VALUE",
+       "old": 0,
+       "engine": -6.5,
+       "diff": -6.5
+      },
+      {
+       "type": "UP_ATK_RATIO",
+       "old": -13.8,
+       "engine": -16.1,
+       "diff": -2.3
+      },
+      {
+       "type": "UP_GIV_DMG_RATIO",
+       "old": -13.8,
+       "engine": -16.1,
+       "diff": -2.3
+      },
+      {
+       "type": "UP_CTD_FIXED",
+       "old": -6.3,
+       "engine": -7.4,
+       "diff": -1.2
+      }
+     ]
+    }
+   ],
+   "dealer": {
+    "old": 0,
+    "engine": 0,
+    "ratio": null,
+    "oldCrit": "25",
+    "engineCrit": 0
+   }
+  },
+  {
+   "name": "Neo Genesis",
+   "role": "Breaker",
+   "element": "Flame",
+   "rarity": 5,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 0,
+     "engine": 0,
+     "diff": 0
+    }
+   ],
+   "dealer": {
+    "old": 48523,
+    "engine": 48523,
+    "ratio": 1,
+    "oldCrit": "10",
+    "engineCrit": 10
+   }
+  },
+  {
+   "name": "Nightmare Stinger",
+   "role": "Debuffer",
+   "element": "Dark",
+   "rarity": 4,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 0,
+     "engine": 0,
+     "diff": 0
+    },
+    {
+     "identity": "-/-/CURSE",
+     "old": 0,
+     "engine": 0,
+     "diff": 0
+    }
+   ],
+   "dealer": {
+    "old": 30198,
+    "engine": 32708,
+    "ratio": 1.083118087290549,
+    "oldCrit": "10",
+    "engineCrit": 10
+   }
+  },
+  {
+   "name": "Nine Phases",
+   "role": "Breaker",
+   "element": "Void",
+   "rarity": 5,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 0,
+     "engine": 11.07,
+     "diff": 11.07,
+     "why": [
+      {
+       "type": "WEAKNESS",
+       "old": 0,
+       "engine": -10,
+       "diff": -10
+      }
+     ]
+    }
+   ],
+   "dealer": {
+    "old": 39623,
+    "engine": 44009,
+    "ratio": 1.110693284203619,
+    "oldCrit": "10",
+    "engineCrit": 10
+   }
+  },
+  {
+   "name": "Nothing to Despair, Ever",
+   "role": "Attacker",
+   "element": "Light",
+   "rarity": 5,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 14.95,
+     "engine": 14.96,
+     "diff": 0
+    }
+   ],
+   "dealer": {
+    "old": 475589,
+    "engine": 423003,
+    "ratio": 0.8894297387029557,
+    "oldCrit": "35",
+    "engineCrit": 50
+   },
+   "why": [
+    {
+     "type": "UP_GIV_DMG_RATIO",
+     "old": -23.1,
+     "engine": 0,
+     "diff": 23.1
+    },
+    {
+     "type": "UP_CTD_ACCUM_RATIO",
+     "old": 0,
+     "engine": -13.5,
+     "diff": -13.5
+    },
+    {
+     "type": "UP_CTD_FIXED",
+     "old": -25,
+     "engine": -21.6,
+     "diff": 3.4
+    },
+    {
+     "type": "UP_ATK_RATIO",
+     "old": -21.8,
+     "engine": -21.8,
+     "diff": 0
+    },
+    {
+     "type": "UP_ATK_ACCUM_RATIO",
+     "old": -15.6,
+     "engine": -15.6,
+     "diff": 0
+    }
+   ]
+  },
+  {
+   "name": "Oracle Ray",
+   "role": "Attacker",
+   "element": "Light",
+   "rarity": 5,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 0,
+     "engine": 0,
+     "diff": 0
+    }
+   ],
+   "dealer": {
+    "old": 264634,
+    "engine": 421677,
+    "ratio": 1.5934347060468421,
+    "oldCrit": "10",
+    "engineCrit": 10
+   },
+   "why": [
+    {
+     "type": "UP_GIV_DMG_RATIO",
+     "old": -44.4,
+     "engine": -60.8,
+     "diff": -16.3
+    },
+    {
+     "type": "UP_ATK_ACCUM_RATIO",
+     "old": 0,
+     "engine": -11.1,
+     "diff": -11.1
+    },
+    {
+     "type": "UP_ATK_RATIO",
+     "old": -16.6,
+     "engine": -14.8,
+     "diff": 1.8
+    }
+   ]
+  },
+  {
+   "name": "Panna Vorticosa",
+   "role": "Healer",
+   "element": "Forest",
+   "rarity": 5,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 31.04,
+     "engine": 31.05,
+     "diff": 0
+    },
+    {
+     "identity": "Forest/-/-",
+     "old": 41.12,
+     "engine": 41.13,
+     "diff": 0
+    }
+   ],
+   "dealer": {
+    "old": 39924,
+    "engine": 39924,
+    "ratio": 1,
+    "oldCrit": "10",
+    "engineCrit": 10
+   }
+  },
+  {
+   "name": "Pluvia☆Clara",
+   "role": "Healer",
+   "element": "Aqua",
+   "rarity": 5,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 24.53,
+     "engine": 38.91,
+     "diff": 14.37,
+     "why": [
+      {
+       "type": "UP_WEAK_ELEMENT_DMG_RATIO",
+       "old": -7.7,
+       "engine": -17.2,
+       "diff": -9.6
+      },
+      {
+       "type": "UP_ATK_RATIO",
+       "old": -13,
+       "engine": -13,
+       "diff": 0
+      }
+     ]
+    }
+   ],
+   "dealer": {
+    "old": 35229,
+    "engine": 39294,
+    "ratio": 1.1153878906582646,
+    "oldCrit": "10",
+    "engineCrit": 10
+   }
+  },
+  {
+   "name": "Pluvia☆Magica",
+   "role": "Breaker",
+   "element": "Light",
+   "rarity": 5,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 0,
+     "engine": 0,
+     "diff": 0
+    }
+   ],
+   "dealer": {
+    "old": 34418,
+    "engine": 34418,
+    "ratio": 1,
+    "oldCrit": "10",
+    "engineCrit": 10
+   }
+  },
+  {
+   "name": "Pluvia☆Neujahr",
+   "role": "Buffer",
+   "element": "Light",
+   "rarity": 5,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 382.73,
+     "engine": 366.76,
+     "diff": -15.98,
+     "why": [
+      {
+       "type": "UP_BUFF_EFFECT_VALUE",
+       "old": 0,
+       "engine": -31,
+       "diff": -31
+      },
+      {
+       "type": "ADDITIONAL_DAMAGE",
+       "old": 0,
+       "engine": -9.1,
+       "diff": -9.1
+      },
+      {
+       "type": "UP_ATK_CONSUME_RATIO",
+       "old": -21.1,
+       "engine": -19.2,
+       "diff": 1.9
+      },
+      {
+       "type": "UP_ATK_RATIO",
+       "old": -17.6,
+       "engine": -18.1,
+       "diff": -0.4
+      },
+      {
+       "type": "UP_ATK_ACCUM_RATIO",
+       "old": -14.1,
+       "engine": -14.4,
+       "diff": -0.3
+      },
+      {
+       "type": "UP_CTD_FIXED",
+       "old": -50,
+       "engine": -50,
+       "diff": 0
+      }
+     ]
+    },
+    {
+     "identity": "Light/-/-",
+     "old": 382.73,
+     "engine": 366.76,
+     "diff": -15.98,
+     "why": [
+      {
+       "type": "UP_BUFF_EFFECT_VALUE",
+       "old": 0,
+       "engine": -31,
+       "diff": -31
+      },
+      {
+       "type": "ADDITIONAL_DAMAGE",
+       "old": 0,
+       "engine": -9.1,
+       "diff": -9.1
+      },
+      {
+       "type": "UP_ATK_CONSUME_RATIO",
+       "old": -21.1,
+       "engine": -19.2,
+       "diff": 1.9
+      },
+      {
+       "type": "UP_ATK_RATIO",
+       "old": -17.6,
+       "engine": -18.1,
+       "diff": -0.4
+      },
+      {
+       "type": "UP_ATK_ACCUM_RATIO",
+       "old": -14.1,
+       "engine": -14.4,
+       "diff": -0.3
+      },
+      {
+       "type": "UP_CTD_FIXED",
+       "old": -50,
+       "engine": -50,
+       "diff": 0
+      }
+     ]
+    }
+   ],
+   "dealer": {
+    "old": 191252,
+    "engine": 209182,
+    "ratio": 1.0937506535879364,
+    "oldCrit": "62.5",
+    "engineCrit": 62.5
+   }
+  },
+  {
+   "name": "Purple Will-o'-Wisp",
+   "role": "Breaker",
+   "element": "Flame",
+   "rarity": 4,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 0,
+     "engine": 0,
+     "diff": 0
+    }
+   ],
+   "dealer": {
+    "old": 25142,
+    "engine": 25142,
+    "ratio": 1,
+    "oldCrit": "10",
+    "engineCrit": 10
+   }
+  },
+  {
+   "name": "Reira's Kioku",
+   "role": "Breaker",
+   "element": "Flame",
+   "rarity": 3,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 0,
+     "engine": 0,
+     "diff": 0
+    }
+   ],
+   "dealer": {
+    "old": 0,
+    "engine": 0,
+    "ratio": null,
+    "oldCrit": "20",
+    "engineCrit": 0
+   }
+  },
+  {
+   "name": "Rika's Kioku",
+   "role": "Attacker",
+   "element": "Flame",
+   "rarity": 3,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 0,
+     "engine": 0,
+     "diff": 0
+    }
+   ],
+   "dealer": {
+    "old": 0,
+    "engine": 0,
+    "ratio": null,
+    "oldCrit": "10",
+    "engineCrit": 0
+   }
+  },
+  {
+   "name": "Riko's Kioku",
+   "role": "Breaker",
+   "element": "Light",
+   "rarity": 3,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 0,
+     "engine": 0,
+     "diff": 0
+    }
+   ],
+   "dealer": {
+    "old": 0,
+    "engine": 0,
+    "ratio": null,
+    "oldCrit": "10",
+    "engineCrit": 0
+   }
+  },
+  {
+   "name": "Ryushin Spiral Fury",
+   "role": "Attacker",
+   "element": "Aqua",
+   "rarity": 4,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 0,
+     "engine": 0,
+     "diff": 0
+    }
+   ],
+   "dealer": {
+    "old": 115209,
+    "engine": 142805,
+    "ratio": 1.2395298978378426,
+    "oldCrit": "10",
+    "engineCrit": 10
+   },
+   "why": [
+    {
+     "type": "UP_ATK_RATIO",
+     "old": -8,
+     "engine": -25.8,
+     "diff": -17.8
+    },
+    {
+     "type": "UP_ATK_ACCUM_RATIO",
+     "old": -12,
+     "engine": -9.7,
+     "diff": 2.3
+    },
+    {
+     "type": "UP_GIV_DMG_RATIO",
+     "old": -16.7,
+     "engine": -16.7,
+     "diff": 0
+    }
+   ]
+  },
+  {
+   "name": "Sacred Gift",
+   "role": "Breaker",
+   "element": "Aqua",
+   "rarity": 5,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 30,
+     "engine": 60.37,
+     "diff": 30.37,
+     "why": [
+      {
+       "type": "WEAKNESS",
+       "old": 0,
+       "engine": -18.9,
+       "diff": -18.9
+      },
+      {
+       "type": "UP_GIV_DMG_RATIO",
+       "old": -23.1,
+       "engine": -23.1,
+       "diff": 0
+      }
+     ]
+    }
+   ],
+   "dealer": {
+    "old": 45463,
+    "engine": 56084,
+    "ratio": 1.2336185469502672,
+    "oldCrit": "10",
+    "engineCrit": 10
+   },
+   "why": [
+    {
+     "type": "WEAKNESS",
+     "old": 0,
+     "engine": -18.9,
+     "diff": -18.9
+    },
+    {
+     "type": "UP_GIV_DMG_RATIO",
+     "old": -23.1,
+     "engine": -23.1,
+     "diff": 0
+    }
+   ]
+  },
+  {
+   "name": "Scorchin' Summer Spike",
+   "role": "Buffer",
+   "element": "Flame",
+   "rarity": 5,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 357.41,
+     "engine": 284.86,
+     "diff": -72.55,
+     "why": [
+      {
+       "type": "ADDITIONAL_DAMAGE",
+       "old": 0,
+       "engine": -27.3,
+       "diff": -27.3
+      },
+      {
+       "type": "UP_BUFF_EFFECT_VALUE",
+       "old": 0,
+       "engine": -25,
+       "diff": -25
+      },
+      {
+       "type": "UP_GIV_DMG_RATIO",
+       "old": -37.5,
+       "engine": -37.5,
+       "diff": 0
+      },
+      {
+       "type": "UP_ATK_RATIO",
+       "old": -42.8,
+       "engine": -42.8,
+       "diff": 0
+      }
+     ]
+    },
+    {
+     "identity": "-/Attacker/-",
+     "old": 643.28,
+     "engine": 463.03,
+     "diff": -180.25,
+     "why": [
+      {
+       "type": "UP_BUFF_EFFECT_VALUE",
+       "old": 0,
+       "engine": -34.6,
+       "diff": -34.6
+      },
+      {
+       "type": "ADDITIONAL_DAMAGE",
+       "old": 0,
+       "engine": -19.3,
+       "diff": -19.3
+      },
+      {
+       "type": "UP_GIV_DMG_RATIO",
+       "old": -37.5,
+       "engine": -37.5,
+       "diff": 0
+      },
+      {
+       "type": "UP_WEAK_ELEMENT_DMG_RATIO",
+       "old": -38.5,
+       "engine": -38.5,
+       "diff": 0
+      },
+      {
+       "type": "UP_ATK_RATIO",
+       "old": -42.8,
+       "engine": -42.8,
+       "diff": 0
+      }
+     ]
+    }
+   ],
+   "dealer": {
+    "old": 116261,
+    "engine": 151140,
+    "ratio": 1.3000060209356534,
+    "oldCrit": "10",
+    "engineCrit": 10
+   },
+   "why": [
+    {
+     "type": "UP_BUFF_EFFECT_VALUE",
+     "old": 0,
+     "engine": -25,
+     "diff": -25
+    },
+    {
+     "type": "ADDITIONAL_DAMAGE",
+     "old": 0,
+     "engine": -10.3,
+     "diff": -10.3
+    },
+    {
+     "type": "UP_GIV_DMG_RATIO",
+     "old": -37.5,
+     "engine": -28.8,
+     "diff": 8.7
+    },
+    {
+     "type": "UP_ATK_RATIO",
+     "old": -42.8,
+     "engine": -42.8,
+     "diff": 0
+    }
+   ]
+  },
+  {
+   "name": "Screw Zone",
+   "role": "Defender",
+   "element": "Aqua",
+   "rarity": 5,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 40.62,
+     "engine": 40.63,
+     "diff": 0
+    }
+   ],
+   "dealer": {
+    "old": 28233,
+    "engine": 28233,
+    "ratio": 1,
+    "oldCrit": "25",
+    "engineCrit": 25
+   }
+  },
+  {
+   "name": "Seika's Kioku",
+   "role": "Breaker",
+   "element": "Aqua",
+   "rarity": 3,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 0,
+     "engine": 0,
+     "diff": 0
+    }
+   ],
+   "dealer": {
+    "old": 0,
+    "engine": 0,
+    "ratio": null,
+    "oldCrit": "10",
+    "engineCrit": 0
+   }
+  },
+  {
+   "name": "Seraphic Trial",
+   "role": "Attacker",
+   "element": "Dark",
+   "rarity": 4,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 0,
+     "engine": 0,
+     "diff": 0
+    }
+   ],
+   "dealer": {
+    "old": 151333,
+    "engine": 58698,
+    "ratio": 0.3878731010420728,
+    "oldCrit": "10",
+    "engineCrit": 10
+   },
+   "why": [
+    {
+     "type": "UP_ATK_ACCUM_RATIO",
+     "old": -75,
+     "engine": -19.3,
+     "diff": 55.6
+    },
+    {
+     "type": "UP_ATK_RATIO",
+     "old": 0,
+     "engine": -16.1,
+     "diff": -16.1
+    }
+   ]
+  },
+  {
+   "name": "Soaring Storyteller",
+   "role": "Defender",
+   "element": "Void",
+   "rarity": 5,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 16.67,
+     "engine": 16.67,
+     "diff": 0
+    }
+   ],
+   "dealer": {
+    "old": 94493,
+    "engine": 107073,
+    "ratio": 1.133131554718339,
+    "oldCrit": "10",
+    "engineCrit": 10
+   },
+   "why": [
+    {
+     "type": "UP_DEF_ACCUM_RATIO",
+     "old": 0,
+     "engine": -11.7,
+     "diff": -11.7
+    },
+    {
+     "type": "UP_DEF_RATIO",
+     "old": -33.3,
+     "engine": -29.4,
+     "diff": 3.9
+    },
+    {
+     "type": "UP_WEAK_ELEMENT_DMG_RATIO",
+     "old": -14.3,
+     "engine": -14.3,
+     "diff": 0
+    }
+   ]
+  },
+  {
+   "name": "Soul Salvation",
+   "role": "Debuffer",
+   "element": "Void",
+   "rarity": 5,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 135.66,
+     "engine": 135.66,
+     "diff": 0
+    },
+    {
+     "identity": "-/-/BLEED",
+     "old": 135.66,
+     "engine": 135.66,
+     "diff": 0
+    }
+   ],
+   "dealer": {
+    "old": 132780,
+    "engine": 159267,
+    "ratio": 1.1994803434252146,
+    "oldCrit": "10",
+    "engineCrit": 10
+   },
+   "why": [
+    {
+     "type": "UP_GIV_DMG_RATIO",
+     "old": 0,
+     "engine": -19.4,
+     "diff": -19.4
+    },
+    {
+     "type": "UP_DEBUFF_EFFECT_VALUE",
+     "old": 0,
+     "engine": -17.6,
+     "diff": -17.6
+    },
+    {
+     "type": "UP_ATK_ACCUM_RATIO",
+     "old": 0,
+     "engine": -16.6,
+     "diff": -16.6
+    },
+    {
+     "type": "DWN_DEF_RATIO",
+     "old": -12.9,
+     "engine": -12.9,
+     "diff": 0
+    },
+    {
+     "type": "UP_RCV_DMG_RATIO",
+     "old": -34.2,
+     "engine": -34.2,
+     "diff": 0
+    },
+    {
+     "type": "DWN_DEF_ACCUM_RATIO",
+     "old": -25.9,
+     "engine": -25.9,
+     "diff": 0
+    }
+   ]
+  },
+  {
+   "name": "Spietata Scarica",
+   "role": "Defender",
+   "element": "Forest",
+   "rarity": 5,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 40.1,
+     "engine": 40.1,
+     "diff": 0
+    },
+    {
+     "identity": "Forest/-/-",
+     "old": 50.87,
+     "engine": 50.88,
+     "diff": 0.01
+    }
+   ],
+   "dealer": {
+    "old": 47751,
+    "engine": 47751,
+    "ratio": 1,
+    "oldCrit": "25",
+    "engineCrit": 25
+   }
+  },
+  {
+   "name": "Splashin' Kyubey Blast",
+   "role": "Debuffer",
+   "element": "Dark",
+   "rarity": 5,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 114.28,
+     "engine": 114.29,
+     "diff": 0
+    },
+    {
+     "identity": "Dark/-/-",
+     "old": 158.5,
+     "engine": 158.51,
+     "diff": 0
+    }
+   ],
+   "dealer": {
+    "old": 176928,
+    "engine": 176928,
+    "ratio": 1,
+    "oldCrit": "29.5",
+    "engineCrit": 29.5
+   }
+  },
+  {
+   "name": "Strada Futuro",
+   "role": "Breaker",
+   "element": "Light",
+   "rarity": 5,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 0,
+     "engine": 0,
+     "diff": 0
+    }
+   ],
+   "dealer": {
+    "old": 46449,
+    "engine": 46449,
+    "ratio": 1,
+    "oldCrit": "60",
+    "engineCrit": 90
+   }
+  },
+  {
+   "name": "Structure Destruction",
+   "role": "Healer",
+   "element": "Void",
+   "rarity": 5,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 16.67,
+     "engine": 16.67,
+     "diff": 0
+    },
+    {
+     "identity": "Void/-/-",
+     "old": 16.67,
+     "engine": 16.67,
+     "diff": 0
+    }
+   ],
+   "dealer": {
+    "old": 26274,
+    "engine": 26274,
+    "ratio": 1,
+    "oldCrit": "10",
+    "engineCrit": 10
+   }
+  },
+  {
+   "name": "Surging Laser",
+   "role": "Defender",
+   "element": "Light",
+   "rarity": 4,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 0,
+     "engine": 0,
+     "diff": 0
+    }
+   ],
+   "dealer": {
+    "old": 15520,
+    "engine": 15520,
+    "ratio": 1,
+    "oldCrit": "10",
+    "engineCrit": 10
+   }
+  },
+  {
+   "name": "Tenebrous Arcana",
+   "role": "Breaker",
+   "element": "Forest",
+   "rarity": 5,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 0,
+     "engine": 0,
+     "diff": 0
+    },
+    {
+     "identity": "Forest/-/-",
+     "old": 10,
+     "engine": 10,
+     "diff": 0
+    }
+   ],
+   "dealer": {
+    "old": 43132,
+    "engine": 43132,
+    "ratio": 1,
+    "oldCrit": "10",
+    "engineCrit": 10
+   }
+  },
+  {
+   "name": "The Universe's Edge",
+   "role": "Attacker",
+   "element": "Flame",
+   "rarity": 5,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 0,
+     "engine": 0,
+     "diff": 0
+    }
+   ],
+   "dealer": {
+    "old": 349452,
+    "engine": 404629,
+    "ratio": 1.157895791124389,
+    "oldCrit": "10",
+    "engineCrit": 10
+   },
+   "why": [
+    {
+     "type": "UP_GIV_DMG_RATIO",
+     "old": -47.4,
+     "engine": -54.5,
+     "diff": -7.2
+    },
+    {
+     "type": "UP_ATK_RATIO",
+     "old": -23.3,
+     "engine": -23.3,
+     "diff": 0
+    },
+    {
+     "type": "UP_ATK_ACCUM_RATIO",
+     "old": -10,
+     "engine": -10,
+     "diff": 0
+    }
+   ]
+  },
+  {
+   "name": "Thoughtless",
+   "role": "Debuffer",
+   "element": "Dark",
+   "rarity": 5,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 132.81,
+     "engine": 132.81,
+     "diff": 0
+    }
+   ],
+   "dealer": {
+    "old": 175645,
+    "engine": 175645,
+    "ratio": 1,
+    "oldCrit": "76",
+    "engineCrit": 96
+   }
+  },
+  {
+   "name": "Thunder Torrent",
+   "role": "Buffer",
+   "element": "Light",
+   "rarity": 4,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 90.24,
+     "engine": 90.25,
+     "diff": 0.01
+    }
+   ],
+   "dealer": {
+    "old": 66254,
+    "engine": 66254,
+    "ratio": 1,
+    "oldCrit": "10",
+    "engineCrit": 10
+   }
+  },
+  {
+   "name": "Thunderous Waltz",
+   "role": "Defender",
+   "element": "Flame",
+   "rarity": 5,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 51.75,
+     "engine": 51.76,
+     "diff": 0
+    },
+    {
+     "identity": "Flame/-/-",
+     "old": 66.93,
+     "engine": 66.94,
+     "diff": 0.01
+    }
+   ],
+   "dealer": {
+    "old": 41294,
+    "engine": 41294,
+    "ratio": 1,
+    "oldCrit": "10",
+    "engineCrit": 10
+   }
+  },
+  {
+   "name": "Time Stop Strike",
+   "role": "Buffer",
+   "element": "Void",
+   "rarity": 5,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 88.08,
+     "engine": 88.08,
+     "diff": 0
+    }
+   ],
+   "dealer": {
+    "old": 112411,
+    "engine": 118835,
+    "ratio": 1.0571474321907999,
+    "oldCrit": "10",
+    "engineCrit": 10
+   }
+  },
+  {
+   "name": "Tiro Finale",
+   "role": "Buffer",
+   "element": "Forest",
+   "rarity": 5,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 107.85,
+     "engine": 142.5,
+     "diff": 34.65,
+     "why": [
+      {
+       "type": "UP_BUFF_EFFECT_VALUE",
+       "old": 0,
+       "engine": -19.2,
+       "diff": -19.2
+      },
+      {
+       "type": "UP_WEAK_ELEMENT_DMG_RATIO",
+       "old": 0,
+       "engine": -14.3,
+       "diff": -14.3
+      },
+      {
+       "type": "UP_ATK_RATIO",
+       "old": -23,
+       "engine": -23,
+       "diff": 0
+      },
+      {
+       "type": "UP_GIV_DMG_RATIO",
+       "old": -37.5,
+       "engine": -37.5,
+       "diff": 0
+      }
+     ]
+    }
+   ],
+   "dealer": {
+    "old": 111369,
+    "engine": 129930,
+    "ratio": 1.1666621770869812,
+    "oldCrit": "10",
+    "engineCrit": 10
+   },
+   "why": [
+    {
+     "type": "UP_BUFF_EFFECT_VALUE",
+     "old": 0,
+     "engine": -19.2,
+     "diff": -19.2
+    },
+    {
+     "type": "UP_WEAK_ELEMENT_DMG_RATIO",
+     "old": 0,
+     "engine": -14.3,
+     "diff": -14.3
+    },
+    {
+     "type": "UP_ATK_RATIO",
+     "old": -23,
+     "engine": -23,
+     "diff": 0
+    },
+    {
+     "type": "UP_GIV_DMG_RATIO",
+     "old": -37.5,
+     "engine": -37.5,
+     "diff": 0
+    }
+   ]
+  },
+  {
+   "name": "Tiro Finale Liberation",
+   "role": "Attacker",
+   "element": "Dark",
+   "rarity": 5,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 0,
+     "engine": 0,
+     "diff": 0
+    }
+   ],
+   "dealer": {
+    "old": 284712,
+    "engine": 495278,
+    "ratio": 1.739575430610582,
+    "oldCrit": "10",
+    "engineCrit": 10
+   },
+   "why": [
+    {
+     "type": "UP_GIV_DMG_RATIO",
+     "old": -23.1,
+     "engine": -48.7,
+     "diff": -25.6
+    },
+    {
+     "type": "UP_ATK_RATIO",
+     "old": -20,
+     "engine": -31,
+     "diff": -11
+    },
+    {
+     "type": "UP_WEAK_ELEMENT_DMG_RATIO",
+     "old": -29.4,
+     "engine": -29.4,
+     "diff": 0
+    }
+   ]
+  },
+  {
+   "name": "Ultra Great Big Hammer",
+   "role": "Debuffer",
+   "element": "Dark",
+   "rarity": 5,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 84.85,
+     "engine": 84.85,
+     "diff": 0
+    }
+   ],
+   "dealer": {
+    "old": 154606,
+    "engine": 154606,
+    "ratio": 1,
+    "oldCrit": "10",
+    "engineCrit": 30
+   }
+  },
+  {
+   "name": "Unknown Flying Fire",
+   "role": "Debuffer",
+   "element": "Flame",
+   "rarity": 4,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 83.22,
+     "engine": 83.22,
+     "diff": 0
+    }
+   ],
+   "dealer": {
+    "old": 70934,
+    "engine": 70934,
+    "ratio": 1,
+    "oldCrit": "10",
+    "engineCrit": 10
+   }
+  },
+  {
+   "name": "Unlimited Rulebook",
+   "role": "Breaker",
+   "element": "Forest",
+   "rarity": 5,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 34.16,
+     "engine": 34.16,
+     "diff": 0
+    },
+    {
+     "identity": "Forest/-/-",
+     "old": 34.16,
+     "engine": 34.16,
+     "diff": 0
+    }
+   ],
+   "dealer": {
+    "old": 51844,
+    "engine": 51844,
+    "ratio": 1,
+    "oldCrit": "10",
+    "engineCrit": 10
+   }
+  },
+  {
+   "name": "Vampire Fang",
+   "role": "Defender",
+   "element": "Dark",
+   "rarity": 5,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 0,
+     "engine": 0,
+     "diff": 0
+    }
+   ],
+   "dealer": {
+    "old": 80384,
+    "engine": 80384,
+    "ratio": 1,
+    "oldCrit": "10",
+    "engineCrit": 10
+   }
+  },
+  {
+   "name": "Venusta Dissonanza",
+   "role": "Attacker",
+   "element": "Void",
+   "rarity": 5,
+   "support": [],
+   "error": "Found unknown effects: CONSUME_SELF_HP, STEP_UP_SKILL"
+  },
+  {
+   "name": "Verdant Shower",
+   "role": "Breaker",
+   "element": "Forest",
+   "rarity": 4,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 0,
+     "engine": 0,
+     "diff": 0
+    }
+   ],
+   "dealer": {
+    "old": 20608,
+    "engine": 20608,
+    "ratio": 1,
+    "oldCrit": "10",
+    "engineCrit": 10
+   }
+  },
+  {
+   "name": "Vinctio☆Magica",
+   "role": "Debuffer",
+   "element": "Light",
+   "rarity": 5,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 162.91,
+     "engine": 162.92,
+     "diff": 0.01
+    },
+    {
+     "identity": "Light/-/-",
+     "old": 353.53,
+     "engine": 353.54,
+     "diff": 0.01
+    }
+   ],
+   "dealer": {
+    "old": 318310,
+    "engine": 318312,
+    "ratio": 1.0000062831830605,
+    "oldCrit": "40",
+    "engineCrit": 40
+   }
+  },
+  {
+   "name": "White Camellia",
+   "role": "Attacker",
+   "element": "Forest",
+   "rarity": 4,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 0,
+     "engine": 0,
+     "diff": 0
+    }
+   ],
+   "dealer": {
+    "old": 110605,
+    "engine": 110605,
+    "ratio": 1,
+    "oldCrit": "50",
+    "engineCrit": 65
+   }
+  },
+  {
+   "name": "Yuletide Gift",
+   "role": "Debuffer",
+   "element": "Flame",
+   "rarity": 5,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 158.5,
+     "engine": 158.51,
+     "diff": 0
+    }
+   ],
+   "dealer": {
+    "old": 262441,
+    "engine": 327899,
+    "ratio": 1.2494198696087884,
+    "oldCrit": "10",
+    "engineCrit": 10
+   },
+   "why": [
+    {
+     "type": "UP_ATK_ACCUM_RATIO",
+     "old": 0,
+     "engine": -20,
+     "diff": -20
+    },
+    {
+     "type": "UP_DEBUFF_EFFECT_VALUE",
+     "old": 0,
+     "engine": -18.8,
+     "diff": -18.8
+    },
+    {
+     "type": "DWN_DEF_RATIO",
+     "old": -25.9,
+     "engine": -25.9,
+     "diff": 0
+    },
+    {
+     "type": "DWN_ELEMENT_RESIST_ACCUM_RATIO",
+     "old": -20.6,
+     "engine": -20.6,
+     "diff": 0
+    },
+    {
+     "type": "UP_RCV_DMG_RATIO",
+     "old": -34.2,
+     "engine": -34.2,
+     "diff": 0
+    },
+    {
+     "type": "UP_GIV_DMG_RATIO",
+     "old": -23.1,
+     "engine": -23.1,
+     "diff": 0
+    }
+   ]
+  },
+  {
+   "name": "Yuma's Kioku",
+   "role": "Healer",
+   "element": "Forest",
+   "rarity": 3,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 0,
+     "engine": 0,
+     "diff": 0
+    }
+   ],
+   "dealer": {
+    "old": 0,
+    "engine": 0,
+    "ratio": null,
+    "oldCrit": "10",
+    "engineCrit": 0
+   }
+  },
+  {
+   "name": "Yummy Hunter",
+   "role": "Buffer",
+   "element": "Light",
+   "rarity": 4,
+   "support": [
+    {
+     "identity": "-/-/-",
+     "old": 79.08,
+     "engine": 79.08,
+     "diff": 0.01
+    }
+   ],
+   "dealer": {
+    "old": 53825,
+    "engine": 59592,
+    "ratio": 1.1071435206688343,
+    "oldCrit": "35",
+    "engineCrit": 45
+   }
+  }
+ ]
+}

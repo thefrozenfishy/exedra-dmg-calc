@@ -1,6 +1,6 @@
 # Old single-hit model vs 1:1 engine
 
-Generated 2026-10-16 10:47 by `npx tsx scripts/sim/compareOldModel.ts`.
+Generated 2026-10-16 10:51 by `npx tsx scripts/sim/compareOldModel.ts`.
 
 Setup on both sides: max levels (kioku 160, magic 140, heartphial 50, ultimate 10; the character A5, Lux A0), only the kit, one enemy with 3000 DEF, weak, broken at 500%, every hit a crit, the Ultimate.
 

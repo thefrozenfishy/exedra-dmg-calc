@@ -17,6 +17,16 @@
   the browser may be running main or the deployed site.
 
 ## Engine semantics
+- **"Conditions met" is not "anyone may hold it".** Max Damage (battle/EngineMaxDamage `clearConditions`) used to empty
+  every start / active condition list, so effects the game gives only to some allies landed on every dealer: Scorchin'
+  Summer Spike's Beachball's Boon and Ultimate additional DMG (start condition EachTarget IsRoleType Attacker; the
+  detail's `role` column does NOT filter them) and its ability's ATK +50% / add. DMG +40% / SPD / DMG taken (active
+  condition Self.UniqueAbilityEffect 22 = the holder has Boon) showed on Glitterjoy Snow Globe (Healer). Keep the
+  who-may-hold conditions (`keepHolderConditions`: start EachTarget 19/20, active Self 19/20/26); clear only situational ones.
+- **Enemy-count conditions are not situational in Max Damage: the wave's count is known.** Assuming them met let Oracle Ray
+  stack her "DMG +15% while >= 2/3/4/5 enemies" buffs with her skills' "extra hit while < 5/4/3/2 enemies" rows (ult
+  per enemy x1.4 on a 5-enemy wave, buffs +60% on a 1-enemy wave). EngineMaxDamage evaluates 202 AliveUnitCount on
+  FriendTeam / OpponentTeam (`unitCountConditionsMet`) for team effects and the dealer's own rows.
 - **Unit-state conditions see the running skill.** Checking a state's active condition with a bare
   `stateGen(this, this)` (no actor, no skill) silently disabled every "Ultimate / Battle Skill / follow-up / Ether
   Blow only" buff and every IsActor-gated state (~1000 rows) for months. Use `isEffectCurrentlyActive` /

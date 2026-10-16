@@ -9,7 +9,9 @@
 //   AbilityEffectLauncher (buff strength, role / element filters, duplicates and stacking as in battle), and launches
 //   the dealer's skill with ActiveSkillBase.Triggering (damage rows, additional damage, final damage, break bonus).
 //
-// "Conditions met": the effects' start and active conditions are cleared, except a state's ActorSkillType restriction
+// "Conditions met": the effects' start and active conditions are cleared, except who may hold them (keepHolderConditions:
+// the target's role / element, the holder's unique buff), the wave's unit counts (unitCountConditionsMet) and a state's
+// ActorSkillType restriction
 // ("Ultimate DMG +30%" counts for the Ultimate column only). Alternatives that exclude each other count once, the
 // strongest: state ladders (collectTeamEffects tiers, as before) and, inside the evaluated skill, damage rows whose start
 // conditions exclude each other (every choice is evaluated, the largest total is kept).
@@ -20,7 +22,7 @@ import { E } from "./engineBundle"
 import { EngineBattle, type EngineBattleSetup } from "./EngineBattle"
 import { giveFieldState } from "./EngineBench"
 import { collectTeamEffects, isEffectValueType, type MaxDmgEffect, type MaxDmgOptions, type MaxDmgResult, type MemberDamage, type SkillDamage } from "../models/MaxDamage"
-import { actorSkillTypeRestriction, ailmentConditionsMet } from "../models/BattleConditionParser"
+import { actorSkillTypeRestriction, ailmentConditionsMet, unitCountConditionsMet } from "../models/BattleConditionParser"
 import { conditionCsvsExclusive } from "../models/ConditionTiers"
 import { enemyName, isMultiRaidStage, isSoloRaidStage, type QuestEnemyAppearance } from "../models/PvE"
 import type { PvPKioku } from "../models/PvPKioku"
@@ -94,13 +96,41 @@ function infoOf(e: MaxDmgEffect): any {
 }
 
 /** An ability effect object with its conditions met: its start condition list and its state's active condition list
- *  empty (both are parsed from the csv on first use, so an empty list = no conditions). The csv strings stay: the game
+ *  reduced to the conditions that say WHO may hold the effect (keepHolderConditions), everything situational dropped
+ *  (both lists are parsed from the csv on first use, so an empty list = no conditions). The csv strings stay: the game
  *  also compares them, e.g. two states replace each other only with the same active-condition csv
  *  (UnitCondition.GetDuplicateUnitState b__1), so "ATK +30% (while X)" and "ATK +15%" still coexist as in battle. */
 function clearConditions(effect: any): void {
-    effect.startConditionSetList = []
+    effect.startConditionSetList = keepHolderConditions(effect.get_StartConditionSetList(), START_HOLDER_CONDITION)
     const state = effect._GiveUnitState
-    if (state) state.activeConditionSetList = []
+    if (state) state.activeConditionSetList = keepHolderConditions(state.get_ActiveConditionSetList(), ACTIVE_HOLDER_CONDITION)
+}
+
+// "Conditions met" must not hand an effect to a unit the game would never give it to, or keep it active on one: a
+// condition about the unit's identity is not a situation the max can assume. Kept, evaluated by the game's own checker:
+// - START conditions on EachTarget (19 IsElementType, 20 IsRoleType): [CONFIRMED 3.19] AbilityEffectBase.
+//   SelectTargetsConditionCheck 0x18e7bb0 checks the start conditions per selected target (MECHANICS.md section 6), e.g.
+//   Scorchin' Summer Spike's Beachball's Boon (detail 12921003, set 2831) and Ultimate additional DMG (12931006, set 3273)
+//   go to Attacker allies only. The detail's `role` column alone does not filter them.
+// - ACTIVE conditions on Self = the holder ([CONFIRMED 3.19] UnitStateBase.IsActive(BattleUnit) 0x16dfba0 uses the
+//   holder's bundle): 19 / 20 and 26 UniqueAbilityEffect, e.g. Scorchin' Summer Spike's ability gives every ally ATK +50%,
+//   additional DMG +40%, SPD +2..10% and DMG taken -10% that are active only while the holder has Beachball's Boon
+//   (set 3169 "Self.UniqueAbilityEffect contains 22"), so a non-Attacker dealer never has them.
+// A set left without conditions always matches, so then the whole list matches (sets are OR'd).
+const START_HOLDER_CONDITION = (c: any) => c._CompareTarget === 8 /* EachTarget */ && (c._CompareContent === 19 || c._CompareContent === 20)
+const ACTIVE_HOLDER_CONDITION = (c: any) => c._CompareTarget === 1 /* Self */ && (c._CompareContent === 19 || c._CompareContent === 20 || c._CompareContent === 26)
+function keepHolderConditions(sets: any[] | null, keep: (c: any) => boolean): any[] {
+    const out: any[] = []
+    for (const set of sets ?? []) {
+        const conds = (set._ConditionList ?? []).filter(keep)
+        if (!conds.length) return []
+        const copy = new E.BattleConditionUtils_ConditionSet().ctor()
+        copy._MstId = set._MstId
+        copy._Description = set._Description
+        copy._ConditionList = conds
+        out.push(copy)
+    }
+    return out
 }
 
 interface Built { d: any, dic: Map<number, any>, allies: any[], enemies: (any | undefined)[], main: any, dealer: any }
@@ -111,6 +141,7 @@ interface Ctx {
     enemyApps: QuestEnemyAppearance[]
     opts: MaxDmgOptions
     mainIdx: number
+    allyCount: number
 }
 
 /** The stage's battle at the wave's start with the team's own effects removed. */
@@ -168,6 +199,7 @@ function effectValueRate(caster: any, effect: any): number {
 function giveEffects(b: Built, list: Given): Map<string, { dealer: boolean, enemies: number[], rate: number }> {
     const reach = new Map<string, { dealer: boolean, enemies: number[], rate: number }>()
     // buff / debuff strength first: it scales every state its holder gives afterwards
+    const landed: { key: string, mstId: number, casterId: number, rate: number }[] = []
     const ordered = [...list.filter(x => isEffectValueType(x.e.detail.abilityEffectType)), ...list.filter(x => !isEffectValueType(x.e.detail.abilityEffectType))]
     for (const { e, stacks, copies } of ordered) {
         const caster = b.allies[e.casterPos]
@@ -189,10 +221,15 @@ function giveEffects(b: Built, list: Given): Map<string, { dealer: boolean, enem
             check._MainTargetUnit = b.main
             E.AbilityEffectLauncher.Triggering$10([effect], 0, check, origin, caster, b.dic, b.d, null, b.main?._Id ?? 0, b.dealer._Id)
         }
-        const has = (u: any) => !!u && u._Condition._StateList.some((s: any) => s._MstId === info._MstId && s._UserUnitId === caster._Id)
-        reach.set(e.key, { dealer: has(b.dealer), enemies: b.enemies.map((u, i) => has(u) ? i : -1).filter(i => i >= 0), rate })
+        landed.push({ key: e.key, mstId: info._MstId, casterId: caster._Id, rate })
     }
     for (const u of b.dic.values()) u.UpdateParameter?.()
+    // after every effect is given: a state counts where it is held AND active (its holder conditions, e.g. "while the
+    // holder has Beachball's Boon", can depend on a state given later in the list)
+    for (const { key, mstId, casterId, rate } of landed) {
+        const has = (u: any) => !!u && u._Condition._StateList.some((s: any) => s._MstId === mstId && s._UserUnitId === casterId && s.IsActive$BattleUnit(u))
+        reach.set(key, { dealer: has(b.dealer), enemies: b.enemies.map((u, i) => has(u) ? i : -1).filter(i => i >= 0), rate })
+    }
     return reach
 }
 
@@ -259,6 +296,9 @@ function runOnce(ctx: Ctx, dealerPos: number, pick: SkillPick, crit: boolean, ef
             const r = actorSkillTypeRestriction(eff._ActiveConditionSetIdCsv)
             if (r && !r.has(type)) return false
             if (ctx.opts.enemyStates && !ailmentConditionsMet([eff._StartConditionSetIdCsv, eff._ActiveConditionSetIdCsv], ctx.opts.enemyStates, ctx.enemyApps.length)) return false
+            // the wave's enemy count is known: "while fewer than N enemies" rows only fire when there are (start
+            // conditions, checked in the dealer's bundle: friends = the team, opponents = the wave)
+            if (!unitCountConditionsMet([eff._StartConditionSetIdCsv], ctx.allyCount, ctx.enemyApps.length)) return false
             return true
         })
         own.forEach(clearConditions)
@@ -373,7 +413,7 @@ export function computeMaxDamageEngine(allies: PvPKioku[], stage: EngineMaxDmgSt
         ? { kind: "soloRaid", allies, stageId: stage.stageId, noRoundLimit: true }
         : { kind: "quest", allies, stageId: stage.stageId }
     const mainIdx = Math.min(Math.max(0, opts.mainTargetIdx ?? 0), Math.max(0, enemies.length - 1))
-    const ctx: Ctx = { setup, waveIdx: stage.waveIdx, enemyApps: enemies, opts, mainIdx }
+    const ctx: Ctx = { setup, waveIdx: stage.waveIdx, enemyApps: enemies, opts, mainIdx, allyCount: allies.length }
     const effects = collectTeamEffects(allies, attackerPos)
     const members: MemberDamage[] = []
     let enemySummary: MaxDmgResult["enemies"] = []
@@ -385,6 +425,12 @@ export function computeMaxDamageEngine(allies: PvPKioku[], stage: EngineMaxDmgSt
         }
         const passEffects = pos === attackerPos ? effects : collectTeamEffects(allies, pos)
         const stacksOf = (e: MaxDmgEffect) => opts.excluded?.has(e.key) ? 0 : Math.max(0, Math.min(e.maxStacks, opts.stacks?.get(e.key) ?? e.maxStacks))
+        // The wave's unit counts are known, so "while N enemies remain" conditions are evaluated, not assumed: start
+        // conditions in the caster's (an ally's) bundle, active conditions in the holder's (the dealer for buffs, an enemy
+        // for debuffs, whose friends are the enemies).
+        const countsOk = (e: MaxDmgEffect) => unitCountConditionsMet([e.detail.startConditionSetIdCsv], allies.length, enemies.length)
+            && (e.side === "ally" ? unitCountConditionsMet([e.detail.activeConditionSetIdCsv], allies.length, enemies.length)
+                : unitCountConditionsMet([e.detail.activeConditionSetIdCsv], enemies.length, allies.length))
         const ailmentsOk = (d: SkillDetail) => !opts.enemyStates
             || ailmentConditionsMet([d.startConditionSetIdCsv, d.activeConditionSetIdCsv], opts.enemyStates, enemies.length)
         // Effects that count, and ladders of rungs that cannot count together (one rung each, chosen per column).
@@ -393,7 +439,7 @@ export function computeMaxDamageEngine(allies: PvPKioku[], stage: EngineMaxDmgSt
         for (const e of passEffects) {
             if (pos === attackerPos) { e.tierUsed = undefined; e.reach = undefined; e.rate = undefined }
             const stacks = stacksOf(e)
-            if (!stacks || !ailmentsOk(e.detail) || !e.applies) continue
+            if (!stacks || !ailmentsOk(e.detail) || !e.applies || !countsOk(e)) continue
             const copies = e.source === "Crystalis" ? Math.max(1, ((allies[e.casterPos] as any).crys as number[] ?? []).filter(c => c === (e.detail as any).passiveSkillMstId).length) : 1
             if (e.tier) ladderOf.set(e.tier.group, [...(ladderOf.get(e.tier.group) ?? []), { e, stacks, copies }])
             else base.push({ e, stacks, copies })

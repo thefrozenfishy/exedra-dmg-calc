@@ -1009,3 +1009,23 @@ export function ailmentConditionsMet(csvs: (string | undefined)[], stateTypes: s
         }))
     })
 }
+
+// Max Damage: the wave's unit counts are known, so they are not assumed. Evaluates only the team alive-unit-count
+// conditions (202 AliveUnitCount on FriendTeam / OpponentTeam) against the given counts; every other condition counts as
+// met. `friendCount` / `opponentCount` are from the point of view of the bundle the csv is checked in (the caster's for
+// start conditions, the holder's for active conditions). Each csv's sets are OR'd, conditions in a set AND'd.
+// E.g. Oracle Ray: "DMG dealt +15% while >= 2 / 3 / 4 / 5 enemies" (sets 330, 439-441) and her skills' extra hits
+// "while < 5 / 4 / 3 / 2 enemies" (sets 528, 527, 526, 525) never count together.
+export function unitCountConditionsMet(csvs: (string | undefined)[], friendCount: number, opponentCount: number): boolean {
+    return csvs.every(csv => {
+        const ids = (csv ?? "").split(",").filter(id => id.length && id !== "0")
+        if (!ids.length) return true
+        return ids.some(setId => (battleConditionSets[setId]?.battleConditionMstIdCsv ?? "").split(",").every(condId => {
+            const cond = battleConditions[condId]
+            if (cond?.compareContent !== CompareContent.ALIVE_UNIT_COUNT) return true
+            if (cond.compareTarget === CompareTarget.FRIEND_TEAM) return compareInt(cond.compareOperator, friendCount, cond.compareValue)
+            if (cond.compareTarget === CompareTarget.OPPONENT_TEAM) return compareInt(cond.compareOperator, opponentCount, cond.compareValue)
+            return true
+        }))
+    })
+}
