@@ -11,6 +11,8 @@
                         backup{{ w.length - 5 === 1 ? '' : 's' }}</template></span></button>
             <span class="row-hint">Teams are scored against the enemies on the field when the selected wave
                 starts.</span>
+            <a v-if="wikiUrl" class="wiki-link" :href="wikiUrl" target="_blank" rel="noopener"
+                title="This stage's battle page on exedra.wiki">details →</a>
         </div>
 
         <div v-if="enemyInfo.length" class="enemies-block">
@@ -81,6 +83,7 @@ import { stageWaveMeta, wavePositionIds, enemyName, breakMstOf, ELEMENT_KEYS, ty
 import { waveStartUnits } from '../models/PvEBattle'
 import { elementMap } from '../types/enums'
 import { useSetting } from '../store/settingsStore'
+import { wikiBattleUrl } from '../utils/wikiBattlePage'
 
 const props = withDefaults(defineProps<{ settingPrefix?: string }>(), { settingPrefix: 'saStage' })
 
@@ -90,6 +93,7 @@ const fmt = (n: number) => Math.round(n).toLocaleString()
 const hideImg = (ev: Event) => { (ev.target as HTMLImageElement).style.visibility = 'hidden' }
 const enemyImage = (enemyMstId: number) => `/exedra-dmg-calc/enemy/${enemyMstId}_thumbnail.png`
 
+const wikiUrl = computed(() => stageId.value ? wikiBattleUrl(stageId.value) : undefined)
 const waveMetas = computed(() => stageId.value ? stageWaveMeta(stageId.value) : [])
 const waves = computed(() => waveMetas.value.map(m => m.appearances))
 const wavePos = computed(() => Math.max(0, Math.min(waveIdx.value, waveMetas.value.length - 1)))
@@ -234,6 +238,19 @@ defineExpose({ selection })
 
 .wave-row .row-hint {
     margin-left: 0.4rem;
+}
+
+.wiki-link {
+    margin-left: auto;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--accent);
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.wiki-link:hover {
+    text-decoration: underline;
 }
 
 .enemies-block {
