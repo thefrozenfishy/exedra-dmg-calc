@@ -15,6 +15,16 @@
                 title="This stage's battle page on exedra.wiki">details →</a>
         </div>
 
+        <div v-if="enemyInfo.length" class="derived-row">
+            <span class="filters-heading">Weak elements</span>
+            <span v-if="!weakElements.length" class="row-hint">none</span>
+            <img v-for="w in weakElements" :key="w" :src="`/exedra-dmg-calc/elements/${w}.png`" :alt="w" :title="w"
+                class="elem-icon" />
+            <span class="filters-heading derived-gap">Ailments that can land</span>
+            <span v-if="!ailments.length" class="row-hint">none</span>
+            <span v-else class="row-hint">{{ ailments.map(ailmentLabel).join(', ') }}</span>
+        </div>
+
         <div v-if="enemyInfo.length" class="enemies-block">
             <div class="team-grid enemy-grid">
                 <div v-for="(e, i) in enemyInfo" :key="e.id" class="enemy-card"
@@ -81,7 +91,7 @@ import { computed, ref, watch } from 'vue'
 import StagePicker from './StagePicker.vue'
 import { stageWaveMeta, wavePositionIds, enemyName, breakMstOf, ELEMENT_KEYS, type QuestEnemyAppearance, type ModeChangeInfo } from '../models/PvE'
 import { waveStartUnits } from '../models/PvEBattle'
-import { elementMap } from '../types/enums'
+import { Ailment, elementMap, type KiokuElement } from '../types/enums'
 import { useSetting } from '../store/settingsStore'
 import { wikiBattleUrl } from '../utils/wikiBattlePage'
 
@@ -139,6 +149,17 @@ const enemyInfo = computed(() => {
     })
 })
 
+// The appearance row's parry field of each ailment (1000 = immune).
+const PARRY_FIELD: Record<Ailment, string> = {
+    [Ailment.BURN]: 'burnParryRate', [Ailment.CURSE]: 'curseParryRate', [Ailment.POISON]: 'poisonParryRate',
+    [Ailment.WOUND]: 'bleedParryRate', [Ailment.STUN]: 'stunParryRate', [Ailment.VORTEX]: 'vortexParryRate',
+    [Ailment.WEAKNESS]: 'weaknessParryRate',
+}
+// Elements any enemy on the field is weak to; ailments some enemy on the field isn't fully immune to.
+const weakElements = computed<KiokuElement[]>(() => [...new Set(enemyInfo.value.flatMap(e => e.weak))] as KiokuElement[])
+const ailments = computed<Ailment[]>(() => Object.values(Ailment).filter(a => wave.value.some(e => ((e as any)[PARRY_FIELD[a]] ?? 0) < 1000)))
+const ailmentLabel = (a: Ailment) => a === Ailment.WOUND ? 'Bleed' : a.charAt(0) + a.slice(1).toLowerCase()
+
 /** The stage, wave and per-enemy settings to score against (plain data: it goes to the workers). */
 const selection = computed(() => stageId.value && wave.value.length ? {
     stageId: stageId.value,
@@ -147,6 +168,8 @@ const selection = computed(() => stageId.value && wave.value.length ? {
     mainTargetIdx: mainTargetIdx.value,
     broken: [...broken.value],
     breakRate: [...breakRate.value],
+    weakElements: [...weakElements.value],
+    ailments: [...ailments.value],
 } : undefined)
 
 defineExpose({ selection })
@@ -240,6 +263,18 @@ defineExpose({ selection })
     margin-left: 0.4rem;
 }
 
+.derived-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.4rem;
+    margin: 0.6rem 0 0;
+}
+
+.derived-gap {
+    margin-left: 1rem;
+}
+
 .wiki-link {
     margin-left: auto;
     font-size: 0.85rem;
@@ -255,6 +290,8 @@ defineExpose({ selection })
 
 .enemies-block {
     container-type: inline-size;
+    /* size containment in a flex column (the page's .section-card) otherwise sizes the block from a guess, not its grid */
+    width: 100%;
 }
 
 .team-grid {

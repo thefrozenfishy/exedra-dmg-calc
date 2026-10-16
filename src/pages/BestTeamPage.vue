@@ -36,6 +36,10 @@
                 title="Optimizes for average damage over many hits, instead of assuming crit">
                 <input type="checkbox" v-model="optimizeAverageDamage" /> Average damage (LR)
             </label>
+            <label class="chip" style="cursor: help;" :class="{ active: onlyFiveStarLists }"
+                title="Only 5★ Kioku in the Kioku lists below (exceptions, obligatory, ignored, non-attacker damage dealers)">
+                <input type="checkbox" v-model="onlyFiveStarLists" /> Show only 5★ Kioku
+            </label>
             <label class="chip" :class="{ active: onlyConsiderOnElements }">
                 <input type="checkbox" v-model="onlyConsiderOnElements" /> On-element only
             </label>
@@ -131,20 +135,6 @@ Lower = faster but more likely to skip a team that could have closed the gap.
                         }}</div>
                 </div>
             </div>
-        </section>
-
-        <section class="card section-card weak-elements">
-            <h3 class="section-title">Weak Elements</h3>
-            <div class="element-aliment-grid">
-                <div v-for="element in weakElements" :key="element.name" class="element"
-                    :class="{ disabled: !element.enabled }" @click="toggleElement(element)">
-                    <img :src="`/exedra-dmg-calc/elements/${element.name}.png`" :alt="element.name"
-                        :title="element.name" />
-                    <span>{{ element.name }}</span>
-                </div>
-            </div>
-
-            <AlimentToggler ref="alimentRef" />
         </section>
 
         <section class="card section-card kioku-selector">
@@ -300,13 +290,12 @@ import { reactive, computed, ref, ComputedRef } from 'vue'
 import TeamRow from '../components/TeamRow.vue'
 import StageEnemySelector from '../components/StageEnemySelector.vue'
 import ArenaBuffs from '../components/ArenaBuffs.vue'
-import AlimentToggler from '../components/AlimentToggler.vue'
 import DamageReductionInputs from '../components/DamageReductionInputs.vue'
 import ResultsHeader from '../components/ResultsHeader.vue'
 import { useEnemyStore } from '../store/singleTeamStore'
 import { useCharacterStore } from '../store/characterStore'
 import { Character, KiokuConstants, withMaxLevelsForPlayerLevel } from '../types/KiokuTypes'
-import { KiokuRole, KiokuElement, elementAlimentMap, LuxMagica, maxPlayerLevel } from '../types/enums'
+import { KiokuRole, KiokuElement, LuxMagica, maxPlayerLevel } from '../types/enums'
 import { toast } from "vue3-toastify"
 import { FinalTeam } from '../types/BestTeamTypes'
 import { useSetting } from '../store/settingsStore'
@@ -353,7 +342,6 @@ let pool: EngineTeamPool | null = null
 let runId = 0
 const progress = ref<FinalTeam>({})
 
-const alimentRef = ref<InstanceType<typeof AlimentToggler> | null>(null)
 const stageRef = ref<InstanceType<typeof StageEnemySelector> | null>(null)
 
 const topTeamsPerKioku = useSetting("topTeamsPerKioku", 5)
@@ -374,22 +362,17 @@ const pruningMargin = useSetting("pruningMargin", 15)
 const arenaEffects = useSetting<{ type: string; value: number }[]>("arenaEffects", [])
 const onlyConsiderOnElements = useSetting("onlyConsiderOnElements", true)
 
-const weakElements = reactive([
-    { name: KiokuElement.Flame, enabled: useSetting("flame-enabled", true) },
-    { name: KiokuElement.Aqua, enabled: useSetting("aqua-enabled", true) },
-    { name: KiokuElement.Forest, enabled: useSetting("forest-enabled", true) },
-    { name: KiokuElement.Light, enabled: useSetting("light-enabled", true) },
-    { name: KiokuElement.Dark, enabled: useSetting("dark-enabled", true) },
-    { name: KiokuElement.Void, enabled: useSetting("void-enabled", true) },
-])
+// The weak elements and the ailments come from the picked stage (StageEnemySelector): the elements any enemy on the
+// field is weak to, and every ailment some enemy there isn't fully immune to.
+const stageWeakElements = computed<KiokuElement[]>(() => stageRef.value?.selection?.weakElements ?? [])
+const toElementToggles = (els: KiokuElement[]) => Object.values(KiokuElement).map(name => ({ name, enabled: els.includes(name) }))
+// the elements of the last run, for the result rows (off-element support markers)
+const runWeakElements = ref<KiokuElement[]>([])
+const weakElements = computed(() => toElementToggles(runWeakElements.value))
 
-// Keep weak element toggles in sync with their linked aliment in AlimentToggler
-const toggleElement = (element: typeof weakElements[number]) => {
-    element.enabled = !element.enabled
-    if (!alimentRef.value) return
-    const linked = alimentRef.value.aliments.find(a => a.name === elementAlimentMap[element.name])
-    if (linked) linked.enabled = element.enabled
-}
+// Kioku lists (exceptions, obligatory, ignored, non-attacker dealers): only 5 stars, as in the single team page's selector
+const onlyFiveStarLists = useSetting("bestTeamOnlyFiveStarLists", true)
+const listable = (m: Character) => !onlyFiveStarLists.value || (m.rarity === 5 && m.name !== "Strada Futuro")
 
 const deBufferCount = useSetting("deBufferCount", 3)
 const otherCount = computed(() => 4 - deBufferCount.value)
@@ -430,7 +413,7 @@ function safeInt(value: unknown, fallback = 0, min?: number, max?: number): numb
 const exportOpts = { exportClass: "exporting" }
 
 const shareOptionsForBestTeam = () => ({
-    title: `${friendStore.getFormattedDisplayNamePossessive()} best team vs ${weakElements.filter(el => el.enabled).map(el => el.name).join(" & ")}`,
+    title: `${friendStore.getFormattedDisplayNamePossessive()} best team vs ${(stageWeakElements.value.length ? stageWeakElements.value : runWeakElements.value).join(" & ")}`,
     backUrl: window.location.href,
 })
 
@@ -454,7 +437,7 @@ const filteredAttackers = computed(() => {
     const q = extraAttackerQuery.value.toLowerCase()
     return members.value.filter(m =>
         !extraAttackers.value.some(a => a.id === m.id) &&
-        m.rarity !== 3 &&
+        listable(m) &&
         m.role !== KiokuRole.Attacker &&
         (m.name.toLowerCase().includes(q) || m.character_en.toLowerCase().includes(q) || (m.name === "Time Stop Strike" && q.startsWith("moe")))
     )
@@ -463,16 +446,16 @@ const filteredKioku = computed(() => {
     const q = obligatoryKiokuQuery.value.toLowerCase()
     return members.value.filter(m =>
         !obligatoryKioku.value.some(a => a.id === m.id) &&
-        m.rarity !== 3 &&
+        listable(m) &&
         (m.name.toLowerCase().includes(q) || m.character_en.toLowerCase().includes(q) || (m.name === "Time Stop Strike" && q.startsWith("moe")))
     )
 })
 const filteredOnElementExceptions = computed(() => {
     const q = onElementExceptionQuery.value.toLowerCase()
-    const enabledElements = weakElements.filter(el => el.enabled).map(el => el.name)
+    const enabledElements = stageWeakElements.value
     return members.value.filter(m =>
         !onElementExceptions.value.some(a => a.id === m.id) &&
-        m.rarity !== 3 &&
+        listable(m) &&
         m.role !== KiokuRole.Attacker &&
         !enabledElements.includes(m.element) &&
         (m.name.toLowerCase().includes(q) || m.character_en.toLowerCase().includes(q) || (m.name === "Time Stop Strike" && q.startsWith("moe")))
@@ -482,7 +465,7 @@ const filteredIgnoredKioku = computed(() => {
     const q = ignoredKiokuQuery.value.toLowerCase()
     return members.value.filter(m =>
         !ignoredKioku.value.some(a => a.id === m.id) &&
-        m.rarity !== 3 &&
+        listable(m) &&
         (m.name.toLowerCase().includes(q) || m.character_en.toLowerCase().includes(q) || (m.name === "Time Stop Strike" && q.startsWith("moe")))
     )
 })
@@ -660,6 +643,7 @@ async function startSimulation() {
         toast.error("Pick a stage first", { position: toast.POSITION.TOP_RIGHT, icon: false })
         return
     }
+    runWeakElements.value = [...stage.weakElements]
     prevObligatoryKioku = [...obligatoryKioku.value]
     prevAttackers = [...attackers.value, ...extraAttackers.value]
     running.value = true
@@ -679,10 +663,10 @@ async function startSimulation() {
         include4StarAttackers: include4StarAttackers.value,
         include4StarSupports: include4StarSupports.value,
         include4StarOthers: include4StarOthers.value,
-        weakElements: weakElements.filter(el => el.enabled).map(el => el.name),
+        weakElements: [...stage.weakElements],
         onlyConsiderOnElements: onlyConsiderOnElements.value,
         onElementExceptions: onElementExceptions.value.map(c => c.name),
-        activeAliments: alimentRef.value?.aliments.filter(a => a.enabled).map(a => a.name) ?? [],
+        activeAliments: [...stage.ailments],
         extraAttackers: extraAttackers.value.map(c => c.name),
         obligatoryKioku: obligatoryKioku.value.map(c => c.name),
         ignoredKioku: ignoredKioku.value.map(c => c.name).filter(c => !obligatoryKioku.value.map(c => c.name).includes(c)),
