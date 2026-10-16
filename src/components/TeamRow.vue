@@ -26,8 +26,8 @@
                 </a>
                 <div v-if="!loading && team.pwr !== undefined" class="combo-pwr">{{ team.pwr.toLocaleString() }}</div>
             </div>
-            <template v-for="i in 4" :key="i" class="image-wrapper">
-                <div v-if="team[`supp${i}`]">
+            <template v-for="i in 4">
+                <div v-if="team[`supp${i}`]" :key="i" class="image-wrapper">
                     <a :href="`https://exedra.wiki/wiki/${team[`supp${i}`].name}`"
                         target="_blank">
                         <img :src="`/exedra-dmg-calc/kioku_images/${team[`supp${i}`].id}_thumbnail.png`"
