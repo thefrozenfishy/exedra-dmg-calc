@@ -14,6 +14,8 @@ Reports, worst first:
   VALUE ERROR    _formatValue raised: an effect type / value slot with no rule (generator logs an error)
   VALUE UNKNOWN  slot shown as "ValueN" (known unknowns)
   VALUE UNITS    the description text suggests the other unit (per-mille % vs raw) for a slot, >= 60% of rows
+  SYNC COND      a CompareContent the 1:1 engine knows (src/engine/.../CompareContent.ts) that condition_parser lacks,
+                 or one whose number differs: the wiki must say what the engine evaluates, even before data uses it
 Fix them in condition_parser.py (COMPARE_CONTENT_NAMES + the match) and wiki_helpers._formatValue, using the engine's
 knowledge (exedra-dmg-calc docs/ai/MECHANICS.md, `xq enum CompareContent`, `xq effect <TYPE>`).
 """
@@ -84,5 +86,16 @@ for (t, i), s in sorted(stat.items()):
         other = "raw" if s["fmt"] == "pct" else "pct"
         if s[other] >= 0.6 * s["n"] and s[other] > s[s["fmt"]]:
             out.append(f"VALUE UNITS   {t} value{i}: shown as {s['fmt']}, description matches {other} in {s[other]}/{s['n']} rows, e.g. {s['ex']}")
+# engine <-> wiki: every compare content of the engine (the game's enum) is named in the wiki parser
+ENGINE = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "src", "engine"))
+cc_ts = os.path.join(ENGINE, "ReDriveBattleCore", "BattleCondition", "CompareContent.ts")
+if os.path.exists(cc_ts):
+    eng = {int(v): n for n, v in re.findall(r"^\s+(\w+): (\d+),$", open(cc_ts, encoding="utf-8").read(), re.M)}
+    wiki_vals = {int(m.value) for m in cp.CompareContent}
+    for v, n in sorted(eng.items()):
+        if v and v not in wiki_vals:
+            out.append(f"SYNC COND     engine CompareContent {n} = {v} has no entry in condition_parser.CompareContent")
+        elif v and v in wiki_vals and cp.CompareContent(v) not in cp.COMPARE_CONTENT_NAMES:
+            out.append(f"SYNC COND     engine CompareContent {n} = {v} has no COMPARE_CONTENT_NAMES entry")
 print("\n".join(out) if out else "OK: every condition and effect value has a rule")
 print(f"({len(cp.battle_conditions)} conditions, {sum(s['n'] for s in stat.values())} effect values checked)")

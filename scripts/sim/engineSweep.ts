@@ -1,5 +1,7 @@
 // Sweep many stages x teams x seeds on the 1:1 engine and group failures by message.
 // npx tsx scripts/sim/engineSweep.ts [stageCount=40] [seeds=2] [offset=0] [budgetSec=150]
+// STAGES=1,2,3 runs exactly those stages; WITH="Kioku A|Kioku B" adds, per fixture team, a copy with that kioku
+// (max build) in slot 1 and counts Step-Up skill uses and self HP costs (new-content smoke test, VERSION_UPDATE.md).
 import "../../src/models/BestTeamCalculator"; // load order (Kioku <-> BestTeamCalculator cycle)
 import fs from "fs";
 import path from "path";
@@ -38,11 +40,25 @@ if (randTeams > 0) {
         teams.push({ name: `rand${t}:${picked.join(",")}`, kiokus });
     }
 }
+// new-kioku teams: each fixture team with the kioku (max build) in the first slot
+const maxBuild = (name: string) => {
+    const d: any = (kiokuData as any)[name];
+    if (!d) throw new Error(`unknown kioku ${name}`);
+    return buildSlotKioku({ main: { enabled: true, dupes: 0, ascension: 5, portrait: "", kiokuLvl: 138, magicLvl: 130, heartphialLvl: 50, specialLvl: 7,
+        name, id: d.id, role: d.role, element: d.element, supportTarget: d.support_target, supportDescription: d.support_effect,
+        character_en: d.character_en, heartphial: d.heartphial || d.character_en, rarity: d.rarity, obtain: d.obtain, crysOptions: {} } } as any);
+};
+const withNames = (process.env.WITH ?? "").split("|").map(x => x.trim()).filter(Boolean);
+if (withNames.length) {
+    const base = teams.splice(0, teams.length);
+    for (const nm of withNames) for (const t of base) teams.push({ name: `${nm}+${t.name}`, kiokus: [maxBuild(nm), ...t.kiokus.slice(1)] });
+}
+let stepUps = 0, consumeHp = 0;
 Object.assign(console, quiet);
 bindMasterData();
 // spread the sample over the whole stage list
 // SOLORAID=1: only Solo Raid stages (run on SoloRaidGameDirector, like every Solo Raid stage in the sweep)
-const all = (stages as any[]).map((s) => s.id ?? s.questStageMstId).filter((x) => x).filter((x) => !process.env.SOLORAID || isSoloRaidStage(x));
+const all = process.env.STAGES ? process.env.STAGES.split(",").map(Number) : (stages as any[]).map((s) => s.id ?? s.questStageMstId).filter((x) => x).filter((x) => !process.env.SOLORAID || isSoloRaidStage(x));
 const step = Math.max(1, Math.floor(all.length / count));
 const pick: number[] = [];
 for (let i = off; i < all.length && pick.length < count; i += step) pick.push(all[i]);
@@ -62,6 +78,8 @@ outer: for (const stageId of pick) for (const team of teams) for (let seed = 1; 
             for (const c of commands) {
                 if (c.constructor.name !== "CommandSkill") continue;
                 skills++;
+                if (c._StepUpLevel > 0) stepUps++;
+                for (const n of c._AffectedUnitNoticeList ?? []) if (n._IsConsumeHp) consumeHp++;
                 for (const n of c._AffectedUnitNoticeList ?? []) for (const d of [...(n.Damages ?? []), ...(n.BarrierDamages ?? [])]) {
                     const v = d.DamageValue ?? d._DamageValue;
                     if (!Number.isInteger(v) || v < 0) bad ||= `damage ${v} (skill ${c._SkillMstId})`;
@@ -90,6 +108,7 @@ outer: for (const stageId of pick) for (const team of teams) for (let seed = 1; 
         const l = fails.get(key) ?? []; l.push(`${stageId}/${team.name.slice(0, team.name.startsWith("rand") ? 200 : 12)}/${seed}`); fails.set(key, l);
     }
 }
+if (withNames.length) console.log(`Step-Up skill uses ${stepUps}, self HP costs ${consumeHp}`);
 console.log(`results ${[...results].map(([k, v]) => `${k}:${v}`).join(" ")}`);
 console.log(`runs ${n} ok ${ok} wins ${wins} stages ${pick[0]}..${pick[pick.length - 1]} (${((Date.now() - t0) / 1000).toFixed(0)}s)`);
 for (const [k, v] of [...fails].sort((a, b) => b[1].length - a[1].length)) console.log(`${v.length}x ${k}\n     e.g. ${v.slice(0, 3).join(" ")}`);

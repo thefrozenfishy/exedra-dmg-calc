@@ -555,6 +555,19 @@ export class EngineBattle {
         const normal = unit.IsSwitchingActiveSkill(E.NormalAttack, switchedNormal, E.ref(null)) ? switchedNormal.v : unit.NormalAttack
         const options: { label: string, skill?: any, ult?: any }[] = []
         if (skill && sp > 0) options.push({ label: `Battle Skill (SP ${sp})`, skill })
+        // 3.21.0 Step-Up: the client's step button walks StepUpSkillHandler.TryEvaluateNextStepUp step by step; each
+        // reachable step is its own skill (SkillSet.StepUpSkills), paid as its SP + step in ActiveSkill.Execute
+        if (skill && sp > 0) {
+            const states = E.StepUpSkillHandler.GetActiveStepUpStateList(unit)
+            let level = 0
+            const id = E.ref(0), cost = E.ref(0)
+            while (states.length && E.StepUpSkillHandler.TryEvaluateNextStepUp(unit, states, level, d.spReferee, id, cost)) {
+                level++
+                const stepSkill = unit.SkillSet.GetSkill(id.v)
+                if (!stepSkill) break
+                options.push({ label: `Battle Skill Step ${level}: ${skillName(stepSkill.Id)} (SP ${cost.v})`, skill: stepSkill })
+            }
+        }
         options.push({ label: "Basic Attack", skill: normal })
         for (const u of this.readyUltimates()) options.push({ label: `Ultimate: ${this.unitLabel(u)}`, ult: u })
         const choice = options[this.rng.pick("action", `${this.unitLabel(unit)} · ${what}: choose an action`, options.map(o => o.label))]

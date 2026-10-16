@@ -137,6 +137,7 @@ enum CompareContent {
     FIELD_START = 113,
     FIELD_END = 114,
     HAS_DEBUFF_EFFECT_VALUE = 116, // 3.19 dump.cs: AddRemovableDebuffCount
+    IS_CONSUME_HP = 117, // 3.21.0 IsConsumeHp: evaluated by src/engine only (the old engine has no HP cost, false here)
 
     SP = 201,
     ALIVE_UNIT_COUNT = 202,
