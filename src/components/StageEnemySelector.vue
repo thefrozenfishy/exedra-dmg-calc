@@ -22,7 +22,8 @@
                 class="elem-icon" />
             <span class="filters-heading derived-gap">Ailments that can land</span>
             <span v-if="!ailments.length" class="row-hint">none</span>
-            <span v-else class="row-hint">{{ ailments.map(ailmentLabel).join(', ') }}</span>
+            <img v-for="a in ailments.map(ailmentLabel)" :key="a" :src="`/exedra-dmg-calc/aliments/${a}.png`" :alt="a" :title="a"
+                class="elem-icon" />
         </div>
 
         <div v-if="enemyInfo.length" class="enemies-block">
