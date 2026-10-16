@@ -15,7 +15,7 @@ import { PvPKioku } from "./PvPKioku";
 import { Kioku } from "./Kioku";
 import { BattleType } from "./DamageCalculator";
 import type { RngMode } from "./BattleRng";
-import { ailmentConditionValues, unitTypeConditionValues } from "./BattleConditionParser";
+import { ailmentConditionValues, critConditionUsed, unitTypeConditionValues } from "./BattleConditionParser";
 import type { QuestEnemyAppearance } from "./PvE";
 import { crystalisesByStyle, kiokuData, skillDetailsByMstId } from "../utils/helpers";
 import { TargetType, TargetTypeLookup, targetTypeToLvl, type BattleEvent, type BattleSnapshot, type KiokuArgs, type SkillDetail } from "../types/KiokuTypes";
@@ -96,10 +96,8 @@ function averageRoleStats(role: KiokuRole, levels: Pick<KiokuArgs, "ascension" |
 
 const DAMAGE_TYPES = new Set(["DMG_ATK", "DMG_DEF", "DMG_HP", "DMG_RANDOM"])
 
-/** Elements and roles a kit's effects are limited to: the TargetElement/TargetRole of its effects (damage effects
- *  aside, where `element` is the attack element) and the IS_ELEMENT_TYPE / IS_ROLE_TYPE conditions they use.
- *  Covers the basic attack, battle skill, ultimate, every passive and the follow-up skills they grant. */
-export function kitRestrictions(k: PvPKioku): { elements: KiokuElement[], roles: KiokuRole[], ailments: Ailment[] } {
+/** Every skill / passive row of a kit: basic attack, battle skill, ultimate, passives, and the follow-ups they grant. */
+function kitDetails(k: PvPKioku): SkillDetail[] {
     const details: SkillDetail[] = []
     for (const type of [TargetType.attackId, TargetType.skillId, TargetType.specialId]) {
         const id = (k.data as any)[TargetTypeLookup[type as keyof typeof TargetTypeLookup]]
@@ -110,6 +108,21 @@ export function kitRestrictions(k: PvPKioku): { elements: KiokuElement[], roles:
     for (const d of [...details]) {
         if (d.abilityEffectType === "ADDITIONAL_SKILL_ACT") details.push(...(skillDetailsByMstId.get(d.value1) ?? []) as SkillDetail[])
     }
+    return details
+}
+
+/** Kits whose effects react to crits: a "critical hit happened" condition (CTDUnitCount 303, e.g. Absolute Rain's
+ *  "on critical hit, ATK +10%") or a state used up by a crit (UP/DWN_CTD_CONSUME_FIXED). For those the expected-crit
+ *  shortcut would miss the procs, so their battles roll crits as in the game. */
+export function kitReactsToCrits(k: PvPKioku): boolean {
+    return kitDetails(k).some(d => d.abilityEffectType.includes("CTD_CONSUME") || critConditionUsed([d.startConditionSetIdCsv, d.activeConditionSetIdCsv]))
+}
+
+/** Elements and roles a kit's effects are limited to: the TargetElement/TargetRole of its effects (damage effects
+ *  aside, where `element` is the attack element) and the IS_ELEMENT_TYPE / IS_ROLE_TYPE conditions they use.
+ *  Covers the basic attack, battle skill, ultimate, every passive and the follow-up skills they grant. */
+export function kitRestrictions(k: PvPKioku): { elements: KiokuElement[], roles: KiokuRole[], ailments: Ailment[] } {
+    const details = kitDetails(k)
     const elements = new Set<KiokuElement>(), roles = new Set<KiokuRole>(), ailments = new Set<Ailment>()
     for (const d of details) {
         ailmentConditionValues([d.startConditionSetIdCsv, d.activeConditionSetIdCsv]).forEach(a => ailments.add(a))
@@ -276,7 +289,9 @@ export function simulatedDealerDamage(allies: PvPKioku[], dealerPos: number, ene
             if (states.some(isDealerTurn)) { nextTurn = battle.elapsed; break }
         }
     }
-    if (opts.report) opts.report.random = rng.events.length > 0
+    // random beyond crits: a crit roll only matters with rolled crits (with expected crits it only sets the IsCritical
+    // flag, which nothing in a team without crit reactions reads)
+    if (opts.report) opts.report.random = rng.events.some(e => !opts.expectedCrits || e.kind !== "crit")
     return opts.perAv && nextTurn > 0 ? total * opts.av / nextTurn : total
     } finally {
         mods.expectedCritDamage = savedMod
@@ -301,22 +316,22 @@ export interface BenchOptions {
     seeds: number   // rolled battles averaged for Average Damage when anything in it is random (see simTotal)
     av: number      // action value per battle
     infiniteSp?: boolean // see SimOptions
-    expectedCrits?: boolean // APP MOD, see SimOptions: then two seeds that agree are enough (crits no longer vary the damage)
 }
 
 type KiokuInput = Omit<KiokuArgs, "crysIDs" | "subCrysIDs"> & Partial<KiokuArgs>
 
 /**
- * Support chart: a Lux dealer with the character next to her, compared to Lux alone; the dealer has no element or role
- * (the main bar) or one the character's kit is limited to (variant bars). Attacker chart: the character alone as the
- * dealer (its own element and role) compared to Lux alone in the character's role (with that role's average 5 star
- * stats, see benchKioku). No filler units: the game runs a battle with any number of allies (the old engine needed 5).
- * Lux's baselines are computed once per identity / enemy count and reused. The support chart's Lux dealer is A0 at max
- * levels, so she has no follow-up.
+ * Support chart: a Lux dealer with the character in slot 2 and three Lux fillers, compared to five Lux; the dealer
+ * has no element or role (the main bar) or one the character's kit is limited to (variant bars). Attacker chart:
+ * the character as the dealer (its own element and role) compared to Lux as the dealer in the character's role (with
+ * that role's average 5 star stats, see benchKioku), both with four fillers. Always 5 units (user's choice).
+ * Lux's baselines are computed once per identity / enemy count and reused. Every bench Lux (dealer, fillers,
+ * reference) is A0 at max levels, so she has no follow-up.
  */
 export class LuxBenchCharts {
     private readonly luxArgs: KiokuInput
     private readonly reference: PvPKioku
+    private readonly filler: PvPKioku
     private readonly dealers = new Map<string, PvPKioku>()
     private readonly references = new Map<KiokuRole, PvPKioku>()
     private readonly ultBase = new Map<string, { damage: number, critChance: number }>()
@@ -330,6 +345,7 @@ export class LuxBenchCharts {
         this.luxArgs = { ...lux, ascension: 0 }
         this.opts = opts
         this.reference = benchKioku(this.luxArgs)
+        this.filler = benchKioku(this.luxArgs, { element: undefined, role: undefined })
     }
 
     private dealer(id: BenchIdentity): PvPKioku {
@@ -348,25 +364,21 @@ export class LuxBenchCharts {
     }
 
     private team(dealer: PvPKioku, second?: PvPKioku): PvPKioku[] {
-        return second ? [dealer, second] : [dealer]
+        return [dealer, second ?? this.filler, this.filler, this.filler, this.filler]
     }
 
-    // The dealer's average damage over one run: the mean of `seeds` rolled battles (seeds 0..seeds-1), or the one
-    // battle when nothing in it was random (no roll between 0 and 100%: e.g. a 0% or 100% crit rate).
+    // The dealer's average damage over one run. A team where a kit reacts to crits (kitReactsToCrits) rolls its crits as
+    // in the game: the mean of `seeds` battles (seeds 0..seeds-1). Every other team uses the expected-crit APP MOD
+    // (runtime.AppMods.expectedCritDamage, not game code): one battle gives the average; `seeds` battles only when
+    // something else in it is random (proc chances, random targets).
     private simTotal(team: PvPKioku[], enemies: number, ailment?: Ailment, immune: Ailment[] = []): number {
-        const base = { av: this.opts.av, infiniteSp: this.opts.infiniteSp, expectedCrits: this.opts.expectedCrits, ailment, immune, perAv: true }
+        const expectedCrits = !team.some(k => kitReactsToCrits(k))
+        const base = { av: this.opts.av, infiniteSp: this.opts.infiniteSp, expectedCrits, ailment, immune, perAv: true }
         const report = { random: false }
-        const first = simulatedDealerDamage(team, 0, enemies, { ...base, seed: 0, report })
-        if (!report.random) return first
-        // [BENCH] Seeds 0, 1, 2, ... until the mean is settled: its standard error under SEED_PRECISION of the mean (from
-        // MIN_SEEDS on), at most `seeds`. Deterministic (same seeds, same stopping point). A long battle averages its
-        // crits within itself (100 turns: ~0.3% apart between seeds), so it stops after a few; a short one uses more.
-        const values = [first]
-        while (values.length < this.opts.seeds) {
-            values.push(simulatedDealerDamage(team, 0, enemies, { ...base, seed: values.length }))
-            if (values.length >= (this.opts.expectedCrits ? 2 : MIN_SEEDS) && settled(values)) break
-        }
-        return values.reduce((a, b) => a + b, 0) / values.length
+        let total = simulatedDealerDamage(team, 0, enemies, { ...base, seed: 0, report })
+        if (!report.random) return total
+        for (let seed = 1; seed < this.opts.seeds; seed++) total += simulatedDealerDamage(team, 0, enemies, { ...base, seed })
+        return total / this.opts.seeds
     }
 
     private cachedUlt(key: string, team: () => PvPKioku[], enemies: number, ailment?: Ailment) {
@@ -456,16 +468,6 @@ export class LuxBenchCharts {
             return { ...id, gain: pctGain(this.simTotal(this.team(x), enemies, id.ailment, immune), base) }
         })
     }
-}
-
-const MIN_SEEDS = 3
-const SEED_PRECISION = 0.0025 // standard error of the mean / mean
-function settled(values: number[]): boolean {
-    const n = values.length
-    const mean = values.reduce((a, b) => a + b, 0) / n
-    if (!(mean > 0)) return true
-    const variance = values.reduce((a, v) => a + (v - mean) ** 2, 0) / (n - 1)
-    return Math.sqrt(variance / n) / mean < SEED_PRECISION
 }
 
 const pctGain = (value: number, base: number) => base > 0 ? (value / base - 1) * 100 : 0

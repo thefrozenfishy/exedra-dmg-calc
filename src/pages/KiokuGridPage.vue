@@ -243,19 +243,6 @@
                     </div>
                 </div>
 
-                <div v-if="benchAverageDmg" class="fight-mode-row">
-                    <span class="fight-mode-label">Crits</span>
-                    <div class="fight-mode-toggle" style="--count: 2" role="radiogroup" aria-label="Crit handling">
-                        <div class="fight-mode-highlight"
-                            :style="{ transform: `translateX(${benchCritIndex * 100}%)` }"></div>
-                        <button v-for="opt in benchCritOptions" :key="opt.label" type="button"
-                            class="fight-mode-option" :class="{ active: benchExpectedCrits === opt.value }"
-                            :title="opt.title" @click="benchExpectedCrits = opt.value">
-                            {{ opt.label }}
-                        </button>
-                    </div>
-                </div>
-
                 <div v-if="bc.fightType" class="fight-mode-row">
                     <span class="fight-mode-label">Fight type</span>
                     <div class="fight-mode-toggle" role="radiogroup" aria-label="Fight type">
@@ -494,14 +481,6 @@ const benchSpeedOptions = [
 ] as const
 type BenchSpeed = typeof benchSpeedOptions[number]["value"]
 const benchSpeed = useSetting<BenchSpeed>("gridBenchSpeed", "fast")
-// APP MOD (not game code, runtime.AppMods.expectedCritDamage): every hit deals its expected crit damage instead of a
-// rolled crit, so one battle gives the average (rolled crits need several seeded battles).
-const benchCritOptions = [
-    { value: true, label: "Average crits (mod)", title: "Not how the game works: every hit deals its expected damage (normal + (crit - normal) x crit chance). One battle gives the average, so this is much faster. Effects that react to crits still use rolled crits." },
-    { value: false, label: "Rolled crits (1:1)", title: "As in the game: each hit rolls its crit. Averaged over several seeded battles (until the average settles)." },
-]
-const benchExpectedCrits = useSetting("gridBenchExpectedCrits", true)
-const benchCritIndex = computed(() => benchExpectedCrits.value ? 0 : 1)
 const benchSpeedIndex = computed(() => Math.max(0, benchSpeedOptions.findIndex(opt => opt.value === benchSpeed.value)))
 const benchTurns = computed(() => benchSpeedOptions[benchSpeedIndex.value].turns)
 
@@ -974,7 +953,8 @@ const emptyBarChart = () => ({
     hasVariants: false,
 })
 
-const BENCH_SEEDS = 10 // rolled battles averaged when a team is random beyond crits (the same seeds for Lux's baseline)
+const BENCH_SEEDS = 10 // battles averaged when a team rolls crits (a kit reacts to crits) or has other random effects
+const CRIT_TEXT = "Crits: every hit deals its average crit damage (a shortcut, not how the game works), except in teams where a kit reacts to crits (e.g. Absolute Rain's \"on critical hit\"): those roll crits as in the game and average 10 battles."
 const benchAv = () => benchTurns.value * 100 // 100 AV = 1 turn (the Length toggle)
 const BENCH_INFINITE_SP = true // SP topped up to 5 before every turn: a battle skill every turn, no SP shared out
 
@@ -1024,7 +1004,6 @@ const benchSetup = (kind: BenchChartKind, lux: Character): BenchSetup => ({
     seeds: BENCH_SEEDS,
     av: benchAv(),
     infiniteSp: BENCH_INFINITE_SP,
-    expectedCrits: benchExpectedCrits.value,
     lux: maxLevelsForChart(lux),
 })
 
@@ -1093,7 +1072,6 @@ const runBench = (kind: BenchChartKind, { fresh = false } = {}) => {
         seeds: setup.seeds,
         av: setup.av,
         infiniteSp: BENCH_INFINITE_SP,
-        expectedCrits: setup.expectedCrits,
     }
 
     const count = Math.min(BENCH_WORKERS, todo.length)
@@ -1219,7 +1197,7 @@ const benchCharts = computed(() => [
         desc: [
             `How much each character increases the damage of a ${LuxMagica} as damage dealer, ${LuxMagica} is modified to be simulated as with any role and any element. When the element or role version had a different damage output, that element or role will be given a separate bar. ${levelsDescription.value}`,
             benchAverageDmg.value
-                ? `Average Damage: ${benchAv()} AV (${benchTurns.value} turns) of battle on the game's battle code with infinite SP (ultimates as soon as they are ready, Battle Skill every turn, ally-target skills on the damage dealer), the character next to the damage dealer (no other allies), ${benchExpectedCrits.value ? 'every hit at its average crit damage (a mod: not how the game works)' : 'crits rolled as in the game, averaged over seeded battles'}. Only the damage dealer's own damage counts (including additional damage it deals), never the rest of the team's.`
+                ? `Average Damage: ${benchAv()} AV (${benchTurns.value} turns) of battle on the game's battle code with infinite SP (ultimates as soon as they are ready, Battle Skill every turn, ally-target skills on the damage dealer), the character next to the damage dealer and three ${LuxMagica}. ${CRIT_TEXT} Only the damage dealer's own damage counts (including additional damage it deals), never the rest of the team's.`
                 : `Max Burst: the damage dealer's Ultimate with every buff and debuff of the team at full stacks and every hit a crit.`,
             `${benchEnemyText.value} with 3000 def, weak to every element and broken (500% dmg taken) for the whole battle. Everyone aims single-target and proximity skills at the middle enemy, so a single-target debuff covers one enemy and an AoE one all of them.`,
             `Element, role or ailment bonuses (enemies under Curse, Burn, ... for the whole battle) get their own bar when they change the result; in Average Damage the other bars make the enemies immune to those ailments, so a character that applies an ailment itself and reacts to it shows that in its ailment bar, so a bonus can show in one metric only: crit rate or procs (chains, follow-ups) don't change Max Burst, and Max Burst counts every buff as already applied.`,
@@ -1241,7 +1219,7 @@ const benchCharts = computed(() => [
             `Damage each character deals as the damage dealer, compared to ${LuxMagica} in the same spot with the character's role: ${LuxMagica} then has the average HP, ATK and DEF of the 5 star characters of that role.`,
             `${LuxMagica} is the 0% line; 100% means double of her damage.`,
             benchAverageDmg.value
-                ? `Average Damage: ${benchAv()} AV (${benchTurns.value} turns) of battle with infinite SP, the damage dealer alone, ${benchExpectedCrits.value ? 'every hit at its average crit damage (a mod: not how the game works)' : 'crits rolled as in the game, averaged over seeded battles'}. Only the damage dealer's own damage counts.`
+                ? `Average Damage: ${benchAv()} AV (${benchTurns.value} turns) of battle with infinite SP, supported by four ${LuxMagica}. ${CRIT_TEXT} Only the damage dealer's own damage counts.`
                 : `Max Burst: the Ultimate with the damage dealer's own buffs and debuffs at full stacks and every hit a crit.`,
             `${levelsDescription.value} ${benchEnemyText.value} with 3000 def, weak to every element and broken (500% dmg taken) for the whole battle; single-target and proximity skills aim at the middle one. Ailment bonuses (enemies under Curse, Burn, ...) get their own bar when they change the result; in Average Damage the other bars make the enemies immune to those ailments.`,
             benchAverageDmg.value
@@ -1409,8 +1387,8 @@ const chartExportOpts = (selector: string): ImageExportOptions => {
     }
 }
 
-watch([markedCharacters, simulateMaxLevels, fightMode, benchSpeed, benchExpectedCrits], () => runBench("support"), { immediate: true })
-watch([markedCharacters, simulateMaxLevels, fightMode, benchSpeed, benchExpectedCrits], () => runBench("attacker"), { immediate: true })
+watch([markedCharacters, simulateMaxLevels, fightMode, benchSpeed], () => runBench("support"), { immediate: true })
+watch([markedCharacters, simulateMaxLevels, fightMode, benchSpeed], () => runBench("attacker"), { immediate: true })
 </script>
 
 <style scoped>

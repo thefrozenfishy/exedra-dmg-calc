@@ -2,6 +2,14 @@
 
 _Last updated: 2026-10-15 (game 3.21.0: dumped + decompiled by Claude on Windows, engine re-ported to 3.21.0; branch claude/version-3.21.0); before: 2026-10-14 (Max Damage + Kioku Grid bench on the 1:1 engine); before: 2026-10-10 (1:1 port in src/engine started); before: 2026-10-03 (passive states per giver, UP_HP_FIXED max HP; earlier: duplicate active-skill states); before: 2026-10-02 (game 3.19.1: version diff + newsletter, Magic Seal, break/notice team conditions, IMM_SLIP_DMG burst; branch claude/version-3.19.1)._
 
+
+## 2026-10-16: Kioku Grid bench crit handling (user's choice)
+
+- 5-unit teams again (Lux fillers back). No "Crits" toggle: a team where a kit reacts to crits
+  (`kitReactsToCrits`: a CTDUnitCount 303 condition or a CTD_CONSUME state; 20 of 116 kits, e.g. Absolute Rain)
+  rolls crits as in the game and averages 10 seeded battles; every other team uses the expected-crit APP MOD
+  (runtime.AppMods.expectedCritDamage) in one battle, or 10 when something else in it is random. Cache version 20.
+
 ## 2026-10-15: Kioku Grid bench speed, expected-crit APP MOD, no filler Lux
 
 - **APP MOD (not game code)** `runtime.AppMods.expectedCritDamage` (off by default, never set by game code): in

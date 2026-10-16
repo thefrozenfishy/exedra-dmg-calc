@@ -956,6 +956,16 @@ export function unitTypeConditionValues(csvs: (string | undefined)[]): { element
 // Ailments (Ailment enum values: BURN, CURSE, ..., BLEED) that ABILITY_EFFECT conditions in these condition-set csvs
 // test for ("contains CURSE", "not contains BURN_ATK", ...), on whichever unit. Used to find a kit's ailment-dependent
 // effects.
+/** Whether any of these condition sets reacts to crits: CompareContent 303 CTDUnitCount ("a critical hit happened"). */
+export function critConditionUsed(csvs: (string | undefined)[]): boolean {
+    for (const setId of csvs.flatMap(csv => (csv ?? "").split(","))) {
+        for (const condId of (battleConditionSets[setId]?.battleConditionMstIdCsv ?? "").split(",")) {
+            if (battleConditions[condId]?.compareContent === 303) return true
+        }
+    }
+    return false
+}
+
 export function ailmentConditionValues(csvs: (string | undefined)[]): Ailment[] {
     const found = new Set<Ailment>()
     for (const setId of csvs.flatMap(csv => (csv ?? "").split(","))) {
