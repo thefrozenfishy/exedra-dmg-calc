@@ -312,6 +312,8 @@ import { FinalTeam } from '../types/BestTeamTypes'
 import { useSetting } from '../store/settingsStore'
 import ImageActionsToolbar from '../components/ImageActionsToolbar.vue'
 import { useFriendStore } from "../store/friendStore"
+import { findBestTeamEngine, scenarioOf } from '../models/EngineBestTeam'
+import { EngineTeamPool } from '../models/EngineTeamPool'
 
 const enemies = useEnemyStore()
 const store = useCharacterStore()
@@ -345,7 +347,10 @@ let prevObligatoryKioku: Character[] = []
 
 const defaultIgnoredKioku = members.value.filter(c => ["Nightmare Stinger", "Lynx Impact", "Circle Of Fire", "Glittering Hurricane", "Surging Laser", "Verdant Shower", "Diamond Splash", "Purple Will-o'-Wisp", "Folter Gefängnis", "Vampire Fang", "Strada Futuro", LuxMagica, "Infinite Poseidon", "Neo Genesis"].includes(c.name))
 
-const workerRef = ref<Worker | null>(null)
+// Teams are scored on the 1:1 engine by a pool of workers (models/EngineBestTeam, models/EngineTeamPool); the old
+// single-hit model's search lives on in OldBestTeamPage.vue.
+let pool: EngineTeamPool | null = null
+let runId = 0
 const progress = ref<FinalTeam>({})
 
 const alimentRef = ref<InstanceType<typeof AlimentToggler> | null>(null)
@@ -640,8 +645,9 @@ const topTeamsByAttacker = computed(() => {
 })
 
 function cancelSimulation() {
-    workerRef.value?.terminate()
-    workerRef.value = null
+    runId++
+    pool?.close()
+    pool = null
     running.value = false
     preprocessing.value = false
     progress.value = {}
@@ -654,26 +660,6 @@ async function startSimulation() {
     results.splice(0, results.length)
     progress.value = {}
 
-    workerRef.value = new Worker(new URL('../workers/BestTeamWorker.js', import.meta.url), { type: 'module' })
-
-    workerRef.value.onmessage = (e) => {
-        if (e.data.type === 'progress') {
-            progress.value = populateStatusTeam(e.data.currChars)
-            completedRuns.value = e.data.completedRuns
-            expectedRuns.value = e.data.expectedTotalRuns
-            console.log(e.data)
-            preprocessing.value = e.data.preprocessing
-        } else if (e.data.type === 'done') {
-            for (const r of e.data.results) results.push(r)
-            running.value = false
-            workerRef.value?.terminate()
-            workerRef.value = null
-        } else if (e.data.type === 'error') {
-            toast.error(e.data.error, { position: toast.POSITION.TOP_RIGHT, icon: false })
-            console.error("Failed to execute simulation:", e.data.error)
-        }
-    }
-
     const arenaEffectsMap: Record<string, number> = {}
     for (const { type, value } of arenaEffects.value) {
         if (!type) continue
@@ -681,38 +667,68 @@ async function startSimulation() {
     }
     const safeDeBufferCount = safeInt(deBufferCount.value, 3, 0, 4)
 
-    workerRef.value.postMessage({
-        options: {
-            enemies: JSON.parse(JSON.stringify(enemies.enemies)),
-            include4StarAttackers: include4StarAttackers.value,
-            include4StarSupports: include4StarSupports.value,
-            include4StarOthers: include4StarOthers.value,
-            weakElements: weakElements.filter(el => el.enabled).map(el => el.name),
-            onlyConsiderOnElements: onlyConsiderOnElements.value,
-            onElementExceptions: onElementExceptions.value.map(c => c.name),
-            activeAliments: alimentRef.value?.aliments.filter(a => a.enabled).map(a => a.name) ?? [],
-            extraAttackers: extraAttackers.value.map(c => c.name),
-            obligatoryKioku: obligatoryKioku.value.map(c => c.name),
-            ignoredKioku: ignoredKioku.value.map(c => c.name).filter(c => !obligatoryKioku.value.map(c => c.name).includes(c)),
-            deBufferCount: safeDeBufferCount,
-            otherCount: Math.max(0, 4 - safeDeBufferCount),
-            minHealer: safeInt(minHealer.value, 0, 0, 4),
-            minDefender: safeInt(minDefender.value, 0, 0, 4),
-            minBreaker: safeInt(minBreaker.value, 0, 0, 4),
-            optimalSubCrys: optimalSubCrys.value,
-            enabledCharacters: JSON.parse(JSON.stringify(members.value)),
-            buffMultReduction: buffMultReduction.value,
-            offElementBuffMultReduction: offElementBuffMultReduction.value,
-            debuffMultReduction: debuffMultReduction.value,
-            offElementDebuffMultReduction: offElementDebuffMultReduction.value,
-            attackerHealth: attackerHealth.value,
-            optimizeAverageDamage: optimizeAverageDamage.value,
-            disabledOtherRoles: [...disabledOtherRoles.value],
-            arenaEffectsMap,
-            enablePruning: enablePruning.value,
-            pruningMargin: safeInt(pruningMargin.value, 15, 0, 100),
+    const options: any = {
+        enemies: JSON.parse(JSON.stringify(enemies.enemies)),
+        include4StarAttackers: include4StarAttackers.value,
+        include4StarSupports: include4StarSupports.value,
+        include4StarOthers: include4StarOthers.value,
+        weakElements: weakElements.filter(el => el.enabled).map(el => el.name),
+        onlyConsiderOnElements: onlyConsiderOnElements.value,
+        onElementExceptions: onElementExceptions.value.map(c => c.name),
+        activeAliments: alimentRef.value?.aliments.filter(a => a.enabled).map(a => a.name) ?? [],
+        extraAttackers: extraAttackers.value.map(c => c.name),
+        obligatoryKioku: obligatoryKioku.value.map(c => c.name),
+        ignoredKioku: ignoredKioku.value.map(c => c.name).filter(c => !obligatoryKioku.value.map(c => c.name).includes(c)),
+        deBufferCount: safeDeBufferCount,
+        otherCount: Math.max(0, 4 - safeDeBufferCount),
+        minHealer: safeInt(minHealer.value, 0, 0, 4),
+        minDefender: safeInt(minDefender.value, 0, 0, 4),
+        minBreaker: safeInt(minBreaker.value, 0, 0, 4),
+        optimalSubCrys: optimalSubCrys.value,
+        enabledCharacters: JSON.parse(JSON.stringify(members.value)),
+        buffMultReduction: buffMultReduction.value,
+        offElementBuffMultReduction: offElementBuffMultReduction.value,
+        debuffMultReduction: debuffMultReduction.value,
+        offElementDebuffMultReduction: offElementDebuffMultReduction.value,
+        attackerHealth: attackerHealth.value,
+        optimizeAverageDamage: optimizeAverageDamage.value,
+        disabledOtherRoles: [...disabledOtherRoles.value],
+        arenaEffectsMap,
+        enablePruning: enablePruning.value,
+        pruningMargin: safeInt(pruningMargin.value, 15, 0, 100),
+    }
+
+    const id = ++runId
+    pool?.close()
+    pool = new EngineTeamPool(scenarioOf(options), undefined, (err) => console.error("Engine team score failed:", err))
+    const thisPool = pool
+    const onError = (error: any) => {
+        toast.error(String(error), { position: toast.POSITION.TOP_RIGHT, icon: false })
+        console.error("Failed to execute simulation:", error)
+    }
+    try {
+        const rows = await findBestTeamEngine({
+            ...options,
+            onProgress: (currChars: string[], done: number, total: number, pre: boolean) => {
+                if (id !== runId) return
+                progress.value = populateStatusTeam(currChars)
+                completedRuns.value = done
+                expectedRuns.value = total
+                preprocessing.value = pre
+            },
+            onError,
+        }, team => thisPool.score(team), () => id !== runId)
+        if (id !== runId) return
+        for (const r of rows) results.push(r)
+    } catch (e) {
+        if (id === runId) onError(e)
+    } finally {
+        if (id === runId) {
+            running.value = false
+            thisPool.close()
+            if (pool === thisPool) pool = null
         }
-    })
+    }
 }
 </script>
 

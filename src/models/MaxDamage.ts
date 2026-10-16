@@ -67,6 +67,10 @@ export interface MaxDmgOptions {
     // Ailment states every enemy carries ("CURSE_ATK", "STUN", ...). When set, conditions about ailments are no longer
     // assumed met but checked against these (ailmentConditionsMet), for the team's effects and the damage rows alike.
     enemyStates?: string[]
+    // App tools (Best SA Team calculator): states the stage puts on units for the whole fight (stage buffs, buff
+    // strength cuts, an enemy's DEF up), given before the team's effects: ally `index` = team position, enemy `index` =
+    // the page's enemy list index, "all" = every unit of that side. `value1` per mille as in the data.
+    fieldStates?: { side: "ally" | "enemy", index: number | "all", type: string, value1: number }[]
 }
 
 // A marker of an ailment on a unit: no damage and never ticks (Max Damage has no turns).

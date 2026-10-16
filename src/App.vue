@@ -118,7 +118,6 @@ const group2Paths = [
     '/pve-simulator',
 ].filter(Boolean)
 const group3Paths = [
-    '/sa-simulator-single',
     '/pvp-how-to',
     '/gacha-rate',
     '/link-raid',
@@ -126,6 +125,12 @@ const group3Paths = [
     '/tier-list-maker',
     '/about',
 ].filter(Boolean)
+
+// The old single-hit model's pages (models/ScoreAttackTeam), kept next to each other on their own row.
+const oldModelPaths = [
+    '/sa-simulator-single',
+    '/sa-simulator-multiple-old',
+]
 
 function routeForPath(path: string) {
     return router.getRoutes().find(r => r.path === path)
@@ -146,7 +151,7 @@ function routeForPath(path: string) {
                 </h1>
             </div>
             <nav>
-                <div v-for="paths in [group1Paths, group2Paths, group3Paths]">
+                <div v-for="paths in [group1Paths, group2Paths, group3Paths, oldModelPaths]">
                     <template v-for="path in paths" :key="path">
                         <router-link :to="path" :class="{ 'nav-new': isNew(path) }">
                             {{ routeForPath(path)?.name }}

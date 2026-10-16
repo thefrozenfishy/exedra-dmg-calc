@@ -18,6 +18,7 @@
 // random targets go to the main target. Enemy HP is set out of reach so nothing dies mid-skill.
 import { E } from "./engineBundle"
 import { EngineBattle, type EngineBattleSetup } from "./EngineBattle"
+import { giveFieldState } from "./EngineBench"
 import { collectTeamEffects, isEffectValueType, type MaxDmgEffect, type MaxDmgOptions, type MaxDmgResult, type MemberDamage, type SkillDamage } from "../models/MaxDamage"
 import { actorSkillTypeRestriction, ailmentConditionsMet } from "../models/BattleConditionParser"
 import { conditionCsvsExclusive } from "../models/ConditionTiers"
@@ -140,6 +141,12 @@ function buildBattle(ctx: Ctx, dealerPos: number, rnd: MaxDamageRandom): Built {
         u._BreakPoint._PointValue = 0
         u._BreakedDamageReceiveRate = ctx.opts.breakRate?.[i] ?? Math.trunc(u._BattleParameter._MaxBreakedDamageReceiveRate / 10)
     })
+    // the stage's own states (app tools): buff-strength cuts last, so they don't scale the other stage states
+    const field = ctx.opts.fieldStates ?? []
+    for (const f of [...field.filter(f => !isEffectValueType(f.type)), ...field.filter(f => isEffectValueType(f.type))]) {
+        const holders = f.side === "ally" ? (f.index === "all" ? allies : [allies[f.index]]) : (f.index === "all" ? enemies : [enemies[f.index]])
+        for (const u of holders) if (u) giveFieldState(d, u, f.type, f.value1)
+    }
     const main = enemies[ctx.mainIdx] ?? enemies.find(Boolean) ?? enemyUnits[0]
     rnd.mainId = main?._Id ?? 0
     return { d, dic, allies, enemies, main, dealer: allies[dealerPos] }

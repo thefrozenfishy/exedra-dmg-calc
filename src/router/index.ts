@@ -2,6 +2,7 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 import TeamSetupPage from '../pages/TeamSetupPage.vue'
 import BestTeamPage from '../pages/BestTeamPage.vue'
 import SingleTeamPage from '../pages/SingleTeamPage.vue'
+import OldBestTeamPage from '../pages/OldBestTeamPage.vue'
 import About from '../pages/About.vue'
 import AccountHasPage from '../pages/AccountHasPage.vue'
 import PvpTeamPage from '../pages/PvpTeamPage.vue'
@@ -32,6 +33,7 @@ const routes = [
     { path: '/account-compare', name: 'Account Comparison', component: AccountComparisonPage, meta: { version: 0 } },
     { path: '/sa-simulator-multiple', name: 'Best SA Team Calculator', component: BestTeamPage, meta: { version: 0 } },
     { path: '/sa-simulator-single', name: 'Old Single Hit Calc', component: SingleTeamPage, meta: { version: 0 } },
+    { path: '/sa-simulator-multiple-old', name: 'Old Best SA Team Calculator', component: OldBestTeamPage, meta: { version: 0 } },
     { path: '/pvp-simulator', name: 'PvP Simulator', component: PvpTeamPage, meta: { version: 1 } },
     { path: '/pve-simulator', name: 'PvE Simulator', component: PvESimulatorPage, meta: { version: 1 } },
     { path: '/pvp-how-to', name: 'PvP 101', component: Pvp101Page, meta: { version: 0 } },

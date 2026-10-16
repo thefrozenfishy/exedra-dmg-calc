@@ -100,6 +100,67 @@ export function benchStage(count: number, immune: readonly Ailment[] = []): { st
     return s
 }
 
+// ---- custom dummy stages (the Best SA Team calculator's enemy row)
+
+export interface DummySpec { def: number, weak: boolean, main?: boolean }
+
+const customStages = new Map<string, { stageId: number, enemies: QuestEnemyAppearance[] }>()
+const CUSTOM_STAGE_BASE = 990500000
+
+/** A stage of dummies like benchStage's, each with its own DEF and either weak to every element or to none (no
+ *  resistances either). Their break table is the bench's (gauge 1): MaxDmgOptions.broken / breakRate set the state. */
+export function customStage(specs: DummySpec[]): { stageId: number, enemies: QuestEnemyAppearance[] } {
+    const key = JSON.stringify(specs)
+    let s = customStages.get(key)
+    if (s) return s
+    addBaseRecords()
+    const template = benchStage(specs.length)
+    const stageId = CUSTOM_STAGE_BASE + customStages.size
+    const enemies = specs.map((spec, i) => ({
+        ...template.enemies[i], questEnemyAppearanceMstId: stageId * 10 + i, questStageMstId: stageId, def: Math.max(0, Math.round(spec.def)),
+        ...Object.fromEntries([1, 2, 3, 4, 5, 6].map(n => [`weakElement${n}`, spec.weak ? n : 0])),
+        ...(spec.main !== undefined ? { isMainTargetEnemy: spec.main } : {}),
+    })) as unknown as QuestEnemyAppearance[]
+    E.addMasterRecords(E.QuestEnemyAppearanceMstModel, enemies)
+    const stage = E.BattleMstReaderBase.get_Instance(E.QuestStageMstModel).GetModelByKey(template.stageId).record
+    E.addMasterRecords(E.QuestStageMstModel, [{ ...stage, questStageMstId: stageId, name: `Custom_${specs.length}` }])
+    customStages.set(key, s = { stageId, enemies })
+    return s
+}
+
+// ---- field states (stage gimmicks: "ATK +X% for every unit", "buff effects -X%", an enemy's DEF up)
+
+const FIELD_DETAIL_BASE = 990600000
+const fieldRows = new Map<string, number>()
+
+/** A made-up skill row of a state on its holder for the whole fight: `type` at `value1` (per mille, as in the data). */
+function fieldRow(type: string, value1: number): number {
+    const key = `${type}:${value1}`
+    let id = fieldRows.get(key)
+    if (id !== undefined) return id
+    id = FIELD_DETAIL_BASE + fieldRows.size
+    const base = detailByType.get(type)
+    E.addMasterRecords(E.SkillDetailMstModel, [{
+        ...(base ?? {}), abilityEffectType: type, activeConditionSetIdCsv: "", startConditionSetIdCsv: "", description: type,
+        descriptionType: 0, element: 0, role: 0, isFixedProbability: true, probability: 1000, range: -1, remainCount: 0,
+        skillDetailMstId: id, skillMstId: Math.trunc(id / 100), turn: 99, value1, value2: base?.value2 ?? 0, value3: 0, value4: 0, value5: 0,
+    }])
+    fieldRows.set(key, id)
+    return id
+}
+
+/** Gives `holder` the state of `type` at `value1` (per mille), as a stage would: not scaled by anyone's buff strength. */
+export function giveFieldState(director: any, holder: any, type: string, value1: number): void {
+    if (!holder || !value1) return
+    const model = E.BattleMstReaderBase.get_Instance(E.SkillDetailMstModel).GetModelByKey(fieldRow(type, value1))
+    if (!model) return
+    const effect = E.AbilityEffectFactory.Create(E.AbilityEffectInfo.CreateFromMst$SkillDetailMstModel_int(model, 0), false)
+    if (!effect?._GiveUnitState) return
+    const state = effect._GiveUnitState.Clone()
+    state.SetTriggeringInfo(1, holder, false, false, director.get_BattleType())
+    holder._Condition.AddUnitState(state, holder, director.turnActSystem.turnReferee.get_NextTurnOrderPriority(), holder, true)
+}
+
 const styles = new Map<string, number>()
 const styleById = new Map<number, any>((styleMstJson as any[]).map(s => [s.styleMstId, s]))
 const numberOf = <T extends string>(map: Record<string, T>, v: T): number => Number(Object.entries(map).find(([, x]) => x === v)?.[0] ?? 0)

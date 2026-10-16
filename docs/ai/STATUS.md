@@ -3,6 +3,24 @@
 _Last updated: 2026-10-15 (game 3.21.0: dumped + decompiled by Claude on Windows, engine re-ported to 3.21.0; branch claude/version-3.21.0); before: 2026-10-14 (Max Damage + Kioku Grid bench on the 1:1 engine); before: 2026-10-10 (1:1 port in src/engine started); before: 2026-10-03 (passive states per giver, UP_HP_FIXED max HP; earlier: duplicate active-skill states); before: 2026-10-02 (game 3.19.1: version diff + newsletter, Magic Seal, break/notice team conditions, IMM_SLIP_DMG burst; branch claude/version-3.19.1)._
 
 
+## 2026-10-16 (2): Best SA Team Calculator on the 1:1 engine
+
+- `/sa-simulator-multiple` "Best SA Team Calculator" (`BestTeamPage.vue`, same UI) scores teams on the engine:
+  `models/EngineBestTeam.ts` (same candidates and result rows as `findBestTeam`; Phase A one score per roster +
+  pruning margin, Phase B coordinate ascent over attacker support / portrait / crystalis set / supports' supports
+  instead of the full product), `battle/EngineTeamScore.ts` (the attacker's Ultimate as Max Damage computes it on
+  dummies from the enemy row: `EngineBench.customStage`, DEF / weak to all or none / broken at the break bonus; crit
+  per enemy = the enemy's "crit" flag), scored in a worker pool (`models/EngineTeamPool.ts`, `maxDamageWorker.ts`
+  "teams" messages: no extra worker bundle). Old-model inputs become stage states (`MaxDmgOptions.fieldStates`,
+  `EngineBench.giveFieldState`, not scaled by anyone's buff strength): buff / debuff bonus reduction ->
+  DWN_BUFF / DWN_DEBUFF_EFFECT_VALUE on each ally (off-element value for off-element allies), stage buffs -> that state
+  on every ally (or enemy for DWN_ / RCV / WEAKNESS types), DEF up / DMG taken down -> UP_DEF_RATIO /
+  DWN_RCV_DMG_RATIO on that enemy. Unused: attacker HP, hits to kill, additional-damage crit.
+- The old calculator moved to `/sa-simulator-multiple-old` "Old Best SA Team Calculator" (`OldBestTeamPage.vue`,
+  unchanged), on its own nav row with "Old Single Hit Calc". CLI: `scripts/sim/engineBestTeam.ts <team.json> [Elements] [--old]`.
+- Cost: ~0.2-0.4 s per score (Max Damage's ladder runs, each a fresh battle setup); Dark with the user's roster:
+  ~1,900 scores. In-game check page for the engine (`scripts/sim/ingameChecks.ts`): the user's checks matched exactly.
+
 ## 2026-10-16: Kioku Grid bench crit handling (user's choice)
 
 - 5-unit teams again (Lux fillers back). No "Crits" toggle: a team where a kit reacts to crits

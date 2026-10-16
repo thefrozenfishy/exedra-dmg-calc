@@ -611,6 +611,7 @@ import { effectDescription, effectName, effectRestriction, effectValue } from '.
 import { passiveDetailsByMstId, portraits } from '../utils/helpers'
 import { EngineBattle } from '../battle/EngineBattle'
 import type { MaxDamageMessage, MaxDamageRequest } from '../workers/maxDamageWorker'
+import { newMaxDamageWorker } from '../workers/newMaxDamageWorker'
 import type { PvPKioku } from '../models/PvPKioku'
 
 const team = useTeamStore()
@@ -762,7 +763,7 @@ function requestMaxDamage() {
     if (!teamKiokus.value.length || !wave.value.length) { maxDmg.value = undefined; maxDmgBusy.value = false; return }
     try {
         if (!maxDmgWorker) {
-            maxDmgWorker = new Worker(new URL('../workers/maxDamageWorker.ts', import.meta.url), { type: 'module' })
+            maxDmgWorker = newMaxDamageWorker()
             maxDmgWorker.onmessage = (e: MessageEvent<MaxDamageMessage>) => {
                 if (e.data.id !== maxDmgReq) return
                 maxDmgBusy.value = false

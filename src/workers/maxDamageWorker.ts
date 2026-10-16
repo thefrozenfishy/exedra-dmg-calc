@@ -8,6 +8,9 @@ import type { QuestEnemyAppearance } from "../models/PvE"
 import type { PvPKioku } from "../models/PvPKioku"
 import type { TeamSlot } from "../types/BestTeamTypes"
 import { buildSlotKioku } from "../utils/pvpExport"
+import { PvPKioku as PvPKiokuClass } from "../models/PvPKioku"
+import { scoreTeam, type TeamScore, type TeamScoreScenario } from "../battle/EngineTeamScore"
+import type { KiokuArgs } from "../types/KiokuTypes"
 
 export interface MaxDamageRequest {
     id: number
@@ -60,7 +63,35 @@ function next() {
     }, 0)
 }
 
-self.onmessage = (e: MessageEvent<MaxDamageRequest>) => {
-    pending = e.data
+// ---- Best SA Team calculator (pages/BestTeamPage, models/EngineBestTeam): batches of teams scored on the engine.
+// The same worker file as the Max Damage panel, so the build bundles the engine for workers once less.
+
+export interface TeamScoreBatch { kind: "teams", batch: number, scenario?: TeamScoreScenario, jobs: { id: number, team: KiokuArgs[] }[] }
+export type TeamScoreReply = { kind: "teams", batch: number, scores: { id: number, score?: TeamScore, error?: string }[] }
+
+let scenario: TeamScoreScenario | undefined
+const teamKiokus = new Map<string, PvPKioku>()
+function teamKioku(args: KiokuArgs): PvPKioku {
+    const key = JSON.stringify(args)
+    let k = teamKiokus.get(key)
+    if (!k) {
+        if (teamKiokus.size > 2000) teamKiokus.clear()
+        teamKiokus.set(key, k = new PvPKiokuClass(args))
+    }
+    return k
+}
+
+function scoreBatch(msg: TeamScoreBatch) {
+    if (msg.scenario) scenario = msg.scenario
+    const scores = msg.jobs.map(({ id, team }) => {
+        try { return { id, score: scoreTeam(team.map(teamKioku), scenario!) } }
+        catch (e) { return { id, error: String((e as Error)?.message ?? e) } }
+    })
+    self.postMessage({ kind: "teams", batch: msg.batch, scores } satisfies TeamScoreReply)
+}
+
+self.onmessage = (e: MessageEvent<MaxDamageRequest | TeamScoreBatch>) => {
+    if ((e.data as TeamScoreBatch).kind === "teams") return scoreBatch(e.data as TeamScoreBatch)
+    pending = e.data as MaxDamageRequest
     next()
 }

@@ -770,7 +770,7 @@ export async function findBestAttackerLoadout({
     return results.sort((a, b) => b.dmg - a.dmg)
 }
 
-function permute(arr: any[]): any[][] {
+export function permute(arr: any[]): any[][] {
     if (arr.length <= 1) return [arr];
     const result = [];
     for (let i = 0; i < arr.length; i++) {
@@ -780,7 +780,7 @@ function permute(arr: any[]): any[][] {
     return result;
 }
 
-function combinations<T>(arr: T[], k: number): T[][] {
+export function combinations<T>(arr: T[], k: number): T[][] {
     if (k === 0) return [[]];
     if (k > arr.length) return [];
 
@@ -800,7 +800,7 @@ function combinations<T>(arr: T[], k: number): T[][] {
     return result;
 }
 
-function generateRoleDistributions(otherCount: number, minHealer: number, minDefender: number, minBreaker: number): { healers: number, defenders: number, breakers: number }[] {
+export function generateRoleDistributions(otherCount: number, minHealer: number, minDefender: number, minBreaker: number): { healers: number, defenders: number, breakers: number }[] {
     const distributions: { healers: number, defenders: number, breakers: number }[] = [];
     for (let healers = minHealer; healers <= otherCount; healers++) {
         for (let defenders = minDefender; defenders <= otherCount - healers; defenders++) {
