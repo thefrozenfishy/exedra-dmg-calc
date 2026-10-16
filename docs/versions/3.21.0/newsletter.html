@@ -44,87 +44,112 @@ footer { color: var(--muted); font-size: 13px; border-top: 1px solid var(--line)
 
 <div class="wrap">
   <header style="display:flex;flex-direction:column;gap:14px">
-    <div class="eyebrow">Madoka Exedra · patch notes from the files · 15 Oct 2026</div>
-    <h1>Version 3.21.0: Step-Up skills and HP-cost skills are coming</h1>
-    <p class="lede">This update adds two new combat mechanics to the game. No kioku uses them yet, so your current teams play exactly as before. Expect the first units with these mechanics in an upcoming banner.</p>
+    <div class="eyebrow">Madoka Exedra · patch notes from the files · updated 16 Oct 2026</div>
+    <h1>Version 3.21.0: Venusta Dissonanza brings Step-Up skills and HP costs</h1>
+    <p class="lede">Version 3.21.0 added two new combat mechanics, and the 16 October data shows who uses them first: <b>Venusta Dissonanza</b>, a 5★ Void Attacker Sayaka. Alongside her come a Sayaka (Anomalia) Score Attack, a new Link Raid and Halloween reruns.</p>
   </header>
 
   <div class="tldr">
     <h3>In short</h3>
     <ul>
-      <li><b>Step-Up skills</b>: some Battle Skills can be powered up by spending extra SP before you use them.</li>
-      <li><b>Skills that cost your own HP</b>: a skill can drain a share of the user's HP, but it can never knock them out.</li>
-      <li><b>Link Raid</b>: support for bosses whose parts share one HP bar, plus an "EX Bonus" for featured characters.</li>
-      <li>Auto battle will aim Magic Seal only at units it can affect.</li>
-      <li>No new kiokus, events or stages, and no balance changes to existing skills.</li>
+      <li><b>New kioku</b>: Venusta Dissonanza (Sayaka Miki), 5★ Void Attacker, out 16 Oct 12:00 JST.</li>
+      <li><b>Step-Up skills</b>: her Battle Skill can be powered up twice by spending extra SP before you use it.</li>
+      <li><b>Skills that cost your own HP</b>: her skills drain her own HP but can never knock her out, and paying HP powers her up.</li>
+      <li><b>Events</b>: Score Attack: Sayaka Miki (Anomalia) (16–30 Oct), Link Raid: Dessert Witch, two Halloween reruns, Mirror Layers 116–120, Exedra Quest 1-6.</li>
+      <li><b>Balance</b>: the Mirror Layer 111–115 bosses now speed up only when they actually take damage.</li>
     </ul>
   </div>
+
+  <section id="venusta">
+    <div class="eyebrow">New kioku</div>
+    <div class="card">
+      <div class="head"><h2>Venusta Dissonanza</h2><span class="chip">5★ Void Attacker</span><span class="chip">Sayaka Miki</span><span class="chip live">out 16 Oct</span></div>
+      <ul>
+        <li><b>Battle Skill: Pesante Risonanza</b> (1 SP). 90% void DMG to all enemies. Adds 1 Cadence Echo and one stack of +2% ultimate DMG (max 15), and costs 5% of her max HP. It opens her <b>Void Field</b> (all allies +30% void DMG and +30% void crit rate), or adds 2 stock to it if it is already up.</li>
+        <li><b>Step 1: Clamorosa Risonanza</b> (2 SP). 200% void DMG to all enemies, 2 Cadence Echo, 2 ultimate-DMG stacks, costs 15% max HP.</li>
+        <li><b>Step 2: Clamorosa Risonanza +</b> (3 SP). 220% void DMG to all enemies plus 5 random 10% hits, 3 Cadence Echo, 5 ultimate-DMG stacks, +30% SPD for 1 turn, costs 30% max HP.</li>
+        <li><b>Cadence Echo</b> (max 4): +80% follow-up DMG. At 4 stacks she makes a follow-up attack.</li>
+        <li><b>Ultimate</b>: 100% void DMG to all enemies plus 10 random 10% hits. Her Battle Skill DMG goes up for 2 turns, and she heals based on her ATK.</li>
+        <li><b>Ability</b>: each time she pays HP, +2% ATK and +2% SPD (each max 10 stacks). The lower her HP, the less DMG she takes: −20% at 70% HP or more, up to −50% below 11%. Void hits by her team give her DMG stacks and MP.</li>
+        <li><b>EX crys</b>: +10% ATK and +10% HP recovery; on follow-up attacks +2% SPD (max 10 stacks).</li>
+      </ul>
+      <p class="tip">How she plays: Step 2 is her big turn. It costs 3 SP and 30% HP, but it fills Cadence Echo almost at once and stacks ultimate DMG five at a time. Because her damage reduction grows as her HP drops, she is built to run low on HP. Her own ultimate heal, plus a healer, lets her keep paying.</p>
+    </div>
+  </section>
 
   <section id="stepup">
     <div class="eyebrow">New mechanic</div>
     <div class="card">
-      <div class="head"><h2>Step-Up skills</h2><span class="chip later">no units yet</span></div>
-      <p>A unit with a Step-Up skill gets a new button next to its Battle Skill. Each press raises the skill one step and swaps it for a stronger version. <b>Cost: that version's own SP plus 1 SP per step</b>, so Step 2 of a 3 SP skill costs 5 SP. The button greys out when the team doesn't have the SP for the next step or the skill is at its top step. Cancel takes you back to the normal skill before you commit.</p>
-      <p>A passive on the kioku grants the Step-Up, so it belongs to that unit's own kit.</p>
+      <div class="head"><h2>Step-Up skills</h2><span class="chip live">live with Venusta</span></div>
+      <p>A unit with a Step-Up skill gets a new button next to its Battle Skill. Each press raises the skill one step and swaps it for a stronger version. <b>Cost: that version's own SP plus 1 SP per step</b>. Venusta's step skills cost 1 SP each, so Step 1 costs 2 SP and Step 2 costs 3 SP. The button greys out when the team doesn't have the SP for the next step or the skill is at its top step. Cancel takes you back to the normal skill before you commit.</p>
       <h3>What auto battle does</h3>
-      <p>On auto, the unit uses the <b>highest step the team can afford</b>, but only when its role's trigger is met:</p>
+      <p>On auto, the unit uses the <b>highest step the team can afford</b>, but only when its role's trigger is met. Otherwise it uses the normal skill:</p>
       <ul>
-        <li><b>Attacker</b>: an enemy is in Break.</li>
+        <li><b>Attacker</b> (Venusta): an enemy is in Break.</li>
         <li><b>Breaker</b>: an enemy is not in Break yet.</li>
         <li><b>Healer</b>: an ally is below 50% HP.</li>
         <li><b>Buffer</b>: one of its own buffs on an ally has 1 turn left.</li>
         <li><b>Debuffer</b>: one of its own debuffs on an enemy has 1 turn left.</li>
         <li><b>Defender</b>: an ally has no barrier.</li>
       </ul>
-      <p class="tip">What to watch for: a Step-Up unit drains team SP quickly. Expect them to pair well with SP-generating supports, and expect step levels to show up in skill descriptions ("at Step 2: …").</p>
+      <p class="tip">On auto, Venusta only steps up while an enemy is broken. If you want Step 2 outside Break, play her manually.</p>
     </div>
   </section>
 
   <section id="hpcost">
     <div class="eyebrow">New mechanic</div>
     <div class="card">
-      <div class="head"><h2>Skills that cost HP</h2><span class="chip later">no units yet</span></div>
-      <p>A new effect lets a skill spend the user's own HP: a percentage of max HP, a flat amount, or both, rounded up. It shows as its own HP-loss number in battle. The cost <b>never takes a unit below 1 HP</b>, so it can't knock out your own unit. At 1 HP the skill still works and costs nothing.</p>
+      <div class="head"><h2>Skills that cost HP</h2><span class="chip live">live with Venusta</span></div>
+      <p>A skill can now spend the user's own HP: a percentage of max HP, a flat amount, or both, rounded up. It shows as its own HP-loss number in battle. The cost <b>never takes a unit below 1 HP</b>, so it can't knock out your own unit. At 1 HP the skill still works and costs nothing.</p>
       <ul>
-        <li>Passives can now check whether a unit just paid HP. Expect kits that reward it, such as "after consuming HP, gain…".</li>
+        <li>Passives can trigger on "paid HP this action". That is how Venusta's ATK and SPD stacks work.</li>
         <li>In Link Raid, HP that a boss spends on its own skills counts toward the raid's total damage.</li>
       </ul>
-      <p class="tip">What to watch for: heal-over-time and barrier supports will matter more for units that keep paying HP, and so will effects that scale with missing HP.</p>
     </div>
   </section>
 
-  <section id="linkraid">
-    <div class="eyebrow">Link Raid</div>
-    <div class="card">
-      <div class="head"><h2>Shared-HP bosses and EX Bonus</h2><span class="chip later">not active yet</span></div>
+  <section id="events">
+    <div class="eyebrow">Events and stages</div>
+    <h2>What to play</h2>
+    <div class="item"><h3>Score Attack: Sayaka Miki (Anomalia)</h3><p>16–30 Oct JST, 50 ranks. The boss acts twice on even turns and three times on odd turns. Its Magic rises as its HP falls, and at full Magic it moves its own turn up. It takes much more damage once its break bonus reaches 600%, so plan around breaking it. It also has its own defeat cutscene.</p></div>
+    <div class="item"><h3>Link Raid: Dessert Witch</h3><p>20 levels. The next Link Raid season runs 22 Oct–5 Nov JST. The new EX Bonus for featured characters is still unused.</p></div>
+    <div class="item"><h3>[Redux] Forever Halloween Night Part I and II</h3><p>15 battles each, with three new portraits:</p>
       <ul>
-        <li><b>Shared HP</b>: Link Raid bosses can now have several parts on one HP bar. When the raid's HP is synced with other players, every part updates. Damage to any part counts toward your total, and when the bar empties, every part falls.</li>
-        <li><b>EX Bonus</b>: each Link Raid season can name featured characters who get an extra passive in that raid, shown on a new "EX Bonus" popup. No current season uses it.</li>
+        <li><i>Where the Story Begins</i>: +12.5% DMG on void attacks.</li>
+        <li><i>A Really Happy Halloween</i>: +10% debuff hit rate; on a Debuffer also +10% SPD.</li>
+        <li><i>A Gift of Halloween Art</i>: +12.5% ailment RES; on an Attacker also +12.5% ongoing DMG.</li>
+      </ul></div>
+    <div class="item"><h3>Story and tower</h3><p>Exedra Quest 1-6 and Mirror Layers 116–120.</p></div>
+  </section>
+
+  <section id="balance">
+    <div class="eyebrow">Balance</div>
+    <h2>Changed rows</h2>
+    <ul>
+      <li><b>Mirror Layer 111–115 bosses</b>: the action-order advance on your Battle Skills and ultimates now needs them to actually take damage. Hits they block or take no damage from no longer speed them up.</li>
+      <li><b>Mirror Layer counterattack</b> (the forest DMG [XL] Magic attack) now counts as a follow-up attack instead of a Battle Skill. Effects that react to enemy Battle Skills no longer fire on it.</li>
+      <li>Text fix: one dark RES DOWN skill said "light RES", and the effect itself was already dark. A wording fix on Blast Haste.</li>
+    </ul>
+  </section>
+
+  <section id="more">
+    <div class="eyebrow">Also in 3.21.0</div>
+    <div class="card">
+      <div class="head"><h2>Smaller changes</h2></div>
+      <ul>
+        <li><b>Link Raid shared HP</b>: bosses can have several parts on one HP bar. Damage to any part counts toward your total, and when the bar empties, every part falls.</li>
+        <li><b>Magic Seal</b> (no users yet): auto battle and enemies will aim it only at units it can land on.</li>
+        <li><b>Shop</b>: bulk exchange, a <i>Recommended exchange</i> tab, and a reminder for unclaimed free Web Shop items.</li>
+        <li><b>Profile</b>: shows your highest cleared Mirror Tower floor. Characters can now have alternate voice lines per costume.</li>
       </ul>
     </div>
-  </section>
-
-  <section id="live">
-    <div class="eyebrow">Auto battle</div>
-    <div class="card">
-      <div class="head"><h2>Smarter Magic Seal targeting</h2><span class="chip later">no units yet</span></div>
-      <p>Magic Seal (it locks a unit's ultimate) was added in 3.19 and still has no users. When it arrives, auto battle and enemies will aim it only at units it can land on: units that are not sealed yet, have an EP gauge and don't use a BP gauge. Until now the targeting could pick a BP-gauge unit or one that was already sealed.</p>
-    </div>
-  </section>
-
-  <section id="other">
-    <div class="eyebrow">Everything else</div>
-    <h2>Quality of life</h2>
-    <div class="item"><h3>Shop</h3><p>Bulk exchange lets you buy several items at once. A new <i>Recommended exchange</i> tab can be tuned to your priorities. If you haven't claimed a free Web Shop item, you now get a reminder, with a "don't show again" option.</p></div>
-    <div class="item"><h3>Profile</h3><p>Profiles show your highest cleared Mirror Tower floor.</p></div>
-    <div class="item"><h3>Battles and story</h3><p>Some bosses get a special defeat cutscene; the first one is tied to a Sayaka boss. Characters can have alternate voice lines per costume, though none are set yet. Story chapters show unlock animations and better "new" badges.</p></div>
   </section>
 
   <section id="calc">
     <div class="eyebrow">exedra-dmg-calc</div>
     <h2>Simulator status</h2>
-    <p>The simulator now runs on version 3.21.0. It already supports Step-Up skills (including the auto-battle rules), HP-cost skills, shared-HP Link Raid bosses and the new Magic Seal targeting. It will handle the first units with these mechanics as soon as their data comes out.</p>
+    <p>The simulator runs on version 3.21.0 with the 16 Oct data. Venusta works in the PvE and PvP simulators. On auto she steps up by the game's rules, and in manual mode the action menu lists each Step-Up option with its SP cost. HP costs, the new "paid HP" condition and shared-HP Link Raid bosses are handled as in the game.</p>
   </section>
 
-  <footer>Read from the 3.21.0 game files and the game data downloaded on 15 Oct 2026. Features with no unit or event yet may still change before release.</footer>
+  <footer>Read from the 3.21.0 game files and the game data downloaded on 16 Oct 2026. Kit numbers are at max skill level.</footer>
 </div>

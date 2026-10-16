@@ -158,18 +158,31 @@ From report.md, in this order:
 Every port: game rule comment `[CONFIRMED 3.19] Class.Method (0xRVA)`, a check in `scripts/sim/checkMechanics.ts`
 that fails without the change, an entry in docs/ai/MECHANICS.md.
 
-## 6b. Wiki generator (ma-ex-data/wiki)
+## 6b. Wiki generator (ma-ex-data/wiki): must say what the engine does
 
 The wiki pages decode conditions with `wiki/condition_parser.py` and effect values with `wiki/wiki_helpers.py`
-(`_formatValue`). New compare contents / effect types / value slots must be added there too:
+(`_formatValue`). **Whatever the engine learns in step 6 goes into the wiki in the same session**, with the same meaning:
+every CompareContent of `src/engine/.../CompareContent.ts` has a parser entry (the wikicheck `SYNC COND` line checks
+this), every effect value slot is labelled with what the ported class reads it as (the `.ctor(AbilityEffectInfo)`
+of the class: `xq effect <TYPE>`, `decomp.py fn '<Class>\$\$\.ctor'`), ids are resolved to names (skills by
+skillUniqueId, kioku, characters, unique-state patterns), and per-mille fields are shown as %. A slot the game code
+never reads is labelled as unused, not "ValueN". Comment each rule with the class / RVA it comes from.
 ```
 pip install uv -q && ~/.local/bin/uv python install 3.12      # once per VM (the wiki code needs Python 3.12)
 cd $HOME/mnt/ma-ex-data && ~/.local/bin/python3.12 $HOME/mnt/exedra-dmg-calc/scripts/ai/wikicheck.py
 ```
-Fix every COND MISSING / COND ERROR / COND RAW / VALUE ERROR line (VALUE UNKNOWN = known unknowns, fine), using the
-engine's names and semantics (`xq enum CompareContent`, MECHANICS.md section 6, `xq effect`). Values: per-mille
-fields are shown as % (`formatPercentage`), ids are resolved to names (characters, kioku, unique-state patterns /
-fields). Re-run until clean. Don't run the page generators or the uploader: the user does that.
+Re-run until it prints OK (VALUE UNKNOWN only for slots the engine itself has no meaning for). Edit only
+condition_parser.py / wiki_helpers.py (keep their line endings); don't run the page generators or the uploader and
+don't commit in ma-ex-data: the user does that.
+
+## 6c. New data after the patch (base_data sync)
+
+When the user's download (ma-ex-data/gamedata/manifests/en-Latn) is newer than base_data: `verdiff.py mst HEAD <manifests>`;
+sync it on the branch with the same transform as `ma-ex-data/dmg_calc_helpers/organize_data.py` (files without "_" plus
+get_config.json: `payload.mstList`, `json.dumps(sort_keys=True, ensure_ascii=False, indent=4)`, no trailing newline;
+the images part of that script is the user's) as its own commit. Smoke-test the new content on the engine:
+`STAGES=<new ids> npx tsx scripts/sim/engineSweep.ts <n> 2` and `WITH="<new kioku>|..." npx tsx scripts/sim/engineSweep.ts 15 2`
+(prints Step-Up uses / HP costs too), then the newsletter gets the kits, events and balance changes.
 
 ## 7. Verify
 
