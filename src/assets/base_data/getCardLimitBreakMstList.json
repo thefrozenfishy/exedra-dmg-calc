@@ -6528,6 +6528,150 @@
         "limitBreakCount": 5
     },
     {
+        "atk": 95,
+        "cardLimitBreakMstId": 42001040,
+        "cardMstId": 4200104,
+        "def": 33,
+        "hp": 151,
+        "limitBreakCount": 0
+    },
+    {
+        "atk": 145,
+        "cardLimitBreakMstId": 42001041,
+        "cardMstId": 4200104,
+        "def": 51,
+        "hp": 230,
+        "limitBreakCount": 1
+    },
+    {
+        "atk": 194,
+        "cardLimitBreakMstId": 42001042,
+        "cardMstId": 4200104,
+        "def": 69,
+        "hp": 309,
+        "limitBreakCount": 2
+    },
+    {
+        "atk": 244,
+        "cardLimitBreakMstId": 42001043,
+        "cardMstId": 4200104,
+        "def": 86,
+        "hp": 389,
+        "limitBreakCount": 3
+    },
+    {
+        "atk": 293,
+        "cardLimitBreakMstId": 42001044,
+        "cardMstId": 4200104,
+        "def": 104,
+        "hp": 468,
+        "limitBreakCount": 4
+    },
+    {
+        "atk": 343,
+        "cardLimitBreakMstId": 42001045,
+        "cardMstId": 4200104,
+        "def": 122,
+        "hp": 547,
+        "limitBreakCount": 5
+    },
+    {
+        "atk": 96,
+        "cardLimitBreakMstId": 42001050,
+        "cardMstId": 4200105,
+        "def": 49,
+        "hp": 104,
+        "limitBreakCount": 0
+    },
+    {
+        "atk": 146,
+        "cardLimitBreakMstId": 42001051,
+        "cardMstId": 4200105,
+        "def": 74,
+        "hp": 158,
+        "limitBreakCount": 1
+    },
+    {
+        "atk": 196,
+        "cardLimitBreakMstId": 42001052,
+        "cardMstId": 4200105,
+        "def": 99,
+        "hp": 212,
+        "limitBreakCount": 2
+    },
+    {
+        "atk": 246,
+        "cardLimitBreakMstId": 42001053,
+        "cardMstId": 4200105,
+        "def": 125,
+        "hp": 266,
+        "limitBreakCount": 3
+    },
+    {
+        "atk": 296,
+        "cardLimitBreakMstId": 42001054,
+        "cardMstId": 4200105,
+        "def": 150,
+        "hp": 320,
+        "limitBreakCount": 4
+    },
+    {
+        "atk": 346,
+        "cardLimitBreakMstId": 42001055,
+        "cardMstId": 4200105,
+        "def": 176,
+        "hp": 374,
+        "limitBreakCount": 5
+    },
+    {
+        "atk": 103,
+        "cardLimitBreakMstId": 42001060,
+        "cardMstId": 4200106,
+        "def": 56,
+        "hp": 61,
+        "limitBreakCount": 0
+    },
+    {
+        "atk": 156,
+        "cardLimitBreakMstId": 42001061,
+        "cardMstId": 4200106,
+        "def": 85,
+        "hp": 93,
+        "limitBreakCount": 1
+    },
+    {
+        "atk": 210,
+        "cardLimitBreakMstId": 42001062,
+        "cardMstId": 4200106,
+        "def": 114,
+        "hp": 126,
+        "limitBreakCount": 2
+    },
+    {
+        "atk": 264,
+        "cardLimitBreakMstId": 42001063,
+        "cardMstId": 4200106,
+        "def": 144,
+        "hp": 158,
+        "limitBreakCount": 3
+    },
+    {
+        "atk": 317,
+        "cardLimitBreakMstId": 42001064,
+        "cardMstId": 4200106,
+        "def": 173,
+        "hp": 190,
+        "limitBreakCount": 4
+    },
+    {
+        "atk": 371,
+        "cardLimitBreakMstId": 42001065,
+        "cardMstId": 4200106,
+        "def": 202,
+        "hp": 222,
+        "limitBreakCount": 5
+    },
+    {
         "atk": 24,
         "cardLimitBreakMstId": 43000010,
         "cardMstId": 4300001,

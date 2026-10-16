@@ -2,6 +2,8 @@
     {
         "dailyBonusLotteryRarityGroupId": 101,
         "endTime": "2025-09-11T11:59:59+09:00",
+        "exCharacterBonusGroupId": 0,
+        "exCharacterBonusPassiveSkillMstId": 0,
         "multiRaidBattleBonusGroupId": 1,
         "multiRaidMstId": 1,
         "seasonId": 1,
@@ -10,6 +12,8 @@
     {
         "dailyBonusLotteryRarityGroupId": 102,
         "endTime": "2025-09-25T11:59:59+09:00",
+        "exCharacterBonusGroupId": 0,
+        "exCharacterBonusPassiveSkillMstId": 0,
         "multiRaidBattleBonusGroupId": 2,
         "multiRaidMstId": 2,
         "seasonId": 2,
@@ -18,6 +22,8 @@
     {
         "dailyBonusLotteryRarityGroupId": 102,
         "endTime": "2025-10-09T11:59:59+09:00",
+        "exCharacterBonusGroupId": 0,
+        "exCharacterBonusPassiveSkillMstId": 0,
         "multiRaidBattleBonusGroupId": 1,
         "multiRaidMstId": 3,
         "seasonId": 1,
@@ -26,6 +32,8 @@
     {
         "dailyBonusLotteryRarityGroupId": 103,
         "endTime": "2025-10-23T11:59:59+09:00",
+        "exCharacterBonusGroupId": 0,
+        "exCharacterBonusPassiveSkillMstId": 0,
         "multiRaidBattleBonusGroupId": 3,
         "multiRaidMstId": 4,
         "seasonId": 3,
@@ -34,6 +42,8 @@
     {
         "dailyBonusLotteryRarityGroupId": 103,
         "endTime": "2025-11-06T11:59:59+09:00",
+        "exCharacterBonusGroupId": 0,
+        "exCharacterBonusPassiveSkillMstId": 0,
         "multiRaidBattleBonusGroupId": 2,
         "multiRaidMstId": 5,
         "seasonId": 2,
@@ -42,6 +52,8 @@
     {
         "dailyBonusLotteryRarityGroupId": 103,
         "endTime": "2025-11-20T11:59:59+09:00",
+        "exCharacterBonusGroupId": 0,
+        "exCharacterBonusPassiveSkillMstId": 0,
         "multiRaidBattleBonusGroupId": 4,
         "multiRaidMstId": 6,
         "seasonId": 4,
@@ -50,6 +62,8 @@
     {
         "dailyBonusLotteryRarityGroupId": 103,
         "endTime": "2025-12-04T11:59:59+09:00",
+        "exCharacterBonusGroupId": 0,
+        "exCharacterBonusPassiveSkillMstId": 0,
         "multiRaidBattleBonusGroupId": 1,
         "multiRaidMstId": 7,
         "seasonId": 1,
@@ -58,6 +72,8 @@
     {
         "dailyBonusLotteryRarityGroupId": 103,
         "endTime": "2025-12-18T11:59:59+09:00",
+        "exCharacterBonusGroupId": 0,
+        "exCharacterBonusPassiveSkillMstId": 0,
         "multiRaidBattleBonusGroupId": 3,
         "multiRaidMstId": 8,
         "seasonId": 3,
@@ -66,6 +82,8 @@
     {
         "dailyBonusLotteryRarityGroupId": 103,
         "endTime": "2026-01-01T11:59:59+09:00",
+        "exCharacterBonusGroupId": 0,
+        "exCharacterBonusPassiveSkillMstId": 0,
         "multiRaidBattleBonusGroupId": 4,
         "multiRaidMstId": 9,
         "seasonId": 4,
@@ -74,6 +92,8 @@
     {
         "dailyBonusLotteryRarityGroupId": 103,
         "endTime": "2026-01-15T11:59:59+09:00",
+        "exCharacterBonusGroupId": 0,
+        "exCharacterBonusPassiveSkillMstId": 0,
         "multiRaidBattleBonusGroupId": 2,
         "multiRaidMstId": 10,
         "seasonId": 2,
@@ -82,6 +102,8 @@
     {
         "dailyBonusLotteryRarityGroupId": 104,
         "endTime": "2026-01-29T11:59:59+09:00",
+        "exCharacterBonusGroupId": 0,
+        "exCharacterBonusPassiveSkillMstId": 0,
         "multiRaidBattleBonusGroupId": 5,
         "multiRaidMstId": 11,
         "seasonId": 5,
@@ -90,6 +112,8 @@
     {
         "dailyBonusLotteryRarityGroupId": 103,
         "endTime": "2026-02-12T11:59:59+09:00",
+        "exCharacterBonusGroupId": 0,
+        "exCharacterBonusPassiveSkillMstId": 0,
         "multiRaidBattleBonusGroupId": 1,
         "multiRaidMstId": 12,
         "seasonId": 1,
@@ -98,6 +122,8 @@
     {
         "dailyBonusLotteryRarityGroupId": 103,
         "endTime": "2026-02-26T11:59:59+09:00",
+        "exCharacterBonusGroupId": 0,
+        "exCharacterBonusPassiveSkillMstId": 0,
         "multiRaidBattleBonusGroupId": 6,
         "multiRaidMstId": 13,
         "seasonId": 6,
@@ -106,6 +132,8 @@
     {
         "dailyBonusLotteryRarityGroupId": 103,
         "endTime": "2026-03-12T11:59:59+09:00",
+        "exCharacterBonusGroupId": 0,
+        "exCharacterBonusPassiveSkillMstId": 0,
         "multiRaidBattleBonusGroupId": 3,
         "multiRaidMstId": 14,
         "seasonId": 3,
@@ -114,6 +142,8 @@
     {
         "dailyBonusLotteryRarityGroupId": 103,
         "endTime": "2026-03-26T11:59:59+09:00",
+        "exCharacterBonusGroupId": 0,
+        "exCharacterBonusPassiveSkillMstId": 0,
         "multiRaidBattleBonusGroupId": 4,
         "multiRaidMstId": 15,
         "seasonId": 4,
@@ -122,6 +152,8 @@
     {
         "dailyBonusLotteryRarityGroupId": 103,
         "endTime": "2026-04-09T11:59:59+09:00",
+        "exCharacterBonusGroupId": 0,
+        "exCharacterBonusPassiveSkillMstId": 0,
         "multiRaidBattleBonusGroupId": 5,
         "multiRaidMstId": 16,
         "seasonId": 5,
@@ -130,6 +162,8 @@
     {
         "dailyBonusLotteryRarityGroupId": 103,
         "endTime": "2026-04-24T11:59:59+09:00",
+        "exCharacterBonusGroupId": 0,
+        "exCharacterBonusPassiveSkillMstId": 0,
         "multiRaidBattleBonusGroupId": 2,
         "multiRaidMstId": 17,
         "seasonId": 2,
@@ -138,6 +172,8 @@
     {
         "dailyBonusLotteryRarityGroupId": 103,
         "endTime": "2026-05-07T11:59:59+09:00",
+        "exCharacterBonusGroupId": 0,
+        "exCharacterBonusPassiveSkillMstId": 0,
         "multiRaidBattleBonusGroupId": 7,
         "multiRaidMstId": 18,
         "seasonId": 7,
@@ -146,6 +182,8 @@
     {
         "dailyBonusLotteryRarityGroupId": 103,
         "endTime": "2026-05-21T11:59:59+09:00",
+        "exCharacterBonusGroupId": 0,
+        "exCharacterBonusPassiveSkillMstId": 0,
         "multiRaidBattleBonusGroupId": 3,
         "multiRaidMstId": 19,
         "seasonId": 3,
@@ -154,6 +192,8 @@
     {
         "dailyBonusLotteryRarityGroupId": 103,
         "endTime": "2026-06-04T11:59:59+09:00",
+        "exCharacterBonusGroupId": 0,
+        "exCharacterBonusPassiveSkillMstId": 0,
         "multiRaidBattleBonusGroupId": 6,
         "multiRaidMstId": 20,
         "seasonId": 6,
@@ -162,6 +202,8 @@
     {
         "dailyBonusLotteryRarityGroupId": 103,
         "endTime": "2026-06-16T04:59:59+09:00",
+        "exCharacterBonusGroupId": 0,
+        "exCharacterBonusPassiveSkillMstId": 0,
         "multiRaidBattleBonusGroupId": 4,
         "multiRaidMstId": 21,
         "seasonId": 4,
@@ -170,6 +212,8 @@
     {
         "dailyBonusLotteryRarityGroupId": 103,
         "endTime": "2026-07-02T11:59:59+09:00",
+        "exCharacterBonusGroupId": 0,
+        "exCharacterBonusPassiveSkillMstId": 0,
         "multiRaidBattleBonusGroupId": 2,
         "multiRaidMstId": 22,
         "seasonId": 2,
@@ -178,6 +222,8 @@
     {
         "dailyBonusLotteryRarityGroupId": 103,
         "endTime": "2026-07-16T11:59:59+09:00",
+        "exCharacterBonusGroupId": 0,
+        "exCharacterBonusPassiveSkillMstId": 0,
         "multiRaidBattleBonusGroupId": 1,
         "multiRaidMstId": 23,
         "seasonId": 1,
@@ -186,6 +232,8 @@
     {
         "dailyBonusLotteryRarityGroupId": 103,
         "endTime": "2026-07-31T11:59:59+09:00",
+        "exCharacterBonusGroupId": 0,
+        "exCharacterBonusPassiveSkillMstId": 0,
         "multiRaidBattleBonusGroupId": 5,
         "multiRaidMstId": 24,
         "seasonId": 5,
@@ -194,6 +242,8 @@
     {
         "dailyBonusLotteryRarityGroupId": 103,
         "endTime": "2026-08-14T11:59:59+09:00",
+        "exCharacterBonusGroupId": 0,
+        "exCharacterBonusPassiveSkillMstId": 0,
         "multiRaidBattleBonusGroupId": 8,
         "multiRaidMstId": 25,
         "seasonId": 8,
@@ -202,6 +252,8 @@
     {
         "dailyBonusLotteryRarityGroupId": 103,
         "endTime": "2026-08-29T11:59:59+09:00",
+        "exCharacterBonusGroupId": 0,
+        "exCharacterBonusPassiveSkillMstId": 0,
         "multiRaidBattleBonusGroupId": 6,
         "multiRaidMstId": 26,
         "seasonId": 6,
@@ -210,6 +262,8 @@
     {
         "dailyBonusLotteryRarityGroupId": 103,
         "endTime": "2026-09-10T11:59:59+09:00",
+        "exCharacterBonusGroupId": 0,
+        "exCharacterBonusPassiveSkillMstId": 0,
         "multiRaidBattleBonusGroupId": 9,
         "multiRaidMstId": 27,
         "seasonId": 9,
@@ -218,6 +272,8 @@
     {
         "dailyBonusLotteryRarityGroupId": 103,
         "endTime": "2026-09-24T11:59:59+09:00",
+        "exCharacterBonusGroupId": 0,
+        "exCharacterBonusPassiveSkillMstId": 0,
         "multiRaidBattleBonusGroupId": 1,
         "multiRaidMstId": 28,
         "seasonId": 1,
@@ -226,6 +282,8 @@
     {
         "dailyBonusLotteryRarityGroupId": 103,
         "endTime": "2026-10-08T11:59:59+09:00",
+        "exCharacterBonusGroupId": 0,
+        "exCharacterBonusPassiveSkillMstId": 0,
         "multiRaidBattleBonusGroupId": 2,
         "multiRaidMstId": 29,
         "seasonId": 2,
@@ -234,9 +292,21 @@
     {
         "dailyBonusLotteryRarityGroupId": 103,
         "endTime": "2026-10-22T11:59:59+09:00",
+        "exCharacterBonusGroupId": 0,
+        "exCharacterBonusPassiveSkillMstId": 0,
         "multiRaidBattleBonusGroupId": 10,
         "multiRaidMstId": 30,
         "seasonId": 10,
         "startTime": "2026-10-08T12:00:00+09:00"
+    },
+    {
+        "dailyBonusLotteryRarityGroupId": 103,
+        "endTime": "2026-11-05T11:59:59+09:00",
+        "exCharacterBonusGroupId": 0,
+        "exCharacterBonusPassiveSkillMstId": 0,
+        "multiRaidBattleBonusGroupId": 11,
+        "multiRaidMstId": 31,
+        "seasonId": 11,
+        "startTime": "2026-10-22T12:00:00+09:00"
     }
 ]

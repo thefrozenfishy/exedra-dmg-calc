@@ -230,6 +230,16 @@
         "type": 1
     },
     {
+        "homeMotionResourceName": "chara_10040601_home",
+        "isDefault": true,
+        "isExistVoice": true,
+        "name": "Sayaka Miki - Anomalia",
+        "resourceName": "chara_100406_battle_unit",
+        "sortOrder": 100405,
+        "style3dCharacterMstId": 100405,
+        "type": 1
+    },
+    {
         "homeMotionResourceName": "chara_10050101_home",
         "isDefault": true,
         "isExistVoice": true,

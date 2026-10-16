@@ -1066,6 +1066,19 @@
         "unlockType": 8
     },
     {
+        "backgroundResourceName": "bg_3d_616_00_01_001",
+        "dioramaBackgroundMstId": 210811,
+        "enemyType": 1,
+        "fieldSeriesMstId": 99999,
+        "releaseTime": "2050-01-01T12:00:00+09:00",
+        "seriesId": 2,
+        "sortOrder": 101,
+        "stageName": "Symbol Witch - Floor 1",
+        "stageThumbnailName": "bg_3d_616_00_01_001",
+        "unlockId": 0,
+        "unlockType": 1
+    },
+    {
         "backgroundResourceName": "bg_3d_615_00_01_001",
         "dioramaBackgroundMstId": 310111,
         "enemyType": 1,

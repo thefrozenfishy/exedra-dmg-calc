@@ -838,5 +838,17 @@
         "sortOrder": 1032,
         "startTime": "2026-10-03T00:00:00+09:00",
         "title": "Madoka Kaname's Birthday Login Bonus"
+    },
+    {
+        "appealDescription": "Get training items like <color=#ecd19c>Prism Orbs</color>!",
+        "appealIconObjectId": 121003,
+        "appealIconObjectReceiveType": 5,
+        "conditionDescription": "Log in",
+        "cycleType": 2,
+        "endTime": "2026-11-13T11:59:59+09:00",
+        "loginBonusMstId": 71,
+        "sortOrder": 1031,
+        "startTime": "2026-10-16T12:00:00+09:00",
+        "title": "Exedra Quest Chapter 1 Part II Act II Release Celebration Login Bonus"
     }
 ]

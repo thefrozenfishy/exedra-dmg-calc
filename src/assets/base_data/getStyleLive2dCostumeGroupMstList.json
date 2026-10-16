@@ -285,6 +285,11 @@
         "styleMstId": 10040701
     },
     {
+        "styleLive2dCostumeGroupMstId": 1004401,
+        "styleLive2dCostumeMstId": 100440,
+        "styleMstId": 10040601
+    },
+    {
         "styleLive2dCostumeGroupMstId": 1005001,
         "styleLive2dCostumeMstId": 100500,
         "styleMstId": 10050101
@@ -582,6 +587,16 @@
     {
         "styleLive2dCostumeGroupMstId": 1017012,
         "styleLive2dCostumeMstId": 101701,
+        "styleMstId": 10170102
+    },
+    {
+        "styleLive2dCostumeGroupMstId": 1017021,
+        "styleLive2dCostumeMstId": 101702,
+        "styleMstId": 10170101
+    },
+    {
+        "styleLive2dCostumeGroupMstId": 1017022,
+        "styleLive2dCostumeMstId": 101702,
         "styleMstId": 10170102
     },
     {

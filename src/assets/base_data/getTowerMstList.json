@@ -170,6 +170,16 @@
         "towerThemeMstId": 0
     },
     {
+        "bannerImageName": "permanent",
+        "endTime": "2026-11-19T11:59:59+09:00",
+        "eventType": 1,
+        "reprintNum": 20261019,
+        "startTime": "2026-10-19T12:00:00+09:00",
+        "themeImageName": "permanent",
+        "towerMstId": 18,
+        "towerThemeMstId": 0
+    },
+    {
         "bannerImageName": "theme_0001",
         "endTime": "2026-09-30T11:59:59+09:00",
         "eventType": 3,

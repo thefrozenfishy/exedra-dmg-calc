@@ -452,6 +452,46 @@
     {
         "conditionElement": 0,
         "conditionRole": 0,
+        "description": "On basic attack, grants 1 SP.",
+        "level": 1,
+        "name": "Season Buffs",
+        "passiveSkillMstId": 1045,
+        "skillButtonIcon": "",
+        "skillUniqueId": 1045
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "On DMG dealt to an enemy, increases ATK and SPD of allies with the same element as self by 2% (Max 10%).",
+        "level": 1,
+        "name": "Season Buffs",
+        "passiveSkillMstId": 1046,
+        "skillButtonIcon": "",
+        "skillUniqueId": 1046
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 1,
+        "description": "Increases DMG dealt when targeting elemental weakness by 50%.",
+        "level": 1,
+        "name": "Season Buffs",
+        "passiveSkillMstId": 1047,
+        "skillButtonIcon": "",
+        "skillUniqueId": 1047
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 2,
+        "description": "Increases break gauge depletion by 50%.",
+        "level": 1,
+        "name": "Season Buffs",
+        "passiveSkillMstId": 1048,
+        "skillButtonIcon": "",
+        "skillUniqueId": 1048
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
         "description": "Increases DEF by 5%.",
         "level": 1,
         "name": "Ability",
@@ -12212,6 +12252,186 @@
     {
         "conditionElement": 0,
         "conditionRole": 0,
+        "description": "On void attack, increases DMG dealt by 7.5%.",
+        "level": 1,
+        "name": "Ability",
+        "passiveSkillMstId": 419701,
+        "skillButtonIcon": "",
+        "skillUniqueId": 4197
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "On void attack, increases DMG dealt by 8.5%.",
+        "level": 2,
+        "name": "Ability",
+        "passiveSkillMstId": 419702,
+        "skillButtonIcon": "",
+        "skillUniqueId": 4197
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "On void attack, increases DMG dealt by 9.5%.",
+        "level": 3,
+        "name": "Ability",
+        "passiveSkillMstId": 419703,
+        "skillButtonIcon": "",
+        "skillUniqueId": 4197
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "On void attack, increases DMG dealt by 10.5%.",
+        "level": 4,
+        "name": "Ability",
+        "passiveSkillMstId": 419704,
+        "skillButtonIcon": "",
+        "skillUniqueId": 4197
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "On void attack, increases DMG dealt by 11.5%.",
+        "level": 5,
+        "name": "Ability",
+        "passiveSkillMstId": 419705,
+        "skillButtonIcon": "",
+        "skillUniqueId": 4197
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "On void attack, increases DMG dealt by 12.5%.",
+        "level": 6,
+        "name": "Ability",
+        "passiveSkillMstId": 419706,
+        "skillButtonIcon": "",
+        "skillUniqueId": 4197
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases debuff hit rate by 5%.<br>Equipped to Debuffer:<br>Also increases SPD by 5%.",
+        "level": 1,
+        "name": "Ability",
+        "passiveSkillMstId": 419801,
+        "skillButtonIcon": "",
+        "skillUniqueId": 4198
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases debuff hit rate by 6%.<br>Equipped to Debuffer:<br>Also increases SPD by 6%.",
+        "level": 2,
+        "name": "Ability",
+        "passiveSkillMstId": 419802,
+        "skillButtonIcon": "",
+        "skillUniqueId": 4198
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases debuff hit rate by 7%.<br>Equipped to Debuffer:<br>Also increases SPD by 7%.",
+        "level": 3,
+        "name": "Ability",
+        "passiveSkillMstId": 419803,
+        "skillButtonIcon": "",
+        "skillUniqueId": 4198
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases debuff hit rate by 8%.<br>Equipped to Debuffer:<br>Also increases SPD by 8%.",
+        "level": 4,
+        "name": "Ability",
+        "passiveSkillMstId": 419804,
+        "skillButtonIcon": "",
+        "skillUniqueId": 4198
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases debuff hit rate by 9%.<br>Equipped to Debuffer:<br>Also increases SPD by 9%.",
+        "level": 5,
+        "name": "Ability",
+        "passiveSkillMstId": 419805,
+        "skillButtonIcon": "",
+        "skillUniqueId": 4198
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases debuff hit rate by 10%.<br>Equipped to Debuffer:<br>Also increases SPD by 10%.",
+        "level": 6,
+        "name": "Ability",
+        "passiveSkillMstId": 419806,
+        "skillButtonIcon": "",
+        "skillUniqueId": 4198
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases ailment RES by 7.5%.<br>Equipped to Attacker:<br>Also increases ongoing DMG dealt by 7.5%.",
+        "level": 1,
+        "name": "Ability",
+        "passiveSkillMstId": 419901,
+        "skillButtonIcon": "",
+        "skillUniqueId": 4199
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases ailment RES by 8.5%.<br>Equipped to Attacker:<br>Also increases ongoing DMG dealt by 8.5%.",
+        "level": 2,
+        "name": "Ability",
+        "passiveSkillMstId": 419902,
+        "skillButtonIcon": "",
+        "skillUniqueId": 4199
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases ailment RES by 9.5%.<br>Equipped to Attacker:<br>Also increases ongoing DMG dealt by 9.5%.",
+        "level": 3,
+        "name": "Ability",
+        "passiveSkillMstId": 419903,
+        "skillButtonIcon": "",
+        "skillUniqueId": 4199
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases ailment RES by 10.5%.<br>Equipped to Attacker:<br>Also increases ongoing DMG dealt by 10.5%.",
+        "level": 4,
+        "name": "Ability",
+        "passiveSkillMstId": 419904,
+        "skillButtonIcon": "",
+        "skillUniqueId": 4199
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases ailment RES by 11.5%.<br>Equipped to Attacker:<br>Also increases ongoing DMG dealt by 11.5%.",
+        "level": 5,
+        "name": "Ability",
+        "passiveSkillMstId": 419905,
+        "skillButtonIcon": "",
+        "skillUniqueId": 4199
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases ailment RES by 12.5%.<br>Equipped to Attacker:<br>Also increases ongoing DMG dealt by 12.5%.",
+        "level": 6,
+        "name": "Ability",
+        "passiveSkillMstId": 419906,
+        "skillButtonIcon": "",
+        "skillUniqueId": 4199
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
         "description": "Increases DEF by 15%.",
         "level": 1,
         "name": "Ability",
@@ -20808,6 +21028,16 @@
         "passiveSkillMstId": 1150076,
         "skillButtonIcon": "",
         "skillUniqueId": 1150076
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases ATK by 10% and HP recovery amount by 10%.<br>On follow-up attack, increases SPD by 2% (Max 10 stacks).",
+        "level": 1,
+        "name": "Surely Joy and Dismay Balance Out",
+        "passiveSkillMstId": 1150079,
+        "skillButtonIcon": "",
+        "skillUniqueId": 1150079
     },
     {
         "conditionElement": 0,
@@ -32112,7 +32342,7 @@
     {
         "conditionElement": 0,
         "conditionRole": 0,
-        "description": "At battle start, sets Hydro Clusters to 0 (Max 4).<br>Increases all allies' DMG dealt when targeting elemental weakness by 10%.<br><br>If at 1 Hydro Cluster or higher:<br>Increases own SPD by 3% (Effect scales with Hydro Clusters; max 12%).<br><br>On special attack by ally with Orchestration applied, activates assist.<br><br>Assist:<br>Increases all allies' DMG dealt by 10% (2 turns).<br>Grants 1 Hydro Cluster.<br>If at 4 Hydro Clusters:<br>Also grants 5 MP to self.",
+        "description": "At battle start, sets Hydro Clusters to 0 (Max 4).<br>Increases all allies' DMG dealt when targeting elemental weakness by 10%.<br><br>If at 1 Hydro Cluster or higher:<br>Increases own SPD by 3% (Effect scales with Hydro Clusters; max 12%).<br><br>On special attack by ally with Orchestration applied, activates assist.<br><br>Assist:<br>Increases all allies' DMG dealt by 10% (2 turns).<br>Grants 1 Hydro Cluster.<br>When at 4 Hydro Clusters:<br>Also grants 5 MP to self.",
         "level": 1,
         "name": "Blast Haste",
         "passiveSkillMstId": 1507601,
@@ -32122,7 +32352,7 @@
     {
         "conditionElement": 0,
         "conditionRole": 0,
-        "description": "At battle start, sets Hydro Clusters to 0 (Max 4).<br>Increases all allies' DMG dealt when targeting elemental weakness by 10%.<br><br>If at 1 Hydro Cluster or higher:<br>Increases own SPD by 3% (Effect scales with Hydro Clusters; max 12%).<br><br>On special attack by ally with Orchestration applied, activates assist.<br><br>Assist:<br>Increases all allies' DMG dealt by 11% (2 turns).<br>Grants 1 Hydro Cluster.<br>If at 4 Hydro Clusters:<br>Also grants 5 MP to self.",
+        "description": "At battle start, sets Hydro Clusters to 0 (Max 4).<br>Increases all allies' DMG dealt when targeting elemental weakness by 10%.<br><br>If at 1 Hydro Cluster or higher:<br>Increases own SPD by 3% (Effect scales with Hydro Clusters; max 12%).<br><br>On special attack by ally with Orchestration applied, activates assist.<br><br>Assist:<br>Increases all allies' DMG dealt by 11% (2 turns).<br>Grants 1 Hydro Cluster.<br>When at 4 Hydro Clusters:<br>Also grants 5 MP to self.",
         "level": 2,
         "name": "Blast Haste",
         "passiveSkillMstId": 1507602,
@@ -32132,7 +32362,7 @@
     {
         "conditionElement": 0,
         "conditionRole": 0,
-        "description": "At battle start, sets Hydro Clusters to 0 (Max 4).<br>Increases all allies' DMG dealt when targeting elemental weakness by 10%.<br><br>If at 1 Hydro Cluster or higher:<br>Increases own SPD by 3% (Effect scales with Hydro Clusters; max 12%).<br><br>On special attack by ally with Orchestration applied, activates assist.<br><br>Assist:<br>Increases all allies' DMG dealt by 12% (2 turns).<br>Grants 1 Hydro Cluster.<br>If at 4 Hydro Clusters:<br>Also grants 5 MP to self.",
+        "description": "At battle start, sets Hydro Clusters to 0 (Max 4).<br>Increases all allies' DMG dealt when targeting elemental weakness by 10%.<br><br>If at 1 Hydro Cluster or higher:<br>Increases own SPD by 3% (Effect scales with Hydro Clusters; max 12%).<br><br>On special attack by ally with Orchestration applied, activates assist.<br><br>Assist:<br>Increases all allies' DMG dealt by 12% (2 turns).<br>Grants 1 Hydro Cluster.<br>When at 4 Hydro Clusters:<br>Also grants 5 MP to self.",
         "level": 3,
         "name": "Blast Haste",
         "passiveSkillMstId": 1507603,
@@ -32142,7 +32372,7 @@
     {
         "conditionElement": 0,
         "conditionRole": 0,
-        "description": "At battle start, sets Hydro Clusters to 0 (Max 4).<br>Increases all allies' DMG dealt when targeting elemental weakness by 10%.<br><br>If at 1 Hydro Cluster or higher:<br>Increases own SPD by 3% (Effect scales with Hydro Clusters; max 12%).<br><br>On special attack by ally with Orchestration applied, activates assist.<br><br>Assist:<br>Increases all allies' DMG dealt by 13% (2 turns).<br>Grants 1 Hydro Cluster.<br>If at 4 Hydro Clusters:<br>Also grants 5 MP to self.",
+        "description": "At battle start, sets Hydro Clusters to 0 (Max 4).<br>Increases all allies' DMG dealt when targeting elemental weakness by 10%.<br><br>If at 1 Hydro Cluster or higher:<br>Increases own SPD by 3% (Effect scales with Hydro Clusters; max 12%).<br><br>On special attack by ally with Orchestration applied, activates assist.<br><br>Assist:<br>Increases all allies' DMG dealt by 13% (2 turns).<br>Grants 1 Hydro Cluster.<br>When at 4 Hydro Clusters:<br>Also grants 5 MP to self.",
         "level": 4,
         "name": "Blast Haste",
         "passiveSkillMstId": 1507604,
@@ -32152,7 +32382,7 @@
     {
         "conditionElement": 0,
         "conditionRole": 0,
-        "description": "At battle start, sets Hydro Clusters to 0 (Max 4).<br>Increases all allies' DMG dealt when targeting elemental weakness by 10%.<br><br>If at 1 Hydro Cluster or higher:<br>Increases own SPD by 3% (Effect scales with Hydro Clusters; max 12%).<br><br>On special attack by ally with Orchestration applied, activates assist.<br><br>Assist:<br>Increases all allies' DMG dealt by 14% (2 turns).<br>Grants 1 Hydro Cluster.<br>If at 4 Hydro Clusters:<br>Also grants 5 MP to self.",
+        "description": "At battle start, sets Hydro Clusters to 0 (Max 4).<br>Increases all allies' DMG dealt when targeting elemental weakness by 10%.<br><br>If at 1 Hydro Cluster or higher:<br>Increases own SPD by 3% (Effect scales with Hydro Clusters; max 12%).<br><br>On special attack by ally with Orchestration applied, activates assist.<br><br>Assist:<br>Increases all allies' DMG dealt by 14% (2 turns).<br>Grants 1 Hydro Cluster.<br>When at 4 Hydro Clusters:<br>Also grants 5 MP to self.",
         "level": 5,
         "name": "Blast Haste",
         "passiveSkillMstId": 1507605,
@@ -32162,7 +32392,7 @@
     {
         "conditionElement": 0,
         "conditionRole": 0,
-        "description": "At battle start, sets Hydro Clusters to 0 (Max 4).<br>Increases all allies' DMG dealt when targeting elemental weakness by 10%.<br><br>If at 1 Hydro Cluster or higher:<br>Increases own SPD by 3% (Effect scales with Hydro Clusters; max 12%).<br><br>On special attack by ally with Orchestration applied, activates assist.<br><br>Assist:<br>Increases all allies' DMG dealt by 15% (2 turns).<br>Grants 1 Hydro Cluster.<br>If at 4 Hydro Clusters:<br>Also grants 5 MP to self.",
+        "description": "At battle start, sets Hydro Clusters to 0 (Max 4).<br>Increases all allies' DMG dealt when targeting elemental weakness by 10%.<br><br>If at 1 Hydro Cluster or higher:<br>Increases own SPD by 3% (Effect scales with Hydro Clusters; max 12%).<br><br>On special attack by ally with Orchestration applied, activates assist.<br><br>Assist:<br>Increases all allies' DMG dealt by 15% (2 turns).<br>Grants 1 Hydro Cluster.<br>When at 4 Hydro Clusters:<br>Also grants 5 MP to self.",
         "level": 6,
         "name": "Blast Haste",
         "passiveSkillMstId": 1507606,
@@ -32172,7 +32402,7 @@
     {
         "conditionElement": 0,
         "conditionRole": 0,
-        "description": "At battle start, sets Hydro Clusters to 0 (Max 4).<br>Increases all allies' DMG dealt when targeting elemental weakness by 10%.<br><br>If at 1 Hydro Cluster or higher:<br>Increases own SPD by 3% (Effect scales with Hydro Clusters; max 12%).<br><br>On special attack by ally with Orchestration applied, activates assist.<br><br>Assist:<br>Increases all allies' DMG dealt by 16% (2 turns).<br>Grants 1 Hydro Cluster.<br>If at 4 Hydro Clusters:<br>Also grants 5 MP to self.",
+        "description": "At battle start, sets Hydro Clusters to 0 (Max 4).<br>Increases all allies' DMG dealt when targeting elemental weakness by 10%.<br><br>If at 1 Hydro Cluster or higher:<br>Increases own SPD by 3% (Effect scales with Hydro Clusters; max 12%).<br><br>On special attack by ally with Orchestration applied, activates assist.<br><br>Assist:<br>Increases all allies' DMG dealt by 16% (2 turns).<br>Grants 1 Hydro Cluster.<br>When at 4 Hydro Clusters:<br>Also grants 5 MP to self.",
         "level": 7,
         "name": "Blast Haste",
         "passiveSkillMstId": 1507607,
@@ -32182,7 +32412,7 @@
     {
         "conditionElement": 0,
         "conditionRole": 0,
-        "description": "At battle start, sets Hydro Clusters to 0 (Max 4).<br>Increases all allies' DMG dealt when targeting elemental weakness by 10%.<br><br>If at 1 Hydro Cluster or higher:<br>Increases own SPD by 3% (Effect scales with Hydro Clusters; max 12%).<br><br>On special attack by ally with Orchestration applied, activates assist.<br><br>Assist:<br>Increases all allies' DMG dealt by 17% (2 turns).<br>Grants 1 Hydro Cluster.<br>If at 4 Hydro Clusters:<br>Also grants 5 MP to self.",
+        "description": "At battle start, sets Hydro Clusters to 0 (Max 4).<br>Increases all allies' DMG dealt when targeting elemental weakness by 10%.<br><br>If at 1 Hydro Cluster or higher:<br>Increases own SPD by 3% (Effect scales with Hydro Clusters; max 12%).<br><br>On special attack by ally with Orchestration applied, activates assist.<br><br>Assist:<br>Increases all allies' DMG dealt by 17% (2 turns).<br>Grants 1 Hydro Cluster.<br>When at 4 Hydro Clusters:<br>Also grants 5 MP to self.",
         "level": 8,
         "name": "Blast Haste",
         "passiveSkillMstId": 1507608,
@@ -32192,7 +32422,7 @@
     {
         "conditionElement": 0,
         "conditionRole": 0,
-        "description": "At battle start, sets Hydro Clusters to 0 (Max 4).<br>Increases all allies' DMG dealt when targeting elemental weakness by 10%.<br><br>If at 1 Hydro Cluster or higher:<br>Increases own SPD by 3% (Effect scales with Hydro Clusters; max 12%).<br><br>On special attack by ally with Orchestration applied, activates assist.<br><br>Assist:<br>Increases all allies' DMG dealt by 18% (2 turns).<br>Grants 1 Hydro Cluster.<br>If at 4 Hydro Clusters:<br>Also grants 5 MP to self.",
+        "description": "At battle start, sets Hydro Clusters to 0 (Max 4).<br>Increases all allies' DMG dealt when targeting elemental weakness by 10%.<br><br>If at 1 Hydro Cluster or higher:<br>Increases own SPD by 3% (Effect scales with Hydro Clusters; max 12%).<br><br>On special attack by ally with Orchestration applied, activates assist.<br><br>Assist:<br>Increases all allies' DMG dealt by 18% (2 turns).<br>Grants 1 Hydro Cluster.<br>When at 4 Hydro Clusters:<br>Also grants 5 MP to self.",
         "level": 9,
         "name": "Blast Haste",
         "passiveSkillMstId": 1507609,
@@ -32202,7 +32432,7 @@
     {
         "conditionElement": 0,
         "conditionRole": 0,
-        "description": "At battle start, sets Hydro Clusters to 0 (Max 4).<br>Increases all allies' DMG dealt when targeting elemental weakness by 10%.<br><br>If at 1 Hydro Cluster or higher:<br>Increases own SPD by 3% (Effect scales with Hydro Clusters; max 12%).<br><br>On special attack by ally with Orchestration applied, activates assist.<br><br>Assist:<br>Increases all allies' DMG dealt by 20% (2 turns).<br>Grants 1 Hydro Cluster.<br>If at 4 Hydro Clusters:<br>Also grants 5 MP to self.",
+        "description": "At battle start, sets Hydro Clusters to 0 (Max 4).<br>Increases all allies' DMG dealt when targeting elemental weakness by 10%.<br><br>If at 1 Hydro Cluster or higher:<br>Increases own SPD by 3% (Effect scales with Hydro Clusters; max 12%).<br><br>On special attack by ally with Orchestration applied, activates assist.<br><br>Assist:<br>Increases all allies' DMG dealt by 20% (2 turns).<br>Grants 1 Hydro Cluster.<br>When at 4 Hydro Clusters:<br>Also grants 5 MP to self.",
         "level": 10,
         "name": "Blast Haste",
         "passiveSkillMstId": 1507610,
@@ -32308,6 +32538,106 @@
         "passiveSkillMstId": 1507710,
         "skillButtonIcon": "battle_icon_passive_buff",
         "skillUniqueId": 15077
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "On void DMG dealt to an enemy by self or ally, increases own DMG dealt by 3% (Max 10 stacks) and grants 5 MP.<br>On own HP consumption, increases ATK by 2% (Max 10 stacks) and increases SPD by 2% (Max 10 stacks).<br>* Only applies to basic attack / battle skill / special attack.<br>Decreases DMG taken by 10% as own HP decreases (Max 40%).<br><br>When own void field inactive:<br>On own battle skill use, activates void field (Stock Gained: 3).<br><br>Void Field:<br>Increases all allies' void DMG dealt by 30% and void critical rate by 30%.<br>Max Stock: 3; on user's battle skill use, grants 2 stock, and on user's basic attack, consumes 1 stock.",
+        "level": 1,
+        "name": "Assault Haste",
+        "passiveSkillMstId": 1508001,
+        "skillButtonIcon": "battle_icon_passive_buff",
+        "skillUniqueId": 15080
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "On void DMG dealt to an enemy by self or ally, increases own DMG dealt by 3% (Max 10 stacks) and grants 5 MP.<br>On own HP consumption, increases ATK by 2% (Max 10 stacks) and increases SPD by 2% (Max 10 stacks).<br>* Only applies to basic attack / battle skill / special attack.<br>Decreases DMG taken by 11% as own HP decreases (Max 41%).<br><br>When own void field inactive:<br>On own battle skill use, activates void field (Stock Gained: 3).<br><br>Void Field:<br>Increases all allies' void DMG dealt by 30% and void critical rate by 30%.<br>Max Stock: 3; on user's battle skill use, grants 2 stock, and on user's basic attack, consumes 1 stock.",
+        "level": 2,
+        "name": "Assault Haste",
+        "passiveSkillMstId": 1508002,
+        "skillButtonIcon": "battle_icon_passive_buff",
+        "skillUniqueId": 15080
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "On void DMG dealt to an enemy by self or ally, increases own DMG dealt by 3% (Max 10 stacks) and grants 5 MP.<br>On own HP consumption, increases ATK by 2% (Max 10 stacks) and increases SPD by 2% (Max 10 stacks).<br>* Only applies to basic attack / battle skill / special attack.<br>Decreases DMG taken by 12% as own HP decreases (Max 42%).<br><br>When own void field inactive:<br>On own battle skill use, activates void field (Stock Gained: 3).<br><br>Void Field:<br>Increases all allies' void DMG dealt by 30% and void critical rate by 30%.<br>Max Stock: 3; on user's battle skill use, grants 2 stock, and on user's basic attack, consumes 1 stock.",
+        "level": 3,
+        "name": "Assault Haste",
+        "passiveSkillMstId": 1508003,
+        "skillButtonIcon": "battle_icon_passive_buff",
+        "skillUniqueId": 15080
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "On void DMG dealt to an enemy by self or ally, increases own DMG dealt by 3% (Max 10 stacks) and grants 5 MP.<br>On own HP consumption, increases ATK by 2% (Max 10 stacks) and increases SPD by 2% (Max 10 stacks).<br>* Only applies to basic attack / battle skill / special attack.<br>Decreases DMG taken by 13% as own HP decreases (Max 43%).<br><br>When own void field inactive:<br>On own battle skill use, activates void field (Stock Gained: 3).<br><br>Void Field:<br>Increases all allies' void DMG dealt by 30% and void critical rate by 30%.<br>Max Stock: 3; on user's battle skill use, grants 2 stock, and on user's basic attack, consumes 1 stock.",
+        "level": 4,
+        "name": "Assault Haste",
+        "passiveSkillMstId": 1508004,
+        "skillButtonIcon": "battle_icon_passive_buff",
+        "skillUniqueId": 15080
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "On void DMG dealt to an enemy by self or ally, increases own DMG dealt by 3% (Max 10 stacks) and grants 5 MP.<br>On own HP consumption, increases ATK by 2% (Max 10 stacks) and increases SPD by 2% (Max 10 stacks).<br>* Only applies to basic attack / battle skill / special attack.<br>Decreases DMG taken by 14% as own HP decreases (Max 44%).<br><br>When own void field inactive:<br>On own battle skill use, activates void field (Stock Gained: 3).<br><br>Void Field:<br>Increases all allies' void DMG dealt by 30% and void critical rate by 30%.<br>Max Stock: 3; on user's battle skill use, grants 2 stock, and on user's basic attack, consumes 1 stock.",
+        "level": 5,
+        "name": "Assault Haste",
+        "passiveSkillMstId": 1508005,
+        "skillButtonIcon": "battle_icon_passive_buff",
+        "skillUniqueId": 15080
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "On void DMG dealt to an enemy by self or ally, increases own DMG dealt by 3% (Max 10 stacks) and grants 5 MP.<br>On own HP consumption, increases ATK by 2% (Max 10 stacks) and increases SPD by 2% (Max 10 stacks).<br>* Only applies to basic attack / battle skill / special attack.<br>Decreases DMG taken by 15% as own HP decreases (Max 45%).<br><br>When own void field inactive:<br>On own battle skill use, activates void field (Stock Gained: 3).<br><br>Void Field:<br>Increases all allies' void DMG dealt by 30% and void critical rate by 30%.<br>Max Stock: 3; on user's battle skill use, grants 2 stock, and on user's basic attack, consumes 1 stock.",
+        "level": 6,
+        "name": "Assault Haste",
+        "passiveSkillMstId": 1508006,
+        "skillButtonIcon": "battle_icon_passive_buff",
+        "skillUniqueId": 15080
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "On void DMG dealt to an enemy by self or ally, increases own DMG dealt by 3% (Max 10 stacks) and grants 5 MP.<br>On own HP consumption, increases ATK by 2% (Max 10 stacks) and increases SPD by 2% (Max 10 stacks).<br>* Only applies to basic attack / battle skill / special attack.<br>Decreases DMG taken by 16% as own HP decreases (Max 46%).<br><br>When own void field inactive:<br>On own battle skill use, activates void field (Stock Gained: 3).<br><br>Void Field:<br>Increases all allies' void DMG dealt by 30% and void critical rate by 30%.<br>Max Stock: 3; on user's battle skill use, grants 2 stock, and on user's basic attack, consumes 1 stock.",
+        "level": 7,
+        "name": "Assault Haste",
+        "passiveSkillMstId": 1508007,
+        "skillButtonIcon": "battle_icon_passive_buff",
+        "skillUniqueId": 15080
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "On void DMG dealt to an enemy by self or ally, increases own DMG dealt by 3% (Max 10 stacks) and grants 5 MP.<br>On own HP consumption, increases ATK by 2% (Max 10 stacks) and increases SPD by 2% (Max 10 stacks).<br>* Only applies to basic attack / battle skill / special attack.<br>Decreases DMG taken by 17% as own HP decreases (Max 47%).<br><br>When own void field inactive:<br>On own battle skill use, activates void field (Stock Gained: 3).<br><br>Void Field:<br>Increases all allies' void DMG dealt by 30% and void critical rate by 30%.<br>Max Stock: 3; on user's battle skill use, grants 2 stock, and on user's basic attack, consumes 1 stock.",
+        "level": 8,
+        "name": "Assault Haste",
+        "passiveSkillMstId": 1508008,
+        "skillButtonIcon": "battle_icon_passive_buff",
+        "skillUniqueId": 15080
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "On void DMG dealt to an enemy by self or ally, increases own DMG dealt by 3% (Max 10 stacks) and grants 5 MP.<br>On own HP consumption, increases ATK by 2% (Max 10 stacks) and increases SPD by 2% (Max 10 stacks).<br>* Only applies to basic attack / battle skill / special attack.<br>Decreases DMG taken by 18% as own HP decreases (Max 48%).<br><br>When own void field inactive:<br>On own battle skill use, activates void field (Stock Gained: 3).<br><br>Void Field:<br>Increases all allies' void DMG dealt by 30% and void critical rate by 30%.<br>Max Stock: 3; on user's battle skill use, grants 2 stock, and on user's basic attack, consumes 1 stock.",
+        "level": 9,
+        "name": "Assault Haste",
+        "passiveSkillMstId": 1508009,
+        "skillButtonIcon": "battle_icon_passive_buff",
+        "skillUniqueId": 15080
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "On void DMG dealt to an enemy by self or ally, increases own DMG dealt by 3% (Max 10 stacks) and grants 5 MP.<br>On own HP consumption, increases ATK by 2% (Max 10 stacks) and increases SPD by 2% (Max 10 stacks).<br>* Only applies to basic attack / battle skill / special attack.<br>Decreases DMG taken by 20% as own HP decreases (Max 50%).<br><br>When own void field inactive:<br>On own battle skill use, activates void field (Stock Gained: 3).<br><br>Void Field:<br>Increases all allies' void DMG dealt by 30% and void critical rate by 30%.<br>Max Stock: 3; on user's battle skill use, grants 2 stock, and on user's basic attack, consumes 1 stock.",
+        "level": 10,
+        "name": "Assault Haste",
+        "passiveSkillMstId": 1508010,
+        "skillButtonIcon": "battle_icon_passive_buff",
+        "skillUniqueId": 15080
     },
     {
         "conditionElement": 0,
@@ -37942,6 +38272,56 @@
     {
         "conditionElement": 0,
         "conditionRole": 0,
+        "description": "Grants 2 actions.<br><br>Decreases DMG taken based on how many SP the enemy has.<br><br>Increases break gauge depletion RES based on how many allies are present.<br><br>When an enemy not aligned with the user's elemental weakness takes an action, delays all enemies' action order.",
+        "level": 1,
+        "name": "Ability IV",
+        "passiveSkillMstId": 5001267,
+        "skillButtonIcon": "",
+        "skillUniqueId": 5001267
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "When attacked by enemy basic attacks, skills, or special attacks targeting elemental weakness, consumes 1 Magic.<br>When not attacked by enemy basic attacks, skills, or special attacks, grants 3 Magic.<br>When own Magic reaches 10, triggers a counterattack.<br><br>Counterattack:<br>Deals void DMG [L] to all enemies.<br>Consumes 10 of own Magic.",
+        "level": 1,
+        "name": "Ability IV",
+        "passiveSkillMstId": 5001268,
+        "skillButtonIcon": "",
+        "skillUniqueId": 5001268
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "When attacked by enemy basic attacks, skills, or special attacks targeting elemental weakness, consumes 1 Magic.<br>When not attacked by enemy basic attacks, skills, or special attacks, grants 2 Magic.<br>When own Magic reaches 10, triggers a counterattack.<br><br>Counterattack:<br>Deals void DMG [L] to all enemies.<br>Consumes 10 of own Magic.",
+        "level": 1,
+        "name": "Ability IV",
+        "passiveSkillMstId": 5001269,
+        "skillButtonIcon": "",
+        "skillUniqueId": 5001269
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "When attacked by enemy basic attacks, skills, or special attacks targeting elemental weakness, consumes 1 Magic.<br>When not attacked by enemy basic attacks, skills, or special attacks, grants 5 Magic.<br>When own Magic reaches 10, triggers a counterattack.<br><br>Counterattack:<br>Deals void DMG [L] to all enemies.<br>Consumes 10 of own Magic.",
+        "level": 1,
+        "name": "Ability IV",
+        "passiveSkillMstId": 5001270,
+        "skillButtonIcon": "",
+        "skillUniqueId": 5001270
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "When not in break, decreases DMG taken.",
+        "level": 1,
+        "name": "Ability IV",
+        "passiveSkillMstId": 5001271,
+        "skillButtonIcon": "",
+        "skillUniqueId": 5001271
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
         "description": "If attack target is cursed, grants 1 extra action.",
         "level": 1,
         "name": "Ability IV",
@@ -39158,6 +39538,196 @@
         "passiveSkillMstId": 7005001,
         "skillButtonIcon": "",
         "skillUniqueId": 7005001
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Grants 2 actions.<br>Grants 3 actions on odd-numbered turns.<br><br>At battle start, significantly advances own action order, and delays all enemies' action order.<br><br>Each time own Magic reaches max, advances own action order, and slightly increases ATK.<br>When own HP decreases, grants 1 Magic.<br>When attacked by enemies not aligned with the user's elemental weakness, grants 1 Magic.<br><br>If own break bonus is under 600%, significantly decreases DMG taken.",
+        "level": 1,
+        "name": "Ability VI",
+        "passiveSkillMstId": 7090001,
+        "skillButtonIcon": "",
+        "skillUniqueId": 7090001
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Grants 2 actions.<br>Grants 3 actions on odd-numbered turns.<br><br>At battle start, significantly advances own action order, and delays all enemies' action order.<br><br>Each time own Magic reaches max, advances own action order.<br>When own HP decreases, grants 1 Magic.<br>When attacked by enemies not aligned with the user's elemental weakness, grants 1 Magic.<br><br>If own break bonus is under 600%, significantly decreases DMG taken.",
+        "level": 1,
+        "name": "Ability V",
+        "passiveSkillMstId": 7090002,
+        "skillButtonIcon": "",
+        "skillUniqueId": 7090002
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Grants 2 actions.<br>Grants 3 actions on odd-numbered turns.<br><br>Each time own Magic reaches max, advances own action order.<br>When own HP decreases, grants 1 Magic.<br><br>If own break bonus is under 600%, significantly decreases DMG taken.",
+        "level": 1,
+        "name": "Ability IV",
+        "passiveSkillMstId": 7090003,
+        "skillButtonIcon": "",
+        "skillUniqueId": 7090003
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Grants 2 actions.<br>Grants 3 actions on odd-numbered turns.<br><br>Each time own Magic reaches max, advances own action order.<br>When own HP decreases, grants 1 Magic.<br><br>If own break bonus is under 600%, slightly decreases DMG taken.",
+        "level": 1,
+        "name": "Ability III",
+        "passiveSkillMstId": 7090004,
+        "skillButtonIcon": "",
+        "skillUniqueId": 7090004
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Grants 2 actions.<br>When 1 or more allies other than self are present, increases break gauge depletion RES.",
+        "level": 1,
+        "name": "Ability VI",
+        "passiveSkillMstId": 7120001,
+        "skillButtonIcon": "",
+        "skillUniqueId": 7120001
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Grants 2 actions.<br>Grants 3 actions every 2 turns.<br><br>When 1 or more allies other than self are present, greatly increases break gauge depletion RES.",
+        "level": 1,
+        "name": "Ability VI",
+        "passiveSkillMstId": 7120002,
+        "skillButtonIcon": "",
+        "skillUniqueId": 7120002
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Grants 2 actions.<br>Grants 3 actions every 2 turns.<br><br>When 1 or more allies other than self are present, greatly increases break gauge depletion RES and greatly decreases DMG taken.<br><br>For every 10 Magic gained by self, triggers a counterattack.<br>Each time an ally takes special attack DMG, grants 1 Magic.<br>For every 10 Magic gained by self, grants 1 Magic.<br>Each time Magic reaches 90, consumes 5 Magic.<br><br>Counterattack:<br>Deals light DMG [L] to all enemies.",
+        "level": 1,
+        "name": "Ability VI",
+        "passiveSkillMstId": 7120003,
+        "skillButtonIcon": "",
+        "skillUniqueId": 7120003
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Grants 2 actions.<br>Grants 3 actions every 2 turns.<br><br>When 1 or more allies other than self are present, significantly increases break gauge depletion RES and greatly decreases DMG taken.<br><br>For every 10 Magic gained by self, triggers a counterattack.<br>Each time an ally takes special attack DMG, grants 1 Magic.<br>For every 10 Magic gained by self, grants 1 Magic.<br>Each time Magic reaches 50, consumes 5 Magic.<br><br>Counterattack:<br>Deals light DMG [L] to all enemies.<br>Delays action order of enemies not aligned with the user's elemental weakness.",
+        "level": 1,
+        "name": "Ability VI",
+        "passiveSkillMstId": 7120004,
+        "skillButtonIcon": "",
+        "skillUniqueId": 7120004
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Grants 2 actions.<br>Grants 3 actions every 2 turns.<br><br>When 1 or more allies other than self are present, significantly increases break gauge depletion RES and significantly decreases DMG taken.<br><br>For every 10 Magic gained by self, guaranteed to apply Magic Seal to all enemies for 1 turn and triggers a counterattack.<br>Each time an ally takes special attack DMG, grants 1 Magic.<br>For every 10 Magic gained by self, grants 1 Magic.<br>Each time Magic reaches 50, consumes 5 Magic.<br><br>Counterattack:<br>Deals light DMG [L] to all enemies.<br>Greatly delays action order of enemies not aligned with the user's elemental weakness.",
+        "level": 1,
+        "name": "Ability VI",
+        "passiveSkillMstId": 7120005,
+        "skillButtonIcon": "",
+        "skillUniqueId": 7120005
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Grants 2 actions.<br>Grants 3 actions every 2 turns.<br><br>When 1 or more allies other than self are present, significantly increases break gauge depletion RES and significantly decreases DMG taken.<br>Advances action order each time an ally is put in break or defeated.<br><br>For every 10 Magic gained by self, guaranteed to apply Magic Seal to all enemies for 2 turns and triggers a counterattack.<br>Each time an ally takes special attack DMG, grants 1 Magic.<br>For every 10 Magic gained by self, grants 1 Magic.<br>Each time Magic reaches 30, consumes 5 Magic.<br><br>Counterattack:<br>Deals light DMG [L] to all enemies.<br>Greatly delays action order of enemies not aligned with the user's elemental weakness.",
+        "level": 1,
+        "name": "Ability VI",
+        "passiveSkillMstId": 7120006,
+        "skillButtonIcon": "",
+        "skillUniqueId": 7120006
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Every 2 turns, increases all allies' ATK for 2 turns.",
+        "level": 1,
+        "name": "Ability I",
+        "passiveSkillMstId": 7120007,
+        "skillButtonIcon": "",
+        "skillUniqueId": 7120007
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Every 2 turns, increases all allies' DEF and break gauge depletion RES for 2 turns.",
+        "level": 1,
+        "name": "Ability I",
+        "passiveSkillMstId": 7120008,
+        "skillButtonIcon": "",
+        "skillUniqueId": 7120008
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Restores a small amount of HP to all allies every 2 turns.",
+        "level": 1,
+        "name": "Ability I",
+        "passiveSkillMstId": 7120009,
+        "skillButtonIcon": "",
+        "skillUniqueId": 7120009
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Every 2 turns, greatly increases all allies' ATK for 2 turns.",
+        "level": 1,
+        "name": "Ability I",
+        "passiveSkillMstId": 7120010,
+        "skillButtonIcon": "",
+        "skillUniqueId": 7120010
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Every 2 turns, greatly increases all allies' DEF and break gauge depletion RES for 2 turns.",
+        "level": 1,
+        "name": "Ability I",
+        "passiveSkillMstId": 7120011,
+        "skillButtonIcon": "",
+        "skillUniqueId": 7120011
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Restores HP to all allies every 2 turns.",
+        "level": 1,
+        "name": "Ability I",
+        "passiveSkillMstId": 7120012,
+        "skillButtonIcon": "",
+        "skillUniqueId": 7120012
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Every 2 turns, greatly increases all allies' ATK for 2 turns.<br>Advances action order each time an ally is put in break or defeated.",
+        "level": 1,
+        "name": "Ability I",
+        "passiveSkillMstId": 7120013,
+        "skillButtonIcon": "",
+        "skillUniqueId": 7120013
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Every 2 turns, greatly increases all allies' DEF and break gauge depletion RES for 2 turns.<br>Advances action order each time an ally is put in break or defeated.",
+        "level": 1,
+        "name": "Ability I",
+        "passiveSkillMstId": 7120014,
+        "skillButtonIcon": "",
+        "skillUniqueId": 7120014
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Restores HP to all allies every 2 turns.<br>Advances action order each time an ally is put in break or defeated.",
+        "level": 1,
+        "name": "Ability I",
+        "passiveSkillMstId": 7120015,
+        "skillButtonIcon": "",
+        "skillUniqueId": 7120015
     },
     {
         "conditionElement": 0,
@@ -40818,6 +41388,26 @@
         "passiveSkillMstId": 8509901,
         "skillButtonIcon": "",
         "skillUniqueId": 85099
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "At battle start, increases MP by 50%.<br>On special attack, triggers a follow-up attack.<br>* This follow-up attack does not remove Cadence Echo.<br>* Follow-up attack will trigger for each condition.<br><br>While own void field active:<br>Increases own special attack DMG dealt by 30%, and on taking at least 1 DMG from an enemy attack, advances action order by 5%.",
+        "level": 1,
+        "name": "Ascension Effects",
+        "passiveSkillMstId": 8510201,
+        "skillButtonIcon": "",
+        "skillUniqueId": 85102
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "On follow-up attack, grants 10 MP.<br><br>While Cadence Echo is applied:<br>On own special attack, grants extra action to self.",
+        "level": 1,
+        "name": "Ascension Effects",
+        "passiveSkillMstId": 8510301,
+        "skillButtonIcon": "",
+        "skillUniqueId": 85103
     },
     {
         "conditionElement": 0,
@@ -52328,5 +52918,105 @@
         "passiveSkillMstId": 9507610,
         "skillButtonIcon": "battle_icon_supportpassive_buff",
         "skillUniqueId": 95076
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 1,
+        "description": "Equipped to Attacker:<br>Decreases DMG taken by 5% and increases SPD by 5%.<br>On special attack, increases battle skill DMG dealt by 25% (2 turns).",
+        "level": 1,
+        "name": "Defense Blast",
+        "passiveSkillMstId": 9507901,
+        "skillButtonIcon": "battle_icon_supportpassive_buff",
+        "skillUniqueId": 95079
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 1,
+        "description": "Equipped to Attacker:<br>Decreases DMG taken by 6% and increases SPD by 5%.<br>On special attack, increases battle skill DMG dealt by 25% (2 turns).",
+        "level": 2,
+        "name": "Defense Blast",
+        "passiveSkillMstId": 9507902,
+        "skillButtonIcon": "battle_icon_supportpassive_buff",
+        "skillUniqueId": 95079
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 1,
+        "description": "Equipped to Attacker:<br>Decreases DMG taken by 6% and increases SPD by 6%.<br>On special attack, increases battle skill DMG dealt by 25% (2 turns).",
+        "level": 3,
+        "name": "Defense Blast",
+        "passiveSkillMstId": 9507903,
+        "skillButtonIcon": "battle_icon_supportpassive_buff",
+        "skillUniqueId": 95079
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 1,
+        "description": "Equipped to Attacker:<br>Decreases DMG taken by 7% and increases SPD by 6%.<br>On special attack, increases battle skill DMG dealt by 25% (2 turns).",
+        "level": 4,
+        "name": "Defense Blast",
+        "passiveSkillMstId": 9507904,
+        "skillButtonIcon": "battle_icon_supportpassive_buff",
+        "skillUniqueId": 95079
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 1,
+        "description": "Equipped to Attacker:<br>Decreases DMG taken by 7% and increases SPD by 7%.<br>On special attack, increases battle skill DMG dealt by 25% (2 turns).",
+        "level": 5,
+        "name": "Defense Blast",
+        "passiveSkillMstId": 9507905,
+        "skillButtonIcon": "battle_icon_supportpassive_buff",
+        "skillUniqueId": 95079
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 1,
+        "description": "Equipped to Attacker:<br>Decreases DMG taken by 7% and increases SPD by 8%.<br>On special attack, increases battle skill DMG dealt by 25% (2 turns).",
+        "level": 6,
+        "name": "Defense Blast",
+        "passiveSkillMstId": 9507906,
+        "skillButtonIcon": "battle_icon_supportpassive_buff",
+        "skillUniqueId": 95079
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 1,
+        "description": "Equipped to Attacker:<br>Decreases DMG taken by 8% and increases SPD by 8%.<br>On special attack, increases battle skill DMG dealt by 25% (2 turns).",
+        "level": 7,
+        "name": "Defense Blast",
+        "passiveSkillMstId": 9507907,
+        "skillButtonIcon": "battle_icon_supportpassive_buff",
+        "skillUniqueId": 95079
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 1,
+        "description": "Equipped to Attacker:<br>Decreases DMG taken by 9% and increases SPD by 8%.<br>On special attack, increases battle skill DMG dealt by 25% (2 turns).",
+        "level": 8,
+        "name": "Defense Blast",
+        "passiveSkillMstId": 9507908,
+        "skillButtonIcon": "battle_icon_supportpassive_buff",
+        "skillUniqueId": 95079
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 1,
+        "description": "Equipped to Attacker:<br>Decreases DMG taken by 9% and increases SPD by 9%.<br>On special attack, increases battle skill DMG dealt by 25% (2 turns).",
+        "level": 9,
+        "name": "Defense Blast",
+        "passiveSkillMstId": 9507909,
+        "skillButtonIcon": "battle_icon_supportpassive_buff",
+        "skillUniqueId": 95079
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 1,
+        "description": "Equipped to Attacker:<br>Decreases DMG taken by 10% and increases SPD by 10%.<br>On special attack, increases battle skill DMG dealt by 25% (2 turns).",
+        "level": 10,
+        "name": "Defense Blast",
+        "passiveSkillMstId": 9507910,
+        "skillButtonIcon": "battle_icon_supportpassive_buff",
+        "skillUniqueId": 95079
     }
 ]

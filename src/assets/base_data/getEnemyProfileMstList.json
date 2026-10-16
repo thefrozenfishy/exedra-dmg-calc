@@ -1,6 +1,20 @@
 [
     {
         "description": "",
+        "enemyMstId": 100406,
+        "enemyProfileMstId": 100406,
+        "enemyUniqueId": 100406,
+        "isCollectionDisp": false,
+        "name": "Sayaka Miki",
+        "releaseTime": "2026-10-16T12:00:00+09:00",
+        "runesName": "",
+        "seriesId": 4,
+        "sortOrder": 0,
+        "unlockId": 0,
+        "unlockType": 1
+    },
+    {
+        "description": "",
         "enemyMstId": 112001,
         "enemyProfileMstId": 112001,
         "enemyUniqueId": 112001,

@@ -601,6 +601,18 @@
     },
     {
         "cheekParam": 0,
+        "defaultOption": "",
+        "isDefault": true,
+        "isExistVoice": true,
+        "name": "Sayaka Miki - Anomalia",
+        "releaseTime": "2026-10-16T12:00:00+09:00",
+        "resourceName": "200435",
+        "sortOrder": 100440,
+        "styleLive2dCostumeMstId": 100440,
+        "type": 1
+    },
+    {
+        "cheekParam": 0,
         "defaultOption": "\"\"",
         "isDefault": true,
         "isExistVoice": true,
@@ -1293,6 +1305,18 @@
         "resourceName": "101231",
         "sortOrder": 101701,
         "styleLive2dCostumeMstId": 101701,
+        "type": 1
+    },
+    {
+        "cheekParam": 0,
+        "defaultOption": "",
+        "isDefault": false,
+        "isExistVoice": true,
+        "name": "Karin Misono - Halloween",
+        "releaseTime": "2026-10-16T12:00:00+09:00",
+        "resourceName": "111230",
+        "sortOrder": 101702,
+        "styleLive2dCostumeMstId": 101702,
         "type": 1
     },
     {

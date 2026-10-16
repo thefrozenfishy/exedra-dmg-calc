@@ -96,5 +96,19 @@
         "prevPointSequenceMstId": 20802,
         "sequenceType": 2,
         "sequenceValue": 20005111
+    },
+    {
+        "alternativeStoryPointSequenceMstId": 30601,
+        "inBattleArchiveAdvMstId": 0,
+        "prevPointSequenceMstId": 0,
+        "sequenceType": 2,
+        "sequenceValue": 20006906
+    },
+    {
+        "alternativeStoryPointSequenceMstId": 30602,
+        "inBattleArchiveAdvMstId": 20006908,
+        "prevPointSequenceMstId": 30601,
+        "sequenceType": 1,
+        "sequenceValue": 1309102
     }
 ]

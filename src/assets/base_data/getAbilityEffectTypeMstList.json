@@ -2970,6 +2970,28 @@
         "targetParams": ""
     },
     {
+        "abilityEffectTypeMstId": 275,
+        "category": 2,
+        "displayType": 0,
+        "effectType": "CONSUME_SELF_HP",
+        "iconName": "",
+        "name": "Consume HP",
+        "paramEffectType": 0,
+        "stateFlipName": "Consume HP",
+        "targetParams": ""
+    },
+    {
+        "abilityEffectTypeMstId": 276,
+        "category": 2,
+        "displayType": 0,
+        "effectType": "STEP_UP_SKILL",
+        "iconName": "",
+        "name": "Level Enhance",
+        "paramEffectType": 0,
+        "stateFlipName": "Level Enhance",
+        "targetParams": ""
+    },
+    {
         "abilityEffectTypeMstId": 1001,
         "category": 2,
         "displayType": 1,

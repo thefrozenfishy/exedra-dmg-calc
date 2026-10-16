@@ -1,5 +1,40 @@
 [
     {
+        "groupId": 11,
+        "multiRaidBattleBonusMstId": 1107,
+        "passiveSkillMstId": 1048
+    },
+    {
+        "groupId": 11,
+        "multiRaidBattleBonusMstId": 1106,
+        "passiveSkillMstId": 1047
+    },
+    {
+        "groupId": 11,
+        "multiRaidBattleBonusMstId": 1105,
+        "passiveSkillMstId": 1046
+    },
+    {
+        "groupId": 11,
+        "multiRaidBattleBonusMstId": 1104,
+        "passiveSkillMstId": 1045
+    },
+    {
+        "groupId": 11,
+        "multiRaidBattleBonusMstId": 1103,
+        "passiveSkillMstId": 1021
+    },
+    {
+        "groupId": 11,
+        "multiRaidBattleBonusMstId": 1102,
+        "passiveSkillMstId": 1019
+    },
+    {
+        "groupId": 11,
+        "multiRaidBattleBonusMstId": 1101,
+        "passiveSkillMstId": 1018
+    },
+    {
         "groupId": 10,
         "multiRaidBattleBonusMstId": 1005,
         "passiveSkillMstId": 1044

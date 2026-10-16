@@ -114,6 +114,12 @@
         "value1": 10040301
     },
     {
+        "title": "Venusta Dissonanza",
+        "titleType": 1,
+        "userTitleMstId": 10040601,
+        "value1": 10040601
+    },
+    {
         "title": "Grandioso Sinfonia",
         "titleType": 1,
         "userTitleMstId": 10040701,
@@ -1612,6 +1618,30 @@
         "titleType": 2,
         "userTitleMstId": 60000059,
         "value1": 4200102
+    },
+    {
+        "title": "Sayaka Miki (Anomalia) Score Attack Ace",
+        "titleType": 0,
+        "userTitleMstId": 60000060,
+        "value1": 0
+    },
+    {
+        "title": "Sayaka Miki (Anomalia) Score Attack Rank 50 Ace",
+        "titleType": 0,
+        "userTitleMstId": 60000061,
+        "value1": 0
+    },
+    {
+        "title": "[Redux] Forever Halloween Night Part I Ace",
+        "titleType": 2,
+        "userTitleMstId": 60000062,
+        "value1": 4200105
+    },
+    {
+        "title": "[Redux] Forever Halloween Night Part II Ace",
+        "titleType": 2,
+        "userTitleMstId": 60000063,
+        "value1": 4200106
     },
     {
         "title": "Mirrors Ranking S☆☆☆",

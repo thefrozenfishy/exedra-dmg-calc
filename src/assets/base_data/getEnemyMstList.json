@@ -108,6 +108,24 @@
         "unlockValue": 0
     },
     {
+        "appearEffectPrefabName": "enemy_100406_appear",
+        "canRotateModel": false,
+        "cueSheetName": "cv_100406_{0}",
+        "enemyMstId": 100406,
+        "enemyType": 4,
+        "enemyUniqueId": 100406,
+        "iconResourceName": "100406",
+        "isCollectionDisp": false,
+        "isNoVisualDeath": false,
+        "modelPrefabName": "enemy_100406_battle_unit",
+        "name": "Sayaka Miki",
+        "releaseTime": "2026-10-16T12:00:00+09:00",
+        "runesName": "",
+        "size": 1,
+        "unlockType": 1,
+        "unlockValue": 0
+    },
+    {
         "appearEffectPrefabName": "",
         "canRotateModel": false,
         "cueSheetName": "cv_100501_{0}",

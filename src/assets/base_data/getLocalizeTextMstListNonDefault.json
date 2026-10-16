@@ -1,5 +1,9 @@
 [
     {
+        "text": "Bonus Effects",
+        "textMstId": "014ea15ef9608ef0bf404e6b0b68638d11"
+    },
+    {
         "text": "Set",
         "textMstId": "029c0df654365705694155ea3dedf6962"
     },
@@ -350,6 +354,10 @@
     {
         "text": "Increases ATK by 12.",
         "textMstId": "e07385a6f2c8c46e3c7d23a6c16d242d2"
+    },
+    {
+        "text": "Affected Magical Girls",
+        "textMstId": "e0923261608f12ee7394348fd076acb711"
     },
     {
         "text": "Increases ATK by 10%.",

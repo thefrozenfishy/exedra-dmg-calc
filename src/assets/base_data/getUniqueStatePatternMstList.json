@@ -192,6 +192,12 @@
         "uniqueStatePatternMstId": 32
     },
     {
+        "iconName": "battle_icon_unique_040",
+        "name": "Cadence Echo",
+        "stateFlipName": "Cadence Echo",
+        "uniqueStatePatternMstId": 35
+    },
+    {
         "iconName": "battle_icon_unique_013",
         "name": "Dark Field",
         "stateFlipName": "Dark Field",
@@ -214,6 +220,12 @@
         "name": "Flame Field",
         "stateFlipName": "Flame Field",
         "uniqueStatePatternMstId": 10004
+    },
+    {
+        "iconName": "battle_icon_field_neutral",
+        "name": "Void Field",
+        "stateFlipName": "Void Field",
+        "uniqueStatePatternMstId": 10005
     },
     {
         "iconName": "battle_icon_element_damage_light",

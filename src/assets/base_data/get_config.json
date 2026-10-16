@@ -1619,6 +1619,14 @@
                     "playType": 2,
                     "startRound": 0,
                     "targetQuestStageMstId": 1308102
+                },
+                {
+                    "advMstId": 20006907,
+                    "battleFailedText": "",
+                    "moviePath": "",
+                    "playType": 2,
+                    "startRound": 0,
+                    "targetQuestStageMstId": 1309102
                 }
             ],
             "validDailySkipSpecialAttackDirectionTime": "2025-09-11T12:00:00+09:00"
@@ -1634,6 +1642,11 @@
                     "movieResourceName": "Movie/3DMovie/mv01_bgmoff.m3u8",
                     "scoreAttackMstId": 26,
                     "soundMstId": 3001202
+                },
+                {
+                    "movieResourceName": "",
+                    "scoreAttackMstId": 29,
+                    "soundMstId": 3000103
                 }
             ],
             "topRankingViewNumber": 50,
@@ -1739,6 +1752,8 @@
             "useItemMaxForLearnSelectionAbility": 100
         },
         "shopConfig": {
+            "bulkBuyMaxCount": 200,
+            "bulkBuyReleaseTime": "2026-10-16T12:00:00+09:00",
             "timeSaleLimitHours": 72
         },
         "soloRaidConfig": {
