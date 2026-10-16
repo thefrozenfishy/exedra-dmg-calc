@@ -26,35 +26,38 @@
                 </a>
                 <div v-if="!loading && team.pwr !== undefined" class="combo-pwr">{{ team.pwr.toLocaleString() }}</div>
             </div>
-            <div v-for="i in 4" :key="i" class="image-wrapper">
-                <a v-if="team[`supp${i}`]" :href="`https://exedra.wiki/wiki/${team[`supp${i}`].name}`" target="_blank">
-                    <img :src="`/exedra-dmg-calc/kioku_images/${team[`supp${i}`].id}_thumbnail.png`"
-                        :title="team[`supp${i}`].name" :alt="team[`supp${i}`].name" class="character-image" />
-                </a>
-                <a v-if="team[`supp${i}supp`]"
-                    :href="`https://exedra.wiki/wiki/${asList(team[`supp${i}supp`])[0].name}`" target="_blank"
-                    class="supp-image" :class="{ split: asList(team[`supp${i}supp`]).length > 1 }">
-                    <img v-for="(supp, idx) in asList(team[`supp${i}supp`])" :key="supp.id"
-                        :src="`/exedra-dmg-calc/kioku_images/${supp.id}_thumbnail.png`" :alt="supp.name"
-                        :title="asList(team[`supp${i}supp`]).map(s => s.name).join(' / ')"
-                        :style="splitClip(idx, asList(team[`supp${i}supp`]).length)" />
-                    <span v-for="pos in dividerPositions(asList(team[`supp${i}supp`]).length)" :key="pos"
-                        class="split-divider" :style="{ left: pos + '%' }"></span>
-                </a>
-                <a v-if="team[`supp${i}portrait`]"
-                    :href="`https://exedra.wiki/wiki/${asList(team[`supp${i}portrait`])[0]}`" target="_blank"
-                    class="portrait-image" :class="{ split: asList(team[`supp${i}portrait`]).length > 1 }">
-                    <img v-for="(p, idx) in asList(team[`supp${i}portrait`])" :key="p"
-                        :src="`/exedra-dmg-calc/portrait_images/${portraits[p].resourceName}_thumbnail.png`" :alt="p"
-                        :title="asList(team[`supp${i}portrait`]).join(' / ')"
-                        :style="splitClip(idx, asList(team[`supp${i}portrait`]).length)" />
-                    <span v-for="pos in dividerPositions(asList(team[`supp${i}portrait`]).length)" :key="pos"
-                        class="split-divider" :style="{ left: pos + '%' }"></span>
-                </a>
-                <div v-if="!loading && team[`supp${i}pwr`] !== undefined" class="combo-pwr">
-                    {{ team[`supp${i}pwr`].toLocaleString() }}
+            <template v-for="i in 4" :key="i" class="image-wrapper">
+                <div v-if="team[`supp${i}`]">
+                    <a :href="`https://exedra.wiki/wiki/${team[`supp${i}`].name}`"
+                        target="_blank">
+                        <img :src="`/exedra-dmg-calc/kioku_images/${team[`supp${i}`].id}_thumbnail.png`"
+                            :title="team[`supp${i}`].name" :alt="team[`supp${i}`].name" class="character-image" />
+                    </a>
+                    <a v-if="team[`supp${i}supp`]"
+                        :href="`https://exedra.wiki/wiki/${asList(team[`supp${i}supp`])[0].name}`" target="_blank"
+                        class="supp-image" :class="{ split: asList(team[`supp${i}supp`]).length > 1 }">
+                        <img v-for="(supp, idx) in asList(team[`supp${i}supp`])" :key="supp.id"
+                            :src="`/exedra-dmg-calc/kioku_images/${supp.id}_thumbnail.png`" :alt="supp.name"
+                            :title="asList(team[`supp${i}supp`]).map(s => s.name).join(' / ')"
+                            :style="splitClip(idx, asList(team[`supp${i}supp`]).length)" />
+                        <span v-for="pos in dividerPositions(asList(team[`supp${i}supp`]).length)" :key="pos"
+                            class="split-divider" :style="{ left: pos + '%' }"></span>
+                    </a>
+                    <a v-if="team[`supp${i}portrait`]"
+                        :href="`https://exedra.wiki/wiki/${asList(team[`supp${i}portrait`])[0]}`" target="_blank"
+                        class="portrait-image" :class="{ split: asList(team[`supp${i}portrait`]).length > 1 }">
+                        <img v-for="(p, idx) in asList(team[`supp${i}portrait`])" :key="p"
+                            :src="`/exedra-dmg-calc/portrait_images/${portraits[p].resourceName}_thumbnail.png`"
+                            :alt="p" :title="asList(team[`supp${i}portrait`]).join(' / ')"
+                            :style="splitClip(idx, asList(team[`supp${i}portrait`]).length)" />
+                        <span v-for="pos in dividerPositions(asList(team[`supp${i}portrait`]).length)" :key="pos"
+                            class="split-divider" :style="{ left: pos + '%' }"></span>
+                    </a>
+                    <div v-if="!loading && team[`supp${i}pwr`] !== undefined" class="combo-pwr">
+                        {{ team[`supp${i}pwr`].toLocaleString() }}
+                    </div>
                 </div>
-            </div>
+            </template>
         </div>
 
         <div v-if="!loading" class="results-table">
