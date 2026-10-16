@@ -2,7 +2,7 @@
     <div class="setup-page gallery-page">
         <h1 class="page-title">Best Team Finder</h1>
 
-        <EnemySelector />
+        <StageEnemySelector ref="stageRef" />
 
         <section class="card numeric-row">
             <span class="filters-heading">Results</span>
@@ -298,7 +298,7 @@ Lower = faster but more likely to skip a team that could have closed the gap.
 <script lang="ts" setup>
 import { reactive, computed, ref, ComputedRef } from 'vue'
 import TeamRow from '../components/TeamRow.vue'
-import EnemySelector from '../components/EnemySelector.vue'
+import StageEnemySelector from '../components/StageEnemySelector.vue'
 import ArenaBuffs from '../components/ArenaBuffs.vue'
 import AlimentToggler from '../components/AlimentToggler.vue'
 import DamageReductionInputs from '../components/DamageReductionInputs.vue'
@@ -354,6 +354,7 @@ let runId = 0
 const progress = ref<FinalTeam>({})
 
 const alimentRef = ref<InstanceType<typeof AlimentToggler> | null>(null)
+const stageRef = ref<InstanceType<typeof StageEnemySelector> | null>(null)
 
 const topTeamsPerKioku = useSetting("topTeamsPerKioku", 5)
 const topTeams = useSetting("topTeams", 20)
@@ -654,6 +655,11 @@ function cancelSimulation() {
 }
 
 async function startSimulation() {
+    const stage = stageRef.value?.selection
+    if (!stage) {
+        toast.error("Pick a stage first", { position: toast.POSITION.TOP_RIGHT, icon: false })
+        return
+    }
     prevObligatoryKioku = [...obligatoryKioku.value]
     prevAttackers = [...attackers.value, ...extraAttackers.value]
     running.value = true
@@ -668,6 +674,7 @@ async function startSimulation() {
     const safeDeBufferCount = safeInt(deBufferCount.value, 3, 0, 4)
 
     const options: any = {
+        stage,
         enemies: JSON.parse(JSON.stringify(enemies.enemies)),
         include4StarAttackers: include4StarAttackers.value,
         include4StarSupports: include4StarSupports.value,

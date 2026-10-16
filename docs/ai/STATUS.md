@@ -16,6 +16,10 @@ _Last updated: 2026-10-15 (game 3.21.0: dumped + decompiled by Claude on Windows
   DWN_BUFF / DWN_DEBUFF_EFFECT_VALUE on each ally (off-element value for off-element allies), stage buffs -> that state
   on every ally (or enemy for DWN_ / RCV / WEAKNESS types), DEF up / DMG taken down -> UP_DEF_RATIO /
   DWN_RCV_DMG_RATIO on that enemy. Unused: attacker HP, hits to kill, additional-damage crit.
+- The page picks a real stage and wave with the PvE Simulator's picker (`components/StageEnemySelector.vue`: stage
+  tree, wave, Target / Broken / broken rate per enemy; settings `saStageId` / `saStageWave`): teams are scored on that
+  wave (`TeamScoreScenario.stage`, the stage's battle type), max = every hit crits, avg = the engine's crit chance.
+  The old enemy row (dummies) stays for `scripts/sim/engineBestTeam.ts`.
 - The old calculator moved to `/sa-simulator-multiple-old` "Old Best SA Team Calculator" (`OldBestTeamPage.vue`,
   unchanged), on its own nav row with "Old Single Hit Calc". CLI: `scripts/sim/engineBestTeam.ts <team.json> [Elements] [--old]`.
 - Cost: ~0.2-0.4 s per score (Max Damage's ladder runs, each a fresh battle setup); Dark with the user's roster:
