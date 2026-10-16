@@ -165,7 +165,18 @@ Lower = faster but more likely to skip a team that could have closed the gap.
         <section class="card section-card kioku-selector" v-if="onlyConsiderOnElements">
             <h3 class="section-title">On-element Exceptions</h3>
             <p class="section-hint">These off-element Kioku stay eligible even with "On-element only" enabled. They
-                aren't forced into the team like Obligatory Kioku — they're just allowed to be considered again.</p>
+                aren't forced into the team like Obligatory Kioku — they're just allowed to be considered again.
+                Pick a role to keep every Kioku of that role eligible.</p>
+
+            <div class="exception-roles">
+                <label v-for="role in exceptionRoleOptions" :key="role" class="chip"
+                    :class="{ active: onElementExceptionRoles.includes(role) }"
+                    :title="`Every ${role} stays eligible, whatever its element`">
+                    <input type="checkbox" :checked="onElementExceptionRoles.includes(role)"
+                        @change="toggleExceptionRole(role)" />
+                    <img :src="`/exedra-dmg-calc/roles/${role}.png`" :alt="role" class="role-chip-icon" /> {{ role }}
+                </label>
+            </div>
 
             <div class="selected-kioku">
                 <div @click="removeOnElementException(char)" v-for="char in onElementExceptions" :key="char.id"
@@ -426,6 +437,14 @@ const obligatoryKiokuQuery = ref("")
 const showObligatoryKiokuDropdown = ref(false)
 
 const onElementExceptions = useSetting<Character[]>("onElementExceptions", [])
+// Whole roles kept eligible off-element (attackers are always picked by element, so they aren't offered)
+const exceptionRoleOptions = [KiokuRole.Buffer, KiokuRole.Debuffer, KiokuRole.Healer, KiokuRole.Defender, KiokuRole.Breaker]
+const onElementExceptionRoles = useSetting<KiokuRole[]>("onElementExceptionRoles", [])
+function toggleExceptionRole(role: KiokuRole) {
+    onElementExceptionRoles.value = onElementExceptionRoles.value.includes(role)
+        ? onElementExceptionRoles.value.filter(r => r !== role)
+        : [...onElementExceptionRoles.value, role]
+}
 const onElementExceptionQuery = ref("")
 const showOnElementExceptionDropdown = ref(false)
 
@@ -458,6 +477,7 @@ const filteredOnElementExceptions = computed(() => {
         listable(m) &&
         m.role !== KiokuRole.Attacker &&
         !enabledElements.includes(m.element) &&
+        !onElementExceptionRoles.value.includes(m.role) &&
         (m.name.toLowerCase().includes(q) || m.character_en.toLowerCase().includes(q) || (m.name === "Time Stop Strike" && q.startsWith("moe")))
     )
 })
@@ -666,6 +686,7 @@ async function startSimulation() {
         weakElements: [...stage.weakElements],
         onlyConsiderOnElements: onlyConsiderOnElements.value,
         onElementExceptions: onElementExceptions.value.map(c => c.name),
+        onElementExceptionRoles: [...onElementExceptionRoles.value],
         activeAliments: [...stage.ailments],
         extraAttackers: extraAttackers.value.map(c => c.name),
         obligatoryKioku: obligatoryKioku.value.map(c => c.name),
@@ -939,6 +960,20 @@ async function startSimulation() {
 
 .kioku-selector {
     margin-top: 0;
+}
+
+.exception-roles {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.4rem;
+    margin: 0 auto 0.6rem;
+}
+
+.role-chip-icon {
+    width: 18px;
+    height: 18px;
+    object-fit: contain;
 }
 
 .selected-kioku {

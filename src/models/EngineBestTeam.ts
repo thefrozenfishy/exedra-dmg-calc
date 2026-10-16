@@ -62,6 +62,8 @@ export async function findBestTeamEngine(o: FindBestTeamOptions, score: TeamScor
     let { minHealer, minDefender, minBreaker } = o
     const { enemies: _e, weakElements, enabledCharacters, ignoredKioku, onElementExceptions = [], optimizeAverageDamage, onProgress, onError } = o
     void _e
+    // off-element exceptions by role: every Kioku of these roles stays eligible
+    const exceptionRoles: KiokuRole[] = (o as any).onElementExceptionRoles ?? []
     const meta = (c: Partial<Character> & { name: string }, l: Parameters<typeof argsOf>[1] = {}): ScoreAttackKioku => getKioku({ ...(c as any), ...l })
 
     // ---- candidates (as findBestTeam)
@@ -75,7 +77,8 @@ export async function findBestTeamEngine(o: FindBestTeamOptions, score: TeamScor
         } else if (char.rarity === 5 || (char.rarity === 4 &&
             ((o.include4StarSupports && [KiokuRole.Buffer, KiokuRole.Debuffer].includes(char.role))
                 || (o.include4StarOthers && [KiokuRole.Healer, KiokuRole.Defender, KiokuRole.Breaker].includes(char.role))))) {
-            if (!o.onlyConsiderOnElements || weakElements.includes(char.element) || onElementExceptions.includes(char.name)) availableChars[char.role].push(char)
+            if (!o.onlyConsiderOnElements || weakElements.includes(char.element) || onElementExceptions.includes(char.name)
+                || exceptionRoles.includes(char.role)) availableChars[char.role].push(char)
         }
         if (o.extraAttackers.includes(char.name)) availableChars[KiokuRole.Attacker].push(char)
     })
