@@ -1,11 +1,11 @@
-// 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
+// 1:1 port of ReDriveBattleCore (game 3.21.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
 import type { TargetRoleType } from "../../Network/Definition/Battle/TargetRoleType";
 import type { IHateVariation } from "../UnitState/IHateVariation";
 import { QuestEnemyAppearanceParameter } from "../QuestEnemyAppearanceParameter";
 import { CharacterParameter } from "../CharacterParameter";
-import { dictGet, f32, isImpl, notPorted, randomNext } from "../../runtime";
+import { dictGet, f32, isImpl, notPorted, randomNext, randomNextIndex, randomNextWeighted } from "../../runtime";
 import type { Dictionary, IEnumerable, List, int } from "../../runtime";
 import type { RoleType } from "../../Network/Definition/Battle/RoleType";
 import type { BattleUnit } from "../BattleUnit";
@@ -14,7 +14,7 @@ import type { BattleUnit } from "../BattleUnit";
 export class AISkillTargetSelector {
     /** 0x0 private static readonly Dictionary<RoleType, int> roleWeightDic */
     static roleWeightDic: Dictionary<RoleType, int> = null!;
-    /** @rva 0x17DD3C0  public static BattleUnit SelectTargetUnitInOrder(IEnumerable<BattleUnit> candidateUnits, AISkillTargetSelector.UnitFilterFuncOrder unitFilterFuncOrder) { } */
+    /** @rva 0x1806E20  public static BattleUnit SelectTargetUnitInOrder(IEnumerable<BattleUnit> candidateUnits, AISkillTargetSelector.UnitFilterFuncOrder unitFilterFuncOrder) { } */
     static SelectTargetUnitInOrder(candidateUnits: IEnumerable<BattleUnit>, unitFilterFuncOrder: AISkillTargetSelector_UnitFilterFuncOrder): BattleUnit {
         let list: List<BattleUnit> = [...candidateUnits];
         let list2: List<BattleUnit> = [];
@@ -26,53 +26,53 @@ export class AISkillTargetSelector {
                 if (list.length === 1) return list[0];
             }
         }
-        const index = randomNext(list.length); // new System.Random().Next(list.Count)
+        const index = randomNextIndex(list.length, "target", [], list); // new System.Random().Next(list.Count)
         return list[index] ?? null!; // ElementAtOrDefault
     }
-    /** @rva 0x17DD930  public static IEnumerable<BattleUnit> UnitFilterByBreak(IEnumerable<BattleUnit> candidateUnits) { } */
+    /** @rva 0x1807390  public static IEnumerable<BattleUnit> UnitFilterByBreak(IEnumerable<BattleUnit> candidateUnits) { } */
     static UnitFilterByBreak(candidateUnits: IEnumerable<BattleUnit>): IEnumerable<BattleUnit> {
         return candidateUnits.filter(unit => unit._BreakPoint.get_IsBreak()); // <>c.b__2_0 (BreakPoint.get_IsBreak inlined)
     }
-    /** @rva 0x17DDA40  public static IEnumerable<BattleUnit> UnitFilterByMainTarget(IEnumerable<BattleUnit> candidateUnits) { } */
+    /** @rva 0x18074A0  public static IEnumerable<BattleUnit> UnitFilterByMainTarget(IEnumerable<BattleUnit> candidateUnits) { } */
     static UnitFilterByMainTarget(candidateUnits: IEnumerable<BattleUnit>): IEnumerable<BattleUnit> {
         return candidateUnits.filter(unit => { // <>c.b__3_0
             const p = unit._BattleParameter;
             return p instanceof QuestEnemyAppearanceParameter ? p._IsMainTargetEnemy : false;
         });
     }
-    /** @rva 0x17DDC60  public static IEnumerable<BattleUnit> UnitFilterByRoleAttacker(IEnumerable<BattleUnit> candidateUnits) { } */
+    /** @rva 0x18076C0  public static IEnumerable<BattleUnit> UnitFilterByRoleAttacker(IEnumerable<BattleUnit> candidateUnits) { } */
     static UnitFilterByRoleAttacker(candidateUnits: IEnumerable<BattleUnit>): IEnumerable<BattleUnit> {
         return candidateUnits.filter(unit => unit.IsMatch$TargetRoleType(1 as TargetRoleType)); // <>c.b__4_0
     }
-    /** @rva 0x17DDD70  public static IEnumerable<BattleUnit> UnitFilterByRoleBreaker(IEnumerable<BattleUnit> candidateUnits) { } */
+    /** @rva 0x18077D0  public static IEnumerable<BattleUnit> UnitFilterByRoleBreaker(IEnumerable<BattleUnit> candidateUnits) { } */
     static UnitFilterByRoleBreaker(candidateUnits: IEnumerable<BattleUnit>): IEnumerable<BattleUnit> {
         return candidateUnits.filter(unit => unit.IsMatch$TargetRoleType(2 as TargetRoleType)); // <>c.b__5_0
     }
-    /** @rva 0x17DE2C0  public static IEnumerable<BattleUnit> UnitFilterByRoleHealer(IEnumerable<BattleUnit> candidateUnits) { } */
+    /** @rva 0x1807D20  public static IEnumerable<BattleUnit> UnitFilterByRoleHealer(IEnumerable<BattleUnit> candidateUnits) { } */
     static UnitFilterByRoleHealer(candidateUnits: IEnumerable<BattleUnit>): IEnumerable<BattleUnit> {
         return candidateUnits.filter(unit => unit.IsMatch$TargetRoleType(3 as TargetRoleType)); // <>c.b__6_0
     }
-    /** @rva 0x17DDE80  public static IEnumerable<BattleUnit> UnitFilterByRoleBuffer(IEnumerable<BattleUnit> candidateUnits) { } */
+    /** @rva 0x18078E0  public static IEnumerable<BattleUnit> UnitFilterByRoleBuffer(IEnumerable<BattleUnit> candidateUnits) { } */
     static UnitFilterByRoleBuffer(candidateUnits: IEnumerable<BattleUnit>): IEnumerable<BattleUnit> {
         return candidateUnits.filter(unit => unit.IsMatch$TargetRoleType(4 as TargetRoleType)); // <>c.b__7_0
     }
-    /** @rva 0x17DDF90  public static IEnumerable<BattleUnit> UnitFilterByRoleDebuffer(IEnumerable<BattleUnit> candidateUnits) { } */
+    /** @rva 0x18079F0  public static IEnumerable<BattleUnit> UnitFilterByRoleDebuffer(IEnumerable<BattleUnit> candidateUnits) { } */
     static UnitFilterByRoleDebuffer(candidateUnits: IEnumerable<BattleUnit>): IEnumerable<BattleUnit> {
         return candidateUnits.filter(unit => unit.IsMatch$TargetRoleType(5 as TargetRoleType)); // <>c.b__8_0
     }
-    /** @rva 0x17DE0A0  public static IEnumerable<BattleUnit> UnitFilterByRoleDefender(IEnumerable<BattleUnit> candidateUnits) { } */
+    /** @rva 0x1807B00  public static IEnumerable<BattleUnit> UnitFilterByRoleDefender(IEnumerable<BattleUnit> candidateUnits) { } */
     static UnitFilterByRoleDefender(candidateUnits: IEnumerable<BattleUnit>): IEnumerable<BattleUnit> {
         return candidateUnits.filter(unit => unit.IsMatch$TargetRoleType(6 as TargetRoleType)); // <>c.b__9_0
     }
-    /** @rva 0x17DDB50  public static IEnumerable<BattleUnit> UnitFilterByRoleAttackerOrBreaker(IEnumerable<BattleUnit> candidateUnits) { } */
+    /** @rva 0x18075B0  public static IEnumerable<BattleUnit> UnitFilterByRoleAttackerOrBreaker(IEnumerable<BattleUnit> candidateUnits) { } */
     static UnitFilterByRoleAttackerOrBreaker(candidateUnits: IEnumerable<BattleUnit>): IEnumerable<BattleUnit> {
         return candidateUnits.filter(unit => unit.IsMatch$TargetRoleType(1 as TargetRoleType) || unit.IsMatch$TargetRoleType(2 as TargetRoleType)); // <>c.b__10_0 (second IsMatch inlined)
     }
-    /** @rva 0x17DE1B0  public static IEnumerable<BattleUnit> UnitFilterByRoleHealerOrBufferOrDebuffer(IEnumerable<BattleUnit> candidateUnits) { } */
+    /** @rva 0x1807C10  public static IEnumerable<BattleUnit> UnitFilterByRoleHealerOrBufferOrDebuffer(IEnumerable<BattleUnit> candidateUnits) { } */
     static UnitFilterByRoleHealerOrBufferOrDebuffer(candidateUnits: IEnumerable<BattleUnit>): IEnumerable<BattleUnit> {
         return candidateUnits.filter(unit => unit.IsMatch$TargetRoleType(3 as TargetRoleType) || unit.IsMatch$TargetRoleType(4 as TargetRoleType) || unit.IsMatch$TargetRoleType(5 as TargetRoleType)); // <>c.b__11_0 (last IsMatch inlined)
     }
-    /** @rva 0x17DF0F0  public static IEnumerable<BattleUnit> UnitFilterWithMinHpRate(IEnumerable<BattleUnit> candidateUnits) { } */
+    /** @rva 0x1808B50  public static IEnumerable<BattleUnit> UnitFilterWithMinHpRate(IEnumerable<BattleUnit> candidateUnits) { } */
     static UnitFilterWithMinHpRate(candidateUnits: IEnumerable<BattleUnit>): IEnumerable<BattleUnit> {
         if (candidateUnits.length === 0) return candidateUnits; // !Any()
         // Enumerable.Min<BattleUnit>(Func<BattleUnit, float>): NaN wins as soon as it is seen
@@ -86,50 +86,50 @@ export class AISkillTargetSelector {
         }
         return candidateUnits.filter(unit => unit.CalculationHpRate() === minHpRate); // <>c__DisplayClass12_0.b__1
     }
-    /** @rva 0x17DEF10  public static IEnumerable<BattleUnit> UnitFilterWithMinEp(IEnumerable<BattleUnit> candidateUnits) { } */
+    /** @rva 0x1808970  public static IEnumerable<BattleUnit> UnitFilterWithMinEp(IEnumerable<BattleUnit> candidateUnits) { } */
     static UnitFilterWithMinEp(candidateUnits: IEnumerable<BattleUnit>): IEnumerable<BattleUnit> {
         if (candidateUnits.length === 0) return candidateUnits; // !Any()
         const minEp = Math.min(...candidateUnits.map(unit => unit._EP)); // <>c.b__13_0
         return candidateUnits.filter(unit => unit._EP === minEp); // <>c__DisplayClass13_0.b__1
     }
-    /** @rva 0x17DEB50  public static IEnumerable<BattleUnit> UnitFilterWithMinBp(IEnumerable<BattleUnit> candidateUnits) { } */
+    /** @rva 0x18085B0  public static IEnumerable<BattleUnit> UnitFilterWithMinBp(IEnumerable<BattleUnit> candidateUnits) { } */
     static UnitFilterWithMinBp(candidateUnits: IEnumerable<BattleUnit>): IEnumerable<BattleUnit> {
         if (candidateUnits.length === 0) return candidateUnits; // !Any()
         const minBp = Math.min(...candidateUnits.map(unit => unit._BP)); // <>c.b__14_0
         return candidateUnits.filter(unit => unit._BP === minBp); // <>c__DisplayClass14_0.b__1
     }
-    /** @rva 0x17DE3D0  public static IEnumerable<BattleUnit> UnitFilterWithMaxAtk(IEnumerable<BattleUnit> candidateUnits) { } */
+    /** @rva 0x1807E30  public static IEnumerable<BattleUnit> UnitFilterWithMaxAtk(IEnumerable<BattleUnit> candidateUnits) { } */
     static UnitFilterWithMaxAtk(candidateUnits: IEnumerable<BattleUnit>): IEnumerable<BattleUnit> {
         if (candidateUnits.length === 0) return candidateUnits; // !Any()
         const maxAtk = Math.max(...candidateUnits.map(unit => unit.get_ATK())); // <>c.b__15_0
         return candidateUnits.filter(unit => unit.get_ATK() === maxAtk); // <>c__DisplayClass15_0.b__1
     }
-    /** @rva 0x17DE5B0  public static IEnumerable<BattleUnit> UnitFilterWithMaxDef(IEnumerable<BattleUnit> candidateUnits) { } */
+    /** @rva 0x1808010  public static IEnumerable<BattleUnit> UnitFilterWithMaxDef(IEnumerable<BattleUnit> candidateUnits) { } */
     static UnitFilterWithMaxDef(candidateUnits: IEnumerable<BattleUnit>): IEnumerable<BattleUnit> {
         if (candidateUnits.length === 0) return candidateUnits; // !Any()
         const maxDef = Math.max(...candidateUnits.map(unit => unit.get_DEF())); // <>c.b__16_0
         return candidateUnits.filter(unit => unit.get_DEF() === maxDef); // <>c__DisplayClass16_0.b__1
     }
-    /** @rva 0x17DED30  public static IEnumerable<BattleUnit> UnitFilterWithMinDef(IEnumerable<BattleUnit> candidateUnits) { } */
+    /** @rva 0x1808790  public static IEnumerable<BattleUnit> UnitFilterWithMinDef(IEnumerable<BattleUnit> candidateUnits) { } */
     static UnitFilterWithMinDef(candidateUnits: IEnumerable<BattleUnit>): IEnumerable<BattleUnit> {
         if (candidateUnits.length === 0) return candidateUnits; // !Any()
         const minDef = Math.min(...candidateUnits.map(unit => unit.get_DEF())); // <>c.b__17_0
         return candidateUnits.filter(unit => unit.get_DEF() === minDef); // <>c__DisplayClass17_0.b__1
     }
-    /** @rva 0x17DE970  public static IEnumerable<BattleUnit> UnitFilterWithMaxSpeed(IEnumerable<BattleUnit> candidateUnits) { } */
+    /** @rva 0x18083D0  public static IEnumerable<BattleUnit> UnitFilterWithMaxSpeed(IEnumerable<BattleUnit> candidateUnits) { } */
     static UnitFilterWithMaxSpeed(candidateUnits: IEnumerable<BattleUnit>): IEnumerable<BattleUnit> {
         if (candidateUnits.length === 0) return candidateUnits; // !Any()
         const maxSpeed = Math.max(...candidateUnits.map(unit => unit.get_Speed())); // <>c.b__18_0
         return candidateUnits.filter(unit => unit.get_Speed() === maxSpeed); // <>c__DisplayClass18_0.b__1
     }
-    /** @rva 0x17DE790  public static IEnumerable<BattleUnit> UnitFilterWithMaxHP(IEnumerable<BattleUnit> candidateUnits) { } */
+    /** @rva 0x18081F0  public static IEnumerable<BattleUnit> UnitFilterWithMaxHP(IEnumerable<BattleUnit> candidateUnits) { } */
     static UnitFilterWithMaxHP(candidateUnits: IEnumerable<BattleUnit>): IEnumerable<BattleUnit> {
         if (candidateUnits.length === 0) return candidateUnits; // !Any()
         // game quirk: "MaxHP" filters by the current HP
         const maxHp = Math.max(...candidateUnits.map(unit => unit._HP)); // <>c.b__19_0
         return candidateUnits.filter(unit => unit._HP === maxHp); // <>c__DisplayClass19_0.b__1
     }
-    /** @rva 0x17DCF80  public static Dictionary<BattleUnit, int> GetUnitWeightDic(IEnumerable<BattleUnit> candidateUnits, bool withHate = False) { } */
+    /** @rva 0x18069E0  public static Dictionary<BattleUnit, int> GetUnitWeightDic(IEnumerable<BattleUnit> candidateUnits, bool withHate = False) { } */
     static GetUnitWeightDic(candidateUnits: IEnumerable<BattleUnit>, withHate: boolean = false): Dictionary<BattleUnit, int> {
         const dictionary: Dictionary<BattleUnit, int> = new Map();
         for (const unit of candidateUnits) {
@@ -148,12 +148,12 @@ export class AISkillTargetSelector {
         }
         return dictionary;
     }
-    /** @rva 0x17DD730  public static BattleUnit SelectUnitAtWeightedRandom(Dictionary<BattleUnit, int> unitWeightDic) { } */
+    /** @rva 0x1807190  public static BattleUnit SelectUnitAtWeightedRandom(Dictionary<BattleUnit, int> unitWeightDic) { } */
     static SelectUnitAtWeightedRandom(unitWeightDic: Dictionary<BattleUnit, int>): BattleUnit {
         // new System.Random(); Sum(Values) (checked; throws OverflowException in .NET on overflow)
         let sum = 0;
         for (const v of unitWeightDic.values()) sum += v;
-        const num = randomNext(sum); // random.Next(sum)
+        const num = randomNextWeighted(sum, [...unitWeightDic.values()], "target", [], [...unitWeightDic.keys()]); // random.Next(sum)
         let num2 = 0;
         for (const key of unitWeightDic.keys()) {
             num2 += dictGet(unitWeightDic, key);
@@ -161,9 +161,9 @@ export class AISkillTargetSelector {
         }
         return null!;
     }
-    /** @rva 0x7305E0  public void .ctor() { } */
+    /** @rva 0x72F5E0  public void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
-    /** @rva 0x17DF2D0  private static void .cctor() { } */
+    /** @rva 0x1808D30  private static void .cctor() { } */
     static cctor(): void {
         const dic: Dictionary<RoleType, int> = new Map();
         dic.set(6 as RoleType, 15);
@@ -181,30 +181,30 @@ export class AISkillTargetSelector_UnitFilterFuncOrder {  // implements IEnumera
     static readonly __interfaces: readonly string[] = ['IEnumerable', 'IEnumerable', 'IEnumerable'];
     /** 0x10 private LinkedList<Func<IEnumerable<BattleUnit>, IEnumerable<BattleUnit>>> funcList */
     funcList: ((a0: IEnumerable<BattleUnit>) => IEnumerable<BattleUnit>)[] /* LinkedList<Func<IEnumerable<BattleUnit>, IEnumerable<BattleUnit>>> */ = null!;
-    /** @rva 0x17F3AD0  public void .ctor() { } */
+    /** @rva 0x181BB70  public void .ctor() { } */
     ctor(): this {
         this.funcList = []; // new LinkedList<...>()
         return this;
     }
-    /** @rva 0x17F3A00  public void .ctor(List<Func<IEnumerable<BattleUnit>, IEnumerable<BattleUnit>>> funcList) { } */
+    /** @rva 0x181BAA0  public void .ctor(List<Func<IEnumerable<BattleUnit>, IEnumerable<BattleUnit>>> funcList) { } */
     ctor$ListFuncIEnumerableBattleUnitIEnumerableBattleUnit(funcList: List<((a0: IEnumerable<BattleUnit>) => IEnumerable<BattleUnit>)>): this {
         this.funcList = []; // field initializer: new LinkedList<...>()
         this.funcList = [...funcList]; // new LinkedList<...>(funcList)
         return this;
     }
-    /** @rva 0x17F38A0  public void AddFirst(Func<IEnumerable<BattleUnit>, IEnumerable<BattleUnit>> func) { } */
+    /** @rva 0x181B940  public void AddFirst(Func<IEnumerable<BattleUnit>, IEnumerable<BattleUnit>> func) { } */
     AddFirst(func: ((a0: IEnumerable<BattleUnit>) => IEnumerable<BattleUnit>)): void {
         this.funcList.unshift(func);
     }
-    /** @rva 0x17F3900  public void AddLast(Func<IEnumerable<BattleUnit>, IEnumerable<BattleUnit>> func) { } */
+    /** @rva 0x181B9A0  public void AddLast(Func<IEnumerable<BattleUnit>, IEnumerable<BattleUnit>> func) { } */
     AddLast(func: ((a0: IEnumerable<BattleUnit>) => IEnumerable<BattleUnit>)): void {
         this.funcList.push(func);
     }
-    /** @rva 0x17F3960 slot 4  public IEnumerator<Func<IEnumerable<BattleUnit>, IEnumerable<BattleUnit>>> GetEnumerator() { } */
+    /** @rva 0x181BA00 slot 4  public IEnumerator<Func<IEnumerable<BattleUnit>, IEnumerable<BattleUnit>>> GetEnumerator() { } */
     GetEnumerator(): IterableIterator<((a0: IEnumerable<BattleUnit>) => IEnumerable<BattleUnit>)> {
         return this.funcList[Symbol.iterator]();
     }
-    /** @rva 0x17F39F0 slot 5  private IEnumerator System.Collections.IEnumerable.GetEnumerator() { } */
+    /** @rva 0x181BA90 slot 5  private IEnumerator System.Collections.IEnumerable.GetEnumerator() { } */
     IEnumerable$GetEnumerator(): IterableIterator<((a0: IEnumerable<BattleUnit>) => IEnumerable<BattleUnit>)> {
         return this.funcList[Symbol.iterator]();
     }

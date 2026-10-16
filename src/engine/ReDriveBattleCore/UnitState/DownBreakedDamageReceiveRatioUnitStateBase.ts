@@ -1,4 +1,4 @@
-// 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
+// 1:1 port of ReDriveBattleCore (game 3.21.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
 import { notPorted } from "../../runtime";
@@ -20,37 +20,37 @@ import { AISkillTargetSelector } from "../AI/AISkillTargetSelector";
 // ---- ReDriveBattleCore.UnitState.DownBreakedDamageReceiveRatioUnitStateBase  (TypeDefIndex 585, public abstract class) ----
 export abstract class DownBreakedDamageReceiveRatioUnitStateBase extends ParameterVariationUnitStateBase {  // implements IBreakedDamageReceiveRatioVariation, IRequiredStateForDecide, IDebuff
     static readonly __interfaces: readonly string[] = ['IBreakedDamageReceiveRatioVariation', 'IRequiredStateForDecide', 'IDebuff'];
-    /** @rva 0x759B30 slot 6  public override UnitStateBase.DirectionType get_Direction() { } */
+    /** @rva 0x758B30 slot 6  public override UnitStateBase.DirectionType get_Direction() { } */
     get_Direction(): UnitStateBase_DirectionType { return 1 as UnitStateBase_DirectionType; /* asm: mov eax, 1; ret */ }
-    /** @rva 0x759B30 slot 27  public override AdditionType get_Addition() { } */
+    /** @rva 0x758B30 slot 27  public override AdditionType get_Addition() { } */
     get_Addition(): AdditionType { return 1 as AdditionType; /* asm: mov eax, 1; ret */ }
-    /** @rva 0x15B9280 slot 7  public override string get_IconName() { } */
+    /** @rva 0x15DF590 slot 7  public override string get_IconName() { } */
     get_IconName(): string {
         return "battle_icon_dwn_break_damage_receive";
     }
-    /** @rva 0x15B9250 slot 13  public override string get_GiveVisualEffectName() { } */
+    /** @rva 0x15DF560 slot 13  public override string get_GiveVisualEffectName() { } */
     get_GiveVisualEffectName(): string {
         return "eff_cmn_act_debuff_appear_001";
     }
-    /** @rva 0x15B3A90  protected void .ctor() { } */
+    /** @rva 0x15D9DA0  protected void .ctor() { } */
     ctor(): this {
         super.ctor();
         return this;
     }
-    /** @rva 0x15B5240  public void .ctor(AbilityEffectInfo info) { } */
+    /** @rva 0x15DB550  public void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
         super.ctor$AbilityEffectInfo(info);
         return this;
     }
     /** @rva -1 slot 30  public abstract float GetBreakedDamageReceiveRatioVariationValue(BattleUnit unit, float processingValue); */
     abstract GetBreakedDamageReceiveRatioVariationValue(unit: BattleUnit, processingValue: float): float;
-    /** @rva 0x15B8DB0 slot 23  public override List<BattleUnit> GetAIFilteredTargets(BattleUnit userUnit, List<BattleUnit> targetUnitList, SkillType skillType, RangeType effectRange, GameDirectorBase gameDirector) { } */
+    /** @rva 0x15DF0C0 slot 23  public override List<BattleUnit> GetAIFilteredTargets(BattleUnit userUnit, List<BattleUnit> targetUnitList, SkillType skillType, RangeType effectRange, GameDirectorBase gameDirector) { } */
     GetAIFilteredTargets(userUnit: BattleUnit, targetUnitList: List<BattleUnit>, skillType: SkillType, effectRange: RangeType, gameDirector: GameDirectorBase): List<BattleUnit> {
         let list = targetUnitList.filter(x => !x.get_IsDead()); // <>c.b__11_0
         if (list.length > 0) { if (!userUnit._BreakPoint.get_HasBreakPoint()) list = []; }
         return list;
     }
-    /** @rva 0x15B8F60 slot 24  public override AISkillTargetSelector.UnitFilterFuncOrder GetUnitFilterFuncOrder(BattleUnit userUnit, IEnumerable<BattleUnit> candidateUnits) { } */
+    /** @rva 0x15DF270 slot 24  public override AISkillTargetSelector.UnitFilterFuncOrder GetUnitFilterFuncOrder(BattleUnit userUnit, IEnumerable<BattleUnit> candidateUnits) { } */
     GetUnitFilterFuncOrder(userUnit: BattleUnit, candidateUnits: IEnumerable<BattleUnit>): AISkillTargetSelector_UnitFilterFuncOrder {
         const list: List<(a0: IEnumerable<BattleUnit>) => IEnumerable<BattleUnit>> = [];
         list.push(AISkillTargetSelector.UnitFilterByMainTarget);

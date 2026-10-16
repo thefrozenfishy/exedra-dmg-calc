@@ -1,8 +1,8 @@
-// 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
+// 1:1 port of ReDriveBattleCore (game 3.21.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
 
-// ---- ReDriveBattleCore.Command.CommandType  (TypeDefIndex 1024, public enum) ----
+// ---- ReDriveBattleCore.Command.CommandType  (TypeDefIndex 1040, public enum) ----
 export const CommandType = {
     None: 0,
     BattlePhase: 1,
@@ -38,5 +38,6 @@ export const CommandType = {
     SoloRaidBuffFinish: 31,
     SyncLinkHp: 32,
     SyncModeChange: 33,
+    StepUpSkill: 34,
 } as const;
 export type CommandType = (typeof CommandType)[keyof typeof CommandType];

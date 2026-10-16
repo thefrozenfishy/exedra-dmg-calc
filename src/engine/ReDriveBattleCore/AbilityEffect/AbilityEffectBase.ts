@@ -1,4 +1,4 @@
-// 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
+// 1:1 port of ReDriveBattleCore (game 3.21.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
 import { dictGet, notPorted, orderBy, orderByDescending, orderByNewGuid } from "../../runtime";
@@ -62,68 +62,68 @@ export abstract class AbilityEffectBase {
     get DetailMstId(): int { return this.get_DetailMstId(); }
     set DetailMstId(v: int) { this.set_DetailMstId(v); }
     get IsConditionActivation(): boolean { return this.get_IsConditionActivation(); }
-    /** @rva 0x7364F0  public AbilitySourceType get_AbilitySource() { } */
+    /** @rva 0x7354F0  public AbilitySourceType get_AbilitySource() { } */
     get_AbilitySource(): AbilitySourceType { return this._AbilitySource; /* auto-property */ }
-    /** @rva 0x739D00  public void set_AbilitySource(AbilitySourceType value) { } */
+    /** @rva 0x738D00  public void set_AbilitySource(AbilitySourceType value) { } */
     set_AbilitySource(value: AbilitySourceType): void { this._AbilitySource = value; /* auto-property */ }
-    /** @rva 0x733E90  public string get_EffectType() { } */
+    /** @rva 0x732E90  public string get_EffectType() { } */
     get_EffectType(): string { return this._EffectType; /* auto-property */ }
-    /** @rva 0x736AB0  public void set_EffectType(string value) { } */
+    /** @rva 0x735AB0  public void set_EffectType(string value) { } */
     set_EffectType(value: string): void { this._EffectType = value; /* auto-property */ }
-    /** @rva 0x75ED70  public RangeType get_EffectRange() { } */
+    /** @rva 0x75DD70  public RangeType get_EffectRange() { } */
     get_EffectRange(): RangeType { return this._EffectRange; /* auto-property */ }
-    /** @rva 0x8A2230  public void set_EffectRange(RangeType value) { } */
+    /** @rva 0x8A1230  public void set_EffectRange(RangeType value) { } */
     set_EffectRange(value: RangeType): void { this._EffectRange = value; /* auto-property */ }
-    /** @rva 0x75A830  public AbilityEffectBase.TargetSideType get_TargetSide() { } */
+    /** @rva 0x759830  public AbilityEffectBase.TargetSideType get_TargetSide() { } */
     get_TargetSide(): AbilityEffectBase_TargetSideType { return this._TargetSide; /* auto-property */ }
-    /** @rva 0x75A840  public void set_TargetSide(AbilityEffectBase.TargetSideType value) { } */
+    /** @rva 0x759840  public void set_TargetSide(AbilityEffectBase.TargetSideType value) { } */
     set_TargetSide(value: AbilityEffectBase_TargetSideType): void { this._TargetSide = value; /* auto-property */ }
-    /** @rva 0x73A4E0  public bool get_IsIncludeDeadUnitInTarget() { } */
+    /** @rva 0x7394E0  public bool get_IsIncludeDeadUnitInTarget() { } */
     get_IsIncludeDeadUnitInTarget(): boolean { return this._IsIncludeDeadUnitInTarget; /* auto-property */ }
-    /** @rva 0x73A4F0  public void set_IsIncludeDeadUnitInTarget(bool value) { } */
+    /** @rva 0x7394F0  public void set_IsIncludeDeadUnitInTarget(bool value) { } */
     set_IsIncludeDeadUnitInTarget(value: boolean): void { this._IsIncludeDeadUnitInTarget = value; /* auto-property */ }
-    /** @rva 0x736F00  public List<int> get_TargetUnitIdList() { } */
+    /** @rva 0x735F00  public List<int> get_TargetUnitIdList() { } */
     get_TargetUnitIdList(): List<int> { return this._TargetUnitIdList; /* auto-property */ }
-    /** @rva 0x736F30  public void set_TargetUnitIdList(List<int> value) { } */
+    /** @rva 0x735F30  public void set_TargetUnitIdList(List<int> value) { } */
     set_TargetUnitIdList(value: List<int>): void { this._TargetUnitIdList = value; /* auto-property */ }
-    /** @rva 0x736970  public List<ProcessTiming> get_StartTimings() { } */
+    /** @rva 0x735970  public List<ProcessTiming> get_StartTimings() { } */
     get_StartTimings(): List<ProcessTiming> { return this._StartTimings; /* auto-property */ }
-    /** @rva 0x736A30  public void set_StartTimings(List<ProcessTiming> value) { } */
+    /** @rva 0x735A30  public void set_StartTimings(List<ProcessTiming> value) { } */
     set_StartTimings(value: List<ProcessTiming>): void { this._StartTimings = value; /* auto-property */ }
-    /** @rva 0x7368E0  public string get_StartConditionSetIdCsv() { } */
+    /** @rva 0x7358E0  public string get_StartConditionSetIdCsv() { } */
     get_StartConditionSetIdCsv(): string { return this._StartConditionSetIdCsv; /* auto-property */ }
-    /** @rva 0x736F20  public void set_StartConditionSetIdCsv(string value) { } */
+    /** @rva 0x735F20  public void set_StartConditionSetIdCsv(string value) { } */
     set_StartConditionSetIdCsv(value: string): void { this._StartConditionSetIdCsv = value; /* auto-property */ }
-    /** @rva 0x7368F0  public string get_ActiveConditionSetIdCsv() { } */
+    /** @rva 0x7358F0  public string get_ActiveConditionSetIdCsv() { } */
     get_ActiveConditionSetIdCsv(): string { return this._ActiveConditionSetIdCsv; /* auto-property */ }
-    /** @rva 0x736A00  public void set_ActiveConditionSetIdCsv(string value) { } */
+    /** @rva 0x735A00  public void set_ActiveConditionSetIdCsv(string value) { } */
     set_ActiveConditionSetIdCsv(value: string): void { this._ActiveConditionSetIdCsv = value; /* auto-property */ }
-    /** @rva 0x18E8970  public List<BattleConditionUtils.ConditionSet> get_StartConditionSetList() { } */
+    /** @rva 0x191AE30  public List<BattleConditionUtils.ConditionSet> get_StartConditionSetList() { } */
     get_StartConditionSetList(): List<BattleConditionUtils_ConditionSet> {
         if (this.startConditionSetList == null) {
             this.startConditionSetList = BattleConditionUtils.GetConditionSetListByIdCsv(this._StartConditionSetIdCsv);
         }
         return this.startConditionSetList;
     }
-    /** @rva 0x737C40  public int get_DetailMstId() { } */
+    /** @rva 0x736C40  public int get_DetailMstId() { } */
     get_DetailMstId(): int { return this._DetailMstId; /* auto-property */ }
-    /** @rva 0x737DF0  public void set_DetailMstId(int value) { } */
+    /** @rva 0x736DF0  public void set_DetailMstId(int value) { } */
     set_DetailMstId(value: int): void { this._DetailMstId = value; /* auto-property */ }
-    /** @rva 0x18E88E0  public bool get_IsConditionActivation() { } */
+    /** @rva 0x191ADA0  public bool get_IsConditionActivation() { } */
     get_IsConditionActivation(): boolean {
         if (!(this._StartTimings.length > 0)) return false;
         // Count != 1 || First() != 1
         if (this._StartTimings.length !== 1) return true;
         return this._StartTimings[0] !== 1;
     }
-    /** @rva 0x18E8810  protected void .ctor() { } */
+    /** @rva 0x191ACD0  protected void .ctor() { } */
     ctor(): this {
         this._TargetSide = 1 as AbilityEffectBase_TargetSideType;
         this._TargetUnitIdList = [];
         this._StartTimings = [];
         return this;
     }
-    /** @rva 0x18E86B0  public void .ctor(AbilityEffectInfo info) { } */
+    /** @rva 0x191AB70  public void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
         this._TargetSide = 1 as AbilityEffectBase_TargetSideType;
         this._TargetUnitIdList = [];
@@ -138,11 +138,11 @@ export abstract class AbilityEffectBase {
         this._DetailMstId = info._MstId;
         return this;
     }
-    /** @rva 0x18E78C0  public bool CheckStartConditionSets(BattleConditionUtils.ConditionCheckDataBundle conditionCheckDataBundle) { } */
+    /** @rva 0x1919D80  public bool CheckStartConditionSets(BattleConditionUtils.ConditionCheckDataBundle conditionCheckDataBundle) { } */
     CheckStartConditionSets(conditionCheckDataBundle: BattleConditionUtils_ConditionCheckDataBundle): boolean {
         return BattleConditionUtils.IsMatchConditionSets$ListBattleConditionUtilsConditionSet_ConditionCheckDataBundle_ConditionUseType(this.get_StartConditionSetList() /* inlined in the game */, conditionCheckDataBundle, 1 as ConditionUseType);
     }
-    /** @rva 0x18E7E60 slot 4  public virtual void SelectTargets(BattleUnit userUnit, Dictionary<int, BattleUnit> targetUnitDic, int selectFriendUnitId, int attackTargetId = 0) { } */
+    /** @rva 0x191A320 slot 4  public virtual void SelectTargets(BattleUnit userUnit, Dictionary<int, BattleUnit> targetUnitDic, int selectFriendUnitId, int attackTargetId = 0) { } */
     SelectTargets(userUnit: BattleUnit, targetUnitDic: Dictionary<int, BattleUnit>, selectFriendUnitId: int, attackTargetId?: int /* = 0 */): void {
         attackTargetId = attackTargetId ?? 0;
         // <>c__DisplayClass49_0: 0x10 targetTeam, 0x14 selectUnitId, 0x18 mainTarget
@@ -184,7 +184,7 @@ export abstract class AbilityEffectBase {
             if (units[i] != null) this._TargetUnitIdList.push(units[i]!._Id);
         }
     }
-    /** @rva 0x18E7BB0  public void SelectTargetsConditionCheck(Dictionary<int, BattleUnit> targetUnitDic, BattleConditionUtils.ConditionCheckDataBundle conditionCheckDataBundle) { } */
+    /** @rva 0x191A070  public void SelectTargetsConditionCheck(Dictionary<int, BattleUnit> targetUnitDic, BattleConditionUtils.ConditionCheckDataBundle conditionCheckDataBundle) { } */
     SelectTargetsConditionCheck(targetUnitDic: Dictionary<int, BattleUnit>, conditionCheckDataBundle: BattleConditionUtils_ConditionCheckDataBundle): void {
         const list: List<int> = [];
         for (const id of this._TargetUnitIdList) {
@@ -198,13 +198,13 @@ export abstract class AbilityEffectBase {
     }
     /** @rva -1 slot 5  public abstract AffectedUnitNoticeBundle Triggering(EffectOriginType origin, BattleUnit userUnit, Dictionary<int, BattleUnit> targetUnitDic, GameDirectorBase gameDirector); */
     abstract Triggering(origin: EffectOriginType, userUnit: BattleUnit, targetUnitDic: Dictionary<int, BattleUnit>, gameDirector: GameDirectorBase): AffectedUnitNoticeBundle;
-    /** @rva 0x746DC0 slot 6  public virtual List<BattleUnit> GetAIFilteredTargets(BattleUnit userUnit, List<BattleUnit> targetUnitList, SkillType skillType, GameDirectorBase gameDirector) { } */
+    /** @rva 0x745DC0 slot 6  public virtual List<BattleUnit> GetAIFilteredTargets(BattleUnit userUnit, List<BattleUnit> targetUnitList, SkillType skillType, GameDirectorBase gameDirector) { } */
     GetAIFilteredTargets(userUnit: BattleUnit, targetUnitList: List<BattleUnit>, skillType: SkillType, gameDirector: GameDirectorBase): List<BattleUnit> {
         return targetUnitList;
     }
-    /** @rva 0x18E7990 slot 7  public virtual int SelectTargetInAIAction(BattleUnit userUnit, List<BattleUnit> targetUnitList) { } */
+    /** @rva 0x1919E50 slot 7  public virtual int SelectTargetInAIAction(BattleUnit userUnit, List<BattleUnit> targetUnitList) { } */
     SelectTargetInAIAction(userUnit: BattleUnit, targetUnitList: List<BattleUnit>): int {
-        const unit = orderByNewGuid(targetUnitList.filter(u => !u.get_IsDead()) /* <>c.b__53_0 */)[0] ?? null; // OrderBy(_ => Guid.NewGuid()) <>c.b__53_1
+        const unit = orderByNewGuid(targetUnitList.filter(u => !u.get_IsDead()) /* <>c.b__53_0 */, "target", [userUnit, this])[0] ?? null; // OrderBy(_ => Guid.NewGuid()) <>c.b__53_1
         if (unit != null) return unit._Id;
         return 0;
     }

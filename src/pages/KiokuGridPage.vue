@@ -468,7 +468,7 @@ const fightModeIndex = computed(() => fightModeOptions.findIndex(opt => opt.valu
 const benchAverageDmg = useSetting("gridBenchAverageDmg", false)
 const benchMetricOptions = [
     { value: false, label: "Max Burst", title: "How much the Ultimate's dmg changes, every hit a crit, with all buffs and debuffs at full stacks" },
-    { value: true, label: "Average Damage", title: "How much the attacker's total dmg changes over a few turns of auto battle with SP refilled every turn, using expected crit damage" },
+    { value: true, label: "Average Damage", title: "How much the attacker's total dmg changes over a few turns of auto battle with SP refilled every turn, averaged over seeded battles (crits are rolled, as in the game)" },
 ] as const
 const benchMetricIndex = computed(() => benchMetricOptions.findIndex(opt => opt.value === benchAverageDmg.value))
 
@@ -953,7 +953,8 @@ const emptyBarChart = () => ({
     hasVariants: false,
 })
 
-const BENCH_SEEDS = 10 // rolled battles averaged when a team is random beyond crits (the same seeds for Lux's baseline)
+const BENCH_SEEDS = 10 // battles averaged when a team rolls crits (a kit reacts to crits) or has other random effects
+const CRIT_TEXT = "Crits: every hit deals its average crit damage (a shortcut, not how the game works), except in teams where a kit reacts to crits (e.g. Absolute Rain's \"on critical hit\"): those roll crits as in the game and average 10 battles."
 const benchAv = () => benchTurns.value * 100 // 100 AV = 1 turn (the Length toggle)
 const BENCH_INFINITE_SP = true // SP topped up to 5 before every turn: a battle skill every turn, no SP shared out
 
@@ -986,10 +987,12 @@ const benchProgress: Record<BenchChartKind, ShallowRef<BenchProgress>> = {
     support: shallowRef(idleBench()),
     attacker: shallowRef(idleBench()),
 }
-const benchWorkers: Partial<Record<BenchChartKind, Worker>> = {}
+// Several workers per chart: the characters are dealt out round-robin (each worker computes Lux's baselines itself).
+const benchWorkers: Partial<Record<BenchChartKind, Worker[]>> = {}
+const BENCH_WORKERS = Math.max(1, Math.min(8, (typeof navigator !== "undefined" ? navigator.hardwareConcurrency || 2 : 2) - 1))
 
 const stopBench = (kind: BenchChartKind) => {
-    benchWorkers[kind]?.terminate()
+    for (const w of benchWorkers[kind] ?? []) w.terminate()
     delete benchWorkers[kind]
 }
 
@@ -1071,8 +1074,10 @@ const runBench = (kind: BenchChartKind, { fresh = false } = {}) => {
         infiniteSp: BENCH_INFINITE_SP,
     }
 
-    const worker = new Worker(new URL("../workers/luxBenchWorker.ts", import.meta.url), { type: "module" })
-    benchWorkers[kind] = worker
+    const count = Math.min(BENCH_WORKERS, todo.length)
+    const workers = Array.from({ length: count }, () => new Worker(new URL("../workers/luxBenchWorker.ts", import.meta.url), { type: "module" }))
+    benchWorkers[kind] = workers
+    let running = count
 
     // One message per character: re-render at most once per frame.
     let scheduled = false
@@ -1081,7 +1086,7 @@ const runBench = (kind: BenchChartKind, { fresh = false } = {}) => {
         scheduled = true
         requestAnimationFrame(() => {
             scheduled = false
-            if (benchWorkers[kind] !== worker && progress.running) return // superseded
+            if (benchWorkers[kind] !== workers && progress.running) return // superseded
             benchResults[kind].value = new Map(results)
             benchProgress[kind].value = { ...progress }
         })
@@ -1089,7 +1094,7 @@ const runBench = (kind: BenchChartKind, { fresh = false } = {}) => {
 
     const pendingMax = new Map<number, BenchRow[]>()
 
-    worker.onmessage = (e: MessageEvent<LuxBenchMessage>) => {
+    const onMessage = (e: MessageEvent<LuxBenchMessage>) => {
         const msg = e.data
         if (msg.type === "max") {
             setMax(msg.id, msg.rows)
@@ -1103,7 +1108,7 @@ const runBench = (kind: BenchChartKind, { fresh = false } = {}) => {
             progress.avgDone++
         } else if (msg.type === "error") {
             progress.failed++
-        } else {
+        } else if (--running === 0) { // every worker is done
             progress.running = false
             save(true)
             stopBench(kind)
@@ -1111,15 +1116,17 @@ const runBench = (kind: BenchChartKind, { fresh = false } = {}) => {
         publish()
     }
 
-    worker.onerror = (e) => {
-        console.error(`Lux bench (${kind}) worker failed:`, e)
-        progress.running = false
-        progress.error = "The battle simulation failed (see console)."
-        stopBench(kind)
-        publish()
-    }
-
-    worker.postMessage(job)
+    workers.forEach((worker, i) => {
+        worker.onmessage = onMessage
+        worker.onerror = (e) => {
+            console.error(`Lux bench (${kind}) worker failed:`, e)
+            progress.running = false
+            progress.error = "The battle simulation failed (see console)."
+            stopBench(kind)
+            publish()
+        }
+        worker.postMessage({ ...job, chars: job.chars.filter((_, k) => k % count === i) })
+    })
 }
 
 onBeforeUnmount(() => {
@@ -1190,7 +1197,7 @@ const benchCharts = computed(() => [
         desc: [
             `How much each character increases the damage of a ${LuxMagica} as damage dealer, ${LuxMagica} is modified to be simulated as with any role and any element. When the element or role version had a different damage output, that element or role will be given a separate bar. ${levelsDescription.value}`,
             benchAverageDmg.value
-                ? `Average Damage: ${benchAv()} AV (${benchTurns.value} turns) of auto battle with infinite SP, the character next to the damage dealer and three ${LuxMagica}, Only the damage dealer's own damage counts (including additional damage it deals), never the rest of the team's.`
+                ? `Average Damage: ${benchAv()} AV (${benchTurns.value} turns) of battle on the game's battle code with infinite SP (ultimates as soon as they are ready, Battle Skill every turn, ally-target skills on the damage dealer), the character next to the damage dealer and three ${LuxMagica}. ${CRIT_TEXT} Only the damage dealer's own damage counts (including additional damage it deals), never the rest of the team's.`
                 : `Max Burst: the damage dealer's Ultimate with every buff and debuff of the team at full stacks and every hit a crit.`,
             `${benchEnemyText.value} with 3000 def, weak to every element and broken (500% dmg taken) for the whole battle. Everyone aims single-target and proximity skills at the middle enemy, so a single-target debuff covers one enemy and an AoE one all of them.`,
             `Element, role or ailment bonuses (enemies under Curse, Burn, ... for the whole battle) get their own bar when they change the result; in Average Damage the other bars make the enemies immune to those ailments, so a character that applies an ailment itself and reacts to it shows that in its ailment bar, so a bonus can show in one metric only: crit rate or procs (chains, follow-ups) don't change Max Burst, and Max Burst counts every buff as already applied.`,
@@ -1209,10 +1216,10 @@ const benchCharts = computed(() => [
         title: `Damage dealer strength compared to ${LuxMagica}`,
         fightType: true,
         desc: [
-            `Damage each character deals as the damage dealer, compared to ${LuxMagica} in the same spot.`,
+            `Damage each character deals as the damage dealer, compared to ${LuxMagica} in the same spot with the character's role: ${LuxMagica} then has the average HP, ATK and DEF of the 5 star characters of that role.`,
             `${LuxMagica} is the 0% line; 100% means double of her damage.`,
             benchAverageDmg.value
-                ? `Average Damage: ${benchAv()} AV (${benchTurns.value} turns) of auto battle with infinite SP, supported by four ${LuxMagica}, Only the damage dealer's own damage counts.`
+                ? `Average Damage: ${benchAv()} AV (${benchTurns.value} turns) of battle with infinite SP, supported by four ${LuxMagica}. ${CRIT_TEXT} Only the damage dealer's own damage counts.`
                 : `Max Burst: the Ultimate with the damage dealer's own buffs and debuffs at full stacks and every hit a crit.`,
             `${levelsDescription.value} ${benchEnemyText.value} with 3000 def, weak to every element and broken (500% dmg taken) for the whole battle; single-target and proximity skills aim at the middle one. Ailment bonuses (enemies under Curse, Burn, ...) get their own bar when they change the result; in Average Damage the other bars make the enemies immune to those ailments.`,
             benchAverageDmg.value

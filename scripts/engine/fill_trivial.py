@@ -19,7 +19,7 @@ ROOT = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)),
 ENG = os.path.join(ROOT, 'src', 'engine')
 a = sys.argv[1:]
 DRY = '--dry' in a
-VER = a[a.index('--ver') + 1] if '--ver' in a else os.environ.get('XQ_GAME_VER', '3.19.0')
+VER = a[a.index('--ver') + 1] if '--ver' in a else (os.environ.get('XQ_GAME_VER') or open(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'ai', 'GAME_VER')).read().strip())
 UNP = os.environ.get('XQ_UNPACKED') or os.path.join(ROOT, '..', 'unpackedExedra')
 import capstone
 

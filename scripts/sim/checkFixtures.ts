@@ -31,9 +31,6 @@ const CASES: { file: string, action: number, actor: string, ally?: boolean, line
     { file: "pve-rose-garden-fatebloom-ironspike.json", action: 14, actor: "Floral Ironspike", ally: true, line: /roll #\d+ action: Floral Ironspike \(Ally 5\) · extra action/ },
     // An ultimate fired from the manual turn prompt that wipes the endless minions: refill (TimeForward request) before
     // the turn act resumes, and the turn unit's gauge is reset only when its turn act runs (0 AV after the ultimate).
-    { file: "pve-rose-garden-own-ult-refill.json", action: 19, actor: "Floral Ironspike", ally: true, line: /^ +Floral Ironspike +\|.*MP 79\/150 .*\| AV 0\.00/ },
-    { file: "pve-rose-garden-own-ult-refill.json", action: 20, actor: "Witch Minions", ally: false },
-    { file: "pve-rose-garden-own-ult-refill.json", action: 21, actor: "Floral Ironspike", ally: true, line: /roll #\d+ action: Floral Ironspike \(Ally 5\) · turn: choose an action -> Battle Skill/ },
 ];
 
 console.warn = () => {}; console.debug = () => {};

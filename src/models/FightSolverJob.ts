@@ -1,3 +1,4 @@
+// TODO(engine 1:1): runs on the old engine - see the TODO at the top of models/FightSolver.ts.
 // A Fight Solver search as plain data (the page's settings, a team, a stage) and the solver it builds. Shared by the
 // page's worker (workers/fightSolverWorker.ts) and the command-line runner (scripts/sim/fightSolve.ts), so both
 // search exactly the same battle.

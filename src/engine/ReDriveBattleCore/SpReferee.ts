@@ -1,4 +1,4 @@
-// 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
+// 1:1 port of ReDriveBattleCore (game 3.21.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
 import type { SkillMstRecord } from "../Network/Definition/Skill/SkillMstRecord";
@@ -16,16 +16,16 @@ export class SpReferee {
     enemySp: int = 0;
     get AllySp(): int { return this.get_AllySp(); }
     get EnemySp(): int { return this.get_EnemySp(); }
-    /** @rva 0x7364F0  public int get_AllySp() { } */
+    /** @rva 0x7354F0  public int get_AllySp() { } */
     get_AllySp(): int { return this.allySp; /* asm: mov eax, dword ptr [rcx + 0x10]; ret */ }
-    /** @rva 0x803350  public int get_EnemySp() { } */
+    /** @rva 0x802350  public int get_EnemySp() { } */
     get_EnemySp(): int { return this.enemySp; /* asm: mov eax, dword ptr [rcx + 0x14]; ret */ }
-    /** @rva 0x15C07A0  public void Init() { } */
+    /** @rva 0x15E4850  public void Init() { } */
     Init(): void {
         this.allySp = 5;
         this.enemySp = 5;
     }
-    /** @rva 0x15C04B0  public void AddSp(BattleUnit.TeamType targetTeam, int sp) { } */
+    /** @rva 0x15E4670  public void AddSp(BattleUnit.TeamType targetTeam, int sp) { } */
     AddSp(targetTeam: BattleUnit_TeamType, sp: int): void {
         if (targetTeam === BattleUnit_TeamType.Ally) {
             const v = this.allySp + sp;
@@ -37,19 +37,12 @@ export class SpReferee {
             this.enemySp = v < 0 ? 0 : (v < 7 ? v : 6);
         }
     }
-    /** @rva 0x15C06F0  public int GetSp(BattleUnit.TeamType targetTeam) { } */
+    /** @rva 0x15E47A0  public int GetSp(BattleUnit.TeamType targetTeam) { } */
     GetSp(targetTeam: BattleUnit_TeamType): int {
         if (targetTeam === BattleUnit_TeamType.Ally) return this.allySp;
         if (targetTeam === BattleUnit_TeamType.Enemy) return this.enemySp;
         throw new RangeError(`ArgumentOutOfRangeException: targetTeam ${targetTeam}`);
     }
-    /** @rva 0x15C05E0  public static int GetCalculationSp(int skillMstId) { } */
-    static GetCalculationSp(skillMstId: int): int {
-        const skill = BattleMstReaderBase.get_Instance<SkillMstModel, SkillMstRecord, int>(SkillMstModel).GetModelByKey(skillMstId);
-        if (skill == null) return 0;
-        if (skill.Type !== 3) return -skill.SP; // SkillType 3
-        return 1;
-    }
-    /** @rva 0x7305E0  public void .ctor() { } */
+    /** @rva 0x72F5E0  public void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
 }

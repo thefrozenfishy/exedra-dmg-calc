@@ -1,4 +1,4 @@
-// 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
+// 1:1 port of ReDriveBattleCore (game 3.21.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
 import { EnumUtil } from "../EnumUtil";
@@ -24,31 +24,31 @@ export class SwitchSkillUnitState extends UnitStateBase {
     get SwitchSkillUniqueId(): int { return this.get_SwitchSkillUniqueId(); }
     get VisualEffectNo(): int { return this.get_VisualEffectNo(); }
     get SkillType(): SkillType { return this.get_SkillType(); }
-    /** @rva 0x7431D0 slot 6  public override UnitStateBase.DirectionType get_Direction() { } */
+    /** @rva 0x7421D0 slot 6  public override UnitStateBase.DirectionType get_Direction() { } */
     get_Direction(): UnitStateBase_DirectionType { return 0 as UnitStateBase_DirectionType; /* asm: xor eax, eax; ret */ }
-    /** @rva 0x16D8E00 slot 7  public override string get_IconName() { } */
+    /** @rva 0x1702E60 slot 7  public override string get_IconName() { } */
     get_IconName(): string {
         return "battle_icon_switch_skill";
     }
-    /** @rva 0xC2A210 slot 8  public override int get_IconPriority() { } */
+    /** @rva 0xC7B850 slot 8  public override int get_IconPriority() { } */
     get_IconPriority(): int { return 100; /* asm: mov eax, 0x64; ret */ }
-    /** @rva 0x76F830 slot 9  public override bool get_ShowStateIconAttachedByPassiveSkill() { } */
+    /** @rva 0x76E830 slot 9  public override bool get_ShowStateIconAttachedByPassiveSkill() { } */
     get_ShowStateIconAttachedByPassiveSkill(): boolean { return true; /* asm: mov al, 1; ret */ }
-    /** @rva 0x902530  public int get_SwitchSkillUniqueId() { } */
+    /** @rva 0x9009C0  public int get_SwitchSkillUniqueId() { } */
     get_SwitchSkillUniqueId(): int { return this.switchSkillUniqueId; /* asm: mov eax, dword ptr [rcx + 0x88]; ret */ }
-    /** @rva 0x9FD270  public int get_VisualEffectNo() { } */
+    /** @rva 0xA06F50  public int get_VisualEffectNo() { } */
     get_VisualEffectNo(): int { return this.visualEffectNo; /* asm: mov eax, dword ptr [rcx + 0x8c]; ret */ }
-    /** @rva 0x16D8E30  public SkillType get_SkillType() { } */
+    /** @rva 0x1702E90  public SkillType get_SkillType() { } */
     get_SkillType(): SkillType {
         if (enumIsDefined(SkillType, this.skillType)) return this.skillType;
         return 1 as SkillType;
     }
-    /** @rva 0x16CF610  protected void .ctor() { } */
+    /** @rva 0x16F8570  protected void .ctor() { } */
     ctor(): this {
         this._IconName = "";
         return this;
     }
-    /** @rva 0x16D8CC0  public void .ctor(AbilityEffectInfo info) { } */
+    /** @rva 0x1702D20  public void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
         super.ctor$AbilityEffectInfo(info);
         this.switchSkillUniqueId = info._EffectValue1;
@@ -60,7 +60,7 @@ export class SwitchSkillUnitState extends UnitStateBase {
         this.skillType = 1 as SkillType;
         return this;
     }
-    /** @rva 0x16D8C30 slot 24  public override AISkillTargetSelector.UnitFilterFuncOrder GetUnitFilterFuncOrder(BattleUnit userUnit, IEnumerable<BattleUnit> candidateUnits) { } */
+    /** @rva 0x1702C90 slot 24  public override AISkillTargetSelector.UnitFilterFuncOrder GetUnitFilterFuncOrder(BattleUnit userUnit, IEnumerable<BattleUnit> candidateUnits) { } */
     GetUnitFilterFuncOrder(userUnit: BattleUnit, candidateUnits: IEnumerable<BattleUnit>): AISkillTargetSelector_UnitFilterFuncOrder {
         const list: List<(a0: IEnumerable<BattleUnit>) => IEnumerable<BattleUnit>> = [];
         return new AISkillTargetSelector_UnitFilterFuncOrder().ctor$ListFuncIEnumerableBattleUnitIEnumerableBattleUnit(list);

@@ -1,4 +1,4 @@
-// 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
+// 1:1 port of ReDriveBattleCore (game 3.21.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
 import { notPorted } from "../../runtime";
@@ -21,24 +21,24 @@ import { UnitStateBase } from "./UnitStateBase";
 // ---- ReDriveBattleCore.UnitState.UpRcvCtdUnitStateBase  (TypeDefIndex 800, public abstract class) ----
 export abstract class UpRcvCtdUnitStateBase extends ParameterVariationUnitStateBase {  // implements IRcvCtdVariation, IDebuff
     static readonly __interfaces: readonly string[] = ['IRcvCtdVariation', 'IDebuff'];
-    /** @rva 0x759B30 slot 6  public override UnitStateBase.DirectionType get_Direction() { } */
+    /** @rva 0x758B30 slot 6  public override UnitStateBase.DirectionType get_Direction() { } */
     get_Direction(): UnitStateBase_DirectionType { return 1 as UnitStateBase_DirectionType; /* asm: mov eax, 1; ret */ }
-    /** @rva 0x7431D0 slot 27  public override AdditionType get_Addition() { } */
+    /** @rva 0x7421D0 slot 27  public override AdditionType get_Addition() { } */
     get_Addition(): AdditionType { return 0 as AdditionType; /* asm: xor eax, eax; ret */ }
-    /** @rva 0x16E6500 slot 7  public override string get_IconName() { } */
+    /** @rva 0x1710FD0 slot 7  public override string get_IconName() { } */
     get_IconName(): string {
         return "battle_icon_up_rcv_ctd";
     }
-    /** @rva 0x16E64D0 slot 13  public override string get_GiveVisualEffectName() { } */
+    /** @rva 0x1710FA0 slot 13  public override string get_GiveVisualEffectName() { } */
     get_GiveVisualEffectName(): string {
         return "eff_cmn_act_debuff_appear_001";
     }
-    /** @rva 0x16CF610  protected void .ctor() { } */
+    /** @rva 0x16F8570  protected void .ctor() { } */
     ctor(): this {
         this._IconName = "";
         return this;
     }
-    /** @rva 0x15BAC90  public void .ctor(AbilityEffectInfo info) { } */
+    /** @rva 0x15E14E0  public void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
         super.ctor$AbilityEffectInfo(info);
         this._UpdateableEffectValue = f32(info._EffectValue1);
@@ -46,22 +46,22 @@ export abstract class UpRcvCtdUnitStateBase extends ParameterVariationUnitStateB
     }
     /** @rva -1 slot 30  public abstract float GetRcvCtdVariationValue(BattleUnit attackUnit, float processingValue); */
     abstract GetRcvCtdVariationValue(attackUnit: BattleUnit, processingValue: float): float;
-    /** @rva 0x76F830 slot 21  public override bool CanAddTo(BattleUnit targetUnit) { } */
+    /** @rva 0x76E830 slot 21  public override bool CanAddTo(BattleUnit targetUnit) { } */
     CanAddTo(targetUnit: BattleUnit): boolean { return true; /* asm: mov al, 1; ret */ }
-    /** @rva 0x16E5FF0 slot 23  public override List<BattleUnit> GetAIFilteredTargets(BattleUnit userUnit, List<BattleUnit> targetUnitList, SkillType skillType, RangeType effectRange, GameDirectorBase gameDirector) { } */
+    /** @rva 0x1710AC0 slot 23  public override List<BattleUnit> GetAIFilteredTargets(BattleUnit userUnit, List<BattleUnit> targetUnitList, SkillType skillType, RangeType effectRange, GameDirectorBase gameDirector) { } */
     GetAIFilteredTargets(userUnit: BattleUnit, targetUnitList: List<BattleUnit>, skillType: SkillType, effectRange: RangeType, gameDirector: GameDirectorBase): List<BattleUnit> {
         let list = targetUnitList.filter(x => !x.get_IsDead()); // <>c.b__12_0
         if (list.length > 0) list = list.filter(unit => this.$GetAIFilteredTargets$b__12_1(unit));
         return list;
     }
-    /** @rva 0x16E61B0 slot 24  public override AISkillTargetSelector.UnitFilterFuncOrder GetUnitFilterFuncOrder(BattleUnit userUnit, IEnumerable<BattleUnit> candidateUnits) { } */
+    /** @rva 0x1710C80 slot 24  public override AISkillTargetSelector.UnitFilterFuncOrder GetUnitFilterFuncOrder(BattleUnit userUnit, IEnumerable<BattleUnit> candidateUnits) { } */
     GetUnitFilterFuncOrder(userUnit: BattleUnit, candidateUnits: IEnumerable<BattleUnit>): AISkillTargetSelector_UnitFilterFuncOrder {
         const list: List<(a0: IEnumerable<BattleUnit>) => IEnumerable<BattleUnit>> = [];
         list.push(AISkillTargetSelector.UnitFilterByMainTarget);
         list.push(AISkillTargetSelector.UnitFilterWithMaxAtk);
         return new AISkillTargetSelector_UnitFilterFuncOrder().ctor$ListFuncIEnumerableBattleUnitIEnumerableBattleUnit(list);
     }
-    /** @rva 0x16E6380  private bool <GetAIFilteredTargets>b__12_1(BattleUnit unit) { } */
+    /** @rva 0x1710E50  private bool <GetAIFilteredTargets>b__12_1(BattleUnit unit) { } */
     $GetAIFilteredTargets$b__12_1(unit: BattleUnit): boolean {
         return !unit._Condition.GetSameStateList(this, false).some(state => state._EffectTurn === UnitStateBase.EffectTurnOfPermanent || state._RemainingTurn > 1); // <>c.b__12_2
     }

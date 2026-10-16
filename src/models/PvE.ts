@@ -155,6 +155,9 @@ export function stageWaveMeta(questStageMstId: number): WaveMeta[] {
 import soloRaidJson from "../assets/base_data/getSoloRaidMstList.json";
 import soloRaidSeasonBuffJson from "../assets/base_data/getSoloRaidSeasonBuffMstList.json";
 import soloRaidPartyBuffJson from "../assets/base_data/getSoloRaidPartyBuffMstList.json";
+import multiRaidStageJson from "../assets/base_data/getMultiRaidStageMstList.json";
+import multiRaidJson from "../assets/base_data/getMultiRaidMstList.json";
+import multiRaidBonusJson from "../assets/base_data/getMultiRaidBattleBonusMstList.json";
 export interface SoloRaidSeasonBuff {
     soloRaidSeasonBuffMstId: number, groupId: number, passiveSkillMstId: number, enhancedPassiveSkillMstId: number,
     buffPointChargePassiveSkillMstId: number, maxBuffPoint: number, maxBuffPointOnEnhanced: number, enhancedSkillTurnGaugeValue: number
@@ -173,6 +176,22 @@ export function soloRaidInfo(questStageMstId: number): SoloRaidInfo | undefined 
         partyBuffs: (soloRaidPartyBuffJson as any[]).filter(b => b.groupId === raid?.soloRaidPartyBuffGroupId),
     }
 }
+
+// Link Raid (Multi-Raid): MultiRaidStageMst -> the quest stage, its round limit, and the season's battle bonus passives
+// (MultiRaidMst.multiRaidBattleBonusGroupId -> MultiRaidBattleBonusMst.groupId). Those passives carry their own
+// role / element condition (PassiveSkillMst.conditionRole / conditionElement, checked by BattleUnit.GetPassiveSkills).
+export interface MultiRaidInfo { multiRaidStageMstId: number, seasonId: number, difficulty: number, limitRoundCount: number, bonusPassiveIds: number[] }
+export function multiRaidInfo(questStageMstId: number): MultiRaidInfo | undefined {
+    const st = (multiRaidStageJson as any[]).find(s => s.questStageMstId === questStageMstId)
+    if (!st) return undefined
+    // a season id recurs (reruns); every run of it has the same bonus group
+    const season = (multiRaidJson as any[]).filter(r => r.seasonId === st.seasonId).pop()
+    const bonus = (multiRaidBonusJson as any[]).filter(b => b.groupId === season?.multiRaidBattleBonusGroupId)
+        .sort((a, b) => a.multiRaidBattleBonusMstId - b.multiRaidBattleBonusMstId)
+    return { multiRaidStageMstId: st.multiRaidStageMstId, seasonId: st.seasonId, difficulty: st.difficulty, limitRoundCount: st.limitRoundCount, bonusPassiveIds: bonus.map(b => b.passiveSkillMstId) }
+}
+const multiRaidStageIds = new Set<number>((multiRaidStageJson as any[]).map(s => s.questStageMstId))
+export const isMultiRaidStage = (questStageMstId: number) => multiRaidStageIds.has(questStageMstId)
 
 // Countdowns only run in Solo Raid battles (SoloRaidGameDirector).
 const soloRaidStageIds = new Set<number>((soloRaidStageJson as any[]).map(s => s.questStageMstId))

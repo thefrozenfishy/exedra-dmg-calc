@@ -58,8 +58,13 @@ Read the line for `GameAssembly.unpack.dll`:
 
 ## 2. Only if the code changed
 
-1. The method names come from Il2CppDumper, a Windows .NET exe that cannot run in the VM. Ask the user to run (or
-   if unattended, write "BLOCKED: needs Il2CppDumper" in the report and continue with steps 3-6):
+Before the dump exists: `python3 scripts/ai/meta_idents.py $HOME/mnt/unpackedExedra/$OLD/global-metadata.dat $HOME/mnt/unpackedExedra/$NEW/global-metadata.dat --out docs/versions/$NEW --grep 'Skill|Effect|State|Battle'`
+lists new/gone type, method and field names (3.21.0: Step-Up skills, CONSUME_SELF_HP). Put them in the newsletter.
+
+1. The method names come from Il2CppDumper, a Windows .NET exe that cannot run in the VM. Run it yourself on the
+   Windows desktop with computer use: write the version to `E:\Il2CppDumper\run_dump_ver.txt` and double-click
+   `E:\Il2CppDumper\run_dump.bat` in File Explorer (click tier: navigate by clicking, no typing); it writes
+   `<ver>\dump`, `dump\il2cppdumper.log` and `dump\EXIT.txt`. Equivalent command:
    ```
    # in E:\Il2CppDumper (PowerShell)
    .\Il2CppDumper.exe "E:\unpackedExedra\<NEW>\GameAssembly.unpack.dll" "E:\SteamLibrary\steamapps\common\MadokaExedra\MadokaExedra_Data\il2cpp_data\Metadata\global-metadata.dat" "E:\unpackedExedra\<NEW>\dump"
@@ -73,8 +78,12 @@ Read the line for `GameAssembly.unpack.dll`:
    Heuristic: a CHANGED entry can still be a pure re-layout (a RIP-relative global that moved); read it before
    believing it.
 3. Decompile the new version: `E:\unpackedExedra\Ghidra\README_headless.md` (make_name_lists.py on the NEW dump,
-   import, DecompileList into `E:\unpackedExedra\<NEW>\decompiled`). It needs ~6 GB heap: the user runs it on Windows
-   (the VM has 4 GB). Then `export XQ_GAME_VER=$NEW XQ_DUMPER=$HOME/mnt/unpackedExedra/$NEW/dump` for xq.
+   import, DecompileList into `E:\unpackedExedra\<NEW>\decompiled`). It needs ~6 GB heap, so it runs on Windows:
+   `make_name_lists.py` in the VM into `E:\unpackedExedra\ghidra_work_<NEW>`, the version into
+   `Ghidra\run_ghidra_ver.txt`, then double-click `E:\unpackedExedra\Ghidra\run_ghidra.bat` (logs and
+   GHIDRA_EXIT.txt in `<NEW>\decompiled`; ~5 min in total for 3.21.0). Then copy factories.json / state_direction.json /
+   ability_side.json from the previous decompile and add the new factory entries, and `_index_targets.tsv` = targets.tsv.
+   Semantic diff: `python3 scripts/engine/decdiff.py <old>/decompiled <new>/decompiled --only <new rvas> --ignore-offsets --loose`. Then `export XQ_GAME_VER=$NEW XQ_DUMPER=$HOME/mnt/unpackedExedra/$NEW/dump` for xq.
 4. For every changed method: find where the engine ports it (`grep -rn "<old RVA>" src/models docs/ai`, `xq ts`),
    re-read the new code (`xq fn`), fix the port, update the RVA in the code comment and in MECHANICS.md.
 5. Ghidra drops float returns and some branches: when C output looks incomplete, disassemble
@@ -149,18 +158,31 @@ From report.md, in this order:
 Every port: game rule comment `[CONFIRMED 3.19] Class.Method (0xRVA)`, a check in `scripts/sim/checkMechanics.ts`
 that fails without the change, an entry in docs/ai/MECHANICS.md.
 
-## 6b. Wiki generator (ma-ex-data/wiki)
+## 6b. Wiki generator (ma-ex-data/wiki): must say what the engine does
 
 The wiki pages decode conditions with `wiki/condition_parser.py` and effect values with `wiki/wiki_helpers.py`
-(`_formatValue`). New compare contents / effect types / value slots must be added there too:
+(`_formatValue`). **Whatever the engine learns in step 6 goes into the wiki in the same session**, with the same meaning:
+every CompareContent of `src/engine/.../CompareContent.ts` has a parser entry (the wikicheck `SYNC COND` line checks
+this), every effect value slot is labelled with what the ported class reads it as (the `.ctor(AbilityEffectInfo)`
+of the class: `xq effect <TYPE>`, `decomp.py fn '<Class>\$\$\.ctor'`), ids are resolved to names (skills by
+skillUniqueId, kioku, characters, unique-state patterns), and per-mille fields are shown as %. A slot the game code
+never reads is labelled as unused, not "ValueN". Comment each rule with the class / RVA it comes from.
 ```
 pip install uv -q && ~/.local/bin/uv python install 3.12      # once per VM (the wiki code needs Python 3.12)
 cd $HOME/mnt/ma-ex-data && ~/.local/bin/python3.12 $HOME/mnt/exedra-dmg-calc/scripts/ai/wikicheck.py
 ```
-Fix every COND MISSING / COND ERROR / COND RAW / VALUE ERROR line (VALUE UNKNOWN = known unknowns, fine), using the
-engine's names and semantics (`xq enum CompareContent`, MECHANICS.md section 6, `xq effect`). Values: per-mille
-fields are shown as % (`formatPercentage`), ids are resolved to names (characters, kioku, unique-state patterns /
-fields). Re-run until clean. Don't run the page generators or the uploader: the user does that.
+Re-run until it prints OK (VALUE UNKNOWN only for slots the engine itself has no meaning for). Edit only
+condition_parser.py / wiki_helpers.py (keep their line endings); don't run the page generators or the uploader and
+don't commit in ma-ex-data: the user does that.
+
+## 6c. New data after the patch (base_data sync)
+
+When the user's download (ma-ex-data/gamedata/manifests/en-Latn) is newer than base_data: `verdiff.py mst HEAD <manifests>`;
+sync it on the branch with the same transform as `ma-ex-data/dmg_calc_helpers/organize_data.py` (files without "_" plus
+get_config.json: `payload.mstList`, `json.dumps(sort_keys=True, ensure_ascii=False, indent=4)`, no trailing newline;
+the images part of that script is the user's) as its own commit. Smoke-test the new content on the engine:
+`STAGES=<new ids> npx tsx scripts/sim/engineSweep.ts <n> 2` and `WITH="<new kioku>|..." npx tsx scripts/sim/engineSweep.ts 15 2`
+(prints Step-Up uses / HP costs too), then the newsletter gets the kits, events and balance changes.
 
 ## 7. Verify
 
@@ -172,13 +194,15 @@ NODE_OPTIONS=--max-old-space-size=3300 timeout 175 npx vue-tsc --noEmit -p tscon
 Type-check: compare the SET of errors with a baseline taken before your change
 (`grep "error TS" | sed 's/([0-9]*,[0-9]*)//' | sort`, then `diff`), not the count alone. 229 on 2026-10-02.
 
-## 8. Newsletter
+## 8. Newsletter (for players)
 
-HTML page for the user: copy `docs/versions/3.19.1/newsletter.html` and replace the content (same sections: headline
-verdict, what's new in the game, what changed in the client, what the simulator learned, numbers, how it was made).
-Keep it factual, cite stage ids / kiokus, and list engine changes with their RVAs. Publish it with the Artifact tool
-when available (load the artifact-design skill first), and save a copy to
-`E:\unpackedExedra\<NEW>\version_report\newsletter.html` and `docs/versions/<NEW>/newsletter.html`.
+The newsletter is for other players of the game, not for the user: gameplay only. Cover new mechanics and how they
+play (buttons, costs, limits, teambuilding hints), new kiokus and kits, events and stages, balance changes, raid / PvP
+rule changes, quality-of-life changes and one simulator-status line. Mark features nothing uses yet ("no units yet").
+Leave out decompile and client internals (RVAs, method/class names, byte diffs, tools, branches, check counts); those
+go to the user in the final chat message. Write only mechanics confirmed in code or data. Model:
+`docs/versions/3.21.0/newsletter.html`. Publish it with the Artifact tool (load the artifact-design skill first), and
+save a copy to `E:\unpackedExedra\<NEW>\version_report\newsletter.html` and `docs/versions/<NEW>/newsletter.html`.
 
 ## 9. Close out
 
@@ -199,6 +223,15 @@ when available (load the artifact-design skill first), and save a copy to
 - Background processes die when the device_bash call ends; split long work into <170 s calls.
 
 ## src/engine (1:1 port) after a code change
+
+Order that worked for 3.21.0 (one session, ~2 h):
+0. `python3 scripts/engine/dump_parse.py <NEW>/dump/dump.cs ~/t.json`; then `ledger.py --check ~/t.json --apply-moves`
+   (moved @rva tags), `fields_check.py ~/t.json --apply` (moved field offsets, NEW/GONE fields),
+   `gen_shells.py ~/t.json --only <new types>`, and for existing types with new members
+   `ENGINE_OUT=~/shells gen_shells.py ~/t.json --force --only <types>` + `merge_members.py ~/shells <types>`.
+   Enums: compare const fields of both dumps and regenerate changed enums with `gen_shells.py --force --only`.
+   Factories: diff the StringLiteral lists of UnitStateFactory / AbilityEffectFactory .cctor and add the entries.
+   Then `echo <NEW> > scripts/ai/GAME_VER` (default version of xq / decomp / disasm / fill_trivial).
 
 1. New dump: `python3 scripts/engine/dump_parse.py <ver>/dump/dump.cs /tmp/t.json && python3 scripts/engine/ledger.py --check /tmp/t.json`
    (new/removed/changed members, moved RVAs). Changed functions from `verdiff.py funcs`: `ledger.py --rva <rva,...>`.

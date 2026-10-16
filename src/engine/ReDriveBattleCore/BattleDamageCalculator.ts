@@ -1,4 +1,4 @@
-// 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
+// 1:1 port of ReDriveBattleCore (game 3.21.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
 import type { IReceiveFinalDamage } from "./UnitState/IReceiveFinalDamage";
@@ -24,7 +24,7 @@ import { QuestEnemyAppearanceParameter } from "./QuestEnemyAppearanceParameter";
 import { CharacterParameter } from "./CharacterParameter";
 import { CorrelationEffect } from "./CorrelationEffect";
 import { AffectedUnitNotice, AffectedUnitNotice_DamageInfo } from "./AffectedUnitNotice";
-import { GameRandom, dictGet, enumIsDefined, enumToString, f32, isImpl, notPorted } from "../runtime";
+import { AppMods, clamp, dictGet, enumIsDefined, enumToString, f32, isImpl, notPorted, randomChance } from "../runtime";
 import type { Dictionary, float, int } from "../runtime";
 import { Decimal } from "../runtime";
 import type { BattleType } from "../Network/Definition/Battle/BattleType";
@@ -47,13 +47,13 @@ export class BattleDamageCalculator {
     static BreakDamageDefenceCorrectedBaseType: DamageBaseType = 0 as DamageBaseType;
     /** 0x4 private static readonly DamageBaseType ReflectionDamageDefenceCorrectedBaseType */
     static ReflectionDamageDefenceCorrectedBaseType: DamageBaseType = 0 as DamageBaseType;
-    /** @rva 0x137D8A0  public static Decimal GetDamageBase(float paramValue, float power) { } */
+    /** @rva 0x13A4750  public static Decimal GetDamageBase(float paramValue, float power) { } */
     static GetDamageBase(paramValue: float, power: float): Decimal {
         const first = Decimal.fromFloat(f32(paramValue * power));
         const pow = Decimal.fromDouble(Math.pow(paramValue / 124.0, 1.2)); // System.Math.Pow(double, 1.2)
         return first.mul(pow.add(Decimal.fromInt(12)).div(Decimal.fromInt(20)));
     }
-    /** @rva 0x137CB10  public static AffectedUnitNotice GetAttackDamageResult(BattleUnit attackUnit, BattleUnit defenseUnit, Decimal damageBase, TargetElementType attackElement, DamageBaseType damageBaseType, ActiveSkillBase attackSkill, BattleType battleType, DamageCategory damageCategory) { } */
+    /** @rva 0x13A39C0  public static AffectedUnitNotice GetAttackDamageResult(BattleUnit attackUnit, BattleUnit defenseUnit, Decimal damageBase, TargetElementType attackElement, DamageBaseType damageBaseType, ActiveSkillBase attackSkill, BattleType battleType, DamageCategory damageCategory) { } */
     static GetAttackDamageResult(attackUnit: BattleUnit, defenseUnit: BattleUnit, damageBase: Decimal, attackElement: TargetElementType, damageBaseType: DamageBaseType, attackSkill: ActiveSkillBase, battleType: BattleType, damageCategory: DamageCategory): AffectedUnitNotice {
         const visualEffects = new Set<string>(); // HashSet<string>
         const isNoCritNoBarrier = attackSkill instanceof AdditionalSkill && attackSkill.skillType === 5;
@@ -68,7 +68,13 @@ export class BattleDamageCalculator {
         let isCritical: boolean;
         if (isNoCritNoBarrier) isCritical = false;
         else isCritical = BattleDamageCalculator.IsCriticalDamage(attackUnit, defenseUnit); // inlined in the game
-        if (isCritical) damage = BattleDamageCalculator.GetAddedCriticalDamage(attackUnit, defenseUnit, damage);
+        if (AppMods.expectedCritDamage && !isNoCritNoBarrier) {
+            // ==== APP MOD (not game code): runtime.AppMods.expectedCritDamage, off in every game battle ====
+            // expected damage = normal + (crit - normal) x crit chance; the roll above still decides IsCritical
+            const chance = clamp(f32(f32(defenseUnit.GetProcessedRcvCtr(attackUnit) + attackUnit.GetProcessedCtr()) / 100), 0, 1);
+            const crit = BattleDamageCalculator.GetAddedCriticalDamage(attackUnit, defenseUnit, damage);
+            damage = damage.add(crit.sub(damage).mul(Decimal.fromFloat(chance)));
+        } else if (isCritical) damage = BattleDamageCalculator.GetAddedCriticalDamage(attackUnit, defenseUnit, damage);
         damage = BattleDamageCalculator.GetDifficultyCorrectedDamage(attackUnit, defenseUnit, damage);
         damage = BattleDamageCalculator.GetProcessedFinalGiveDamage(attackUnit, defenseUnit, damage, attackSkill);
         if (battleType === 2 || battleType === 4) damage = BattleDamageCalculator.DamageCutByPvpOrGvgSuppression(damage);
@@ -93,7 +99,7 @@ export class BattleDamageCalculator {
         }
         return notice;
     }
-    /** @rva 0x137D340  public static AffectedUnitNotice.DamageInfo GetBreakDamage(BattleUnit attackUnit, BattleUnit defenseUnit, TargetElementType attackElement) { } */
+    /** @rva 0x13A41F0  public static AffectedUnitNotice.DamageInfo GetBreakDamage(BattleUnit attackUnit, BattleUnit defenseUnit, TargetElementType attackElement) { } */
     static GetBreakDamage(attackUnit: BattleUnit, defenseUnit: BattleUnit, attackElement: TargetElementType): AffectedUnitNotice_DamageInfo {
         const parameter = attackUnit._BattleParameter;
         if (!(parameter instanceof CharacterParameter)) return null!;
@@ -118,7 +124,7 @@ export class BattleDamageCalculator {
         damageInfo._IsBarrierDamage = false;
         return damageInfo;
     }
-    /** @rva 0x1380F20  public static int GetSlipDamageValue(BattleUnit attackUnit, BattleUnit defenseUnit, Decimal damageBase, TargetElementType attackElement, DamageBaseType damageBaseType, BattleType battleType, ReceiveSlipDamageUnitStateBase receiveSlipDamageUnitState) { } */
+    /** @rva 0x13A7DD0  public static int GetSlipDamageValue(BattleUnit attackUnit, BattleUnit defenseUnit, Decimal damageBase, TargetElementType attackElement, DamageBaseType damageBaseType, BattleType battleType, ReceiveSlipDamageUnitStateBase receiveSlipDamageUnitState) { } */
     static GetSlipDamageValue(attackUnit: BattleUnit, defenseUnit: BattleUnit, damageBase: Decimal, attackElement: TargetElementType, damageBaseType: DamageBaseType, battleType: BattleType, receiveSlipDamageUnitState: ReceiveSlipDamageUnitStateBase): int {
         let damage = BattleDamageCalculator.GetAppliedDamageOfBreakSituation(defenseUnit, damageBase, false);
         damage = BattleDamageCalculator.GetDefenseCorrectedDamage(attackUnit, defenseUnit, damage, damageBaseType);
@@ -133,7 +139,7 @@ export class BattleDamageCalculator {
         damage = BattleDamageCalculator.GetDisabledDamage(damage, defenseUnit); // inlined in the game
         return damage.ceiling().toInt();
     }
-    /** @rva 0x13806D0  public static AffectedUnitNotice GetSlipDamageResult(BattleUnit unit, Dictionary<int, BattleUnit> battleUnitDic, BattleType battleType, Func<UnitStateBase, bool> predicate, bool isImmediately = False) { } */
+    /** @rva 0x13A7580  public static AffectedUnitNotice GetSlipDamageResult(BattleUnit unit, Dictionary<int, BattleUnit> battleUnitDic, BattleType battleType, Func<UnitStateBase, bool> predicate, bool isImmediately = False) { } */
     static GetSlipDamageResult(unit: BattleUnit, battleUnitDic: Dictionary<int, BattleUnit>, battleType: BattleType, predicate: ((a0: UnitStateBase) => boolean), isImmediately: boolean = false): AffectedUnitNotice {
         // <>c__DisplayClass6_0 { isBreak }
         const receivedSlipDamageEffectTypes = new Set<string>(); // HashSet<string>
@@ -185,7 +191,7 @@ export class BattleDamageCalculator {
         for (const damageInfo of notice.Damages) damageInfo._IsMaxBreakBonusWhenHit = isMaxBreakBonus;
         return notice;
     }
-    /** @rva 0x137DA30  private static Decimal GetDefenseCorrectedDamage(BattleUnit attackUnit, BattleUnit defenseUnit, Decimal damage, DamageBaseType damageBaseType) { } */
+    /** @rva 0x13A48E0  private static Decimal GetDefenseCorrectedDamage(BattleUnit attackUnit, BattleUnit defenseUnit, Decimal damage, DamageBaseType damageBaseType) { } */
     static GetDefenseCorrectedDamage(attackUnit: BattleUnit, defenseUnit: BattleUnit, damage: Decimal, damageBaseType: DamageBaseType): Decimal {
         const attackValue = attackUnit.GetProcessedDamageBaseParamValueDecimal(damageBaseType); // inlined in the game
         const defenseValue = defenseUnit.GetProcessedDefDecimal();
@@ -193,21 +199,21 @@ export class BattleDamageCalculator {
         const ratio = ten.add(attackValue).div(ten.add(defenseValue)).mul(Decimal.fromParts(12, 0, 0, false, 2)); // new decimal(12, 0, 0, false, 2) = 0.12
         return damage.mul(Decimal.min(ratio, Decimal.fromInt(2)));
     }
-    /** @rva 0x13813C0  private static bool IsCriticalDamage(BattleUnit attackUnit, BattleUnit defenseUnit) { } */
+    /** @rva 0x13A8270  private static bool IsCriticalDamage(BattleUnit attackUnit, BattleUnit defenseUnit) { } */
     static IsCriticalDamage(attackUnit: BattleUnit, defenseUnit: BattleUnit): boolean {
         const ctr = attackUnit.GetProcessedCtr();
         const rcvCtr = defenseUnit.GetProcessedRcvCtr(attackUnit);
-        const roll = GameRandom.next(); // new System.Random().NextDouble()
-        return f32(roll * 100) < f32(rcvCtr + ctr);
+        // new System.Random().NextDouble(): f32(roll * 100) < f32(rcvCtr + ctr)
+        return randomChance(f32(rcvCtr + ctr), "crit", [attackUnit, defenseUnit], roll => f32(roll * 100) < f32(rcvCtr + ctr));
     }
-    /** @rva 0x137C720  private static Decimal GetAddedCriticalDamage(BattleUnit attackUnit, BattleUnit defenseUnit, Decimal damage) { } */
+    /** @rva 0x13A35D0  private static Decimal GetAddedCriticalDamage(BattleUnit attackUnit, BattleUnit defenseUnit, Decimal damage) { } */
     static GetAddedCriticalDamage(attackUnit: BattleUnit, defenseUnit: BattleUnit, damage: Decimal): Decimal {
         const ctd = Decimal.fromFloat(attackUnit.GetProcessedCtd());
         const rcvCtd = Decimal.fromFloat(defenseUnit.GetProcessedRcvCtd(attackUnit));
         const hundred = Decimal.fromInt(100);
         return damage.mul(Decimal.One.add(ctd.div(hundred)).mul(Decimal.One.add(rcvCtd.div(hundred))));
     }
-    /** @rva 0x137ED10  private static Decimal GetProcessedGiveDamage(BattleUnit attackUnit, BattleUnit defenseUnit, Decimal damage, TargetElementType attackElement, ReceiveSlipDamageUnitStateBase receiveSlipDamageUnitState) { } */
+    /** @rva 0x13A5BC0  private static Decimal GetProcessedGiveDamage(BattleUnit attackUnit, BattleUnit defenseUnit, Decimal damage, TargetElementType attackElement, ReceiveSlipDamageUnitStateBase receiveSlipDamageUnitState) { } */
     static GetProcessedGiveDamage(attackUnit: BattleUnit, defenseUnit: BattleUnit, damage: Decimal, attackElement: TargetElementType, receiveSlipDamageUnitState: ReceiveSlipDamageUnitStateBase): Decimal {
         // <>c__DisplayClass10_0 { attackElement }
         let result = damage;
@@ -242,7 +248,7 @@ export class BattleDamageCalculator {
         }
         return result.le(Decimal.Zero) ? Decimal.Zero : result;
     }
-    /** @rva 0x137E940  private static Decimal GetProcessedFinalGiveDamage(BattleUnit attackUnit, BattleUnit defenseUnit, Decimal damage, ActiveSkillBase attackSkill) { } */
+    /** @rva 0x13A57F0  private static Decimal GetProcessedFinalGiveDamage(BattleUnit attackUnit, BattleUnit defenseUnit, Decimal damage, ActiveSkillBase attackSkill) { } */
     static GetProcessedFinalGiveDamage(attackUnit: BattleUnit, defenseUnit: BattleUnit, damage: Decimal, attackSkill: ActiveSkillBase): Decimal {
         let result = damage;
         if (attackSkill instanceof SpecialAttack) {
@@ -253,7 +259,7 @@ export class BattleDamageCalculator {
         }
         return result.le(Decimal.Zero) ? Decimal.Zero : result;
     }
-    /** @rva 0x137FAD0  private static Decimal GetProcessedReceiveDamage(BattleUnit attackUnit, BattleUnit defenseUnit, Decimal damage) { } */
+    /** @rva 0x13A6980  private static Decimal GetProcessedReceiveDamage(BattleUnit attackUnit, BattleUnit defenseUnit, Decimal damage) { } */
     static GetProcessedReceiveDamage(attackUnit: BattleUnit, defenseUnit: BattleUnit, damage: Decimal): Decimal {
         let result = damage;
         for (const addition of [0, 1]) {
@@ -267,14 +273,14 @@ export class BattleDamageCalculator {
         }
         return result.le(Decimal.Zero) ? Decimal.Zero : result;
     }
-    /** @rva 0x137E130  private static Decimal GetElementResistDamage(BattleUnit attackUnit, BattleUnit defenseUnit, Decimal damage, TargetElementType attackElement) { } */
+    /** @rva 0x13A4FE0  private static Decimal GetElementResistDamage(BattleUnit attackUnit, BattleUnit defenseUnit, Decimal damage, TargetElementType attackElement) { } */
     static GetElementResistDamage(attackUnit: BattleUnit, defenseUnit: BattleUnit, damage: Decimal, attackElement: TargetElementType): Decimal {
         if (attackElement === 0) return damage;
         const rate = Decimal.clamp(defenseUnit.GetProcessedElementResistRate(attackElement), Decimal.fromInt(-100), Decimal.fromInt(100)); // Math.Clamp(decimal)
         const result = damage.sub(damage.mul(rate.div(Decimal.fromInt(100))));
         return result.le(Decimal.Zero) ? Decimal.Zero : result;
     }
-    /** @rva 0x137DD90  private static Decimal GetDifficultyCorrectedDamage(BattleUnit attackUnit, BattleUnit defenseUnit, Decimal damage) { } */
+    /** @rva 0x13A4C40  private static Decimal GetDifficultyCorrectedDamage(BattleUnit attackUnit, BattleUnit defenseUnit, Decimal damage) { } */
     static GetDifficultyCorrectedDamage(attackUnit: BattleUnit, defenseUnit: BattleUnit, damage: Decimal): Decimal {
         // <>c__DisplayClass14_0 { charaParam }
         let result = damage;
@@ -289,7 +295,7 @@ export class BattleDamageCalculator {
         }
         return result;
     }
-    /** @rva 0x137C520  private static Decimal GetAddedBreakDamage(BattleUnit attackUnit, Decimal damage) { } */
+    /** @rva 0x13A33D0  private static Decimal GetAddedBreakDamage(BattleUnit attackUnit, Decimal damage) { } */
     static GetAddedBreakDamage(attackUnit: BattleUnit, damage: Decimal): Decimal {
         const p = attackUnit._BattleParameter;
         if (p instanceof CharacterParameter) {
@@ -298,7 +304,7 @@ export class BattleDamageCalculator {
         }
         return Decimal.Zero;
     }
-    /** @rva 0x137E450  public static Decimal GetProcessedBreakDamageRate(BattleUnit attackUnit, CharacterParameter charaParam) { } */
+    /** @rva 0x13A5300  public static Decimal GetProcessedBreakDamageRate(BattleUnit attackUnit, CharacterParameter charaParam) { } */
     static GetProcessedBreakDamageRate(attackUnit: BattleUnit, charaParam: CharacterParameter): Decimal {
         let rate = Decimal.fromInt(charaParam._BreakDamageRate).div(Decimal.fromInt(10));
         for (const addition of [0, 1]) {
@@ -312,7 +318,7 @@ export class BattleDamageCalculator {
         }
         return rate.le(Decimal.Zero) ? Decimal.Zero : rate;
     }
-    /** @rva 0x137C950  private static Decimal GetAppliedDamageOfBreakSituation(BattleUnit defenseUnit, Decimal damage, bool doForceToNormal = False) { } */
+    /** @rva 0x13A3800  private static Decimal GetAppliedDamageOfBreakSituation(BattleUnit defenseUnit, Decimal damage, bool doForceToNormal = False) { } */
     static GetAppliedDamageOfBreakSituation(defenseUnit: BattleUnit, damage: Decimal, doForceToNormal: boolean = false): Decimal {
         if (!defenseUnit._BreakPoint.get_HasBreakPoint()) return damage;
         let rate: Decimal;
@@ -321,19 +327,52 @@ export class BattleDamageCalculator {
         if (doForceToNormal) rate = BreakPoint.DamageRatioOnNormal;
         return damage.mul(rate);
     }
-    /** @rva 0x1380070  public static AffectedUnitNotice GetReflectionDamageResult(BattleUnit attackUnit, BattleUnit defenseUnit, Decimal damageBase, TargetElementType attackElement, BattleType battleType) { } */
-    static GetReflectionDamageResult(attackUnit: BattleUnit, defenseUnit: BattleUnit, damageBase: Decimal, attackElement: TargetElementType, battleType: BattleType): AffectedUnitNotice { return notPorted("BattleDamageCalculator.GetReflectionDamageResult", 0x1380070); }
-    /** @rva 0x137BFF0  private static Decimal DamageCutByPvpOrGvgSuppression(Decimal damage) { } */
+    /** @rva 0x13A6F20  public static AffectedUnitNotice GetReflectionDamageResult(BattleUnit attackUnit, BattleUnit defenseUnit, Decimal damageBase, TargetElementType attackElement, BattleType battleType) { } */
+    static GetReflectionDamageResult(attackUnit: BattleUnit, defenseUnit: BattleUnit, damageBase: Decimal, attackElement: TargetElementType, battleType: BattleType): AffectedUnitNotice {
+        const visualEffects = new Set<string>(); // HashSet<string>
+        let damage = BattleDamageCalculator.GetAppliedDamageOfBreakSituation(defenseUnit, damageBase, false);
+        damage = BattleDamageCalculator.GetDefenseCorrectedDamage(attackUnit, defenseUnit, damage, BattleDamageCalculator.ReflectionDamageDefenceCorrectedBaseType);
+        damage = BattleDamageCalculator.GetProcessedGiveDamage(attackUnit, defenseUnit, damage, attackElement, null!);
+        damage = BattleDamageCalculator.GetProcessedReceiveDamage(attackUnit, defenseUnit, damage);
+        damage = BattleDamageCalculator.GetElementResistDamage(attackUnit, defenseUnit, damage, attackElement);
+        const correlationEffect = new CorrelationEffect().ctor$BattleUnit_BattleUnit_TargetElementType(attackUnit, defenseUnit, attackElement);
+        const correlationDamageType = correlationEffect._DamageType;
+        damage = damage.mul(Decimal.fromFloat(correlationEffect._ElementDamageRatio));
+        // no critical roll for reflection damage
+        damage = BattleDamageCalculator.GetDifficultyCorrectedDamage(attackUnit, defenseUnit, damage);
+        damage = BattleDamageCalculator.GetProcessedFinalGiveDamage(attackUnit, defenseUnit, damage, null!);
+        if (battleType === 2 || battleType === 4) damage = BattleDamageCalculator.DamageCutByPvpOrGvgSuppression(damage);
+        damage = BattleDamageCalculator.DamageCutByShield(damage, defenseUnit);
+        damage = Decimal.max(Decimal.One, damage); // Math.Max(decimal, decimal)
+        let notice = new AffectedUnitNotice().ctor$int(defenseUnit._Id);
+        [notice, damage] = BattleDamageCalculator.DamageCutByDisableDamage(damage, defenseUnit, notice); // inlined in the game
+        let damageValue = damage.ceiling().toInt(); // (int)decimal.Ceiling(damage)
+        let barrierDamageValue = 0;
+        [notice, barrierDamageValue, damageValue] = BattleDamageCalculator.DamageCutByBarrier(damageValue, defenseUnit, notice);
+        const isBreak = defenseUnit._BreakPoint.get_IsBreak();
+        const damageNotice = AffectedUnitNotice.CreateByDamage(defenseUnit._Id, damageValue, 5 as DamageCategory, false, correlationDamageType, [...visualEffects], attackElement, isBreak);
+        let isMaxBreakBonus = false;
+        if (defenseUnit._BreakPoint.get_IsBreak()) isMaxBreakBonus = defenseUnit._BreakedDamageReceiveRate === Math.trunc(defenseUnit._BattleParameter._MaxBreakedDamageReceiveRate / 10);
+        for (const damageInfo of damageNotice.Damages) damageInfo._IsMaxBreakBonusWhenHit = isMaxBreakBonus;
+        if (!(barrierDamageValue > 0 && damageValue === 0)) notice = AffectedUnitNotice.op_Addition(notice, damageNotice);
+        if (barrierDamageValue > 0) {
+            const barrierNotice = AffectedUnitNotice.CreateByBarrierDamage(defenseUnit._Id, barrierDamageValue, 5 as DamageCategory, false, correlationDamageType, [...visualEffects], attackElement, isBreak);
+            for (const damageInfo of barrierNotice.BarrierDamages) damageInfo._IsMaxBreakBonusWhenHit = isMaxBreakBonus;
+            notice = AffectedUnitNotice.op_Addition(notice, barrierNotice);
+        }
+        return notice;
+    }
+    /** @rva 0x13A2EA0  private static Decimal DamageCutByPvpOrGvgSuppression(Decimal damage) { } */
     static DamageCutByPvpOrGvgSuppression(damage: Decimal): Decimal {
         const model = CalculationPointPolicyMstReader.GetModelByCoefficientName("damageSuppresionRatio");
         return damage.mul(Decimal.One.sub(Decimal.fromInt(model.get_Value()).div(Decimal.fromInt(1000))));
     }
-    /** @rva 0x1381580  private static Decimal SlipDamageCutByPvpOrGvgSuppression(Decimal damage) { } */
+    /** @rva 0x13A8430  private static Decimal SlipDamageCutByPvpOrGvgSuppression(Decimal damage) { } */
     static SlipDamageCutByPvpOrGvgSuppression(damage: Decimal): Decimal {
         const model = CalculationPointPolicyMstReader.GetModelByCoefficientName("damageSuppresionRatio");
         return damage.mul(Decimal.One.sub(Decimal.fromInt(model.get_Value()).div(Decimal.fromInt(1000))));
     }
-    /** @rva 0x137C160  private static Decimal DamageCutByShield(Decimal damage, BattleUnit defenseUnit) { } */
+    /** @rva 0x13A3010  private static Decimal DamageCutByShield(Decimal damage, BattleUnit defenseUnit) { } */
     static DamageCutByShield(damage: Decimal, defenseUnit: BattleUnit): Decimal {
         // <>c__DisplayClass21_0 { defenseUnit }
         const shields = defenseUnit._Condition._StateList
@@ -347,7 +386,7 @@ export class BattleDamageCalculator {
         }
         return damage.mul(Decimal.fromFloat(ratio));
     }
-    /** @rva 0x137BC90  private static ValueTuple<AffectedUnitNotice, int, int> DamageCutByBarrier(int damageValue, BattleUnit defenseUnit, AffectedUnitNotice notice) { } */
+    /** @rva 0x13A2B40  private static ValueTuple<AffectedUnitNotice, int, int> DamageCutByBarrier(int damageValue, BattleUnit defenseUnit, AffectedUnitNotice notice) { } */
     static DamageCutByBarrier(damageValue: int, defenseUnit: BattleUnit, notice: AffectedUnitNotice): [AffectedUnitNotice, int, int] {
         const condition = defenseUnit._Condition;
         if (0 < condition._BarrierEndurance) {
@@ -376,7 +415,7 @@ export class BattleDamageCalculator {
         }
         return [notice, 0, damageValue];
     }
-    /** @rva 0x137B110  public static AffectedUnitNoticeBundle CalcFinalDamageNoticeBundle(BattleUnit userUnit, AffectedUnitNoticeBundle noticeBundle, GameDirectorBase gameDirector) { } */
+    /** @rva 0x13A1FC0  public static AffectedUnitNoticeBundle CalcFinalDamageNoticeBundle(BattleUnit userUnit, AffectedUnitNoticeBundle noticeBundle, GameDirectorBase gameDirector) { } */
     static CalcFinalDamageNoticeBundle(userUnit: BattleUnit, noticeBundle: AffectedUnitNoticeBundle, gameDirector: GameDirectorBase): AffectedUnitNoticeBundle {
         // <>c__DisplayClass23_0 { userUnit }
         const affectedUnitNoticeBundle = new AffectedUnitNoticeBundle().ctor();
@@ -415,15 +454,15 @@ export class BattleDamageCalculator {
         }
         return affectedUnitNoticeBundle;
     }
-    /** @rva 0x1381490  private static bool IsDamageDisabled(BattleUnit unit) { } */
+    /** @rva 0x13A8340  private static bool IsDamageDisabled(BattleUnit unit) { } */
     static IsDamageDisabled(unit: BattleUnit): boolean {
         return unit._Condition._StateList.some(state => state instanceof UniqueEnemy639002UnitState && state.IsActive$BattleUnit(unit)); // DisplayClass24_0.b__0
     }
-    /** @rva 0x137E080  private static Decimal GetDisabledDamage(Decimal damage, BattleUnit defenseUnit) { } */
+    /** @rva 0x13A4F30  private static Decimal GetDisabledDamage(Decimal damage, BattleUnit defenseUnit) { } */
     static GetDisabledDamage(damage: Decimal, defenseUnit: BattleUnit): Decimal {
         return BattleDamageCalculator.IsDamageDisabled(defenseUnit) ? Decimal.Zero : damage;
     }
-    /** @rva 0x137BEE0  private static ValueTuple<AffectedUnitNotice, Decimal> DamageCutByDisableDamage(Decimal damage, BattleUnit defenseUnit, AffectedUnitNotice notice) { } */
+    /** @rva 0x13A2D90  private static ValueTuple<AffectedUnitNotice, Decimal> DamageCutByDisableDamage(Decimal damage, BattleUnit defenseUnit, AffectedUnitNotice notice) { } */
     static DamageCutByDisableDamage(damage: Decimal, defenseUnit: BattleUnit, notice: AffectedUnitNotice): [AffectedUnitNotice, Decimal] {
         if (BattleDamageCalculator.IsDamageDisabled(defenseUnit)) {
             notice = AffectedUnitNotice.op_Addition(notice, AffectedUnitNotice.CreateByDisabledDamageHit(defenseUnit._Id));
@@ -431,7 +470,7 @@ export class BattleDamageCalculator {
         }
         return [notice, damage];
     }
-    /** @rva 0x13816F0  private static void .cctor() { } */
+    /** @rva 0x13A85A0  private static void .cctor() { } */
     static cctor(): void {
         BattleDamageCalculator.BreakDamageDefenceCorrectedBaseType = 1 as DamageBaseType;
         BattleDamageCalculator.ReflectionDamageDefenceCorrectedBaseType = 2 as DamageBaseType;

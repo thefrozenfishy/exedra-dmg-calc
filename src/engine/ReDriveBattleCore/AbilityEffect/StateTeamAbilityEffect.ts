@@ -1,4 +1,4 @@
-// 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
+// 1:1 port of ReDriveBattleCore (game 3.21.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
 import { isImpl, notPorted } from "../../runtime";
@@ -14,13 +14,13 @@ import type { List } from "../../runtime";
 export class StateTeamAbilityEffect extends StateAbilityEffect {
     /** 0x68 public ITargetTeam.TeamTargetType TeamTargetType */
     TeamTargetType: ITargetTeam_TeamTargetType = 0 as ITargetTeam_TeamTargetType;
-    /** @rva 0x1902AC0  protected void .ctor() { } */
+    /** @rva 0x1931590  protected void .ctor() { } */
     ctor(): this {
         this.TeamTargetType = 2 as ITargetTeam_TeamTargetType;
         super.ctor();
         return this;
     }
-    /** @rva 0x1902920  public void .ctor(AbilityEffectInfo info, UnitStateBase giveUnitState, bool isIncludeDeadUnitInTarget) { } */
+    /** @rva 0x19313F0  public void .ctor(AbilityEffectInfo info, UnitStateBase giveUnitState, bool isIncludeDeadUnitInTarget) { } */
     ctor$AbilityEffectInfo_UnitStateBase_bool(info: AbilityEffectInfo, giveUnitState: UnitStateBase, isIncludeDeadUnitInTarget: boolean): this {
         this.TeamTargetType = 2 as ITargetTeam_TeamTargetType;
         super.ctor$AbilityEffectInfo_UnitStateBase_bool(info, giveUnitState, isIncludeDeadUnitInTarget); // inlined in the game
@@ -30,7 +30,7 @@ export class StateTeamAbilityEffect extends StateAbilityEffect {
         }
         return this;
     }
-    /** @rva 0x1902520 slot 4  public override void SelectTargets(BattleUnit userUnit, Dictionary<int, BattleUnit> targetUnitDic, int selectFriendUnitId, int attackTargetId = 0) { } */
+    /** @rva 0x1930FF0 slot 4  public override void SelectTargets(BattleUnit userUnit, Dictionary<int, BattleUnit> targetUnitDic, int selectFriendUnitId, int attackTargetId = 0) { } */
     SelectTargets(userUnit: BattleUnit, targetUnitDic: Dictionary<int, BattleUnit>, selectFriendUnitId: int, attackTargetId?: int /* = 0 */): void {
         // <>c__DisplayClass3_0: 0x10 userUnit
         this._TargetUnitIdList = [];

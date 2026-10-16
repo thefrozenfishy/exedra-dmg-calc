@@ -251,14 +251,13 @@
 
         <!-- Max damage -->
         <section class="card section-card">
-            <h2 class="section-title">Max Damage</h2>
+            <h2 class="section-title">Max Damage <span v-if="maxDmgBusy" class="title-sub">· calculating…</span></h2>
             <p class="hint-text">The best case against wave {{ waveIdx + 1 }}: every buff and debuff listed under "Buffs
-                &amp;
-                Debuffs" below is active at the same time, at full stacks, with its conditions met (for tiered effects
-                that
-                exclude each other, like "while 5 / 4 / ... / 1 enemies remain" or Light Chain Lv 1-5, only the
-                strongest
-                tier). Each skill is then run through the battle engine's damage formula.</p>
+                &amp; Debuffs" below is active at the same time, at full stacks, with its conditions met. Effects that
+                can't count together count once, whichever gives the most damage: tiers that exclude each other (like
+                "while 5 / 4 / ... / 1 enemies remain" or Light Chain Lv 1-5), and the same kind of buff from a skill
+                and the switch skill replacing it, or from different follow-ups. Each skill is then launched in the
+                game's battle code against this wave.</p>
 
             <p v-if="!teamKiokus.length" class="empty-hint">Add team members to calculate damage.</p>
             <template v-else-if="maxDmg">
@@ -339,9 +338,8 @@
                 the
                 ones that are on: buffs on {{ dealerName }} (green) and debuffs on the enemies (red). Click one to turn
                 it off
-                or back on; lower its stacks to use fewer. Tiered effects count one tier at a time: click another tier
-                to use it
-                instead.</p>
+                or back on; lower its stacks to use fewer. Tiered effects and alternatives count one at a time (the one that gives the most damage):
+                click another one to use it instead.</p>
 
             <div class="effects-summary">
                 <span class="legend legend-buff">{{ effectCounts.buff }} buff{{ effectCounts.buff === 1 ? '' : 's' }} on
@@ -457,6 +455,25 @@
                 </div>
             </div>
 
+            <div v-if="linkRaid" class="raid-panel">
+                <div class="raid-head">
+                    <span class="filters-heading">Link Raid</span>
+                    <span>Difficulty {{ linkRaid.difficulty }} · {{ linkRaid.limitRoundCount }}-round limit</span>
+                </div>
+                <div class="raid-row">
+                    <label class="field" title="The boss's HP when you join: the raid's shared HP after the other participants' damage (empty = a fresh raid at full HP). Offline there are no other participants, so their damage does not come in during the battle.">
+                        <span class="field-label">Boss HP at start</span>
+                        <input v-model.number="linkRaidBossHp" type="number" min="1" :max="linkRaidFullHp"
+                            :placeholder="String(linkRaidFullHp)" />
+                    </label>
+                    <span class="row-hint">of {{ fmt(linkRaidFullHp) }}</span>
+                </div>
+                <div v-if="linkRaidBonuses.length" class="raid-row">
+                    <span class="row-hint">Season buffs (each applies to its role / element):</span>
+                    <span v-for="b in linkRaidBonuses" :key="b" class="row-hint">· {{ b }}</span>
+                </div>
+            </div>
+
             <div class="run-sim-row">
                 <button class="btn btn-accent" @click="runSimulation" :disabled="!canRun">Run Simulation</button>
                 <button v-if="showSolver" class="btn btn-accent" @click="solveFromHere"
@@ -497,6 +514,9 @@
 
             <div v-if="pending || battleResult" class="sim-status">
                 <span class="result-pill" :class="pending ? 'waiting' : battleResult">{{ battleResultText }}</span>
+                <span v-if="!pending && battleResult && linkRaid && battle" class="row-hint"
+                    title="MultiRaidGameDirector.TotalDamage: every damage value dealt to the boss (overkill included), what the game reports as this battle's damage">{{
+                        fmt(battle.raidTotalDamage ?? 0) }} damage to the boss</span>
                 <span v-if="!pending && battleResult && raid && battle" class="row-hint"
                     title="Approximation: 20 points per AV of elapsed time (the game computes the real score on the server)">{{
                         battle.teamPointsUsed.toLocaleString() }} team points used ({{ Math.round(battle.elapsed) }}
@@ -562,7 +582,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, markRaw, nextTick, reactive, ref, shallowRef, watch } from 'vue'
+import { computed, markRaw, nextTick, reactive, ref, shallowRef, watch, onBeforeUnmount } from 'vue'
 import { useTeamStore } from '../store/singleTeamStore'
 import { useSetting } from '../store/settingsStore'
 import CharacterEditor from '../components/CharacterEditor.vue'
@@ -579,17 +599,18 @@ import { PendingDecision, type RngDecision, type RngEvent, type RngMode } from '
 import { toast } from 'vue3-toastify'
 import { TargetType, type BattleSnapshot, type SkillDetail } from '../types/KiokuTypes'
 import { elementMap } from '../types/enums'
-import { stageWaves, stageWaveMeta, summonTemplates, wavePositionIds, enemyName, breakMstOf, ELEMENT_KEYS, questStages, soloRaidInfo, type QuestEnemyAppearance, type ModeChangeInfo } from '../models/PvE'
-import { createPvEBattle, stageBattleType, waveStartUnits } from '../models/PvEBattle'
+import { stageWaves, stageWaveMeta, summonTemplates, wavePositionIds, enemyName, breakMstOf, ELEMENT_KEYS, questStages, soloRaidInfo, isSoloRaidStage, multiRaidInfo, type QuestEnemyAppearance, type ModeChangeInfo } from '../models/PvE'
+import { stageBattleType, waveStartUnits } from '../models/PvEBattle'
 import passiveMstJson from '../assets/base_data/getPassiveSkillMstList.json'
 import type { RaidCarry } from '../models/PvPBattle'
 import { getScoreAttackStage } from '../models/PvEScore'
-import { computeMaxDamage, isEffectValueType, type MaxDmgEffect, type MaxDmgResult, type MemberDamage, type SkillDamage } from '../models/MaxDamage'
+import { isEffectValueType, type MaxDmgEffect, type MaxDmgResult, type MemberDamage, type SkillDamage } from '../models/MaxDamage'
 import { buildSlotKioku, buildPvEExport, parsePvEExport, downloadText, exportToText, rekeyPicks, type PvEExport } from '../utils/pvpExport'
 import { describePvESetup, sanitizePvESetup, stagePath, type PvESetup } from '../utils/pveSetup'
 import { effectDescription, effectName, effectRestriction, effectValue } from '../utils/effectText'
 import { passiveDetailsByMstId, portraits } from '../utils/helpers'
-import type { PvPBattle } from '../models/PvPBattle'
+import { EngineBattle } from '../battle/EngineBattle'
+import type { MaxDamageMessage, MaxDamageRequest } from '../workers/maxDamageWorker'
 import type { PvPKioku } from '../models/PvPKioku'
 
 const team = useTeamStore()
@@ -713,14 +734,14 @@ const memberId = (pos: number) => filledSlots.value[pos]?.[0].main?.id
 // ---- max damage ----
 const excluded = reactive(new Set<string>())
 const stacks = reactive(new Map<string, number>())
-// A rung of a tier ladder (MaxDmgEffect.tier, one rung counts at a time): clicking the rung in use turns the whole
-// ladder off; clicking any other rung uses that one (the stronger rungs above it are turned off).
+// A rung of a tier ladder (MaxDmgEffect.tier, one rung counts at a time; the engine uses the rung that gives the most
+// damage): clicking the rung in use turns the whole ladder off; clicking any other rung uses that one only.
 const toggleEffect = (k: string) => {
     const e = maxDmg.value?.effects.find(x => x.key === k)
     if (e?.tier) {
         const inUse = !excluded.has(k) && !e.tierUsed && !!e.reach
         if (inUse) e.tier.keys.forEach(key => excluded.add(key))
-        else e.tier.keys.forEach((key, rank) => { if (rank < e.tier!.rank) excluded.add(key); else excluded.delete(key) })
+        else e.tier.keys.forEach(key => { if (key !== k) excluded.add(key); else excluded.delete(key) })
         return
     }
     if (excluded.has(k)) excluded.delete(k); else excluded.add(k)
@@ -731,19 +752,44 @@ const setStacks = (k: string, v: number, max: number) => {
 }
 const resetEffects = () => { excluded.clear(); stacks.clear() }
 
-const maxDmg = computed<MaxDmgResult | undefined>(() => {
-    if (!teamKiokus.value.length || !wave.value.length) return undefined
+// Computed in a worker (workers/maxDamageWorker.ts: battle/EngineMaxDamage, the game's own battle code); the last
+// result stays on screen while a new one is computed (`maxDmgBusy`).
+const maxDmg = shallowRef<MaxDmgResult | undefined>()
+const maxDmgBusy = ref(false)
+let maxDmgWorker: Worker | undefined
+let maxDmgReq = 0
+function requestMaxDamage() {
+    if (!teamKiokus.value.length || !wave.value.length) { maxDmg.value = undefined; maxDmgBusy.value = false; return }
     try {
-        return computeMaxDamage(teamKiokus.value, wave.value, dealerPos.value, {
-            battleType: stageBattleType(stageId.value),
-            excluded: new Set(excluded), stacks: new Map(stacks),
-            broken: broken.value, breakRate: breakRate.value, mainTargetIdx: mainTargetIdx.value,
-        })
+        if (!maxDmgWorker) {
+            maxDmgWorker = new Worker(new URL('../workers/maxDamageWorker.ts', import.meta.url), { type: 'module' })
+            maxDmgWorker.onmessage = (e: MessageEvent<MaxDamageMessage>) => {
+                if (e.data.id !== maxDmgReq) return
+                maxDmgBusy.value = false
+                if (e.data.error) { console.warn('Max damage failed', e.data.error); maxDmg.value = undefined; return }
+                maxDmg.value = markRaw(e.data.result!)
+            }
+            maxDmgWorker.onerror = (e) => { console.warn('Max damage worker failed', e.message); maxDmgBusy.value = false }
+        }
+        maxDmgBusy.value = true
+        maxDmgWorker.postMessage({
+            id: ++maxDmgReq,
+            slots: JSON.parse(JSON.stringify(filledSlots.value.map(([s]) => s))),
+            stageId: stageId.value, waveIdx: Math.min(waveIdx.value, waveMetas.value.length - 1),
+            wave: JSON.parse(JSON.stringify(wave.value)), dealerPos: dealerPos.value,
+            opts: {
+                battleType: stageBattleType(stageId.value),
+                excluded: new Set(excluded), stacks: new Map(stacks),
+                broken: [...broken.value], breakRate: [...breakRate.value], mainTargetIdx: mainTargetIdx.value,
+            },
+        } satisfies MaxDamageRequest)
     } catch (e) {
         console.warn('Max damage failed', e)
-        return undefined
+        maxDmgBusy.value = false
     }
-})
+}
+watch([teamKiokus, wave, dealerPos, () => [...excluded], () => [...stacks], broken, breakRate, mainTargetIdx], requestMaxDamage, { deep: true, immediate: true })
+onBeforeUnmount(() => maxDmgWorker?.terminate())
 const dealer = computed(() => maxDmg.value?.members[dealerPos.value])
 const dealerName = computed(() => dealer.value?.name ?? 'the damage dealer')
 const skillOf = (m: MemberDamage, t: TargetType) => m.skills.find(s => s.type === t)
@@ -785,7 +831,11 @@ function effectStatus(e: MaxDmgEffect): { status: EffectStatus, statusText: stri
             : { status: 'na', statusText: `A drawback on ${e.casterName} itself, not on enemies` }
     }
     if (excluded.has(e.key)) return { status: 'off', statusText: 'Turned off: click to turn on' }
-    if (e.tierUsed) return { status: 'alt', statusText: 'Only one tier is active at a time (its conditions exclude each other)' }
+    if (e.tierUsed) return {
+        status: 'alt', statusText: e.tier?.reason === 'alternative'
+            ? 'Same kind of effect from a skill that stands in for another (switch skill / other follow-up): only the strongest counts'
+            : 'Only one tier is active at a time (its conditions exclude each other)',
+    }
     if (!e.reach) return { status: 'off', statusText: 'Set to 0 stacks' }
     if (e.side === 'ally') {
         return e.reach.dealer
@@ -864,7 +914,7 @@ const saScoreTitle = computed(() => `${difficultyScore.value} + 20 * (${saDamage
 
 // ---- battle simulator ----
 // shallowRef + markRaw: keep the engine out of Vue reactivity (object identity matters, see PvP page).
-const battle = shallowRef<PvPBattle | null>(null)
+const battle = shallowRef<EngineBattle | null>(null)
 const battleOutput = ref<BattleSnapshot[]>([])
 const battleResult = ref<'win' | 'lose' | undefined>()
 const canRun = computed(() => !!teamKiokus.value.length && !!stageId.value)
@@ -945,6 +995,16 @@ const battleResultText = computed(() => pending.value ? 'Waiting for your decisi
 
 // ---- Solo Raid: party buff, round limit, attempts carrying over (PvEBattle / PvPBattle.raidCarry) ----
 const raid = computed(() => stageId.value ? soloRaidInfo(stageId.value) : undefined)
+// Link Raid (MultiRaidGameDirector): the boss's HP when you join, empty = full (a fresh raid).
+const linkRaid = computed(() => stageId.value ? multiRaidInfo(stageId.value) : undefined)
+const linkRaidFullHp = computed(() => linkRaid.value ? EngineBattle.multiRaidBossHp(stageId.value) : 0)
+const linkRaidBossHp = ref<number | ''>('')
+watch(stageId, () => { linkRaidBossHp.value = '' })
+watch(linkRaidBossHp, () => { if (hasRun()) runSimulation(); else buildBattle() })
+const linkRaidBonuses = computed(() => (linkRaid.value?.bonusPassiveIds ?? []).map(id => {
+    const p = (passiveMstJson as any[]).find(x => x.passiveSkillMstId === id)
+    return p ? String(p.description).replace(/<br>/g, ' ') : `#${id}`
+}))
 const partyBuffId = useSetting<number>('pveRaidPartyBuff', 0)
 // Solo Raid party buff choices: the buffs each gives every ally, and how it earns Vanguard points.
 const partyBuffViews = computed(() => (raid.value?.partyBuffs ?? []).map(p => ({
@@ -969,8 +1029,9 @@ const passiveNames = new Map<number, { name: string, description: string }>((pas
 const passiveInfo = (id: number) => passiveNames.get(id) ?? { name: `Passive ${id}`, description: '' }
 
 function nextAttempt() {
-    if (!battle.value?.isOver) return
-    raidAttempts.value = [...raidAttempts.value, battle.value.raidCarry()]
+    const carry = battle.value?.isOver ? battle.value.raidCarry() : undefined
+    if (!carry) return
+    raidAttempts.value = [...raidAttempts.value, carry]
     decisions.value = new Map()
     seed.value = Math.floor(Math.random() * 2 ** 32)
     runSimulation()
@@ -985,15 +1046,21 @@ watch(partyBuffId, () => { if (hasRun()) runSimulation(); else buildBattle() })
 // Set for the first run of an imported file: its picks may sit at shifted indices (engine changes since the export).
 let relaxedPicksRun = false
 
-function newBattle(): PvPBattle {
-    // Fresh units: a battle mutates its units' state.
+function newBattle(): EngineBattle {
+    // Fresh units: a battle mutates its units' state. The 1:1 game engine (src/engine) through src/battle/EngineBattle.
     const allies = filledSlots.value.map(([s]) => buildSlotKioku(s))
     const carry = raidAttempts.value[raidAttempts.value.length - 1]
-    return markRaw(createPvEBattle(allies, stageId.value, seed.value, 0, {
-        rngMode: rngMode.value, decisions: decisions.value,
+    const opts = {
+        seed: seed.value, rngMode: rngMode.value, decisions: decisions.value, relaxedPicks: relaxedPicksRun,
         manualTargeting: solverControl.value ? solverControl.value.control === 'manual' : targetMode.value === 'manual',
-        partyBuffId: partyBuffId.value || undefined, raidCarry: carry, relaxedPicks: relaxedPicksRun,
-    }))
+    }
+    if (linkRaid.value) {
+        const bossHp = linkRaidBossHp.value && linkRaidBossHp.value > 0 ? Math.min(linkRaidBossHp.value, linkRaidFullHp.value) : undefined
+        return markRaw(new EngineBattle({ kind: 'multiRaid', allies, stageId: stageId.value, bossHp }, opts))
+    }
+    return markRaw(isSoloRaidStage(stageId.value)
+        ? new EngineBattle({ kind: 'soloRaid', allies, stageId: stageId.value, partyBuffId: partyBuffId.value || undefined, carry }, opts)
+        : new EngineBattle({ kind: 'quest', allies, stageId: stageId.value }, opts))
 }
 
 // Initial state only (no simulation yet).
@@ -1008,7 +1075,7 @@ function buildBattle() {
     }
     try {
         battle.value = newBattle()
-        battleOutput.value = [battle.value.getCurrentState()]
+        battleOutput.value = [battle.value.initialState]
     } catch (e) {
         console.warn('Could not build battle', e)
         battle.value = null
@@ -1065,7 +1132,7 @@ watch(targetMode, v => { if (v !== 'manual') solverControl.value = null })
 
 function runSimulation() {
     if (!canRun.value || !waves.value.length) return buildBattle()
-    let b: PvPBattle
+    let b: EngineBattle
     try {
         b = newBattle()
     } catch (e) {
@@ -1074,7 +1141,7 @@ function runSimulation() {
     }
     battle.value = b
     pending.value = null
-    const states: BattleSnapshot[] = [b.getCurrentState()]
+    const states: BattleSnapshot[] = [b.initialState]
     const ends: number[] = []
     simStepAv = []
     let t = 0

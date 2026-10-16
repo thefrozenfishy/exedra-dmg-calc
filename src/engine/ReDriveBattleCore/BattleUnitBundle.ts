@@ -1,4 +1,4 @@
-// 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
+// 1:1 port of ReDriveBattleCore (game 3.21.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
 import { bindDelegate, listRemove, notPorted } from "../runtime";
@@ -16,7 +16,7 @@ export class BattleUnitBundle {
     enemyList: List<BattleUnit> = null!;
     /** 0x28 public List<BattleUnit> activeList */
     activeList: List<BattleUnit> = null!;
-    /** @rva 0x14907C0  public void AddUnit(BattleUnit unit) { } */
+    /** @rva 0x14B6A00  public void AddUnit(BattleUnit unit) { } */
     AddUnit(unit: BattleUnit): void {
         this.dic.set(unit.Id, unit); // Dictionary.Add
         const list = unit.Team === BattleUnit_TeamType.Ally ? this.allyList : this.enemyList;
@@ -24,7 +24,7 @@ export class BattleUnitBundle {
         if (!unit.IsDead) this.AddToActiveUnitList(unit);
         unit.add_onAliveStateChanged(bindDelegate(this, this.OnUnitAliveStateChanged));
     }
-    /** @rva 0x1490EA0  public void RemoveUnit(int unitId) { } */
+    /** @rva 0x14B70E0  public void RemoveUnit(int unitId) { } */
     RemoveUnit$int(unitId: int): void {
         const unit = this.dic.get(unitId);
         if (unit === undefined) return;
@@ -34,7 +34,7 @@ export class BattleUnitBundle {
         if (this.activeList.includes(unit)) this.RemoveFromActiveUnitList(unit);
         unit.remove_onAliveStateChanged(bindDelegate(this, this.OnUnitAliveStateChanged));
     }
-    /** @rva 0x1491010  public void RemoveUnit(BattleUnit unit) { } */
+    /** @rva 0x14B7250  public void RemoveUnit(BattleUnit unit) { } */
     RemoveUnit$BattleUnit(unit: BattleUnit): void {
         this.dic.delete(unit.Id);
         const list = unit.Team === BattleUnit_TeamType.Ally ? this.allyList : this.enemyList;
@@ -42,11 +42,11 @@ export class BattleUnitBundle {
         if (this.activeList.includes(unit)) this.RemoveFromActiveUnitList(unit);
         unit.remove_onAliveStateChanged(bindDelegate(this, this.OnUnitAliveStateChanged)); // inlined in the game
     }
-    /** @rva 0x1490BB0  public void RemoveAllEnemyUnits() { } */
+    /** @rva 0x14B6DF0  public void RemoveAllEnemyUnits() { } */
     RemoveAllEnemyUnits(): void {
         for (const unit of [...this.enemyList]) this.RemoveUnit$BattleUnit(unit); // ToList() copy; call target 0x1491010
     }
-    /** @rva 0x1490AF0  private void OnUnitAliveStateChanged(BattleUnit unit) { } */
+    /** @rva 0x14B6D30  private void OnUnitAliveStateChanged(BattleUnit unit) { } */
     OnUnitAliveStateChanged(unit: BattleUnit): void {
         if (unit.IsDead && this.activeList.includes(unit)) {
             this.RemoveFromActiveUnitList(unit);
@@ -54,7 +54,7 @@ export class BattleUnitBundle {
         }
         if (!unit.IsDead && !this.activeList.includes(unit)) this.AddToActiveUnitList(unit); // inlined in the game
     }
-    /** @rva 0x1490510  private void AddToActiveUnitList(BattleUnit newUnit) { } */
+    /** @rva 0x14B6750  private void AddToActiveUnitList(BattleUnit newUnit) { } */
     AddToActiveUnitList(newUnit: BattleUnit): void {
         if (this.activeList.includes(newUnit)) return;
         // the game builds a new list (copy + add) so running enumerations of the old one are not disturbed
@@ -63,14 +63,14 @@ export class BattleUnitBundle {
         for (const u of old) this.activeList.push(u);
         this.activeList.push(newUnit);
     }
-    /** @rva 0x1490CD0  private void RemoveFromActiveUnitList(BattleUnit removeUnit) { } */
+    /** @rva 0x14B6F10  private void RemoveFromActiveUnitList(BattleUnit removeUnit) { } */
     RemoveFromActiveUnitList(removeUnit: BattleUnit): void {
         if (!this.activeList.includes(removeUnit)) return;
         const old = this.activeList;
         this.activeList = [];
         for (const u of old) if (u !== removeUnit) this.activeList.push(u);
     }
-    /** @rva 0x14908D0  public void OnDeserialized(StreamingContext _) { } */
+    /** @rva 0x14B6B10  public void OnDeserialized(StreamingContext _) { } */
     OnDeserialized(_: any /* StreamingContext */): void {
         for (const unit of this.dic.values()) {
             if (unit.Team === BattleUnit_TeamType.Ally) this.allyList.push(unit);
@@ -79,7 +79,7 @@ export class BattleUnitBundle {
             unit.add_onAliveStateChanged(bindDelegate(this, this.OnUnitAliveStateChanged));
         }
     }
-    /** @rva 0x1491130  public void .ctor() { } */
+    /** @rva 0x14B7370  public void .ctor() { } */
     ctor(): this {
         this.dic = new Map(); // capacity 16
         this.allyList = []; // capacity 5

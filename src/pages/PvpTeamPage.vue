@@ -118,6 +118,7 @@
                 <p>Just @TFF!</p>
             </div>
 
+            <SegmentedToggle v-model="battleRules" :options="RULE_OPTIONS" label="Rules" />
             <RngControls class="sim-rng" v-model:mode="rngMode" :seed="seed" :changed="decisions.size"
                 :disabled="!isFullBattle" @update:seed="setSeed" @reset="resetDecisions" />
 
@@ -144,14 +145,14 @@
 import { computed, markRaw, nextTick, ref, shallowRef, watch } from 'vue'
 import { usePvPStore } from '../store/singleTeamStore'
 import { BattleSnapshot, TeamSnapshot, Character } from '../types/KiokuTypes'
-import { PvPBattle } from '../models/PvPBattle'
-import { PvPTeam } from '../models/PvPTeam'
+import { EngineBattle } from '../battle/EngineBattle'
 import CharacterEditor from '../components/CharacterEditor.vue'
 import ImageActionsToolbar from '../components/ImageActionsToolbar.vue'
 import SavedTeamsPanel from '../components/SavedTeamsPanel.vue'
 import { useSavedTeams } from '../store/savedTeams'
 import BattleTimeline from '../components/BattleTimeline.vue'
 import RngControls from '../components/RngControls.vue'
+import SegmentedToggle from '../components/SegmentedToggle.vue'
 import { useSetting } from '../store/settingsStore'
 import type { RngDecision, RngEvent, RngMode } from '../models/BattleRng'
 import { toast } from 'vue3-toastify'
@@ -172,7 +173,7 @@ const isFullBattle = computed(() => team.slots[0].every(t => t?.main) && team.sl
 // shallowRef + markRaw: the battle must NOT become a deep Vue reactive proxy. The engine relies
 // on object identity (lastActor !== unit, Map/Set lookups, team.kiokuStates.includes(unit)), and
 // proxies vs raw objects made page runs differ from the same seed run anywhere else.
-const battleInstance = shallowRef<PvPBattle | null>(null)
+const battleInstance = shallowRef<EngineBattle | null>(null)
 
 // Shared with scripts/sim/replayExport.ts so an exported file replays with the same teams.
 function buildTeams(): [PvPKioku[], PvPKioku[]] {
@@ -185,14 +186,22 @@ const importInput = ref<HTMLInputElement | null>(null)
 
 // ---- RNG (see models/BattleRng.ts) ----
 const rngMode = useSetting<RngMode>('pvpRngMode', 'seed')
+// PvP (PvpGameDirector) or GvG (GvgGameDirector). In 3.19 the battle core treats both alike (every BattleType check is
+// "Pvp or Gvg": damage / DOT / heal / barrier suppression), with the same 15-round limit.
+const RULE_OPTIONS = [
+    { value: 'pvp', label: 'PvP', title: 'Arena rules (PvpGameDirector)' },
+    { value: 'gvg', label: 'GvG', title: 'Guild battle rules (GvgGameDirector). The game version this runs plays them the same as PvP: same damage, heal and barrier suppression, same 15-round limit.' },
+] as const
+const battleRules = useSetting<'pvp' | 'gvg'>('pvpBattleRules', 'pvp')
 const seed = ref(Math.floor(Math.random() * 2 ** 32))
 // Manual mode: rolls the user changed from their default, by roll index. Replayed from the start.
 const decisions = shallowRef(new Map<number, RngDecision>())
 
-function newBattle(): PvPBattle {
+function newBattle(): EngineBattle {
     const [alliedTeam, enemyTeam] = buildTeams()
-    return markRaw(new PvPBattle(new PvPTeam(alliedTeam, "Ally", true), new PvPTeam(enemyTeam, "Enemy"), false, seed.value,
-        { rngMode: rngMode.value, decisions: decisions.value }))
+    // the 1:1 game engine (src/engine) through the app adapter (src/battle/EngineBattle.ts)
+    return markRaw(new EngineBattle({ kind: "pvp", allies: alliedTeam, enemies: enemyTeam, gvg: battleRules.value === 'gvg' },
+        { seed: seed.value, rngMode: rngMode.value, decisions: decisions.value }))
 }
 
 // Initial state only (no simulation yet).
@@ -205,7 +214,7 @@ function rebuildBattle() {
     const battle = newBattle()
     battleInstance.value = battle
     if (import.meta.env.DEV) (window as any).__pvpBattle = battle // for debugging exports in dev
-    battleOutput.value = [battle.getCurrentState()]
+    battleOutput.value = [battle.initialState]
 }
 
 watch(team, () => {
@@ -220,6 +229,7 @@ function rerun() {
     else rebuildBattle()
 }
 watch(rngMode, rerun)
+watch(battleRules, rerun)
 
 function setSeed(v: number) {
     seed.value = v
@@ -326,7 +336,7 @@ function runSimulation() {
     battleInstance.value = battle
     // One entry per executed skill: turn actions, ultimates, extra actions, combo steps and
     // follow-ups each get their own "Action N" (executeNextAction returns them in order).
-    const states: BattleSnapshot[] = [battle.getCurrentState()]
+    const states: BattleSnapshot[] = [battle.initialState]
     for (let turn = 0; turn < SIM_TURNS && !battle.isOver; turn++) {
         try {
             states.push(...battle.executeNextAction())

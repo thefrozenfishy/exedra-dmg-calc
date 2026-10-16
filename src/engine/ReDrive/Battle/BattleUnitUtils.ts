@@ -25,6 +25,17 @@ export class BattleUnitUtils {
             positionId, activeSkillMstIds, specialAttackMstId, normalAttackMstId, networkUnit.passiveSkillInfoList);
     }
 
+    /** @rva 0xD24D00  public static BattleUnit CreateBattleCoreUnitFromNetworkUnitIdOverride(BattleUnit networkUnit, int idOverride, BattleUnit.TeamType teamType, int positionId, bool isPvpOrGvg = False) */
+    static CreateBattleCoreUnitFromNetworkUnitIdOverride(networkUnit: NetworkBattleUnit, idOverride: int, teamType: BattleUnit_TeamType, positionId: int, isPvpOrGvg: boolean = false): BattleUnit {
+        const mstId = networkUnit.battleUnitMstId;
+        const parameter = BattleUnitUtils.CreateCharParamFromNetworkUnit(networkUnit, isPvpOrGvg);
+        const activeSkillMstIds = networkUnit.attackInfoList.map(info => info.skillMstId); // <>c.b__2_0
+        const specialAttackMstId = networkUnit.specialAttackInfo!.skillMstId;
+        const normalAttackMstId = networkUnit.normalAttackInfo != null ? networkUnit.normalAttackInfo.skillMstId : 0;
+        return new BattleUnit().ctor$int_int_TeamType_CharacterParameter_int_int_int_int_PassiveSkillInfo(idOverride, mstId, teamType, parameter,
+            positionId, activeSkillMstIds, specialAttackMstId, normalAttackMstId, networkUnit.passiveSkillInfoList);
+    }
+
     /** @rva 0xD25170  private static CharacterParameter CreateCharParamFromNetworkUnit(BattleUnit networkUnit, bool isPvpOrGvg) */
     static CreateCharParamFromNetworkUnit(networkUnit: NetworkBattleUnit, isPvpOrGvg: boolean): CharacterParameter {
         // AriesSingleton<StyleMstModelRepository>.Instance.GetByKey(styleMstId): the client's style repository (same model)

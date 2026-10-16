@@ -1,4 +1,4 @@
-// 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
+// 1:1 port of ReDriveBattleCore (game 3.21.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
 import { notPorted } from "../../runtime";
@@ -27,68 +27,73 @@ export class CountUnitState extends UnitStateBase {  // implements INeutralState
     get DontRemoveOnPassiveSkillUserLeaveBattle(): boolean { return this.get_DontRemoveOnPassiveSkillUserLeaveBattle(); }
     get CountPoint(): int { return this.get_CountPoint(); }
     get MaxCountPoint(): int { return this.get_MaxCountPoint(); }
-    /** @rva 0x7E1AD0 slot 6  public override UnitStateBase.DirectionType get_Direction() { } */
+    /** @rva 0x7E0AD0 slot 6  public override UnitStateBase.DirectionType get_Direction() { } */
     get_Direction(): UnitStateBase_DirectionType { return 2 as UnitStateBase_DirectionType; /* asm: mov eax, 2; ret */ }
-    /** @rva 0x15B7150 slot 7  public override string get_IconName() { } */
+    /** @rva 0x15DD460 slot 7  public override string get_IconName() { } */
     get_IconName(): string {
         return "battle_icon_count";
     }
-    /** @rva 0x76F830 slot 9  public override bool get_ShowStateIconAttachedByPassiveSkill() { } */
+    /** @rva 0x76E830 slot 9  public override bool get_ShowStateIconAttachedByPassiveSkill() { } */
     get_ShowStateIconAttachedByPassiveSkill(): boolean { return true; /* asm: mov al, 1; ret */ }
-    /** @rva 0x15B7140 slot 8  public override int get_IconPriority() { } */
+    /** @rva 0x15DD450 slot 8  public override int get_IconPriority() { } */
     get_IconPriority(): int { return 50; /* asm: mov eax, 0x32; ret */ }
-    /** @rva 0x76F830 slot 11  public override bool get_ShowStateDetailAttachedByPassiveSkill() { } */
+    /** @rva 0x76E830 slot 11  public override bool get_ShowStateDetailAttachedByPassiveSkill() { } */
     get_ShowStateDetailAttachedByPassiveSkill(): boolean { return true; /* asm: mov al, 1; ret */ }
-    /** @rva 0x15B7140 slot 10  public override int get_DetailDisplayPriority() { } */
+    /** @rva 0x15DD450 slot 10  public override int get_DetailDisplayPriority() { } */
     get_DetailDisplayPriority(): int { return 50; /* asm: mov eax, 0x32; ret */ }
-    /** @rva 0x76F830 slot 12  public override bool get_IsDontShowAddStateFlip() { } */
+    /** @rva 0x76E830 slot 12  public override bool get_IsDontShowAddStateFlip() { } */
     get_IsDontShowAddStateFlip(): boolean { return true; /* asm: mov al, 1; ret */ }
-    /** @rva 0x759B30 slot 25  private AbilityEffectBase.TargetSideType ReDriveBattleCore.UnitState.INeutralState.get_TargetSide() { } */
+    /** @rva 0x758B30 slot 25  private AbilityEffectBase.TargetSideType ReDriveBattleCore.UnitState.INeutralState.get_TargetSide() { } */
     get_INeutralState$TargetSide(): AbilityEffectBase_TargetSideType { return 1 as AbilityEffectBase_TargetSideType; /* asm: mov eax, 1; ret */ }
-    /** @rva 0x902530 slot 28  private int ReDriveBattleCore.UnitState.IStateIconNumberDisplayable.get_StateIconNumber() { } */
+    /** @rva 0x9009C0 slot 28  private int ReDriveBattleCore.UnitState.IStateIconNumberDisplayable.get_StateIconNumber() { } */
     get_IStateIconNumberDisplayable$StateIconNumber(): int { return this.countPoint; /* asm: mov eax, dword ptr [rcx + 0x88]; ret */ }
-    /** @rva 0x76F830 slot 29  private bool ReDriveBattleCore.UnitState.IStateIconNumberDisplayable.get_IsShowZeroIfZero() { } */
+    /** @rva 0x76E830 slot 29  private bool ReDriveBattleCore.UnitState.IStateIconNumberDisplayable.get_IsShowZeroIfZero() { } */
     get_IStateIconNumberDisplayable$IsShowZeroIfZero(): boolean { return true; /* asm: mov al, 1; ret */ }
-    /** @rva 0x76F830 slot 26  public bool get_DontRemoveOnPassiveSkillUserLeaveBattle() { } */
+    /** @rva 0x76E830 slot 26  public bool get_DontRemoveOnPassiveSkillUserLeaveBattle() { } */
     get_DontRemoveOnPassiveSkillUserLeaveBattle(): boolean { return true; /* asm: mov al, 1; ret */ }
-    /** @rva 0x76F830 slot 20  public override bool get_ShouldRemoveStateByHolderDeath() { } */
+    /** @rva 0x76E830 slot 20  public override bool get_ShouldRemoveStateByHolderDeath() { } */
     get_ShouldRemoveStateByHolderDeath(): boolean { return true; /* asm: mov al, 1; ret */ }
-    /** @rva 0x902530  public int get_CountPoint() { } */
+    /** @rva 0x9009C0  public int get_CountPoint() { } */
     get_CountPoint(): int { return this.countPoint; /* asm: mov eax, dword ptr [rcx + 0x88]; ret */ }
-    /** @rva 0x15B7180  public int get_MaxCountPoint() { } */
+    /** @rva 0x15DD490  public int get_MaxCountPoint() { } */
     get_MaxCountPoint(): int { return 20; /* asm: mov eax, 0x14; ret */ }
-    /** @rva 0x15B3A90  public void .ctor() { } */
+    /** @rva 0x15D9DA0  public void .ctor() { } */
     ctor(): this {
         super.ctor();
         return this;
     }
-    /** @rva 0x15B3AA0  public void .ctor(AbilityEffectInfo info) { } */
+    /** @rva 0x15D9DB0  public void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
         super.ctor$AbilityEffectInfo(info);
         return this;
     }
-    /** @rva 0x15B70B0 slot 18  public override void OnAddedToCondition(BattleUnit unit, GameDirectorBase gameDirector) { } */
-    OnAddedToCondition(unit: BattleUnit, gameDirector: GameDirectorBase): void { return notPorted("CountUnitState.OnAddedToCondition", 0x15B70B0); }
-    /** @rva 0x15B70E0 slot 19  public override void OnRemovingFromCondition(BattleUnit unit, GameDirectorBase gameDirector) { } */
-    OnRemovingFromCondition(unit: BattleUnit, gameDirector: GameDirectorBase): void { return notPorted("CountUnitState.OnRemovingFromCondition", 0x15B70E0); }
-    /** @rva 0x15B6CB0 slot 23  public override List<BattleUnit> GetAIFilteredTargets(BattleUnit userUnit, List<BattleUnit> targetUnitList, SkillType skillType, RangeType effectRange, GameDirectorBase gameDirector) { } */
+    /** @rva 0x15DD3C0 slot 18  public override void OnAddedToCondition(BattleUnit unit, GameDirectorBase gameDirector) { } */
+    OnAddedToCondition(unit: BattleUnit, gameDirector: GameDirectorBase): void {
+        unit._Condition._MaxCountPoint = 20;
+    }
+    /** @rva 0x15DD3F0 slot 19  public override void OnRemovingFromCondition(BattleUnit unit, GameDirectorBase gameDirector) { } */
+    OnRemovingFromCondition(unit: BattleUnit, gameDirector: GameDirectorBase): void {
+        unit._Condition._CountPoint = 0;
+        unit._Condition._MaxCountPoint = 0;
+    }
+    /** @rva 0x15DCFC0 slot 23  public override List<BattleUnit> GetAIFilteredTargets(BattleUnit userUnit, List<BattleUnit> targetUnitList, SkillType skillType, RangeType effectRange, GameDirectorBase gameDirector) { } */
     GetAIFilteredTargets(userUnit: BattleUnit, targetUnitList: List<BattleUnit>, skillType: SkillType, effectRange: RangeType, gameDirector: GameDirectorBase): List<BattleUnit> {
         let list = targetUnitList.filter(x => !x.get_IsDead()); // <>c.b__33_0
         if (list.length > 0) list = list.filter(unit => !unit._Condition._StateList.some(s => s instanceof CountUnitState)); // b__33_1
         return list;
     }
-    /** @rva 0x15B6EE0 slot 24  public override AISkillTargetSelector.UnitFilterFuncOrder GetUnitFilterFuncOrder(BattleUnit userUnit, IEnumerable<BattleUnit> candidateUnits) { } */
+    /** @rva 0x15DD1F0 slot 24  public override AISkillTargetSelector.UnitFilterFuncOrder GetUnitFilterFuncOrder(BattleUnit userUnit, IEnumerable<BattleUnit> candidateUnits) { } */
     GetUnitFilterFuncOrder(userUnit: BattleUnit, candidateUnits: IEnumerable<BattleUnit>): AISkillTargetSelector_UnitFilterFuncOrder {
         const list: List<(a0: IEnumerable<BattleUnit>) => IEnumerable<BattleUnit>> = [];
         list.push(AISkillTargetSelector.UnitFilterByMainTarget);
         list.push(AISkillTargetSelector.UnitFilterWithMaxAtk);
         return new AISkillTargetSelector_UnitFilterFuncOrder().ctor$ListFuncIEnumerableBattleUnitIEnumerableBattleUnit(list);
     }
-    /** @rva 0x15B6C40 slot 21  public override bool CanAddTo(BattleUnit unit) { } */
+    /** @rva 0x15DCF50 slot 21  public override bool CanAddTo(BattleUnit unit) { } */
     CanAddTo(unit: BattleUnit): boolean {
         return !unit._Condition._StateList.some(s => s instanceof CountUnitState); // OfType<CountUnitState>().Any()
     }
-    /** @rva 0x15B7110 slot 27  public void RefreshStateIconNumber(BattleUnit unit) { } */
+    /** @rva 0x15DD420 slot 27  public void RefreshStateIconNumber(BattleUnit unit) { } */
     RefreshStateIconNumber(unit: BattleUnit): void {
         this.countPoint = unit._Condition._CountPoint;
     }

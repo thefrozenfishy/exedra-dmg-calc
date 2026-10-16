@@ -1,4 +1,4 @@
-// 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
+// 1:1 port of ReDriveBattleCore (game 3.21.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
 import { notPorted } from "../runtime";
@@ -23,25 +23,25 @@ export class GainSoloRaidBuffPointNotice {
     set AfterPoint(v: int) { this.set_AfterPoint(v); }
     get AbilitySource(): AbilitySourceType { return this.get_AbilitySource(); }
     set AbilitySource(v: AbilitySourceType) { this.set_AbilitySource(v); }
-    /** @rva 0x730C50  public string get_IconName() { } */
+    /** @rva 0x72FC50  public string get_IconName() { } */
     get_IconName(): string { return this._IconName; /* auto-property */ }
-    /** @rva 0x730C60  public void set_IconName(string value) { } */
+    /** @rva 0x72FC60  public void set_IconName(string value) { } */
     set_IconName(value: string): void { this._IconName = value; /* auto-property */ }
-    /** @rva 0x763820  public int get_GainPoint() { } */
+    /** @rva 0x762820  public int get_GainPoint() { } */
     get_GainPoint(): int { return this._GainPoint; /* auto-property */ }
-    /** @rva 0x8A2240  public void set_GainPoint(int value) { } */
+    /** @rva 0x8A1240  public void set_GainPoint(int value) { } */
     set_GainPoint(value: int): void { this._GainPoint = value; /* auto-property */ }
-    /** @rva 0x7F9800  public int get_AfterPoint() { } */
+    /** @rva 0x7F8800  public int get_AfterPoint() { } */
     get_AfterPoint(): int { return this._AfterPoint; /* auto-property */ }
-    /** @rva 0x7F9820  public void set_AfterPoint(int value) { } */
+    /** @rva 0x7F8820  public void set_AfterPoint(int value) { } */
     set_AfterPoint(value: int): void { this._AfterPoint = value; /* auto-property */ }
-    /** @rva 0x75ED70  public AbilitySourceType get_AbilitySource() { } */
+    /** @rva 0x75DD70  public AbilitySourceType get_AbilitySource() { } */
     get_AbilitySource(): AbilitySourceType { return this._AbilitySource; /* auto-property */ }
-    /** @rva 0x8A2230  public void set_AbilitySource(AbilitySourceType value) { } */
+    /** @rva 0x8A1230  public void set_AbilitySource(AbilitySourceType value) { } */
     set_AbilitySource(value: AbilitySourceType): void { this._AbilitySource = value; /* auto-property */ }
-    /** @rva 0x7305E0  public void .ctor() { } */
+    /** @rva 0x72F5E0  public void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
-    /** @rva 0x12D52F0  public void .ctor(string iconName, int gainPoint, int afterPoint, AbilitySourceType abilitySource) { } */
+    /** @rva 0x13066D0  public void .ctor(string iconName, int gainPoint, int afterPoint, AbilitySourceType abilitySource) { } */
     ctor$string_int_int_AbilitySourceType(iconName: string, gainPoint: int, afterPoint: int, abilitySource: AbilitySourceType): this {
         this._IconName = iconName;
         this._AfterPoint = afterPoint;

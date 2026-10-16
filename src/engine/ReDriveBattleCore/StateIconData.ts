@@ -1,4 +1,4 @@
-// 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
+// 1:1 port of ReDriveBattleCore (game 3.21.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
 import { notPorted } from "../runtime";
@@ -19,9 +19,9 @@ export class StateIconData {
     Priority: int = 0;
     /** 0x28 public bool IsShowStateCountZeroIfZero */
     IsShowStateCountZeroIfZero: boolean = false;
-    /** @rva 0x7305E0  public void .ctor() { } */
+    /** @rva 0x72F5E0  public void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
-    /** @rva 0x15C07B0  public void .ctor(UnitStateBase state, int stateCount, bool isShowStateCountZeroIfZero) { } */
+    /** @rva 0x15E4860  public void .ctor(UnitStateBase state, int stateCount, bool isShowStateCountZeroIfZero) { } */
     ctor$UnitStateBase_int_bool(state: UnitStateBase, stateCount: int, isShowStateCountZeroIfZero: boolean): this {
         if (state == null) return this;
         this.IconName = state.get_IconName();

@@ -1,4 +1,4 @@
-// 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
+// 1:1 port of ReDriveBattleCore (game 3.21.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
 import { f32, notPorted, union } from "../runtime";
@@ -27,47 +27,51 @@ export class AffectedUnitNotice {
     _RecoveryValue: int = 0;
     /** 0x38 private bool <IsReceivedRecovery>k__BackingField */
     _IsReceivedRecovery: boolean = false;
-    /** 0x3C private float <TurnGaugeVariation>k__BackingField */
+    /** 0x3C private int <ConsumeHpValue>k__BackingField */
+    _ConsumeHpValue: int = 0;
+    /** 0x39 private bool <IsConsumeHp>k__BackingField */
+    _IsConsumeHp: boolean = false;
+    /** 0x40 private float <TurnGaugeVariation>k__BackingField */
     _TurnGaugeVariation: float = 0;
-    /** 0x40 private bool <IsDead>k__BackingField */
+    /** 0x44 private bool <IsDead>k__BackingField */
     _IsDead: boolean = false;
-    /** 0x41 private bool <IsRevived>k__BackingField */
+    /** 0x45 private bool <IsRevived>k__BackingField */
     _IsRevived: boolean = false;
-    /** 0x42 private bool <IsSummoned>k__BackingField */
+    /** 0x46 private bool <IsSummoned>k__BackingField */
     _IsSummoned: boolean = false;
-    /** 0x43 private bool <IsResetBreakPoint>k__BackingField */
+    /** 0x47 private bool <IsResetBreakPoint>k__BackingField */
     _IsResetBreakPoint: boolean = false;
-    /** 0x44 private bool <CanNotAction>k__BackingField */
+    /** 0x48 private bool <CanNotAction>k__BackingField */
     _CanNotAction: boolean = false;
-    /** 0x45 private bool <FinishCanNotAction>k__BackingField */
+    /** 0x49 private bool <FinishCanNotAction>k__BackingField */
     _FinishCanNotAction: boolean = false;
-    /** 0x46 private bool <FinishLockTurnOrder>k__BackingField */
+    /** 0x4A private bool <FinishLockTurnOrder>k__BackingField */
     _FinishLockTurnOrder: boolean = false;
-    /** 0x47 private bool <IsBarrierAdded>k__BackingField */
+    /** 0x4B private bool <IsBarrierAdded>k__BackingField */
     _IsBarrierAdded: boolean = false;
-    /** 0x48 private int <BarrierValue>k__BackingField */
+    /** 0x4C private int <BarrierValue>k__BackingField */
     _BarrierValue: int = 0;
-    /** 0x4C private bool <IsBarrierAttacked>k__BackingField */
+    /** 0x50 private bool <IsBarrierAttacked>k__BackingField */
     _IsBarrierAttacked: boolean = false;
-    /** 0x4D private bool <IsBarrierDestroyed>k__BackingField */
+    /** 0x51 private bool <IsBarrierDestroyed>k__BackingField */
     _IsBarrierDestroyed: boolean = false;
-    /** 0x4E private bool <IsReceivedReflection>k__BackingField */
+    /** 0x52 private bool <IsReceivedReflection>k__BackingField */
     _IsReceivedReflection: boolean = false;
-    /** 0x4F private bool <IsCounterAttack>k__BackingField */
+    /** 0x53 private bool <IsCounterAttack>k__BackingField */
     _IsCounterAttack: boolean = false;
-    /** 0x50 private int <BreakedDamageReceiveRateUpValue>k__BackingField */
+    /** 0x54 private int <BreakedDamageReceiveRateUpValue>k__BackingField */
     _BreakedDamageReceiveRateUpValue: int = 0;
-    /** 0x54 private bool <IsBreakedDamageReceiveRateBecomeMax>k__BackingField */
+    /** 0x58 private bool <IsBreakedDamageReceiveRateBecomeMax>k__BackingField */
     _IsBreakedDamageReceiveRateBecomeMax: boolean = false;
-    /** 0x55 private bool <IsWeakElementAttacked>k__BackingField */
+    /** 0x59 private bool <IsWeakElementAttacked>k__BackingField */
     _IsWeakElementAttacked: boolean = false;
-    /** 0x58 private List<string> <DamageVisualEffectList>k__BackingField */
+    /** 0x60 private List<string> <DamageVisualEffectList>k__BackingField */
     _DamageVisualEffectList: List<string> = null!;
-    /** 0x60 private List<string> <NonDamageVisualEffectList>k__BackingField */
+    /** 0x68 private List<string> <NonDamageVisualEffectList>k__BackingField */
     _NonDamageVisualEffectList: List<string> = null!;
-    /** 0x68 private List<AffectedUnitNotice.AddStateInfo> <AddStateInfoList>k__BackingField */
+    /** 0x70 private List<AffectedUnitNotice.AddStateInfo> <AddStateInfoList>k__BackingField */
     _AddStateInfoList: List<AffectedUnitNotice_AddStateInfo> = null!;
-    /** 0x70 private List<string> <ReceivedSlipDamageEffectTypeList>k__BackingField */
+    /** 0x78 private List<string> <ReceivedSlipDamageEffectTypeList>k__BackingField */
     _ReceivedSlipDamageEffectTypeList: List<string> = null!;
     get AffectedUnitId(): int { return this.get_AffectedUnitId(); }
     set AffectedUnitId(v: int) { this.set_AffectedUnitId(v); }
@@ -81,6 +85,10 @@ export class AffectedUnitNotice {
     set RecoveryValue(v: int) { this.set_RecoveryValue(v); }
     get IsReceivedRecovery(): boolean { return this.get_IsReceivedRecovery(); }
     set IsReceivedRecovery(v: boolean) { this.set_IsReceivedRecovery(v); }
+    set ConsumeHpValue(v: int) { this.set_ConsumeHpValue(v); }
+    get ConsumeHpValue(): int { return this.get_ConsumeHpValue(); }
+    set IsConsumeHp(v: boolean) { this.set_IsConsumeHp(v); }
+    get IsConsumeHp(): boolean { return this.get_IsConsumeHp(); }
     get TurnGaugeVariation(): float { return this.get_TurnGaugeVariation(); }
     set TurnGaugeVariation(v: float) { this.set_TurnGaugeVariation(v); }
     get IsDead(): boolean { return this.get_IsDead(); }
@@ -124,121 +132,129 @@ export class AffectedUnitNotice {
     get ReceivedSlipDamageEffectTypeList(): List<string> { return this.get_ReceivedSlipDamageEffectTypeList(); }
     set ReceivedSlipDamageEffectTypeList(v: List<string>) { this.set_ReceivedSlipDamageEffectTypeList(v); }
     get IsReceivedDamage(): boolean { return this.get_IsReceivedDamage(); }
-    /** @rva 0x7364F0  public int get_AffectedUnitId() { } */
+    /** @rva 0x7354F0  public int get_AffectedUnitId() { } */
     get_AffectedUnitId(): int { return this._AffectedUnitId; /* auto-property */ }
-    /** @rva 0x739D00  public void set_AffectedUnitId(int value) { } */
+    /** @rva 0x738D00  public void set_AffectedUnitId(int value) { } */
     set_AffectedUnitId(value: int): void { this._AffectedUnitId = value; /* auto-property */ }
-    /** @rva 0x7369E0  public AffectedUnitNotice.DamageInfo get_BreakDamage() { } */
+    /** @rva 0x7359E0  public AffectedUnitNotice.DamageInfo get_BreakDamage() { } */
     get_BreakDamage(): AffectedUnitNotice_DamageInfo { return this._BreakDamage; /* auto-property */ }
-    /** @rva 0x736A50  public void set_BreakDamage(AffectedUnitNotice.DamageInfo value) { } */
+    /** @rva 0x735A50  public void set_BreakDamage(AffectedUnitNotice.DamageInfo value) { } */
     set_BreakDamage(value: AffectedUnitNotice_DamageInfo): void { this._BreakDamage = value; /* auto-property */ }
-    /** @rva 0x75F800  public bool get_IsReceivedAttack() { } */
+    /** @rva 0x75E800  public bool get_IsReceivedAttack() { } */
     get_IsReceivedAttack(): boolean { return this._IsReceivedAttack; /* auto-property */ }
-    /** @rva 0x75F830  public void set_IsReceivedAttack(bool value) { } */
+    /** @rva 0x75E830  public void set_IsReceivedAttack(bool value) { } */
     set_IsReceivedAttack(value: boolean): void { this._IsReceivedAttack = value; /* auto-property */ }
-    /** @rva 0x75F810  public bool get_IsVisibleOnAttack() { } */
+    /** @rva 0x75E810  public bool get_IsVisibleOnAttack() { } */
     get_IsVisibleOnAttack(): boolean { return this._IsVisibleOnAttack; /* auto-property */ }
-    /** @rva 0x75F840  public void set_IsVisibleOnAttack(bool value) { } */
+    /** @rva 0x75E840  public void set_IsVisibleOnAttack(bool value) { } */
     set_IsVisibleOnAttack(value: boolean): void { this._IsVisibleOnAttack = value; /* auto-property */ }
-    /** @rva 0x75ED50  public int get_RecoveryValue() { } */
+    /** @rva 0x75DD50  public int get_RecoveryValue() { } */
     get_RecoveryValue(): int { return this._RecoveryValue; /* auto-property */ }
-    /** @rva 0x8A22A0  public void set_RecoveryValue(int value) { } */
+    /** @rva 0x8A12A0  public void set_RecoveryValue(int value) { } */
     set_RecoveryValue(value: int): void { this._RecoveryValue = value; /* auto-property */ }
-    /** @rva 0x7388E0  public bool get_IsReceivedRecovery() { } */
+    /** @rva 0x7378E0  public bool get_IsReceivedRecovery() { } */
     get_IsReceivedRecovery(): boolean { return this._IsReceivedRecovery; /* auto-property */ }
-    /** @rva 0x7388F0  public void set_IsReceivedRecovery(bool value) { } */
+    /** @rva 0x7378F0  public void set_IsReceivedRecovery(bool value) { } */
     set_IsReceivedRecovery(value: boolean): void { this._IsReceivedRecovery = value; /* auto-property */ }
-    /** @rva 0x9FD120  public float get_TurnGaugeVariation() { } */
+    /** @rva 0x900870  public void set_ConsumeHpValue(int value) { } */
+    set_ConsumeHpValue(value: int): void { this._ConsumeHpValue = value; /* auto-property */ }
+    /** @rva 0x8F2F40  public int get_ConsumeHpValue() { } */
+    get_ConsumeHpValue(): int { return this._ConsumeHpValue; /* auto-property */ }
+    /** @rva 0x900B40  public void set_IsConsumeHp(bool value) { } */
+    set_IsConsumeHp(value: boolean): void { this._IsConsumeHp = value; /* auto-property */ }
+    /** @rva 0x900A80  public bool get_IsConsumeHp() { } */
+    get_IsConsumeHp(): boolean { return this._IsConsumeHp; /* auto-property */ }
+    /** @rva 0x7535B0  public float get_TurnGaugeVariation() { } */
     get_TurnGaugeVariation(): float { return this._TurnGaugeVariation; /* auto-property */ }
-    /** @rva 0x1379E60  public void set_TurnGaugeVariation(float value) { } */
+    /** @rva 0x753870  public void set_TurnGaugeVariation(float value) { } */
     set_TurnGaugeVariation(value: float): void { this._TurnGaugeVariation = value; /* auto-property */ }
-    /** @rva 0x902790  public bool get_IsDead() { } */
+    /** @rva 0x8F2F20  public bool get_IsDead() { } */
     get_IsDead(): boolean { return this._IsDead; /* auto-property */ }
-    /** @rva 0x9027C0  public void set_IsDead(bool value) { } */
+    /** @rva 0x9012B0  public void set_IsDead(bool value) { } */
     set_IsDead(value: boolean): void { this._IsDead = value; /* auto-property */ }
-    /** @rva 0xA0E570  public bool get_IsRevived() { } */
+    /** @rva 0x8F2F50  public bool get_IsRevived() { } */
     get_IsRevived(): boolean { return this._IsRevived; /* auto-property */ }
-    /** @rva 0xA0E580  public void set_IsRevived(bool value) { } */
+    /** @rva 0x9012A0  public void set_IsRevived(bool value) { } */
     set_IsRevived(value: boolean): void { this._IsRevived = value; /* auto-property */ }
-    /** @rva 0xD2C250  public bool get_IsSummoned() { } */
+    /** @rva 0x8F2F30  public bool get_IsSummoned() { } */
     get_IsSummoned(): boolean { return this._IsSummoned; /* auto-property */ }
-    /** @rva 0xF60FA0  public void set_IsSummoned(bool value) { } */
+    /** @rva 0xF40DE0  public void set_IsSummoned(bool value) { } */
     set_IsSummoned(value: boolean): void { this._IsSummoned = value; /* auto-property */ }
-    /** @rva 0xD2C1C0  public bool get_IsResetBreakPoint() { } */
+    /** @rva 0x8F2F10  public bool get_IsResetBreakPoint() { } */
     get_IsResetBreakPoint(): boolean { return this._IsResetBreakPoint; /* auto-property */ }
-    /** @rva 0x12D53C0  public void set_IsResetBreakPoint(bool value) { } */
+    /** @rva 0x13A0D10  public void set_IsResetBreakPoint(bool value) { } */
     set_IsResetBreakPoint(value: boolean): void { this._IsResetBreakPoint = value; /* auto-property */ }
-    /** @rva 0x8F3F20  public bool get_CanNotAction() { } */
+    /** @rva 0x829CE0  public bool get_CanNotAction() { } */
     get_CanNotAction(): boolean { return this._CanNotAction; /* auto-property */ }
-    /** @rva 0x902BA0  public void set_CanNotAction(bool value) { } */
+    /** @rva 0x900B90  public void set_CanNotAction(bool value) { } */
     set_CanNotAction(value: boolean): void { this._CanNotAction = value; /* auto-property */ }
-    /** @rva 0x8F3F50  public bool get_FinishCanNotAction() { } */
+    /** @rva 0x900AC0  public bool get_FinishCanNotAction() { } */
     get_FinishCanNotAction(): boolean { return this._FinishCanNotAction; /* auto-property */ }
-    /** @rva 0x902B90  public void set_FinishCanNotAction(bool value) { } */
+    /** @rva 0x900BA0  public void set_FinishCanNotAction(bool value) { } */
     set_FinishCanNotAction(value: boolean): void { this._FinishCanNotAction = value; /* auto-property */ }
-    /** @rva 0x8F3F30  public bool get_FinishLockTurnOrder() { } */
+    /** @rva 0x82F5B0  public bool get_FinishLockTurnOrder() { } */
     get_FinishLockTurnOrder(): boolean { return this._FinishLockTurnOrder; /* auto-property */ }
-    /** @rva 0xF1E070  public void set_FinishLockTurnOrder(bool value) { } */
+    /** @rva 0x82F6F0  public void set_FinishLockTurnOrder(bool value) { } */
     set_FinishLockTurnOrder(value: boolean): void { this._FinishLockTurnOrder = value; /* auto-property */ }
-    /** @rva 0x8F3F10  public bool get_IsBarrierAdded() { } */
+    /** @rva 0x11939C0  public bool get_IsBarrierAdded() { } */
     get_IsBarrierAdded(): boolean { return this._IsBarrierAdded; /* auto-property */ }
-    /** @rva 0x1379E40  public void set_IsBarrierAdded(bool value) { } */
+    /** @rva 0x13A0CF0  public void set_IsBarrierAdded(bool value) { } */
     set_IsBarrierAdded(value: boolean): void { this._IsBarrierAdded = value; /* auto-property */ }
-    /** @rva 0x854810  public int get_BarrierValue() { } */
+    /** @rva 0x87ACD0  public int get_BarrierValue() { } */
     get_BarrierValue(): int { return this._BarrierValue; /* auto-property */ }
-    /** @rva 0x902050  public void set_BarrierValue(int value) { } */
+    /** @rva 0x900790  public void set_BarrierValue(int value) { } */
     set_BarrierValue(value: int): void { this._BarrierValue = value; /* auto-property */ }
-    /** @rva 0x9FD230  public bool get_IsBarrierAttacked() { } */
+    /** @rva 0x8AB2E0  public bool get_IsBarrierAttacked() { } */
     get_IsBarrierAttacked(): boolean { return this._IsBarrierAttacked; /* auto-property */ }
-    /** @rva 0xA107C0  public void set_IsBarrierAttacked(bool value) { } */
+    /** @rva 0x8AB340  public void set_IsBarrierAttacked(bool value) { } */
     set_IsBarrierAttacked(value: boolean): void { this._IsBarrierAttacked = value; /* auto-property */ }
-    /** @rva 0x9FD280  public bool get_IsBarrierDestroyed() { } */
+    /** @rva 0x8AB2F0  public bool get_IsBarrierDestroyed() { } */
     get_IsBarrierDestroyed(): boolean { return this._IsBarrierDestroyed; /* auto-property */ }
-    /** @rva 0xA14B90  public void set_IsBarrierDestroyed(bool value) { } */
+    /** @rva 0x8AB350  public void set_IsBarrierDestroyed(bool value) { } */
     set_IsBarrierDestroyed(value: boolean): void { this._IsBarrierDestroyed = value; /* auto-property */ }
-    /** @rva 0x9FD240  public bool get_IsReceivedReflection() { } */
+    /** @rva 0x8AB300  public bool get_IsReceivedReflection() { } */
     get_IsReceivedReflection(): boolean { return this._IsReceivedReflection; /* auto-property */ }
-    /** @rva 0xA14BA0  public void set_IsReceivedReflection(bool value) { } */
+    /** @rva 0x8AB360  public void set_IsReceivedReflection(bool value) { } */
     set_IsReceivedReflection(value: boolean): void { this._IsReceivedReflection = value; /* auto-property */ }
-    /** @rva 0x9FD2C0  public bool get_IsCounterAttack() { } */
+    /** @rva 0x8DC9A0  public bool get_IsCounterAttack() { } */
     get_IsCounterAttack(): boolean { return this._IsCounterAttack; /* auto-property */ }
-    /** @rva 0xA14BB0  public void set_IsCounterAttack(bool value) { } */
+    /** @rva 0x13A0D00  public void set_IsCounterAttack(bool value) { } */
     set_IsCounterAttack(value: boolean): void { this._IsCounterAttack = value; /* auto-property */ }
-    /** @rva 0x7545F0  public int get_BreakedDamageReceiveRateUpValue() { } */
+    /** @rva 0x8A1210  public int get_BreakedDamageReceiveRateUpValue() { } */
     get_BreakedDamageReceiveRateUpValue(): int { return this._BreakedDamageReceiveRateUpValue; /* auto-property */ }
-    /** @rva 0x7548B0  public void set_BreakedDamageReceiveRateUpValue(int value) { } */
+    /** @rva 0x8A12E0  public void set_BreakedDamageReceiveRateUpValue(int value) { } */
     set_BreakedDamageReceiveRateUpValue(value: int): void { this._BreakedDamageReceiveRateUpValue = value; /* auto-property */ }
-    /** @rva 0x87BB30  public bool get_IsBreakedDamageReceiveRateBecomeMax() { } */
+    /** @rva 0x7F9AD0  public bool get_IsBreakedDamageReceiveRateBecomeMax() { } */
     get_IsBreakedDamageReceiveRateBecomeMax(): boolean { return this._IsBreakedDamageReceiveRateBecomeMax; /* auto-property */ }
-    /** @rva 0xA14B80  public void set_IsBreakedDamageReceiveRateBecomeMax(bool value) { } */
+    /** @rva 0x7F9CD0  public void set_IsBreakedDamageReceiveRateBecomeMax(bool value) { } */
     set_IsBreakedDamageReceiveRateBecomeMax(value: boolean): void { this._IsBreakedDamageReceiveRateBecomeMax = value; /* auto-property */ }
-    /** @rva 0x8DD9C0  public bool get_IsWeakElementAttacked() { } */
+    /** @rva 0x7F9AF0  public bool get_IsWeakElementAttacked() { } */
     get_IsWeakElementAttacked(): boolean { return this._IsWeakElementAttacked; /* auto-property */ }
-    /** @rva 0x1379E50  public void set_IsWeakElementAttacked(bool value) { } */
+    /** @rva 0x901250  public void set_IsWeakElementAttacked(bool value) { } */
     set_IsWeakElementAttacked(value: boolean): void { this._IsWeakElementAttacked = value; /* auto-property */ }
-    /** @rva 0x736900  public List<string> get_DamageVisualEffectList() { } */
+    /** @rva 0x736A10  public List<string> get_DamageVisualEffectList() { } */
     get_DamageVisualEffectList(): List<string> { return this._DamageVisualEffectList; /* auto-property */ }
-    /** @rva 0x736A10  public void set_DamageVisualEffectList(List<string> value) { } */
+    /** @rva 0x736A50  public void set_DamageVisualEffectList(List<string> value) { } */
     set_DamageVisualEffectList(value: List<string>): void { this._DamageVisualEffectList = value; /* auto-property */ }
-    /** @rva 0x737A10  public List<string> get_NonDamageVisualEffectList() { } */
+    /** @rva 0x736A30  public List<string> get_NonDamageVisualEffectList() { } */
     get_NonDamageVisualEffectList(): List<string> { return this._NonDamageVisualEffectList; /* auto-property */ }
-    /** @rva 0x737A50  public void set_NonDamageVisualEffectList(List<string> value) { } */
+    /** @rva 0x736A70  public void set_NonDamageVisualEffectList(List<string> value) { } */
     set_NonDamageVisualEffectList(value: List<string>): void { this._NonDamageVisualEffectList = value; /* auto-property */ }
-    /** @rva 0x737A30  public List<AffectedUnitNotice.AddStateInfo> get_AddStateInfoList() { } */
+    /** @rva 0x736A20  public List<AffectedUnitNotice.AddStateInfo> get_AddStateInfoList() { } */
     get_AddStateInfoList(): List<AffectedUnitNotice_AddStateInfo> { return this._AddStateInfoList; /* auto-property */ }
-    /** @rva 0x737A70  public void set_AddStateInfoList(List<AffectedUnitNotice.AddStateInfo> value) { } */
+    /** @rva 0x736A60  public void set_AddStateInfoList(List<AffectedUnitNotice.AddStateInfo> value) { } */
     set_AddStateInfoList(value: List<AffectedUnitNotice_AddStateInfo>): void { this._AddStateInfoList = value; /* auto-property */ }
-    /** @rva 0x737A20  public List<string> get_ReceivedSlipDamageEffectTypeList() { } */
+    /** @rva 0x736C60  public List<string> get_ReceivedSlipDamageEffectTypeList() { } */
     get_ReceivedSlipDamageEffectTypeList(): List<string> { return this._ReceivedSlipDamageEffectTypeList; /* auto-property */ }
-    /** @rva 0x737A60  public void set_ReceivedSlipDamageEffectTypeList(List<string> value) { } */
+    /** @rva 0x736E10  public void set_ReceivedSlipDamageEffectTypeList(List<string> value) { } */
     set_ReceivedSlipDamageEffectTypeList(value: List<string>): void { this._ReceivedSlipDamageEffectTypeList = value; /* auto-property */ }
-    /** @rva 0x1379940  public bool get_IsReceivedDamage() { } */
+    /** @rva 0x13A07E0  public bool get_IsReceivedDamage() { } */
     get_IsReceivedDamage(): boolean {
         const damage = this.Damages.reduce((a, d) => a + d._DamageValue, 0); // <>c.b__128_0
         if (this._BreakDamage != null) return 0 < damage + this._BreakDamage._DamageValue;
         return 0 < damage;
     }
-    /** @rva 0x13797E0  public void .ctor() { } */
+    /** @rva 0x13A0680  public void .ctor() { } */
     ctor(): this {
         this.Damages = [];
         this.BarrierDamages = [];
@@ -248,7 +264,7 @@ export class AffectedUnitNotice {
         this._ReceivedSlipDamageEffectTypeList = [];
         return this;
     }
-    /** @rva 0x1379670  public void .ctor(int affectedUnitId) { } */
+    /** @rva 0x13A0510  public void .ctor(int affectedUnitId) { } */
     ctor$int(affectedUnitId: int): this {
         this.Damages = [];
         this.BarrierDamages = [];
@@ -259,7 +275,7 @@ export class AffectedUnitNotice {
         this._AffectedUnitId = affectedUnitId;
         return this;
     }
-    /** @rva 0x1378A40  public static AffectedUnitNotice CreateByDamage(int affectedUnitId, int damageValue, DamageCategory damageCategory, bool isCritical, CorrelationDamageType correlationDamageType, List<string> visualEffectList, TargetElementType attackElement = 0, bool isBreakBonusApplied = False) { } */
+    /** @rva 0x139F8E0  public static AffectedUnitNotice CreateByDamage(int affectedUnitId, int damageValue, DamageCategory damageCategory, bool isCritical, CorrelationDamageType correlationDamageType, List<string> visualEffectList, TargetElementType attackElement = 0, bool isBreakBonusApplied = False) { } */
     static CreateByDamage(affectedUnitId: int, damageValue: int, damageCategory: DamageCategory, isCritical: boolean, correlationDamageType: CorrelationDamageType, visualEffectList: List<string>, attackElement: TargetElementType = 0 as TargetElementType, isBreakBonusApplied: boolean = false): AffectedUnitNotice {
         const notice = new AffectedUnitNotice().ctor$int(affectedUnitId);
         const damageInfo = new AffectedUnitNotice_DamageInfo();
@@ -276,7 +292,7 @@ export class AffectedUnitNotice {
         notice._DamageVisualEffectList = visualEffectList ?? [];
         return notice;
     }
-    /** @rva 0x1378650  public static AffectedUnitNotice CreateByBarrierDamage(int affectedUnitId, int damageValue, DamageCategory damageCategory, bool isCritical, CorrelationDamageType correlationDamageType, List<string> visualEffectList, TargetElementType attackElement = 0, bool isBreakBonusApplied = False) { } */
+    /** @rva 0x139F480  public static AffectedUnitNotice CreateByBarrierDamage(int affectedUnitId, int damageValue, DamageCategory damageCategory, bool isCritical, CorrelationDamageType correlationDamageType, List<string> visualEffectList, TargetElementType attackElement = 0, bool isBreakBonusApplied = False) { } */
     static CreateByBarrierDamage(affectedUnitId: int, damageValue: int, damageCategory: DamageCategory, isCritical: boolean, correlationDamageType: CorrelationDamageType, visualEffectList: List<string>, attackElement: TargetElementType = 0 as TargetElementType, isBreakBonusApplied: boolean = false): AffectedUnitNotice {
         const notice = new AffectedUnitNotice().ctor$int(affectedUnitId);
         const damageInfo = new AffectedUnitNotice_DamageInfo();
@@ -293,7 +309,7 @@ export class AffectedUnitNotice {
         notice._DamageVisualEffectList = visualEffectList ?? [];
         return notice;
     }
-    /** @rva 0x1378DF0  public static AffectedUnitNotice CreateByRecovery(int affectedUnitId, int recoveryValue, bool isRevival = False) { } */
+    /** @rva 0x139FC90  public static AffectedUnitNotice CreateByRecovery(int affectedUnitId, int recoveryValue, bool isRevival = False) { } */
     static CreateByRecovery(affectedUnitId: int, recoveryValue: int, isRevival?: boolean /* = False */): AffectedUnitNotice {
         isRevival = isRevival ?? false;
         const notice = new AffectedUnitNotice().ctor$int(affectedUnitId);
@@ -303,25 +319,32 @@ export class AffectedUnitNotice {
         notice._NonDamageVisualEffectList.push(isRevival ? "revival_temp" : "eff_cmn_act_recovery_appear_001");
         return notice;
     }
-    /** @rva 0x1379130  public static AffectedUnitNotice CreateByTurnGaugeVariation(int affectedUnitId, float turnGaugeVariation) { } */
+    /** @rva 0x139F870  public static AffectedUnitNotice CreateByConsumeHp(int affectedUnitId, int consumeHpValue) { } */
+    static CreateByConsumeHp(affectedUnitId: int, consumeHpValue: int): AffectedUnitNotice {
+        const notice = new AffectedUnitNotice().ctor$int(affectedUnitId);
+        notice._IsConsumeHp = true;
+        notice._ConsumeHpValue = consumeHpValue;
+        return notice;
+    }
+    /** @rva 0x139FFD0  public static AffectedUnitNotice CreateByTurnGaugeVariation(int affectedUnitId, float turnGaugeVariation) { } */
     static CreateByTurnGaugeVariation(affectedUnitId: int, turnGaugeVariation: float): AffectedUnitNotice {
         const notice = new AffectedUnitNotice().ctor$int(affectedUnitId);
         notice._TurnGaugeVariation = turnGaugeVariation;
         return notice;
     }
-    /** @rva 0x1379010  public static AffectedUnitNotice CreateByRemoveState(int affectedUnitId, AbilityEffectBase.TargetSideType targetSide) { } */
+    /** @rva 0x139FEB0  public static AffectedUnitNotice CreateByRemoveState(int affectedUnitId, AbilityEffectBase.TargetSideType targetSide) { } */
     static CreateByRemoveState(affectedUnitId: int, targetSide: AbilityEffectBase_TargetSideType): AffectedUnitNotice {
         const notice = new AffectedUnitNotice().ctor$int(affectedUnitId);
         notice._NonDamageVisualEffectList.push(targetSide === 0 ? "eff_cmn_act_recovery_appear_001" : "eff_cmn_act_debuff_appear_001");
         return notice;
     }
-    /** @rva 0x1378CF0  public static AffectedUnitNotice CreateByOneState(int affectedUnitId, string visualEffect) { } */
+    /** @rva 0x139FB90  public static AffectedUnitNotice CreateByOneState(int affectedUnitId, string visualEffect) { } */
     static CreateByOneState(affectedUnitId: int, visualEffect: string): AffectedUnitNotice {
         const notice = new AffectedUnitNotice().ctor$int(affectedUnitId);
         notice._NonDamageVisualEffectList.push(visualEffect);
         return notice;
     }
-    /** @rva 0x1378920  public static AffectedUnitNotice CreateByBarrier(int affectedUnitId, bool isCharacterFigure, int barrierValue) { } */
+    /** @rva 0x139F750  public static AffectedUnitNotice CreateByBarrier(int affectedUnitId, bool isCharacterFigure, int barrierValue) { } */
     static CreateByBarrier(affectedUnitId: int, isCharacterFigure: boolean, barrierValue: int): AffectedUnitNotice {
         const notice = new AffectedUnitNotice().ctor$int(affectedUnitId);
         notice._IsBarrierAdded = true;
@@ -329,7 +352,7 @@ export class AffectedUnitNotice {
         notice._NonDamageVisualEffectList.push(isCharacterFigure ? "eff_cmn_act_barrier_appear_001" : "eff_cmn_act_barrier_appear_002");
         return notice;
     }
-    /** @rva 0x1378800  public static AffectedUnitNotice CreateByBarrierHit(int affectedUnitId, bool isCharacterFigure, bool isBarrierDestroyed) { } */
+    /** @rva 0x139F630  public static AffectedUnitNotice CreateByBarrierHit(int affectedUnitId, bool isCharacterFigure, bool isBarrierDestroyed) { } */
     static CreateByBarrierHit(affectedUnitId: int, isCharacterFigure: boolean, isBarrierDestroyed: boolean): AffectedUnitNotice {
         const notice = new AffectedUnitNotice().ctor$int(affectedUnitId);
         notice._IsBarrierAttacked = true;
@@ -337,25 +360,25 @@ export class AffectedUnitNotice {
         notice._DamageVisualEffectList.push(isCharacterFigure ? "eff_cmn_act_barrier_active_001" : "eff_cmn_act_barrier_active_002");
         return notice;
     }
-    /** @rva 0x1378F10  public static AffectedUnitNotice CreateByReflection(int affectedUnitId) { } */
+    /** @rva 0x139FDB0  public static AffectedUnitNotice CreateByReflection(int affectedUnitId) { } */
     static CreateByReflection(affectedUnitId: int): AffectedUnitNotice {
         const notice = new AffectedUnitNotice().ctor$int(affectedUnitId);
         notice._DamageVisualEffectList.push("eff_cmn_act_reflection_active_001");
         return notice;
     }
-    /** @rva 0x1378BF0  public static AffectedUnitNotice CreateByDisabledDamageHit(int affectedUnitId) { } */
+    /** @rva 0x139FA90  public static AffectedUnitNotice CreateByDisabledDamageHit(int affectedUnitId) { } */
     static CreateByDisabledDamageHit(affectedUnitId: int): AffectedUnitNotice {
         const notice = new AffectedUnitNotice().ctor$int(affectedUnitId);
         notice._DamageVisualEffectList.push("eff_639002_smoke_001");
         return notice;
     }
-    /** @rva 0x1378550  public static AffectedUnitNotice CreateByAddStateInfo(int affectedUnitId, AffectedUnitNotice.AddStateInfo addStateInfo) { } */
+    /** @rva 0x139F380  public static AffectedUnitNotice CreateByAddStateInfo(int affectedUnitId, AffectedUnitNotice.AddStateInfo addStateInfo) { } */
     static CreateByAddStateInfo(affectedUnitId: int, addStateInfo: AffectedUnitNotice_AddStateInfo): AffectedUnitNotice {
         const notice = new AffectedUnitNotice().ctor$int(affectedUnitId);
         notice._AddStateInfoList.push(addStateInfo);
         return notice;
     }
-    /** @rva 0x1379A90  public static AffectedUnitNotice op_Addition(AffectedUnitNotice notice1, AffectedUnitNotice notice2) { } */
+    /** @rva 0x13A0930  public static AffectedUnitNotice op_Addition(AffectedUnitNotice notice1, AffectedUnitNotice notice2) { } */
     static op_Addition(notice1: AffectedUnitNotice, notice2: AffectedUnitNotice): AffectedUnitNotice {
         const n = new AffectedUnitNotice().ctor$int(notice1._AffectedUnitId);
         n.Damages = union(notice1.Damages, notice2.Damages);
@@ -367,6 +390,8 @@ export class AffectedUnitNotice {
         n._BarrierValue = notice1._BarrierValue + notice2._BarrierValue;
         n._TurnGaugeVariation = f32(notice1._TurnGaugeVariation + notice2._TurnGaugeVariation);
         n._IsReceivedRecovery = notice1._IsReceivedRecovery || notice2._IsReceivedRecovery;
+        n._IsConsumeHp = notice1._IsConsumeHp || notice2._IsConsumeHp; // 3.21.0
+        n._ConsumeHpValue = notice1._ConsumeHpValue + notice2._ConsumeHpValue;
         n._IsDead = notice1._IsDead || notice2._IsDead;
         n._IsRevived = notice1._IsRevived || notice2._IsRevived;
         n._IsSummoned = notice1._IsSummoned || notice2._IsSummoned;
@@ -388,42 +413,42 @@ export class AffectedUnitNotice {
         n._ReceivedSlipDamageEffectTypeList = union(notice1._ReceivedSlipDamageEffectTypeList, notice2._ReceivedSlipDamageEffectTypeList);
         return n;
     }
-    /** @rva 0x1379240  public int GetTotalDamageValue(bool includeBreakDamage = True) { } */
+    /** @rva 0x13A00E0  public int GetTotalDamageValue(bool includeBreakDamage = True) { } */
     GetTotalDamageValue(includeBreakDamage?: boolean /* = True */): int {
         includeBreakDamage = includeBreakDamage ?? true;
         const damage = this.Damages.reduce((a, d) => a + d._DamageValue, 0) | 0; // Enumerable.Sum (<>c.b__128_0)
         if (includeBreakDamage && this._BreakDamage != null) return (damage + this._BreakDamage._DamageValue) | 0;
         return damage;
     }
-    /** @rva 0x1379440  public void SetDamageSequence(int seq) { } */
+    /** @rva 0x13A02E0  public void SetDamageSequence(int seq) { } */
     SetDamageSequence(seq: int): void {
         // <>c__DisplayClass129_0: 0x10 seq
         this.Damages.forEach(x => { x._Sequence = seq; }); // b__0
         this.BarrierDamages.forEach(x => { x._Sequence = seq; }); // b__1
     }
-    /** @rva 0x13791A0  public List<AffectedUnitNotice.DamageInfo> GetDisplayDamageInfoList() { } */
+    /** @rva 0x13A0040  public List<AffectedUnitNotice.DamageInfo> GetDisplayDamageInfoList() { } */
     GetDisplayDamageInfoList(): List<AffectedUnitNotice_DamageInfo> {
         const list: List<AffectedUnitNotice_DamageInfo> = [];
         list.push(...this.BarrierDamages);
         list.push(...this.Damages);
         return list;
     }
-    /** @rva 0x1379390  public bool HasAnyDamageOfCategory(DamageCategory category) { } */
+    /** @rva 0x13A0230  public bool HasAnyDamageOfCategory(DamageCategory category) { } */
     HasAnyDamageOfCategory(category: DamageCategory): boolean {
         for (const d of this.Damages) if (d._Category === category) return true;
         if (this._BreakDamage != null && this._BreakDamage._Category === category) return true;
         for (const d of this.BarrierDamages) if (d._Category === category) return true;
         return false;
     }
-    /** @rva 0x1379600  public bool ShouldSerializeDamages() { } */
+    /** @rva 0x13A04A0  public bool ShouldSerializeDamages() { } */
     ShouldSerializeDamages(): boolean { return this.Damages.length !== 0; }
-    /** @rva 0xBE6780  public bool ShouldSerializeBarrierDamages() { } */
+    /** @rva 0xC020C0  public bool ShouldSerializeBarrierDamages() { } */
     ShouldSerializeBarrierDamages(): boolean { return this.BarrierDamages.length !== 0; }
-    /** @rva 0x13795B0  public bool ShouldSerializeDamageVisualEffectList() { } */
+    /** @rva 0x13A0450  public bool ShouldSerializeDamageVisualEffectList() { } */
     ShouldSerializeDamageVisualEffectList(): boolean { return 0 < this._DamageVisualEffectList.length; }
-    /** @rva 0x1379620  public bool ShouldSerializeNonDamageVisualEffectList() { } */
+    /** @rva 0x13A04C0  public bool ShouldSerializeNonDamageVisualEffectList() { } */
     ShouldSerializeNonDamageVisualEffectList(): boolean { return 0 < this._NonDamageVisualEffectList.length; }
-    /** @rva 0x1379560  public bool ShouldSerializeAddStateInfoList() { } */
+    /** @rva 0x13A0400  public bool ShouldSerializeAddStateInfoList() { } */
     ShouldSerializeAddStateInfoList(): boolean { return 0 < this._AddStateInfoList.length; }
 }
 
@@ -466,47 +491,47 @@ export class AffectedUnitNotice_DamageInfo {
     set IsReflectionDamage(v: boolean) { this.set_IsReflectionDamage(v); }
     get Category(): DamageCategory { return this.get_Category(); }
     set Category(v: DamageCategory) { this.set_Category(v); }
-    /** @rva 0x7364F0  public int get_DamageValue() { } */
+    /** @rva 0x7354F0  public int get_DamageValue() { } */
     get_DamageValue(): int { return this._DamageValue; /* auto-property */ }
-    /** @rva 0x739D00  public void set_DamageValue(int value) { } */
+    /** @rva 0x738D00  public void set_DamageValue(int value) { } */
     set_DamageValue(value: int): void { this._DamageValue = value; /* auto-property */ }
-    /** @rva 0x803350  public TargetElementType get_AttackElement() { } */
+    /** @rva 0x802350  public TargetElementType get_AttackElement() { } */
     get_AttackElement(): TargetElementType { return this._AttackElement; /* auto-property */ }
-    /** @rva 0x803540  public void set_AttackElement(TargetElementType value) { } */
+    /** @rva 0x802540  public void set_AttackElement(TargetElementType value) { } */
     set_AttackElement(value: TargetElementType): void { this._AttackElement = value; /* auto-property */ }
-    /** @rva 0x7F97F0  public bool get_IsCritical() { } */
+    /** @rva 0x7F87F0  public bool get_IsCritical() { } */
     get_IsCritical(): boolean { return this._IsCritical; /* auto-property */ }
-    /** @rva 0x7F9810  public void set_IsCritical(bool value) { } */
+    /** @rva 0x7F8810  public void set_IsCritical(bool value) { } */
     set_IsCritical(value: boolean): void { this._IsCritical = value; /* auto-property */ }
-    /** @rva 0x7F9800  public CorrelationDamageType get_CorrelationDamageType() { } */
+    /** @rva 0x7F8800  public CorrelationDamageType get_CorrelationDamageType() { } */
     get_CorrelationDamageType(): CorrelationDamageType { return this._CorrelationDamageType; /* auto-property */ }
-    /** @rva 0x7F9820  public void set_CorrelationDamageType(CorrelationDamageType value) { } */
+    /** @rva 0x7F8820  public void set_CorrelationDamageType(CorrelationDamageType value) { } */
     set_CorrelationDamageType(value: CorrelationDamageType): void { this._CorrelationDamageType = value; /* auto-property */ }
-    /** @rva 0x75ED70  public int get_Sequence() { } */
+    /** @rva 0x75DD70  public int get_Sequence() { } */
     get_Sequence(): int { return this._Sequence; /* auto-property */ }
-    /** @rva 0x8A2230  public void set_Sequence(int value) { } */
+    /** @rva 0x8A1230  public void set_Sequence(int value) { } */
     set_Sequence(value: int): void { this._Sequence = value; /* auto-property */ }
-    /** @rva 0x8A21C0  public bool get_IsBreakBonusApplied() { } */
+    /** @rva 0x8A11C0  public bool get_IsBreakBonusApplied() { } */
     get_IsBreakBonusApplied(): boolean { return this._IsBreakBonusApplied; /* auto-property */ }
-    /** @rva 0x8A2270  public void set_IsBreakBonusApplied(bool value) { } */
+    /** @rva 0x8A1270  public void set_IsBreakBonusApplied(bool value) { } */
     set_IsBreakBonusApplied(value: boolean): void { this._IsBreakBonusApplied = value; /* auto-property */ }
-    /** @rva 0x8A21D0  public bool get_IsMaxBreakBonusWhenHit() { } */
+    /** @rva 0x8A11D0  public bool get_IsMaxBreakBonusWhenHit() { } */
     get_IsMaxBreakBonusWhenHit(): boolean { return this._IsMaxBreakBonusWhenHit; /* auto-property */ }
-    /** @rva 0x8A2280  public void set_IsMaxBreakBonusWhenHit(bool value) { } */
+    /** @rva 0x8A1280  public void set_IsMaxBreakBonusWhenHit(bool value) { } */
     set_IsMaxBreakBonusWhenHit(value: boolean): void { this._IsMaxBreakBonusWhenHit = value; /* auto-property */ }
-    /** @rva 0x8A21E0  public bool get_IsBarrierDamage() { } */
+    /** @rva 0x8A11E0  public bool get_IsBarrierDamage() { } */
     get_IsBarrierDamage(): boolean { return this._IsBarrierDamage; /* auto-property */ }
-    /** @rva 0x8A2290  public void set_IsBarrierDamage(bool value) { } */
+    /** @rva 0x8A1290  public void set_IsBarrierDamage(bool value) { } */
     set_IsBarrierDamage(value: boolean): void { this._IsBarrierDamage = value; /* auto-property */ }
-    /** @rva 0x138B530  public void set_IsReflectionDamage(bool value) { } */
+    /** @rva 0x13B2BE0  public void set_IsReflectionDamage(bool value) { } */
     set_IsReflectionDamage(value: boolean): void {
         this._Category = (value ? 5 : 0) as DamageCategory;
     }
-    /** @rva 0x7637A0  public DamageCategory get_Category() { } */
+    /** @rva 0x7627A0  public DamageCategory get_Category() { } */
     get_Category(): DamageCategory { return this._Category; /* auto-property */ }
-    /** @rva 0x8A2250  public void set_Category(DamageCategory value) { } */
+    /** @rva 0x8A1250  public void set_Category(DamageCategory value) { } */
     set_Category(value: DamageCategory): void { this._Category = value; /* auto-property */ }
-    /** @rva 0x138B4C0  public void .ctor(int damageValue, TargetElementType attackElement, DamageCategory category, bool isCritical = False, CorrelationDamageType correlationDamageType = 0, bool isBreakBonusApplied = False, bool isBarrierDamage = False) { } */
+    /** @rva 0x13B2B70  public void .ctor(int damageValue, TargetElementType attackElement, DamageCategory category, bool isCritical = False, CorrelationDamageType correlationDamageType = 0, bool isBreakBonusApplied = False, bool isBarrierDamage = False) { } */
     ctor$int_TargetElementType_DamageCategory_bool_CorrelationDamageType_bool_bool(damageValue: int, attackElement: TargetElementType, category: DamageCategory, isCritical?: boolean /* = False */, correlationDamageType?: CorrelationDamageType /* = 0 */, isBreakBonusApplied?: boolean /* = False */, isBarrierDamage?: boolean /* = False */): this {
         this._IsCritical = (isCritical ?? false);
         this._CorrelationDamageType = (correlationDamageType ?? 0);
@@ -537,6 +562,6 @@ export class AffectedUnitNotice_AddStateInfo {
     isRemovableBuff: boolean = false;
     /** 0x2B public bool isRemovableDebuff */
     isRemovableDebuff: boolean = false;
-    /** @rva 0x7305E0  public void .ctor() { } */
+    /** @rva 0x72F5E0  public void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
 }

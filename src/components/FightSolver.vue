@@ -443,6 +443,7 @@
 </template>
 
 <script setup lang="ts">
+// TODO(engine 1:1): the solver still runs on the old engine - see the TODO at the top of models/FightSolver.ts.
 // Fight solver panel of the PvE Simulator (search in workers/fightSolverWorker.ts, models/FightSolver.ts).
 // The search tree is drawn top-down on a canvas (it can hold tens of thousands of nodes): the root is the battle
 // start, each node a decision point, each edge one combination of decisions for the next action that needs any

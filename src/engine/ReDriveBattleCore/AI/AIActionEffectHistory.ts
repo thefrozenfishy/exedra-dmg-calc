@@ -1,4 +1,4 @@
-// 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
+// 1:1 port of ReDriveBattleCore (game 3.21.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
 import { notPorted } from "../../runtime";
@@ -11,17 +11,17 @@ export class AIActionEffectHistory {
     allyActionEffectTypes: HashSet<string> = null!;
     /** 0x18 private HashSet<string> enemyActionEffectTypes */
     enemyActionEffectTypes: HashSet<string> = null!;
-    /** @rva 0x17DCD80  public void AddAppliedEffectTypes(List<string> appliedSkillEffectTypes, BattleUnit.TeamType teamType) { } */
+    /** @rva 0x18067E0  public void AddAppliedEffectTypes(List<string> appliedSkillEffectTypes, BattleUnit.TeamType teamType) { } */
     AddAppliedEffectTypes(appliedSkillEffectTypes: List<string>, teamType: BattleUnit_TeamType): void {
         const hashSet = teamType === 0 ? this.allyActionEffectTypes : this.enemyActionEffectTypes;
         if (appliedSkillEffectTypes == null) return;
         for (const effectType of appliedSkillEffectTypes) hashSet.add(effectType);
     }
-    /** @rva 0x17DCEC0  public HashSet<string> GetAppliedEffectTypes(BattleUnit.TeamType teamType) { } */
+    /** @rva 0x1806920  public HashSet<string> GetAppliedEffectTypes(BattleUnit.TeamType teamType) { } */
     GetAppliedEffectTypes(teamType: BattleUnit_TeamType): HashSet<string> {
         return teamType === 0 ? this.allyActionEffectTypes : this.enemyActionEffectTypes;
     }
-    /** @rva 0x17DCED0  public void .ctor() { } */
+    /** @rva 0x1806930  public void .ctor() { } */
     ctor(): this {
         this.allyActionEffectTypes = new Set<string>();
         this.enemyActionEffectTypes = new Set<string>();

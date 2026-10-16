@@ -1,4 +1,4 @@
-// 1:1 port of ReDriveBattleCore (game 3.19.0). Generic class (RVA -1 in the dump), ported by hand from the shared
+// 1:1 port of ReDriveBattleCore (game 3.21.0). Generic class (RVA -1 in the dump), ported by hand from the shared
 // instance BattleMstReaderBase<object, object, int>$$get_Instance 0x452d070.
 
 import type { Type } from "../../runtime";

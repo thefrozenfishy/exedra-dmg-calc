@@ -1,4 +1,4 @@
-// 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
+// 1:1 port of ReDriveBattleCore (game 3.21.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
 import { notPorted } from "../runtime";
@@ -40,38 +40,38 @@ export class TurnActOrderUnitInfo {
     set ActiveCurrentSeasonBuffTurnGaugeValue(v: float) { this.set_ActiveCurrentSeasonBuffTurnGaugeValue(v); }
     get IsIgnoreInfoOrder(): boolean { return this.get_IsIgnoreInfoOrder(); }
     set IsIgnoreInfoOrder(v: boolean) { this.set_IsIgnoreInfoOrder(v); }
-    /** @rva 0x7364F0  public int get_InfoId() { } */
+    /** @rva 0x7354F0  public int get_InfoId() { } */
     get_InfoId(): int { return this._InfoId; /* auto-property */ }
-    /** @rva 0x739D00  public void set_InfoId(int value) { } */
+    /** @rva 0x738D00  public void set_InfoId(int value) { } */
     set_InfoId(value: int): void { this._InfoId = value; /* auto-property */ }
-    /** @rva 0x803350  public int get_CurrentTurnUnitId() { } */
+    /** @rva 0x802350  public int get_CurrentTurnUnitId() { } */
     get_CurrentTurnUnitId(): int { return this._CurrentTurnUnitId; /* auto-property */ }
-    /** @rva 0x803540  public void set_CurrentTurnUnitId(int value) { } */
+    /** @rva 0x802540  public void set_CurrentTurnUnitId(int value) { } */
     set_CurrentTurnUnitId(value: int): void { this._CurrentTurnUnitId = value; /* auto-property */ }
-    /** @rva 0x733E90  public List<TurnOrderUnitInfo> get_TurnOrderUnitInfoList() { } */
+    /** @rva 0x732E90  public List<TurnOrderUnitInfo> get_TurnOrderUnitInfoList() { } */
     get_TurnOrderUnitInfoList(): List<TurnOrderUnitInfo> { return this._TurnOrderUnitInfoList; /* auto-property */ }
-    /** @rva 0x736AB0  public void set_TurnOrderUnitInfoList(List<TurnOrderUnitInfo> value) { } */
+    /** @rva 0x735AB0  public void set_TurnOrderUnitInfoList(List<TurnOrderUnitInfo> value) { } */
     set_TurnOrderUnitInfoList(value: List<TurnOrderUnitInfo>): void { this._TurnOrderUnitInfoList = value; /* auto-property */ }
-    /** @rva 0x7369E0  public List<ActOrderUnitInfo> get_ActOrderUnitInfoList() { } */
+    /** @rva 0x7359E0  public List<ActOrderUnitInfo> get_ActOrderUnitInfoList() { } */
     get_ActOrderUnitInfoList(): List<ActOrderUnitInfo> { return this._ActOrderUnitInfoList; /* auto-property */ }
-    /** @rva 0x736A50  public void set_ActOrderUnitInfoList(List<ActOrderUnitInfo> value) { } */
+    /** @rva 0x735A50  public void set_ActOrderUnitInfoList(List<ActOrderUnitInfo> value) { } */
     set_ActOrderUnitInfoList(value: List<ActOrderUnitInfo>): void { this._ActOrderUnitInfoList = value; /* auto-property */ }
-    /** @rva 0x7637A0  public int get_NextRound() { } */
+    /** @rva 0x7627A0  public int get_NextRound() { } */
     get_NextRound(): int { return this._NextRound; /* auto-property */ }
-    /** @rva 0x8A2250  public void set_NextRound(int value) { } */
+    /** @rva 0x8A1250  public void set_NextRound(int value) { } */
     set_NextRound(value: int): void { this._NextRound = value; /* auto-property */ }
-    /** @rva 0x9DCB60  public float get_GaugeValueToNextRound() { } */
+    /** @rva 0x9F3F70  public float get_GaugeValueToNextRound() { } */
     get_GaugeValueToNextRound(): float { return this._GaugeValueToNextRound; /* auto-property */ }
-    /** @rva 0x9DCBA0  public void set_GaugeValueToNextRound(float value) { } */
+    /** @rva 0x9F3FB0  public void set_GaugeValueToNextRound(float value) { } */
     set_GaugeValueToNextRound(value: float): void { this._GaugeValueToNextRound = value; /* auto-property */ }
-    /** @rva 0x95E090  public float get_ActiveCurrentSeasonBuffTurnGaugeValue() { } */
+    /** @rva 0x96C420  public float get_ActiveCurrentSeasonBuffTurnGaugeValue() { } */
     get_ActiveCurrentSeasonBuffTurnGaugeValue(): float { return this._ActiveCurrentSeasonBuffTurnGaugeValue; /* auto-property */ }
-    /** @rva 0x95E100  public void set_ActiveCurrentSeasonBuffTurnGaugeValue(float value) { } */
+    /** @rva 0x96C490  public void set_ActiveCurrentSeasonBuffTurnGaugeValue(float value) { } */
     set_ActiveCurrentSeasonBuffTurnGaugeValue(value: float): void { this._ActiveCurrentSeasonBuffTurnGaugeValue = value; /* auto-property */ }
-    /** @rva 0x9023F0  public bool get_IsIgnoreInfoOrder() { } */
+    /** @rva 0x900800  public bool get_IsIgnoreInfoOrder() { } */
     get_IsIgnoreInfoOrder(): boolean { return this._IsIgnoreInfoOrder; /* auto-property */ }
-    /** @rva 0x902400  public void set_IsIgnoreInfoOrder(bool value) { } */
+    /** @rva 0x900810  public void set_IsIgnoreInfoOrder(bool value) { } */
     set_IsIgnoreInfoOrder(value: boolean): void { this._IsIgnoreInfoOrder = value; /* auto-property */ }
-    /** @rva 0x7305E0  public void .ctor() { } */
+    /** @rva 0x72F5E0  public void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
 }

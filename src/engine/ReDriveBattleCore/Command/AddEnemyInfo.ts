@@ -1,4 +1,4 @@
-// 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
+// 1:1 port of ReDriveBattleCore (game 3.21.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
 import { notPorted } from "../../runtime";
@@ -18,19 +18,19 @@ export class AddEnemyInfo {
     set QuestEnemyAppearanceMstId(v: int) { this.set_QuestEnemyAppearanceMstId(v); }
     get PositionId(): int { return this.get_PositionId(); }
     set PositionId(v: int) { this.set_PositionId(v); }
-    /** @rva 0x7364F0  public int get_BattleUnitId() { } */
+    /** @rva 0x7354F0  public int get_BattleUnitId() { } */
     get_BattleUnitId(): int { return this._BattleUnitId; /* auto-property */ }
-    /** @rva 0x739D00  public void set_BattleUnitId(int value) { } */
+    /** @rva 0x738D00  public void set_BattleUnitId(int value) { } */
     set_BattleUnitId(value: int): void { this._BattleUnitId = value; /* auto-property */ }
-    /** @rva 0x803350  public int get_QuestEnemyAppearanceMstId() { } */
+    /** @rva 0x802350  public int get_QuestEnemyAppearanceMstId() { } */
     get_QuestEnemyAppearanceMstId(): int { return this._QuestEnemyAppearanceMstId; /* auto-property */ }
-    /** @rva 0x803540  public void set_QuestEnemyAppearanceMstId(int value) { } */
+    /** @rva 0x802540  public void set_QuestEnemyAppearanceMstId(int value) { } */
     set_QuestEnemyAppearanceMstId(value: int): void { this._QuestEnemyAppearanceMstId = value; /* auto-property */ }
-    /** @rva 0x763820  public int get_PositionId() { } */
+    /** @rva 0x762820  public int get_PositionId() { } */
     get_PositionId(): int { return this._PositionId; /* auto-property */ }
-    /** @rva 0x8A2240  public void set_PositionId(int value) { } */
+    /** @rva 0x8A1240  public void set_PositionId(int value) { } */
     set_PositionId(value: int): void { this._PositionId = value; /* auto-property */ }
-    /** @rva 0x95DC70  public void .ctor(int id, int mstId, int pos) { } */
+    /** @rva 0x98AA10  public void .ctor(int id, int mstId, int pos) { } */
     ctor$int_int_int(id: int, mstId: int, pos: int): this {
         this._BattleUnitId = id;
         this._QuestEnemyAppearanceMstId = mstId;

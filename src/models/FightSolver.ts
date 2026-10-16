@@ -1,3 +1,8 @@
+// TODO(engine 1:1): the Fight Solver still searches on the OLD engine (models/PvPBattle via createPvEBattle, cloned with
+//   BattleCloner), while the PvE Simulator's battle and Max Damage run on the 1:1 engine (battle/EngineBattle). Its
+//   results can therefore differ from what the simulator plays. Port it to EngineBattle: the 1:1 engine has no
+//   BattleCloner, so nodes must be rebuilt by replaying the decision prefix from the start (or via a ported
+//   BackupAgent snapshot). Parked on purpose (2026-10-14); come back to it later.
 // Fight solver: searches the player's decisions in a PvE battle for the clear that takes the least action value
 // (elapsed turn-gauge time, "AV"). Not a game rule: a search over what the PvE Simulator's Manual control lets the
 // player decide (Battle Skill / Basic Attack, which ultimate to fire and when, every ally-side target pick), with
@@ -1550,7 +1555,8 @@ export class FightSolver {
 // Solver control from action `at` on (also what the Battle Simulator does for a line loaded from the solver): allies
 // manual, enemies on their targeting AI, `aiSides` picked by the AI as well.
 export interface ControlSwitch { at: number, aiSides: ("friend" | "opp")[] }
-export function applyControlSwitch(b: PvPBattle, sw: ControlSwitch): void {
+export function applyControlSwitch(b: PvPBattle | { applyControl(aiSides: ("friend" | "opp")[]): void }, sw: ControlSwitch): void {
+    if ("applyControl" in b) return b.applyControl(sw.aiSides) // EngineBattle (src/battle)
     const t1 = (b as any).team1, t2 = (b as any).team2
     t1.manualTargeting = true
     t2.manualTargeting = false

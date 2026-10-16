@@ -1,6 +1,117 @@
 # Status (update at the end of every session)
 
-_Last updated: 2026-10-10 (1:1 port in src/engine started); before: 2026-10-03 (passive states per giver, UP_HP_FIXED max HP; earlier: duplicate active-skill states); before: 2026-10-02 (game 3.19.1: version diff + newsletter, Magic Seal, break/notice team conditions, IMM_SLIP_DMG burst; branch claude/version-3.19.1)._
+_Last updated: 2026-10-15 (game 3.21.0: dumped + decompiled by Claude on Windows, engine re-ported to 3.21.0; branch claude/version-3.21.0); before: 2026-10-14 (Max Damage + Kioku Grid bench on the 1:1 engine); before: 2026-10-10 (1:1 port in src/engine started); before: 2026-10-03 (passive states per giver, UP_HP_FIXED max HP; earlier: duplicate active-skill states); before: 2026-10-02 (game 3.19.1: version diff + newsletter, Magic Seal, break/notice team conditions, IMM_SLIP_DMG burst; branch claude/version-3.19.1)._
+
+
+## 2026-10-16: Kioku Grid bench crit handling (user's choice)
+
+- 5-unit teams again (Lux fillers back). No "Crits" toggle: a team where a kit reacts to crits
+  (`kitReactsToCrits`: a CTDUnitCount 303 condition or a CTD_CONSUME state; 20 of 116 kits, e.g. Absolute Rain)
+  rolls crits as in the game and averages 10 seeded battles; every other team uses the expected-crit APP MOD
+  (runtime.AppMods.expectedCritDamage) in one battle, or 10 when something else in it is random. Cache version 20.
+
+## 2026-10-15: Kioku Grid bench speed, expected-crit APP MOD, no filler Lux
+
+- **APP MOD (not game code)** `runtime.AppMods.expectedCritDamage` (off by default, never set by game code): in
+  BattleDamageCalculator.GetAttackDamageResult every crit-capable hit deals normal + (crit - normal) x crit chance;
+  the crit roll still happens and is reported. Kioku Grid "Crits: Average crits (mod) | Rolled crits (1:1)", default
+  the mod. Every reader of an AppMods switch is marked "APP MOD (not game code)".
+- Bench teams without filler Lux: support chart = Lux dealer + the character vs Lux alone; attacker chart = the
+  character alone vs Lux alone (role stats). The game runs battles with any number of allies.
+- Average Damage seeds: adaptive (stop when the mean's standard error < 0.25%, at least 3 seeds; 2 with the mod).
+- Parallel bench workers (cores - 1, max 8); runtime.isImpl caches each class's interface set.
+- Fixed `scripts/engine/bundle.mjs` on Windows (path matching found 0 modules and wrote an empty bundle).
+- Cache version 19.
+
+## 2026-10-14 (4): Link Raid (Multi-Raid), GvG, GvE directors ported; app options
+
+- Ported MultiRaidGameDirector, MultiRaidJudgeResultReferee, GvgGameDirector, GveGameDirector,
+  GveJudgeResultReferee, GveBreakBonusFieldParam (28 methods; 53 stubs left, none reachable).
+- **Link Raid** stages (MultiRaidStageMst, category "Link Raid") now run on MultiRaidGameDirector in the PvE page
+  (EngineBattle kind "multiRaid"): one wave, the boss starts at the raid's HP ("Boss HP at start", default full),
+  the stage's round limit, the season's battle bonus passives on every ally (source Bonus 5 [UNCERTAIN: server
+  side]; each passive's role / element condition is the engine's). The status shows TotalDamage (damage values to
+  the boss, overkill included, as the game counts it). Offline: no participants, so no HP syncs
+  (SyncHpScore is only called by the server's answer). `scripts/sim/engineMultiRaid.ts`: 200 stages x 4 teams ok.
+- **GvG**: PvP page "Rules: PvP | GvG" (GvgGameDirector). In 3.19 every BattleType check in the core is
+  "Pvp or Gvg" and both judges have the 15-round limit, so the result is the same as PvP.
+- **GvE**: ported, not offered: the master lists (GveMst, GveStageMst, MapGve*) are empty in this data dump, and
+  GvE enemies come from the server (CreateInitialEnemyBattleUnits), not from a stage.
+
+## 2026-10-14 (3): Max Damage + Kioku Grid bench on the 1:1 engine; two port bugs fixed
+
+- **Port bugs found by comparing the old and new bench** (PITFALLS "explicit interface implementations"):
+  WeaknessUnitState's ATK/DEF -10% never applied (GetProcessedAtk/Def read `.Addition` of an explicit
+  implementation), and the neutral states (Count, LockSpecialAttack, UniqueZone) got `_TargetSide = undefined`.
+  `ifaceProp` (runtime.ts) does interface dispatch. Icon numbers of accum / count states fixed the same way.
+- **Max Damage panel** (PvE page) runs on the engine: `src/battle/EngineMaxDamage.ts`, in a worker
+  (`src/workers/maxDamageWorker.ts`, the last result stays on screen while the next one is computed). Each skill is
+  launched in fresh engine battles of the stage's wave with every team effect given through AbilityEffectLauncher,
+  conditions met (parsed condition lists emptied, csv kept). Effects that can't count together count once, the
+  one giving the most damage (coordinate ascent per column): MaxDmgEffect.tier ladders - "conditions" (exclusive
+  conditions / game duplicates) and, new, "alternative": same-type effects of a skill and the switch skill
+  replacing it, or of different follow-ups (the user's rule: "only the major buff"). The skill's own rows whose start
+  conditions exclude each other also count once (Pluvia☆Magica's HP<80% / HP>=80% rows: the old panel added both).
+  Crystalis copies are given once per equipped copy. `scripts/sim/maxDamageEngine.ts` compares with the old panel
+  (same numbers except: enemy battle-start passives now count, e.g. 129202's DEF +10%; the cases above).
+- **Kioku Grid bench** (`models/LuxBench.ts`) runs on the engine against game-shaped made-up master data
+  (`src/battle/EngineBench.ts`, `addMasterRecords`): a bench stage per enemy count / immunity set (DEF 3000, weak to
+  all, int.MaxValue HP, SPD 1, break table that stays at 500%, 100% parry for immune ailments), styles for Lux
+  identities (element / role; open = Lux's own) and her skills as rows in the tested element. Average Damage is a
+  Manual-control EngineBattle answered by BenchRng (ultimates when ready, Battle Skill whenever SP, single targets on
+  the middle dummy, ally targets on the dealer, PLAY_PATTERNS). No expected crits in the engine: every run with a
+  real roll averages `seeds` battles. Cache version 18.
+- **Speed:** `indexHint` on hot GetModelList scans (BattleUnitInfo per request was 55% of a battle): bench battle
+  200 -> 40 ms; Max Damage 0.3-0.6 s per evaluation for quests, ~1 s for Solo Raid (in the worker).
+- Fight Solver: still on the old engine, marked TODO (user: come back later).
+
+## 2026-10-14 (2): verification of the port, remaining notPorted
+
+- `scripts/engine/callcheck.py` cross-checks every hand-ported body against the game's machine code: for each
+  `@rva` method it lists the ReDriveBattleCore functions the game calls and reports callees the TS body never names.
+  Default mode accepts a callee that is reached through a helper the TS body names (the game inlined that helper);
+  `--strict` shows those too. Result: 0 unexplained callees; `--strict` 30 methods, all reviewed (inlined helpers such as
+  IsCriticalDamage / DamageCutByDisableDamage / CountdownReferee.Initialize, Mst getters read as record fields,
+  local functions `g__X|N_M` written inline, tail calls). GameDirectorBase.BattleEnd now calls SyncGameSituation (tail call).
+- Ported the small leftovers (TargetTypeExtensions, BattleUnitSpeedAccumulator, BackupData.IsValid, GameSituationData
+  ctor, BattleSpeedTypeExtensions, InvalidRequest cctor, DebugTurnGaugeEditRequest ctor, CommandSender.Subscription
+  Dispose, KnockDownAdditionalEnemyCondition.CheckTargetEnemy, AdditionalEnemyUnit ctor(QuestEnemyAppearanceMstModel)).
+- 81 notPorted left, none reachable from a battle (reverse call index over all ReDriveBattleCore functions, cached
+  in ~/.cache/exedra-engine/rev.pkl; 0 callers unless noted):
+  - backup / JSON restore (BackupAgent, contract resolvers, CommandPack Set/RestoreCommands, BattleUnitSkillSet
+    OnSerializing/OnDeserialized): only on a resumed battle; `RestoreLogCommands` is called from
+    RespondToClientReadyRequest only when the backup has commands (never here).
+  - Gve / Gvg / MultiRaid directors and judges, GveBreakBonusFieldParam: game modes the app does not run.
+  - client UI: Vector3 helpers, Style/Enemy texture keys, StyleMst.ReleaseTime/IsReleased, mode-change asset name.
+  - `GetSpeedVariationValue(BattleUnitData, ...)` / `CanAddTo(BattleUnitData)` of the speed states: interface
+    IRequiredSpeedVariationStateForDecide, used by the client's turn-order preview on states sent in
+    CommandDecideSkillContent (BattleUnit.GetStateListForDecide); no battle code calls them.
+  - SimulationBattleGameDirector / FinishBattleData ctors, LinqExtension.Max/Min/Priority (shared generic, no caller),
+    BattleMstReaderContainer.GetReader reflection fallback (every reader is bound).
+- Debug code: the shipped build has it stripped. GameDirectorBase.DebugMode and SoloGameDirectorBase.OnForceWinDebugRequested
+  are `ret`, Request() ignores SwitchDebug (6) and Debug* (1000-1004), Debug.Log is [Conditional("ARIES_LOGGER")], and
+  nothing in the battle code references the DebugTool namespace (log managers, Force*DamageOption, SkillOverwriteOption).
+
+## 2026-10-14: engine runs every battle type; app adapter (branch claude/engine-1to1)
+
+No NOT PORTED errors in quest, PvP or Solo Raid battles (sweeps: quests 150/150, Solo Raid 189/189 incl. 2 seeds,
+RANDTEAMS random kioku teams). Ported this session: SoloRaidGameDirector (setup + restart from BattleInfo,
+countdown, death, SyncBattleInfo), SoloRaidBuffReferee, SoloRaidJudgeResultReferee, CountdownReferee, PvP
+director/provider, remaining unit states / ability effects. Fixed: hidden try/catch in IsMatchConditionSet
+(PITFALLS). App side: `src/battle/EngineBattle.ts` runs the engine like the client and returns BattleSnapshot
+entries (the shape the pages render); `GameRandom.hook` + `src/battle/EngineRandom.ts` route every random draw
+through BattleRng (hit/miss/weighted/seed/manual flips). `scripts/sim/checkFixturesEngine.ts`: all automatic
+in-game fixture cases pass on the engine; manual-control PvE cases skipped (manual control not wired yet).
+Pages switched (same snapshots, low visual change): PvP simulator and PvE simulator (quests, Solo Raid with attempt
+carry, manual control) now run on the engine through EngineBattle. `npm run engine` builds src/engine/dist/engine.js;
+`predev` / `prebuild` run it. Verified with a production build and headless Chromium (fixture import, run, pick panel).
+Old vs engine (`scripts/sim/compareEngines.ts`, deterministic hit/miss modes, 42 battles): 210 of 247 matching
+actions identical; differences traced so far are engine-correct: break deals Max(1, ...) = 1 HP because
+LevelReactionBreakDamageValue is 0 (server value unknown), a passive state given during another unit's act expiring at
+the holder's next TurnEnd (old kept it), Solo Raid ally buff passives. Turn-order ties among identical units can pick a
+different unit than before (time-stop-strike #12, mirrored fixture #5).
+Still on the old engine (src/models): Max Damage panel (MaxDamage.ts), Kioku Grid bench (LuxBench.ts), Fight Solver
+(hidden, BattleClone), Score Attack calculators (closed-form, not a battle sim).
 
 ## 2026-10-10: 1:1 port started in src/engine (branch claude/engine-1to1)
 
@@ -24,12 +135,29 @@ Findings for src/models: MathExtension.Floor scale (PITFALLS), RegisterSpecialAt
 |---|---|
 | `claude/version-3.19.1` | **Checked out 2026-10-02**, branched from main 7fb9730 (= origin/main; the 2026-10-01 branches claude/verify-priority-3.19, claude/actor-skill-type-3.19 and battle-engine-3.19 are merged and no longer exist locally). 3.19.1 work: verdiff.py / disasm.py / smokeNew.ts / VERSION_UPDATE.md runbook, LOCK_SPECIAL_ATTACK, conditions 22/206/207/313-316, BreakedDamageReceiveRate starts at 0, IMM_SLIP_DMG instant DOT burst. Fixtures 6/6, checkMechanics 18/18 (#10-#14 new, each fails without its change), type-check 229 = baseline set. Not pushed; for the user to merge. |
 | `claude/version-3.19.11` | **Checked out 2026-10-07**, branched at 1f3e518 (= main). 3.19.11 report + newsletter, `verdiff.py runs`, docs. No engine change (battle code identical to 3.19.0). Fixtures 10/10, checkMechanics 19/19, type-check 230. Not pushed. |
+| `claude/version-3.21.0` | **Checked out 2026-10-15**, branched from claude/engine-1to1 43e093e (the checked-out branch; clean tree). 3.21.0 report + player newsletter, metadata identifier diff, engine re-ported to 3.21.0 (Step-Up, CONSUME_SELF_HP, Link Raid linked HP, Magic Seal AI), new tools meta_idents / decdiff / fields_check / merge_members / ledger --apply-moves, checkEngine321.ts. Not pushed; merge after claude/engine-1to1. |
 | `main` | = origin/main 7fb9730 on 2026-10-02. |
 
 `docs/ai/EFFECT_TYPES.md` is committed per branch (its header says which); rebuild with `xq build` after switching
 branches or changing the engine. On battle-engine-3.19 `xq build` still lists UNIQUE_BUFF / UNIQUE_DEBUFF /
 UNIQUE_10030301 / UNIQUE_10070201 (pure marker states: stored generically, read by conditions 12/26 - nothing more to
 do) and UP_BREAK_EFFECT (blocked, open question 1).
+
+## Game 3.21.0 (Steam files 2026-10-15 16:12 UTC, PE build 2026-10-08), compared with 3.19.11
+
+CODE CHANGED and the layout moved. Il2CppDumper + Ghidra were run by Claude on Windows (computer use, launchers
+`E:\Il2CppDumper\run_dump.bat`, `E:\unpackedExedra\Ghidra\run_ghidra.bat`): dump in `3.21.0\dump`, decompile in
+`3.21.0\decompiled` (5,513 functions). **src/engine is now a port of 3.21.0** (scripts default to it through
+`scripts/ai/GAME_VER`): 4,073 moved @rva tags (`ledger.py --apply-moves`), 30 moved field offsets
+(`fields_check.py --apply`), new members merged (`merge_members.py`), new types StepUpSkillHandler,
+StepUpSkillUnitState, CommandStepUpSkill, StepUpSkillRequest, ConsumeSelfHpAbilityEffect, enums RequestType 16 /
+CommandType 34 / CompareContent 117. Logic re-ported: see MECHANICS "Step-Up skills and self HP cost". Of 186
+changed functions (`verdiff.py funcs`) ~50 had real changes after `decdiff.py --ignore-offsets --loose`; the rest
+is inlining / folding noise. Master data: nothing uses the new mechanics yet. Checks: engine tsc 0,
+checkEngine321 7/7 (new), checkFixturesEngine 12/12, engineSweep 400/400 runs ok, engineMultiRaid 600/600 ok,
+checkFixtures 12/12 and checkMechanics 19/19 (old engine, unchanged), app type-check 232 (no error in src/engine or
+src/battle). Not ported (stubs as before): BattleUnitSkillSet.OnSerializing / OnDeserialized (backup only).
+[UNCERTAIN] BattleUnitSkillSet ctor stores stepUpSkills through a helper call (Array.Empty when null?).
 
 ## Game 3.19.11 (patched 2026-10-05 18:26 UTC), compared with 3.19.0
 
@@ -109,6 +237,9 @@ Confirmed by the user's in-game observation. Buffs from allies now tick at the h
 - Sandbox Witch (509140) rotation, to confirm TurnNum-per-turn in combo enemies.
 
 ## Session log (newest first, one line each)
+- 2026-10-16: 16 Oct download synced into base_data on claude/version-3.21.0 (Venusta Dissonanza: first STEP_UP_SKILL / CONSUME_SELF_HP / content 117 user; Score Attack 29 Sayaka (Anomalia), Link Raid Dessert Witch, Halloween reruns, Mirror Layers 116-120; report docs/versions/3.21.0/data-2026-10-16.md). Engine sweeps ok (Step-Up used on auto); manual menu offers Step-Up options (EngineBattle.decide); wiki condition_parser / wiki_helpers mirror the engine (117 ConsumedHp, STEP_UP_SKILL, CONSUME_SELF_HP, SWITCH_SKILL v1/v2, *_TURN_IMM v3), wikicheck SYNC COND check. Old src/models engine: Venusta deals 0 DMG there (Fight Solver only).
+- 2026-10-15 (3): ran Il2CppDumper + Ghidra on the user's Windows desktop (File Explorer double-click on .bat launchers), re-ported src/engine to 3.21.0 (Step-Up skills, self HP cost, Link Raid linked HP, Magic Seal AI, 4,073 RVAs); newsletter rewritten for players; skill + runbook updated.
+- 2026-10-15 (2): game 3.21.0 (scheduled run): GameAssembly code changed and moved (needs Il2CppDumper/Ghidra); metadata names Step-Up skills, CONSUME_SELF_HP, Link Raid EX character bonus, none used by data yet; no new content. Report/newsletter/idents in docs/versions/3.21.0 and E:\unpackedExedra\3.21.0\version_report. Branch claude/version-3.21.0.
 - 2026-10-07 (3): PvE Simulator page: "Actions" card above the Fight Solver (`actionSteps` in PvESimulatorPage.vue): one scrolling row of the allies' inputs (Ult / Skill / Basic + picked target, extra actions marked), numbered like the timeline, R/Wave markers, pending decision chip, Copy as text. For replaying a run in game.
 - 2026-10-07 (2): manual turn prompt: ultimates fired from it run before the turn unit's gauge reset, and the TimeForward between-acts requests (endless refill, Vanguard) run after each (`PvPTeam.betweenActsHook`, set in `PvPBattle.bindSnapshotHooks`), so an ult that wipes the minions keeps the turn. Fixture pve-rose-garden-own-ult-refill.json (fixtures 15/15). Also traced two reported tie orders: both were a missing Heroic Grace++ on Floral in the sim build.
 - 2026-10-02 (2): scheduled task made manual; `unpack_version.sh` + senbei-linux unpack the Steam install in the VM; wiki condition_parser.py / wiki_helpers._formatValue updated (real content names, ids -> names, % units, 212/403/313-316, value slots) + `scripts/ai/wikicheck.py`; engine contents 28/30/212/403 (checkMechanics #14). The 2026-10-02 download (Aqua Tempest, Link Raid Darkness Witch, Sorana event) is in ma-ex-data manifests but NOT in base_data yet: report docs/versions/3.19.1/data-2026-10-02.md.

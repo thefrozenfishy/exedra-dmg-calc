@@ -1,4 +1,4 @@
-// 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
+// 1:1 port of ReDriveBattleCore (game 3.21.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
 import { LinkHpReferee } from "./LinkHpReferee";
@@ -36,16 +36,16 @@ export abstract class EnemyAppearanceGameDirectorBase extends GameDirectorBase {
     /** 0x88 protected LinkHpReferee linkHpReferee */
     linkHpReferee: LinkHpReferee = null!;
     get LinkHpReferee(): LinkHpReferee { return this.get_LinkHpReferee(); }
-    /** @rva 0x737D70  public LinkHpReferee get_LinkHpReferee() { } */
+    /** @rva 0x736D70  public LinkHpReferee get_LinkHpReferee() { } */
     get_LinkHpReferee(): LinkHpReferee { return this.linkHpReferee; /* asm: mov rax, qword ptr [rcx + 0x88]; ret */ }
-    /** @rva 0x1495ED0  public void .ctor() { } */
+    /** @rva 0x14BC100  public void .ctor() { } */
     ctor(): this {
         this.additionalEnemyReferee = new AdditionalEnemyReferee().ctor();
         this.linkHpReferee = new LinkHpReferee().ctor();
         super.ctor();
         return this;
     }
-    /** @rva 0x1495C20 slot 6  public override void OnBattleUnitDeath(int deathObjectId) { } */
+    /** @rva 0x14BBE50 slot 6  public override void OnBattleUnitDeath(int deathObjectId) { } */
     OnBattleUnitDeath(deathObjectId: int): void {
         super.OnBattleUnitDeath(deathObjectId);
         const deathUnit = dictGet(this.battleUnitBundle.dic, deathObjectId);
@@ -55,7 +55,7 @@ export abstract class EnemyAppearanceGameDirectorBase extends GameDirectorBase {
             if (list != null) list.forEach(bindDelegate(this, this.$OnBattleUnitDeath$b__5_0));
         }
     }
-    /** @rva 0x1495D80 slot 18  protected override void UpdateLinkHp(List<AffectedUnitNotice> noticeList, GameDirectorBase gameDirector) { } */
+    /** @rva 0x14BBFB0 slot 18  protected override void UpdateLinkHp(List<AffectedUnitNotice> noticeList, GameDirectorBase gameDirector) { } */
     UpdateLinkHp(noticeList: List<AffectedUnitNotice>, gameDirector: GameDirectorBase): void {
         const bundle = this.battleUnitBundle;
         const linkHp = this.linkHpReferee;
@@ -73,12 +73,12 @@ export abstract class EnemyAppearanceGameDirectorBase extends GameDirectorBase {
         const r = this.linkHpReferee;
         this.StoreCommand(new CommandSyncLinkHp().ctor$LinkHpType_string_int_int(r.linkHpType, r.linkHpName, r.currentLinkHp, r.maxLinkHp));
     }
-    /** @rva 0x1495270 slot 7  protected override void CheckMainTargetEnemyDead(BattleUnit deathUnit) { } */
+    /** @rva 0x14BB4A0 slot 7  protected override void CheckMainTargetEnemyDead(BattleUnit deathUnit) { } */
     CheckMainTargetEnemyDead(deathUnit: BattleUnit): void {
         if (this.linkHpReferee.linkHpType !== 0) return;
         this.judgeResultReferee.CheckMainTargetEnemyDead(deathUnit);
     }
-    /** @rva 0x1495050 slot 16  protected override void CheckBattleFinishAfterAct() { } */
+    /** @rva 0x14BB280 slot 16  protected override void CheckBattleFinishAfterAct() { } */
     CheckBattleFinishAfterAct(): void {
         if (this.linkHpReferee == null) return;
         const judge = this.judgeResultReferee;
@@ -88,7 +88,7 @@ export abstract class EnemyAppearanceGameDirectorBase extends GameDirectorBase {
         }
         judge.CheckBattleFinishAfterAct(this.battleUnitBundle.activeList);
     }
-    /** @rva 0x14952B0 slot 11  protected override CommandInitialize CreateCommandInitialize(BattleUnitInfo[] battleUnitInfoArray, TargetReferee targetReferee, SpReferee spReferee, GameSituationData gameSituationData) { } */
+    /** @rva 0x14BB4E0 slot 11  protected override CommandInitialize CreateCommandInitialize(BattleUnitInfo[] battleUnitInfoArray, TargetReferee targetReferee, SpReferee spReferee, GameSituationData gameSituationData) { } */
     CreateCommandInitialize(battleUnitInfoArray: BattleUnitInfo[], targetReferee: TargetReferee, spReferee: SpReferee, gameSituationData: GameSituationData): CommandInitialize {
         const command = new CommandInitialize().ctor$BattleUnitInfo_int_int_int_int_int_int_bool_GameSituationData(battleUnitInfoArray,
             targetReferee.allyAttackTargetId, targetReferee.allyFriendTargetId, targetReferee.enemyAttackTargetId, targetReferee.enemyFriendTargetId,
@@ -97,7 +97,7 @@ export abstract class EnemyAppearanceGameDirectorBase extends GameDirectorBase {
         if (r != null) command.SetLinkHp(r.linkHpType, r.linkHpName, r.currentLinkHp, r.maxLinkHp);
         return command;
     }
-    /** @rva 0x14956F0  public void ModeChangeEnemyBattleUnit(BattleUnit oldUnit, ModeChangeReferee.ModeChangeInfo modeChangeInfo) { } */
+    /** @rva 0x14BB920  public void ModeChangeEnemyBattleUnit(BattleUnit oldUnit, ModeChangeReferee.ModeChangeInfo modeChangeInfo) { } */
     ModeChangeEnemyBattleUnit(oldUnit: BattleUnit, modeChangeInfo: ModeChangeReferee_ModeChangeInfo): void {
         if (oldUnit == null || oldUnit.isCharacter) return;
         if (!(oldUnit.BattleParameter instanceof QuestEnemyAppearanceParameter)) return;
@@ -140,7 +140,7 @@ export abstract class EnemyAppearanceGameDirectorBase extends GameDirectorBase {
         PassiveSkill.TriggeringOnBattleStart(this, otherDic, newUnitDic, true);
         this.SyncGameSituation();
     }
-    /** @rva 0x1494C80  protected void AddEnemyBattleUnit(BattleUnit enemyBattleUnit, bool withStoreCommand = False, bool isInitializedHpLink = False) { } */
+    /** @rva 0x14BAEB0  protected void AddEnemyBattleUnit(BattleUnit enemyBattleUnit, bool withStoreCommand = False, bool isInitializedHpLink = False) { } */
     AddEnemyBattleUnit(enemyBattleUnit: BattleUnit, withStoreCommand?: boolean /* = False */, isInitializedHpLink?: boolean /* = False */): void {
         if (enemyBattleUnit == null || enemyBattleUnit.isCharacter) return;
         if (!(enemyBattleUnit.BattleParameter instanceof QuestEnemyAppearanceParameter)) return;
@@ -163,7 +163,7 @@ export abstract class EnemyAppearanceGameDirectorBase extends GameDirectorBase {
         if (!(withStoreCommand ?? false)) return;
         this.StoreCommand(new CommandAddEnemy().ctor$int_int_int(enemyBattleUnit.Id, param.QuestEnemyAppearanceMstId, enemyBattleUnit.PositionId));
     }
-    /** @rva 0x14953F0  public List<BattleUnit> GetSummonedUnitList(List<int> summonIdList) { } */
+    /** @rva 0x14BB620  public List<BattleUnit> GetSummonedUnitList(List<int> summonIdList) { } */
     GetSummonedUnitList(summonIdList: List<int>): List<BattleUnit> {
         const result: List<BattleUnit> = [];
         if (!(summonIdList.length > 0)) return result;
@@ -185,12 +185,12 @@ export abstract class EnemyAppearanceGameDirectorBase extends GameDirectorBase {
         }
         return result;
     }
-    /** @rva 0x14956C0  public void InitLinkHp(int questStageMstId, int currentWave, List<BattleUnit> enemyUnitList, Nullable<int> initialLinkHp) { } */
+    /** @rva 0x14BB8F0  public void InitLinkHp(int questStageMstId, int currentWave, List<BattleUnit> enemyUnitList, Nullable<int> initialLinkHp) { } */
     InitLinkHp(questStageMstId: int, currentWave: int, enemyUnitList: List<BattleUnit>, initialLinkHp: Nullable<int>): void {
         if (this.linkHpReferee == null) return;
         this.linkHpReferee.Init(questStageMstId, currentWave, enemyUnitList, initialLinkHp); // tail call in the game
     }
-    /** @rva 0x1495D60  private void <OnBattleUnitDeath>b__5_0(BattleUnit unit) { } */
+    /** @rva 0x14BBF90  private void <OnBattleUnitDeath>b__5_0(BattleUnit unit) { } */
     $OnBattleUnitDeath$b__5_0(unit: BattleUnit): void {
         this.AddEnemyBattleUnit(unit, true, true);
     }

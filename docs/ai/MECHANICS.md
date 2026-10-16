@@ -444,6 +444,31 @@ Ultimates (SpecialAttackAct) and follow-ups: only ExecuteSkill - no TurnStart/Tu
   DamageInfo has no giver field: the vortex's owner gets no credit. [C] TS: added to `notice.totalDamageValue`; the
   owner's `dot` event is display/attribution only. Check: checkMechanics #7.
 
+### Step-Up skills and self HP cost (game 3.21.0, ported 2026-10-15)
+- STEP_UP_SKILL = StepUpSkillUnitState (value1 = step level, value2 = skillUniqueId), given by a passive. The step's
+  skill is the SkillMst row with that skillUniqueId at the unit's first Battle Skill level
+  (StepUpSkillUnitState.GetSkillMstId 0x1702580). BattleUnit.GetStepUpSkills 0x13ae900 builds SkillSet.StepUpSkills
+  from the passives (deduplicated); GetList / GetSkill include them.
+- Stepping is a UI request (StepUpSkillRequest, RequestType 16; ignored when the battle is finished):
+  StepUpSkillHandler.HandleRequest 0x15e4e00 answers with CommandStepUpSkill (next skill id, step, expected SP,
+  can step further); cancel goes back to step 0. The client then sends a normal SkillRequest with the step skill.
+- SP: step skill's ConsumeSP + step level (CalcStepUpTotalConsumeSp 0x15e4900), checked against team SP
+  (TryEvaluateNextStepUp 0x15e5a20) and paid in ActiveSkill.Execute 0x139c830 (GetActiveStepUpLevel 0x15e4ab0).
+- Auto (UnitBrain.AutoSelectActiveSkillOrNormalAttack 0x18190e0): when not switching skills,
+  TrySelectStepUpActiveSkills 0x15e5c00 takes the highest affordable step if ShouldUseStepUpSkillByRole 0x15e5260
+  says so: Attacker an enemy broken, Breaker an enemy not broken, Healer an ally under 50% HP, Buffer / Debuffer one
+  of its own buffs on an ally / debuffs on an enemy with 1 turn left, Defender an ally without a barrier.
+- CONSUME_SELF_HP = ConsumeSelfHpAbilityEffect 0x1923320: self only (EffectRange -1); cost = ceil(MaxHP x
+  value1/1000 + value2), capped at HP - 1 (never kills); Solo directors apply the mode-change damage cut; enemies
+  under linked HP (type 2) don't lose own HP. AffectedUnitNotice.IsConsumeHp / ConsumeHpValue (op_Addition merges);
+  compare content 117 IsConsumeHp (BattleUnitConditionChecker 0x180a330); boss linked HP and Link Raid TotalDamage
+  count the cost.
+- Link Raid 3.21.0: SetupBattleStage inits the linked HP at the raid's HP; SyncHp sets every enemy through the link
+  and kills all of them at 0; StoreCommand counts damage to any enemy under linked HP (allies never);
+  BattleUnit.Attack 0x13aa010 returns 0 under linked HP for every EnemyAppearance director (was Solo only).
+- Magic Seal AI (LockSpecialAttackUnitState.GetAIFilteredTargets 0x16fc950) now only targets units it can land on
+  (IsTarget = CanAddTo).
+
 ## 14. PvP specifics
 
 - policyType 3: damage ×0.25, heal ×0.5, barrier ×0.5, break gauge from rarity/role, slow 250. [C][D]

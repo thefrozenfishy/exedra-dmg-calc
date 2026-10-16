@@ -1,6 +1,7 @@
-// 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
+// 1:1 port of ReDriveBattleCore (game 3.21.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
+import { ConsumeSelfHpAbilityEffect } from "./AbilityEffect/ConsumeSelfHpAbilityEffect";
 import { ZoneStackAbilityEffect } from "./AbilityEffect/ZoneStackAbilityEffect";
 import { ZoneReleaseAbilityEffect } from "./AbilityEffect/ZoneReleaseAbilityEffect";
 import { ZoneExpandAbilityEffect } from "./AbilityEffect/ZoneExpandAbilityEffect";
@@ -60,12 +61,12 @@ import type { AbilityEffectInfo } from "./AbilityEffectInfo";
 export class AbilityEffectFactory {
     /** 0x0 private static readonly Dictionary<string, Func<AbilityEffectInfo, AbilityEffectBase>> createDic */
     static createDic: Dictionary<string, ((a0: AbilityEffectInfo) => AbilityEffectBase)> = null!;
-    /** @rva 0x125A1A0  public static bool CanCreate(string effectType) { } */
+    /** @rva 0x128D1F0  public static bool CanCreate(string effectType) { } */
     static CanCreate(effectType: string): boolean {
         runCctor(AbilityEffectFactory);
         return AbilityEffectFactory.createDic.has(effectType);
     }
-    /** @rva 0x125A220  public static AbilityEffectBase Create(AbilityEffectInfo info, bool isIncludeDeadUnitInTarget) { } */
+    /** @rva 0x128D270  public static AbilityEffectBase Create(AbilityEffectInfo info, bool isIncludeDeadUnitInTarget) { } */
     static Create(info: AbilityEffectInfo, isIncludeDeadUnitInTarget: boolean): AbilityEffectBase {
         runCctor(AbilityEffectFactory);
         if (UnitStateFactory.CanCreate(info.EffectType)) {
@@ -76,7 +77,7 @@ export class AbilityEffectFactory {
         if (!AbilityEffectFactory.createDic.has(info.EffectType)) return null!;
         return AbilityEffectFactory.createDic.get(info.EffectType)!(info);
     }
-    /** @rva 0x125A480  private static void .cctor() { } */
+    /** @rva 0x128D4D0  private static void .cctor() { } */
     static cctor(): void {
         // lazy (runCctor): the lambdas construct classes that import this module
         const dic = new Map<string, (info: AbilityEffectInfo) => AbilityEffectBase>();
@@ -89,6 +90,7 @@ export class AbilityEffectFactory {
         dic.set("RECOVERY_HP", info => new RecoveryHpAbilityEffect().ctor$AbilityEffectInfo(info)); // b__3_6
         dic.set("RECOVERY_HP_ATK", info => new RecoveryHpAtkAbilityEffect().ctor$AbilityEffectInfo(info)); // b__3_7
         dic.set("REVIVAL_RATIO", info => new RevivalRatioAbilityEffect().ctor$AbilityEffectInfo(info)); // b__3_8
+        dic.set("CONSUME_SELF_HP", info => new ConsumeSelfHpAbilityEffect().ctor$AbilityEffectInfo(info)); // 3.21.0
         dic.set("GAIN_EP_FIXED", info => new GainEpFixedAbilityEffect().ctor$AbilityEffectInfo(info)); // b__3_9
         dic.set("GAIN_EP_RATIO", info => new GainEpRatioAbilityEffect().ctor$AbilityEffectInfo(info)); // b__3_10
         dic.set("LOSE_EP_FIXED", info => new LoseEpFixedAbilityEffect().ctor$AbilityEffectInfo(info)); // b__3_11

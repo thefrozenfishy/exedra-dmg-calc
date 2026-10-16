@@ -1,4 +1,4 @@
-// 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
+// 1:1 port of ReDriveBattleCore (game 3.21.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
 import { notPorted } from "../../runtime";
@@ -22,7 +22,7 @@ export class BattleMstReaderContainer {
     static Bind<TModel, TRecord, TKey>(TModel$: Type, reader: IBattleMstReader<TModel, TRecord, TKey>): void {
         BattleMstReaderContainer.readerDic.set(TModel$, reader); // 0x24edde0: readerDic[typeof(IBattleMstReader<...>)] = reader
     }
-    /** @rva 0x16CD520  private static void .cctor() { } */
+    /** @rva 0x16F6FF0  private static void .cctor() { } */
     static cctor(): void {
         BattleMstReaderContainer.readerDic = new Map<Type, any>();
     }

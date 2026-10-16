@@ -1,4 +1,4 @@
-// 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
+// 1:1 port of ReDriveBattleCore (game 3.21.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
 import { f32, notPorted } from "../../runtime";
@@ -22,16 +22,16 @@ export abstract class BreakPointDamageVariationUnitStateBase extends UnitStateBa
     set UpdateableEffectValue(v: float) { this.set_UpdateableEffectValue(v); }
     get Calculation(): BreakPointDamageVariationUnitStateBase_CalculationType { return this.get_Calculation(); }
     get Addition(): AdditionType { return this.get_Addition(); }
-    /** @rva 0xC646A0 slot 25  public float get_UpdateableEffectValue() { } */
+    /** @rva 0xC84590 slot 25  public float get_UpdateableEffectValue() { } */
     get_UpdateableEffectValue(): float { return this._UpdateableEffectValue; /* auto-property */ }
-    /** @rva 0xC646B0 slot 26  public void set_UpdateableEffectValue(float value) { } */
+    /** @rva 0xC845A0 slot 26  public void set_UpdateableEffectValue(float value) { } */
     set_UpdateableEffectValue(value: float): void { this._UpdateableEffectValue = value; /* auto-property */ }
-    /** @rva 0x16CF610  protected void .ctor() { } */
+    /** @rva 0x16F8570  protected void .ctor() { } */
     ctor(): this {
         this._IconName = "";
         return this;
     }
-    /** @rva 0x15BAC90  public void .ctor(AbilityEffectInfo info) { } */
+    /** @rva 0x15E14E0  public void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
         super.ctor$AbilityEffectInfo(info);
         this._UpdateableEffectValue = f32(info._EffectValue1);
@@ -41,7 +41,7 @@ export abstract class BreakPointDamageVariationUnitStateBase extends UnitStateBa
     abstract get_Calculation(): BreakPointDamageVariationUnitStateBase_CalculationType;
     /** @rva -1 slot 28  public abstract AdditionType get_Addition(); */
     abstract get_Addition(): AdditionType;
-    /** @rva 0x16CF3D0 slot 29  public virtual Decimal GetDamageVariationValue(Decimal damageValue, Decimal processingValue) { } */
+    /** @rva 0x16F8330 slot 29  public virtual Decimal GetDamageVariationValue(Decimal damageValue, Decimal processingValue) { } */
     GetDamageVariationValue(damageValue: Decimal, processingValue: Decimal): Decimal {
         let value: Decimal;
         const calculation = this.get_Calculation(); // vslot 27
@@ -58,13 +58,13 @@ export abstract class BreakPointDamageVariationUnitStateBase extends UnitStateBa
         if (addition === 1) return value.neg();
         return Decimal.Zero;
     }
-    /** @rva 0x15B8090 slot 21  public override bool CanAddTo(BattleUnit targetUnit) { } */
+    /** @rva 0x15DE3A0 slot 21  public override bool CanAddTo(BattleUnit targetUnit) { } */
     CanAddTo(targetUnit: BattleUnit): boolean {
         // DamageBetterUnitStateBase.CanAddTo (0x15B8090)
         if (!targetUnit.IsMatch$TargetRoleType(this._TargetRole)) return false;
         return targetUnit.IsMatch$TargetElementType(this._TargetElement);
     }
-    /** @rva 0x16CF110 slot 23  public override List<BattleUnit> GetAIFilteredTargets(BattleUnit userUnit, List<BattleUnit> targetUnitList, SkillType skillType, RangeType effectRange, GameDirectorBase gameDirector) { } */
+    /** @rva 0x16F8070 slot 23  public override List<BattleUnit> GetAIFilteredTargets(BattleUnit userUnit, List<BattleUnit> targetUnitList, SkillType skillType, RangeType effectRange, GameDirectorBase gameDirector) { } */
     GetAIFilteredTargets(userUnit: BattleUnit, targetUnitList: List<BattleUnit>, skillType: SkillType, effectRange: RangeType, gameDirector: GameDirectorBase): List<BattleUnit> {
         let list = targetUnitList.filter(x => !x.get_IsDead()); // <>c.b__13_0
         if (list.length > 0) {

@@ -10,7 +10,7 @@ import type { IBattleMstReader, IMstIdDetailMstDicHolder } from "../../ReDriveBa
 export class BattleMstModelRepositoryBase<TModel, TRecord, TKey> implements IBattleMstReader<TModel, TRecord, TKey> {
     static readonly __interfaces: readonly string[] = ['IBattleMstReader'];
     /** ResourceMstRepository: the records (server order) and the record cache keyed by the unique key (field 0x10). */
-    private readonly records: readonly TRecord[];
+    private records: readonly TRecord[];
     private readonly recordDic: Map<TKey, TRecord> = new Map();
     /** ResourceMstRepository model cache (0x20): Dictionary<TKey, TModel>, filled by UpdateCache in record order. */
     private modelCache: Map<TKey, TModel> | null = null;
@@ -22,6 +22,17 @@ export class BattleMstModelRepositoryBase<TModel, TRecord, TKey> implements IBat
         this.keyOf = keyOf;
         this.createFn = create;
         for (const r of records) this.recordDic.set(keyOf(r), r);
+    }
+
+    /** App side, not in the client: appends records the app makes up (the Kioku Grid bench's dummy stage, enemies
+     *  and styles, battle/EngineBench.ts). A record whose key is already present replaces nothing (added keys are new). */
+    AddRecords(records: readonly TRecord[]): void {
+        const fresh = records.filter(r => !this.recordDic.has(this.keyOf(r)));
+        if (!fresh.length) return;
+        this.records = [...this.records, ...fresh];
+        for (const r of fresh) this.recordDic.set(this.keyOf(r), r);
+        this.modelCache = null;
+        this.fieldIndex.clear();
     }
 
     // ---- ResourceMstRepository<TRepository, TModel, TRecord, TKey> ----
@@ -62,7 +73,27 @@ export class BattleMstModelRepositoryBase<TModel, TRecord, TKey> implements IBat
     }
     /** 0x452cd20 slot 20 (virtual): GetRecords().Where(expr).Select(Create).ToList() */
     GetModelList(expr: (r: TRecord) => boolean): ICollection<TModel> {
-        return this.GetRecords().filter(expr).map(r => this.Create(r));
+        // App side: runtime.indexHint - scan only the records with the hinted value (same records, same order)
+        const hint = (expr as any).$index as [string, unknown] | undefined;
+        const source = hint ? this.recordsWith(hint[0], hint[1]) : this.GetRecords();
+        return source.filter(expr).map(r => this.Create(r));
+    }
+
+    /** App side: records whose `field` is `value`, in record order (an index per field, built on first use). */
+    private readonly fieldIndex = new Map<string, Map<unknown, TRecord[]>>();
+    private recordsWith(field: string, value: unknown): readonly TRecord[] {
+        let index = this.fieldIndex.get(field);
+        if (index === undefined) {
+            index = new Map();
+            for (const r of this.records) {
+                const v = (r as any)[field];
+                const list = index.get(v);
+                if (list) list.push(r);
+                else index.set(v, [r]);
+            }
+            this.fieldIndex.set(field, index);
+        }
+        return index.get(value) ?? [];
     }
 }
 
@@ -78,6 +109,11 @@ export class DetailMstModelRepository<TModel extends { record: TRecord }, TRecor
     constructor(records: readonly TRecord[], keyOf: (r: TRecord) => int, create: (r: TRecord) => TModel, mstIdOf: (r: TRecord) => int) {
         super(records, keyOf, create);
         this.mstIdOf = mstIdOf;
+    }
+    /** App side (see BattleMstModelRepositoryBase.AddRecords): the grouping is rebuilt with the new records. */
+    override AddRecords(records: readonly TRecord[]): void {
+        super.AddRecords(records);
+        this.mstIdDetailModelsDic = null;
     }
     GetMstIdDetailModelsDic(): IReadOnlyDictionary<int, List<TModel>> {
         if (this.mstIdDetailModelsDic == null) {

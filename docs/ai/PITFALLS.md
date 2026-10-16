@@ -207,3 +207,58 @@
 - **Device file delivery:** `device_commit_files` uploads the content a path had when it was first committed; a
   second commit of the same container path can deliver the old bytes. Copy to a new name per revision and
   check md5 on both sides. Don't edit a committed file on the device and commit it again from the container.
+- **Hidden try/catch.** Ghidra drops catch blocks. `ConditionSet.IsMatchConditionSet` (0x17ec2d0) is
+  `try { !Any(!IsMatchCondition) } catch { return false; }` (FH4 tryBlockMap, catch continuation `xor al, al` at
+  0x17ec4e7). Without it a TurnEnd / battle-start AfterProcess pass (null notice bundle) crashes on Linq over null
+  notices (CompareContent 301-304, e.g. passives 2010015, 7001036). Audit: `~/ehaudit.py` lists functions with a
+  try block but no foreach/using (only this one and BackupAgent.RestoreGameDirector in 3.19.0). Port catches with
+  `isGameException(e)` so NotPortedError still propagates.
+- **ClientDriver, not RunBattleToEnd, for Solo Raid / endless waves.** Endless enemy supply and the season buff
+  activation only happen in SoloGameDirectorBase.Request(TimeForwardRequest); RunBattleToEnd (battle skip) calls
+  Forward directly and runs AdditionalSkillActs aimed at id 0 after a wave is wiped (KeyNotFound). Drive battles
+  with `runBattleLikeClient` / src/battle/EngineBattle.
+- **Solo Raid buffs go to the enemy list** (SetupBattleStageForSoloRaid passes `battleUnitBundle.enemyList` [+0x20] to
+  SoloRaidBuffReferee.Init); condition 1513 keeps them inert there. Not a port slip.
+- **GameDirectorBase.ChangeBattlePhase(Start) runs the first act** (Forward): capture its commands as an entry
+  (battle-start follow-ups like Splashin' Kyubey Blast happen there).
+- **Explicit interface implementations need interface dispatch (2026-10-14).** A C# member implemented as
+  `int IFoo.Bar { get; }` is ported as `IFoo$Bar`; code that reads it through the interface must not read `.Bar`
+  (undefined in JS, so every comparison silently fails). Use `ifaceProp(o, "IFoo", "Bar")` (runtime.ts). Found by
+  the Kioku Grid bench: WeaknessUnitState's ATK/DEF -10% (IAtkVariation/IDefVariation.Addition) never applied in
+  BattleUnit.GetProcessedAtk/Def, and StateAbilityEffect set `_TargetSide = undefined` for the neutral states
+  (Count, LockSpecialAttack, UniqueZone: INeutralState.TargetSide). Icon numbers (IStateIconNumberDisplayable) had
+  the same slip, plus IAccum's default implementation of those members. List explicit members with
+  `grep -rhoE "I[A-Z][A-Za-z]+[$][A-Za-z_]+" src/engine/ReDriveBattleCore` and check every reader.
+- **"Conditions met" keeps the condition csv (Max Damage).** Clearing `_ActiveConditionSetIdCsv` also changes which
+  states replace each other (GetDuplicateUnitState b__1 compares the csv): L'Ombre's "+30% DMG (while ...)" and
+  "+15% DMG" then replaced each other. Empty the parsed lists (`startConditionSetList` / `activeConditionSetList`,
+  parsed lazily from the csv) instead; the csv stays.
+- **A unit's role 0 throws** (DmgAbilityEffectBase.IncreaseBreakedDamageReceiveRate "Role が不正です"): made-up units
+  (Kioku Grid bench) always get a real element and role.
+- **Master-table scans are slow in JS.** `GetModelList(predicate)` scans the whole table; BattleUnitInfo
+  (RefreshPrevBackup, every request) did it per passive per unit = 55% of a battle. `indexHint(pred, field, value)`
+  (runtime.ts) tags a predicate with an equality it implies; the repository then scans only matching records (same
+  result, same order). Use it at hot call sites only; the predicate stays the game's.
+- **App mods are the only allowed exceptions to 1:1** (2026-10-15). A deliberate deviation for an app tool goes behind a
+  switch in `runtime.AppMods` (default off = the game), and every line that reads it says "APP MOD (not game code)".
+  Current: `expectedCritDamage` (Kioku Grid bench). Never use one in the simulator pages' default path.
+
+## Added 2026-10-15 (3.21.0 session)
+- When the code changed but no Il2CppDumper dump exists yet, `python3 scripts/ai/meta_idents.py OLD/global-metadata.dat
+  NEW/global-metadata.dat --grep <rx>` diffs the metadata identifier strings (type/method/field names). It found
+  Step-Up skills and CONSUME_SELF_HP in 3.21.0 without a dump. Names only: don't port anything from them.
+- A new enum name (STEP_UP_SKILL, CONSUME_SELF_HP) can appear in the code before AbilityEffectTypeMst has a row for
+  it: `verdiff.py mst` then reports "no new effect types". Check the metadata literals too.
+- unpackedExedra no longer keeps every version (3.19.1 was deleted): OLD = the newest folder with version_report/DONE.
+- Il2CppDumper / Ghidra are Windows programs: run them yourself with computer use. File Explorer is the Windows
+  shell and only gets click tier (no typing, no Run box): write a .bat in the VM (CRLF) and double-click it; the
+  console is masked, so log to files and poll from the VM. The user may have another app in front: re-open Explorer.
+- `verdiff.py funcs` CHANGED includes field-offset shifts, folded getters and inlining. Triage with
+  `scripts/engine/decdiff.py <old> <new> --only <rvas> --ignore-offsets --loose --show`, then read each survivor in the
+  new decompile; ctor inlining (ActBase / BattleUnitStructure / CommandExecuteCommonAct.CreateByTurn*) is noise.
+- `node scripts/engine/bundle.mjs` runs out of memory in the VM without `NODE_OPTIONS=--max-old-space-size=3300`, and
+  a first run can exceed 120 s.
+- `sed -i` / `xargs` over all 600 engine files on the mount is too slow for one call (got killed half way): use one
+  python process.
+- Lambda renumbering after a patch (`b__164_0` -> `b__165_0`) shows up as GONE + NEW members: move the ported body to
+  the new name and RVA, don't leave both.
