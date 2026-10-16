@@ -18,5 +18,10 @@
         "bingoMissionMstId": 8,
         "firstMissionTitleMstId": 2024,
         "sortOrder": 100
+    },
+    {
+        "bingoMissionMstId": 9,
+        "firstMissionTitleMstId": 2027,
+        "sortOrder": 100
     }
 ]

@@ -1176,6 +1176,24 @@
         "sortOrder": 310
     },
     {
+        "passiveSkillSortCategoryMstId": 110,
+        "passiveSkillSortMstId": 4197,
+        "skillUniqueId": 4197,
+        "sortOrder": 110
+    },
+    {
+        "passiveSkillSortCategoryMstId": 130,
+        "passiveSkillSortMstId": 4198,
+        "skillUniqueId": 4198,
+        "sortOrder": 310
+    },
+    {
+        "passiveSkillSortCategoryMstId": 130,
+        "passiveSkillSortMstId": 4199,
+        "skillUniqueId": 4199,
+        "sortOrder": 310
+    },
+    {
         "passiveSkillSortCategoryMstId": 103,
         "passiveSkillSortMstId": 5001,
         "skillUniqueId": 5001,

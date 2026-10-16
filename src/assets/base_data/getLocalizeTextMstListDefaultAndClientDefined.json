@@ -36,6 +36,10 @@
         "textMstId": "0056f249b362ccb37fd7f414d2abb2831"
     },
     {
+        "text": "EX Bonus",
+        "textMstId": "0067761833492b5bd3641e0cb440b2911"
+    },
+    {
         "text": "Subscribe to {0} for <color=#ecd19c>¥{1:N0}</color> a month?",
         "textMstId": "007df68fd46c817d9f3aad106a65fcb71"
     },
@@ -770,6 +774,10 @@
     {
         "text": "09",
         "textMstId": "0a8005f5594bd67041f88c61961926461"
+    },
+    {
+        "text": "Remaining",
+        "textMstId": "0a80e88c6f654b8b2dc02a752fdf8e9a1"
     },
     {
         "text": "Wraith",
@@ -1624,6 +1632,10 @@
         "textMstId": "166718365fd9309017230b914eb949fb1"
     },
     {
+        "text": "Trance",
+        "textMstId": "16690d6b24f81de01dc35d92cb90e6851"
+    },
+    {
         "text": "Obtained Character",
         "textMstId": "166eec8a27b2b284a94ec041638da9611"
     },
@@ -1662,6 +1674,10 @@
     {
         "text": "Featured Unit Description etc.\nSample Text Sample Text Sample\nFeatured Unit Description etc.\nSample Text Sample Text Sample\nFeatured Unit Description etc.\nSample Text Sample Text Sample\nFeatured Unit Description etc.\nSample Text Sample Text Sample",
         "textMstId": "16c8c2f321b3aa84ba9030cc9f67d6171"
+    },
+    {
+        "text": "No Magical Girls are affected.",
+        "textMstId": "16ce03084aae1b548991d36ade4b47b81"
     },
     {
         "text": "Non-Gallery Backgrounds",
@@ -2772,6 +2788,10 @@
         "textMstId": "24daba8201f118ae90da8e5d0b0885ae1"
     },
     {
+        "text": "Recommended Trades",
+        "textMstId": "24dc74883c6ae0eb8a6fd4bbe0d1b4c91"
+    },
+    {
         "text": "Gallery",
         "textMstId": "24de7a1ac944e75d8112007d3b717a791"
     },
@@ -3524,6 +3544,10 @@
         "textMstId": "2e9e3cad7d1a90c4d47b3a5f44c826e51"
     },
     {
+        "text": "None Held",
+        "textMstId": "2e9ecf7c7e62ea08ebeb7565485d35dc1"
+    },
+    {
         "text": "Event Shop",
         "textMstId": "2ea139df275f5a6b580aef94e68eec311"
     },
@@ -4152,6 +4176,10 @@
         "textMstId": "35aceb9f500f5cfd3e6398452cfc81f41"
     },
     {
+        "text": "I confirm I have not claimed the {0}.\nDo not show this notice again.",
+        "textMstId": "35be1547fed30deb2a4afda8397959061"
+    },
+    {
         "text": "The battle in progress ended. The valid battle time expired.",
         "textMstId": "35c4228073a03c82de47409d9ad545ea1"
     },
@@ -4370,6 +4398,10 @@
     {
         "text": "Select an upgrade level.",
         "textMstId": "37dacf363e1c211b6510b532768e02881"
+    },
+    {
+        "text": "* This notice is shown to players who\nhaven't claimed the {0} from the Web Shop.",
+        "textMstId": "37ecfdc779253c2a0af2442be791e4ff1"
     },
     {
         "text": "TBD Witch name goes here. (Rose Garden Witch etc.)",
@@ -4624,6 +4656,10 @@
         "textMstId": "3bc066ed2934e6998386987bf5befc731"
     },
     {
+        "text": "Magical Girls with bonus effects receive stat bonuses in battle.\nBonus effects are not applied to Support Kioku.",
+        "textMstId": "3bd54b986f0a3246dccdfca943daf9541"
+    },
+    {
         "text": "Back button is currently disabled.",
         "textMstId": "3bf5f352386975adee7d615e63c7432b1"
     },
@@ -4746,6 +4782,10 @@
     {
         "text": "Failed to unlink account.",
         "textMstId": "3d62b22f246074d25e1684a1710324591"
+    },
+    {
+        "text": "Cannot Enhance",
+        "textMstId": "3d6d5d12163ea187bb792a6c844d78cf1"
     },
     {
         "text": "2024-12-30T15:00:00.000Z",
@@ -5288,6 +5328,10 @@
         "textMstId": "4488410a489a426ccc71d3e8db1fa26c1"
     },
     {
+        "text": "Autoselect Max Trade",
+        "textMstId": "449447ad3a8120641cb5c7ce5aeb664e1"
+    },
+    {
         "text": "Unlock P Skill Level Cap",
         "textMstId": "449dd6276bbb2e79cde92eb080811a071"
     },
@@ -5558,6 +5602,10 @@
     {
         "text": "There are previous stories related to this event. From the Event screen, you can reread stories that were made available in the past. If you haven't read these stories yet, we recommend you read them first to enhance your enjoyment of this event.",
         "textMstId": "475b83df409584d2171667026dd55dfb1"
+    },
+    {
+        "text": "Recommended Traders",
+        "textMstId": "475f734587b41ac0ede4792c3cb79aba1"
     },
     {
         "text": "Transfer was unsuccessful.",
@@ -8832,6 +8880,10 @@
         "textMstId": "701635304690bd5644b7572d8326ec861"
     },
     {
+        "text": "Held: {0}",
+        "textMstId": "703f1e7e85dfa26ecd3e461275a39e4e1"
+    },
+    {
         "text": "Sunset",
         "textMstId": "70560cbd49685f421c9a8307854f16ef1"
     },
@@ -10316,6 +10368,10 @@
         "textMstId": "832a8e01a3e099461a5c42a0c27685811"
     },
     {
+        "text": "Bulk Trade",
+        "textMstId": "833524e3e0831828cb4dab55eba007351"
+    },
+    {
         "text": "Remove the following player from the union?",
         "textMstId": "83360e319ebcc28766df3d9f1f78f14b1"
     },
@@ -10358,6 +10414,10 @@
     {
         "text": "Lvl. 12",
         "textMstId": "83a84baa6fee213b2414d89f9749cbbd1"
+    },
+    {
+        "text": "Recommendation Settings",
+        "textMstId": "83b14b40410a4cee85c68cf91b8841901"
     },
     {
         "text": "\"",
@@ -10434,6 +10494,10 @@
     {
         "text": "Score Attack Highest Rank",
         "textMstId": "848aa02e594fb93a865481e3a49851bf1"
+    },
+    {
+        "text": "Check the Web Shop now to get a free {0}\nto exchange for Kioku!",
+        "textMstId": "8490f910edbd285c2409e72661bcc8631"
     },
     {
         "text": "Another Memspark for your collection.",
@@ -11576,6 +11640,10 @@
         "textMstId": "91327dc9d2348b3ff9351cb9ddc29d961"
     },
     {
+        "text": "No items to trade.",
+        "textMstId": "9132a9bc802681fb5fe3e044eea9c96f1"
+    },
+    {
         "text": "Transfer Data",
         "textMstId": "913f29ad126317981cb2f590992d0c981"
     },
@@ -12712,6 +12780,10 @@
         "textMstId": "a05d86395e21d2ab2adda487868500721"
     },
     {
+        "text": "Draw Fate Weave",
+        "textMstId": "a09350462d230747f4977505fe652abe1"
+    },
+    {
         "text": "After\n",
         "textMstId": "a0a46cadf2c9f5f2eaad850bb21c66741"
     },
@@ -13606,6 +13678,10 @@
     {
         "text": "You cannot add more LP.",
         "textMstId": "ab9f7f5be2d6fe1e2ff00be5ae5f411b1"
+    },
+    {
+        "text": "Until a selected Kioku is obtained",
+        "textMstId": "aba46fad5c584813e988de61d9dbd79f1"
     },
     {
         "text": "Yachiyo's Voice",
@@ -14904,6 +14980,10 @@
         "textMstId": "bb99cd1388e584b97a1cbf35e84fe15a1"
     },
     {
+        "text": "Highest Cleared Mirror Layer",
+        "textMstId": "bb9c0a6c21d4ed31ba98802632ca30ff1"
+    },
+    {
         "text": "{0} ~ {1}",
         "textMstId": "bbbfa14b83b06b840013f2b87c36270b1"
     },
@@ -15154,6 +15234,10 @@
     {
         "text": "You reached your player level cap. Player EXP obtained from main quests and Exedra Quest will be stored.",
         "textMstId": "bf8733d2bdb962488b0bb0fb583ef4ad1"
+    },
+    {
+        "text": "Magical Girls with bonus effects receive stat bonuses in battle.",
+        "textMstId": "bf96429c1b602aae5e862cb746665e8f1"
     },
     {
         "text": "<sprite name=\"PuellapicturaNumber_2\" color=#fff8eb><sprite name=\"PuellapicturaNumber_2\" color=#fff8eb><sprite name=\"PuellapicturaNumber_2\" color=#fff8eb>",
@@ -16074,6 +16158,10 @@
     {
         "text": "No results from search.",
         "textMstId": "cadfeb48505694331edc55b8e00e12b91"
+    },
+    {
+        "text": "ccc / ddd",
+        "textMstId": "cae15cbedd536c53e67165012f1adfc61"
     },
     {
         "text": "Last Login",
@@ -17968,6 +18056,10 @@
         "textMstId": "e1ac832d81bc00bcaa014e97a3fa97681"
     },
     {
+        "text": "Trance / Cancel",
+        "textMstId": "e1adf41e271475804b4701d6941fc0291"
+    },
+    {
         "text": "You've exceeded the max amount of A-Q Chips that can be obtained.",
         "textMstId": "e1adff95df94b3fda4d72a87703974e21"
     },
@@ -18348,6 +18440,10 @@
         "textMstId": "e6797283781a4af4d285826372a5f6501"
     },
     {
+        "text": "Information",
+        "textMstId": "e67cde4b1d024af6703f2e56749dce901"
+    },
+    {
         "text": "This feature can be used with Simple Shot mode when a 3D model is set.",
         "textMstId": "e68fbdfb5c6ffff307ab857762a922021"
     },
@@ -18362,6 +18458,10 @@
     {
         "text": "Lvl. -",
         "textMstId": "e69e619a13ccfdf01c0f4da829ad5f1b1"
+    },
+    {
+        "text": "This feature has not been unlocked.",
+        "textMstId": "e6aba5f2644eebf97f93818d019471cb1"
     },
     {
         "text": "Individual Point Rewards",
@@ -19040,6 +19140,14 @@
         "textMstId": "eedd07e24cba2b71caced5e6e9c1ca341"
     },
     {
+        "text": "5★ Rate {0}%",
+        "textMstId": "eeeeed151871ec29e58ed04cb7fa4c1d1"
+    },
+    {
+        "text": "Tap to change your order of preference.",
+        "textMstId": "ef243a512883a3c53b6de2ac174c29ed1"
+    },
+    {
         "text": "Attack",
         "textMstId": "ef2e7cf38c8526f44d6a3c1df02431ca1"
     },
@@ -19246,6 +19354,10 @@
     {
         "text": "Chat Name",
         "textMstId": "f14697de4b860a45085d64efa271ed2a1"
+    },
+    {
+        "text": "Trade Preferences",
+        "textMstId": "f16abee54cc8a13ba39cc560364f3ccf1"
     },
     {
         "text": "Enter",

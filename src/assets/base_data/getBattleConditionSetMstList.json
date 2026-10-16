@@ -18990,9 +18990,319 @@
         "description": "自分のキャラクターが「凪星そらな」"
     },
     {
+        "battleConditionMstIdCsv": "2290",
+        "battleConditionSetMstId": 3884,
+        "description": "アノマリアさやかの専用バフが付与されているとき"
+    },
+    {
+        "battleConditionMstIdCsv": "2291",
+        "battleConditionSetMstId": 3885,
+        "description": "アノマリアさやかの専用バフが付与されていないとき"
+    },
+    {
+        "battleConditionMstIdCsv": "2292",
+        "battleConditionSetMstId": 3886,
+        "description": "自身にHP消費効果が発動したとき"
+    },
+    {
+        "battleConditionMstIdCsv": "2293",
+        "battleConditionSetMstId": 3887,
+        "description": "アノマリアさやかのフィールドが発動しているとき"
+    },
+    {
+        "battleConditionMstIdCsv": "2294",
+        "battleConditionSetMstId": 3888,
+        "description": "アノマリアさやかのフィールドが発動していないとき"
+    },
+    {
+        "battleConditionMstIdCsv": "976,1,655,5",
+        "battleConditionSetMstId": 3889,
+        "description": "無属性の仲間がダメージを与えたとき(通常攻撃発動したとき)"
+    },
+    {
+        "battleConditionMstIdCsv": "976,1,655,6",
+        "battleConditionSetMstId": 3890,
+        "description": "無属性の仲間がダメージを与えたとき(戦闘スキル発動したとき)"
+    },
+    {
+        "battleConditionMstIdCsv": "976,1,655,7",
+        "battleConditionSetMstId": 3891,
+        "description": "無属性の仲間がダメージを与えたとき(必殺技発動したとき)"
+    },
+    {
+        "battleConditionMstIdCsv": "2290,3,7",
+        "battleConditionSetMstId": 3892,
+        "description": "自身にアノマリアさやか専用バフがあるとき+必殺技を発動"
+    },
+    {
+        "battleConditionMstIdCsv": "306,3,2290",
+        "battleConditionSetMstId": 3905,
+        "description": "自身にアノマリアさやか専用バフがあるとき+追撃を発動したとき"
+    },
+    {
+        "battleConditionMstIdCsv": "138,55,273",
+        "battleConditionSetMstId": 3906,
+        "description": "体力ゲージ数が1のとき AND 2ターンごとに（ターン1から）AND連続行動の1回目"
+    },
+    {
+        "battleConditionMstIdCsv": "138,55,274",
+        "battleConditionSetMstId": 3907,
+        "description": "体力ゲージ数が1のとき AND 2ターンごとに（ターン1から）AND連続行動の2回目"
+    },
+    {
+        "battleConditionMstIdCsv": "138,56,273",
+        "battleConditionSetMstId": 3908,
+        "description": "体力ゲージ数が1のとき AND 2ターンごとに（ターン2から）AND連続行動の1回目"
+    },
+    {
+        "battleConditionMstIdCsv": "138,56,274",
+        "battleConditionSetMstId": 3909,
+        "description": "体力ゲージ数が1のとき AND 2ターンごとに（ターン2から）AND連続行動の2回目"
+    },
+    {
+        "battleConditionMstIdCsv": "139,55,273",
+        "battleConditionSetMstId": 3910,
+        "description": "体力ゲージ数が2のとき AND 2ターンごとに（ターン1から）AND連続行動の1回目"
+    },
+    {
+        "battleConditionMstIdCsv": "139,55,274",
+        "battleConditionSetMstId": 3911,
+        "description": "体力ゲージ数が2のとき AND 2ターンごとに（ターン1から）AND連続行動の2回目"
+    },
+    {
+        "battleConditionMstIdCsv": "139,56,273",
+        "battleConditionSetMstId": 3912,
+        "description": "体力ゲージ数が2のとき AND 2ターンごとに（ターン2から）AND連続行動の1回目"
+    },
+    {
+        "battleConditionMstIdCsv": "139,56,274",
+        "battleConditionSetMstId": 3913,
+        "description": "体力ゲージ数が2のとき AND 2ターンごとに（ターン2から）AND連続行動の2回目"
+    },
+    {
+        "battleConditionMstIdCsv": "140,55,273",
+        "battleConditionSetMstId": 3914,
+        "description": "体力ゲージ数が3のとき AND 2ターンごとに（ターン1から）AND連続行動の1回目"
+    },
+    {
+        "battleConditionMstIdCsv": "140,55,274",
+        "battleConditionSetMstId": 3915,
+        "description": "体力ゲージ数が3のとき AND 2ターンごとに（ターン1から）AND連続行動の2回目"
+    },
+    {
+        "battleConditionMstIdCsv": "140,56,273",
+        "battleConditionSetMstId": 3916,
+        "description": "体力ゲージ数が3のとき AND 2ターンごとに（ターン2から）AND連続行動の1回目"
+    },
+    {
+        "battleConditionMstIdCsv": "140,56,274",
+        "battleConditionSetMstId": 3917,
+        "description": "体力ゲージ数が3のとき AND 2ターンごとに（ターン2から）AND連続行動の2回目"
+    },
+    {
+        "battleConditionMstIdCsv": "2292,5",
+        "battleConditionSetMstId": 3918,
+        "description": "HP消費効果を受けたとき＋通常攻撃"
+    },
+    {
+        "battleConditionMstIdCsv": "2292,6",
+        "battleConditionSetMstId": 3919,
+        "description": "HP消費効果を受けたとき＋戦闘スキル"
+    },
+    {
+        "battleConditionMstIdCsv": "2292,7",
+        "battleConditionSetMstId": 3920,
+        "description": "HP消費効果を受けたとき＋必殺技"
+    },
+    {
         "battleConditionMstIdCsv": "3,1017",
         "battleConditionSetMstId": 3921,
         "description": "自身の経過ターンが17ターン以上"
+    },
+    {
+        "battleConditionMstIdCsv": "2295",
+        "battleConditionSetMstId": 3922,
+        "description": "アノマリアさやかの専用バフが4付与されているとき"
+    },
+    {
+        "battleConditionMstIdCsv": "2296",
+        "battleConditionSetMstId": 3923,
+        "description": "自分のHPが11%未満"
+    },
+    {
+        "battleConditionMstIdCsv": "2297,2298",
+        "battleConditionSetMstId": 3924,
+        "description": "自分のHPが11%以上、30%未満"
+    },
+    {
+        "battleConditionMstIdCsv": "2299,2300",
+        "battleConditionSetMstId": 3925,
+        "description": "自分のHPが30%以上、45%未満"
+    },
+    {
+        "battleConditionMstIdCsv": "2301,2302",
+        "battleConditionSetMstId": 3926,
+        "description": "自分のHPが45%以上、70%未満"
+    },
+    {
+        "battleConditionMstIdCsv": "2303",
+        "battleConditionSetMstId": 3927,
+        "description": "自分のHPが70%以上"
+    },
+    {
+        "battleConditionMstIdCsv": "2293,7,3",
+        "battleConditionSetMstId": 3929,
+        "description": "アノマリアさやかフィールドが発動しているとき＋必殺技発動したとき"
+    },
+    {
+        "battleConditionMstIdCsv": "138,60",
+        "battleConditionSetMstId": 3941,
+        "description": "自分の体力ゲージ数が1のときAND 自分が4ターンごとに（ターン1から）"
+    },
+    {
+        "battleConditionMstIdCsv": "138,61",
+        "battleConditionSetMstId": 3942,
+        "description": "自分の体力ゲージ数が1のときAND 自分が4ターンごとに（ターン2から）"
+    },
+    {
+        "battleConditionMstIdCsv": "138,62",
+        "battleConditionSetMstId": 3943,
+        "description": "自分の体力ゲージ数が1のときAND 自分が4ターンごとに（ターン3から）"
+    },
+    {
+        "battleConditionMstIdCsv": "138,63",
+        "battleConditionSetMstId": 3944,
+        "description": "自分の体力ゲージ数が1のときAND 自分が4ターンごとに（ターン4から）"
+    },
+    {
+        "battleConditionMstIdCsv": "139,57",
+        "battleConditionSetMstId": 3945,
+        "description": "自分の体力ゲージ数が2のときAND 自分が3ターンごとに（ターン1から）"
+    },
+    {
+        "battleConditionMstIdCsv": "139,58",
+        "battleConditionSetMstId": 3946,
+        "description": "自分の体力ゲージ数が2のときAND 自分が3ターンごとに（ターン2から）"
+    },
+    {
+        "battleConditionMstIdCsv": "139,59",
+        "battleConditionSetMstId": 3947,
+        "description": "自分の体力ゲージ数が2のときAND 自分が3ターンごとに（ターン3から）"
+    },
+    {
+        "battleConditionMstIdCsv": "140,60",
+        "battleConditionSetMstId": 3948,
+        "description": "自分の体力ゲージ数が3のときAND 自分が4ターンごとに（ターン1から）"
+    },
+    {
+        "battleConditionMstIdCsv": "140,61",
+        "battleConditionSetMstId": 3949,
+        "description": "自分の体力ゲージ数が3のときAND 自分が4ターンごとに（ターン2から）"
+    },
+    {
+        "battleConditionMstIdCsv": "140,62",
+        "battleConditionSetMstId": 3950,
+        "description": "自分の体力ゲージ数が3のときAND 自分が4ターンごとに（ターン3から）"
+    },
+    {
+        "battleConditionMstIdCsv": "140,63",
+        "battleConditionSetMstId": 3951,
+        "description": "自分の体力ゲージ数が3のときAND 自分が4ターンごとに（ターン4から）"
+    },
+    {
+        "battleConditionMstIdCsv": "140,55",
+        "battleConditionSetMstId": 3952,
+        "description": "自分の体力ゲージ数が3のときAND 自分が2ターンごとに（ターン1から）"
+    },
+    {
+        "battleConditionMstIdCsv": "140,56",
+        "battleConditionSetMstId": 3953,
+        "description": "自分の体力ゲージ数が3のときAND 自分が2ターンごとに（ターン2から）"
+    },
+    {
+        "battleConditionMstIdCsv": "2316",
+        "battleConditionSetMstId": 3956,
+        "description": "自分のブレイク補正倍率は600%未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1513,3,5",
+        "battleConditionSetMstId": 3957,
+        "description": "自身がプレイヤー側のユニットのとき、行動者は自分、通常攻撃を使用"
+    },
+    {
+        "battleConditionMstIdCsv": "2,649",
+        "battleConditionSetMstId": 3958,
+        "description": "行動者は敵 AND 味方が1体以上ブレイクした"
+    },
+    {
+        "battleConditionMstIdCsv": "2,551",
+        "battleConditionSetMstId": 3959,
+        "description": "行動者は敵 AND 味方が1体以上殺された"
+    },
+    {
+        "battleConditionMstIdCsv": "2,5,1388",
+        "battleConditionSetMstId": 3960,
+        "description": "行動者は敵 AND 行動タイプが通常攻撃 AND 自軍が1以上のダメージを受けた"
+    },
+    {
+        "battleConditionMstIdCsv": "2,6,1388",
+        "battleConditionSetMstId": 3961,
+        "description": "行動者は敵 AND 行動タイプがスキル攻撃 AND 自軍が1以上のダメージを受けた"
+    },
+    {
+        "battleConditionMstIdCsv": "2,7,1388",
+        "battleConditionSetMstId": 3962,
+        "description": "行動者は敵 AND 行動タイプが必殺技 AND 自軍が1以上のダメージを受けた"
+    },
+    {
+        "battleConditionMstIdCsv": "2293,25",
+        "battleConditionSetMstId": 3964,
+        "description": "アノマリアさやかフィールドが発動しているとき＋ダメージを受けたとき"
+    },
+    {
+        "battleConditionMstIdCsv": "3,270",
+        "battleConditionSetMstId": 3965,
+        "description": "自身の経過ターンが6ターン未満"
+    },
+    {
+        "battleConditionMstIdCsv": "3,272,776",
+        "battleConditionSetMstId": 3966,
+        "description": "自身の経過ターンが6ターン以上、12ターン未満"
+    },
+    {
+        "battleConditionMstIdCsv": "3,771,779",
+        "battleConditionSetMstId": 3967,
+        "description": "自身の経過ターンが12ターン以上、18ターン未満"
+    },
+    {
+        "battleConditionMstIdCsv": "3,774",
+        "battleConditionSetMstId": 3968,
+        "description": "自身の経過ターンが18ターン以上"
+    },
+    {
+        "battleConditionMstIdCsv": "70,273,536",
+        "battleConditionSetMstId": 3969,
+        "description": "6ターンごと（2ターン目から） AND 連続行動の1回目 AND 味方が誰もいない"
+    },
+    {
+        "battleConditionMstIdCsv": "74,273,536",
+        "battleConditionSetMstId": 3970,
+        "description": "6ターンごと（6ターン目から） AND 連続行動の1回目 AND 味方が誰もいない"
+    },
+    {
+        "battleConditionMstIdCsv": "972,892",
+        "battleConditionSetMstId": 3973,
+        "description": "行動者は水属性&攻撃された時"
+    },
+    {
+        "battleConditionMstIdCsv": "974,892",
+        "battleConditionSetMstId": 3974,
+        "description": "行動者は光属性&攻撃された時"
+    },
+    {
+        "battleConditionMstIdCsv": "976,892",
+        "battleConditionSetMstId": 3975,
+        "description": "行動者は無属性&攻撃された時"
     },
     {
         "battleConditionMstIdCsv": "2123,2322",
@@ -19043,5 +19353,30 @@
         "battleConditionMstIdCsv": "2321,2125",
         "battleConditionSetMstId": 3986,
         "description": "味方全体で毒が付与されている敵が5体以上AND 味方全体で火傷が付与されている敵が1体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "400,7,1686",
+        "battleConditionSetMstId": 4001,
+        "description": "トークンが9のとき＋行動タイプは必殺技＋味方が1体以上攻撃を受けたとき"
+    },
+    {
+        "battleConditionMstIdCsv": "625,7,1686",
+        "battleConditionSetMstId": 4002,
+        "description": "トークンが19のとき＋行動タイプは必殺技＋味方が1体以上攻撃を受けたとき"
+    },
+    {
+        "battleConditionMstIdCsv": "665,7,1686",
+        "battleConditionSetMstId": 4003,
+        "description": "トークンが29のとき＋行動タイプは必殺技＋味方が1体以上攻撃を受けたとき"
+    },
+    {
+        "battleConditionMstIdCsv": "675,7,1686",
+        "battleConditionSetMstId": 4004,
+        "description": "トークンが39のとき＋行動タイプは必殺技＋味方が1体以上攻撃を受けたとき"
+    },
+    {
+        "battleConditionMstIdCsv": "685,7,1686",
+        "battleConditionSetMstId": 4005,
+        "description": "トークンが49のとき＋行動タイプは必殺技＋味方が1体以上攻撃を受けたとき"
     }
 ]

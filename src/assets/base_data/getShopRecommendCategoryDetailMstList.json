@@ -1,0 +1,62 @@
+[
+    {
+        "effectType": 0,
+        "objectType": 1,
+        "shopRecommendCategoryDetailMstId": 100,
+        "shopRecommendCategoryMstId": 1
+    },
+    {
+        "effectType": 32,
+        "objectType": 3,
+        "shopRecommendCategoryDetailMstId": 200,
+        "shopRecommendCategoryMstId": 2
+    },
+    {
+        "effectType": 21,
+        "objectType": 3,
+        "shopRecommendCategoryDetailMstId": 300,
+        "shopRecommendCategoryMstId": 3
+    },
+    {
+        "effectType": 23,
+        "objectType": 3,
+        "shopRecommendCategoryDetailMstId": 400,
+        "shopRecommendCategoryMstId": 4
+    },
+    {
+        "effectType": 13,
+        "objectType": 3,
+        "shopRecommendCategoryDetailMstId": 500,
+        "shopRecommendCategoryMstId": 5
+    },
+    {
+        "effectType": 80,
+        "objectType": 3,
+        "shopRecommendCategoryDetailMstId": 600,
+        "shopRecommendCategoryMstId": 6
+    },
+    {
+        "effectType": 82,
+        "objectType": 3,
+        "shopRecommendCategoryDetailMstId": 601,
+        "shopRecommendCategoryMstId": 6
+    },
+    {
+        "effectType": 22,
+        "objectType": 3,
+        "shopRecommendCategoryDetailMstId": 700,
+        "shopRecommendCategoryMstId": 7
+    },
+    {
+        "effectType": 0,
+        "objectType": 7,
+        "shopRecommendCategoryDetailMstId": 800,
+        "shopRecommendCategoryMstId": 8
+    },
+    {
+        "effectType": 1,
+        "objectType": 3,
+        "shopRecommendCategoryDetailMstId": 900,
+        "shopRecommendCategoryMstId": 9
+    }
+]

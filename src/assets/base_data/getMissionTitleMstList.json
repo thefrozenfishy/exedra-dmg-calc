@@ -57,7 +57,7 @@
         "completeAppealDescription": "",
         "featuredRewardResourceName": "",
         "missionCampaignGroupMstId": 0,
-        "missionTitleMstId": 1029,
+        "missionTitleMstId": 1030,
         "prevMissionTitleMstId": 0,
         "priority": 1,
         "title": "Season Missions"
@@ -66,10 +66,10 @@
         "completeAppealDescription": "",
         "featuredRewardResourceName": "",
         "missionCampaignGroupMstId": 0,
-        "missionTitleMstId": 1030,
+        "missionTitleMstId": 1031,
         "prevMissionTitleMstId": 0,
         "priority": 1,
-        "title": "Season Missions"
+        "title": "Link Raid Season Missions"
     },
     {
         "completeAppealDescription": "Get Portrait \"Walpurgisnacht Rising KV Part 1 Madoka\" x1!",
@@ -243,6 +243,33 @@
         "title": "Sorana Magica Bingo Missions"
     },
     {
+        "completeAppealDescription": "Get Magica Stone x1,000!",
+        "featuredRewardResourceName": "",
+        "missionCampaignGroupMstId": 0,
+        "missionTitleMstId": 2027,
+        "prevMissionTitleMstId": 0,
+        "priority": 90,
+        "title": "Exedra Quest Chapter 1 Part II Act II Release Celebration Bingo Missions"
+    },
+    {
+        "completeAppealDescription": "Get Magica Stone x1,000!",
+        "featuredRewardResourceName": "",
+        "missionCampaignGroupMstId": 0,
+        "missionTitleMstId": 2028,
+        "prevMissionTitleMstId": 2027,
+        "priority": 90,
+        "title": "Exedra Quest Chapter 1 Part II Act II Release Celebration Bingo Missions"
+    },
+    {
+        "completeAppealDescription": "Get Magica Stone x1,000!",
+        "featuredRewardResourceName": "",
+        "missionCampaignGroupMstId": 0,
+        "missionTitleMstId": 2029,
+        "prevMissionTitleMstId": 2028,
+        "priority": 90,
+        "title": "Exedra Quest Chapter 1 Part II Act II Release Celebration Bingo Missions"
+    },
+    {
         "completeAppealDescription": "",
         "featuredRewardResourceName": "",
         "missionCampaignGroupMstId": 0,
@@ -300,15 +327,6 @@
         "completeAppealDescription": "",
         "featuredRewardResourceName": "",
         "missionCampaignGroupMstId": 0,
-        "missionTitleMstId": 5157,
-        "prevMissionTitleMstId": 0,
-        "priority": 10006,
-        "title": "Exedra Crisis Play Missions"
-    },
-    {
-        "completeAppealDescription": "",
-        "featuredRewardResourceName": "",
-        "missionCampaignGroupMstId": 0,
         "missionTitleMstId": 5158,
         "prevMissionTitleMstId": 0,
         "priority": 92,
@@ -349,5 +367,59 @@
         "prevMissionTitleMstId": 0,
         "priority": 95,
         "title": "Anything for Who I Care About! Event Memorial Medal Missions"
+    },
+    {
+        "completeAppealDescription": "",
+        "featuredRewardResourceName": "",
+        "missionCampaignGroupMstId": 0,
+        "missionTitleMstId": 5163,
+        "prevMissionTitleMstId": 0,
+        "priority": 96,
+        "title": "[Redux] Forever Halloween Night Part I Event Missions"
+    },
+    {
+        "completeAppealDescription": "",
+        "featuredRewardResourceName": "",
+        "missionCampaignGroupMstId": 0,
+        "missionTitleMstId": 5164,
+        "prevMissionTitleMstId": 0,
+        "priority": 97,
+        "title": "[Redux] Forever Halloween Night Part I Event Memorial Medal Missions"
+    },
+    {
+        "completeAppealDescription": "",
+        "featuredRewardResourceName": "",
+        "missionCampaignGroupMstId": 0,
+        "missionTitleMstId": 5165,
+        "prevMissionTitleMstId": 0,
+        "priority": 99,
+        "title": "[Redux] Forever Halloween Night Part II Event Missions"
+    },
+    {
+        "completeAppealDescription": "",
+        "featuredRewardResourceName": "",
+        "missionCampaignGroupMstId": 0,
+        "missionTitleMstId": 5166,
+        "prevMissionTitleMstId": 0,
+        "priority": 100,
+        "title": "[Redux] Forever Halloween Night Part II Event Memorial Medal Missions"
+    },
+    {
+        "completeAppealDescription": "",
+        "featuredRewardResourceName": "",
+        "missionCampaignGroupMstId": 0,
+        "missionTitleMstId": 5167,
+        "prevMissionTitleMstId": 0,
+        "priority": 10007,
+        "title": "Exedra Quest Clear Missions"
+    },
+    {
+        "completeAppealDescription": "",
+        "featuredRewardResourceName": "",
+        "missionCampaignGroupMstId": 0,
+        "missionTitleMstId": 5168,
+        "prevMissionTitleMstId": 0,
+        "priority": 98,
+        "title": "Score Attack Missions"
     }
 ]

@@ -17888,6 +17888,126 @@
         "description": "自分のキャラクターが「凪星そらな」"
     },
     {
+        "battleConditionMstId": 2290,
+        "compareContent": 26,
+        "compareOperator": 7,
+        "compareTarget": 1,
+        "compareValue": "35",
+        "description": "アノマリアさやかの専用バフが付与されているとき"
+    },
+    {
+        "battleConditionMstId": 2291,
+        "compareContent": 26,
+        "compareOperator": 8,
+        "compareTarget": 1,
+        "compareValue": "35",
+        "description": "アノマリアさやかの専用バフが付与されていないとき"
+    },
+    {
+        "battleConditionMstId": 2292,
+        "compareContent": 117,
+        "compareOperator": 1,
+        "compareTarget": 1,
+        "compareValue": "TRUE",
+        "description": "自身にHP消費効果が発動したとき"
+    },
+    {
+        "battleConditionMstId": 2293,
+        "compareContent": 29,
+        "compareOperator": 1,
+        "compareTarget": 1,
+        "compareValue": "10005,TRUE",
+        "description": "アノマリアさやかのフィールドが発動しているとき"
+    },
+    {
+        "battleConditionMstId": 2294,
+        "compareContent": 29,
+        "compareOperator": 2,
+        "compareTarget": 1,
+        "compareValue": "10005,TRUE",
+        "description": "アノマリアさやかのフィールドが発動していないとき"
+    },
+    {
+        "battleConditionMstId": 2295,
+        "compareContent": 27,
+        "compareOperator": 1,
+        "compareTarget": 1,
+        "compareValue": "35,4",
+        "description": "アノマリアさやかの専用バフが4付与されているとき"
+    },
+    {
+        "battleConditionMstId": 2296,
+        "compareContent": 2,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "11",
+        "description": "自身のHPが11%未満のとき"
+    },
+    {
+        "battleConditionMstId": 2297,
+        "compareContent": 2,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "11",
+        "description": "自身のHPが11%以上のとき"
+    },
+    {
+        "battleConditionMstId": 2298,
+        "compareContent": 2,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "30",
+        "description": "自身のHPが30%未満のとき"
+    },
+    {
+        "battleConditionMstId": 2299,
+        "compareContent": 2,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "30",
+        "description": "自身のHPが30%以上のとき"
+    },
+    {
+        "battleConditionMstId": 2300,
+        "compareContent": 2,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "45",
+        "description": "自身のHPが45%未満のとき"
+    },
+    {
+        "battleConditionMstId": 2301,
+        "compareContent": 2,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "45",
+        "description": "自身のHPが45%以上のとき"
+    },
+    {
+        "battleConditionMstId": 2302,
+        "compareContent": 2,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "70",
+        "description": "自身のHPが70%未満のとき"
+    },
+    {
+        "battleConditionMstId": 2303,
+        "compareContent": 2,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "70",
+        "description": "自身のHPが70%以上のとき"
+    },
+    {
+        "battleConditionMstId": 2316,
+        "compareContent": 21,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "600",
+        "description": "自分のブレイク補正倍率は600%未満"
+    },
+    {
         "battleConditionMstId": 2317,
         "compareContent": 205,
         "compareOperator": 4,

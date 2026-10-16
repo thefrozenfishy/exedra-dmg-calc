@@ -1,0 +1,56 @@
+[
+    {
+        "defaultPriority": 1,
+        "iconImagePath": "icon_priority_07",
+        "name": "Magica Stones",
+        "shopRecommendCategoryMstId": 1
+    },
+    {
+        "defaultPriority": 2,
+        "iconImagePath": "icon_priority_05",
+        "name": "Magia Key",
+        "shopRecommendCategoryMstId": 2
+    },
+    {
+        "defaultPriority": 3,
+        "iconImagePath": "icon_priority_04",
+        "name": "Magic Lvl.",
+        "shopRecommendCategoryMstId": 3
+    },
+    {
+        "defaultPriority": 4,
+        "iconImagePath": "icon_priority_03",
+        "name": "Magia Book",
+        "shopRecommendCategoryMstId": 4
+    },
+    {
+        "defaultPriority": 5,
+        "iconImagePath": "icon_priority_01",
+        "name": "Heartsand",
+        "shopRecommendCategoryMstId": 5
+    },
+    {
+        "defaultPriority": 6,
+        "iconImagePath": "icon_priority_06",
+        "name": "Crystalis",
+        "shopRecommendCategoryMstId": 6
+    },
+    {
+        "defaultPriority": 7,
+        "iconImagePath": "icon_priority_02",
+        "name": "Magical Palette",
+        "shopRecommendCategoryMstId": 7
+    },
+    {
+        "defaultPriority": 8,
+        "iconImagePath": "icon_priority_08",
+        "name": "A-Q Chip",
+        "shopRecommendCategoryMstId": 8
+    },
+    {
+        "defaultPriority": 9,
+        "iconImagePath": "icon_priority_09",
+        "name": "Style Ticket",
+        "shopRecommendCategoryMstId": 9
+    }
+]

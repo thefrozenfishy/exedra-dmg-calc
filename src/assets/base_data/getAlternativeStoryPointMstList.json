@@ -411,8 +411,40 @@
         "isDisplayBossIcon": false,
         "name": "Story 5",
         "pointType": 2,
-        "pointValue": 20006903,
+        "pointValue": 20006904,
         "prevAlternativeStoryPointMstId": 304,
+        "storyType": 1
+    },
+    {
+        "alternativeStoryMstId": 3,
+        "alternativeStoryPointGroupMstId": 32,
+        "alternativeStoryPointMstId": 306,
+        "bgAnimType": 4,
+        "bgAssetBundleName": "bg_01_06",
+        "chapterBgAssetBundleName": "alternative_bg_model_01",
+        "firstClearRewardGroupId": 100,
+        "inBattleArchiveAdvMstId": 0,
+        "isDisplayBossIcon": true,
+        "name": "Story 6",
+        "pointType": 3,
+        "pointValue": 30601,
+        "prevAlternativeStoryPointMstId": 305,
+        "storyType": 1
+    },
+    {
+        "alternativeStoryMstId": 3,
+        "alternativeStoryPointGroupMstId": 32,
+        "alternativeStoryPointMstId": 307,
+        "bgAnimType": 1,
+        "bgAssetBundleName": "bg_01_10",
+        "chapterBgAssetBundleName": "alternative_bg_model_02",
+        "firstClearRewardGroupId": 100,
+        "inBattleArchiveAdvMstId": 0,
+        "isDisplayBossIcon": false,
+        "name": "Story 7",
+        "pointType": 2,
+        "pointValue": 20006909,
+        "prevAlternativeStoryPointMstId": 306,
         "storyType": 1
     }
 ]

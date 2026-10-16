@@ -4438,5 +4438,20 @@
         "targetType": 2,
         "value1": 1150076,
         "value2": 0
+    },
+    {
+        "abilityEffectType": "",
+        "description": "Increases ATK by 10% and HP recovery amount by 10%.<br>On follow-up attack, increases SPD by 2% (Max 10 stacks).",
+        "name": "Surely Joy and Dismay Balance Out",
+        "rarity": 4,
+        "resourceIconName": "battle_icon_selection_ability_ex",
+        "selectionAbilityEffectId": 160,
+        "selectionAbilityMstId": 7079,
+        "selectionAbilityType": 1,
+        "sortOrder": 0,
+        "styleMstId": 10040601,
+        "targetType": 2,
+        "value1": 1150079,
+        "value2": 0
     }
 ]

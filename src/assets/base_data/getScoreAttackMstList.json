@@ -334,5 +334,17 @@
         "scoreAttackMstId": 28,
         "startTime": "2026-09-27T21:00:00+09:00",
         "totalScoreRewardGroupId": 27
+    },
+    {
+        "comment": "The boss is granted 2 actions on even-numbered turns and 3 actions on odd-numbered turns.<br>As the boss's HP decreases, its Magic increases. When its Magic reaches max, it advances its own action order.<br>Its damage taken greatly increases once the break bonus reaches 600% or higher, so going for break bonus increases can work to your advantage.",
+        "dioramaBackgroundMstId": 210811,
+        "endTime": "2026-10-30T11:59:59+09:00",
+        "highScoreRewardGroupId": 29,
+        "name": "Sayaka Miki (Anomalia)",
+        "rankingRewardGroupId": 28,
+        "reprintNum": 0,
+        "scoreAttackMstId": 29,
+        "startTime": "2026-10-16T12:00:00+09:00",
+        "totalScoreRewardGroupId": 28
     }
 ]

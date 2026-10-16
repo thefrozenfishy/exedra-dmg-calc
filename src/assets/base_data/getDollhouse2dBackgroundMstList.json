@@ -2828,5 +2828,45 @@
         "resourceName": "bg_adv_00_90253_02",
         "seriesId": 999,
         "sortOrder": 990751
+    },
+    {
+        "dollhouse2dBackgroundMstId": 990763,
+        "isDefault": false,
+        "lightingType": 2,
+        "name": "Candyland 2 (Night)",
+        "releaseTime": "2026-10-16T12:00:00+09:00",
+        "resourceName": "bg_adv_99_10065_01",
+        "seriesId": 999,
+        "sortOrder": 990763
+    },
+    {
+        "dollhouse2dBackgroundMstId": 990771,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Manor - Parlor (Night)",
+        "releaseTime": "2026-10-16T12:00:00+09:00",
+        "resourceName": "bg_adv_99_90303_03",
+        "seriesId": 999,
+        "sortOrder": 990771
+    },
+    {
+        "dollhouse2dBackgroundMstId": 990781,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Manor - Room (Night)",
+        "releaseTime": "2026-10-16T12:00:00+09:00",
+        "resourceName": "bg_adv_99_90304_03",
+        "seriesId": 999,
+        "sortOrder": 990622
+    },
+    {
+        "dollhouse2dBackgroundMstId": 990791,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Palace (Night)",
+        "releaseTime": "2026-10-25T12:00:00+09:00",
+        "resourceName": "bg_adv_99_10066_01",
+        "seriesId": 999,
+        "sortOrder": 990791
     }
 ]

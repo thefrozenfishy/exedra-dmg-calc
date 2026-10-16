@@ -3122,10 +3122,87 @@
         "name": ""
     },
     {
+        "bannerLabelMstId": 17,
+        "bannerMstId": 453,
+        "destination": "Gacha",
+        "imageName": "banner_00406",
+        "name": ""
+    },
+    {
+        "bannerLabelMstId": 9,
+        "bannerMstId": 454,
+        "destination": "Gacha",
+        "imageName": "banner_00406",
+        "name": ""
+    },
+    {
+        "bannerLabelMstId": 10,
+        "bannerMstId": 455,
+        "destination": "Gacha",
+        "imageName": "banner_00406",
+        "name": ""
+    },
+    {
         "bannerLabelMstId": 0,
         "bannerMstId": 456,
         "destination": "",
         "imageName": "banner_00401",
+        "name": ""
+    },
+    {
+        "bannerLabelMstId": 2,
+        "bannerMstId": 457,
+        "destination": "StoryEvent",
+        "imageName": "banner_00402",
+        "name": ""
+    },
+    {
+        "bannerLabelMstId": 2,
+        "bannerMstId": 458,
+        "destination": "StoryEvent",
+        "imageName": "banner_00403",
+        "name": ""
+    },
+    {
+        "bannerLabelMstId": 0,
+        "bannerMstId": 459,
+        "destination": "",
+        "imageName": "banner_00411",
+        "name": ""
+    },
+    {
+        "bannerLabelMstId": 2,
+        "bannerMstId": 460,
+        "destination": "StoryEvent",
+        "imageName": "banner_00407",
+        "name": ""
+    },
+    {
+        "bannerLabelMstId": 4,
+        "bannerMstId": 461,
+        "destination": "Tower",
+        "imageName": "banner_00412",
+        "name": ""
+    },
+    {
+        "bannerLabelMstId": 5,
+        "bannerMstId": 463,
+        "destination": "",
+        "imageName": "banner_00408",
+        "name": ""
+    },
+    {
+        "bannerLabelMstId": 0,
+        "bannerMstId": 464,
+        "destination": "",
+        "imageName": "banner_00409",
+        "name": ""
+    },
+    {
+        "bannerLabelMstId": 2,
+        "bannerMstId": 465,
+        "destination": "",
+        "imageName": "banner_00410",
         "name": ""
     }
 ]
