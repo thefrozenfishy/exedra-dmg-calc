@@ -14,7 +14,7 @@ import { EngineBattle } from "../../src/battle/EngineBattle";
 import { BattleRng, type RngKind } from "../../src/models/BattleRng";
 import { PvPKioku } from "../../src/models/PvPKioku";
 import { correctCharacterParams } from "../../src/types/KiokuTypes";
-import { kiokuData } from "../../src/utils/helpers";
+import { kiokuData, crystalises } from "../../src/utils/helpers";
 import { skillName } from "../../src/models/PvE";
 import { E } from "../../src/battle/engineBundle";
 
@@ -115,7 +115,7 @@ export function userKioku(chars: any[], name: string): { kioku: PvPKioku, build:
     const crys = Object.entries(ch.crysOptions ?? {}).filter(([, v]: any) => v.useIndex > 0)
     const kioku = new PvPKioku({ ...ch, crysIDs: crys.map(x => Number(x[0])), subCrysIDs: crys.flatMap((x: any) => x[1].subCrys), supportKey: undefined } as any)
     const build = `Lv${ch.kiokuLvl} magic ${ch.magicLvl} heartphial ${ch.heartphialLvl} A${ch.ascension} Ult ${ch.specialLvl}` +
-        `${ch.portrait ? `, portrait "${ch.portrait}"` : ", no portrait"}${crys.length ? `, crystalis ${crys.map(x => x[0]).join("/")}` : ""}`
+        `${ch.portrait ? `, portrait "${ch.portrait}"` : ", no portrait"}${crys.length ? `, crystalis ${crys.map(x => (crystalises as any)[x[0]]?.name ?? x[0]).join(", ")}` : ""}`
     return { kioku, build }
 }
 
