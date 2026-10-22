@@ -1,9 +1,5 @@
 {
- "_comment": "Kioku thumbnails with a badge (count '1','2','4','5' bottom-left, or 'new' tag top-left) for =IMAGE() links in the Magia Exedra data sheet. Add a combo and run compose_badges.py.",
- "badgePos": [
-  6,
-  168
- ],
+ "_comment": "Kioku thumbnails with a badge for =IMAGE() links in the Magia Exedra data sheet: an ascension number ('1','2',...) drawn like TierList.vue, or 'new' for the NEW tag. Add a combo and run compose_badges.py.",
  "combos": [
   {
    "kioku": "10010101",
@@ -153,11 +149,5 @@
    "kioku": "11390101",
    "badge": "new"
   }
- ],
- "badgePosOverrides": {
-  "new": [
-   0,
-   0
-  ]
- }
+ ]
 }
