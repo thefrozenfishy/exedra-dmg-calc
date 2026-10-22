@@ -1,5 +1,5 @@
 {
- "_comment": "Kioku thumbnails with a count badge in the bottom-left corner, for =IMAGE() links in the Magia Exedra data sheet. Add a combo and run compose_badges.py.",
+ "_comment": "Kioku thumbnails with a badge (count '1','2','4','5' bottom-left, or 'new' tag top-left) for =IMAGE() links in the Magia Exedra data sheet. Add a combo and run compose_badges.py.",
  "badgePos": [
   6,
   168
@@ -10,8 +10,16 @@
    "badge": "5"
   },
   {
+   "kioku": "10010601",
+   "badge": "new"
+  },
+  {
    "kioku": "10030101",
    "badge": "2"
+  },
+  {
+   "kioku": "10030301",
+   "badge": "new"
   },
   {
    "kioku": "10040101",
@@ -20,6 +28,10 @@
   {
    "kioku": "10040101",
    "badge": "4"
+  },
+  {
+   "kioku": "10040201",
+   "badge": "new"
   },
   {
    "kioku": "10050101",
@@ -48,6 +60,30 @@
   {
    "kioku": "10180101",
    "badge": "5"
+  },
+  {
+   "kioku": "10190101",
+   "badge": "new"
+  },
+  {
+   "kioku": "10200101",
+   "badge": "new"
+  },
+  {
+   "kioku": "10210101",
+   "badge": "new"
+  },
+  {
+   "kioku": "10220101",
+   "badge": "new"
+  },
+  {
+   "kioku": "10250101",
+   "badge": "new"
+  },
+  {
+   "kioku": "10260101",
+   "badge": "new"
   },
   {
    "kioku": "10610101",
@@ -98,6 +134,10 @@
    "badge": "5"
   },
   {
+   "kioku": "10980101",
+   "badge": "new"
+  },
+  {
    "kioku": "11070101",
    "badge": "5"
   },
@@ -108,6 +148,16 @@
   {
    "kioku": "11260101",
    "badge": "5"
+  },
+  {
+   "kioku": "11390101",
+   "badge": "new"
   }
- ]
+ ],
+ "badgePosOverrides": {
+  "new": [
+   0,
+   0
+  ]
+ }
 }
