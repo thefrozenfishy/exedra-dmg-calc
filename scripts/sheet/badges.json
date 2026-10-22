@@ -1,0 +1,153 @@
+{
+ "_comment": "Kioku thumbnails with a badge for =IMAGE() links in the Magia Exedra data sheet: an ascension number ('1','2',...) drawn like TierList.vue, or 'new' for the NEW tag. Add a combo and run compose_badges.py.",
+ "combos": [
+  {
+   "kioku": "10010101",
+   "badge": "5"
+  },
+  {
+   "kioku": "10010601",
+   "badge": "new"
+  },
+  {
+   "kioku": "10030101",
+   "badge": "2"
+  },
+  {
+   "kioku": "10030301",
+   "badge": "new"
+  },
+  {
+   "kioku": "10040101",
+   "badge": "2"
+  },
+  {
+   "kioku": "10040101",
+   "badge": "4"
+  },
+  {
+   "kioku": "10040201",
+   "badge": "new"
+  },
+  {
+   "kioku": "10050101",
+   "badge": "2"
+  },
+  {
+   "kioku": "10080101",
+   "badge": "1"
+  },
+  {
+   "kioku": "10090101",
+   "badge": "2"
+  },
+  {
+   "kioku": "10100101",
+   "badge": "2"
+  },
+  {
+   "kioku": "10120101",
+   "badge": "2"
+  },
+  {
+   "kioku": "10170101",
+   "badge": "5"
+  },
+  {
+   "kioku": "10180101",
+   "badge": "5"
+  },
+  {
+   "kioku": "10190101",
+   "badge": "new"
+  },
+  {
+   "kioku": "10200101",
+   "badge": "new"
+  },
+  {
+   "kioku": "10210101",
+   "badge": "new"
+  },
+  {
+   "kioku": "10220101",
+   "badge": "new"
+  },
+  {
+   "kioku": "10250101",
+   "badge": "new"
+  },
+  {
+   "kioku": "10260101",
+   "badge": "new"
+  },
+  {
+   "kioku": "10610101",
+   "badge": "5"
+  },
+  {
+   "kioku": "10690101",
+   "badge": "5"
+  },
+  {
+   "kioku": "10700101",
+   "badge": "5"
+  },
+  {
+   "kioku": "10710101",
+   "badge": "5"
+  },
+  {
+   "kioku": "10720101",
+   "badge": "5"
+  },
+  {
+   "kioku": "10740101",
+   "badge": "5"
+  },
+  {
+   "kioku": "10760101",
+   "badge": "5"
+  },
+  {
+   "kioku": "10820101",
+   "badge": "5"
+  },
+  {
+   "kioku": "10830101",
+   "badge": "5"
+  },
+  {
+   "kioku": "10840101",
+   "badge": "5"
+  },
+  {
+   "kioku": "10860101",
+   "badge": "5"
+  },
+  {
+   "kioku": "10900101",
+   "badge": "5"
+  },
+  {
+   "kioku": "10980101",
+   "badge": "new"
+  },
+  {
+   "kioku": "11070101",
+   "badge": "5"
+  },
+  {
+   "kioku": "11140101",
+   "badge": "5"
+  },
+  {
+   "kioku": "11260101",
+   "badge": "5"
+  },
+  {
+   "kioku": "11390101",
+   "badge": "new"
+  }
+ ]
+}
