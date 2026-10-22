@@ -46,6 +46,9 @@ const bannedEffects: Set<string> = new Set([
     //SYachi
     "65341002",
     "65351002",
+
+    // Daya
+    "65421002",
 ]);
 
 const effectIsBanned = (detail: SkillDetail): boolean => {

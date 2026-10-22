@@ -236,4 +236,6 @@ export const otherBuffsAndDebuffs = {
     VORTEX_ATK: "VORTEX_ATK",
     ZONE_EXPAND: "ZONE_EXPAND",
     ZONE_STACK: "ZONE_STACK",
+    CONSUME_SELF_HP: "CONSUME_SELF_HP", 
+    STEP_UP_SKILL: "STEP_UP_SKILL"
 };
