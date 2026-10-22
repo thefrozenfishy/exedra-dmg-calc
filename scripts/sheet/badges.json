@@ -1,0 +1,113 @@
+{
+ "_comment": "Kioku thumbnails with a count badge in the bottom-left corner, for =IMAGE() links in the Magia Exedra data sheet. Add a combo and run compose_badges.py.",
+ "badgePos": [
+  6,
+  168
+ ],
+ "combos": [
+  {
+   "kioku": "10010101",
+   "badge": "5"
+  },
+  {
+   "kioku": "10030101",
+   "badge": "2"
+  },
+  {
+   "kioku": "10040101",
+   "badge": "2"
+  },
+  {
+   "kioku": "10040101",
+   "badge": "4"
+  },
+  {
+   "kioku": "10050101",
+   "badge": "2"
+  },
+  {
+   "kioku": "10080101",
+   "badge": "1"
+  },
+  {
+   "kioku": "10090101",
+   "badge": "2"
+  },
+  {
+   "kioku": "10100101",
+   "badge": "2"
+  },
+  {
+   "kioku": "10120101",
+   "badge": "2"
+  },
+  {
+   "kioku": "10170101",
+   "badge": "5"
+  },
+  {
+   "kioku": "10180101",
+   "badge": "5"
+  },
+  {
+   "kioku": "10610101",
+   "badge": "5"
+  },
+  {
+   "kioku": "10690101",
+   "badge": "5"
+  },
+  {
+   "kioku": "10700101",
+   "badge": "5"
+  },
+  {
+   "kioku": "10710101",
+   "badge": "5"
+  },
+  {
+   "kioku": "10720101",
+   "badge": "5"
+  },
+  {
+   "kioku": "10740101",
+   "badge": "5"
+  },
+  {
+   "kioku": "10760101",
+   "badge": "5"
+  },
+  {
+   "kioku": "10820101",
+   "badge": "5"
+  },
+  {
+   "kioku": "10830101",
+   "badge": "5"
+  },
+  {
+   "kioku": "10840101",
+   "badge": "5"
+  },
+  {
+   "kioku": "10860101",
+   "badge": "5"
+  },
+  {
+   "kioku": "10900101",
+   "badge": "5"
+  },
+  {
+   "kioku": "11070101",
+   "badge": "5"
+  },
+  {
+   "kioku": "11140101",
+   "badge": "5"
+  },
+  {
+   "kioku": "11260101",
+   "badge": "5"
+  }
+ ]
+}
