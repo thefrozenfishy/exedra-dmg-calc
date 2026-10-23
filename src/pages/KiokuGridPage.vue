@@ -206,7 +206,16 @@
             </table>
         </div>
 
-        <section v-for="bc in benchCharts" :key="bc.kind" class="card gain-section" :class="bc.sectionClass">
+        <section class="card bench-toggle-section">
+            <label class="filter-chip" :class="{ active: showBenchCharts }"
+                title="Runs a battle simulation for every Kioku in the background. Heavy on phones and low-memory devices.">
+                <input type="checkbox" v-model="showBenchCharts" /> Show damage simulation charts
+            </label>
+            <p v-if="!showBenchCharts" class="gain-desc">The Lux support and attacker charts simulate battles for every
+                Kioku in the background, which can use a lot of memory (may crash the tab on some phones).</p>
+        </section>
+
+        <section v-for="bc in (showBenchCharts ? benchCharts : [])" :key="bc.kind" class="card gain-section" :class="bc.sectionClass">
             <div class="chart-export-toolbar">
                 <ImageActionsToolbar :target="`.${bc.sectionClass}`" :filename="bc.filename"
                     :export-options="() => chartExportOpts(`.${bc.sectionClass}`)"
@@ -464,6 +473,9 @@ type FightMode = typeof fightModeOptions[number]["value"]
 const fightMode = useSetting<FightMode>("fightMode", "aoe")
 const fightModeIndex = computed(() => fightModeOptions.findIndex(opt => opt.value === fightMode.value))
 
+// Beta charts (battle engine): opt-in, because they spin up several workers per chart that each load the game data,
+// which crashes the tab on low-memory phones ("Aw, Snap!" on Android Chrome).
+const showBenchCharts = useSetting("gridShowBenchCharts", false)
 // Beta charts (battle engine): their own metric toggle, since "average" means something else there.
 const benchAverageDmg = useSetting("gridBenchAverageDmg", false)
 const benchMetricOptions = [
@@ -1387,11 +1399,24 @@ const chartExportOpts = (selector: string): ImageExportOptions => {
     }
 }
 
-watch([markedCharacters, simulateMaxLevels, fightMode, benchSpeed], () => runBench("support"), { immediate: true })
-watch([markedCharacters, simulateMaxLevels, fightMode, benchSpeed], () => runBench("attacker"), { immediate: true })
+// The bench only runs while its charts are shown; hiding them stops the workers.
+const benchKinds: BenchChartKind[] = ["support", "attacker"]
+watch([showBenchCharts, markedCharacters, simulateMaxLevels, fightMode, benchSpeed], () => {
+    for (const kind of benchKinds) {
+        if (showBenchCharts.value) runBench(kind)
+        else stopBench(kind)
+    }
+}, { immediate: true })
 </script>
 
 <style scoped>
+.bench-toggle-section {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+}
+
 .setup-page {
     max-width: 1100px;
     margin: 0 auto;
