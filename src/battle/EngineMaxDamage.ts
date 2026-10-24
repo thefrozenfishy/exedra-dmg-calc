@@ -24,7 +24,7 @@
 import { E } from "./engineBundle"
 import { EngineBattle, type EngineBattleSetup } from "./EngineBattle"
 import { giveFieldState } from "./EngineBench"
-import { collectTeamEffects, isEffectValueType, type MaxDmgEffect, type MaxDmgOptions, type MaxDmgResult, type MemberDamage, type SkillDamage } from "../models/MaxDamage"
+import { collectTeamEffects, isEffectValueType, isSlipDamageType, kitHasEffect, type MaxDmgEffect, type MaxDmgOptions, type MaxDmgResult, type MemberDamage, type SkillDamage } from "../models/MaxDamage"
 import { actorSkillTypeRestriction, ailmentConditionsMet, unitCountConditionsMet } from "../models/BattleConditionParser"
 import { conditionCsvsExclusive } from "../models/ConditionTiers"
 import { enemyName, isMultiRaidStage, isSoloRaidStage, type QuestEnemyAppearance } from "../models/PvE"
@@ -211,7 +211,10 @@ function giveEffects(b: Built, list: Given): Map<string, { dealer: boolean, enem
     const reach = new Map<string, { dealer: boolean, enemies: number[], rate: number }>()
     // buff / debuff strength first: it scales every state its holder gives afterwards
     const landed: { key: string, mstId: number, casterId: number, rate: number }[] = []
-    const ordered = [...list.filter(x => isEffectValueType(x.e.detail.abilityEffectType)), ...list.filter(x => !isEffectValueType(x.e.detail.abilityEffectType))]
+    // and the turn adders (ADD_BUFF_TURN / ADD_DEBUFF_TURN, AddTurnUnitStateBase.AddTurnTo at give time): a DoT given
+    // afterwards gets its extra turns, which IMM_SLIP_DMG pops (damage x remaining turns)
+    const first = (x: Given[number]) => isEffectValueType(x.e.detail.abilityEffectType) || /^ADD_(BUFF|DEBUFF)_TURN$/.test(x.e.detail.abilityEffectType)
+    const ordered = [...list.filter(first), ...list.filter(x => !first(x))]
     for (const { e, stacks, copies } of ordered) {
         const caster = b.allies[e.casterPos]
         if (!caster) continue
@@ -433,7 +436,7 @@ export function computeMaxDamageEngine(allies: PvPKioku[], stage: EngineMaxDmgSt
         : { kind: "quest", allies, stageId: stage.stageId }
     const mainIdx = Math.min(Math.max(0, opts.mainTargetIdx ?? 0), Math.max(0, enemies.length - 1))
     const ctx: Ctx = { setup, waveIdx: stage.waveIdx, enemyApps: enemies, opts, mainIdx, allyCount: allies.length }
-    const effects = collectTeamEffects(allies, attackerPos)
+    const effects = collectTeamEffects(allies, attackerPos, { slipDamage: true })
     const members: MemberDamage[] = []
     let enemySummary: MaxDmgResult["enemies"] = []
 
@@ -442,7 +445,7 @@ export function computeMaxDamageEngine(allies: PvPKioku[], stage: EngineMaxDmgSt
             members.push({ pos, name: allies[pos].name, skills: [], best: undefined })
             continue
         }
-        const passEffects = pos === attackerPos ? effects : collectTeamEffects(allies, pos)
+        const passEffects = pos === attackerPos ? effects : collectTeamEffects(allies, pos, { slipDamage: true })
         const offOf = (e: MaxDmgEffect) => opts.excluded?.has(e.key) || (vortexOffByDefault(e, pos) && !opts.included?.has(e.key))
         const stacksOf = (e: MaxDmgEffect) => offOf(e) ? 0 : Math.max(0, Math.min(e.maxStacks, opts.stacks?.get(e.key) ?? e.maxStacks))
         // The wave's unit counts are known, so "while N enemies remain" conditions are evaluated, not assumed: start
@@ -453,14 +456,17 @@ export function computeMaxDamageEngine(allies: PvPKioku[], stage: EngineMaxDmgSt
                 : unitCountConditionsMet([e.detail.activeConditionSetIdCsv], enemies.length, allies.length))
         const ailmentsOk = (d: SkillDetail) => !opts.enemyStates
             || ailmentConditionsMet([d.startConditionSetIdCsv, d.activeConditionSetIdCsv], opts.enemyStates, enemies.length)
-        // A vortex pops through its OWNER's damage pipeline, not the popping hit's: [CONFIRMED 3.19]
+        // Slip damage (a vortex popping, a DoT popped by IMM_SLIP_DMG) goes through its OWNER's damage pipeline, not the
+        // popping hit's: [CONFIRMED 3.19]
         // BattleDamageCalculator.GetSlipDamageResult (0x13A7580) takes the state's _UserUnitId as attackUnit, and
         // GetSlipDamageValue (0x13A7DD0) uses that unit's processed ATK (GetDefenseCorrectedDamage 0x13A48E0, capped at 2x),
         // DMG dealt / ongoing / vortex DMG dealt (GetProcessedGiveDamage 0x13A5BC0) and element bonuses. So the self-only
-        // buffs of another member whose vortex counts here are given to that member (their crystalis, portrait, ability).
-        const vortexOwners = new Set(passEffects.filter(e => e.detail.abilityEffectType === "VORTEX_ATK" && e.casterPos !== pos
-            && stacksOf(e) > 0 && ailmentsOk(e.detail) && countsOk(e)).map(e => e.casterPos))
-        const forVortex = (e: MaxDmgEffect) => !e.applies && e.side === "ally" && e.detail.range === targetRange.SELF && vortexOwners.has(e.casterPos)
+        // buffs of another member whose vortex counts here, or whose DoT the dealer can pop (IMM_SLIP_DMG in its kit), are
+        // given to that member (their crystalis, portrait, ability, ascension).
+        const popsSlip = kitHasEffect(allies[pos], "IMM_SLIP_DMG")
+        const slipOwners = new Set(passEffects.filter(e => (e.detail.abilityEffectType === "VORTEX_ATK" || (popsSlip && isSlipDamageType(e.detail.abilityEffectType)))
+            && e.casterPos !== pos && stacksOf(e) > 0 && ailmentsOk(e.detail) && countsOk(e)).map(e => e.casterPos))
+        const forOwner = (e: MaxDmgEffect) => !e.applies && e.side === "ally" && e.detail.range === targetRange.SELF && slipOwners.has(e.casterPos)
         // Effects that count, and ladders of rungs that cannot count together (one rung each, chosen per column).
         const base: Given = []
         const ladderOf = new Map<string, Given>()
@@ -468,10 +474,10 @@ export function computeMaxDamageEngine(allies: PvPKioku[], stage: EngineMaxDmgSt
             if (pos === attackerPos) {
                 e.tierUsed = undefined; e.reach = undefined; e.rate = undefined
                 e.defaultOff = vortexOffByDefault(e, pos) || undefined
-                e.forVortex = forVortex(e) || undefined
+                e.forOwner = forOwner(e) || undefined
             }
             const stacks = stacksOf(e)
-            if (!stacks || !ailmentsOk(e.detail) || !(e.applies || forVortex(e)) || !countsOk(e)) continue
+            if (!stacks || !ailmentsOk(e.detail) || !(e.applies || forOwner(e)) || !countsOk(e)) continue
             const copies = e.source === "Crystalis" ? Math.max(1, ((allies[e.casterPos] as any).crys as number[] ?? []).filter(c => c === (e.detail as any).passiveSkillMstId).length) : 1
             if (e.tier) ladderOf.set(e.tier.group, [...(ladderOf.get(e.tier.group) ?? []), { e, stacks, copies }])
             else base.push({ e, stacks, copies })

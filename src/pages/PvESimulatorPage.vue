@@ -341,7 +341,8 @@
                 or back on; lower its stacks to use fewer. Tiered effects and alternatives count one at a time (the one that gives the most damage):
                 click another one to use it instead. A vortex always pops here, and a vortex user's vortex counts from one
                 skill only: the Battle Skill's when they deal the damage, the Ultimate's otherwise (the other is off; click
-                it to turn it on).</p>
+                it to turn it on). A popped vortex or DoT deals its damage with its owner's own ATK and DMG buffs, so
+                those count too ("Show support buffs" shows them in blue).</p>
 
             <div class="effects-summary">
                 <span class="legend legend-buff">{{ effectCounts.buff }} buff{{ effectCounts.buff === 1 ? '' : 's' }} on
@@ -353,6 +354,12 @@
                 <span v-if="effectCounts.off" class="legend legend-off">{{ effectCounts.off }} turned off</span>
                 <button v-if="excluded.size || included.size || stacks.size" type="button" class="link-btn" @click="resetEffects">Reset
                     to the defaults</button>
+                <span v-if="effectCounts.support && showSupportBuffs" class="legend legend-support">{{ effectCounts.support }}
+                    support buff{{ effectCounts.support === 1 ? '' : 's' }}</span>
+                <label v-if="effectCounts.support" class="chip" :class="{ active: showSupportBuffs }"
+                    title="Self-only buffs of members whose vortex / DoT damage counts here: a vortex or popped DoT deals its damage with its owner's ATK and DMG buffs, so these are on the owner, not on the damage dealer. They count whether shown or not.">
+                    <input type="checkbox" v-model="showSupportBuffs" /> Show support buffs
+                </label>
                 <label v-if="effectCounts.na" class="chip" :class="{ active: showUnreachable }"
                     title="Effects that only affect their own caster, or are limited to other elements/roles">
                     <input type="checkbox" v-model="showUnreachable" /> Show {{ effectCounts.na }} that can't reach {{
@@ -381,7 +388,7 @@
                                 <span class="fx-caster">{{ cell[0].casterName }}</span>
                             </div>
                             <div v-for="e in cell" :key="e.key" class="fx-card"
-                                :class="[e.side === 'ally' ? 'fx-buff' : 'fx-debuff', `fx-${e.status}`]"
+                                :class="[e.side === 'ally' ? 'fx-buff' : 'fx-debuff', e.forOwner ? (e.side === 'ally' ? 'fx-support-buff' : 'fx-support-debuff') : '', `fx-${e.status}`]"
                                 :title="e.status === 'na' ? e.statusText : e.status === 'alt' ? `${e.type}\nClick to use this tier instead` : `${e.type}\nClick to turn ${e.status === 'off' ? 'on' : 'off'}`"
                                 @click="e.status !== 'na' && toggleEffect(e.key)">
                                 <div class="fx-effect">
@@ -825,6 +832,8 @@ const STATUS_ORDER: Record<EffectStatus, number> = { used: 0, partial: 1, alt: 2
 // Sections, in this order: active skills first, then the kit's passives and what's equipped.
 const SOURCE_ORDER = ['Battle Skill', 'Ultimate', 'Basic Attack', 'Switch Skill', 'Follow-up', 'Ability', 'Ascension', 'Crystalis', 'Portrait', 'Support', 'Passive']
 const showUnreachable = useSetting('pveShowUnreachableEffects', false)
+// Buffs on a vortex / DoT owner who isn't the dealer (MaxDmgEffect.forOwner): hidden unless asked for, still counted.
+const showSupportBuffs = useSetting('pveShowSupportBuffs', false)
 
 function effectStatus(e: MaxDmgEffect): { status: EffectStatus, statusText: string } {
     const restriction = effectRestriction(e.detail)
@@ -836,9 +845,9 @@ function effectStatus(e: MaxDmgEffect): { status: EffectStatus, statusText: stri
         const what = e.detail.abilityEffectType.includes('DEBUFF') ? 'debuffs' : 'buffs'
         return { status: 'used', statusText: `${e.detail.abilityEffectType.startsWith('UP') ? 'Strengthens' : 'Weakens'} the ${what} ${e.casterName} gives` }
     }
-    if (e.forVortex) {
+    if (e.forOwner) {
         if (excluded.has(e.key)) return { status: 'off', statusText: 'Turned off: click to turn on' }
-        return { status: 'used', statusText: `On ${e.casterName}: a vortex pops with its owner's ATK and DMG buffs` }
+        return { status: 'used', statusText: `On ${e.casterName}: its vortex / DoT damage uses its own ATK and DMG buffs` }
     }
     if (!e.applies) {
         return e.side === 'ally'
@@ -877,6 +886,7 @@ const effectViews = computed(() => (maxDmg.value?.effects ?? []).map(e => {
         value: effectValue(e.rate && e.rate !== 1 ? { ...e.detail, value1: e.detail.value1 * e.rate } : e.detail, e.maxStacks > 1 ? count : 1),
         rate: e.rate ?? 1,
         tierGroup: e.tier?.group,
+        forOwner: !!e.forOwner,
         description: effectDescription(e.detail),
         ...effectStatus(e),
     }
@@ -884,8 +894,13 @@ const effectViews = computed(() => (maxDmg.value?.effects ?? []).map(e => {
 type EffectView = (typeof effectViews.value)[number]
 
 const effectCounts = computed(() => {
-    const counts = { buff: 0, debuff: 0, off: 0, na: 0 }
+    const counts = { buff: 0, debuff: 0, off: 0, na: 0, support: 0 }
     for (const e of effectViews.value) {
+        if (e.forOwner) {
+            if (e.status !== 'off') counts.support++
+            else if (showSupportBuffs.value) counts.off++
+            continue
+        }
         if (e.status === 'off' || e.status === 'na') counts[e.status]++
         else if (e.status !== 'alt') counts[e.side === 'ally' ? 'buff' : 'debuff']++
     }
@@ -896,6 +911,7 @@ const effectSections = computed(() => {
     const bySource = new Map<string, EffectView[]>()
     for (const e of effectViews.value) {
         if (e.status === 'na' && !showUnreachable.value) continue
+        if (e.forOwner && !showSupportBuffs.value) continue
         bySource.set(e.source, [...(bySource.get(e.source) ?? []), e])
     }
     const rank = (source: string) => { const i = SOURCE_ORDER.indexOf(source); return i < 0 ? SOURCE_ORDER.length : i }
@@ -2316,6 +2332,10 @@ const saved = useSavedTeams({
     background: var(--danger);
 }
 
+.legend-support::before {
+    background: #4a8fe0;
+}
+
 .legend-off::before {
     background: rgba(255, 255, 255, 0.25);
 }
@@ -2411,6 +2431,17 @@ const saved = useSavedTeams({
 .fx-card.fx-debuff {
     --fx: var(--danger);
     --fx-bg: rgba(180, 40, 40, 0.16);
+}
+
+/* buffs on a vortex / DoT owner who isn't the damage dealer */
+.fx-card.fx-support-buff {
+    --fx: #4a8fe0;
+    --fx-bg: rgba(40, 90, 180, 0.18);
+}
+
+.fx-card.fx-support-debuff {
+    --fx: #8e1f1f;
+    --fx-bg: rgba(110, 20, 20, 0.22);
 }
 
 .fx-card:hover {

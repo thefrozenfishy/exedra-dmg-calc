@@ -105,7 +105,8 @@
 
 - Vortex (and every slip damage) is computed with its OWNER's stats and buffs, not the popping hit's attacker
   (GetSlipDamageResult 0x13A7580: attackUnit = state._UserUnitId). Max Damage tools that only buff the dealer miss
-  the owner's ATK / DMG dealt / vortex DMG crystalis (fixed 2026-10-24, EngineMaxDamage forVortex).
+  the owner's ATK / DMG dealt / vortex DMG crystalis (fixed 2026-10-24, EngineMaxDamage forOwner). Same for DoTs
+  popped by IMM_SLIP_DMG; and models/MaxDamage.collectTeamEffects drops DoT ailments unless `slipDamage: true`.
 
 ## Decompile reading
 - Ghidra names are ICF-folded: identical bodies share one name, so the `// ====` header may name another method.

@@ -53,9 +53,9 @@ export interface MaxDmgEffect {
     // Dealer's evaluation (engine Max Damage only): off unless its key is in MaxDmgOptions.included
     // (battle/EngineMaxDamage.vortexOffByDefault: a vortex user's other vortex). UI bookkeeping.
     defaultOff?: boolean
-    // Dealer's evaluation (engine Max Damage only): a self-only buff of another member whose vortex counts, given to that
-    // member because a vortex pops with its owner's buffs (battle/EngineMaxDamage). UI bookkeeping.
-    forVortex?: boolean
+    // Dealer's evaluation (engine Max Damage only): a self-only buff of another member whose vortex / DoT counts, given to
+    // that member because slip damage pops with its owner's buffs (battle/EngineMaxDamage). UI bookkeeping.
+    forOwner?: boolean
 }
 
 // Buff/debuff strength (UP/DWN_BUFF/DEBUFF_EFFECT_VALUE): not a state on the dealer or an enemy, it scales every
@@ -162,10 +162,21 @@ function skillDetailsOf(k: PvPKioku, type: TargetType): SkillDetail[] {
     return (skillDetailsByMstId.get(id * 100 + lvl) ?? []) as SkillDetail[]
 }
 
-// States (buffs/debuffs that stay on a unit). Instant effects (damage, heals, EP, haste...) are skipped.
-const isState = (d: SkillDetail) => UNIT_STATE_TYPES.has(d.abilityEffectType)
+// Damage-over-time ailments (popped by IMM_SLIP_DMG in the engine Max Damage).
+export const isSlipDamageType = (type: string) => /^(BURN|POISON|CURSE|BLEED)_/.test(type)
+
+// States (buffs/debuffs that stay on a unit). Instant effects (damage, heals, EP, haste...) are skipped, and DoT
+// ailments unless `withSlipDamage` (this model has no turns, nothing pops them).
+const isState = (d: SkillDetail, withSlipDamage = false) => UNIT_STATE_TYPES.has(d.abilityEffectType)
     && !["ADDITIONAL_SKILL_ACT", "SWITCH_SKILL", "CUTOUT", "STUN", "LOCK_TURN_ORDER", "COMBO", "CAN_NOT_ACTION"].includes(d.abilityEffectType)
-    && !d.abilityEffectType.startsWith("BURN") && !d.abilityEffectType.startsWith("POISON") && !d.abilityEffectType.startsWith("CURSE") && !d.abilityEffectType.startsWith("BLEED")
+    && (withSlipDamage || !isSlipDamageType(d.abilityEffectType))
+
+/** Whether any of the kit's skills, switch skills, follow-ups or passives has an effect of `type` (e.g. IMM_SLIP_DMG). */
+export function kitHasEffect(k: PvPKioku, type: string): boolean {
+    const switches = switchSkillsOf(k)
+    return [...k.effects, ...SKILL_TYPES.flatMap(([t]) => skillDetailsOf(k, t)), ...switches.flatMap(s => s.details), ...followUpsOf(k, switches).flatMap(f => f.details)]
+        .some(d => d.abilityEffectType === type)
+}
 
 // Which part of a kit a passive effect comes from. PvPKioku merges them into one `effects` list, so this reads
 // the passive id back: crystalis are stored as full passive ids, the rest as id * 100 + level. UI grouping only.
@@ -181,12 +192,12 @@ function passiveOrigin(k: PvPKioku, d: SkillDetail): string {
     return "Passive"
 }
 
-// Every buff/debuff the team can produce.
-export function collectTeamEffects(allies: PvPKioku[], attackerPos: number): MaxDmgEffect[] {
+// Every buff/debuff the team can produce (`slipDamage`: DoT ailments too).
+export function collectTeamEffects(allies: PvPKioku[], attackerPos: number, opts: { slipDamage?: boolean } = {}): MaxDmgEffect[] {
     const out: MaxDmgEffect[] = []
     const seen = new Set<string>()
     const add = (casterPos: number, casterName: string, source: string, d: SkillDetail, alt?: { family: string, variant: string }) => {
-        if (!isState(d)) return
+        if (!isState(d, opts.slipDamage)) return
         const side: EffectSide | undefined = isFriendlyEffect(d.abilityEffectType) ? "ally" : isOpponentEffect(d.abilityEffectType) ? "enemy" : undefined
         if (!side) return
         const key = `${casterPos}:${skillDetailId(d)}`
