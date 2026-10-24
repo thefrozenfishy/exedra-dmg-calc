@@ -347,7 +347,7 @@
                 or back on; lower its stacks to use fewer. Tiered effects and alternatives count one at a time (the one that gives the most damage):
                 click another one to use it instead. A vortex always pops here, and a vortex user's vortex counts from one
                 skill only: the Battle Skill's when they deal the damage, the Ultimate's otherwise (the other is off; click
-                it to turn it on). On a wave with several enemies, the numbers on a vortex pick which enemies it is on. A popped vortex or DoT deals its damage with its owner's own ATK and DMG buffs, so
+                it to turn it on). On a wave with several enemies, the numbers on a vortex pick which enemies it is on; on a single-target buff, the portraits pick which allies get it (the dealer by default; another member's vortex / DoT damage uses its own buffs). A popped vortex or DoT deals its damage with its owner's own ATK and DMG buffs, so
                 those count too ("Show support buffs" shows them in blue).</p>
 
             <div class="effects-summary">
@@ -358,7 +358,7 @@
                     's' }}
                     on the enemies</span>
                 <span v-if="effectCounts.off" class="legend legend-off">{{ effectCounts.off }} turned off</span>
-                <button v-if="excluded.size || included.size || stacks.size || Object.keys(vortexEnemies).length" type="button" class="link-btn" @click="resetEffects">Reset
+                <button v-if="excluded.size || included.size || stacks.size || Object.keys(vortexEnemies).length || Object.keys(allyTargets).length" type="button" class="link-btn" @click="resetEffects">Reset
                     to the defaults</button>
                 <span v-if="effectCounts.support && showSupportBuffs" class="legend legend-support">{{ effectCounts.support }}
                     support buff{{ effectCounts.support === 1 ? '' : 's' }}</span>
@@ -413,6 +413,17 @@
                                         :class="{ on: e.status !== 'off' && e.onEnemies.includes(i) }"
                                         :title="`${en.name}: click to ${e.status !== 'off' && e.onEnemies.includes(i) ? 'take this vortex off it' : 'put this vortex on it'}`"
                                         @click="toggleVortexEnemy(e, i)">{{ i + 1 }}</button>
+                                </div>
+                                <!-- single-target ally buff: which allies get it (default: the dealer; pick any) -->
+                                <div v-if="e.allyPick && e.status !== 'na' && (maxDmg?.members.length ?? 0) > 1" class="fx-enemies" @click.stop>
+                                    <span class="fx-enemies-label">On</span>
+                                    <button v-for="m in maxDmg!.members" :key="m.pos" type="button" class="fx-enemy fx-ally"
+                                        :class="{ on: e.status !== 'off' && e.onAllies.includes(m.pos) }"
+                                        :title="`${m.name}${m.pos === dealerPos ? ' (damage dealer)' : ''}: click to ${e.status !== 'off' && e.onAllies.includes(m.pos) ? 'take this buff away' : 'give this buff to it too'}`"
+                                        @click="toggleAllyTarget(e, m.pos)">
+                                        <img v-if="memberId(m.pos)" class="fx-ally-thumb" :src="kiokuImage(memberId(m.pos)!)" :alt="m.name" />
+                                        <span v-else>{{ m.pos + 1 }}</span>
+                                    </button>
                                 </div>
                                 <!-- skill detail id (click to copy) and condition set ids: rows with the same text differ here -->
                                 <div class="fx-meta">
@@ -771,6 +782,9 @@ const included = reactive(new Set<string>())
 const stacks = reactive(new Map<string, number>())
 // A vortex put on chosen enemies (effect key -> page enemy indexes, [] = off): replaces its default and on/off.
 const vortexEnemies = reactive<Record<string, number[]>>({})
+// A single-target ally buff (range 1) given to chosen allies (effect key -> team positions, [] = off) instead of the
+// dealer only: another member's vortex / DoT damage uses that member's own buffs.
+const allyTargets = reactive<Record<string, number[]>>({})
 const isOffByDefault = (k: string) => !!maxDmg.value?.effects.find(x => x.key === k)?.defaultOff
 // A rung of a tier ladder (MaxDmgEffect.tier, one rung counts at a time; the engine uses the rung that gives the most
 // damage): clicking the rung in use turns the whole ladder off; clicking any other rung uses that one only.
@@ -779,6 +793,11 @@ const toggleEffect = (k: string) => {
     // a vortex on chosen enemies: off everywhere, or (when off) on every enemy
     if (vortexEnemies[k]) {
         vortexEnemies[k] = vortexEnemies[k].length ? [] : (maxDmg.value?.enemies ?? []).map((_, i) => i)
+        return
+    }
+    // a buff given to chosen allies: off, or (when off) back on the dealer
+    if (allyTargets[k]) {
+        allyTargets[k] = allyTargets[k].length ? [] : [dealerPos.value]
         return
     }
     if (e?.tier) {
@@ -801,6 +820,13 @@ const setStacks = (k: string, v: number, max: number) => {
 const resetEffects = () => {
     excluded.clear(); included.clear(); stacks.clear()
     for (const k of Object.keys(vortexEnemies)) delete vortexEnemies[k]
+    for (const k of Object.keys(allyTargets)) delete allyTargets[k]
+}
+// One ally chip of a single-target buff card: gives the buff to that ally too, or takes it away.
+function toggleAllyTarget(e: EffectView, i: number) {
+    const on = new Set(e.status === 'off' ? [] : e.onAllies)
+    if (on.has(i)) on.delete(i); else on.add(i)
+    allyTargets[e.key] = [...on].sort((a, b) => a - b)
 }
 // One enemy chip of a vortex card: puts the vortex on that enemy or takes it off (starting from where it is now).
 function toggleVortexEnemy(e: EffectView, i: number) {
@@ -838,6 +864,7 @@ function requestMaxDamage() {
                 battleType: stageBattleType(stageId.value),
                 excluded: new Set(excluded), included: new Set(included), stacks: new Map(stacks),
                 vortexEnemies: JSON.parse(JSON.stringify(vortexEnemies)),
+                allyTargets: JSON.parse(JSON.stringify(allyTargets)),
                 broken: [...broken.value], breakRate: [...breakRate.value], mainTargetIdx: mainTargetIdx.value,
             },
         } satisfies MaxDamageRequest)
@@ -846,7 +873,7 @@ function requestMaxDamage() {
         maxDmgBusy.value = false
     }
 }
-watch([teamKiokus, wave, dealerPos, () => [...excluded], () => [...included], () => JSON.stringify(vortexEnemies), () => [...stacks], broken, breakRate, mainTargetIdx], requestMaxDamage, { deep: true, immediate: true })
+watch([teamKiokus, wave, dealerPos, () => [...excluded], () => [...included], () => JSON.stringify(vortexEnemies), () => JSON.stringify(allyTargets), () => [...stacks], broken, breakRate, mainTargetIdx], requestMaxDamage, { deep: true, immediate: true })
 onBeforeUnmount(() => maxDmgWorker?.terminate())
 const dealer = computed(() => maxDmg.value?.members[dealerPos.value])
 const dealerName = computed(() => dealer.value?.name ?? 'the damage dealer')
@@ -894,6 +921,12 @@ function effectStatus(e: MaxDmgEffect): { status: EffectStatus, statusText: stri
             ? { status: 'na', statusText: `Only affects ${e.casterName} itself` }
             : { status: 'na', statusText: `A drawback on ${e.casterName} itself, not on enemies` }
     }
+    const allyChosen = allyTargets[e.key]
+    if (allyChosen) {
+        if (!allyChosen.length) return { status: 'off', statusText: 'Off on every ally: pick allies below, or click to give it to the dealer' }
+        const names = allyChosen.map(i => maxDmg.value?.members[i]?.name).filter(Boolean)
+        return { status: 'used', statusText: `On ${names.join(', ')}` }
+    }
     const chosen = vortexEnemies[e.key]
     if (chosen && !chosen.length) return { status: 'off', statusText: 'Off on every enemy: pick enemies below, or click to put it on all' }
     if (!chosen && excluded.has(e.key)) return { status: 'off', statusText: 'Turned off: click to turn on' }
@@ -932,6 +965,9 @@ const effectRows = computed(() => (maxDmg.value?.effects ?? []).map(e => {
         // vortex: which enemies it is on (enemy chips on its card)
         vortex: e.detail.abilityEffectType === 'VORTEX_ATK',
         onEnemies: vortexEnemies[e.key] ?? e.reach?.enemies ?? [],
+        // single-target ally buff: which allies get it (ally chips on its card; the dealer by default)
+        allyPick: e.side === 'ally' && e.detail.range === 1 && e.applies && !e.forOwner,
+        onAllies: allyTargets[e.key] ?? e.reach?.allies ?? [],
         description: effectDescription(e.detail),
         blendGroup: e.blendGroup,
         // a card of merged effects (blendGroup) lists every one of these
@@ -1438,6 +1474,7 @@ function currentSetup(): PvESetup {
         excluded: [...excluded],
         included: [...included],
         vortexEnemies: JSON.parse(JSON.stringify(vortexEnemies)),
+        allyTargets: JSON.parse(JSON.stringify(allyTargets)),
         stacks: Object.fromEntries(stacks),
         control: targetMode.value,
         rngMode: rngMode.value,
@@ -1470,6 +1507,7 @@ async function applySetup(raw: unknown) {
     s.excluded.forEach(k => excluded.add(k))
     s.included?.forEach(k => included.add(k))
     Object.entries(s.vortexEnemies ?? {}).forEach(([k, v]) => { vortexEnemies[k] = [...v] })
+    Object.entries(s.allyTargets ?? {}).forEach(([k, v]) => { allyTargets[k] = [...v] })
     Object.entries(s.stacks).forEach(([k, v]) => stacks.set(k, v))
     seed.value = s.seed
     simTurns.value = s.turns
@@ -2712,6 +2750,22 @@ const saved = useSavedTeams({
     color: var(--muted);
     font-size: 0.72rem;
     cursor: pointer;
+}
+
+.fx-enemy.fx-ally {
+    padding: 1px;
+    line-height: 0;
+}
+
+.fx-ally-thumb {
+    width: 22px;
+    height: 22px;
+    border-radius: 5px;
+    opacity: 0.45;
+}
+
+.fx-enemy.on .fx-ally-thumb {
+    opacity: 1;
 }
 
 .fx-enemy.on {

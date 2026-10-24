@@ -23,6 +23,7 @@ export interface PvESetup {
     excluded: string[]               // Max Damage effects left out (MaxDmgEffect.key)
     included?: string[]              // Max Damage effects that are off by default turned on (MaxDmgEffect.defaultOff)
     vortexEnemies?: Record<string, number[]> // Max Damage vortex effect key -> the enemy indexes it is put on ([] = off)
+    allyTargets?: Record<string, number[]>   // Max Damage single-target ally buff key -> the team positions given it ([] = off)
     stacks: Record<string, number>   // Max Damage stack overrides (MaxDmgEffect.key -> stacks)
     control: PvEControl
     rngMode: RngMode
@@ -96,6 +97,9 @@ export function sanitizePvESetup(raw: unknown): PvESetup {
     const vortexIn = asRecord(s.vortexEnemies)
     const vortexEnemies = Object.fromEntries(Object.keys(vortexIn).filter(k => EFFECT_KEY.test(k)).sort().slice(0, MAX_EFFECT_KEYS)
         .map(k => [k, [...new Set(asArray(vortexIn[k]).filter((i): i is number => Number.isInteger(i) && (i as number) >= 0 && (i as number) < MAX_ENEMIES))].sort((a, b) => a - b)]))
+    const allyIn = asRecord(s.allyTargets)
+    const allyTargets = Object.fromEntries(Object.keys(allyIn).filter(k => EFFECT_KEY.test(k)).sort().slice(0, MAX_EFFECT_KEYS)
+        .map(k => [k, [...new Set(asArray(allyIn[k]).filter((i): i is number => Number.isInteger(i) && (i as number) >= 0 && (i as number) < 5))].sort((a, b) => a - b)]))
     const stacksIn = asRecord(s.stacks)
     const stacks = Object.fromEntries(Object.keys(stacksIn).filter(k => EFFECT_KEY.test(k)).sort().slice(0, MAX_EFFECT_KEYS)
         .map(k => [k, int(stacksIn[k], 0, 999, 0)]))
@@ -125,6 +129,7 @@ export function sanitizePvESetup(raw: unknown): PvESetup {
         excluded,
         included,
         vortexEnemies,
+        allyTargets,
         stacks,
         control: s.control === "manual" ? "manual" : "auto",
         rngMode: RNG_MODES.includes(s.rngMode as RngMode) ? s.rngMode as RngMode : "seed",

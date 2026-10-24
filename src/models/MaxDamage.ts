@@ -36,7 +36,7 @@ export interface MaxDmgEffect {
     applies: boolean       // false for self-only effects of another member, and for self-targeted debuffs (drawbacks)
     // Set by computeMaxDamage for the damage dealer's evaluation: where the effect actually landed. Undefined when
     // it was left out (excluded, 0 stacks or !applies). UI bookkeeping only.
-    reach?: { dealer: boolean, enemies: number[] }
+    reach?: { dealer: boolean, enemies: number[], allies?: number[] }   // allies: team positions holding it (ally side)
     // Also for the dealer's evaluation: the effect-value rate the caster's buff/debuff strength applied (1 = none).
     rate?: number
     // One rung of a ladder of same-type states from the same caster whose ACTIVE conditions exclude each other
@@ -72,6 +72,9 @@ export interface MaxDmgOptions {
     // engine Max Damage: a vortex (VORTEX_ATK effect key) put on these enemies only (page enemy indexes), overriding its
     // default and on/off; [] = off
     vortexEnemies?: Record<string, number[]>
+    // engine Max Damage: a single-target ally buff (range 1, effect key) given to these team positions instead of the dealer
+    // only; [] = off
+    allyTargets?: Record<string, number[]>
     stacks?: Map<string, number>
     broken?: boolean[]            // per enemy: evaluate as broken
     breakRate?: (number | undefined)[] // per enemy broken damage rate in % (default: the enemy's max)

@@ -90,6 +90,10 @@ export function vortexOffByDefault(e: MaxDmgEffect, dealerPos: number): boolean 
     return e.casterPos === dealerPos ? e.source === "Ultimate" : e.source === "Battle Skill"
 }
 
+/** A single-target ally buff (range 1): given to the selected friend (Triggering selectFriendUnitId), the dealer by
+ *  default; MaxDmgOptions.allyTargets picks other allies (their vortex / DoT damage uses their own buffs). */
+export const isAllyTargetBuff = (e: MaxDmgEffect) => e.side === "ally" && e.detail.range === targetRange.TARGET && e.applies
+
 /** AbilityEffectInfo of a team effect with its start / active conditions cleared. */
 function infoOf(e: MaxDmgEffect): any {
     const d: any = e.detail
@@ -210,7 +214,7 @@ function effectValueRate(caster: any, effect: any): number {
 
 /** Gives the listed team effects (conditions met). Returns where each landed (for the UI). */
 /** Gives `e` once (conditions cleared) from `caster`; the effect-value rate of the caster, undefined when it can't be made. */
-function launchOnce(b: Built, e: MaxDmgEffect, caster: any, info: any, main: any = b.main): number | undefined {
+function launchOnce(b: Built, e: MaxDmgEffect, caster: any, info: any, main: any = b.main, friend: any = b.dealer): number | undefined {
     const effect = E.AbilityEffectFactory.Create(info, false)
     if (!effect) return undefined
     clearConditions(effect)
@@ -221,7 +225,7 @@ function launchOnce(b: Built, e: MaxDmgEffect, caster: any, info: any, main: any
     check._ActorUnit = caster
     check._MainTargetUnit = main
     const origin = isPassiveDetail(e.detail) ? ORIGIN_PASSIVE : ORIGIN_ACTIVE
-    E.AbilityEffectLauncher.Triggering$10([effect], 0, check, origin, caster, b.dic, b.d, null, main?._Id ?? 0, b.dealer._Id)
+    E.AbilityEffectLauncher.Triggering$10([effect], 0, check, origin, caster, b.dic, b.d, null, main?._Id ?? 0, friend._Id)
     return rate
 }
 
@@ -271,8 +275,9 @@ function blendGroups(ctx: Ctx, pos: number, effects: MaxDmgEffect[]): Map<string
     return out
 }
 
-function giveEffects(b: Built, list: Given, vortexEnemies?: Record<string, number[]>): Map<string, { dealer: boolean, enemies: number[], rate: number }> {
-    const reach = new Map<string, { dealer: boolean, enemies: number[], rate: number }>()
+type Reach = { dealer: boolean, enemies: number[], allies: number[], rate: number }
+function giveEffects(b: Built, list: Given, vortexEnemies?: Record<string, number[]>, allyTargets?: Record<string, number[]>): Map<string, Reach> {
+    const reach = new Map<string, Reach>()
     // buff / debuff strength first: it scales every state its holder gives afterwards
     const landed: { key: string, mstId: number, casterId: number, rate: number }[] = []
     // and the turn adders (ADD_BUFF_TURN / ADD_DEBUFF_TURN, AddTurnUnitStateBase.AddTurnTo at give time): a DoT given
@@ -290,11 +295,14 @@ function giveEffects(b: Built, list: Given, vortexEnemies?: Record<string, numbe
         const onlyOn = e.detail.abilityEffectType === "VORTEX_ATK" ? vortexEnemies?.[e.key] : undefined
         const vortexStates = () => b.enemies.flatMap(u => (u?._Condition._StateList ?? [])
             .filter((st: any) => st instanceof E.VortexUnitStateBase && st._MstId === info._MstId && st._UserUnitId === caster._Id).map((st: any) => ({ u, st })))
-        for (const main of onlyOn ? onlyOn.map(i => b.enemies[i]).filter(Boolean) : [b.main]) {
+        // App rule: a single-target ally buff the user gave to chosen allies (MaxDmgOptions.allyTargets) is given once per
+        // chosen ally as the selected friend, instead of to the dealer only
+        const friends: any[] = (isAllyTargetBuff(e) ? allyTargets?.[e.key]?.map(i => b.allies[i]).filter(Boolean) : undefined) ?? [b.dealer]
+        for (const main of onlyOn ? onlyOn.map(i => b.enemies[i]).filter(Boolean) : [b.main]) for (const friend of friends) {
             const before = new Set(onlyOn ? vortexStates().map(x => x.st) : [])
             // every equipped copy of a crystalis is its own passive (the effect list merges them into one row)
             for (let n = 0; n < stacks * (copies ?? 1); n++) {
-                const r = launchOnce(b, e, caster, info, main)
+                const r = launchOnce(b, e, caster, info, main, friend)
                 if (r === undefined) break
                 if (n === 0) rate = r
             }
@@ -317,7 +325,7 @@ function giveEffects(b: Built, list: Given, vortexEnemies?: Record<string, numbe
     // holder has Beachball's Boon", can depend on a state given later in the list)
     for (const { key, mstId, casterId, rate } of landed) {
         const has = (u: any) => !!u && u._Condition._StateList.some((s: any) => s._MstId === mstId && s._UserUnitId === casterId && s.IsActive$BattleUnit(u))
-        reach.set(key, { dealer: has(b.dealer), enemies: b.enemies.map((u, i) => has(u) ? i : -1).filter(i => i >= 0), rate })
+        reach.set(key, { dealer: has(b.dealer), enemies: b.enemies.map((u, i) => has(u) ? i : -1).filter(i => i >= 0), allies: b.allies.map((u, i) => has(u) ? i : -1).filter(i => i >= 0), rate })
     }
     return reach
 }
@@ -378,7 +386,7 @@ function runOnce(ctx: Ctx, dealerPos: number, pick: SkillPick, crit: boolean, ef
         if (!skill) return undefined
         const type = actorSkillTypeOf(skill)
         const allowed = effects.filter(({ e }) => { const r = actorSkillTypeRestriction(e.detail.activeConditionSetIdCsv); return !r || r.has(type) })
-        giveEffects(b, allowed, ctx.opts.vortexEnemies)
+        giveEffects(b, allowed, ctx.opts.vortexEnemies, ctx.opts.allyTargets)
         const list: any[] = skill.launcher._AbilityEffectList
         const own = list.filter((eff: any, i: number) => {
             if (!keep(i)) return false
@@ -517,6 +525,8 @@ export function computeMaxDamageEngine(allies: PvPKioku[], stage: EngineMaxDmgSt
         const offOf = (e: MaxDmgEffect) => {
             const chosen = e.detail.abilityEffectType === "VORTEX_ATK" ? opts.vortexEnemies?.[e.key] : undefined
             if (chosen) return chosen.length === 0
+            const allies = isAllyTargetBuff(e) ? opts.allyTargets?.[e.key] : undefined
+            if (allies) return allies.length === 0
             return opts.excluded?.has(e.key) || (vortexOffByDefault(e, pos) && !opts.included?.has(e.key))
         }
         const stacksOf = (e: MaxDmgEffect) => offOf(e) ? 0 : Math.max(0, Math.min(e.maxStacks, opts.stacks?.get(e.key) ?? e.maxStacks))
@@ -601,11 +611,11 @@ export function computeMaxDamageEngine(allies: PvPKioku[], stage: EngineMaxDmgSt
             new MaxDamageRandom(false, 0).run(() => {
                 const b = buildBattle(ctx, pos, new MaxDamageRandom(false, 0))
                 if (!b.dealer) return
-                const reach = giveEffects(b, given, ctx.opts.vortexEnemies)
+                const reach = giveEffects(b, given, ctx.opts.vortexEnemies, ctx.opts.allyTargets)
                 for (const e of passEffects) {
                     const x = reach.get(e.key)
                     if (!x) continue
-                    e.reach = e.side === "ally" ? { dealer: x.dealer, enemies: [] } : { dealer: false, enemies: x.enemies }
+                    e.reach = e.side === "ally" ? { dealer: x.dealer, enemies: [], allies: x.allies } : { dealer: false, enemies: x.enemies }
                     e.rate = x.rate
                 }
             })
