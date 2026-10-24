@@ -227,17 +227,6 @@ export function middleEnemy(director: any): any {
     return list[Math.trunc(list.length / 2)]
 }
 
-/** Every dummy starts broken: gauge 0 and the initial broken rate (what BreakPoint.Decrease leaves after a break). */
-export function breakDummies(director: any): void {
-    for (const u of director.battleUnitBundle.enemyList) {
-        const bp = u._BreakPoint
-        if (!bp.get_HasBreakPoint()) continue
-        bp._PointValue = 0
-        bp._BreakCount = 1
-        u.SetBreakedDamageReceiveRate(Math.trunc(u._BattleParameter._InitialBreakedDamageReceiveRate / 10))
-    }
-}
-
 const detailByType = new Map<string, any>()
 for (const d of skillDetailJson as any[]) if (!detailByType.has(d.abilityEffectType)) detailByType.set(d.abilityEffectType, d)
 
@@ -264,6 +253,25 @@ export function keepAilment(director: any, ailment: Ailment | undefined): void {
         if (u.IsDead || u._Condition._StateList.some((s: any) => s._MstId === row.skillDetailMstId)) continue
         const state = stateOf(row.skillDetailMstId, u, director)
         if (state) u._Condition.AddUnitState(state, u, prio, u, true)
+    }
+}
+
+/** Max Burst (EngineMaxDamage `enemyStates`): puts each of these ailment states ("WEAKNESS", "STUN", ...) on `units`, as
+ *  keepAilment does in Average Damage (the game's state of a skill row of that type, given by the holder itself), so
+ *  "every enemy carries it" also brings the ailment's own effect (Weakness: ATK/DEF -10%), not only its conditions.
+ *  Damage ailments (BURN/POISON/CURSE/BLEED/VORTEX _ATK) are left out: they do nothing within one skill but get popped
+ *  (vortex, IMM_SLIP_DMG), and their damage would then count as the dealer's. */
+export function giveAilmentStates(director: any, units: any[], types: string[]): void {
+    const prio = director.turnActSystem.turnReferee.get_NextTurnOrderPriority()
+    for (const type of types) {
+        if (type.endsWith("_ATK")) continue
+        const row = detailByType.get(type)
+        if (!row) continue
+        for (const u of units) {
+            if (!u || u.IsDead || u._Condition._StateList.some((s: any) => s._MstId === row.skillDetailMstId)) continue
+            const state = stateOf(row.skillDetailMstId, u, director)
+            if (state) u._Condition.AddUnitState(state, u, prio, u, true)
+        }
     }
 }
 
@@ -330,8 +338,11 @@ export interface BenchBattleHooks {
 export function benchBattle(allies: any[], stageId: number, rng: BenchRng, hooks: BenchBattleHooks): EngineBattle {
     return new EngineBattle({ kind: "quest", allies, stageId }, {
         rng, manualTargeting: true, beforeDecision: hooks.beforeDecision,
+        // The dummies start unbroken with a 1-point gauge (BreakMst breakPoint 1): the first damaging hit on each breaks
+        // it through the game's own break code, so "on enemy break" effects trigger once (Sacred Gift's Weakness, break
+        // bonus / SPD buffs). It then stays broken at BENCH_BROKEN_RATE: broken units only recover at their own turn
+        // start, and the dummies get none within a run.
         onSetup: d => {
-            breakDummies(d)
             const main = middleEnemy(d)
             if (main) d.targetReferee.allyAttackTargetId = main._Id // the player taps the middle dummy
             hooks.beforeAction?.(d)

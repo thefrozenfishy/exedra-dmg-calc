@@ -981,11 +981,25 @@ export function ailmentConditionValues(csvs: (string | undefined)[]): Ailment[] 
 const ailmentOf = (stateType: string): Ailment | undefined =>
     (Object.values(Ailment) as string[]).find(a => stateType === a || stateType.startsWith(a + "_")) as Ailment | undefined
 
-// The ailment an ABILITY_EFFECT condition (12, "has state X") or ABILITY_EFFECT_UNIT_COUNT condition (205, "N units
-// with state X", compareValue "X,N" - Atomo Arrabbiato's "when a poisoned enemy is present") is about, if any.
+// The ailment a condition is about, if any. Every compare content whose value names a state type:
+//   12  AbilityEffect ("has state X")
+//   112 ReceivedSlipDamageType ("took X slip damage", compareValue "X") [CONFIRMED 3.19] BattleUnitConditionChecker.Check
+//   205 AbilityEffectUnitCount ("N units with state X", "X,N" - Atomo Arrabbiato's "when a poisoned enemy is present")
+//   305 AbilityEffectAndDamage ("dealt >= N DMG to a unit with state X", "X,N" - Sacred Gift's "+5 MP on DMG dealt to
+//       weakened enemies") [CONFIRMED 3.19] BattleUnitTeamConditionChecker.Check
+//   309 AbilityEffectAndReceivedAttackUnitCount ("N attacked units with state X", "X,N") [CONFIRMED 3.19]
+//       BattleUnitTeamConditionChecker.Check
+// 305 / 309 / 112 used to be missed, so those kits got no ailment bar on the Kioku Grid charts.
 function ailmentConditionType(cond: BattleCondition | undefined): Ailment | undefined {
-    if (cond?.compareContent === CompareContent.ABILITY_EFFECT) return ailmentOf(cond.compareValue)
-    if (cond?.compareContent === CompareContent.ABILITY_EFFECT_UNIT_COUNT) return ailmentOf(cond.compareValue.split(",")[0])
+    switch (cond?.compareContent) {
+        case CompareContent.ABILITY_EFFECT:
+        case CompareContent.HAS_ALIMENT: // 112 ReceivedSlipDamageType
+            return ailmentOf(cond.compareValue)
+        case CompareContent.ABILITY_EFFECT_UNIT_COUNT:
+        case CompareContent.ABILITY_EFFECT_AND_DAMAGE:
+        case CompareContent.HAS_BUFF_APPLIED: // 309 AbilityEffectAndReceivedAttackUnitCount
+            return ailmentOf(cond.compareValue.split(",")[0])
+    }
     return undefined
 }
 
@@ -1001,9 +1015,16 @@ export function ailmentConditionsMet(csvs: (string | undefined)[], stateTypes: s
         return ids.some(setId => (battleConditionSets[setId]?.battleConditionMstIdCsv ?? "").split(",").every(condId => {
             const cond = battleConditions[condId]
             if (!ailmentConditionType(cond)) return true
-            if (cond.compareContent === CompareContent.ABILITY_EFFECT_UNIT_COUNT) {
+            if (cond.compareContent === CompareContent.ABILITY_EFFECT_UNIT_COUNT || cond.compareContent === CompareContent.HAS_BUFF_APPLIED) {
+                // 309 counts only the attacked units carrying it: [APPROXIMATION] every enemy, as for 205
                 const [prefix, threshold] = cond.compareValue.split(",")
-                return compareInt(cond.compareOperator, stateTypes.some(t => t.startsWith(prefix)) ? enemyCount : 0, threshold ?? "0")
+                return compareInt(cond.compareOperator, stateTypes.some(t => t.startsWith(prefix.trim())) ? enemyCount : 0, (threshold ?? "0").trim())
+            }
+            // 305: the operator compares the damage dealt to such a unit, which counts as met like every other condition;
+            // only whether an enemy carries the state is checked
+            if (cond.compareContent === CompareContent.ABILITY_EFFECT_AND_DAMAGE) {
+                const prefix = cond.compareValue.split(",")[0] // not trimmed in the game
+                return stateTypes.some(t => t.startsWith(prefix))
             }
             return compareAbilityEffectList(cond.compareOperator, stateTypes, cond.compareValue)
         }))

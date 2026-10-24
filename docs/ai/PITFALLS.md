@@ -97,6 +97,25 @@
   Damage runs now make the dummies immune to the kit's ailments except the tested one (`benchImmunities`,
   `KiokuState.immuneAilments`, bench-only, checked in canAddTo / vortex before the roll). Max Burst never applied
   ailments itself, so it is unchanged.
+- A kit's ailment reactions are found by `BattleConditionParser.ailmentConditionType`, which must know EVERY compare
+  content whose value names a state type: 12 AbilityEffect, 112 ReceivedSlipDamageType, 205 AbilityEffectUnitCount,
+  305 AbilityEffectAndDamage ("X,N"), 309 AbilityEffectAndReceivedAttackUnitCount ("X,N"). 112/305/309 were missed,
+  so Sacred Gift (+5 MP on DMG to weakened enemies, cond 449 = 305 "WEAKNESS,1") and Yuletide Gift (Burn) got no
+  ailment bar on the Kioku Grid at all. (The parser's enum names HAS_ALIMENT=112 / HAS_BUFF_APPLIED=309 are
+  misleading; the engine's CompareContent.ts has the game names.)
+- Max Damage `enemyStates` ("every enemy carries it") used to feed only the condition checks; the ailment's own effect
+  was missing (a Weakness bar had full enemy DEF). `EngineBench.giveAilmentStates` now puts non-damage ailments
+  (WEAKNESS, STUN) on the enemies in `EngineMaxDamage.buildBattle`; DoT/vortex `_ATK` states stay out (a pop would
+  count the dummy's damage as the dealer's). Weakness from two givers stacks (GetDuplicateUnitState matches the same
+  giver only), so a Weakness user still adds its -10% on an already weakened enemy.
+- Max Burst gives every team effect as landed (its random hook says yes to every "effect" roll), so the bench's immune
+  dummies alone don't keep an ailment off them: `LuxBench.ultimateDamage(…, immune)` leaves out (MaxDmgOptions.excluded)
+  the team effects whose type gives an immune ailment. Without it Max Burst counted a kit's own ailments in every bar
+  and its ailment bar never differed (Sacred Gift: 2 Weaknesses in the main bar too).
+- Average Damage dummies used to start broken, so "on enemy break" effects never triggered (Sacred Gift's second
+  Weakness, break-triggered SPD / break bonus buffs). They now start unbroken with the 1-point gauge of the bench
+  BreakMst (EngineBench.benchBattle no longer pre-breaks them): the first damaging hit breaks each one once through the
+  game's code, and it stays broken (no dummy turns, so no recovery). The hits before that one take no break bonus.
 - Hot paths: never `Object.values(skillDetails).filter(...)` per action (it was ~23% of sim time in `getDetails`
   and `triggerFua`); use `skillDetailsByMstId.get(id * 100 + lvl)`, same entries in the same order.
 - The old ScoreAttackTeam/ScoreAttackKioku code is a different, simplified calculator. Don't copy its rules into

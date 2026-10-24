@@ -270,22 +270,28 @@
                         on average at {{ dealer.best.critChance.toFixed(1) }}% crit rate</div>
                 </div>
 
-                <template v-if="isScoreAttack">
+                <div class="sa-block">
                     <div class="sa-score-row" :title="saScoreTitle">
                         <span class="sa-score-label">Score Attack score (estimate)</span>
                         <span class="sa-score-value">{{ saScore }}</span>
                     </div>
+                    <p v-if="!isScoreAttack" class="sa-hint">This stage is not a Score Attack stage; the score
+                        uses {{ dealer?.name ?? 'the dealer' }}'s crit damage above with the numbers below.</p>
                     <div class="sa-fields">
-                        <label class="field"><span class="field-label">Difficulty score</span>
+                        <label class="field"
+                            title="To find: check the final score screen. This changes for each difficulty">
+                            <span class="field-label">Difficulty score</span>
                             <input v-model.number="difficultyScore" type="number" /></label>
                         <label class="field"><span class="field-label">HP remaining (%)</span>
-                            <input v-model.number="hpPercentTeam" type="number" min="0" max="100" /></label>
+                            <input v-model.number="hpPercentTeam" type="number" step="1" min="0" max="100" /></label>
                         <label class="field"><span class="field-label">Turns</span>
-                            <input v-model.number="saTurns" type="number" min="1" max="16" /></label>
-                        <label class="field"><span class="field-label">Score multiplier</span>
+                            <input v-model.number="saTurns" type="number" step="1" min="1" max="16" /></label>
+                        <label class="field"
+                            title="To find: calculate (damage dealt / points from damage done) in an SA run. This changes for each SA">
+                            <span class="field-label">Score multiplier</span>
                             <input v-model.number="scoreMultiplier" type="number" step="0.1" min="0" /></label>
                     </div>
-                </template>
+                </div>
 
                 <div class="table-wrap">
                     <table class="dmg-table">
@@ -2274,6 +2280,17 @@ const saved = useSavedTeams({
 .result-sub {
     font-size: 0.85rem;
     color: var(--muted);
+}
+
+.sa-block {
+    margin-top: 0.75rem;
+}
+
+.sa-hint {
+    text-align: center;
+    font-size: 0.8rem;
+    color: var(--muted);
+    margin: 0 0 0.6rem;
 }
 
 .sa-score-row {

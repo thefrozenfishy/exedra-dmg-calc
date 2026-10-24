@@ -23,7 +23,7 @@
 // random targets go to the main target. Enemy HP is set out of reach so nothing dies mid-skill.
 import { E } from "./engineBundle"
 import { EngineBattle, type EngineBattleSetup } from "./EngineBattle"
-import { giveFieldState } from "./EngineBench"
+import { giveAilmentStates, giveFieldState } from "./EngineBench"
 import { collectTeamEffects, isEffectValueType, isSlipDamageType, kitHasEffect, type MaxDmgEffect, type MaxDmgOptions, type MaxDmgResult, type MemberDamage, type SkillDamage } from "../models/MaxDamage"
 import { actorSkillTypeRestriction, ailmentConditionsMet, unitCountConditionsMet } from "../models/BattleConditionParser"
 import { conditionCsvsExclusive } from "../models/ConditionTiers"
@@ -189,6 +189,8 @@ function buildBattle(ctx: Ctx, dealerPos: number, rnd: MaxDamageRandom): Built {
         const holders = f.side === "ally" ? (f.index === "all" ? allies : [allies[f.index]]) : (f.index === "all" ? enemies : [enemies[f.index]])
         for (const u of holders) if (u) giveFieldState(d, u, f.type, f.value1)
     }
+    // ailments every enemy carries (opts.enemyStates): their own effect too, not only the conditions about them
+    if (ctx.opts.enemyStates?.length) giveAilmentStates(d, enemyUnits, ctx.opts.enemyStates)
     const main = enemies[ctx.mainIdx] ?? enemies.find(Boolean) ?? enemyUnits[0]
     rnd.mainId = main?._Id ?? 0
     return { d, dic, allies, enemies, main, dealer: allies[dealerPos] }

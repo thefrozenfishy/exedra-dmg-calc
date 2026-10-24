@@ -1,7 +1,22 @@
 # Status (update at the end of every session)
 
-_Last updated: 2026-10-15 (game 3.21.0: dumped + decompiled by Claude on Windows, engine re-ported to 3.21.0; branch claude/version-3.21.0); before: 2026-10-14 (Max Damage + Kioku Grid bench on the 1:1 engine); before: 2026-10-10 (1:1 port in src/engine started); before: 2026-10-03 (passive states per giver, UP_HP_FIXED max HP; earlier: duplicate active-skill states); before: 2026-10-02 (game 3.19.1: version diff + newsletter, Magic Seal, break/notice team conditions, IMM_SLIP_DMG burst; branch claude/version-3.19.1)._
+_Last updated: 2026-10-24 (Kioku Grid ailment bars: 112/305/309 conditions, Max Damage enemies carry Weakness/Stun); before: 2026-10-15 (game 3.21.0: dumped + decompiled by Claude on Windows, engine re-ported to 3.21.0; branch claude/version-3.21.0); before: 2026-10-14 (Max Damage + Kioku Grid bench on the 1:1 engine); before: 2026-10-10 (1:1 port in src/engine started); before: 2026-10-03 (passive states per giver, UP_HP_FIXED max HP; earlier: duplicate active-skill states); before: 2026-10-02 (game 3.19.1: version diff + newsletter, Magic Seal, break/notice team conditions, IMM_SLIP_DMG burst; branch claude/version-3.19.1)._
 
+
+## 2026-10-24: Kioku Grid ailment bars (Sacred Gift had no Weakness bar)
+
+- `ailmentConditionType` now covers compare contents 112 / 305 / 309 besides 12 / 205; `ailmentConditionsMet` checks
+  305 by state prefix (the damage part counts as met) and 309 like 205. New ailment bars: Sacred Gift (WEAKNESS),
+  Yuletide Gift (BURN).
+- Max Damage with `enemyStates` puts WEAKNESS / STUN on the enemies for real (`EngineBench.giveAilmentStates`), as the
+  Average Damage bench's `keepAilment` already did (5x Lux Ultimate +11.07% with Weakness in both metrics now).
+  Also affects EngineTeamScore (Best SA Team) when the enemy row has Weakness.
+- Max Burst now applies the same immunities as Average Damage (`benchImmunities`; team effects giving an immune
+  ailment are excluded), so a kit's own ailment shows in its ailment bar in both metrics.
+- Sacred Gift applies 2 Weaknesses (Battle Skill + ability "on enemy break, weaken all enemies"; different origins, they
+  stack). Average Damage dummies now start unbroken (1-point gauge) so the first hit breaks them and on-break effects
+  trigger once, for every kit. Support chart (1 enemy): Max 30.00% / Weakness 60.35%; Average 20.41% / Weakness 48.53%.
+- LUX_BENCH_VERSION 26.
 
 ## 2026-10-16 (2): Best SA Team Calculator on the 1:1 engine
 

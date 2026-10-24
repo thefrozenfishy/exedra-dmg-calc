@@ -10,7 +10,9 @@
 //     (BenchPolicy below), counting only the damage the dealer itself deals ("Average Damage"). The rest of the team's
 //     damage is ignored, so a support that also hits hard doesn't count, only what it changes about the dealer.
 // The dummies have SPD 1, so they never get a turn within the run: they don't attack, and (broken units only
-// recover at their own turn start) they stay broken throughout.
+// recover at their own turn start) they stay broken once broken. In Average Damage they start unbroken with a 1-point
+// break gauge, so the first hit breaks them and "on enemy break" effects trigger once (EngineBench.benchBattle); Max
+// Burst evaluates them already broken.
 import { PvPKioku } from "./PvPKioku";
 import { Kioku } from "./Kioku";
 import { BattleType } from "./DamageCalculator";
@@ -23,6 +25,7 @@ import { Ailment, elementMap, roleMap, KiokuElement, KiokuRole, LuxMagica } from
 import { computeMaxDamageEngine } from "../battle/EngineMaxDamage";
 import { E } from "../battle/engineBundle";
 import { AILMENT_STATE, BENCH_BROKEN_RATE, BENCH_DEF, BenchRng, benchBattle, benchSkills, benchStage, benchStyle, keepAilment, keepStates, middleEnemy } from "../battle/EngineBench";
+import { collectTeamEffects } from "./MaxDamage";
 
 export { BENCH_BROKEN_RATE, BENCH_DEF }
 // "Infinite" SP: topped up to this whenever time moves forward. Truly endless SP never ends a chain of battle skills
@@ -137,10 +140,18 @@ export function kitRestrictions(k: PvPKioku): { elements: KiokuElement[], roles:
     return { elements: [...elements], roles: [...roles], ailments: [...ailments] }
 }
 
+/** The ailment an effect type gives (WEAKNESS, CURSE_ATK -> CURSE, BLEED_ATK -> BLEED, ...), if any. */
+const ailmentOfType = (type: string): Ailment | undefined =>
+    (Object.values(Ailment) as string[]).find(a => type === a || type.startsWith(a + "_")) as Ailment | undefined
+
 /** Max Burst: the dealer's Ultimate, every hit a crit, total over every enemy it hits. With `ailment`, every enemy
- *  carries it and the team's ailment conditions are checked against it (the other conditions count as met). */
-export function ultimateDamage(allies: PvPKioku[], dealerPos: number, enemyCount: number, ailment?: Ailment): { damage: number, critChance: number } {
-    const { stageId, enemies } = benchStage(enemyCount)
+ *  carries it and the team's ailment conditions are checked against it (the other conditions count as met).
+ *  `immune`: ailments the enemies cannot carry (benchImmunities, as in Average Damage): the team's effects that give
+ *  them are left out (Max Damage gives every effect as landed, so the dummies' parry alone would not stop them). */
+export function ultimateDamage(allies: PvPKioku[], dealerPos: number, enemyCount: number, ailment?: Ailment, immune: Ailment[] = []): { damage: number, critChance: number } {
+    const { stageId, enemies } = benchStage(enemyCount, immune)
+    const excluded = immune.length ? new Set(collectTeamEffects(allies, dealerPos, { slipDamage: true })
+        .filter(e => immune.includes(ailmentOfType(e.detail.abilityEffectType)!)).map(e => e.key)) : undefined
     const result = computeMaxDamageEngine(allies, { stageId, waveIdx: 0 }, enemies, dealerPos, {
         battleType: BattleType.Solo,
         broken: enemies.map(() => true),
@@ -148,6 +159,7 @@ export function ultimateDamage(allies: PvPKioku[], dealerPos: number, enemyCount
         mainTargetIdx: Math.trunc(enemyCount / 2),
         onlyPos: dealerPos,
         enemyStates: enemyStatesOf(ailment),
+        excluded,
     })
     const ult = result.members[dealerPos]?.skills.find(s => s.type === TargetType.specialId)
     return { damage: ult?.total.crit ?? 0, critChance: ult?.critChance ?? 0 }
@@ -302,7 +314,7 @@ export function simulatedDealerDamage(allies: PvPKioku[], dealerPos: number, ene
 
 const identityKey = (id: BenchIdentity) => `${id.element ?? "-"}/${id.role ?? "-"}/${id.ailment ?? "-"}`
 
-/** Average Damage: an ailment the kit reacts to is a question of whether the enemies CAN carry it, not of who puts it
+/** Max Burst and Average Damage: an ailment the kit reacts to is a question of whether the enemies CAN carry it, not of who puts it
  *  there. A run without that ailment makes the enemies immune to it, so a kit that applies it itself and reacts to it
  *  (Bebe-O'-Lantern curses her Candyholic target, and Candyholic only lowers DEF while the target is cursed) shows
  *  the difference in its ailment bar instead of always having it. A run with one of them keeps it on the enemies
@@ -381,9 +393,10 @@ export class LuxBenchCharts {
         return total / this.opts.seeds
     }
 
-    private cachedUlt(key: string, team: () => PvPKioku[], enemies: number, ailment?: Ailment) {
+    private cachedUlt(key: string, team: () => PvPKioku[], enemies: number, ailment?: Ailment, immune: Ailment[] = []) {
+        key += `:${[...immune].sort().join(",")}`
         let v = this.ultBase.get(key)
-        if (!v) this.ultBase.set(key, v = ultimateDamage(team(), 0, enemies, ailment))
+        if (!v) this.ultBase.set(key, v = ultimateDamage(team(), 0, enemies, ailment, immune))
         return v
     }
 
@@ -432,10 +445,12 @@ export class LuxBenchCharts {
     }
 
     supportMax(x: PvPKioku, enemies = 1, ids = this.supportIdentities(x)): BenchRow[] {
+        const kitAilments = kitRestrictions(x).ailments
         return ids.map(id => {
             const dealer = this.dealer(this.resolve(id, x))
-            const base = this.cachedUlt(`s:${enemies}:${identityKey(this.resolve(id, x))}`, () => this.team(dealer), enemies, id.ailment)
-            const v = ultimateDamage(this.team(dealer, x), 0, enemies, id.ailment)
+            const immune = benchImmunities(kitAilments, id.ailment)
+            const base = this.cachedUlt(`s:${enemies}:${identityKey(this.resolve(id, x))}`, () => this.team(dealer), enemies, id.ailment, immune)
+            const v = ultimateDamage(this.team(dealer, x), 0, enemies, id.ailment, immune)
             return { ...id, gain: pctGain(v.damage, base.damage), critRate: v.critChance }
         })
     }
@@ -451,10 +466,12 @@ export class LuxBenchCharts {
     }
 
     attackerMax(x: PvPKioku, enemies: number, ids = this.attackerIdentities(x)): BenchRow[] {
+        const kitAilments = kitRestrictions(x).ailments
         return ids.map(id => {
+            const immune = benchImmunities(kitAilments, id.ailment)
             const role = x.data.role as KiokuRole
-            const base = this.cachedUlt(`a:${enemies}:${role}:${id.ailment ?? "-"}`, () => this.team(this.roleReference(role)), enemies, id.ailment)
-            const v = ultimateDamage(this.team(x), 0, enemies, id.ailment)
+            const base = this.cachedUlt(`a:${enemies}:${role}:${id.ailment ?? "-"}`, () => this.team(this.roleReference(role)), enemies, id.ailment, immune)
+            const v = ultimateDamage(this.team(x), 0, enemies, id.ailment, immune)
             return { ...id, gain: pctGain(v.damage, base.damage), critRate: v.critChance }
         })
     }
