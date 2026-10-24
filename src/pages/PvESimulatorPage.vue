@@ -347,7 +347,7 @@
                 or back on; lower its stacks to use fewer. Tiered effects and alternatives count one at a time (the one that gives the most damage):
                 click another one to use it instead. A vortex always pops here, and a vortex user's vortex counts from one
                 skill only: the Battle Skill's when they deal the damage, the Ultimate's otherwise (the other is off; click
-                it to turn it on). On a wave with several enemies, the numbers on a vortex pick which enemies it is on; on a single-target buff, the portraits pick which allies get it (the dealer by default; another member's vortex / DoT damage uses its own buffs). A popped vortex or DoT deals its damage with its owner's own ATK and DMG buffs, so
+                it to turn it on). On a wave with several enemies, the numbers on a vortex pick which enemies it is on; on a single-target buff, the portraits on a skill's top single-target buff pick which allies get all of that skill's single-target buffs (the dealer by default; another member's vortex / DoT damage uses its own buffs, and "while it has X" buffs follow X). A popped vortex or DoT deals its damage with its owner's own ATK and DMG buffs, so
                 those count too ("Show support buffs" shows them in blue).</p>
 
             <div class="effects-summary">
@@ -795,9 +795,12 @@ const toggleEffect = (k: string) => {
         vortexEnemies[k] = vortexEnemies[k].length ? [] : (maxDmg.value?.enemies ?? []).map((_, i) => i)
         return
     }
-    // a buff given to chosen allies: off, or (when off) back on the dealer
-    if (allyTargets[k]) {
-        allyTargets[k] = allyTargets[k].length ? [] : [dealerPos.value]
+    // single-target ally buffs given to chosen allies: the top card (the group's anchor) turns the whole skill off, or
+    // (when off) back on the dealer; the others turn off / on one by one
+    const g = e?.allyGroup
+    if (g && allyTargets[g] && !excluded.has(k)) {
+        if (k === g) allyTargets[g] = allyTargets[g].length ? [] : [dealerPos.value]
+        else excluded.add(k)
         return
     }
     if (e?.tier) {
@@ -822,7 +825,8 @@ const resetEffects = () => {
     for (const k of Object.keys(vortexEnemies)) delete vortexEnemies[k]
     for (const k of Object.keys(allyTargets)) delete allyTargets[k]
 }
-// One ally chip of a single-target buff card: gives the buff to that ally too, or takes it away.
+// One ally chip on the top single-target buff card of a skill: gives that skill's single-target buffs to that ally
+// too, or takes them away.
 function toggleAllyTarget(e: EffectView, i: number) {
     const on = new Set(e.status === 'off' ? [] : e.onAllies)
     if (on.has(i)) on.delete(i); else on.add(i)
@@ -921,7 +925,8 @@ function effectStatus(e: MaxDmgEffect): { status: EffectStatus, statusText: stri
             ? { status: 'na', statusText: `Only affects ${e.casterName} itself` }
             : { status: 'na', statusText: `A drawback on ${e.casterName} itself, not on enemies` }
     }
-    const allyChosen = allyTargets[e.key]
+    const allyChosen = e.allyGroup ? allyTargets[e.allyGroup] : undefined
+    if (allyChosen && excluded.has(e.key)) return { status: 'off', statusText: 'Turned off: click to turn on' }
     if (allyChosen) {
         if (!allyChosen.length) return { status: 'off', statusText: 'Off on every ally: pick allies below, or click to give it to the dealer' }
         const names = allyChosen.map(i => maxDmg.value?.members[i]?.name).filter(Boolean)
@@ -966,8 +971,9 @@ const effectRows = computed(() => (maxDmg.value?.effects ?? []).map(e => {
         vortex: e.detail.abilityEffectType === 'VORTEX_ATK',
         onEnemies: vortexEnemies[e.key] ?? e.reach?.enemies ?? [],
         // single-target ally buff: which allies get it (ally chips on its card; the dealer by default)
-        allyPick: e.side === 'ally' && e.detail.range === 1 && e.applies && !e.forOwner,
-        onAllies: allyTargets[e.key] ?? e.reach?.allies ?? [],
+        // (one choice per skill, on its first such buff: MaxDmgEffect.allyGroup)
+        allyPick: !!e.allyGroup && e.allyGroup === e.key && !e.forOwner,
+        onAllies: (e.allyGroup ? allyTargets[e.allyGroup] : undefined) ?? e.reach?.allies ?? [],
         description: effectDescription(e.detail),
         blendGroup: e.blendGroup,
         // a card of merged effects (blendGroup) lists every one of these
@@ -1053,7 +1059,8 @@ const effectSections = computed(() => {
     const rank = (source: string) => { const i = SOURCE_ORDER.indexOf(source); return i < 0 ? SOURCE_ORDER.length : i }
     return [...bySource].sort(([a], [b]) => rank(a) - rank(b)).map(([source, effects]) => {
         const toggleable = effects.filter(e => e.status !== 'na')
-        const sorted = effects.sort((a, b) => STATUS_ORDER[a.status] - STATUS_ORDER[b.status] || a.name.localeCompare(b.name))
+        // the card that picks a skill's single-target targets (allyPick) goes on top of its cell
+        const sorted = effects.sort((a, b) => Number(b.allyPick) - Number(a.allyPick) || STATUS_ORDER[a.status] - STATUS_ORDER[b.status] || a.name.localeCompare(b.name))
         // A tier ladder counts as one effect.
         const unit = (e: EffectView) => e.tierGroup ?? e.key
         return {

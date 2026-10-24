@@ -56,6 +56,9 @@ export interface MaxDmgEffect {
     // Dealer's evaluation (engine Max Damage only): a self-only buff of another member whose vortex / DoT counts, given to
     // that member because slip damage pops with its owner's buffs (battle/EngineMaxDamage). UI bookkeeping.
     forOwner?: boolean
+    // Engine Max Damage: the single-target ally buffs of one of the caster's skills share one target choice
+    // (MaxDmgOptions.allyTargets[allyGroup]); allyGroup = the key of the first of them (the card with the ally chips).
+    allyGroup?: string
     // Dealer's evaluation (engine Max Damage only): effects of this caster that feed one state in battle (accum / unique
     // states blend, battle/EngineMaxDamage.blendGroups) share this key (the first one's). UI: shown as one card.
     blendGroup?: string
@@ -72,8 +75,8 @@ export interface MaxDmgOptions {
     // engine Max Damage: a vortex (VORTEX_ATK effect key) put on these enemies only (page enemy indexes), overriding its
     // default and on/off; [] = off
     vortexEnemies?: Record<string, number[]>
-    // engine Max Damage: a single-target ally buff (range 1, effect key) given to these team positions instead of the dealer
-    // only; [] = off
+    // engine Max Damage: the single-target ally buffs (range 1) of one skill (MaxDmgEffect.allyGroup) given to these team
+    // positions instead of the dealer only; [] = off
     allyTargets?: Record<string, number[]>
     stacks?: Map<string, number>
     broken?: boolean[]            // per enemy: evaluate as broken
@@ -177,8 +180,10 @@ export const isSlipDamageType = (type: string) => /^(BURN|POISON|CURSE|BLEED)_/.
 // States (buffs/debuffs that stay on a unit). Instant effects (damage, heals, EP, haste...) are skipped, and DoT
 // ailments unless `withSlipDamage` (this model has no turns, nothing pops them).
 const isState = (d: SkillDetail, withSlipDamage = false) => UNIT_STATE_TYPES.has(d.abilityEffectType)
-    && !["ADDITIONAL_SKILL_ACT", "SWITCH_SKILL", "CUTOUT", "STUN", "LOCK_TURN_ORDER", "COMBO", "CAN_NOT_ACTION"].includes(d.abilityEffectType)
-    && (withSlipDamage || !isSlipDamageType(d.abilityEffectType))
+    && !["ADDITIONAL_SKILL_ACT", "SWITCH_SKILL", "STUN", "LOCK_TURN_ORDER", "COMBO", "CAN_NOT_ACTION"].includes(d.abilityEffectType)
+    // engine Max Damage: DoT ailments (popped by IMM_SLIP_DMG) and CUTOUT (other states are active while their holder
+    // has it, e.g. Hollow Woman's ascension 2)
+    && (withSlipDamage || (!isSlipDamageType(d.abilityEffectType) && d.abilityEffectType !== "CUTOUT"))
 
 /** Whether any of the kit's skills, switch skills, follow-ups or passives has an effect of `type` (e.g. IMM_SLIP_DMG). */
 export function kitHasEffect(k: PvPKioku, type: string): boolean {

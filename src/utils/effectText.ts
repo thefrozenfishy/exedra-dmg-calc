@@ -69,6 +69,7 @@ const NAMES: Record<string, string> = {
     UP_RCV_BREAK_POINT_DMG_RATIO: "Break gauge depletion taken up",
     WEAKNESS: "Weakness",
     VORTEX_ATK: "Vortex",
+    CUTOUT: "Cutaway",
     COUNT: "Sigils",
     UNIQUE_ZONE: "Zone",
     UNIQUE_ELEMENT_STACK: "Element stacks",
