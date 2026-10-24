@@ -27,10 +27,11 @@ const LIMIT = 10_000
 const MAX_PASSES = 3
 const SUPPORT_PORTRAIT = "The Savior's Apostle"
 
-// Vortex users (VORTEX_ATK in their kit) in a support slot: the vortex always pops in the max (battle/EngineMaxDamage) and
-// its damage base is the caster's own ATK, so they are scored with the DoT applier loadout: The Savior's Apostle, their
-// EX + these crystalis, and a Debuffer's supports (RELEVANT_SUPPORT_SUPPORTS) whatever their role, the highest ATK
-// 5 star support when none of those is available.
+// Slip supports: vortex users (VORTEX_ATK in their kit; the vortex always pops in the max, battle/EngineMaxDamage) and, when
+// the attacker pops DoTs (IMM_SLIP_DMG), DoT appliers (SupportIdealPortrait.DOT_APPLIER). Their slip damage counts in the
+// attacker's Ultimate and goes through the OWNER's damage pipeline (its ATK, its self buffs), so each one's support,
+// portrait and crystalis are picked by a prepass (slipPreset below), starting from the DoT applier loadout: The
+// Savior's Apostle, their EX + these crystalis, a Debuffer's supports (RELEVANT_SUPPORT_SUPPORTS) whatever their role.
 const VORTEX_SUPPORT_CRYS = ["Towering Offense++", "Dominant Blow++"]
 
 const RELEVANT_SUPPORT_SUPPORTS = {
@@ -116,11 +117,16 @@ export async function findBestTeamEngine(o: FindBestTeamOptions, score: TeamScor
         if (v === undefined) vortexUsers.set(c.name, v = !!meta(c)?.effects.some(e => e.abilityEffectType === "VORTEX_ATK"))
         return v
     }
-    /** A support member's crystalis: the EX, plus VORTEX_SUPPORT_CRYS for a vortex user. */
-    const supportCrysOf = (c: Character): number[] => [
-        getEX(c.id)?.selectionAbilityMstId,
-        ...(isVortexUser(c) ? relevantCrys(c.id).filter(x => VORTEX_SUPPORT_CRYS.includes(x.name)).map(x => x.selectionAbilityMstId) : []),
-    ].filter(x => x != null) as number[]
+    const dotAppliers = new Map<string, boolean>()
+    const isDotApplier = (c: any): boolean => {
+        if (!c?.name) return false
+        let v = dotAppliers.get(c.name)
+        if (v === undefined) dotAppliers.set(c.name, v = meta(c)?.idealSupportPortrait === SupportIdealPortrait.DOT_APPLIER)
+        return v
+    }
+    const isSlipSupport = (c: Character, hasDotPop: boolean) => isVortexUser(c) || (hasDotPop && isDotApplier(c))
+    /** A (non slip) support member's crystalis: the EX. */
+    const supportCrysOf = (c: Character): number[] => [getEX(c.id)?.selectionAbilityMstId].filter(x => x != null) as number[]
     const margin = Math.min(Math.max(o.pruningMargin ?? 15, 0), 100) / 100
     const objective = (s: TeamScore) => optimizeAverageDamage ? s.avg : s.max
 
@@ -193,10 +199,32 @@ export async function findBestTeamEngine(o: FindBestTeamOptions, score: TeamScor
 
     // ---- one team = attacker loadout + the roster with one support-of-support choice
     interface Loadout { support: number, portrait: number, crys: number, ss: number }
-    const teamOf = (p: Plan, r: Roster, l: Loadout): KiokuArgs[] => [
-        argsOf(p.attacker, { portrait: p.portraits[l.portrait], supportKey: p.supportKeys[l.support], crysIDs: p.crysCombos[l.crys].map((c: any) => c.selectionAbilityMstId), subCrysIDs: p.subCrys }),
-        ...r.totalSupports.map((s, i) => argsOf(s, { portrait: SUPPORT_PORTRAIT, crysIDs: supportCrysOf(s), supportKey: r.supportSupports[l.ss][i] })),
-    ]
+    // A slip support's preset (prepass below), per attacker: `${attacker}|${support}`.
+    interface SlipPreset { supportKey: any[] | undefined, portrait: string, crysIDs: number[], supportRank?: any[][] }
+    const slipPresets = new Map<string, SlipPreset>()
+    const presetOf = (p: Plan, c: Character) => slipPresets.get(`${p.attacker.name}|${c.name}`)
+    /** The supports' loadouts in a team. A slip support takes its preset; its preset support only when no other member or
+     *  support of the team is that Kioku already (else its next best support, else the roster's choice, else none). Others: The Savior's Apostle, their
+     *  EX and the roster's support. */
+    const supportLoadouts = (p: Plan, r: Roster, l: Loadout): { portrait: string, crysIDs: number[], supportKey: any[] | undefined, preset: boolean }[] => {
+        const ss = r.supportSupports[l.ss]
+        const pres = r.totalSupports.map(c => presetOf(p, c))
+        const used = new Set<string>([...r.teamNames, p.supportKeys[l.support]?.[0], ...ss.filter((k, i) => k && !pres[i]).map(k => k[0])].filter(Boolean))
+        return r.totalSupports.map((c, i) => {
+            const pre = pres[i]
+            if (!pre) return { portrait: SUPPORT_PORTRAIT, crysIDs: supportCrysOf(c), supportKey: ss[i], preset: false }
+            const key = [pre.supportKey, ...(pre.supportRank ?? []), ss[i]].find(k => k && !used.has(k[0]))
+            if (key) used.add(key[0])
+            return { portrait: pre.portrait, crysIDs: pre.crysIDs, supportKey: key, preset: true }
+        })
+    }
+    const teamOf = (p: Plan, r: Roster, l: Loadout): KiokuArgs[] => {
+        const sl = supportLoadouts(p, r, l)
+        return [
+            argsOf(p.attacker, { portrait: p.portraits[l.portrait], supportKey: p.supportKeys[l.support], crysIDs: p.crysCombos[l.crys].map((c: any) => c.selectionAbilityMstId), subCrysIDs: p.subCrys }),
+            ...r.totalSupports.map((s, i) => argsOf(s, sl[i])),
+        ]
+    }
     const memo = new Map<string, Promise<TeamScore | undefined>>()
     const scoreOf = (team: KiokuArgs[]): Promise<TeamScore | undefined> => {
         const key = JSON.stringify(team)
@@ -207,6 +235,61 @@ export async function findBestTeamEngine(o: FindBestTeamOptions, score: TeamScor
         }
         return p
     }
+
+    // ---- Prepass: each slip support's preset, per attacker (user's rule, app side [APPROXIMATION]). Scored as the
+    // attacker (its first loadout) + that support alone, so the score is the attacker's Ultimate with that support's
+    // slip damage popped (and whatever that support's loadout gives the attacker); coordinate ascent over its support,
+    // portrait and each crystalis slot (distinct, from relevantCrys), no sub crystalis (as every support).
+    const slipPreset = async (p: Plan, c: Character): Promise<SlipPreset> => {
+        const attackerArgs = argsOf(p.attacker, {
+            portrait: p.portraits[0], supportKey: p.supportKeys.find(k => k?.[0] !== c.name),
+            crysIDs: p.crysCombos[0].map((x: any) => x.selectionAbilityMstId), subCrysIDs: p.subCrys,
+        })
+        const dedupe = (keys: any[][]) => [...new Map(keys.filter(k => k && k[0] !== c.name && k[0] !== p.attacker.name).map(k => [k[0], k])).values()]
+        const supports = dedupe([...(relevantSupportData[KiokuRole.Debuffer] ?? []), highestAtkSupportKey, ...supportKeysFor[c.role as SupportKey], ...supportKeysFor[c.element as SupportKey]])
+        const portraitList = [...new Set([SUPPORT_PORTRAIT, ...portraitsBestOnly(c.element, optimizeAverageDamage), SupportIdealPortrait.ADD_DMG as string])]
+        const crysList = relevantCrys(c.id).map(x => x.selectionAbilityMstId)
+        const start = [...new Set([getEX(c.id)?.selectionAbilityMstId,
+            ...relevantCrys(c.id).filter(x => VORTEX_SUPPORT_CRYS.includes(x.name)).map(x => x.selectionAbilityMstId), ...crysList])]
+            .filter(x => x != null).slice(0, 3) as number[]
+        let cur: SlipPreset = { supportKey: supports[0], portrait: SUPPORT_PORTRAIT, crysIDs: start }
+        const valueOf = async (pre: SlipPreset) => {
+            const s = await scoreOf([attackerArgs, argsOf(c, pre)])
+            return s ? objective(s) : -Infinity
+        }
+        let best = await valueOf(cur)
+        for (let pass = 0; pass < MAX_PASSES; pass++) {
+            let improved = false
+            const dims: (() => SlipPreset[])[] = [
+                () => supports.map(k => ({ ...cur, supportKey: k })),
+                () => portraitList.map(pt => ({ ...cur, portrait: pt })),
+                ...cur.crysIDs.map((_, slot) => () => crysList.filter(id => !cur.crysIDs.includes(id))
+                    .map(id => ({ ...cur, crysIDs: cur.crysIDs.map((x, j) => j === slot ? id : x) }))),
+            ]
+            for (const dim of dims) {
+                if (isCancelled()) return cur
+                const cands = dim()
+                const values = await Promise.all(cands.map(valueOf))
+                values.forEach((v, i) => { if (v > best) { best = v; cur = cands[i]; improved = true } })
+            }
+            if (!improved) break
+        }
+        // every support ranked with the rest of the preset, for a team where the best one is taken
+        const supportValues = await Promise.all(supports.map(k => valueOf({ ...cur, supportKey: k })))
+        cur.supportRank = supports.map((k, i) => [k, supportValues[i]] as const).sort((a, b) => b[1] - a[1]).map(([k]) => k)
+        return cur
+    }
+    const supportPool = Object.entries(availableChars).filter(([role]) => role !== KiokuRole.Attacker).flatMap(([, list]) => list)
+    const slipJobs = plans.flatMap(p => [...new Map(supportPool.filter(c => c.name !== p.attacker.name && isSlipSupport(c, p.hasDotPop)).map(c => [c.name, c])).values()].map(c => ({ p, c })))
+    let doneSlip = 0
+    for (const plan of plans) {
+        if (isCancelled()) return []
+        await Promise.all(slipJobs.filter(j => j.p === plan).map(async ({ p, c }) => {
+            slipPresets.set(`${p.attacker.name}|${c.name}`, await slipPreset(p, c))
+            onProgress?.([p.attacker.name, c.name], ++doneSlip, slipJobs.length, true)
+        }))
+    }
+
     const usableSupports = (p: Plan, r: Roster) => p.supportKeys.map((k, i) => [k, i] as const).filter(([k]) => !r.teamNames.includes(k[0])).map(([, i]) => i)
 
     // ---- Phase A: one score per roster, prune
@@ -243,20 +326,20 @@ export async function findBestTeamEngine(o: FindBestTeamOptions, score: TeamScor
     const shouldHavePortrait: Record<string, Set<string>> = {}
     const record = (p: Plan, r: Roster, l: Loadout, s: TeamScore) => {
         const want = shouldHavePortrait[p.attacker.name] ??= new Set()
-        const members = r.totalSupports.map((m, i) => meta(m, { portrait: SUPPORT_PORTRAIT, crysIDs: supportCrysOf(m), supportKey: r.supportSupports[l.ss][i] }))
+        const sl = supportLoadouts(p, r, l)
+        const members = r.totalSupports.map((m, i) => meta(m, sl[i]))
         members.forEach((k, i) => {
-            // a vortex always pops, so a vortex user always wants the DoT applier portrait
-            if (k.idealSupportPortrait === SupportIdealPortrait.ADD_DMG
-                || ((p.hasDotPop || isVortexUser(r.totalSupports[i])) && k.idealSupportPortrait === SupportIdealPortrait.DOT_APPLIER)) want.add(r.totalSupports[i].name)
+            if (k.idealSupportPortrait === SupportIdealPortrait.ADD_DMG) want.add(r.totalSupports[i].name)
         })
         let max = s.max, avg = s.avg
         if (optimizeAverageDamage) [avg, max] = [max, avg]
         ;(results[p.attacker.name] ??= []).push([
             max | 0, s.critRate, avg | 0, p.attacker.name, p.portraits[l.portrait], p.supportKeys[l.support]?.[0],
             ...p.crysCombos[l.crys].map((c: any) => c.selectionAbilityMstId),
-            ...r.totalSupports.flatMap((m, i) => [m.name, r.supportSupports[l.ss][i]?.[0], want.has(m.name) ? members[i].idealSupportPortrait : undefined]),
-            // [21..24] each support's crystalis as scored (supportCrysOf), so "open in PvE Simulator" equips the same
-            ...r.totalSupports.map(m => supportCrysOf(m)),
+            // a slip support shows its preset portrait; others the ADD_DMG portrait when they want it
+            ...r.totalSupports.flatMap((m, i) => [m.name, sl[i].supportKey?.[0], sl[i].preset ? sl[i].portrait : want.has(m.name) ? members[i].idealSupportPortrait : undefined]),
+            // [21..24] each support's crystalis as scored, so "open in PvE Simulator" equips the same
+            ...sl.map(x => x.crysIDs),
         ])
     }
 
