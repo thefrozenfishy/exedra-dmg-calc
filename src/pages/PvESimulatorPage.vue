@@ -400,6 +400,13 @@
                                     ×{{ +e.rate.toFixed(2) }} from {{ e.side === 'ally' ? 'buff' : 'debuff' }} strength
                                 </div>
                                 <div v-if="e.description" class="fx-desc">{{ e.description }}</div>
+                                <!-- skill detail id (click to copy) and condition set ids: rows with the same text differ here -->
+                                <div class="fx-meta">
+                                    <span class="fx-id" title="Skill detail id: click to copy"
+                                        @click.stop="copyId(e.id)">{{ e.id }}</span>
+                                    <span v-if="e.startCond" class="fx-cond" title="Start condition set ids">S{{ e.startCond }}</span>
+                                    <span v-if="e.activeCond" class="fx-cond" title="Active condition set ids">A{{ e.activeCond }}</span>
+                                </div>
                                 <div class="fx-foot">
                                     <span class="fx-target">{{ e.statusText }}</span>
                                     <span class="fx-switch">{{ e.status === 'off' ? 'Off' : e.status === 'na' ? 'N/A' :
@@ -606,7 +613,7 @@ import SavedTeamsPanel from '../components/SavedTeamsPanel.vue'
 import { useSavedTeams } from '../store/savedTeams'
 import { PendingDecision, type RngDecision, type RngEvent, type RngMode } from '../models/BattleRng'
 import { toast } from 'vue3-toastify'
-import { TargetType, type BattleSnapshot, type SkillDetail } from '../types/KiokuTypes'
+import { TargetType, skillDetailId, type BattleSnapshot, type SkillDetail } from '../types/KiokuTypes'
 import { elementMap } from '../types/enums'
 import { stageWaves, stageWaveMeta, summonTemplates, wavePositionIds, enemyName, breakMstOf, ELEMENT_KEYS, questStages, soloRaidInfo, isSoloRaidStage, multiRaidInfo, type QuestEnemyAppearance, type ModeChangeInfo } from '../models/PvE'
 import { stageBattleType, waveStartUnits } from '../models/PvEBattle'
@@ -888,10 +895,18 @@ const effectViews = computed(() => (maxDmg.value?.effects ?? []).map(e => {
         tierGroup: e.tier?.group,
         forOwner: !!e.forOwner,
         description: effectDescription(e.detail),
+        id: skillDetailId(e.detail),
+        startCond: e.detail.startConditionSetIdCsv || '',
+        activeCond: e.detail.activeConditionSetIdCsv || '',
         ...effectStatus(e),
     }
 }))
 type EffectView = (typeof effectViews.value)[number]
+
+function copyId(id: number) {
+    const text = String(id)
+    navigator.clipboard?.writeText(text).then(() => toast.success(`Copied: ${text}`), () => toast.warning('Could not copy'))
+}
 
 const effectCounts = computed(() => {
     const counts = { buff: 0, debuff: 0, off: 0, na: 0, support: 0 }
@@ -2531,6 +2546,29 @@ const saved = useSavedTeams({
     color: var(--muted);
     line-height: 1.35;
     white-space: pre-line;
+}
+
+.fx-meta {
+    display: flex;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+}
+
+.fx-id,
+.fx-cond {
+    color: var(--muted);
+    font-size: 0.65rem;
+    font-family: monospace;
+}
+
+.fx-id {
+    cursor: pointer;
+    transition: color 0.12s, text-shadow 0.12s;
+}
+
+.fx-id:hover {
+    color: var(--success);
+    text-shadow: 0 0 4px rgba(122, 247, 173, 0.55);
 }
 
 .fx-foot {
