@@ -16,6 +16,9 @@
 // strongest: state ladders (collectTeamEffects tiers, as before) and, inside the evaluated skill, damage rows whose start
 // conditions exclude each other (every choice is evaluated, the largest total is kept).
 //
+// Vortex (VORTEX_ATK) is an ailment that always pops in the theoretical max (vortexOffByDefault, giveEffects): only one
+// of a vortex user's skills is assumed to have set it, the other one is off unless the user turns it on.
+//
 // Random draws: crits forced on / off (avg = the per-enemy blend with the engine's own crit chance), every effect lands,
 // random targets go to the main target. Enemy HP is set out of reach so nothing dies mid-skill.
 import { E } from "./engineBundle"
@@ -78,6 +81,14 @@ const LABEL_OF: Record<string, string> = { SpecialAttack: "Ultimate", ActiveSkil
 const PASSIVE_SOURCE: Record<string, number> = { Crystalis: 4, Portrait: 2, Support: 3 }
 
 const isPassiveDetail = (d: SkillDetail) => "passiveSkillDetailMstId" in d
+
+/** [APPROXIMATION] app rule (user's, as in the old calculator): a vortex user's vortex counts from ONE skill. As the dealer,
+ *  the one from their Battle Skill (set before the evaluated skill pops it); as another member, the one from their
+ *  Ultimate. The other vortex is off by default; `MaxDmgOptions.included` turns it back on (the UI's toggle). */
+export function vortexOffByDefault(e: MaxDmgEffect, dealerPos: number): boolean {
+    if (e.detail.abilityEffectType !== "VORTEX_ATK") return false
+    return e.casterPos === dealerPos ? e.source === "Ultimate" : e.source === "Battle Skill"
+}
 
 /** AbilityEffectInfo of a team effect with its start / active conditions cleared. */
 function infoOf(e: MaxDmgEffect): any {
@@ -220,6 +231,14 @@ function giveEffects(b: Built, list: Given): Map<string, { dealer: boolean, enem
             check._ActorUnit = caster
             check._MainTargetUnit = b.main
             E.AbilityEffectLauncher.Triggering$10([effect], 0, check, origin, caster, b.dic, b.d, null, b.main?._Id ?? 0, b.dealer._Id)
+        }
+        // [APPROXIMATION] a vortex always pops in the max: one hit left (RemainAttackCount = v2 when given,
+        // VortexUnitStateBase.ctor 0x15F6CF0; VortexProcess 0x18f0260 pops it when a hit takes it to 0), so the evaluated
+        // skill's first hit sets it off whatever its hit count. The damage base stays the one fixed at give time.
+        if (e.detail.abilityEffectType === "VORTEX_ATK") {
+            for (const u of b.enemies) for (const st of u?._Condition._StateList ?? []) {
+                if (st instanceof E.VortexUnitStateBase && st._MstId === info._MstId && st._UserUnitId === caster._Id) st.set_RemainAttackCount(1)
+            }
         }
         landed.push({ key: e.key, mstId: info._MstId, casterId: caster._Id, rate })
     }
@@ -424,7 +443,8 @@ export function computeMaxDamageEngine(allies: PvPKioku[], stage: EngineMaxDmgSt
             continue
         }
         const passEffects = pos === attackerPos ? effects : collectTeamEffects(allies, pos)
-        const stacksOf = (e: MaxDmgEffect) => opts.excluded?.has(e.key) ? 0 : Math.max(0, Math.min(e.maxStacks, opts.stacks?.get(e.key) ?? e.maxStacks))
+        const offOf = (e: MaxDmgEffect) => opts.excluded?.has(e.key) || (vortexOffByDefault(e, pos) && !opts.included?.has(e.key))
+        const stacksOf = (e: MaxDmgEffect) => offOf(e) ? 0 : Math.max(0, Math.min(e.maxStacks, opts.stacks?.get(e.key) ?? e.maxStacks))
         // The wave's unit counts are known, so "while N enemies remain" conditions are evaluated, not assumed: start
         // conditions in the caster's (an ally's) bundle, active conditions in the holder's (the dealer for buffs, an enemy
         // for debuffs, whose friends are the enemies).
@@ -437,7 +457,7 @@ export function computeMaxDamageEngine(allies: PvPKioku[], stage: EngineMaxDmgSt
         const base: Given = []
         const ladderOf = new Map<string, Given>()
         for (const e of passEffects) {
-            if (pos === attackerPos) { e.tierUsed = undefined; e.reach = undefined; e.rate = undefined }
+            if (pos === attackerPos) { e.tierUsed = undefined; e.reach = undefined; e.rate = undefined; e.defaultOff = vortexOffByDefault(e, pos) || undefined }
             const stacks = stacksOf(e)
             if (!stacks || !ailmentsOk(e.detail) || !e.applies || !countsOk(e)) continue
             const copies = e.source === "Crystalis" ? Math.max(1, ((allies[e.casterPos] as any).crys as number[] ?? []).filter(c => c === (e.detail as any).passiveSkillMstId).length) : 1

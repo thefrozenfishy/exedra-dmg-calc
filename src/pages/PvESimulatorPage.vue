@@ -339,7 +339,9 @@
                 ones that are on: buffs on {{ dealerName }} (green) and debuffs on the enemies (red). Click one to turn
                 it off
                 or back on; lower its stacks to use fewer. Tiered effects and alternatives count one at a time (the one that gives the most damage):
-                click another one to use it instead.</p>
+                click another one to use it instead. A vortex always pops here, and a vortex user's vortex counts from one
+                skill only: the Battle Skill's when they deal the damage, the Ultimate's otherwise (the other is off; click
+                it to turn it on).</p>
 
             <div class="effects-summary">
                 <span class="legend legend-buff">{{ effectCounts.buff }} buff{{ effectCounts.buff === 1 ? '' : 's' }} on
@@ -349,8 +351,8 @@
                     's' }}
                     on the enemies</span>
                 <span v-if="effectCounts.off" class="legend legend-off">{{ effectCounts.off }} turned off</span>
-                <button v-if="excluded.size || stacks.size" type="button" class="link-btn" @click="resetEffects">Turn
-                    everything back on</button>
+                <button v-if="excluded.size || included.size || stacks.size" type="button" class="link-btn" @click="resetEffects">Reset
+                    to the defaults</button>
                 <label v-if="effectCounts.na" class="chip" :class="{ active: showUnreachable }"
                     title="Effects that only affect their own caster, or are limited to other elements/roles">
                     <input type="checkbox" v-model="showUnreachable" /> Show {{ effectCounts.na }} that can't reach {{
@@ -734,7 +736,10 @@ const memberId = (pos: number) => filledSlots.value[pos]?.[0].main?.id
 
 // ---- max damage ----
 const excluded = reactive(new Set<string>())
+// Effects that are off by default (MaxDmgEffect.defaultOff: a vortex user's other vortex) and were turned on.
+const included = reactive(new Set<string>())
 const stacks = reactive(new Map<string, number>())
+const isOffByDefault = (k: string) => !!maxDmg.value?.effects.find(x => x.key === k)?.defaultOff
 // A rung of a tier ladder (MaxDmgEffect.tier, one rung counts at a time; the engine uses the rung that gives the most
 // damage): clicking the rung in use turns the whole ladder off; clicking any other rung uses that one only.
 const toggleEffect = (k: string) => {
@@ -745,13 +750,18 @@ const toggleEffect = (k: string) => {
         else e.tier.keys.forEach(key => { if (key !== k) excluded.add(key); else excluded.delete(key) })
         return
     }
+    if (isOffByDefault(k)) {
+        excluded.delete(k)
+        if (included.has(k)) included.delete(k); else included.add(k)
+        return
+    }
     if (excluded.has(k)) excluded.delete(k); else excluded.add(k)
 }
 const setStacks = (k: string, v: number, max: number) => {
     const n = Math.max(0, Math.min(max, Number.isFinite(v) ? v : max))
     if (n === max) stacks.delete(k); else stacks.set(k, n)
 }
-const resetEffects = () => { excluded.clear(); stacks.clear() }
+const resetEffects = () => { excluded.clear(); included.clear(); stacks.clear() }
 
 // Computed in a worker (workers/maxDamageWorker.ts: battle/EngineMaxDamage, the game's own battle code); the last
 // result stays on screen while a new one is computed (`maxDmgBusy`).
@@ -780,7 +790,7 @@ function requestMaxDamage() {
             wave: JSON.parse(JSON.stringify(wave.value)), dealerPos: dealerPos.value,
             opts: {
                 battleType: stageBattleType(stageId.value),
-                excluded: new Set(excluded), stacks: new Map(stacks),
+                excluded: new Set(excluded), included: new Set(included), stacks: new Map(stacks),
                 broken: [...broken.value], breakRate: [...breakRate.value], mainTargetIdx: mainTargetIdx.value,
             },
         } satisfies MaxDamageRequest)
@@ -789,7 +799,7 @@ function requestMaxDamage() {
         maxDmgBusy.value = false
     }
 }
-watch([teamKiokus, wave, dealerPos, () => [...excluded], () => [...stacks], broken, breakRate, mainTargetIdx], requestMaxDamage, { deep: true, immediate: true })
+watch([teamKiokus, wave, dealerPos, () => [...excluded], () => [...included], () => [...stacks], broken, breakRate, mainTargetIdx], requestMaxDamage, { deep: true, immediate: true })
 onBeforeUnmount(() => maxDmgWorker?.terminate())
 const dealer = computed(() => maxDmg.value?.members[dealerPos.value])
 const dealerName = computed(() => dealer.value?.name ?? 'the damage dealer')
@@ -832,6 +842,9 @@ function effectStatus(e: MaxDmgEffect): { status: EffectStatus, statusText: stri
             : { status: 'na', statusText: `A drawback on ${e.casterName} itself, not on enemies` }
     }
     if (excluded.has(e.key)) return { status: 'off', statusText: 'Turned off: click to turn on' }
+    if (e.defaultOff && !included.has(e.key)) return {
+        status: 'off', statusText: `Off by default: a vortex counts from one skill only (the dealer's Battle Skill, another member's Ultimate). Click to turn on`,
+    }
     if (e.tierUsed) return {
         status: 'alt', statusText: e.tier?.reason === 'alternative'
             ? 'Same kind of effect from a skill that stands in for another (switch skill / other follow-up): only the strongest counts'
@@ -902,8 +915,8 @@ const effectSections = computed(() => {
 
 function setSectionOn(effects: EffectView[], on: boolean) {
     for (const e of effects) {
-        if (on) excluded.delete(e.key)
-        else excluded.add(e.key)
+        if (on) { excluded.delete(e.key); if (isOffByDefault(e.key)) included.add(e.key) }
+        else { excluded.add(e.key); included.delete(e.key) }
     }
 }
 
@@ -1303,6 +1316,7 @@ function currentSetup(): PvESetup {
         breakRate: breakRate.value.map(r => r ?? null),
         dealer: attackerIndex.value,
         excluded: [...excluded],
+        included: [...included],
         stacks: Object.fromEntries(stacks),
         control: targetMode.value,
         rngMode: rngMode.value,
@@ -1333,6 +1347,7 @@ async function applySetup(raw: unknown) {
     if (s.breakRate.length === wave.value.length) breakRate.value = s.breakRate.map(r => r ?? undefined)
     resetEffects()
     s.excluded.forEach(k => excluded.add(k))
+    s.included?.forEach(k => included.add(k))
     Object.entries(s.stacks).forEach(([k, v]) => stacks.set(k, v))
     seed.value = s.seed
     simTurns.value = s.turns

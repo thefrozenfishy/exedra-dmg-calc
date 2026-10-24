@@ -50,6 +50,9 @@ export interface MaxDmgEffect {
     alt?: { family: string, variant: string }
     // Dealer's evaluation: set on a rung that was left out because another rung of its ladder (this key) is used.
     tierUsed?: string
+    // Dealer's evaluation (engine Max Damage only): off unless its key is in MaxDmgOptions.included
+    // (battle/EngineMaxDamage.vortexOffByDefault: a vortex user's other vortex). UI bookkeeping.
+    defaultOff?: boolean
 }
 
 // Buff/debuff strength (UP/DWN_BUFF/DEBUFF_EFFECT_VALUE): not a state on the dealer or an enemy, it scales every
@@ -59,6 +62,7 @@ export const isEffectValueType = (type: string) => /^(UP|DWN)_(BUFF|DEBUFF)_EFFE
 export interface MaxDmgOptions {
     battleType?: BattleType
     excluded?: Set<string>
+    included?: Set<string>        // engine Max Damage: effects that are off by default (MaxDmgEffect.defaultOff) turned on
     stacks?: Map<string, number>
     broken?: boolean[]            // per enemy: evaluate as broken
     breakRate?: (number | undefined)[] // per enemy broken damage rate in % (default: the enemy's max)

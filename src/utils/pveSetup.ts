@@ -21,6 +21,7 @@ export interface PvESetup {
     breakRate: (number | null)[]     // per enemy broken DMG rate in %, null = the enemy's max
     dealer: number                   // team slot of the damage dealer
     excluded: string[]               // Max Damage effects left out (MaxDmgEffect.key)
+    included?: string[]              // Max Damage effects that are off by default turned on (MaxDmgEffect.defaultOff)
     stacks: Record<string, number>   // Max Damage stack overrides (MaxDmgEffect.key -> stacks)
     control: PvEControl
     rngMode: RngMode
@@ -89,6 +90,7 @@ export function sanitizePvESetup(raw: unknown): PvESetup {
     const s = asRecord(raw)
 
     const excluded = [...new Set(asArray(s.excluded).filter((k): k is string => typeof k === "string" && EFFECT_KEY.test(k)))]
+    const included = [...new Set(asArray(s.included).filter((k): k is string => typeof k === "string" && EFFECT_KEY.test(k)))]
         .slice(0, MAX_EFFECT_KEYS).sort()
     const stacksIn = asRecord(s.stacks)
     const stacks = Object.fromEntries(Object.keys(stacksIn).filter(k => EFFECT_KEY.test(k)).sort().slice(0, MAX_EFFECT_KEYS)
@@ -117,6 +119,7 @@ export function sanitizePvESetup(raw: unknown): PvESetup {
         breakRate: asArray(s.breakRate).slice(0, MAX_ENEMIES).map(r => typeof r === "number" && Number.isFinite(r) ? int(r, 0, 100000, 0) : null),
         dealer: int(s.dealer, 0, 4, 0),
         excluded,
+        included,
         stacks,
         control: s.control === "manual" ? "manual" : "auto",
         rngMode: RNG_MODES.includes(s.rngMode as RngMode) ? s.rngMode as RngMode : "seed",

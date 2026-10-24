@@ -15,7 +15,7 @@
 //     loadout is a result row, as in the old calculator.
 import type { FindBestTeamOptions } from "../types/BestTeamTypes"
 import { combinations, generateRoleDistributions, getKioku, permute } from "./BestTeamCalculator"
-import { portraitsBestOnly, getBestCrystalises, KiokuConstants, getEX, SupportIdealPortrait, type Character, type KiokuArgs } from "../types/KiokuTypes"
+import { portraitsBestOnly, getBestCrystalises, KiokuConstants, getEX, relevantCrys, SupportIdealPortrait, type Character, type KiokuArgs } from "../types/KiokuTypes"
 import type { ScoreAttackKioku } from "./ScoreAttackKioku"
 import { KiokuElement, KiokuRole, type SupportKey } from "../types/enums"
 import type { TeamScore, TeamScoreScenario } from "../battle/EngineTeamScore"
@@ -26,6 +26,12 @@ export type TeamScorer = (team: KiokuArgs[]) => Promise<TeamScore | undefined>
 const LIMIT = 10_000
 const MAX_PASSES = 3
 const SUPPORT_PORTRAIT = "The Savior's Apostle"
+
+// Vortex users (VORTEX_ATK in their kit) in a support slot: the vortex always pops in the max (battle/EngineMaxDamage) and
+// its damage base is the caster's own ATK, so they are scored with the DoT applier loadout: The Savior's Apostle, their
+// EX + these crystalis, and a Debuffer's supports (RELEVANT_SUPPORT_SUPPORTS) whatever their role, the highest ATK
+// 5 star support when none of those is available.
+const VORTEX_SUPPORT_CRYS = ["Towering Offense++", "Dominant Blow++"]
 
 const RELEVANT_SUPPORT_SUPPORTS = {
     [KiokuRole.Buffer]: ["Flame Waltz", "Buon Natale Grazioso", "Pluvia☆Neujahr", "L'Ombre", "Scorchin' Summer Spike"],
@@ -103,6 +109,18 @@ export async function findBestTeamEngine(o: FindBestTeamOptions, score: TeamScor
     for (const [role, names] of Object.entries(RELEVANT_SUPPORT_SUPPORTS) as [KiokuRole, string[]][]) {
         relevantSupportData[role] = names.map(n => enabledCharacters.find(c => c.name === n)).filter(Boolean).map(c => meta(c as Character).getKey())
     }
+    const vortexUsers = new Map<string, boolean>()
+    const isVortexUser = (c: any): boolean => {
+        if (!c?.name) return false
+        let v = vortexUsers.get(c.name)
+        if (v === undefined) vortexUsers.set(c.name, v = !!meta(c)?.effects.some(e => e.abilityEffectType === "VORTEX_ATK"))
+        return v
+    }
+    /** A support member's crystalis: the EX, plus VORTEX_SUPPORT_CRYS for a vortex user. */
+    const supportCrysOf = (c: Character): number[] => [
+        getEX(c.id)?.selectionAbilityMstId,
+        ...(isVortexUser(c) ? relevantCrys(c.id).filter(x => VORTEX_SUPPORT_CRYS.includes(x.name)).map(x => x.selectionAbilityMstId) : []),
+    ].filter(x => x != null) as number[]
     const margin = Math.min(Math.max(o.pruningMargin ?? 15, 0), 100) / 100
     const objective = (s: TeamScore) => optimizeAverageDamage ? s.avg : s.max
 
@@ -128,10 +146,12 @@ export async function findBestTeamEngine(o: FindBestTeamOptions, score: TeamScor
                 ...Array(dist.breakers).fill({ role: KiokuRole.Breaker }), ...deBufferCombo,
             ]
             let out: any[][] = [new Array(probe.length).fill(undefined)]
+            // vortex users take a Debuffer's supports whatever their role
+            const poolRole = (c: any): KiokuRole => isVortexUser(c) ? KiokuRole.Debuffer : c.role
             for (const [role, pool] of Object.entries(relevant) as [KiokuRole, any[][]][]) {
                 const active = pool.filter(s => !deBufferCombo.map(c => c.name).includes(s[0]))
                 if (!active.length) continue
-                const idx = probe.map((c, i) => c.role === role ? i : null).filter(v => v !== null) as number[]
+                const idx = probe.map((c, i) => poolRole(c) === role ? i : null).filter(v => v !== null) as number[]
                 if (!idx.length) continue
                 const combos = combinations(active, Math.min(active.length, idx.length))
                 const expanded: any[][] = []
@@ -141,6 +161,16 @@ export async function findBestTeamEngine(o: FindBestTeamOptions, score: TeamScor
                     expanded.push(arr)
                 }
                 out = expanded
+            }
+            // a vortex user left without one of those: the highest ATK 5 star support
+            const vortexIdx = probe.map((c, i) => isVortexUser(c) ? i : null).filter(v => v !== null) as number[]
+            const fallback = highestAtkSupportKey
+            if (vortexIdx.length && fallback && fallback[0] !== attacker.name && !deBufferCombo.some(c => c.name === fallback[0])) {
+                out = out.map(arr => {
+                    const a = [...arr]
+                    for (const i of vortexIdx) if (a[i] === undefined && !a.some(x => x?.[0] === fallback[0])) a[i] = fallback
+                    return a
+                })
             }
             return out
         }
@@ -165,7 +195,7 @@ export async function findBestTeamEngine(o: FindBestTeamOptions, score: TeamScor
     interface Loadout { support: number, portrait: number, crys: number, ss: number }
     const teamOf = (p: Plan, r: Roster, l: Loadout): KiokuArgs[] => [
         argsOf(p.attacker, { portrait: p.portraits[l.portrait], supportKey: p.supportKeys[l.support], crysIDs: p.crysCombos[l.crys].map((c: any) => c.selectionAbilityMstId), subCrysIDs: p.subCrys }),
-        ...r.totalSupports.map((s, i) => argsOf(s, { portrait: SUPPORT_PORTRAIT, crysIDs: [getEX(s.id)?.selectionAbilityMstId].filter(c => c != null) as number[], supportKey: r.supportSupports[l.ss][i] })),
+        ...r.totalSupports.map((s, i) => argsOf(s, { portrait: SUPPORT_PORTRAIT, crysIDs: supportCrysOf(s), supportKey: r.supportSupports[l.ss][i] })),
     ]
     const memo = new Map<string, Promise<TeamScore | undefined>>()
     const scoreOf = (team: KiokuArgs[]): Promise<TeamScore | undefined> => {
@@ -213,9 +243,11 @@ export async function findBestTeamEngine(o: FindBestTeamOptions, score: TeamScor
     const shouldHavePortrait: Record<string, Set<string>> = {}
     const record = (p: Plan, r: Roster, l: Loadout, s: TeamScore) => {
         const want = shouldHavePortrait[p.attacker.name] ??= new Set()
-        const members = r.totalSupports.map((m, i) => meta(m, { portrait: SUPPORT_PORTRAIT, crysIDs: [getEX(m.id)?.selectionAbilityMstId].filter(c => c != null) as number[], supportKey: r.supportSupports[l.ss][i] }))
+        const members = r.totalSupports.map((m, i) => meta(m, { portrait: SUPPORT_PORTRAIT, crysIDs: supportCrysOf(m), supportKey: r.supportSupports[l.ss][i] }))
         members.forEach((k, i) => {
-            if (k.idealSupportPortrait === SupportIdealPortrait.ADD_DMG || (p.hasDotPop && k.idealSupportPortrait === SupportIdealPortrait.DOT_APPLIER)) want.add(r.totalSupports[i].name)
+            // a vortex always pops, so a vortex user always wants the DoT applier portrait
+            if (k.idealSupportPortrait === SupportIdealPortrait.ADD_DMG
+                || ((p.hasDotPop || isVortexUser(r.totalSupports[i])) && k.idealSupportPortrait === SupportIdealPortrait.DOT_APPLIER)) want.add(r.totalSupports[i].name)
         })
         let max = s.max, avg = s.avg
         if (optimizeAverageDamage) [avg, max] = [max, avg]
