@@ -22,6 +22,7 @@ export interface PvESetup {
     dealer: number                   // team slot of the damage dealer
     excluded: string[]               // Max Damage effects left out (MaxDmgEffect.key)
     included?: string[]              // Max Damage effects that are off by default turned on (MaxDmgEffect.defaultOff)
+    vortexEnemies?: Record<string, number[]> // Max Damage vortex effect key -> the enemy indexes it is put on ([] = off)
     stacks: Record<string, number>   // Max Damage stack overrides (MaxDmgEffect.key -> stacks)
     control: PvEControl
     rngMode: RngMode
@@ -92,6 +93,9 @@ export function sanitizePvESetup(raw: unknown): PvESetup {
     const excluded = [...new Set(asArray(s.excluded).filter((k): k is string => typeof k === "string" && EFFECT_KEY.test(k)))]
     const included = [...new Set(asArray(s.included).filter((k): k is string => typeof k === "string" && EFFECT_KEY.test(k)))]
         .slice(0, MAX_EFFECT_KEYS).sort()
+    const vortexIn = asRecord(s.vortexEnemies)
+    const vortexEnemies = Object.fromEntries(Object.keys(vortexIn).filter(k => EFFECT_KEY.test(k)).sort().slice(0, MAX_EFFECT_KEYS)
+        .map(k => [k, [...new Set(asArray(vortexIn[k]).filter((i): i is number => Number.isInteger(i) && (i as number) >= 0 && (i as number) < MAX_ENEMIES))].sort((a, b) => a - b)]))
     const stacksIn = asRecord(s.stacks)
     const stacks = Object.fromEntries(Object.keys(stacksIn).filter(k => EFFECT_KEY.test(k)).sort().slice(0, MAX_EFFECT_KEYS)
         .map(k => [k, int(stacksIn[k], 0, 999, 0)]))
@@ -120,6 +124,7 @@ export function sanitizePvESetup(raw: unknown): PvESetup {
         dealer: int(s.dealer, 0, 4, 0),
         excluded,
         included,
+        vortexEnemies,
         stacks,
         control: s.control === "manual" ? "manual" : "auto",
         rngMode: RNG_MODES.includes(s.rngMode as RngMode) ? s.rngMode as RngMode : "seed",

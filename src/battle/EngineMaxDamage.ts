@@ -208,7 +208,7 @@ function effectValueRate(caster: any, effect: any): number {
 
 /** Gives the listed team effects (conditions met). Returns where each landed (for the UI). */
 /** Gives `e` once (conditions cleared) from `caster`; the effect-value rate of the caster, undefined when it can't be made. */
-function launchOnce(b: Built, e: MaxDmgEffect, caster: any, info: any): number | undefined {
+function launchOnce(b: Built, e: MaxDmgEffect, caster: any, info: any, main: any = b.main): number | undefined {
     const effect = E.AbilityEffectFactory.Create(info, false)
     if (!effect) return undefined
     clearConditions(effect)
@@ -217,9 +217,9 @@ function launchOnce(b: Built, e: MaxDmgEffect, caster: any, info: any): number |
     check._GameDirector = b.d
     check._SelfUnit = caster
     check._ActorUnit = caster
-    check._MainTargetUnit = b.main
+    check._MainTargetUnit = main
     const origin = isPassiveDetail(e.detail) ? ORIGIN_PASSIVE : ORIGIN_ACTIVE
-    E.AbilityEffectLauncher.Triggering$10([effect], 0, check, origin, caster, b.dic, b.d, null, b.main?._Id ?? 0, b.dealer._Id)
+    E.AbilityEffectLauncher.Triggering$10([effect], 0, check, origin, caster, b.dic, b.d, null, main?._Id ?? 0, b.dealer._Id)
     return rate
 }
 
@@ -269,7 +269,7 @@ function blendGroups(ctx: Ctx, pos: number, effects: MaxDmgEffect[]): Map<string
     return out
 }
 
-function giveEffects(b: Built, list: Given): Map<string, { dealer: boolean, enemies: number[], rate: number }> {
+function giveEffects(b: Built, list: Given, vortexEnemies?: Record<string, number[]>): Map<string, { dealer: boolean, enemies: number[], rate: number }> {
     const reach = new Map<string, { dealer: boolean, enemies: number[], rate: number }>()
     // buff / debuff strength first: it scales every state its holder gives afterwards
     const landed: { key: string, mstId: number, casterId: number, rate: number }[] = []
@@ -283,11 +283,22 @@ function giveEffects(b: Built, list: Given): Map<string, { dealer: boolean, enem
         const info = infoOf(e)
         if (!info) continue
         let rate = 1
-        // every equipped copy of a crystalis is its own passive (the effect list merges them into one row)
-        for (let n = 0; n < stacks * (copies ?? 1); n++) {
-            const r = launchOnce(b, e, caster, info)
-            if (r === undefined) break
-            if (n === 0) rate = r
+        // App rule: a vortex the user put on chosen enemies (MaxDmgOptions.vortexEnemies) is given with each of them as the
+        // main target and kept on that enemy only (whatever its range reaches besides is taken off again)
+        const onlyOn = e.detail.abilityEffectType === "VORTEX_ATK" ? vortexEnemies?.[e.key] : undefined
+        const vortexStates = () => b.enemies.flatMap(u => (u?._Condition._StateList ?? [])
+            .filter((st: any) => st instanceof E.VortexUnitStateBase && st._MstId === info._MstId && st._UserUnitId === caster._Id).map((st: any) => ({ u, st })))
+        for (const main of onlyOn ? onlyOn.map(i => b.enemies[i]).filter(Boolean) : [b.main]) {
+            const before = new Set(onlyOn ? vortexStates().map(x => x.st) : [])
+            // every equipped copy of a crystalis is its own passive (the effect list merges them into one row)
+            for (let n = 0; n < stacks * (copies ?? 1); n++) {
+                const r = launchOnce(b, e, caster, info, main)
+                if (r === undefined) break
+                if (n === 0) rate = r
+            }
+            if (onlyOn) for (const { u, st } of vortexStates()) {
+                if (u !== main && !before.has(st)) u._Condition._StateList = u._Condition._StateList.filter((s: any) => s !== st)
+            }
         }
         // [APPROXIMATION] a vortex always pops in the max: one hit left (RemainAttackCount = v2 when given,
         // VortexUnitStateBase.ctor 0x15F6CF0; VortexProcess 0x18f0260 pops it when a hit takes it to 0), so the evaluated
@@ -365,7 +376,7 @@ function runOnce(ctx: Ctx, dealerPos: number, pick: SkillPick, crit: boolean, ef
         if (!skill) return undefined
         const type = actorSkillTypeOf(skill)
         const allowed = effects.filter(({ e }) => { const r = actorSkillTypeRestriction(e.detail.activeConditionSetIdCsv); return !r || r.has(type) })
-        giveEffects(b, allowed)
+        giveEffects(b, allowed, ctx.opts.vortexEnemies)
         const list: any[] = skill.launcher._AbilityEffectList
         const own = list.filter((eff: any, i: number) => {
             if (!keep(i)) return false
@@ -500,7 +511,12 @@ export function computeMaxDamageEngine(allies: PvPKioku[], stage: EngineMaxDmgSt
             continue
         }
         const passEffects = pos === attackerPos ? effects : collectTeamEffects(allies, pos, { slipDamage: true })
-        const offOf = (e: MaxDmgEffect) => opts.excluded?.has(e.key) || (vortexOffByDefault(e, pos) && !opts.included?.has(e.key))
+        // a vortex put on chosen enemies (vortexEnemies) is on unless that list is empty, whatever the default
+        const offOf = (e: MaxDmgEffect) => {
+            const chosen = e.detail.abilityEffectType === "VORTEX_ATK" ? opts.vortexEnemies?.[e.key] : undefined
+            if (chosen) return chosen.length === 0
+            return opts.excluded?.has(e.key) || (vortexOffByDefault(e, pos) && !opts.included?.has(e.key))
+        }
         const stacksOf = (e: MaxDmgEffect) => offOf(e) ? 0 : Math.max(0, Math.min(e.maxStacks, opts.stacks?.get(e.key) ?? e.maxStacks))
         // The wave's unit counts are known, so "while N enemies remain" conditions are evaluated, not assumed: start
         // conditions in the caster's (an ally's) bundle, active conditions in the holder's (the dealer for buffs, an enemy
@@ -583,7 +599,7 @@ export function computeMaxDamageEngine(allies: PvPKioku[], stage: EngineMaxDmgSt
             new MaxDamageRandom(false, 0).run(() => {
                 const b = buildBattle(ctx, pos, new MaxDamageRandom(false, 0))
                 if (!b.dealer) return
-                const reach = giveEffects(b, given)
+                const reach = giveEffects(b, given, ctx.opts.vortexEnemies)
                 for (const e of passEffects) {
                     const x = reach.get(e.key)
                     if (!x) continue

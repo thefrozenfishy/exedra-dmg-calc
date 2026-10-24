@@ -69,6 +69,9 @@ export interface MaxDmgOptions {
     battleType?: BattleType
     excluded?: Set<string>
     included?: Set<string>        // engine Max Damage: effects that are off by default (MaxDmgEffect.defaultOff) turned on
+    // engine Max Damage: a vortex (VORTEX_ATK effect key) put on these enemies only (page enemy indexes), overriding its
+    // default and on/off; [] = off
+    vortexEnemies?: Record<string, number[]>
     stacks?: Map<string, number>
     broken?: boolean[]            // per enemy: evaluate as broken
     breakRate?: (number | undefined)[] // per enemy broken damage rate in % (default: the enemy's max)

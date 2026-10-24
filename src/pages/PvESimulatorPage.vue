@@ -341,7 +341,7 @@
                 or back on; lower its stacks to use fewer. Tiered effects and alternatives count one at a time (the one that gives the most damage):
                 click another one to use it instead. A vortex always pops here, and a vortex user's vortex counts from one
                 skill only: the Battle Skill's when they deal the damage, the Ultimate's otherwise (the other is off; click
-                it to turn it on). A popped vortex or DoT deals its damage with its owner's own ATK and DMG buffs, so
+                it to turn it on). On a wave with several enemies, the numbers on a vortex pick which enemies it is on. A popped vortex or DoT deals its damage with its owner's own ATK and DMG buffs, so
                 those count too ("Show support buffs" shows them in blue).</p>
 
             <div class="effects-summary">
@@ -352,7 +352,7 @@
                     's' }}
                     on the enemies</span>
                 <span v-if="effectCounts.off" class="legend legend-off">{{ effectCounts.off }} turned off</span>
-                <button v-if="excluded.size || included.size || stacks.size" type="button" class="link-btn" @click="resetEffects">Reset
+                <button v-if="excluded.size || included.size || stacks.size || Object.keys(vortexEnemies).length" type="button" class="link-btn" @click="resetEffects">Reset
                     to the defaults</button>
                 <span v-if="effectCounts.support && showSupportBuffs" class="legend legend-support">{{ effectCounts.support }}
                     support buff{{ effectCounts.support === 1 ? '' : 's' }}</span>
@@ -400,6 +400,14 @@
                                     ×{{ +e.rate.toFixed(2) }} from {{ e.side === 'ally' ? 'buff' : 'debuff' }} strength
                                 </div>
                                 <div v-if="e.description" class="fx-desc">{{ e.description }}</div>
+                                <!-- vortex: which enemies it is on (default: where its range reaches; pick any) -->
+                                <div v-if="e.vortex && e.status !== 'na' && (maxDmg?.enemies.length ?? 0) > 1" class="fx-enemies" @click.stop>
+                                    <span class="fx-enemies-label">On</span>
+                                    <button v-for="(en, i) in maxDmg!.enemies" :key="i" type="button" class="fx-enemy"
+                                        :class="{ on: e.status !== 'off' && e.onEnemies.includes(i) }"
+                                        :title="`${en.name}: click to ${e.status !== 'off' && e.onEnemies.includes(i) ? 'take this vortex off it' : 'put this vortex on it'}`"
+                                        @click="toggleVortexEnemy(e, i)">{{ i + 1 }}</button>
+                                </div>
                                 <!-- skill detail id (click to copy) and condition set ids: rows with the same text differ here -->
                                 <div class="fx-meta">
                                     <span v-for="id in e.ids" :key="id" class="fx-id" title="Skill detail id: click to copy"
@@ -755,11 +763,18 @@ const excluded = reactive(new Set<string>())
 // Effects that are off by default (MaxDmgEffect.defaultOff: a vortex user's other vortex) and were turned on.
 const included = reactive(new Set<string>())
 const stacks = reactive(new Map<string, number>())
+// A vortex put on chosen enemies (effect key -> page enemy indexes, [] = off): replaces its default and on/off.
+const vortexEnemies = reactive<Record<string, number[]>>({})
 const isOffByDefault = (k: string) => !!maxDmg.value?.effects.find(x => x.key === k)?.defaultOff
 // A rung of a tier ladder (MaxDmgEffect.tier, one rung counts at a time; the engine uses the rung that gives the most
 // damage): clicking the rung in use turns the whole ladder off; clicking any other rung uses that one only.
 const toggleEffect = (k: string) => {
     const e = maxDmg.value?.effects.find(x => x.key === k)
+    // a vortex on chosen enemies: off everywhere, or (when off) on every enemy
+    if (vortexEnemies[k]) {
+        vortexEnemies[k] = vortexEnemies[k].length ? [] : (maxDmg.value?.enemies ?? []).map((_, i) => i)
+        return
+    }
     if (e?.tier) {
         const inUse = !excluded.has(k) && !e.tierUsed && !!e.reach
         if (inUse) e.tier.keys.forEach(key => excluded.add(key))
@@ -777,7 +792,16 @@ const setStacks = (k: string, v: number, max: number) => {
     const n = Math.max(0, Math.min(max, Number.isFinite(v) ? v : max))
     if (n === max) stacks.delete(k); else stacks.set(k, n)
 }
-const resetEffects = () => { excluded.clear(); included.clear(); stacks.clear() }
+const resetEffects = () => {
+    excluded.clear(); included.clear(); stacks.clear()
+    for (const k of Object.keys(vortexEnemies)) delete vortexEnemies[k]
+}
+// One enemy chip of a vortex card: puts the vortex on that enemy or takes it off (starting from where it is now).
+function toggleVortexEnemy(e: EffectView, i: number) {
+    const on = new Set(e.onEnemies)
+    if (on.has(i)) on.delete(i); else on.add(i)
+    vortexEnemies[e.key] = [...on].sort((a, b) => a - b)
+}
 
 // Computed in a worker (workers/maxDamageWorker.ts: battle/EngineMaxDamage, the game's own battle code); the last
 // result stays on screen while a new one is computed (`maxDmgBusy`).
@@ -807,6 +831,7 @@ function requestMaxDamage() {
             opts: {
                 battleType: stageBattleType(stageId.value),
                 excluded: new Set(excluded), included: new Set(included), stacks: new Map(stacks),
+                vortexEnemies: JSON.parse(JSON.stringify(vortexEnemies)),
                 broken: [...broken.value], breakRate: [...breakRate.value], mainTargetIdx: mainTargetIdx.value,
             },
         } satisfies MaxDamageRequest)
@@ -815,7 +840,7 @@ function requestMaxDamage() {
         maxDmgBusy.value = false
     }
 }
-watch([teamKiokus, wave, dealerPos, () => [...excluded], () => [...included], () => [...stacks], broken, breakRate, mainTargetIdx], requestMaxDamage, { deep: true, immediate: true })
+watch([teamKiokus, wave, dealerPos, () => [...excluded], () => [...included], () => JSON.stringify(vortexEnemies), () => [...stacks], broken, breakRate, mainTargetIdx], requestMaxDamage, { deep: true, immediate: true })
 onBeforeUnmount(() => maxDmgWorker?.terminate())
 const dealer = computed(() => maxDmg.value?.members[dealerPos.value])
 const dealerName = computed(() => dealer.value?.name ?? 'the damage dealer')
@@ -863,8 +888,10 @@ function effectStatus(e: MaxDmgEffect): { status: EffectStatus, statusText: stri
             ? { status: 'na', statusText: `Only affects ${e.casterName} itself` }
             : { status: 'na', statusText: `A drawback on ${e.casterName} itself, not on enemies` }
     }
-    if (excluded.has(e.key)) return { status: 'off', statusText: 'Turned off: click to turn on' }
-    if (e.defaultOff && !included.has(e.key)) return {
+    const chosen = vortexEnemies[e.key]
+    if (chosen && !chosen.length) return { status: 'off', statusText: 'Off on every enemy: pick enemies below, or click to put it on all' }
+    if (!chosen && excluded.has(e.key)) return { status: 'off', statusText: 'Turned off: click to turn on' }
+    if (!chosen && e.defaultOff && !included.has(e.key)) return {
         status: 'off', statusText: `Off by default: a vortex counts from one skill only (the dealer's Battle Skill, another member's Ultimate). Click to turn on`,
     }
     if (e.tierUsed) return {
@@ -896,6 +923,9 @@ const effectRows = computed(() => (maxDmg.value?.effects ?? []).map(e => {
         rate: e.rate ?? 1,
         tierGroup: e.tier?.group,
         forOwner: !!e.forOwner,
+        // vortex: which enemies it is on (enemy chips on its card)
+        vortex: e.detail.abilityEffectType === 'VORTEX_ATK',
+        onEnemies: vortexEnemies[e.key] ?? e.reach?.enemies ?? [],
         description: effectDescription(e.detail),
         blendGroup: e.blendGroup,
         // a card of merged effects (blendGroup) lists every one of these
@@ -1401,6 +1431,7 @@ function currentSetup(): PvESetup {
         dealer: attackerIndex.value,
         excluded: [...excluded],
         included: [...included],
+        vortexEnemies: JSON.parse(JSON.stringify(vortexEnemies)),
         stacks: Object.fromEntries(stacks),
         control: targetMode.value,
         rngMode: rngMode.value,
@@ -1432,6 +1463,7 @@ async function applySetup(raw: unknown) {
     resetEffects()
     s.excluded.forEach(k => excluded.add(k))
     s.included?.forEach(k => included.add(k))
+    Object.entries(s.vortexEnemies ?? {}).forEach(([k, v]) => { vortexEnemies[k] = [...v] })
     Object.entries(s.stacks).forEach(([k, v]) => stacks.set(k, v))
     seed.value = s.seed
     simTurns.value = s.turns
@@ -2643,6 +2675,32 @@ const saved = useSavedTeams({
 
 .fx-stacks .num {
     width: 3.5em;
+}
+
+.fx-enemies {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 0.72rem;
+    color: var(--muted);
+}
+
+.fx-enemy {
+    min-width: 1.6rem;
+    padding: 0.05rem 0.35rem;
+    border-radius: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    background: transparent;
+    color: var(--muted);
+    font-size: 0.72rem;
+    cursor: pointer;
+}
+
+.fx-enemy.on {
+    border-color: var(--fx);
+    background: var(--fx);
+    color: #fff;
 }
 
 /* ── Battle simulator ── */
