@@ -278,7 +278,7 @@ Lower = faster but more likely to skip a team that could have closed the gap.
                 <ResultsHeader :optimizeAverageDamage />
                 <div class="team-row-wrapper" v-for="(team, idx) in topResults" :key="idx">
                     <TeamRow :team :weakElements :offElementBuffMultReduction :offElementDebuffMultReduction
-                        :loading="false" :optimalSubCrys />
+                        :loading="false" :optimalSubCrys :pveStageId="runStageId" />
                 </div>
 
                 <div v-for="[attackerName, teams] of topTeamsByAttacker" :key="attackerName" class="attacker-section">
@@ -287,7 +287,7 @@ Lower = faster but more likely to skip a team that could have closed the gap.
                         <ResultsHeader :optimizeAverageDamage />
                         <div class="team-row-wrapper" v-for="(team, idx) in teams" :key="idx">
                             <TeamRow :team :weakElements :offElementBuffMultReduction :offElementDebuffMultReduction
-                                :loading="false" :optimalSubCrys />
+                                :loading="false" :optimalSubCrys :pveStageId="runStageId" />
                         </div>
                     </div>
                 </div>
@@ -354,6 +354,8 @@ let runId = 0
 const progress = ref<FinalTeam>({})
 
 const stageRef = ref<InstanceType<typeof StageEnemySelector> | null>(null)
+// the stage of the last run: the result rows open the PvE Simulator on it
+const runStageId = ref<number | undefined>(undefined)
 
 const topTeamsPerKioku = useSetting("topTeamsPerKioku", 5)
 const topTeams = useSetting("topTeams", 20)
@@ -664,6 +666,7 @@ async function startSimulation() {
         return
     }
     runWeakElements.value = [...stage.weakElements]
+    runStageId.value = stage.stageId
     prevObligatoryKioku = [...obligatoryKioku.value]
     prevAttackers = [...attackers.value, ...extraAttackers.value]
     running.value = true

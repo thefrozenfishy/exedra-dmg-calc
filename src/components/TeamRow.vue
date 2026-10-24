@@ -75,7 +75,7 @@
                     {{ presentCrysName(team.attacker_crys3[idx]) }}
                 </div>
                 <div class="remove-during-export">
-                    <button @click="saveToStore(idx)" class="save-button">Open team in single battle editor</button>
+                    <button @click="saveToStore(idx)" class="save-button">{{ pveStageId ? 'Open team in PvE Simulator' : 'Open team in single battle editor' }}</button>
                 </div>
                 <div class="remove-during-export">
                 </div>
@@ -91,6 +91,7 @@ import { useTeamStore } from '../store/singleTeamStore';
 import { maxDmgSubCrys } from '../types/KiokuTypes';
 import { KiokuElement } from '../types/enums'
 import { useRouter } from 'vue-router'
+import { useSetting } from '../store/settingsStore'
 
 const presentCrysName = (id: number) => {
     const crys = crystalises[id]
@@ -125,14 +126,21 @@ const props = defineProps<{
     offElementBuffMultReduction?: number,
     offElementDebuffMultReduction?: number
     loading?: boolean,
-    optimalSubCrys?: boolean
+    optimalSubCrys?: boolean,
+    // Set by the engine Best SA Team page (the stage it ran against): the button then opens the PvE Simulator on that
+    // stage instead of the old single hit calc.
+    pveStageId?: number
 }>()
 const teamStore = useTeamStore()
 const router = useRouter()
+const pveStageSetting = useSetting<number>('pveStageId', 982250)
+const pveAttackerIndex = useSetting('pveAttackerIndex', 2)
 
 function saveToStore(idx: number) {
     const { team, weakElements, offElementBuffMultReduction, offElementDebuffMultReduction } = props
-    const offElements = weakElements!.filter(w => w.enabled).map(w => w.name)
+    const toPvE = !!props.pveStageId
+    // the off-element buff/debuff reductions belong to the old single-hit model; the PvE Simulator runs the engine
+    const offElements = toPvE ? Object.values(KiokuElement) : weakElements!.filter(w => w.enabled).map(w => w.name)
     teamStore.setMain(0, { ...team.supp1, portrait: first(team.supp1portrait) })
     teamStore.setSupport(0, first(team.supp1supp))
     if (!offElements.includes(team.supp1.element)) {
@@ -180,7 +188,11 @@ function saveToStore(idx: number) {
         teamStore.setCharDebuffReduction(4, undefined)
     }
 
-    const route = router.resolve('/sa-simulator-single')
+    if (toPvE) {
+        pveStageSetting.value = props.pveStageId!
+        pveAttackerIndex.value = 2 // the attacker goes in slot 2 above
+    }
+    const route = router.resolve(toPvE ? '/pve-simulator' : '/sa-simulator-single')
     window.open(route.href, '_blank')
 }
 </script>
