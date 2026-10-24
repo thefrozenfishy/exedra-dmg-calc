@@ -9,9 +9,10 @@ _Last updated: 2026-10-24 (battle-start passive order: kit -> portrait -> suppor
   engine's made-up server passive list (`src/engine/adapter/NetworkUnits.ts`) had crystalis second, so her crys'
   +10% MP recovery applied to her ascension-2 +50 MP. Now kit (ability, ascensions) -> portrait -> support -> crystalis
   (AbilitySourceType order; relative order of the last three [UNCERTAIN]). Side effect: barriers given at battle start
-  are computed before crys DEF ups (Vampire Fang's in those teams 1,121 -> 957), worth an in-game look.
+  are computed before crys DEF ups. Confirmed in game (PvE): Vampire Fang DEF 5,083 -> 2288/3813 (45% / 75%); the
+  sim's PvP 1,144 is that halved (fixture pvp-battle-start-barrier-vampire-fang.json).
 - Fixtures: `pvp-battle-start-mp-*.json` (3), asserted by `checkFixturesEngine.ts` on the initial state (action 0,
-  `actor` optional). Engine fixtures 15/15; old `checkFixtures.ts` 12/12 (old engine unchanged, still crys second);
+  `actor` optional). Engine fixtures 16/16; old `checkFixtures.ts` 12/12 (old engine unchanged, still crys second);
   checkMechanics 0 FAIL; engine tsc 0; app vue-tsc 242, none in changed files. benchOne (SD, Glitterjoy, Tiro) unchanged;
   LUX_BENCH_VERSION 27 anyway (bench kits with EX crys may move).
 

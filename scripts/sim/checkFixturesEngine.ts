@@ -37,6 +37,8 @@ const CASES: { file: string, action: number, actor?: string, ally?: boolean, lin
     { file: "pvp-battle-start-mp-structure-destruction-79.json", action: 0, line: /^ +Structure Destruction +\| .*\| MP 79\/90 / },
     { file: "pvp-battle-start-mp-vampire-fang-after-79.json", action: 0, line: /^ +Structure Destruction +\| .*\| MP 79\/90 / },
     { file: "pvp-battle-start-mp-vampire-fang-before-85.json", action: 0, line: /^ +Structure Destruction +\| .*\| MP 85\/90 / },
+    // Battle-start barrier from DEF before crys / ascension DEF ups (in-game PvE 2288/3813 of DEF 5,083), halved in PvP.
+    { file: "pvp-battle-start-barrier-vampire-fang.json", action: 0, line: /^ +Vampire Fang +\| HP 11,911\/11,911 \| barrier 1,144 \| / },
 ];
 
 console.warn = () => {}; console.debug = () => {};

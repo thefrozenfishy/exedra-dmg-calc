@@ -1,0 +1,2281 @@
+{
+ "format": "exedra-pvp-sim",
+ "version": 1,
+ "exportedAt": "2026-10-24T17:13:24.674Z",
+ "engine": "battle-engine-3.19",
+ "seed": 3224023842,
+ "rngMode": "seed",
+ "turns": 30,
+ "notes": "Vampire Fang (DEF 5,083 on the stat screen) shows 2288/3813 barrier at battle start in PvE: 45% / 75% of DEF before any battle-start DEF up. PvP halves it (barrierEnduranceSuppresionRatio): 1,144 on every ally.",
+ "decisionLog": [],
+ "sequence": [
+  "== Initial state ==",
+  "  roll #0 target: String target -> Time Stop Strike (20.0%)",
+  "  roll #1 target: String target -> Tiro Finale (20.0%)",
+  "  roll #2 target: String target -> Lux☆Magica (20.0%)",
+  "  Allies (SP 6)",
+  "    Tiro Finale                  | HP 9,903/9,903  | barrier 1,144 | MP 0/75 | break 165/165 | spd 264.00 | AV 20.81 | magic 2/5 | buffs[Vampire Fang - Absorbs DMG equal to barrier durability.]",
+  "    Final Fatebloom              | HP 11,076/11,076 | barrier 1,144 | MP 60/90 | break 150/150 | spd 234.30 | AV 0.00 | magic 8/10 | buffs[Vampire Fang - Absorbs DMG equal to barrier durability.]",
+  "    Structure Destruction        | HP 15,186/15,186 | barrier 1,144 | MP 79/90 | break 180/180 | spd 201.25 | AV 32.62 | buffs[Vampire Fang - Absorbs DMG equal to barrier durability.]",
+  "    Vampire Fang                 | HP 11,911/11,911 | barrier 1,144 | MP 0/75 | break 195/195 | spd 226.15 | AV 27.15 | buffs[Vampire Fang - Increases SPD by 50%.; Vampire Fang - Absorbs DMG equal to barrier durability.]",
+  "    Time Stop Strike             | HP 9,974/9,974  | barrier 1,144 | MP 0/75 | break 165/165 | spd 237.80 | AV 24.98 | magic 4/7 | buffs[Vampire Fang - Absorbs DMG equal to barrier durability.]",
+  "  Enemies (SP 5)",
+  "    Lux☆Magica                   | HP 9,622/9,622  | MP 0/75 | break 150/150 | spd 107.00 | AV 76.39 | magic 0/5",
+  "    Lux☆Magica                   | HP 9,622/9,622  | MP 0/75 | break 150/150 | spd 107.00 | AV 76.39 | magic 0/5",
+  "    Lux☆Magica                   | HP 9,622/9,622  | MP 0/75 | break 150/150 | spd 107.00 | AV 76.39 | magic 0/5",
+  "    Lux☆Magica                   | HP 9,622/9,622  | MP 0/75 | break 150/150 | spd 107.00 | AV 76.39 | magic 0/5",
+  "    Lux☆Magica                   | HP 9,622/9,622  | MP 0/75 | break 150/150 | spd 107.00 | AV 76.39 | magic 0/5",
+  "== Action 1: Final Fatebloom (Ally) - Battle Skill ==",
+  "  Final Fatebloom -> Lux☆Magica 557 (break -47)",
+  "  Final Fatebloom -> Lux☆Magica 557 (break -47)",
+  "  Final Fatebloom -> Lux☆Magica 557 (break -47)",
+  "  Final Fatebloom -> Lux☆Magica 668 (crit, break -47)",
+  "  Final Fatebloom -> Lux☆Magica 557 (break -47)",
+  "  roll #3 crit: Final Fatebloom → Lux☆Magica crit -> 10.0% miss",
+  "  roll #4 crit: Final Fatebloom → Lux☆Magica crit -> 10.0% miss",
+  "  roll #5 crit: Final Fatebloom → Lux☆Magica crit -> 10.0% miss",
+  "  roll #6 crit: Final Fatebloom → Lux☆Magica crit -> 10.0% hit",
+  "  roll #7 crit: Final Fatebloom → Lux☆Magica crit -> 10.0% miss",
+  "  Allies (SP 5)",
+  "    Tiro Finale                  | HP 9,903/9,903  | barrier 1,144 | MP 0/75 | break 165/165 | spd 264.00 | AV 20.81 | magic 2/5 | buffs[Vampire Fang - Absorbs DMG equal to barrier durability.]",
+  "    Final Fatebloom              | HP 11,076/11,076 | barrier 1,144 | MP 90/90 | break 150/150 | spd 234.30 | AV 42.68 | magic 10/10 | buffs[Vampire Fang - Absorbs DMG equal to barrier durability.]",
+  "    Structure Destruction        | HP 15,186/15,186 | barrier 1,144 | MP 84/90 | break 180/180 | spd 201.25 | AV 32.62 | buffs[Vampire Fang - Absorbs DMG equal to barrier durability.]",
+  "    Vampire Fang                 | HP 11,911/11,911 | barrier 1,144 | MP 0/75 | break 195/195 | spd 226.15 | AV 27.15 | buffs[Vampire Fang - Increases SPD by 50%.; Vampire Fang - Absorbs DMG equal to barrier durability.]",
+  "    Time Stop Strike             | HP 9,974/9,974  | barrier 1,144 | MP 0/75 | break 165/165 | spd 237.80 | AV 24.98 | magic 5/7 | buffs[Vampire Fang - Absorbs DMG equal to barrier durability.]",
+  "  Enemies (SP 5)",
+  "    Lux☆Magica                   | HP 9,065/9,622  | MP 5/75 | break 103/150 | spd 107.00 | AV 76.39 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).]",
+  "    Lux☆Magica                   | HP 9,065/9,622  | MP 5/75 | break 103/150 | spd 107.00 | AV 76.39 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).]",
+  "    Lux☆Magica                   | HP 9,065/9,622  | MP 5/75 | break 103/150 | spd 107.00 | AV 76.39 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).]",
+  "    Lux☆Magica                   | HP 8,954/9,622  | MP 5/75 | break 103/150 | spd 107.00 | AV 76.39 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).]",
+  "    Lux☆Magica                   | HP 9,065/9,622  | MP 5/75 | break 103/150 | spd 107.00 | AV 76.39 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).]",
+  "== Action 2: Final Fatebloom (Ally) - Ultimate ==",
+  "  Final Fatebloom -> Lux☆Magica 1,051 (break -103, BREAK)",
+  "  Final Fatebloom -> Lux☆Magica 1,262 (crit, break -103, BREAK)",
+  "  Final Fatebloom -> Lux☆Magica 1,051 (break -103, BREAK)",
+  "  Final Fatebloom -> Lux☆Magica 1,051 (break -103, BREAK)",
+  "  Final Fatebloom -> Lux☆Magica 1,051 (break -103, BREAK)",
+  "  roll #8 target: target -> Time Stop Strike (33.3%)",
+  "  roll #9 crit: Final Fatebloom → Lux☆Magica crit -> 10.0% miss",
+  "  roll #10 crit: Final Fatebloom → Lux☆Magica crit -> 10.0% hit",
+  "  roll #11 crit: Final Fatebloom → Lux☆Magica crit -> 10.0% miss",
+  "  roll #12 crit: Final Fatebloom → Lux☆Magica crit -> 10.0% miss",
+  "  roll #13 crit: Final Fatebloom → Lux☆Magica crit -> 10.0% miss",
+  "  Allies (SP 6)",
+  "    Tiro Finale                  | HP 9,903/9,903  | barrier 1,144 | MP 0/75 | break 165/165 | spd 264.00 | AV 13.23 | magic 2/5 | buffs[Vampire Fang - Absorbs DMG equal to barrier durability.; Final Fatebloom - Increases ATK by 20%.]",
+  "    Final Fatebloom              | HP 11,076/11,076 | barrier 1,144 | MP 6/90 | break 150/150 | spd 279.90 | AV 21.44 | magic 0/10 | buffs[Vampire Fang - Absorbs DMG equal to barrier durability.; Final Fatebloom - Increases SPD by 20%, and decreases DMG taken by 10%.; Final Fatebloom - Increases SPD by 20%.; Final Fatebloom - Increases ATK by 20%.; Final Fatebloom - Increases ATK by 20%.]",
+  "    Structure Destruction        | HP 15,186/15,186 | barrier 1,144 | MP 84/90 | break 180/180 | spd 201.25 | AV 22.68 | buffs[Vampire Fang - Absorbs DMG equal to barrier durability.; Final Fatebloom - Increases ATK by 20%.]",
+  "    Vampire Fang                 | HP 11,911/11,911 | barrier 1,144 | MP 0/75 | break 195/195 | spd 226.15 | AV 18.30 | buffs[Vampire Fang - Increases SPD by 50%.; Vampire Fang - Absorbs DMG equal to barrier durability.; Final Fatebloom - Increases ATK by 20%.]",
+  "    Time Stop Strike             | HP 9,974/9,974  | barrier 1,144 | MP 0/75 | break 165/165 | spd 237.80 | AV 16.57 | magic 6/7 | buffs[Vampire Fang - Absorbs DMG equal to barrier durability.; Final Fatebloom - Increases ATK by 20%.]",
+  "  Enemies (SP 5)",
+  "    Lux☆Magica                   | HP 8,013/9,622  | MP 10/75 | break 0/150 BROKEN(100%) | spd 107.00 | AV 99.75 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).; Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux☆Magica                   | HP 7,802/9,622  | MP 10/75 | break 0/150 BROKEN(100%) | spd 107.00 | AV 99.75 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).; Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux☆Magica                   | HP 8,013/9,622  | MP 10/75 | break 0/150 BROKEN(100%) | spd 107.00 | AV 99.75 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).; Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux☆Magica                   | HP 7,902/9,622  | MP 10/75 | break 0/150 BROKEN(100%) | spd 107.00 | AV 99.75 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).; Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux☆Magica                   | HP 8,013/9,622  | MP 10/75 | break 0/150 BROKEN(100%) | spd 107.00 | AV 99.75 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).; Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "== Action 3: Final Fatebloom (Ally) - Battle Skill [Extra action] ==",
+  "  Final Fatebloom -> Lux☆Magica 911 (broken dmg +20%)",
+  "  Final Fatebloom -> Lux☆Magica 1,093 (crit, broken dmg +20%)",
+  "  Final Fatebloom -> Lux☆Magica 911 (broken dmg +20%)",
+  "  Final Fatebloom -> Lux☆Magica 911 (broken dmg +20%)",
+  "  Final Fatebloom -> Lux☆Magica 911 (broken dmg +20%)",
+  "  roll #14 crit: Final Fatebloom → Lux☆Magica crit -> 19.0% miss",
+  "  roll #15 crit: Final Fatebloom → Lux☆Magica crit -> 19.0% hit",
+  "  roll #16 crit: Final Fatebloom → Lux☆Magica crit -> 19.0% miss",
+  "  roll #17 crit: Final Fatebloom → Lux☆Magica crit -> 19.0% miss",
+  "  roll #18 crit: Final Fatebloom → Lux☆Magica crit -> 19.0% miss",
+  "  Allies (SP 6)",
+  "    Tiro Finale                  | HP 9,903/9,903  | barrier 1,144 | MP 0/75 | break 165/165 | spd 264.00 | AV 13.23 | magic 2/5 | buffs[Vampire Fang - Absorbs DMG equal to barrier durability.; Final Fatebloom - Increases ATK by 20%.]",
+  "    Final Fatebloom              | HP 11,076/11,076 | barrier 1,144 | MP 54/90 | break 150/150 | spd 279.90 | AV 21.44 | magic 2/10 | buffs[Vampire Fang - Absorbs DMG equal to barrier durability.; Final Fatebloom - Increases SPD by 20%, and decreases DMG taken by 10%.; Final Fatebloom - Increases SPD by 20%.; Final Fatebloom - Increases ATK by 20%.; Final Fatebloom - Increases ATK by 20%.]",
+  "    Structure Destruction        | HP 15,186/15,186 | barrier 1,144 | MP 89/90 | break 180/180 | spd 201.25 | AV 22.68 | buffs[Vampire Fang - Absorbs DMG equal to barrier durability.; Final Fatebloom - Increases ATK by 20%.]",
+  "    Vampire Fang                 | HP 11,911/11,911 | barrier 1,144 | MP 0/75 | break 195/195 | spd 226.15 | AV 18.30 | buffs[Vampire Fang - Increases SPD by 50%.; Vampire Fang - Absorbs DMG equal to barrier durability.; Final Fatebloom - Increases ATK by 20%.]",
+  "    Time Stop Strike             | HP 9,974/9,974  | barrier 1,144 | MP 0/75 | break 165/165 | spd 237.80 | AV 16.57 | magic 0/7 | buffs[Vampire Fang - Absorbs DMG equal to barrier durability.; Final Fatebloom - Increases ATK by 20%.]",
+  "  Enemies (SP 5)",
+  "    Lux☆Magica                   | HP 7,102/9,622  | MP 15/75 | break 0/150 BROKEN(120%) | spd 107.00 | AV 99.75 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).; Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux☆Magica                   | HP 6,709/9,622  | MP 15/75 | break 0/150 BROKEN(120%) | spd 107.00 | AV 99.75 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).; Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux☆Magica                   | HP 7,102/9,622  | MP 15/75 | break 0/150 BROKEN(120%) | spd 107.00 | AV 99.75 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).; Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux☆Magica                   | HP 6,991/9,622  | MP 15/75 | break 0/150 BROKEN(120%) | spd 107.00 | AV 99.75 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).; Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux☆Magica                   | HP 7,102/9,622  | MP 15/75 | break 0/150 BROKEN(120%) | spd 107.00 | AV 99.75 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).; Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "== Action 4: Tiro Finale (Ally) - Battle Skill ==",
+  "  Tiro Finale -> Lux☆Magica 790 (broken dmg +12%)",
+  "  Tiro Finale -> Lux☆Magica 947 (crit, broken dmg +12%)",
+  "  Tiro Finale -> Lux☆Magica 790 (broken dmg +12%)",
+  "  Tiro Finale -> Lux☆Magica 790 (broken dmg +12%)",
+  "  Tiro Finale -> Lux☆Magica 790 (broken dmg +12%)",
+  "  roll #19 crit: Tiro Finale → Lux☆Magica crit -> 19.0% miss",
+  "  roll #20 crit: Tiro Finale → Lux☆Magica crit -> 19.0% hit",
+  "  roll #21 crit: Tiro Finale → Lux☆Magica crit -> 19.0% miss",
+  "  roll #22 crit: Tiro Finale → Lux☆Magica crit -> 19.0% miss",
+  "  roll #23 crit: Tiro Finale → Lux☆Magica crit -> 19.0% miss",
+  "  Allies (SP 5)",
+  "    Tiro Finale                  | HP 9,903/9,903  | barrier 1,144 | MP 33/75 | break 165/165 | spd 264.00 | AV 37.88 | magic 4/5 | buffs[Vampire Fang - Absorbs DMG equal to barrier durability.; Final Fatebloom - Increases ATK by 20%.; Tiro Finale - Increases ATK by 20%.]",
+  "    Final Fatebloom              | HP 11,076/11,076 | barrier 1,144 | MP 54/90 | break 150/150 | spd 279.90 | AV 8.21 | magic 2/10 | buffs[Vampire Fang - Absorbs DMG equal to barrier durability.; Final Fatebloom - Increases SPD by 20%, and decreases DMG taken by 10%.; Final Fatebloom - Increases SPD by 20%.; Final Fatebloom - Increases ATK by 20%.; Final Fatebloom - Increases ATK by 20%.; Tiro Finale - Increases ATK by 20%.]",
+  "    Structure Destruction        | HP 15,186/15,186 | barrier 1,144 | MP 90/90 | break 180/180 | spd 201.25 | AV 9.45 | buffs[Vampire Fang - Absorbs DMG equal to barrier durability.; Final Fatebloom - Increases ATK by 20%.; Tiro Finale - Increases ATK by 20%.]",
+  "    Vampire Fang                 | HP 11,911/11,911 | barrier 1,144 | MP 0/75 | break 195/195 | spd 226.15 | AV 5.07 | buffs[Vampire Fang - Increases SPD by 50%.; Vampire Fang - Absorbs DMG equal to barrier durability.; Final Fatebloom - Increases ATK by 20%.; Tiro Finale - Increases ATK by 20%.]",
+  "    Time Stop Strike             | HP 9,974/9,974  | barrier 1,144 | MP 0/75 | break 165/165 | spd 237.80 | AV 3.34 | magic 1/7 | buffs[Vampire Fang - Absorbs DMG equal to barrier durability.; Final Fatebloom - Increases ATK by 20%.; Tiro Finale - Increases ATK by 20%.]",
+  "  Enemies (SP 5)",
+  "    Lux☆Magica                   | HP 6,312/9,622  | MP 20/75 | break 0/150 BROKEN(132%) | spd 107.00 | AV 86.52 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).; Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux☆Magica                   | HP 5,762/9,622  | MP 20/75 | break 0/150 BROKEN(132%) | spd 107.00 | AV 86.52 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).; Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux☆Magica                   | HP 6,312/9,622  | MP 20/75 | break 0/150 BROKEN(132%) | spd 107.00 | AV 86.52 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).; Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux☆Magica                   | HP 6,201/9,622  | MP 20/75 | break 0/150 BROKEN(132%) | spd 107.00 | AV 86.52 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).; Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux☆Magica                   | HP 6,312/9,622  | MP 20/75 | break 0/150 BROKEN(132%) | spd 107.00 | AV 86.52 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).; Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "== Action 5: Structure Destruction (Ally) - Ultimate ==",
+  "  Structure Destruction -> Lux☆Magica 1,442 (broken dmg +10%)",
+  "  Structure Destruction -> Lux☆Magica 1,442 (broken dmg +10%)",
+  "  Structure Destruction -> Lux☆Magica 1,442 (broken dmg +10%)",
+  "  Structure Destruction -> Lux☆Magica 1,442 (broken dmg +10%)",
+  "  Structure Destruction -> Lux☆Magica 1,442 (broken dmg +10%)",
+  "  roll #24 crit: Structure Destruction → Lux☆Magica crit -> 19.0% miss",
+  "  roll #25 crit: Structure Destruction → Lux☆Magica crit -> 19.0% miss",
+  "  roll #26 crit: Structure Destruction → Lux☆Magica crit -> 19.0% miss",
+  "  roll #27 crit: Structure Destruction → Lux☆Magica crit -> 19.0% miss",
+  "  roll #28 crit: Structure Destruction → Lux☆Magica crit -> 19.0% miss",
+  "  Allies (SP 6)",
+  "    Tiro Finale                  | HP 9,903/9,903  | barrier 1,144 | MP 33/75 | break 165/165 | spd 264.00 | AV 37.88 | magic 4/5 | buffs[Vampire Fang - Absorbs DMG equal to barrier durability.; Final Fatebloom - Increases ATK by 20%.; Tiro Finale - Increases ATK by 20%.; Structure Destruction - Increases elemental weakness DMG dealt by 18%.]",
+  "    Final Fatebloom              | HP 11,076/11,076 | barrier 1,144 | MP 54/90 | break 150/150 | spd 279.90 | AV 8.21 | magic 2/10 | buffs[Vampire Fang - Absorbs DMG equal to barrier durability.; Final Fatebloom - Increases SPD by 20%, and decreases DMG taken by 10%.; Final Fatebloom - Increases SPD by 20%.; Final Fatebloom - Increases ATK by 20%.; Final Fatebloom - Increases ATK by 20%.; Tiro Finale - Increases ATK by 20%.; Structure Destruction - Increases elemental weakness DMG dealt by 18%.]",
+  "    Structure Destruction        | HP 15,186/15,186 | barrier 1,144 | MP 8/90 | break 180/180 | spd 201.25 | AV 9.45 | buffs[Vampire Fang - Absorbs DMG equal to barrier durability.; Final Fatebloom - Increases ATK by 20%.; Tiro Finale - Increases ATK by 20%.; Structure Destruction - Increases elemental weakness DMG dealt by 18%.]",
+  "    Vampire Fang                 | HP 11,911/11,911 | barrier 1,144 | MP 0/75 | break 195/195 | spd 226.15 | AV 5.07 | buffs[Vampire Fang - Increases SPD by 50%.; Vampire Fang - Absorbs DMG equal to barrier durability.; Final Fatebloom - Increases ATK by 20%.; Tiro Finale - Increases ATK by 20%.; Structure Destruction - Increases elemental weakness DMG dealt by 18%.]",
+  "    Time Stop Strike             | HP 9,974/9,974  | barrier 1,144 | MP 0/75 | break 165/165 | spd 237.80 | AV 3.34 | magic 2/7 | buffs[Vampire Fang - Absorbs DMG equal to barrier durability.; Final Fatebloom - Increases ATK by 20%.; Tiro Finale - Increases ATK by 20%.; Structure Destruction - Increases elemental weakness DMG dealt by 18%.]",
+  "  Enemies (SP 5)",
+  "    Lux☆Magica                   | HP 4,870/9,622  | MP 25/75 | break 0/150 BROKEN(142%) | spd 107.00 | AV 86.52 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).; Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux☆Magica                   | HP 4,320/9,622  | MP 25/75 | break 0/150 BROKEN(142%) | spd 107.00 | AV 86.52 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).; Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux☆Magica                   | HP 4,870/9,622  | MP 25/75 | break 0/150 BROKEN(142%) | spd 107.00 | AV 86.52 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).; Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux☆Magica                   | HP 4,759/9,622  | MP 25/75 | break 0/150 BROKEN(142%) | spd 107.00 | AV 86.52 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).; Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux☆Magica                   | HP 4,870/9,622  | MP 25/75 | break 0/150 BROKEN(142%) | spd 107.00 | AV 86.52 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).; Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "== Action 6: Time Stop Strike (Ally) - Battle Skill ==",
+  "  Time Stop Strike -> Lux☆Magica 2,216 (crit, broken dmg +12%)",
+  "  roll #29 target: target -> Lux☆Magica (20.0%)",
+  "  roll #30 crit: Time Stop Strike → Lux☆Magica crit -> 19.0% hit",
+  "  Allies (SP 5)",
+  "    Tiro Finale                  | HP 9,903/9,903  | barrier 1,144 | MP 33/75 | break 165/165 | spd 264.00 | AV 26.96 | magic 4/5 | buffs[Vampire Fang - Absorbs DMG equal to barrier durability.; Final Fatebloom - Increases ATK by 20%.; Tiro Finale - Increases ATK by 20%.; Structure Destruction - Increases elemental weakness DMG dealt by 18%.]",
+  "    Final Fatebloom              | HP 11,076/11,076 | barrier 1,144 | MP 54/90 | break 150/150 | spd 279.90 | AV 0.00 | magic 2/10 | buffs[Vampire Fang - Absorbs DMG equal to barrier durability.; Final Fatebloom - Increases SPD by 20%, and decreases DMG taken by 10%.; Final Fatebloom - Increases SPD by 20%.; Final Fatebloom - Increases ATK by 20%.; Final Fatebloom - Increases ATK by 20%.; Tiro Finale - Increases ATK by 20%.; Structure Destruction - Increases elemental weakness DMG dealt by 18%.]",
+  "    Structure Destruction        | HP 15,186/15,186 | barrier 1,144 | MP 13/90 | break 180/180 | spd 201.25 | AV 0.00 | buffs[Vampire Fang - Absorbs DMG equal to barrier durability.; Final Fatebloom - Increases ATK by 20%.; Tiro Finale - Increases ATK by 20%.; Structure Destruction - Increases elemental weakness DMG dealt by 18%.]",
+  "    Vampire Fang                 | HP 11,911/11,911 | barrier 1,144 | MP 0/75 | break 195/195 | spd 226.15 | AV 0.00 | buffs[Vampire Fang - Increases SPD by 50%.; Vampire Fang - Absorbs DMG equal to barrier durability.; Final Fatebloom - Increases ATK by 20%.; Tiro Finale - Increases ATK by 20%.; Structure Destruction - Increases elemental weakness DMG dealt by 18%.]",
+  "    Time Stop Strike             | HP 9,974/9,974  | barrier 1,144 | MP 33/75 | break 165/165 | spd 237.80 | AV 33.64 | magic 4/7 | buffs[Vampire Fang - Absorbs DMG equal to barrier durability.; Final Fatebloom - Increases ATK by 20%.; Tiro Finale - Increases ATK by 20%.; Structure Destruction - Increases elemental weakness DMG dealt by 18%.]",
+  "  Enemies (SP 5)",
+  "    Lux☆Magica                   | HP 4,870/9,622  | MP 25/75 | break 0/150 BROKEN(142%) | spd 107.00 | AV 83.18 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).; Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux☆Magica                   | HP 2,104/9,622  | MP 35/75 | break 0/150 BROKEN(154%) | spd 107.00 | AV 83.18 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).; Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux☆Magica                   | HP 4,870/9,622  | MP 25/75 | break 0/150 BROKEN(142%) | spd 107.00 | AV 83.18 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).; Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux☆Magica                   | HP 4,759/9,622  | MP 25/75 | break 0/150 BROKEN(142%) | spd 107.00 | AV 83.18 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).; Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux☆Magica                   | HP 4,870/9,622  | MP 25/75 | break 0/150 BROKEN(142%) | spd 107.00 | AV 83.18 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).; Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "== Action 7: Final Fatebloom (Ally) - Battle Skill ==",
+  "  Final Fatebloom -> Lux☆Magica 1,584 (broken dmg +20%)",
+  "  Final Fatebloom -> Lux☆Magica 1,718 (broken dmg +20%)",
+  "  Final Fatebloom -> Lux☆Magica 1,584 (broken dmg +20%)",
+  "  Final Fatebloom -> Lux☆Magica 1,584 (broken dmg +20%)",
+  "  Final Fatebloom -> Lux☆Magica 1,584 (broken dmg +20%)",
+  "  roll #31 crit: Final Fatebloom → Lux☆Magica crit -> 19.0% miss",
+  "  roll #32 crit: Final Fatebloom → Lux☆Magica crit -> 19.0% miss",
+  "  roll #33 crit: Final Fatebloom → Lux☆Magica crit -> 19.0% miss",
+  "  roll #34 crit: Final Fatebloom → Lux☆Magica crit -> 19.0% miss",
+  "  roll #35 crit: Final Fatebloom → Lux☆Magica crit -> 19.0% miss",
+  "  Allies (SP 4)",
+  "    Tiro Finale                  | HP 9,903/9,903  | barrier 1,144 | MP 33/75 | break 165/165 | spd 264.00 | AV 26.96 | magic 4/5 | buffs[Vampire Fang - Absorbs DMG equal to barrier durability.; Final Fatebloom - Increases ATK by 20%.; Tiro Finale - Increases ATK by 20%.; Structure Destruction - Increases elemental weakness DMG dealt by 18%.]",
+  "    Final Fatebloom              | HP 11,076/11,076 | MP 90/90 | break 150/150 | spd 279.90 | AV 35.73 | magic 4/10 | buffs[Final Fatebloom - Increases SPD by 20%, and decreases DMG taken by 10%.; Final Fatebloom - Increases SPD by 20%.; Final Fatebloom - Increases ATK by 20%.; Final Fatebloom - Increases ATK by 20%.; Tiro Finale - Increases ATK by 20%.; Structure Destruction - Increases elemental weakness DMG dealt by 18%.]",
+  "    Structure Destruction        | HP 15,186/15,186 | barrier 1,144 | MP 18/90 | break 180/180 | spd 201.25 | AV 0.00 | buffs[Vampire Fang - Absorbs DMG equal to barrier durability.; Final Fatebloom - Increases ATK by 20%.; Tiro Finale - Increases ATK by 20%.; Structure Destruction - Increases elemental weakness DMG dealt by 18%.]",
+  "    Vampire Fang                 | HP 11,911/11,911 | barrier 1,144 | MP 0/75 | break 195/195 | spd 226.15 | AV 0.00 | buffs[Vampire Fang - Increases SPD by 50%.; Vampire Fang - Absorbs DMG equal to barrier durability.; Final Fatebloom - Increases ATK by 20%.; Tiro Finale - Increases ATK by 20%.; Structure Destruction - Increases elemental weakness DMG dealt by 18%.]",
+  "    Time Stop Strike             | HP 9,974/9,974  | barrier 1,144 | MP 33/75 | break 165/165 | spd 237.80 | AV 33.64 | magic 5/7 | buffs[Vampire Fang - Absorbs DMG equal to barrier durability.; Final Fatebloom - Increases ATK by 20%.; Tiro Finale - Increases ATK by 20%.; Structure Destruction - Increases elemental weakness DMG dealt by 18%.]",
+  "  Enemies (SP 5)",
+  "    Lux☆Magica                   | HP 3,286/9,622  | MP 35/75 | break 0/150 BROKEN(162%) | spd 107.00 | AV 83.18 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).; Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux☆Magica                   | HP 386/9,622    | MP 50/75 | break 0/150 BROKEN(174%) | spd 107.00 | AV 83.18 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).; Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux☆Magica                   | HP 3,286/9,622  | MP 35/75 | break 0/150 BROKEN(162%) | spd 107.00 | AV 83.18 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).; Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux☆Magica                   | HP 3,175/9,622  | MP 35/75 | break 0/150 BROKEN(162%) | spd 107.00 | AV 83.18 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).; Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux☆Magica                   | HP 3,286/9,622  | MP 35/75 | break 0/150 BROKEN(162%) | spd 107.00 | AV 83.18 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).; Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "== Action 8: Final Fatebloom (Ally) - Ultimate ==",
+  "  Final Fatebloom -> Lux☆Magica 2,970 (broken dmg +20%)",
+  "  Final Fatebloom -> Lux☆Magica 386 (broken dmg +20%)",
+  "  Final Fatebloom -> Lux☆Magica 2,970 (broken dmg +20%)",
+  "  Final Fatebloom -> Lux☆Magica 2,970 (broken dmg +20%)",
+  "  Final Fatebloom -> Lux☆Magica 2,970 (broken dmg +20%)",
+  "  roll #36 crit: Final Fatebloom → Lux☆Magica crit -> 19.0% miss",
+  "  roll #37 crit: Final Fatebloom → Lux☆Magica crit -> 19.0% miss",
+  "  roll #38 crit: Final Fatebloom → Lux☆Magica crit -> 19.0% miss",
+  "  roll #39 crit: Final Fatebloom → Lux☆Magica crit -> 19.0% miss",
+  "  roll #40 crit: Final Fatebloom → Lux☆Magica crit -> 19.0% miss",
+  "  roll #41 target: String target -> Lux☆Magica (25.0%)",
+  "  roll #42 target: String target -> Lux☆Magica (25.0%)",
+  "  Allies (SP 4)",
+  "    Tiro Finale                  | HP 9,903/9,903  | barrier 1,144 | MP 33/75 | break 165/165 | spd 264.00 | AV 26.96 | magic 4/5 | buffs[Vampire Fang - Absorbs DMG equal to barrier durability.; Tiro Finale - Increases ATK by 20%.; Structure Destruction - Increases elemental weakness DMG dealt by 18%.; Final Fatebloom - Increases ATK by 20%.]",
+  "    Final Fatebloom              | HP 11,076/11,076 | MP 16/90 | break 150/150 | spd 279.90 | AV 35.73 | magic 6/10 | buffs[Final Fatebloom - Increases SPD by 20%.; Final Fatebloom - Increases ATK by 20%.; Tiro Finale - Increases ATK by 20%.; Structure Destruction - Increases elemental weakness DMG dealt by 18%.; Final Fatebloom - Increases SPD by 20%, and decreases DMG taken by 10%.; Final Fatebloom - Increases ATK by 20%.]",
+  "    Structure Destruction        | HP 15,186/15,186 | barrier 1,144 | MP 18/90 | break 180/180 | spd 201.25 | AV 0.00 | buffs[Vampire Fang - Absorbs DMG equal to barrier durability.; Tiro Finale - Increases ATK by 20%.; Structure Destruction - Increases elemental weakness DMG dealt by 18%.; Final Fatebloom - Increases ATK by 20%.]",
+  "    Vampire Fang                 | HP 11,911/11,911 | barrier 1,144 | MP 0/75 | break 195/195 | spd 226.15 | AV 0.00 | buffs[Vampire Fang - Increases SPD by 50%.; Vampire Fang - Absorbs DMG equal to barrier durability.; Tiro Finale - Increases ATK by 20%.; Structure Destruction - Increases elemental weakness DMG dealt by 18%.; Final Fatebloom - Increases ATK by 20%.]",
+  "    Time Stop Strike             | HP 9,974/9,974  | barrier 1,144 | MP 33/75 | break 165/165 | spd 237.80 | AV 33.64 | magic 6/7 | buffs[Vampire Fang - Absorbs DMG equal to barrier durability.; Tiro Finale - Increases ATK by 20%.; Structure Destruction - Increases elemental weakness DMG dealt by 18%.; Final Fatebloom - Increases ATK by 20%.]",
+  "  Enemies (SP 5)",
+  "    Lux☆Magica                   | HP 316/9,622    | MP 50/75 | break 0/150 BROKEN(182%) | spd 107.00 | AV 83.18 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).; Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux☆Magica                   | KO              | MP 0/75 | break 0/150 BROKEN(194%) | spd 107.00 | AV 83.18 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).]",
+  "    Lux☆Magica                   | HP 316/9,622    | MP 50/75 | break 0/150 BROKEN(182%) | spd 107.00 | AV 83.18 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).; Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux☆Magica                   | HP 205/9,622    | MP 50/75 | break 0/150 BROKEN(182%) | spd 107.00 | AV 83.18 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).; Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux☆Magica                   | HP 316/9,622    | MP 50/75 | break 0/150 BROKEN(182%) | spd 107.00 | AV 83.18 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).; Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "== Action 9: Structure Destruction (Ally) - Battle Skill ==",
+  "  roll #43 target: target -> Lux☆Magica (25.0%)",
+  "  Allies (SP 3)",
+  "    Tiro Finale                  | HP 9,903/9,903  | barrier 1,144 | MP 33/75 | break 165/165 | spd 264.00 | AV 26.96 | magic 4/5 | buffs[Vampire Fang - Absorbs DMG equal to barrier durability.; Tiro Finale - Increases ATK by 20%.; Structure Destruction - Increases elemental weakness DMG dealt by 18%.; Final Fatebloom - Increases ATK by 20%.]",
+  "    Final Fatebloom              | HP 11,076/11,076 | MP 16/90 | break 150/150 | spd 279.90 | AV 35.73 | magic 6/10 | buffs[Final Fatebloom - Increases SPD by 20%.; Final Fatebloom - Increases ATK by 20%.; Tiro Finale - Increases ATK by 20%.; Structure Destruction - Increases elemental weakness DMG dealt by 18%.; Final Fatebloom - Increases SPD by 20%, and decreases DMG taken by 10%.; Final Fatebloom - Increases ATK by 20%.]",
+  "    Structure Destruction        | HP 15,186/15,186 | barrier 1,144 | MP 77/90 | break 180/180 | spd 201.25 | AV 49.69 | buffs[Vampire Fang - Absorbs DMG equal to barrier durability.; Tiro Finale - Increases ATK by 20%.; Structure Destruction - Increases elemental weakness DMG dealt by 18%.; Final Fatebloom - Increases ATK by 20%.]",
+  "    Vampire Fang                 | HP 11,911/11,911 | barrier 1,144 | MP 0/75 | break 195/195 | spd 226.15 | AV 0.00 | buffs[Vampire Fang - Increases SPD by 50%.; Vampire Fang - Absorbs DMG equal to barrier durability.; Tiro Finale - Increases ATK by 20%.; Structure Destruction - Increases elemental weakness DMG dealt by 18%.; Final Fatebloom - Increases ATK by 20%.]",
+  "    Time Stop Strike             | HP 9,974/9,974  | barrier 1,144 | MP 38/75 | break 165/165 | spd 237.80 | AV 33.64 | magic 6/7 | buffs[Vampire Fang - Absorbs DMG equal to barrier durability.; Tiro Finale - Increases ATK by 20%.; Structure Destruction - Increases elemental weakness DMG dealt by 18%.; Final Fatebloom - Increases ATK by 20%.]",
+  "  Enemies (SP 5)",
+  "    Lux☆Magica                   | HP 316/9,622    | MP 50/75 | break 0/150 BROKEN(182%) | spd 107.00 | AV 83.18 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).; Final Fatebloom - Increases chance to land critical hit by 9%.; Structure Destruction - Decreases ATK by 5%.]",
+  "    Lux☆Magica                   | KO              | MP 0/75 | break 0/150 BROKEN(194%) | spd 107.00 | AV 83.18 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).]",
+  "    Lux☆Magica                   | HP 316/9,622    | MP 50/75 | break 0/150 BROKEN(182%) | spd 107.00 | AV 83.18 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).; Final Fatebloom - Increases chance to land critical hit by 9%.; Structure Destruction - Decreases ATK by 5%.]",
+  "    Lux☆Magica                   | HP 205/9,622    | MP 50/75 | break 0/150 BROKEN(182%) | spd 107.00 | AV 83.18 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).; Final Fatebloom - Increases chance to land critical hit by 9%.; Structure Destruction - Decreases ATK by 5%.]",
+  "    Lux☆Magica                   | HP 316/9,622    | MP 50/75 | break 0/150 BROKEN(182%) | spd 107.00 | AV 83.18 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).; Final Fatebloom - Increases chance to land critical hit by 9%.; Structure Destruction - Decreases ATK by 5%.]",
+  "== Action 10: Vampire Fang (Ally) - Battle Skill ==",
+  "  Vampire Fang -> Lux☆Magica 205 (broken dmg +10%)",
+  "  roll #44 target: target -> Lux☆Magica (25.0%)",
+  "  roll #45 crit: Vampire Fang → Lux☆Magica crit -> 19.0% miss",
+  "  roll #46 target: String target -> Lux☆Magica (33.3%)",
+  "  roll #47 target: String target -> Lux☆Magica (33.3%)",
+  "  Allies (SP 3)",
+  "    Tiro Finale                  | HP 9,903/9,903  | barrier 2,428 | MP 33/75 | break 165/165 | spd 264.00 | AV 26.96 | magic 4/5 | buffs[Vampire Fang - Absorbs DMG equal to barrier durability.; Tiro Finale - Increases ATK by 20%.; Structure Destruction - Increases elemental weakness DMG dealt by 18%.; Final Fatebloom - Increases ATK by 20%.; Vampire Fang - Absorbs DMG until barrier durability reaches 0.; Vampire Fang - When attacked, deals DMG equal to 50% of own barrier durability.]",
+  "    Final Fatebloom              | HP 11,076/11,076 | barrier 2,428 | MP 16/90 | break 150/150 | spd 279.90 | AV 35.73 | magic 6/10 | buffs[Final Fatebloom - Increases SPD by 20%.; Final Fatebloom - Increases ATK by 20%.; Tiro Finale - Increases ATK by 20%.; Structure Destruction - Increases elemental weakness DMG dealt by 18%.; Final Fatebloom - Increases SPD by 20%, and decreases DMG taken by 10%.; Final Fatebloom - Increases ATK by 20%.; Vampire Fang - Absorbs DMG until barrier durability reaches 0.; Vampire Fang - When attacked, deals DMG equal to 50% of own barrier durability.]",
+  "    Structure Destruction        | HP 15,186/15,186 | barrier 2,428 | MP 82/90 | break 180/180 | spd 201.25 | AV 49.69 | buffs[Vampire Fang - Absorbs DMG equal to barrier durability.; Tiro Finale - Increases ATK by 20%.; Structure Destruction - Increases elemental weakness DMG dealt by 18%.; Final Fatebloom - Increases ATK by 20%.; Vampire Fang - Absorbs DMG until barrier durability reaches 0.; Vampire Fang - When attacked, deals DMG equal to 50% of own barrier durability.]",
+  "    Vampire Fang                 | HP 11,911/11,911 | barrier 2,428 | MP 44/75 | break 195/195 | spd 182.65 | AV 54.75 | buffs[Vampire Fang - Absorbs DMG equal to barrier durability.; Tiro Finale - Increases ATK by 20%.; Structure Destruction - Increases elemental weakness DMG dealt by 18%.; Final Fatebloom - Increases ATK by 20%.; Vampire Fang - Absorbs DMG until barrier durability reaches 0.; Vampire Fang - When attacked, deals DMG equal to 50% of own barrier durability.]",
+  "    Time Stop Strike             | HP 9,974/9,974  | barrier 2,428 | MP 38/75 | break 165/165 | spd 237.80 | AV 33.64 | magic 0/7 | buffs[Vampire Fang - Absorbs DMG equal to barrier durability.; Tiro Finale - Increases ATK by 20%.; Structure Destruction - Increases elemental weakness DMG dealt by 18%.; Final Fatebloom - Increases ATK by 20%.; Vampire Fang - Absorbs DMG until barrier durability reaches 0.; Vampire Fang - When attacked, deals DMG equal to 50% of own barrier durability.]",
+  "  Enemies (SP 5)",
+  "    Lux☆Magica                   | HP 316/9,622    | MP 50/75 | break 0/150 BROKEN(182%) | spd 107.00 | AV 83.18 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).; Final Fatebloom - Increases chance to land critical hit by 9%.; Structure Destruction - Decreases ATK by 5%.]",
+  "    Lux☆Magica                   | KO              | MP 0/75 | break 0/150 BROKEN(194%) | spd 107.00 | AV 83.18 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).]",
+  "    Lux☆Magica                   | HP 316/9,622    | MP 50/75 | break 0/150 BROKEN(182%) | spd 107.00 | AV 83.18 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).; Final Fatebloom - Increases chance to land critical hit by 9%.; Structure Destruction - Decreases ATK by 5%.]",
+  "    Lux☆Magica                   | KO              | MP 0/75 | break 0/150 BROKEN(192%) | spd 107.00 | AV 83.18 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).]",
+  "    Lux☆Magica                   | HP 316/9,622    | MP 50/75 | break 0/150 BROKEN(182%) | spd 107.00 | AV 83.18 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).; Final Fatebloom - Increases chance to land critical hit by 9%.; Structure Destruction - Decreases ATK by 5%.]",
+  "== Action 11: Tiro Finale (Ally) - Battle Skill ==",
+  "  Tiro Finale -> Lux☆Magica 316 (broken dmg +12%)",
+  "  Tiro Finale -> Lux☆Magica 316 (broken dmg +12%)",
+  "  Tiro Finale -> Lux☆Magica 316 (broken dmg +12%)",
+  "  roll #48 crit: Tiro Finale → Lux☆Magica crit -> 19.0% miss",
+  "  roll #49 crit: Tiro Finale → Lux☆Magica crit -> 19.0% miss",
+  "  roll #50 crit: Tiro Finale → Lux☆Magica crit -> 19.0% miss",
+  "  Allies (SP 2)",
+  "    Tiro Finale                  | HP 9,903/9,903  | barrier 2,428 | MP 75/75 | break 165/165 | spd 264.00 | AV 30.30 | magic 0/5 | buffs[Vampire Fang - Absorbs DMG equal to barrier durability.; Structure Destruction - Increases elemental weakness DMG dealt by 18%.; Final Fatebloom - Increases ATK by 20%.; Vampire Fang - Absorbs DMG until barrier durability reaches 0.; Vampire Fang - When attacked, deals DMG equal to 50% of own barrier durability.; Tiro Finale - Increases ATK by 20%.]",
+  "    Final Fatebloom              | HP 11,076/11,076 | barrier 2,428 | MP 16/90 | break 150/150 | spd 279.90 | AV 1.62 | magic 6/10 | buffs[Final Fatebloom - Increases SPD by 20%.; Final Fatebloom - Increases ATK by 20%.; Structure Destruction - Increases elemental weakness DMG dealt by 18%.; Final Fatebloom - Increases SPD by 20%, and decreases DMG taken by 10%.; Final Fatebloom - Increases ATK by 20%.; Vampire Fang - Absorbs DMG until barrier durability reaches 0.; Vampire Fang - When attacked, deals DMG equal to 50% of own barrier durability.; Tiro Finale - Increases ATK by 20%.]",
+  "    Structure Destruction        | HP 15,186/15,186 | barrier 2,428 | MP 87/90 | break 180/180 | spd 201.25 | AV 12.79 | buffs[Vampire Fang - Absorbs DMG equal to barrier durability.; Structure Destruction - Increases elemental weakness DMG dealt by 18%.; Final Fatebloom - Increases ATK by 20%.; Vampire Fang - Absorbs DMG until barrier durability reaches 0.; Vampire Fang - When attacked, deals DMG equal to 50% of own barrier durability.; Tiro Finale - Increases ATK by 20%.]",
+  "    Vampire Fang                 | HP 11,911/11,911 | barrier 2,428 | MP 44/75 | break 195/195 | spd 182.65 | AV 16.84 | buffs[Vampire Fang - Absorbs DMG equal to barrier durability.; Structure Destruction - Increases elemental weakness DMG dealt by 18%.; Final Fatebloom - Increases ATK by 20%.; Vampire Fang - Absorbs DMG until barrier durability reaches 0.; Vampire Fang - When attacked, deals DMG equal to 50% of own barrier durability.; Tiro Finale - Increases ATK by 20%.]",
+  "    Time Stop Strike             | HP 9,974/9,974  | barrier 2,428 | MP 38/75 | break 165/165 | spd 237.80 | AV 0.00 | magic 1/7 | buffs[Vampire Fang - Absorbs DMG equal to barrier durability.; Structure Destruction - Increases elemental weakness DMG dealt by 18%.; Final Fatebloom - Increases ATK by 20%.; Vampire Fang - Absorbs DMG until barrier durability reaches 0.; Vampire Fang - When attacked, deals DMG equal to 50% of own barrier durability.; Tiro Finale - Increases ATK by 20%.]",
+  "  Enemies (SP 5)",
+  "    Lux☆Magica                   | KO              | MP 0/75 | break 0/150 BROKEN(194%) | spd 107.00 | AV 56.22 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).]",
+  "    Lux☆Magica                   | KO              | MP 0/75 | break 0/150 BROKEN(194%) | spd 107.00 | AV 83.18 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).]",
+  "    Lux☆Magica                   | KO              | MP 0/75 | break 0/150 BROKEN(194%) | spd 107.00 | AV 56.22 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).]",
+  "    Lux☆Magica                   | KO              | MP 0/75 | break 0/150 BROKEN(192%) | spd 107.00 | AV 83.18 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).]",
+  "    Lux☆Magica                   | KO              | MP 0/75 | break 0/150 BROKEN(194%) | spd 107.00 | AV 56.22 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).]"
+ ],
+ "slots": [
+  [
+   {
+    "main": {
+     "enabled": true,
+     "dupes": 0,
+     "ascension": 5,
+     "portrait": "",
+     "kiokuLvl": 138,
+     "magicLvl": 130,
+     "heartphialLvl": 50,
+     "specialLvl": 7,
+     "name": "Lux☆Magica",
+     "id": 10010101,
+     "role": "Breaker",
+     "element": "Light",
+     "supportTarget": "Light",
+     "supportDescription": "Increases break gauge depletion (2) and increases break effect by 10%.",
+     "character_en": "Madoka Kaname",
+     "heartphial": "Madoka Kaname",
+     "rarity": 4,
+     "obtain": "Free",
+     "permaDate": "2025-03-27",
+     "releaseDate": "2025-03-27",
+     "isStandardChar": false,
+     "crysOptions": {}
+    }
+   },
+   {
+    "main": {
+     "enabled": true,
+     "dupes": 0,
+     "ascension": 5,
+     "portrait": "",
+     "kiokuLvl": 138,
+     "magicLvl": 130,
+     "heartphialLvl": 50,
+     "specialLvl": 7,
+     "name": "Lux☆Magica",
+     "id": 10010101,
+     "role": "Breaker",
+     "element": "Light",
+     "supportTarget": "Light",
+     "supportDescription": "Increases break gauge depletion (2) and increases break effect by 10%.",
+     "character_en": "Madoka Kaname",
+     "heartphial": "Madoka Kaname",
+     "rarity": 4,
+     "obtain": "Free",
+     "permaDate": "2025-03-27",
+     "releaseDate": "2025-03-27",
+     "isStandardChar": false,
+     "crysOptions": {}
+    }
+   },
+   {
+    "main": {
+     "enabled": true,
+     "dupes": 0,
+     "ascension": 5,
+     "portrait": "",
+     "kiokuLvl": 138,
+     "magicLvl": 130,
+     "heartphialLvl": 50,
+     "specialLvl": 7,
+     "name": "Lux☆Magica",
+     "id": 10010101,
+     "role": "Breaker",
+     "element": "Light",
+     "supportTarget": "Light",
+     "supportDescription": "Increases break gauge depletion (2) and increases break effect by 10%.",
+     "character_en": "Madoka Kaname",
+     "heartphial": "Madoka Kaname",
+     "rarity": 4,
+     "obtain": "Free",
+     "permaDate": "2025-03-27",
+     "releaseDate": "2025-03-27",
+     "isStandardChar": false,
+     "crysOptions": {}
+    }
+   },
+   {
+    "main": {
+     "enabled": true,
+     "dupes": 0,
+     "ascension": 5,
+     "portrait": "",
+     "kiokuLvl": 138,
+     "magicLvl": 130,
+     "heartphialLvl": 50,
+     "specialLvl": 7,
+     "name": "Lux☆Magica",
+     "id": 10010101,
+     "role": "Breaker",
+     "element": "Light",
+     "supportTarget": "Light",
+     "supportDescription": "Increases break gauge depletion (2) and increases break effect by 10%.",
+     "character_en": "Madoka Kaname",
+     "heartphial": "Madoka Kaname",
+     "rarity": 4,
+     "obtain": "Free",
+     "permaDate": "2025-03-27",
+     "releaseDate": "2025-03-27",
+     "isStandardChar": false,
+     "crysOptions": {}
+    }
+   },
+   {
+    "main": {
+     "enabled": true,
+     "dupes": 0,
+     "ascension": 5,
+     "portrait": "",
+     "kiokuLvl": 138,
+     "magicLvl": 130,
+     "heartphialLvl": 50,
+     "specialLvl": 7,
+     "name": "Lux☆Magica",
+     "id": 10010101,
+     "role": "Breaker",
+     "element": "Light",
+     "supportTarget": "Light",
+     "supportDescription": "Increases break gauge depletion (2) and increases break effect by 10%.",
+     "character_en": "Madoka Kaname",
+     "heartphial": "Madoka Kaname",
+     "rarity": 4,
+     "obtain": "Free",
+     "permaDate": "2025-03-27",
+     "releaseDate": "2025-03-27",
+     "isStandardChar": false,
+     "crysOptions": {}
+    }
+   }
+  ],
+  [
+   {
+    "main": {
+     "enabled": true,
+     "dupes": 5,
+     "ascension": 5,
+     "portrait": "",
+     "kiokuLvl": 146,
+     "magicLvl": 130,
+     "heartphialLvl": 50,
+     "specialLvl": 10,
+     "name": "Tiro Finale",
+     "id": 10030101,
+     "role": "Buffer",
+     "element": "Forest",
+     "supportTarget": "Forest",
+     "supportDescription": "Increases SPD by 25%, and MP recovery rate by 10%.",
+     "character_en": "Mami Tomoe",
+     "heartphial": "Mami Tomoe",
+     "rarity": 5,
+     "obtain": "Permanent",
+     "permaDate": "May 31, 2025",
+     "releaseDate": "2025-03-30",
+     "crysOptions": {
+      "3001": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3002": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3003": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3004": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3005": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3006": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        4034,
+        4016,
+        4075
+       ]
+      },
+      "3007": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        4057,
+        4034,
+        4088
+       ]
+      },
+      "3008": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3009": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3010": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3011": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        4018,
+        4023,
+        4034
+       ]
+      },
+      "3012": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3013": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        4022,
+        4012,
+        4034
+       ]
+      },
+      "3014": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3015": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3016": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3017": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3018": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3019": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3020": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3021": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3022": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3023": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3024": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        4018,
+        4005,
+        4034
+       ]
+      },
+      "3025": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        4034,
+        4068,
+        4015
+       ]
+      },
+      "3026": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3027": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3028": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        4071,
+        4079,
+        4034
+       ]
+      },
+      "3029": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "7012": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        4086,
+        4034,
+        4062
+       ]
+      }
+     },
+     "isStandardChar": true,
+     "isLimitedChar": false
+    }
+   },
+   {
+    "main": {
+     "enabled": true,
+     "dupes": 0,
+     "ascension": 5,
+     "portrait": "Proof of Friends Again",
+     "kiokuLvl": 146,
+     "magicLvl": 130,
+     "heartphialLvl": 50,
+     "specialLvl": 9,
+     "name": "Final Fatebloom",
+     "id": 11460101,
+     "role": "Breaker",
+     "element": "Dark",
+     "supportTarget": "Breaker",
+     "supportDescription": "Increases break gauge depletion (2), and increases basic attack break bonus by 30%.<br>On battle skill use, increases own SPD by 25% (2 turns).",
+     "character_en": "Fuka Higure",
+     "heartphial": "Fuka Higure",
+     "rarity": 5,
+     "obtain": "Exclusive",
+     "permaDate": "",
+     "releaseDate": "2026-03-27",
+     "crysOptions": {
+      "3001": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3002": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3003": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3004": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        4001,
+        4034,
+        4028
+       ]
+      },
+      "3005": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3006": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        4034,
+        4086,
+        4083
+       ]
+      },
+      "3007": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3008": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3009": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3010": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3011": {
+       "enabled": true,
+       "useIndex": 3,
+       "subCrys": [
+        4012,
+        4034,
+        4065
+       ]
+      },
+      "3012": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3013": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3016": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3018": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        4015,
+        4009,
+        4034
+       ]
+      },
+      "3020": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3021": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3022": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3023": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3024": {
+       "enabled": true,
+       "useIndex": 1,
+       "subCrys": [
+        4034,
+        4011,
+        4067
+       ]
+      },
+      "3025": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        4029,
+        4068,
+        4034
+       ]
+      },
+      "3026": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3027": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3028": {
+       "enabled": true,
+       "useIndex": 2,
+       "subCrys": [
+        4004,
+        4076,
+        4034
+       ]
+      },
+      "3029": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        4091,
+        4040,
+        4076
+       ]
+      },
+      "7054": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        4016,
+        4034,
+        4094
+       ]
+      }
+     },
+     "isStandardChar": false,
+     "isLimitedChar": true
+    }
+   },
+   {
+    "main": {
+     "enabled": true,
+     "dupes": 0,
+     "ascension": 4,
+     "portrait": "It's Cake Party Time!",
+     "kiokuLvl": 140,
+     "magicLvl": 130,
+     "heartphialLvl": 50,
+     "specialLvl": 7,
+     "name": "Structure Destruction",
+     "id": 10240101,
+     "role": "Healer",
+     "element": "Void",
+     "supportTarget": "Healer",
+     "supportDescription": "Increases HP recovery amount by 12%.<br>On basic attack, advances action order by 10%.",
+     "character_en": "Mitama Yakumo",
+     "heartphial": "Mitama Yakumo",
+     "rarity": 5,
+     "obtain": "Permanent",
+     "permaDate": "November 30, 2025",
+     "releaseDate": "2025-10-09",
+     "crysOptions": {
+      "3001": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3002": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3003": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3004": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3005": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3007": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3008": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3009": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3010": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3011": {
+       "enabled": true,
+       "useIndex": 2,
+       "subCrys": [
+        4093,
+        4080,
+        4034
+       ],
+       "locked": false
+      },
+      "3012": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3013": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3016": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3018": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3019": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3020": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3021": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3022": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3023": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3024": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        4092,
+        4034,
+        4010
+       ]
+      },
+      "3025": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3026": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3027": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3028": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        4037,
+        4076,
+        4024
+       ]
+      },
+      "3029": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "7035": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        4001,
+        4045,
+        4034
+       ]
+      }
+     },
+     "isStandardChar": true,
+     "isLimitedChar": false
+    },
+    "support": {
+     "enabled": true,
+     "dupes": 0,
+     "ascension": 4,
+     "portrait": "",
+     "kiokuLvl": 146,
+     "magicLvl": 135,
+     "heartphialLvl": 50,
+     "specialLvl": 7,
+     "name": "Glitterjoy Snow Globe",
+     "id": 10860201,
+     "role": "Healer",
+     "element": "Flame",
+     "supportTarget": "Healer",
+     "supportDescription": "Grants 10 MP at battle start.<br>Increases MP recovery rate by 5% and SPD by 10.",
+     "character_en": "Rika Ayano",
+     "heartphial": "Rika Ayano",
+     "rarity": 5,
+     "obtain": "Exclusive",
+     "permaDate": "",
+     "releaseDate": "2025-12-22",
+     "crysOptions": {
+      "3001": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3002": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3003": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3004": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3005": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3006": {
+       "enabled": true,
+       "useIndex": 1,
+       "subCrys": [
+        4072,
+        4034,
+        4022
+       ]
+      },
+      "3007": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3008": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3009": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3010": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3011": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        4023,
+        4071,
+        4034
+       ]
+      },
+      "3012": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3013": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3014": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3015": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3017": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3018": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3019": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3020": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3021": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3022": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3023": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3024": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        4034,
+        4019,
+        4010
+       ]
+      },
+      "3025": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        4007,
+        4030,
+        4034
+       ]
+      },
+      "3026": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3027": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3028": {
+       "enabled": true,
+       "useIndex": 2,
+       "subCrys": [
+        4006,
+        4036,
+        4034
+       ]
+      },
+      "3029": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "7043": {
+       "enabled": true,
+       "useIndex": 3,
+       "subCrys": [
+        4029,
+        4090,
+        4034
+       ]
+      }
+     },
+     "isStandardChar": false,
+     "isLimitedChar": true
+    }
+   },
+   {
+    "main": {
+     "enabled": true,
+     "dupes": 3,
+     "ascension": 5,
+     "portrait": "For Hope That Lies Ahead",
+     "kiokuLvl": 147,
+     "magicLvl": 135,
+     "heartphialLvl": 50,
+     "specialLvl": 10,
+     "name": "Vampire Fang",
+     "id": 11250101,
+     "role": "Defender",
+     "element": "Dark",
+     "supportTarget": "Defender",
+     "supportDescription": "Increases DEF by 15% and MP recovery rate by 10%.",
+     "character_en": "Kirika Kure",
+     "heartphial": "Kirika Kure",
+     "rarity": 5,
+     "obtain": "Permanent",
+     "permaDate": "2025-03-27",
+     "releaseDate": "2025-03-27",
+     "crysOptions": {
+      "3001": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3002": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3003": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3004": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3005": {
+       "enabled": true,
+       "useIndex": 1,
+       "subCrys": [
+        4083,
+        4064,
+        4030
+       ]
+      },
+      "3006": {
+       "enabled": true,
+       "useIndex": 2,
+       "subCrys": [
+        4034,
+        4055,
+        4077
+       ]
+      },
+      "3007": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3008": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3009": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3010": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3011": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3012": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3013": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3014": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3018": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3020": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3021": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3022": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3023": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3024": {
+       "enabled": true,
+       "useIndex": 3,
+       "subCrys": [
+        4090,
+        4031,
+        4030
+       ]
+      },
+      "3025": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        4085,
+        4030,
+        4065
+       ]
+      },
+      "3026": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3027": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3028": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3029": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "7009": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      }
+     },
+     "isStandardChar": true,
+     "isLimitedChar": false
+    },
+    "support": {
+     "enabled": true,
+     "dupes": 0,
+     "ascension": 5,
+     "portrait": "",
+     "kiokuLvl": 140,
+     "magicLvl": 130,
+     "heartphialLvl": 50,
+     "specialLvl": 10,
+     "name": "Thunder Torrent",
+     "id": 10820101,
+     "role": "Buffer",
+     "element": "Light",
+     "supportTarget": "Buffer",
+     "supportDescription": "Increases SPD by 12%.",
+     "character_en": "Hazuki Yusa",
+     "heartphial": "Hazuki Yusa",
+     "rarity": 4,
+     "obtain": "Permanent",
+     "permaDate": "2025-03-27",
+     "releaseDate": "2025-03-27",
+     "crysOptions": {
+      "3001": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3002": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3004": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3005": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3006": {
+       "enabled": true,
+       "useIndex": 1,
+       "subCrys": [
+        4001,
+        4028,
+        4034
+       ]
+      },
+      "3007": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3009": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3010": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3011": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        4034,
+        4012,
+        4049
+       ]
+      },
+      "3012": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3013": {
+       "enabled": true,
+       "useIndex": 3,
+       "subCrys": [
+        4065,
+        4003,
+        4034
+       ]
+      },
+      "3014": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3017": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3020": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3021": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3022": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3023": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3024": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        4025,
+        4078,
+        4034
+       ]
+      },
+      "3025": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3026": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3027": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3028": {
+       "enabled": true,
+       "useIndex": 2,
+       "subCrys": [
+        4080,
+        4071,
+        4034
+       ]
+      },
+      "3029": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "6010": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      }
+     },
+     "isStandardChar": true,
+     "isLimitedChar": false
+    }
+   },
+   {
+    "main": {
+     "enabled": true,
+     "dupes": 3,
+     "ascension": 5,
+     "portrait": "",
+     "kiokuLvl": 146,
+     "magicLvl": 133,
+     "heartphialLvl": 50,
+     "specialLvl": 10,
+     "name": "Time Stop Strike",
+     "id": 10020101,
+     "role": "Buffer",
+     "element": "Void",
+     "supportTarget": "Buffer",
+     "supportDescription": "Increases SPD by 20%.<br>On battle skill use, advances all allies' action order by 5%.",
+     "character_en": "Homura Akemi",
+     "heartphial": "Homura Akemi",
+     "rarity": 5,
+     "obtain": "Permanent",
+     "permaDate": "June 30, 2025",
+     "releaseDate": "2025-04-25",
+     "crysOptions": {
+      "3001": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3002": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3003": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3004": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3005": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3006": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        4094,
+        4027,
+        4034
+       ]
+      },
+      "3007": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3008": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3009": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3010": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3011": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        4090,
+        4045,
+        4034
+       ]
+      },
+      "3012": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3013": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        4077,
+        4034,
+        4094
+       ]
+      },
+      "3015": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3017": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3019": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3020": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3021": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3022": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3023": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3024": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        4026,
+        4035,
+        4034
+       ]
+      },
+      "3025": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        4029,
+        4034,
+        4047
+       ]
+      },
+      "3026": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3027": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3028": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        4034,
+        4046,
+        4004
+       ]
+      },
+      "3029": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "7015": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        4034,
+        4094,
+        4047
+       ]
+      }
+     },
+     "isStandardChar": true,
+     "isLimitedChar": false
+    }
+   }
+  ]
+ ]
+}
