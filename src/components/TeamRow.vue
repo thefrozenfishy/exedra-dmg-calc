@@ -136,12 +136,22 @@ const router = useRouter()
 const pveStageSetting = useSetting<number>('pveStageId', 982250)
 const pveAttackerIndex = useSetting('pveAttackerIndex', 2)
 
+// A support with the crystalis the search scored it with (team.suppNcrys, engine search only): exactly those equipped,
+// no sub crystalis (the search scores supports without them). Without that list the support keeps its own setup.
+function withSupportCrys<T extends { crysOptions?: Record<number, any> }>(member: T, crysIds?: number[]): T {
+    if (!crysIds) return member
+    const crysOptions: Record<number, any> = {}
+    for (const [id, c] of Object.entries(member.crysOptions ?? {})) crysOptions[Number(id)] = { ...c, useIndex: 0 }
+    crysIds.slice(0, 3).forEach((id, i) => { crysOptions[id] = { ...(crysOptions[id] || {}), useIndex: i + 1, subCrys: [] } })
+    return { ...member, crysOptions }
+}
+
 function saveToStore(idx: number) {
     const { team, weakElements, offElementBuffMultReduction, offElementDebuffMultReduction } = props
     const toPvE = !!props.pveStageId
     // the off-element buff/debuff reductions belong to the old single-hit model; the PvE Simulator runs the engine
     const offElements = toPvE ? Object.values(KiokuElement) : weakElements!.filter(w => w.enabled).map(w => w.name)
-    teamStore.setMain(0, { ...team.supp1, portrait: first(team.supp1portrait) })
+    teamStore.setMain(0, withSupportCrys({ ...team.supp1, portrait: first(team.supp1portrait) }, team.supp1crys))
     teamStore.setSupport(0, first(team.supp1supp))
     if (!offElements.includes(team.supp1.element)) {
         teamStore.setCharBuffReduction(0, offElementBuffMultReduction)
@@ -151,7 +161,7 @@ function saveToStore(idx: number) {
         teamStore.setCharDebuffReduction(0, undefined)
     }
 
-    teamStore.setMain(1, { ...team.supp2, portrait: first(team.supp2portrait) })
+    teamStore.setMain(1, withSupportCrys({ ...team.supp2, portrait: first(team.supp2portrait) }, team.supp2crys))
     teamStore.setSupport(1, first(team.supp2supp))
     if (!offElements.includes(team.supp2.element)) {
         teamStore.setCharBuffReduction(1, offElementBuffMultReduction)
@@ -168,7 +178,7 @@ function saveToStore(idx: number) {
     teamStore.setMain(2, { ...team.attacker, portrait: first(team.portrait), crysOptions })
     teamStore.setSupport(2, first(team.atk_supp))
 
-    teamStore.setMain(3, { ...team.supp3, portrait: first(team.supp3portrait) })
+    teamStore.setMain(3, withSupportCrys({ ...team.supp3, portrait: first(team.supp3portrait) }, team.supp3crys))
     teamStore.setSupport(3, first(team.supp3supp))
     if (!offElements.includes(team.supp3.element)) {
         teamStore.setCharBuffReduction(3, offElementBuffMultReduction)
@@ -178,7 +188,7 @@ function saveToStore(idx: number) {
         teamStore.setCharDebuffReduction(3, undefined)
     }
 
-    teamStore.setMain(4, { ...team.supp4, portrait: first(team.supp4portrait) })
+    teamStore.setMain(4, withSupportCrys({ ...team.supp4, portrait: first(team.supp4portrait) }, team.supp4crys))
     teamStore.setSupport(4, first(team.supp4supp))
     if (!offElements.includes(team.supp4.element)) {
         teamStore.setCharBuffReduction(4, offElementBuffMultReduction)

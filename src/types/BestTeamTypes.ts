@@ -73,5 +73,10 @@ export interface FinalTeam {
     supp4: Character
     supp4supp: Tied<Character> | undefined
     supp4portrait: Tied<string> | undefined
+    // the supports' crystalis as the engine Best SA Team search scored them (EX, vortex crystalis); old search: unset
+    supp1crys?: number[]
+    supp2crys?: number[]
+    supp3crys?: number[]
+    supp4crys?: number[]
     alt_dmg: number[]
 }

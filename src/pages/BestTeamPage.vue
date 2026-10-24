@@ -534,6 +534,10 @@ const populateTeam = (result: any[]): FinalTeam => ({
     supp4: membersByName.value.get(result[18])!,
     supp4supp: membersByName.value.get(result[19]),
     supp4portrait: result[20],
+    supp1crys: result[21],
+    supp2crys: result[22],
+    supp3crys: result[23],
+    supp4crys: result[24],
 })
 
 const populateStatusTeam = (result: any[]) => ({

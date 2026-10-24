@@ -255,6 +255,8 @@ export async function findBestTeamEngine(o: FindBestTeamOptions, score: TeamScor
             max | 0, s.critRate, avg | 0, p.attacker.name, p.portraits[l.portrait], p.supportKeys[l.support]?.[0],
             ...p.crysCombos[l.crys].map((c: any) => c.selectionAbilityMstId),
             ...r.totalSupports.flatMap((m, i) => [m.name, r.supportSupports[l.ss][i]?.[0], want.has(m.name) ? members[i].idealSupportPortrait : undefined]),
+            // [21..24] each support's crystalis as scored (supportCrysOf), so "open in PvE Simulator" equips the same
+            ...r.totalSupports.map(m => supportCrysOf(m)),
         ])
     }
 
