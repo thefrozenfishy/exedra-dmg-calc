@@ -17,9 +17,9 @@ the layout, data formats and mechanics every time. **Read this file, then only t
 | research a new mechanic in the decompile and write it up | [RESEARCH.md](RESEARCH.md) |
 | handle a new game version (diff, engine update, newsletter) | [VERSION_UPDATE.md](VERSION_UPDATE.md) + `scripts/ai/verdiff.py` |
 
-Deeper, older write-ups (still valid unless MECHANICS.md says otherwise): `src/models/PVE_PARAMS_3.19.md`,
-`src/models/PVE_ENEMY_AI_3.19.md`, `src/models/GAME_TABLES_3.19.md` (effect string -> class),
-`src/models/MISSING_AND_UNCERTAIN.md` (chronological revision log R4..R9; newest first; R5+ supersedes R4).
+Deeper, older write-ups (still valid unless MECHANICS.md says otherwise): `docs/ai/legacy/PVE_PARAMS_3.19.md`,
+`docs/ai/legacy/PVE_ENEMY_AI_3.19.md`, `docs/ai/legacy/GAME_TABLES_3.19.md` (effect string -> class),
+`docs/ai/legacy/MISSING_AND_UNCERTAIN.md` (chronological revision log R4..R9; newest first; R5+ supersedes R4).
 
 ## The lookup tool: `scripts/ai/xq.py`
 
@@ -44,7 +44,7 @@ python3 scripts/ai/xq.py --branch battle-engine-3.19 effect X   # any command ag
 
 Other tools: `scripts/ai/verdiff.py` (version diff: binaries, metadata, master data -> report.md),
 `scripts/ai/disasm.py <rva>` (capstone disassembly when Ghidra output is incomplete),
-`scripts/sim/smokeNew.ts` (smoke-run listed stages / kiokus, prints exceptions and engine warnings).
+`scripts/sim/engineSweep.ts` (smoke-run stages x teams on the engine, groups failures; `WITH=` adds new kioku).
 
 ## Lookup ladder (cheapest first)
 
@@ -59,7 +59,7 @@ Other tools: `scripts/ai/verdiff.py` (version diff: binaries, metadata, master d
 ## Golden rules (each one cost a session before)
 
 - **1:1 is the goal.** New engine work is a port of the game's method into `src/engine` (same class, same method,
-  same branch order). Don't add new rules to `src/models` in its own structure; that is how the old engine drifted
+  same branch order). Don't add new rules to `src/models` in its own structure; that is how the removed old engine drifted
   (passive states merged across givers, the TurnStart pass seeing the action type, buff duration exempt-once).
 
 - **The game is the spec.** Every engine rule carries a `[CONFIRMED 3.19]` comment with the C# name + RVA, or
@@ -68,7 +68,7 @@ Other tools: `scripts/ai/verdiff.py` (version diff: binaries, metadata, master d
   weak ratio = float32 (`Math.fround`, alias `f32`). Wrong type = off-by-one damage or wrong turn order.
 - **Condition csv lists are OR, conditions inside one set are AND.**
 - **Detail rows:** skills/ability/ascension/support are keyed `id*100+lvl`; crys and enemy skills/passives by exact id.
-- **Verify before claiming done:** `npx tsx scripts/sim/checkFixtures.ts` (in-game fixtures) + `checkMechanics.ts`, a probe run of the
+- **Verify before claiming done:** `npx tsx scripts/sim/checkFixturesEngine.ts` (in-game fixtures), a probe run of the
   exact scenario, and the type-check with the OOM guard (ENVIRONMENT.md). Compare errors to the baseline.
 - **Leave the cache better:** new confirmed finding -> MECHANICS.md (+ the code comment); state change ->
   STATUS.md; new trap -> PITFALLS.md; engine changes -> `xq build`. Keep entries short and cite RVAs.

@@ -1,8 +1,8 @@
 // App side (not game code): the PvE page's "theoretical max damage" on the 1:1 engine (src/engine).
 //
-// Same result shape as models/MaxDamage.ts (computeMaxDamage), so the page only swaps the function:
+// Result and option types in models/MaxDamage.ts:
 // - the team's effect list (collectTeamEffects: every buff/debuff of every member's skills, passives, switch skills and
-//   follow-ups, ladders of mutually exclusive states, exclusions and stack overrides from the UI) is unchanged;
+//   follow-ups, ladders of mutually exclusive states, exclusions and stack overrides from the UI) comes from there;
 // - everything else is the game's code: each evaluation builds the stage's battle (SetupBattleStage, WaveTransition to
 //   the wave), removes what the team gave at battle start and the team's passive skills (they are re-added below with
 //   their conditions met, and must not trigger a second time), gives every listed effect through the game's own
@@ -522,7 +522,7 @@ function skillDamage(ev: Eval & { rungs?: string[] }, type: TargetType, label: s
     return out
 }
 
-/** computeMaxDamage (models/MaxDamage.ts) on the 1:1 engine; `enemies` = the page's wave list (index order of the result). */
+/** Max Damage on the 1:1 engine; `enemies` = the page's wave list (index order of the result). */
 export function computeMaxDamageEngine(allies: PvPKioku[], stage: EngineMaxDmgStage, enemies: QuestEnemyAppearance[], attackerPos: number, opts: MaxDmgOptions = {}): MaxDmgResult {
     const setup: EngineBattleSetup = isMultiRaidStage(stage.stageId) ? { kind: "multiRaid", allies, stageId: stage.stageId, noRoundLimit: true } : isSoloRaidStage(stage.stageId)
         ? { kind: "soloRaid", allies, stageId: stage.stageId, noRoundLimit: true }

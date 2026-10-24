@@ -1,5 +1,9 @@
 # Pitfalls: mistakes earlier sessions made (don't repeat them)
 
+> Code names like `PvPTeam.*`, `PvPBattle.*`, `UnitStateEngine.ts`, `DamageCalculator.ts`, `AITargetSelector.ts` below
+> point at the second-generation engine removed on 2026-10-24 (git history before branch `remove-gen2`). The game
+> facts stay valid; the code now lives in `src/engine` under the game's own class names.
+
 ## Data
 - **Skill/passive detail rows are keyed `id*100+lvl`.** A scan by raw id "proved" TSUBAME/REGAIN/VORTEX/REFLECTION
   were unused; the user had to point out Luce della Speranza, Panna Vorticosa, Melodia Appassionata, Vampire Fang.

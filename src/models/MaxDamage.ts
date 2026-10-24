@@ -1,26 +1,13 @@
-// "Theoretical max damage" against a PvE wave, computed with the battle engine's own damage pipeline
-// (DamageCalculator.getAttackDamageResult) instead of the old closed-form ScoreAttackTeam formula.
-//
-// Every buff/debuff the team can produce (active skills of every member, passives, crystalis, portraits,
-// supports, follow-up skills) is put on the attacker / the enemies at full stacks, with conditions assumed
-// met, then each member's ultimate / battle skill / basic attack is evaluated against every enemy, with and
-// without a crit. Individual effects can be excluded and stack counts overridden.
-// Exception to "conditions assumed met": a state's ActorSkillType (401) conditions are kept and evaluated per skill
-// column (an "Ultimate DMG +30%" buff counts for the Ultimate only) - see stateFrom / withSkillType. And states whose
-// active conditions exclude each other (a tier ladder like Focused Guard's "enemies == 5 / 4 / ... / 1" or Light Chain
-// Lv 1..5) count one rung at a time, the strongest that is on - see assignTiers.
-import { PvPTeam, KiokuState, isFriendlyEffect, isOpponentEffect, scaleGivenState, elementNumberOf } from "./PvPTeam";
+// Max Damage's shared pieces: the team's effect list (collectTeamEffects: every buff/debuff the team can produce, with
+// the ladders of mutually exclusive states) and the option / result types. The evaluation itself runs on the 1:1
+// engine (battle/EngineMaxDamage.ts).
 import type { PvPKioku } from "./PvPKioku";
-import { BattleType, DamageBaseType, damageBaseTypeFromEffectType, getAttackDamageResult, getAdditionalDamageBase, critChance, getFinalDamageExtra } from "./DamageCalculator";
-import { isEligibleForEffect, getFinalDamageRatio } from "./UnitStateEngine";
-import { ailmentConditionsMet } from "./BattleConditionParser";
+import { isFriendlyEffect, isOpponentEffect } from "./EffectSide";
 import { UNIT_STATE_TYPES } from "./StateAddFilter";
-import { actorSkillTypeRestriction } from "./BattleConditionParser";
 import { conditionCsvsExclusive } from "./ConditionTiers";
-import { enemyKiokus } from "./PvEBattle";
-import type { QuestEnemyAppearance } from "./PvE";
 import { skillDetailsByMstId } from "../utils/helpers";
 import skillMstJson from "../assets/base_data/getSkillMstList.json";
+import { BattleType } from "../types/enums";
 import { type SkillDetail, skillDetailId, targetRange, TargetType, TargetTypeLookup, targetTypeToLvl } from "../types/KiokuTypes";
 
 export type EffectSide = "ally" | "enemy"
@@ -34,7 +21,7 @@ export interface MaxDmgEffect {
     detail: SkillDetail
     maxStacks: number      // 1 unless an ACCUM state
     applies: boolean       // false for self-only effects of another member, and for self-targeted debuffs (drawbacks)
-    // Set by computeMaxDamage for the damage dealer's evaluation: where the effect actually landed. Undefined when
+    // Set by the dealer's evaluation (battle/EngineMaxDamage): where the effect actually landed. Undefined when
     // it was left out (excluded, 0 stacks or !applies). UI bookkeeping only.
     reach?: { dealer: boolean, enemies: number[], allies?: number[] }   // allies: team positions holding it (ally side)
     // Also for the dealer's evaluation: the effect-value rate the caster's buff/debuff strength applied (1 = none).
@@ -65,7 +52,7 @@ export interface MaxDmgEffect {
 }
 
 // Buff/debuff strength (UP/DWN_BUFF/DEBUFF_EFFECT_VALUE): not a state on the dealer or an enemy, it scales every
-// state its holder gives (PvPTeam.scaleGivenState).
+// state its holder gives.
 export const isEffectValueType = (type: string) => /^(UP|DWN)_(BUFF|DEBUFF)_EFFECT_VALUE$/.test(type)
 
 export interface MaxDmgOptions {
@@ -132,12 +119,11 @@ const SKILL_TYPES: [TargetType, string][] = [
 // skillMstId -> name and SkillType (1 ActiveSkill, 2 SpecialAttack, 3 NormalAttack, 4 AdditionalSkill, 5 EtherBlow).
 const skillMst = new Map<number, { name: string, type: number }>((skillMstJson as any[]).map(s => [s.skillMstId, { name: s.name, type: s.type }]))
 const TARGET_OF_SKILL_TYPE: Record<number, TargetType> = { 1: TargetType.skillId, 2: TargetType.specialId, 3: TargetType.attackId }
-const isDamageRow = (d: SkillDetail) => d.abilityEffectType.startsWith("DMG_") && d.abilityEffectType !== "DMG_RATIO"
 
 interface ExtraSkill { type: TargetType, label: string, name?: string, note?: string, details: SkillDetail[], skillType?: string, id?: number }
 
 // [CONFIRMED 3.19] SwitchSkillUnitState: value1 = skill unique id switched to, value3 = the SkillType it replaces, at
-// the replaced skill's level (PvPTeam.act / KiokuState.switchedSkillId). All current ones come from abilities.
+// the replaced skill's level. All current ones come from abilities.
 function switchSkillsOf(k: PvPKioku): ExtraSkill[] {
     const out: ExtraSkill[] = []
     const seen = new Set<number>()
@@ -166,7 +152,6 @@ function followUpsOf(k: PvPKioku, switches: ExtraSkill[]): ExtraSkill[] {
     })
 }
 
-const strongest = (list: (SkillDamage | undefined)[]) => list.reduce<SkillDamage | undefined>((b, s) => s && (!b || s.total.crit > b.total.crit) ? s : b, undefined)
 
 function skillDetailsOf(k: PvPKioku, type: TargetType): SkillDetail[] {
     const id = (k.data as any)[TargetTypeLookup[type as keyof typeof TargetTypeLookup]]
@@ -294,185 +279,4 @@ function assignTiers(effects: MaxDmgEffect[]) {
             ladder.forEach((e, rank) => { e.tier = { group: keys[0], rank, keys, reason } })
         }
     }
-}
-
-function stateFrom(e: MaxDmgEffect, detail: SkillDetail, caster: KiokuState, stacks: number): SkillDetail & Record<string, any> {
-    return {
-        ...detail,
-        // Conditions are assumed met: that's the "max" in max damage. Except the skill type the state is limited to
-        // (ActorSkillType 401, e.g. "special attack crit DMG +20%"): kept as `_actorSkillTypes`, applied per column.
-        activeConditionSetIdCsv: "", startConditionSetIdCsv: "",
-        _actorSkillTypes: actorSkillTypeRestriction(detail.activeConditionSetIdCsv),
-        turn: 99,
-        remainCount: e.detail.remainCount || 99,
-        _accumCount: stacks,
-        _applierState: caster,
-        applier: caster.kioku.name,
-    } as any
-}
-
-export function computeMaxDamage(allies: PvPKioku[], enemies: QuestEnemyAppearance[], attackerPos: number, opts: MaxDmgOptions = {}): MaxDmgResult {
-    const bt = opts.battleType ?? BattleType.Solo
-    const effects = collectTeamEffects(allies, attackerPos)
-    const members: MemberDamage[] = []
-    const main = Math.min(Math.max(0, opts.mainTargetIdx ?? 0), Math.max(0, enemies.length - 1))
-    let enemySummary: MaxDmgResult["enemies"] = []
-
-    // Each member is evaluated as "the attacker" with the whole team's buffs on it.
-    for (let pos = 0; pos < allies.length; pos++) {
-        if (opts.onlyPos !== undefined && pos !== opts.onlyPos) {
-            members.push({ pos, name: allies[pos].name, skills: [], best: undefined })
-            continue
-        }
-        const team1 = new PvPTeam(allies, "Ally", false, bt)
-        const team2 = new PvPTeam(enemyKiokus(enemies), "Enemy", false, bt)
-        team1.finishSetup(team2); team2.finishSetup(team1)
-        for (const u of [...team1.kiokuStates, ...team2.kiokuStates]) u.updateSpd()
-        const attacker = team1.kiokuStates[pos]
-        const targets = team2.kiokuStates
-
-        // The dealer's pass reuses `effects` so the returned list records where each effect landed.
-        const passEffects = pos === attackerPos ? effects : collectTeamEffects(allies, pos)
-        const stacksOf = (e: MaxDmgEffect) => opts.excluded?.has(e.key) ? 0 : Math.max(0, Math.min(e.maxStacks, opts.stacks?.get(e.key) ?? e.maxStacks))
-        // Each caster's active buff/debuff strength, by type (conditions assumed met, like everything else here).
-        const ailmentsOk = (d: SkillDetail) => !opts.enemyStates
-            || ailmentConditionsMet([d.startConditionSetIdCsv, d.activeConditionSetIdCsv], opts.enemyStates, enemies.length)
-        const giverEffects = new Map<number, Record<string, SkillDetail[]>>()
-        for (const e of passEffects) {
-            if (!isEffectValueType(e.detail.abilityEffectType) || !stacksOf(e) || !ailmentsOk(e.detail)) continue
-            const fx = giverEffects.get(e.casterPos) ?? {}
-            fx[e.detail.abilityEffectType] = [...(fx[e.detail.abilityEffectType] ?? []), e.detail]
-            giverEffects.set(e.casterPos, fx)
-        }
-        opts.enemyStates?.forEach((type, i) => targets.forEach(t => t.activeEffectDetails.set(`ailment:${type}`, ailmentMarker(type, i))))
-        // One rung per ladder: the strongest one that is on (not excluded, stacks > 0).
-        const usedRung = new Map<string, string>()
-        for (const e of passEffects.filter(x => x.tier).sort((a, b) => a.tier!.rank - b.tier!.rank)) {
-            if (!usedRung.has(e.tier!.group) && stacksOf(e) && ailmentsOk(e.detail)) usedRung.set(e.tier!.group, e.key)
-        }
-        for (const e of passEffects) {
-            if (pos === attackerPos) e.tierUsed = undefined
-            const stacks = stacksOf(e)
-            if (!stacks || isEffectValueType(e.detail.abilityEffectType) || !ailmentsOk(e.detail)) continue
-            const rung = e.tier ? usedRung.get(e.tier.group) : undefined
-            if (rung && rung !== e.key) {
-                if (pos === attackerPos) e.tierUsed = rung
-                continue
-            }
-            const caster = team1.kiokuStates[e.casterPos]
-            // Scaled by the caster's buff/debuff strength, as when the battle gives the state.
-            const detail = scaleGivenState(e.detail, giverEffects.get(e.casterPos) ?? {})
-            if (pos === attackerPos) e.rate = (detail as any)._effectValueRate ?? 1
-            if (e.side === "ally") {
-                if (!e.applies) continue
-                const eligible = isEligibleForEffect(detail, attacker)
-                if (pos === attackerPos) e.reach = { dealer: eligible, enemies: [] }
-                if (eligible) attacker.activeEffectDetails.set(e.key, stateFrom(e, detail, caster, stacks))
-            } else {
-                if (!e.applies) continue
-                // By range, centred on the main target like the damage rows: single -> the main target, proximity ->
-                // it and its neighbours, all -> every enemy.
-                const inRange = (i: number) => detail.range === targetRange.ALL || detail.range === targetRange.SELF ? true
-                    : detail.range === targetRange.PROXIMITY ? Math.abs(i - main) <= 1 : i === main
-                const hit: number[] = []
-                targets.forEach((t, i) => {
-                    if (!inRange(i) || !isEligibleForEffect(detail, t)) return
-                    t.activeEffectDetails.set(e.key, stateFrom(e, detail, caster, stacks))
-                    hit.push(i)
-                })
-                if (pos === attackerPos) e.reach = { dealer: false, enemies: hit }
-            }
-        }
-        targets.forEach((t, i) => {
-            const broken = !!opts.broken?.[i] && t.maxBreakGauge >= 1
-            if (broken) {
-                t.currentRemainingBreakGauge = 0
-                t.isBroken = true
-                t.breakedDamageReceiveRate = opts.breakRate?.[i] ?? Math.trunc(t.breakParams.maxRate / 10)
-            }
-        })
-        if (!enemySummary.length) enemySummary = targets.map(t => ({
-            name: t.kioku.name, hp: t.maxHp, def: t.kioku.getBaseDef(), broken: t.isBroken,
-            breakRate: t.isBroken ? t.breakedDamageReceiveRate : 100, canBreak: t.maxBreakGauge >= 1,
-        }))
-
-        // [CONFIRMED 3.19] A state's ActorSkillType condition is checked against the skill being launched, on every
-        // unit (PvPTeam `activeLaunch`): while evaluating one column, leave out the states (on the dealer and on the
-        // enemies) whose skill-type restriction excludes it. Map order is kept (it is the states' application order).
-        const withSkillType = <T>(skillType: string, fn: () => T): T => {
-            const saved = [attacker, ...targets].map(u => [u, new Map(u.activeEffectDetails)] as const)
-            for (const [u, orig] of saved) {
-                u.activeEffectDetails.clear()
-                for (const [k, d] of orig) if (!(d as any)._actorSkillTypes || (d as any)._actorSkillTypes.has(skillType)) u.activeEffectDetails.set(k, d)
-            }
-            try { return fn() } finally {
-                for (const [u, orig] of saved) { u.activeEffectDetails.clear(); orig.forEach((d, k) => u.activeEffectDetails.set(k, d)) }
-            }
-        }
-
-        const evaluateSkill = ({ type, label, name, note, details: all }: ExtraSkill): SkillDamage | undefined => {
-            const details = all.filter(d => isDamageRow(d) && ailmentsOk(d))
-            if (!details.length) return undefined
-            const perEnemy = targets.map(() => ({ normal: 0, crit: 0, avg: 0 }))
-            const p = (t: typeof targets[number]) => Math.min(1, Math.max(0, critChance(attacker, t) / 100))
-            const hitEnemies = new Set<number>()
-            for (const d of details) {
-                const hit: number[] = d.range === targetRange.ALL ? targets.map((_, i) => i)
-                    : d.range === targetRange.PROXIMITY ? [main - 1, main, main + 1].filter(i => i >= 0 && i < targets.length)
-                        : [main]
-                for (const i of hit) {
-                    const t = targets[i]
-                    const baseType = damageBaseTypeFromEffectType(d.abilityEffectType)
-                    const isMainTarget = i === main
-                    const run = (crit: boolean) => getAttackDamageResult(attacker, t, d, baseType, { battleType: bt, forceCrit: crit, isMainTarget }).preBarrierDamage
-                    const n = run(false), c = run(true)
-                    perEnemy[i].normal += n
-                    perEnemy[i].crit += c
-                    perEnemy[i].avg += n * (1 - p(t)) + c * p(t)
-                    hitEnemies.add(i)
-                }
-            }
-            // [CONFIRMED 3.19] ADDITIONAL_DAMAGE / TSUBAME_LINK (IAdditionalDamage): one extra hit per state on every
-            // enemy the skill hit, after the skill (not one per damage row) - see KiokuState.additionalDamageAfterLaunch.
-            // A Swallow link is never on its own caster; its power is value3.
-            const bonus = [...attacker.activeEffectDetails.values()]
-                .filter(d => d.abilityEffectType === "ADDITIONAL_DAMAGE" || (d.abilityEffectType === "TSUBAME_LINK" && (d as any)._applierState !== attacker))
-                .map(d => d.abilityEffectType === "TSUBAME_LINK" ? { ...d, value1: (d as any).value3 ?? 0 } as SkillDetail : d)
-            for (const i of hitEnemies) {
-                const t = targets[i]
-                for (const b of bonus) {
-                    const run = (crit: boolean) => getAttackDamageResult(attacker, t, b, DamageBaseType.ATK, {
-                        battleType: bt, forceCrit: crit,
-                        damageBaseOverride: getAdditionalDamageBase((b as any)._applierState ?? attacker, b),
-                        attackElementOverride: elementNumberOf(attacker),
-                    }).preBarrierDamage
-                    const n = run(false), c = run(true)
-                    perEnemy[i].normal += n
-                    perEnemy[i].crit += c
-                    perEnemy[i].avg += n * (1 - p(t)) + c * p(t)
-                }
-            }
-            // [CONFIRMED 3.19] RCV_FINAL_DAMAGE (BattleDamageCalculator.CalcFinalDamageNoticeBundle 0x137b110): one more
-            // hit of Ceiling(the skill's whole damage to that target x Σ ratio) - e.g. Light Chain "final DMG taken +50%".
-            for (const i of hitEnemies) {
-                const ratio = getFinalDamageRatio(targets[i], attacker)
-                const x = perEnemy[i]
-                x.normal += getFinalDamageExtra(x.normal, ratio)
-                x.crit += getFinalDamageExtra(x.crit, ratio)
-                x.avg += getFinalDamageExtra(Math.round(x.avg), ratio)
-            }
-            perEnemy.forEach(x => { x.avg = Math.round(x.avg) })
-            const total = perEnemy.reduce((s, x) => ({ normal: s.normal + x.normal, crit: s.crit + x.crit, avg: s.avg + x.avg }), { normal: 0, crit: 0, avg: 0 })
-            return { type, label, name, note, perEnemy, total, critChance: targets[main] ? critChance(attacker, targets[main]) : 0 }
-        }
-        const evaluate = (skill: ExtraSkill): SkillDamage | undefined => withSkillType(skill.skillType ?? skill.type, () => evaluateSkill(skill))
-        const skills = SKILL_TYPES.map(([type, label]) => evaluate({ type, label, details: skillDetailsOf(allies[pos], type) }))
-            .filter((s): s is SkillDamage => !!s)
-        const switches = switchSkillsOf(allies[pos])
-        const switchSkill = strongest(switches.map(evaluate))
-        const followUp = strongest(followUpsOf(allies[pos], switches).map(evaluate))
-        const best = strongest([...skills, switchSkill])
-        members.push({ pos, name: allies[pos].name, skills, best, switchSkill, followUp })
-    }
-    return { effects, members, enemies: enemySummary }
 }

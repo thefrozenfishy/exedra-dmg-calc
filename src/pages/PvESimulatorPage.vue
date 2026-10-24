@@ -519,19 +519,6 @@
 
             <div class="run-sim-row">
                 <button class="btn btn-accent" @click="runSimulation" :disabled="!canRun">Run Simulation</button>
-                <button v-if="showSolver" class="btn btn-accent" @click="solveFromHere"
-                    :disabled="!canRun || !battleOutput.length"
-                    title="Hand the battle as it stands (the actions run so far, your decisions and flipped rolls) to the Fight Solver below and search from there. Before running anything: the solver starts from the beginning">Solve
-                    from here</button>
-            </div>
-
-            <div v-if="solverControl" class="solver-line-note">
-                <span>Line from the Fight Solver: from action {{ solverControl.switches[solverControl.switches.length -
-                    1]?.at
-                    ?? 0 }}
-                    on you pick for the allies and the enemies' targets stay with their AI (as in the solver).</span>
-                <button class="btn" @click="clearSolverControl"
-                    title="Back to normal Manual control (you pick enemy targets too)">Clear</button>
             </div>
 
             <div class="sim-tools">
@@ -567,10 +554,7 @@
             </div>
 
             <BattleTimeline :states="battleOutput" :show-sp="false" :rng-editable="rngMode === 'manual'"
-                :action-ends="showSolver ? simStepEnds : undefined"
-                :action-button="showSolver ? 'Solve from here' : undefined"
-                action-title="Start a Fight Solver search right after this action (this battle so far is its opening; your later picks are not used)"
-                @decide="onDecide" @action="solveFromStep" />
+                @decide="onDecide" />
             <div v-if="pending" ref="pickPanel" class="pick-panel">
                 <div class="pick-head">{{ pending.kind === 'target' ? 'Pick a target' :
                     pending.label.startsWith('Between') ?
@@ -594,10 +578,6 @@
                 <p class="muted small">Every decision can be changed later from that action's roll list; the battle then
                     re-runs
                     from the start. Decisions are saved with the team when a saved team is selected above.</p>
-                <button v-if="showSolver" class="btn btn-accent solve-here-btn" @click="solveFromHere"
-                    title="Let the Fight Solver take over from this decision (everything before it stays as you played it)">Solve
-                    from
-                    here</button>
             </div>
         </section>
 
@@ -616,11 +596,6 @@
                 <span v-if="pendingStepText" class="act-chip next" :title="pending?.label">{{ pendingStepText }}</span>
             </div>
         </section>
-
-        <!-- Fight solver: least-AV clear search (components/FightSolver.vue) -->
-        <FightSolver v-if="showSolver" ref="solverRef" :can-run="canRun && !!waves.length" :slots="solverSlots"
-            :stage-id="stageId" :seed="seed" :rng-mode="rngMode" :party-buff-id="partyBuffId || undefined"
-            :raid-carry="raidAttempts[raidAttempts.length - 1]" :apply-setup="applyPvEExport" @play="playFromSolver" />
     </div>
 </template>
 
@@ -631,8 +606,6 @@ import { useSetting } from '../store/settingsStore'
 import CharacterEditor from '../components/CharacterEditor.vue'
 import StagePicker from '../components/StagePicker.vue'
 import BattleTimeline from '../components/BattleTimeline.vue'
-import FightSolver from '../components/FightSolver.vue'
-import { applyControlSwitch, summarizePicks, type ControlSwitch, type SolverLine } from '../models/FightSolver'
 import SegmentedToggle from '../components/SegmentedToggle.vue'
 import RngControls from '../components/RngControls.vue'
 import ImageActionsToolbar from '../components/ImageActionsToolbar.vue'
@@ -645,14 +618,13 @@ import { elementMap } from '../types/enums'
 import { stageWaves, stageWaveMeta, summonTemplates, wavePositionIds, enemyName, breakMstOf, ELEMENT_KEYS, questStages, soloRaidInfo, isSoloRaidStage, multiRaidInfo, type QuestEnemyAppearance, type ModeChangeInfo } from '../models/PvE'
 import { stageBattleType, waveStartUnits } from '../models/PvEBattle'
 import passiveMstJson from '../assets/base_data/getPassiveSkillMstList.json'
-import type { RaidCarry } from '../models/PvPBattle'
 import { getScoreAttackStage } from '../models/PvEScore'
 import { isEffectValueType, type MaxDmgEffect, type MaxDmgResult, type MemberDamage, type SkillDamage } from '../models/MaxDamage'
 import { buildSlotKioku, buildPvEExport, parsePvEExport, downloadText, exportToText, rekeyPicks, type PvEExport } from '../utils/pvpExport'
 import { describePvESetup, sanitizePvESetup, stagePath, type PvESetup } from '../utils/pveSetup'
 import { effectDescription, effectName, effectRestriction, effectValue } from '../utils/effectText'
 import { passiveDetailsByMstId, portraits } from '../utils/helpers'
-import { EngineBattle } from '../battle/EngineBattle'
+import { EngineBattle, type RaidCarry } from '../battle/EngineBattle'
 import type { MaxDamageMessage, MaxDamageRequest } from '../workers/maxDamageWorker'
 import { newMaxDamageWorker } from '../workers/newMaxDamageWorker'
 import type { PvPKioku } from '../models/PvPKioku'
@@ -1107,12 +1079,6 @@ const targetMode = useSetting<'auto' | 'manual'>('pveTargetMode', 'auto')
 const rngMode = useSetting<RngMode>('pveRngMode', 'seed')
 const seed = ref(Math.floor(Math.random() * 2 ** 32))
 const decisions = shallowRef(new Map<number, RngDecision>())
-// Fight Solver hand-off state (see playFromSolver): declared here, the battle builders read it.
-const solverControl = shallowRef<{ control: 'auto' | 'manual', switches: ControlSwitch[] } | null>(null)
-const simSteps = ref(0)
-// Per executed action: the index of its last snapshot and the AV after it (per-action "Solve from here").
-const simStepEnds = shallowRef<number[]>([])
-let simStepAv: number[] = []
 const pending = shallowRef<RngEvent | null>(null)
 const pickPanel = ref<HTMLElement | null>(null)
 const changedRolls = computed(() => [...decisions.value.values()].filter(d => !d.pick).length)
@@ -1199,9 +1165,6 @@ const partyBuffChoice = computed<string>({
     set: v => { partyBuffId.value = Number(v) },
 })
 const raidAttempts = shallowRef<RaidCarry[]>([])
-// The fight solver's team: the filled slots as plain data (it builds its own units in a worker).
-const solverSlots = computed(() => filledSlots.value.map(([s]) => s))
-const showSolver = computed(() => localStorage.getItem("solver") === "show")
 const passiveNames = new Map<number, { name: string, description: string }>((passiveMstJson as any[]).map(p => [p.passiveSkillMstId, { name: p.name, description: String(p.description ?? '').replace(/<br>/g, '\n') }]))
 const passiveInfo = (id: number) => passiveNames.get(id) ?? { name: `Passive ${id}`, description: '' }
 
@@ -1229,7 +1192,7 @@ function newBattle(): EngineBattle {
     const carry = raidAttempts.value[raidAttempts.value.length - 1]
     const opts = {
         seed: seed.value, rngMode: rngMode.value, decisions: decisions.value, relaxedPicks: relaxedPicksRun,
-        manualTargeting: solverControl.value ? solverControl.value.control === 'manual' : targetMode.value === 'manual',
+        manualTargeting: targetMode.value === 'manual',
     }
     if (linkRaid.value) {
         const bossHp = linkRaidBossHp.value && linkRaidBossHp.value > 0 ? Math.min(linkRaidBossHp.value, linkRaidFullHp.value) : undefined
@@ -1242,7 +1205,6 @@ function newBattle(): EngineBattle {
 
 // Initial state only (no simulation yet).
 function buildBattle() {
-    simSteps.value = 0
     battleResult.value = undefined
     pending.value = null
     if (!canRun.value || !waves.value.length) {
@@ -1260,52 +1222,11 @@ function buildBattle() {
     }
 }
 watch([() => team.slots, stageId], () => {
-    solverControl.value = null
     decisions.value = new Map()
     raidAttempts.value = []
     buildBattle()
 }, { deep: true, immediate: true })
 
-// ---- Fight Solver hand-off ----
-// A line loaded from the solver ("play from here") starts with the control the solver's search started with and
-// switches to solver control at the listed actions: allies yours, enemy targets on their AI (solver searches never
-// pick enemy targets). `simSteps`: the actions the last run executed (what "solve from here" replays).
-const solverRef = ref<InstanceType<typeof FightSolver> | null>(null)
-function clearSolverControl() {
-    solverControl.value = null
-    runSimulation()
-}
-function playFromSolver(line: SolverLine, opts?: { scroll?: boolean }) {
-    solverControl.value = { control: line.control, switches: line.switches }
-    decisions.value = new Map(line.decisions)
-    simTurns.value = Math.max(simTurns.value || 0, line.steps + 40)
-    if (targetMode.value !== 'manual') targetMode.value = 'manual' // the watcher re-runs
-    else runSimulation()
-    if (opts?.scroll !== false) nextTick(() => document.querySelector('.battle-card')?.scrollIntoView({ behavior: 'smooth', block: 'start' }))
-}
-function solveFromHere() { solveFromStep(simSteps.value) }
-// A search starting after the first `steps` actions of this battle (the timeline's per-action "Solve from here"):
-// the battle so far is its opening (decisions up to there; later ones are not used), with the route read off the
-// snapshots (your picks per action, as the solver labels its edges).
-function solveFromStep(steps: number) {
-    const sc = solverControl.value
-    const ends = simStepEnds.value
-    const route: { label: string, elapsed: number }[] = []
-    for (let k = 0; k < Math.min(steps, ends.length); k++) {
-        const picks = battleOutput.value.slice(k ? ends[k - 1] + 1 : 1, ends[k] + 1).flatMap(s => s.rngEvents ?? [])
-            .filter(e => e.userPick && e.options).map(e => ({ label: e.label, choice: e.options![e.outcome as number]?.label ?? '?' }))
-        if (picks.length) route.push({ label: summarizePicks(picks), elapsed: simStepAv[k] })
-    }
-    // Only the decisions those actions used (later picks / flipped rolls must not leak into the search's rolls).
-    const lastIndex = Math.max(-1, ...battleOutput.value.slice(0, steps ? (ends[Math.min(steps, ends.length) - 1] ?? 0) + 1 : 1)
-        .flatMap(s => (s.rngEvents ?? []).map(e => e.index)))
-    solverRef.value?.solveFrom({
-        decisions: [...decisions.value].filter(([i]) => i <= lastIndex), steps,
-        control: sc ? sc.control : targetMode.value, switches: sc ? sc.switches : [],
-    }, route)
-    nextTick(() => document.querySelector('.solver-card')?.scrollIntoView({ behavior: 'smooth', block: 'start' }))
-}
-watch(targetMode, v => { if (v !== 'manual') solverControl.value = null })
 
 function runSimulation() {
     if (!canRun.value || !waves.value.length) return buildBattle()
@@ -1319,15 +1240,9 @@ function runSimulation() {
     battle.value = b
     pending.value = null
     const states: BattleSnapshot[] = [b.initialState]
-    const ends: number[] = []
-    simStepAv = []
-    let t = 0
-    for (; t < simTurns.value && !b.isOver; t++) {
-        for (const sw of solverControl.value?.switches ?? []) if (sw.at === t) applyControlSwitch(b, sw)
+    for (let t = 0; t < simTurns.value && !b.isOver; t++) {
         try {
             states.push(...b.executeNextAction())
-            ends.push(states.length - 1)
-            simStepAv.push(b.elapsed)
         } catch (e) {
             if (e instanceof PendingDecision) {
                 pending.value = e.event
@@ -1338,8 +1253,6 @@ function runSimulation() {
             break
         }
     }
-    simSteps.value = t
-    simStepEnds.value = ends
     battleOutput.value = states
     battleResult.value = pending.value ? undefined : b.result
     if (pending.value) nextTick(() => pickPanel.value?.scrollIntoView({ behavior: 'smooth', block: 'nearest' }))
@@ -1399,7 +1312,6 @@ function resetRolls() {
 }
 
 function resetPicks() {
-    solverControl.value = null
     decisions.value = new Map([...decisions.value].filter(([, d]) => !d.pick))
     runSimulation()
 }
@@ -1435,7 +1347,7 @@ async function importBattle(ev: Event) {
     }
 }
 
-// Puts an export's stage, team, settings and decisions on the page and runs it (Import file; Fight Solver results).
+// Puts an export's stage, team, settings and decisions on the page and runs it (Import file).
 async function applyPvEExport(data: PvEExport) {
     if (!stageWaves(data.stageId).length) throw new Error(`stage ${data.stageId} is not in this build's data`)
     saved.detach() // an imported file is a new setup, not an edit of the selected saved team
@@ -1451,7 +1363,6 @@ async function applyPvEExport(data: PvEExport) {
         partyBuffId.value = data.soloRaid.partyBuffId ?? 0
         raidAttempts.value = data.soloRaid.attempts ?? []
     }
-    solverControl.value = null
     await nextTick() // the mode watchers re-run first; run once more with everything in place
     // Picks are matched by label where an engine change shifted their indices, then stored at the indices they
     // were used at (BattleRng relaxedPicks / rekeyPicks).
@@ -2951,28 +2862,11 @@ const saved = useSavedTeams({
     padding: 0 0.15rem;
 }
 
-.solver-line-note {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
-    gap: 0.5rem 0.8rem;
-    margin: 0 auto 0.75rem;
-    max-width: 720px;
-    font-size: 0.82rem;
-    color: var(--accent);
-    text-align: center;
-}
-
 .run-sim-row {
     display: flex;
     justify-content: center;
     gap: 0.6rem;
     margin: 0 auto 0.75rem;
-}
-
-.solve-here-btn {
-    align-self: center;
 }
 
 .run-sim-btn {

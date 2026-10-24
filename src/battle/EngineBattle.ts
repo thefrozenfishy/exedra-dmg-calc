@@ -6,7 +6,6 @@
 import { TargetType, type BattleEvent, type BattleSnapshot, type TeamSnapshot } from "../types/KiokuTypes"
 import { BattleRng, type RngDecision, type RngMode } from "../models/BattleRng"
 import { enemyName, multiRaidInfo, skillName, soloRaidInfo, SOLO_RAID_COMMON_CHARGE_PASSIVE, type QuestEnemyAppearance } from "../models/PvE"
-import type { RaidCarry } from "../models/PvPBattle"
 import { passiveDetails, skillDetails } from "../utils/helpers"
 import questEnemyAppearanceJson from "../assets/base_data/getQuestEnemyAppearanceMstList.json"
 import { E } from "./engineBundle"
@@ -26,6 +25,18 @@ export type EngineBattleSetup =
     /** Link Raid (MultiRaidGameDirector). `bossHp`: the boss's HP when this player joins (the raid's shared HP the server
      *  sends; default its full HP: a new raid). Offline there are no other participants: no HP syncs arrive. */
     | { kind: "multiRaid", allies: EngineKioku[], stageId: number, bossHp?: number, noRoundLimit?: boolean }
+
+// [CONFIRMED 3.19] Network.Definition.SoloRaid.BattleInfo, written by SoloRaidGameDirector.SyncBattleInfo (0x14a8220)
+// when an attempt ends (win, loss, round limit) and read back by SetupBattleStageForSoloRaid on the next attempt.
+// Enemy buffs/debuffs are not kept; the round count restarts at 1.
+export interface RaidCarry {
+    wave: number                 // 1-based wave of the stage
+    nextEnemyIndex: number       // endless wave round-robin index
+    linkHp: number               // shared pool (link type 1/2) or the main target's HP
+    enemies: { appearanceId: number, positionId: number, hp: number, breakGauge: number, breakBonus: number, turnGauge: number }[]
+    countdown?: { num: number, damage: number }
+    seasonBuff?: { active: boolean, point: number, gauge: number }
+}
 
 export interface EngineBattleOptions {
     seed?: number
@@ -203,16 +214,6 @@ export class EngineBattle {
     get currentWave(): number { return this.director.waveReferee?.currentWave ?? 1 }
     /** Solo Raid score approximation agreed with the user (the real score is computed on the server): 20 per AV. */
     get teamPointsUsed(): number { return Math.round(20 * this.elapsed) }
-
-    /** Fight solver control: sides whose targets stay with the AI while the player decides the actions. */
-    aiTargetSides?: Set<"friend" | "opp">
-
-    /** Switches to manual control of the allies (the enemies stay with the AI); `aiSides` keep their AI targets. */
-    applyControl(aiSides: ("friend" | "opp")[]): void {
-        this.manual = true
-        this.director.autoType = 0
-        this.aiTargetSides = aiSides.length ? new Set(aiSides) : undefined
-    }
 
     /** SoloRaidGameDirector.SyncBattleInfo of the finished attempt (what the next attempt continues from). */
     raidCarry(): RaidCarry | undefined {
@@ -510,12 +511,12 @@ export class EngineBattle {
         const effects: any[] = skill.launcher.AbilityEffectList
         const aims = (side: number) => effects.some(e => e.TargetSide === side && (e.EffectRange === 1 || e.EffectRange === 2))
         const what = skillName(skill.Id)
-        if (aims(1) && !this.aiTargetSides?.has("opp")) {
+        if (aims(1)) {
             const pool = this.team(false).filter(u => !u.IsDead)
             if (pool.length > 1) target = pool[this.rng.pickTarget(`${this.unitLabel(unit)} · ${what}: target on the enemies`, pool.map(u => this.unitLabel(u)), pool)]._Id
             else if (pool.length === 1) target = pool[0]._Id
         }
-        if (aims(0) && !this.aiTargetSides?.has("friend")) {
+        if (aims(0)) {
             const pool = this.team(true).filter(u => !u.IsDead)
             if (pool.length > 1) friend = pool[this.rng.pickTarget(`${this.unitLabel(unit)} · ${what}: target on the allies`, pool.map(u => this.unitLabel(u)), pool)]._Id
             else if (pool.length === 1) friend = pool[0]._Id

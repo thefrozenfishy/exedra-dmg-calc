@@ -1,5 +1,4 @@
 import type { RngEvent } from "../models/BattleRng";
-import { PvPTeam, KiokuState } from "../models/PvPTeam";
 import { crystalises, crystalisesByStyle, portraits, passiveDetails, passiveBase } from "../utils/helpers";
 import { elementMap, KiokuElement, KiokuObtain, KiokuRole, SupportKey } from "./enums";
 
@@ -676,24 +675,3 @@ export interface AffectedUnitNotice {
     addedRemovableDebuffs?: number
 }
 
-export interface BattleState {
-    actorTeam: PvPTeam,
-    enemyTeam: PvPTeam,
-    actor: KiokuState,
-    target: KiokuState,
-    actionType?: TargetType
-    // CompareContent 401 ActorSkillType when it differs from actionType ("EtherBlow" follow-ups). See
-    // BattleConditionParser.checkOtherCondition and PvPTeam's skill-launch context.
-    actorSkillType?: string
-    // trueActorUnit: unit performing the CURRENT action (CompareTarget.ACTOR);
-    // mainTargetUnit: primary target of the action (CompareTarget.MAIN_TARGET);
-    // notice: what just happened to `target` this action.
-    trueActorUnit?: KiokuState
-    mainTargetUnit?: KiokuState
-    notice?: AffectedUnitNotice
-    // No EachTargetUnit in the holder's bundle (state activity outside the holder's own effect Triggering):
-    // EACH_TARGET conditions are false (Condition.IsMatchCondition 0x17eca80, case 8, ConditionUseType SkillActive).
-    eachTargetUnset?: boolean
-    // ConditionCheckDataBundle.ActorAbilityEffect: the effect of the running skill launch being processed (content 403).
-    actorEffect?: SkillDetail
-}

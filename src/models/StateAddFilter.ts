@@ -1,4 +1,4 @@
-// GENERATED from GameAssembly 3.19.0 (UnitStateBase.CanAddTo overrides), see MISSING_AND_UNCERTAIN R6.
+// GENERATED from GameAssembly 3.19.0 (UnitStateBase.CanAddTo overrides), see docs/ai/legacy/MISSING_AND_UNCERTAIN R6.
 // A skill detail's element/role only filters targets for these STATE effect types:
 //   RoleAndElement: DamageBetter/ParameterVariation/... CanAddTo (0x15b8090) -> unit role AND element must match
 //   RoleOnly:       Up/DownElementDamageRate CanAddTo (0x15b9e40) -> only role; element is the boosted damage element

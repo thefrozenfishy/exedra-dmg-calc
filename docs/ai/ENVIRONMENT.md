@@ -4,7 +4,7 @@
 
 | Path | What |
 |---|---|
-| `E:\exedra-dmg-calc` | The web app (Vue 3 + TS, Vite). Engine in `src/models`, master data in `src/assets/base_data`, sim scripts in `scripts/sim`, this KB in `docs/ai`, lookup tool `scripts/ai/xq.py`. GitHub: thefrozenfishy/exedra-dmg-calc (public, deployed to gh-pages). |
+| `E:\exedra-dmg-calc` | The web app (Vue 3 + TS, Vite). Engine in `src/engine` (app side `src/battle`), master data in `src/assets/base_data`, sim scripts in `scripts/sim`, this KB in `docs/ai`, lookup tool `scripts/ai/xq.py`. GitHub: thefrozenfishy/exedra-dmg-calc (public, deployed to gh-pages). |
 | `E:\unpackedExedra\3.19.0\decompiled\` | **All 5,416 `ReDriveBattleCore.*` functions** decompiled (Ghidra 12.1.4), one `.c` per namespace. Header per function: `// ==== Ns.Class$$Name ====` + `// RVA 0x... C#: <signature>`. Plus `_index_targets.tsv` (RVA, ns, class, signature), `factories.json` (effect string -> class), `state_direction.json`, `ability_side.json`, README.md. |
 | `E:\unpackedExedra\3.19.0\tools\` | `getfn.py`, `fn.sh`, `decsimp.py` (collapses System.Decimal stack shuffling into expressions: `xq fn X \| python3 tools/decsimp.py`), `flt.sh`. `xq fn` supersedes getfn/fn.sh. |
 | `E:\unpackedExedra\3.19.0\GameAssembly.unpack.dll` | Senbei output (Crackproof removed); input for Ghidra. |
@@ -49,16 +49,15 @@
 ## Running things (repo root)
 
 ```
-npx tsx scripts/sim/checkFixtures.ts             # in-game regression fixtures: must stay PASS (actor of action N, optional `line` regex e.g. a unit's Magic)
-npx tsx scripts/sim/checkMechanics.ts            # engine checks of decompile-confirmed rules (skill-type-gated states, additional damage per launch): must stay PASS
-npx tsx scripts/sim/runPvp.ts [seed]             # headless PvP battle, prints every hit
-npx tsx scripts/sim/runPvE.ts <stageId> [seed] [teamExport.json] [turns]   # e.g. 509140 Sandbox Witch, 110112 Mermaid Witch, 1401101 Solo Raid
-npx tsx scripts/sim/replayExport.ts <export.json> [--diff]   # replay a browser export (PvP or PvE) with the current engine
-npx tsx scripts/sim/compareFormula.ts            # engine vs old closed-form formula (2981/3000 identical is expected)
+npm run engine                                   # rebuild src/engine/dist/engine.js after engine changes
+npx tsx scripts/sim/checkFixturesEngine.ts       # in-game regression fixtures: must stay PASS (actor of action N, optional `line` regex e.g. a unit's Magic)
+npx tsx scripts/sim/checkEngine321.ts            # 3.21.0 rule checks
+npx tsx scripts/sim/enginePvp.ts [seed]          # headless PvP battle
+npx tsx scripts/sim/engineRun.ts <stageId> [seed] [teamExport.json]   # e.g. 509140 Sandbox Witch, 110112 Mermaid Witch, 1401101 Solo Raid
 NODE_OPTIONS=--max-old-space-size=3300 timeout 170 npx vue-tsc --noEmit -p tsconfig.app.json > $HOME/tsc.txt 2>&1; grep -c "error TS" $HOME/tsc.txt
 ```
 
-- Read another branch without checking it out: `git show <branch>:src/models/PvPTeam.ts`, or for xq:
+- Read another branch without checking it out: `git show <branch>:src/battle/EngineBattle.ts`, or for xq:
   `mkdir -p $HOME/br && git archive <branch> src | tar -x -C $HOME/br && XQ_SRC=$HOME/br/src python3 scripts/ai/xq.py ts <sym>`.
 - Scripts that import engine code must `import "../../src/models/BestTeamCalculator"` **first** (import cycle
   Kioku <-> BestTeamCalculator, else "Cannot access 'Kioku' before initialization").
@@ -68,8 +67,8 @@ NODE_OPTIONS=--max-old-space-size=3300 timeout 170 npx vue-tsc --noEmit -p tscon
 - Probe scripts: write them **outside the repo** as `$HOME/probe.ts` with absolute imports
   (`import "$R/src/models/BestTeamCalculator"` first, R = repo path) so nothing needs deleting. Build
   `new PvPKioku({name, kiokuLvl:120, magicLvl:10, heartphialLvl:10, ascension:5, specialLvl:10, crysIDs:[...],
-  subCrysIDs:[]})`, `new PvPTeam(kiokus, "Ally")`, `new PvPBattle(t1, t2, false, seed)`, loop
-  `battle.executeNextAction()`; wrap `team.fireTiming` to log a timing. Full tested template: the exedra-kit-fix skill.
+  subCrysIDs:[]})`, `new EngineBattle({ kind: "quest", allies, stageId }, { seed })` (src/battle/EngineBattle), loop
+  `battle.executeNextAction()`; `scripts/sim/engineRun.ts` is a working template.
 - UI check (optional): tar `src index.html package.json vite.config.ts tsconfig*.json` into `debugging/_uicheck.tgz`,
   stage it to the container, run `npx vite --port 5199` there (setsid nohup) and drive it with Playwright
   (Chromium is preinstalled at /opt/pw-browsers). Beta pages need `localStorage.beta = "true"`.

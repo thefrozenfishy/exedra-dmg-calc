@@ -19,7 +19,7 @@ import { ScoreAttackTeam } from "../../src/models/ScoreAttackTeam";
 import { benchKioku, LuxBenchCharts, ultimateDamage, kitRestrictions, type BenchIdentity } from "../../src/models/LuxBench";
 import { computeMaxDamageEngine } from "../../src/battle/EngineMaxDamage";
 import { benchStage, BENCH_BROKEN_RATE } from "../../src/battle/EngineBench";
-import { BattleType } from "../../src/models/DamageCalculator";
+import { BattleType } from "../../src/types/enums"
 import { skillDetailId, TargetType } from "../../src/types/KiokuTypes";
 import { kiokuData } from "../../src/utils/helpers";
 import { KiokuElement, KiokuRole, LuxMagica } from "../../src/types/enums";

@@ -84,7 +84,7 @@ lists new/gone type, method and field names (3.21.0: Step-Up skills, CONSUME_SEL
    GHIDRA_EXIT.txt in `<NEW>\decompiled`; ~5 min in total for 3.21.0). Then copy factories.json / state_direction.json /
    ability_side.json from the previous decompile and add the new factory entries, and `_index_targets.tsv` = targets.tsv.
    Semantic diff: `python3 scripts/engine/decdiff.py <old>/decompiled <new>/decompiled --only <new rvas> --ignore-offsets --loose`. Then `export XQ_GAME_VER=$NEW XQ_DUMPER=$HOME/mnt/unpackedExedra/$NEW/dump` for xq.
-4. For every changed method: find where the engine ports it (`grep -rn "<old RVA>" src/models docs/ai`, `xq ts`),
+4. For every changed method: find where the engine ports it (`python3 scripts/engine/ledger.py --rva <old RVA>`, `grep -rn "<old RVA>" src/engine src/battle docs/ai`),
    re-read the new code (`xq fn`), fix the port, update the RVA in the code comment and in MECHANICS.md.
 5. Ghidra drops float returns and some branches: when C output looks incomplete, disassemble
    (`pip install capstone` once, then `python3 scripts/ai/disasm.py 0x<rva> --ver $NEW`).
@@ -138,8 +138,7 @@ cp $HOME/mnt/unpackedExedra/$NEW/version_report/report.md docs/versions/$NEW/rep
 From report.md, in this order:
 1. **New effect types** with engine != yes: `xq effect <TYPE>` (class, methods, users), read the class
    (`xq fn '<Class>$$'`), port it. Even an unused new type is worth porting (3.19.1: LOCK_SPECIAL_ATTACK "Magic Seal"
-   had 0 users). A pure state type usually needs: `canAddTo` case (PvPTeam.ts), what it blocks/changes, the AI
-   target chain (AITargetSelector.ts `CHAIN_BY_EFFECT_TYPE`, from its GetAIFilteredTargets / GetUnitFilterFuncOrder).
+   had 0 users). Port the new class into `src/engine` (its factory entry, CanAddTo, AI filters) like any other class.
 2. **Effect types used by new rows** not plainly covered (`prefix/template?` is usually fine: check `xq effect`).
 3. **Conditions** with engine != yes (compareContent coverage is read from BattleConditionParser.ts; the enum NAMES
    there were guesses - the real names are in `xq enum CompareContent`). Port from `BattleUnitConditionChecker.Check`
@@ -147,15 +146,12 @@ From report.md, in this order:
    Team checker: `switch(content - 201)` for 201-212, then a second switch on 0x12d.. for 301-316.
 4. **Smoke-run the new content** (exceptions and engine warnings are printed per stage/kioku):
    ```
-   npx tsx scripts/sim/smokeNew.ts --stages <new stage ids, comma-separated> --kiokus "<new kioku>|<another>" --actions 40
+   STAGES=<new stage ids, comma-separated> npx tsx scripts/sim/engineSweep.ts 40 2
+   WITH="<new kioku>|<another>" npx tsx scripts/sim/engineSweep.ts 15 2
    ```
-   "FULL AUTO targeting found no eligible target" at the end of a lost battle is harmless. "Active without turn:
-   <TYPE>" means an ability effect has no handler: that is a bug to fix (3.19.1 session: IMM_SLIP_DMG).
-   For all kiokus: `K=$(python3 -c "import sys; sys.path.insert(0,'scripts/ai'); import xq; print('|'.join(sorted(xq.kioku_data())))")`
-   (~60 kiokus per 170 s call; split the list).
 5. Balance changes (changed existing skill/passive rows) need nothing in the engine (data-driven) but go in the
    newsletter.
-Every port: game rule comment `[CONFIRMED 3.19] Class.Method (0xRVA)`, a check in `scripts/sim/checkMechanics.ts`
+Every port: game rule comment `[CONFIRMED 3.19] Class.Method (0xRVA)`, a check (`scripts/sim/checkEngine321.ts` style)
 that fails without the change, an entry in docs/ai/MECHANICS.md.
 
 ## 6b. Wiki generator (ma-ex-data/wiki): must say what the engine does
@@ -187,8 +183,7 @@ the images part of that script is the user's) as its own commit. Smoke-test the 
 ## 7. Verify
 
 ```
-timeout 175 npx tsx scripts/sim/checkFixtures.ts      # all PASS
-timeout 175 npx tsx scripts/sim/checkMechanics.ts     # all PASS (count them)
+npm run engine && timeout 175 npx tsx scripts/sim/checkFixturesEngine.ts   # all PASS
 NODE_OPTIONS=--max-old-space-size=3300 timeout 175 npx vue-tsc --noEmit -p tsconfig.app.json > $HOME/tsc.txt 2>&1; grep -c "error TS" $HOME/tsc.txt
 ```
 Type-check: compare the SET of errors with a baseline taken before your change

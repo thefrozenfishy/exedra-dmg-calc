@@ -15,7 +15,7 @@
 // Burst evaluates them already broken.
 import { PvPKioku } from "./PvPKioku";
 import { Kioku } from "./Kioku";
-import { BattleType } from "./DamageCalculator";
+import { BattleType } from "../types/enums"
 import type { RngMode } from "./BattleRng";
 import { ailmentConditionValues, critConditionUsed, unitTypeConditionValues } from "./BattleConditionParser";
 import type { QuestEnemyAppearance } from "./PvE";

@@ -1,4 +1,4 @@
-import type { RaidCarry } from "../models/PvPBattle";
+import type { RaidCarry } from "../battle/EngineBattle";
 // PvP simulator export/import: one JSON file holding the exact team setup, the RNG seed and the
 // simulated sequence (human-readable lines), so a run seen in the browser can be replayed exactly
 // elsewhere (scripts/sim/replayExport.ts) and discussed line by line.

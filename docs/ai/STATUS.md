@@ -1,7 +1,27 @@
 # Status (update at the end of every session)
 
-_Last updated: 2026-10-24 (battle-start passive order: kit -> portrait -> support -> crys; before: Kioku Grid ailment bars: 112/305/309 conditions, Max Damage enemies carry Weakness/Stun); before: 2026-10-15 (game 3.21.0: dumped + decompiled by Claude on Windows, engine re-ported to 3.21.0; branch claude/version-3.21.0); before: 2026-10-14 (Max Damage + Kioku Grid bench on the 1:1 engine); before: 2026-10-10 (1:1 port in src/engine started); before: 2026-10-03 (passive states per giver, UP_HP_FIXED max HP; earlier: duplicate active-skill states); before: 2026-10-02 (game 3.19.1: version diff + newsletter, Magic Seal, break/notice team conditions, IMM_SLIP_DMG burst; branch claude/version-3.19.1)._
+_Last updated: 2026-10-24 (3): second-generation engine and Fight Solver removed (branch `remove-gen2`); before: 2026-10-24 (battle-start passive order: kit -> portrait -> support -> crys; before: Kioku Grid ailment bars: 112/305/309 conditions, Max Damage enemies carry Weakness/Stun); before: 2026-10-15 (game 3.21.0: dumped + decompiled by Claude on Windows, engine re-ported to 3.21.0; branch claude/version-3.21.0); before: 2026-10-14 (Max Damage + Kioku Grid bench on the 1:1 engine); before: 2026-10-10 (1:1 port in src/engine started); before: 2026-10-03 (passive states per giver, UP_HP_FIXED max HP; earlier: duplicate active-skill states); before: 2026-10-02 (game 3.19.1: version diff + newsletter, Magic Seal, break/notice team conditions, IMM_SLIP_DMG burst; branch claude/version-3.19.1)._
 
+
+## 2026-10-24 (3): second-generation engine and Fight Solver removed (branch `remove-gen2`)
+
+- User decision: drop the Fight Solver (hidden PvE Simulator panel, `localStorage.solver = "show"`) rather than port
+  it, and remove the second-generation "best effort" engine it was the last runtime user of.
+- Deleted: `src/models` PvPTeam, PvPBattle, UnitStateEngine, DamageCalculator, AITargetSelector, BreakPoint,
+  StateInterfaces, BattleClone, FightSolver* (+ `components/FightSolver.vue`, `workers/fightSolverWorker.ts`); the old
+  `computeMaxDamage` (MaxDamage.ts), `createPvEBattle` / `enemyKiokus` (PvEBattle.ts), the enemy AI in PvE.ts
+  (`EnemyKioku`, `enemyParams`, `selectEnemySkill`), the live condition checker in BattleConditionParser.ts and
+  `BattleState` (KiokuTypes.ts); scripts checkFixtures, checkMechanics, compareEngines, compareFormula, fightSolve,
+  maxDamageEngine, replayExport, runPvE, runPvp, smokeNew, solvePvE, .probe_tieprio; `debugging/solver-case/`.
+  PvE page: solver buttons / hand-off; BattleTimeline's per-action button; `EngineBattle.applyControl` /
+  `aiTargetSides`.
+- Moved: `BattleType` -> `types/enums.ts`; `RaidCarry` -> `battle/EngineBattle.ts`; `friendlySkills` / `enemySkills` +
+  `isFriendlyEffect` / `isOpponentEffect` -> `models/EffectSide.ts`; `src/models/*.md` notes -> `docs/ai/legacy/`.
+- Verify: vue-tsc 242 -> 222 (only change: the moved `BattleType` const enum's erasableSyntaxOnly error now in
+  enums.ts); engine tsc 0; checkFixturesEngine 16/16.
+- Follow-up: `xq` engine coverage (EFFECT_TYPES.md "TS" column, `xq effect` "TS engine references") still scans
+  `src/models` + `src/utils`, so after `xq build` most types read MISSING. It needs to read coverage from `src/engine`
+  (factory entries / `notPorted` methods) before VERSION_UPDATE.md step 6 can use it.
 
 ## 2026-10-24 (2): battle-start passive order (Structure Destruction's starting MP)
 
@@ -183,10 +203,8 @@ Findings for src/models: MathExtension.Floor scale (PITFALLS), RegisterSpecialAt
 
 | ref | state |
 |---|---|
-| `claude/version-3.19.1` | **Checked out 2026-10-02**, branched from main 7fb9730 (= origin/main; the 2026-10-01 branches claude/verify-priority-3.19, claude/actor-skill-type-3.19 and battle-engine-3.19 are merged and no longer exist locally). 3.19.1 work: verdiff.py / disasm.py / smokeNew.ts / VERSION_UPDATE.md runbook, LOCK_SPECIAL_ATTACK, conditions 22/206/207/313-316, BreakedDamageReceiveRate starts at 0, IMM_SLIP_DMG instant DOT burst. Fixtures 6/6, checkMechanics 18/18 (#10-#14 new, each fails without its change), type-check 229 = baseline set. Not pushed; for the user to merge. |
-| `claude/version-3.19.11` | **Checked out 2026-10-07**, branched at 1f3e518 (= main). 3.19.11 report + newsletter, `verdiff.py runs`, docs. No engine change (battle code identical to 3.19.0). Fixtures 10/10, checkMechanics 19/19, type-check 230. Not pushed. |
-| `claude/version-3.21.0` | **Checked out 2026-10-15**, branched from claude/engine-1to1 43e093e (the checked-out branch; clean tree). 3.21.0 report + player newsletter, metadata identifier diff, engine re-ported to 3.21.0 (Step-Up, CONSUME_SELF_HP, Link Raid linked HP, Magic Seal AI), new tools meta_idents / decdiff / fields_check / merge_members / ledger --apply-moves, checkEngine321.ts. Not pushed; merge after claude/engine-1to1. |
-| `main` | = origin/main 7fb9730 on 2026-10-02. |
+| `main` | = origin/main 0643b138 on 2026-10-24. The `claude/*` branches (engine-1to1, engine-best-team, version-3.19.1, version-3.19.11, version-3.21.0) are all merged into it. |
+| `remove-gen2` | 2026-10-24, from main 0643b138: second-generation engine + Fight Solver removed (entry above). |
 
 `docs/ai/EFFECT_TYPES.md` is committed per branch (its header says which); rebuild with `xq build` after switching
 branches or changing the engine. On battle-engine-3.19 `xq build` still lists UNIQUE_BUFF / UNIQUE_DEBUFF /

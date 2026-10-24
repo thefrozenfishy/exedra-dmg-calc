@@ -6,8 +6,9 @@ from the 3.21.0 client (first ported from 3.19.0). When a patch changes the game
 again, nothing else. Do not restructure, merge methods, "simplify" control flow or substitute an existing
 `src/models` rule for the game's code. If something looks odd in the game, port it anyway and say so in a comment.
 
-`src/models` (PvPBattle, PvPTeam, UnitStateEngine...) is the older engine organised its own way. It stays in use
-until this port runs whole battles and matches the fixtures; new game rules go here.
+Every battle in the app runs on this port (through `src/battle/*`). The older engine that organised the rules its own
+way (`src/models` PvPBattle, PvPTeam, UnitStateEngine...) was removed on 2026-10-24; its notes are in
+`docs/ai/legacy/`. New game rules go here.
 
 ## Layout and naming (generated, keep it)
 

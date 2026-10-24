@@ -15,7 +15,7 @@
 // (the dummies never die mid-skill), additional-damage crit (the game decides which hits can crit).
 import { computeMaxDamageEngine } from "./EngineMaxDamage"
 import { customStage, AILMENT_STATE } from "./EngineBench"
-import { BattleType } from "../models/DamageCalculator"
+import { BattleType } from "../types/enums"
 import type { MaxDmgOptions } from "../models/MaxDamage"
 import type { PvPKioku } from "../models/PvPKioku"
 import { TargetType } from "../types/KiokuTypes"

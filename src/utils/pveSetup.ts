@@ -6,7 +6,7 @@
 // Shared setups come from other users, so `sanitizePvESetup` coerces everything into range. It must return the
 // page's own state unchanged, because saved teams compare the two to know whether the page matches the team.
 import type { RngDecision, RngKind, RngMode } from "../models/BattleRng"
-import type { RaidCarry } from "../models/PvPBattle"
+import type { RaidCarry } from "../battle/EngineBattle"
 import { QUEST_CATEGORY_NAMES, questStages } from "../models/PvE"
 import { getScoreAttackStage } from "../models/PvEScore"
 import questGroupJson from "../assets/base_data/getQuestGroupMstList.json"

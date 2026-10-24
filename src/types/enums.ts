@@ -239,3 +239,14 @@ export const otherBuffsAndDebuffs = {
     CONSUME_SELF_HP: "CONSUME_SELF_HP", 
     STEP_UP_SKILL: "STEP_UP_SKILL"
 };
+
+// BattleType - Network.Definition.Battle.BattleType (dump.cs)
+export const enum BattleType {
+    Solo = 1,
+    Pvp = 2,
+    Gve = 3,
+    Gvg = 4,
+    Exploration = 5,
+    ScoreAttack = 6,
+    Simulation = 7,
+}

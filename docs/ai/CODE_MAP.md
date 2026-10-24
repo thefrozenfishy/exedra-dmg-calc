@@ -1,108 +1,59 @@
-# TS engine code map
+# TS code map
 
 **`src/engine/` (the 1:1 port)** needs no map: it mirrors the game's namespaces and classes
 (`src/engine/ReDriveBattleCore/Act/ActReferee.ts` = `ReDriveBattleCore.Act.ActReferee`), and
-`python3 scripts/engine/ledger.py --class <Class>` / `--rva <rva>` locate any game method. The rest of this file
-maps the older engine in `src/models`.
+`python3 scripts/engine/ledger.py --class <Class>` / `--rva <rva>` locate any game method. The app reaches it only
+through the bundle (`src/engine/dist/engine.js`, built by `npm run engine`) via `src/battle/engineBundle.ts`.
 
-## src/models (older engine, own structure)
+The second-generation engine that used to live in `src/models` (`PvPTeam`, `PvPBattle`, `UnitStateEngine`,
+`DamageCalculator`, `AITargetSelector`, `BreakPoint`, `createPvEBattle`, the old `computeMaxDamage`, the Fight Solver)
+was removed on 2026-10-24 (branch `remove-gen2`). Its notes are in `docs/ai/legacy/`. Don't bring game rules back
+into `src/models`: new game logic goes into `src/engine`.
 
-Function names, not line numbers (lines drift). Find any symbol with `python3 scripts/ai/xq.py ts <name>`
-(add `--branch battle-engine-3.19` when another branch is checked out). Described as on branch
-`battle-engine-3.19` (main has an older subset, see STATUS.md).
+Find any symbol with `python3 scripts/ai/xq.py ts <name>`.
 
-## Files
+## src/battle (app side of the 1:1 engine)
 
-| File | Game counterpart | Contents |
-|---|---|---|
-| `PvPBattle.ts` | GameDirectorBase / TurnActSystem | Battle driver. ctor = InitializeBattle (setup, gauge reset, battle-start passives). `executeNextAction()` = one turn/ultimate -> snapshots. Waves, start-timing acts, endless supply, form change, manual ultimate window, Solo Raid attempt state (stash). |
-| `PvPTeam.ts` | BattleUnit, UnitCondition, ActExecutor, AbilityEffects | `KiokuState` (= BattleUnit: HP, gauge, states, break, EP/"MP", turnNum) and `PvPTeam` (a side: turn flow, targeting, passive dispatch, follow-ups, summons, link HP, mode change). `KiokuState.applyEffect` is **the effect dispatcher**. |
-| `PvPKioku.ts` | CharacterParameter + PassiveSkills list | Builds a character's effect list from kioku_data (+crys, ascension, portrait, support). `effects` (stat order: crys first) and `triggerOrderEffects` (ability -> crys -> rest). |
-| `PvE.ts` | QuestEnemyAppearanceParameter, WaveReferee, EnemyConditionAndActionController, UnitBrain | Enemy units (`EnemyKioku`, `enemyParams`), stage/wave tables, summons templates, mode change infos, enemy skill choice `selectEnemySkill`, `startTimingSkills`. |
-| `PvEBattle.ts` | SoloGameDirectorBase setup | `createPvEBattle(allies, stageId, seed, firstWave, opts)`, `stageBattleType`. |
-| `DamageCalculator.ts` | BattleDamageCalculator | `getAttackDamageResult` = GetAttackDamageResult pipeline (each step its own exported fn), `getSlipDamageResult` (DOT), `getAdditionalDamageBase`, barrier/shield cuts, `PVP_POLICY`, `BattleType` enum. |
-| `BattleMath.ts` | System.Decimal (.NET Core DecCalc) | `CsDecimal` exact decimal: `dec.float(x)` = (decimal)float (7 sig digits), `dec.int`, `.mul/.div/.add/.sub/.ceil/.floor/.toFloat()`. |
-| `UnitStateEngine.ts` | BattleUnit.GetProcessedX, UnitStateBase.GetProcessedProbability, HpRecoveryCalculator, EpCharger | Stat processing (ATK/DEF/SPD decimal, crit f32, give/receive/element/weak/shield/final-damage variations), state-add roll `rollAppliesEffect`, heal/EP rates, accum merge `mergeAccumEffect`, `isEligibleForEffect` (CanAddTo), `getMaxComboActionNum`, `getThreatWeight`. |
-| `BattleConditionParser.ts` | BattleCondition.* checkers | Enums `ProcessTiming`, `CompareContent`, `CompareOperator`, `CompareTarget`; `checkUnitCondition` / `checkTeamCondition` / `checkOtherCondition` (one `case` per content), `isMatchCondition` (target dispatch), `isConditionSetActive*`. |
-| `BreakPoint.ts` | BreakPoint, DamageAbilityEffectBase break parts | Break decrease tables, `calculateProcessedBreakPointDamage`, `decreaseBreakPoint`, `increaseBreakedDamageReceiveRate`, `SkillType`. |
-| `AITargetSelector.ts` | AISkillTargetSelector, UnitBrain.TargetingUnits | Unit filters (`filterByBreak`, `filterWithMaxAtk`, role weights, hate), `selectTargetUnitInOrder`, per-effect filter orders. |
-| `BattleRng.ts` | (sim only) | Every random decision: modes seed/hit/miss/weighted/manual, `chance`, `choose`, `pickTarget`, `PendingDecision` (manual PvE picks), recorded `RngEvent`s. Subclasses can override `draw(kind, label)` (the seed-mode uniform draw); `PvPBattle` takes one via `BattleOptions.rng`. |
-| `EffectTargetSide.ts`, `StateAddFilter.ts` | generated from the dump | Target side per effect type; CanAddTo role/element filter class per state. Regenerate, don't hand-edit. |
-| `MaxDamage.ts`, `PvEScore.ts` | - | Max-damage estimate page, score estimate. `computeMaxDamage(..., { onlyPos })` evaluates one member only; enemy buffs/debuffs land by range around `mainTargetIdx`. Tier ladders (`MaxDmgEffect.tier`, `assignTiers`): one rung per ladder, the strongest that is on (`tierUsed` marks the others); RCV_FINAL_DAMAGE added per enemy after the skill. |
-| `ConditionTiers.ts` | - | `conditionCsvsExclusive`: static check that two active-condition csvs can never hold together (same target/content/"pid," prefix, disjoint value ranges; 401 ignored). [APPROXIMATION], conservative. |
-| `LuxBench.ts` | - | Kioku Grid beta charts: Lux☆Magica (max levels; A5 dealer / reference dealer, A0 fillers) bench against 3000-DEF dummies (weak to all, broken 500%, SPD 0.1). `ultimateDamage` (Max Burst via computeMaxDamage), `simulatedDealerDamage` (auto battle for N AV, counts only the dealer slot's `hit`/`dot` events by `sourcePos`, minus popped `vortex`; per-label RNG streams `LabelStreamRng`), `kitRestrictions` (elements/roles a kit's effects are limited to, ailments its conditions react to; ailment variants keep that ailment on every dummy; Average Damage makes the dummies immune to the kit's other ailments, `benchImmunities`), `LuxBenchCharts` (support/attacker gains, baselines cached). Run in `src/workers/luxBenchWorker.ts`. |
-| `ScoreAttackTeam.ts`, `ScoreAttackKioku.ts`, `Kioku.ts`, `BestTeamCalculator.ts` | - | The OLD closed-form Score Attack calculator (Best SA Team / Single Battle pages). Not the engine. Useful hints only. `Kioku.ts` is the base class of PvPKioku (stats). |
+| File | Contents |
+|---|---|
+| `EngineBattle.ts` | Runs one battle like the client (`ClientDriver.runBattleLikeClient`): setup kinds pvp / quest / soloRaid / multiRaid, `executeNextAction()` -> `BattleSnapshot`s, manual control (`BattleRng.pick`, `PendingDecision`), `RaidCarry` (Solo Raid attempt carry-over). |
+| `EngineRandom.ts` | Routes the engine's `GameRandom` hook through a `BattleRng` (page RNG modes, roll log). |
+| `EngineMaxDamage.ts` | Max Damage on the engine: `computeMaxDamageEngine` (result shape in `models/MaxDamage.ts`). |
+| `EngineBench.ts`, `EngineTeamScore.ts` | Kioku Grid bench battles; Best SA Team scoring. |
+| `engineBundle.ts` | `E`: the bundled engine module. |
 
-Type lists at the top of `PvPTeam.ts`: `friendlySkills` / `enemySkills` (effect types by side, the "RECOGNIZED ONLY"
-comment there predates 3.19 and is outdated), `ALIMENT_PREFIXES`, `ACCUM_RATIO_EFFECT_TYPES`. Being listed there is
-not an implementation (`xq effect` marks such types "LISTED ONLY").
+## src/models (app helpers, no battle rules)
 
-Types: `src/types/KiokuTypes.ts` (`SkillDetail`, `TargetType` = "SpecialAttack"/"ActiveSkill"/"NormalAttack"/
-"AdditionalSkill"/"INIT", `targetRange` SELF -1 / TARGET 1 / PROXIMITY 2 / ALL 3, `BattleState`, `AffectedUnitNotice`,
-`BattleSnapshot`, `BattleEvent`), `src/types/enums.ts` (Ailment, elements, roles).
+| File | Contents |
+|---|---|
+| `PvPKioku.ts`, `Kioku.ts` | A character's build (kioku_data + crys, ascension, portrait, support) and its effect list; the unit input for every calculator (`src/engine/adapter/NetworkUnits.ts` reads it). |
+| `PvE.ts` | Stage / wave / enemy / raid master data (`stageWaves`, `stageWaveMeta`, `summonTemplates`, `soloRaidInfo`, `multiRaidInfo`, names). |
+| `PvEBattle.ts`, `PvEScore.ts` | `stageBattleType`, `waveStartUnits`; Score Attack stage lookup. |
+| `MaxDamage.ts` | Max Damage's effect list (`collectTeamEffects`, tier ladders `MaxDmgEffect.tier`) and option / result types. |
+| `BattleConditionParser.ts`, `ConditionTiers.ts` | Static questions about condition csvs (skill-type restriction, element / role, ailments, unit counts, crit) and mutually exclusive csvs; the old single-hit model's pre-filters. No live evaluation. |
+| `EffectSide.ts`, `EffectTargetSide.ts`, `StateAddFilter.ts` | Effect side per type (generated table + hand lists); CanAddTo filter class per state (generated). |
+| `BattleRng.ts` | Every random decision of a simulated battle: modes seed/hit/miss/weighted/manual, `chance`, `choose`, `pickTarget`, `PendingDecision`, recorded `RngEvent`s. |
+| `BattleMath.ts` | `CsDecimal` exact decimal (.NET Core DecCalc), `seededRng`; also used by `src/engine/runtime.ts`. |
+| `LuxBench.ts`, `EngineBestTeam.ts`, `EngineTeamPool.ts` | Kioku Grid bench; Best SA Team search and its worker pool. |
+| `ScoreAttackTeam.ts`, `ScoreAttackKioku.ts`, `BestTeamCalculator.ts` | The first-generation closed-form Score Attack model (Old Single Hit Calc, Old Best SA Team Calculator). `ScoreAttackKioku` is also the stats / effect-list object of Kioku Setup, Kioku Grid and Best SA. |
+| `HeartphialExp.ts`, `PowerValue.ts`, `AccountSimilarityScore.ts` | Page helpers. |
+
+Types: `src/types/KiokuTypes.ts` (`SkillDetail`, `TargetType`, `targetRange`, `BattleSnapshot`, `BattleEvent`),
+`src/types/enums.ts` (Ailment, elements, roles, `BattleType`).
 Data access: `src/utils/helpers.ts` (`kiokuData`, `skillDetails`, `skillDetailsByMstId`, `passiveDetails`,
 `passiveDetailsByMstId`, `crystalises`, `portraits`...).
-
-## One turn, as the engine runs it
-
-```
-PvPBattle.executeNextAction()
-  opening (first call only): battle-start follow-ups (triggerFua), enemy start-timing acts (runStartTimingAction)
-  team2.useUltimate() / team1.useUltimate()  (manual: manualUltimateWindow)      -> SpecialAttackAct, no turn tick
-  else traverseToNextActor()  (TurnReferee.ShiftNextTurn: subtract min gauge time, compareTurnOrder)
-       actorTeam.useAttackOrSkill()                                               = TurnBeginAct+TurnUnitAct+TurnEndAct
-          actor.exitBreak(); actor.tickHotEffects()                               (TurnBegin: break recovery, HoT)
-          fireTiming(TURN_START)
-          actor.resetDistanceRemaining()                                          (gauge reset before the act)
-          for each combo step (getMaxComboActionNum):
-             enemy: selectEnemySkill(...) ; ally: SP -> skill else basic (manual: chooseAllyAction)
-             performAction(actor, type)
-                resetActionTallies(); act() -> completeAction(details) -> per detail: sliceTargets + applyEffect per target
-                fireTiming(ATTACK_END, ..., recordAction = snapshot) ; triggerFua(follow-ups)
-                pendingBonusTurns (RE_ACTION_TURN_UNIT_ACT extra actions) loop
-  (next call) PvPBattle.runQueuedAdditionalTurn(): queued ADDITIONAL_TURN_UNIT_ACT turns, before ultimates
-          fireTiming(TURN_END); triggerCutoutAtTurnEnd(); decrementActiveEffects(); actor.turnNum++   (PassingTurn)
-  resolveEndOfTurn(); formChange()
-fireTiming(timing): both teams applyPassivesForTiming(timing) then AFTER_PROCESS, recomputeDerivedStats, follow-ups.
-```
-
-## Where to hook a new mechanic
-
-| Kind of mechanic | Hook |
-|---|---|
-| New **stat-modifying state** (ATK/DEF/SPD/crit/give/receive/resist...) | `UnitStateEngine.ts`: the matching `atkDefUp/Down`, `critUp/Down`, `GIVE_DMG_CLASSES` / `RECEIVE_DMG_CLASSES`, `getProcessedElementResistRate`... Keep Up pass then Down pass. |
-| New **instant ability effect** (heal, EP, haste, remove, summon...) | `KiokuState.applyEffect` in PvPTeam.ts: add a branch near similar ones (`=== "HASTE"`, `RECOVERY_HP`, `COUNTDOWN_START`...). Return a skill id to queue a follow-up. |
-| New **state with behaviour** (timed buff/debuff stored on the unit) | falls through to `storeTimedEffect` / `storePermanentState` (roll, merge, `updateSpd`); special behaviour where it acts (damage step, turn end, removal hooks `onStateRemoved`). |
-| Something that happens **per damage hit** | `applyEffect` `DMG_` branch (final damage, break, countdown, mode-change cut). Pipeline math in `DamageCalculator.getAttackDamageResult`. |
-| Something that happens **once per skill launch** (after all its effects) | `PvPTeam.launchSkill` (AbilityEffectLauncher.Triggering): `KiokuState.additionalDamageAfterLaunch` (ADDITIONAL_DAMAGE / TSUBAME_LINK), `regainAfterLaunch`. While it runs, `activeLaunch` (actor, skill type, team) is what every unit's state conditions see (IsActor, ActorSkillType, MainTarget). EachTarget is separate: `eachTargetCtx` set by `withEachTarget(user, target)` in `KiokuState.applyEffect` (wraps `applyEffectToTarget`), the heal loop and `additionalHit`; only the user's states see it (`unitStateCheckState`). |
-| New **condition content** | `BattleConditionParser.ts`: add to `enum CompareContent` (names from `xq enum CompareContent`) and a `case` in the unit/team/other checker matching the game checker's case. |
-| New **timing** or passive trigger rule | `PvPTeam.fireTiming` / `applyPassivesForTiming`; battle-start order in `PvPKioku.triggerOrderEffects`. |
-| **Enemy AI** / stage rules | `PvE.ts` (`selectEnemySkill`, `enemyParams`), `PvPTeam` (summon, link HP, mode change), `PvPBattle` (waves, start acts). |
-| **Targeting** | `PvPTeam.sliceTargets`, `AITargetSelector.ts`, `actionPrimaryTargets` (one opponent + one friendly target per skill). |
-| **Random** anything | Always through `this.team.rng` / `rollChance` / `rollChoice` with a readable label (manual mode and exports depend on it). Never `Math.random()`. |
-
-Conventions: comment every game rule `// [CONFIRMED 3.19] Class.Method (0xRVA): what it does`; `[UNCERTAIN]` /
-`[APPROXIMATION]` otherwise. `f32 = Math.fround` for float32 steps. Keep the game's evaluation order even when
-it looks redundant.
-
-- New state that blocks something (Magic Seal): `KiokuState.canAddTo` (CanAddTo), a getter like
-  `canNotUseSpecialAttack`, the gate (`readyUltimates`), and its AI chain in `AITargetSelector.CHAIN_BY_EFFECT_TYPE`.
-- New team/unit condition content: `BattleConditionParser.ts` (`checkTeamCondition` / unit switch); notice-based
-  team counts read each unit's `lastNotice` (one per unit per skill; `noteAddedState` feeds 315/316).
-- New instant ability effect (no state): a branch in `applyEffectToTarget` before `if (detail.turn)` (e.g.
-  IMM_SLIP_DMG); otherwise it falls to the "Active without turn" warning and does nothing.
 
 ## Pages and UI
 
 | Route | Page | Engine use |
 |---|---|---|
-| `/pvp-simulator` "PvP Simulator" | `src/pages/PvpTeamPage.vue` | PvPBattle; RNG modes (`RngControls.vue`), export/import (`src/utils/pvpExport.ts`), `BattleTimeline.vue` |
-| `/pve-simulator` "PvE Simulator" (beta only: `isBeta()` in `src/utils/betaSettings.ts`, toggled on `/beta`) | `src/pages/PvESimulatorPage.vue` | createPvEBattle, stage picker (`StagePicker.vue`), Auto/Manual control, Solo Raid panel (stash); saved/shared teams (`store/savedTeams.ts`, kind `pve`) carry the whole setup incl. decisions (`utils/pveSetup.ts`); Max Damage runs against the wave's start units only (`waveStartUnits`: endless waves list backups beyond 5), effect cards are grouped by `MaxDmgEffect.source` (passives resolved to Ability/Ascension/Crystalis/Portrait/Support) and use `utils/effectText.ts` + `MaxDmgEffect.reach`; RNG mode `weighted` = rolls happen iff p >= 50% |
-| `/sa-simulator-single` "Single Battle Calculator" | `SingleTeamPage.vue` | OLD ScoreAttackTeam formula (restored on user request, keep it) |
-| `/kioku-grid` "Kioku Grid" | `KiokuGridPage.vue` | Legacy bar charts use the OLD formula; beta-only (`isBeta()`) "(battle engine)" copies use `LuxBench.ts` in one worker per chart (`luxBenchWorker.ts`): Max Burst first, then Average Damage (Length toggle 5/10/100 turns, SP refilled, one expected-crit battle or 10 seeds when other RNG / crit reads, play patterns for Tenebrous Arcana / Thunder Torrent) per character; results cached per character in localStorage (`utils/luxBenchCache.ts`, bump `LUX_BENCH_VERSION` when the numbers change) |
-| `/sa-simulator-multiple` "Best SA Team Calculator" | `BestTeamPage.vue` | 1:1 engine: `models/EngineBestTeam.ts` + `battle/EngineTeamScore.ts`, worker pool `models/EngineTeamPool.ts` (`maxDamageWorker.ts` "teams") |
-| `/sa-simulator-multiple-old` "Old Best SA Team Calculator" | `OldBestTeamPage.vue` | OLD formula (`findBestTeam`) + `BestTeamWorker.js` |
+| `/pvp-simulator` "PvP Simulator" | `src/pages/PvpTeamPage.vue` | `EngineBattle` (pvp / gvg); RNG modes (`RngControls.vue`), export/import (`src/utils/pvpExport.ts`), `BattleTimeline.vue` |
+| `/pve-simulator` "PvE Simulator" | `src/pages/PvESimulatorPage.vue` | `EngineBattle` (quest / soloRaid / multiRaid), stage picker (`StagePicker.vue`), Auto/Manual control, Solo Raid attempts, Max Damage (`maxDamageWorker.ts` -> `computeMaxDamageEngine`) |
+| `/sa-simulator-multiple` "Best SA Team Calculator" | `BestTeamPage.vue` | `models/EngineBestTeam.ts` + `battle/EngineTeamScore.ts`, worker pool `models/EngineTeamPool.ts` (`maxDamageWorker.ts` "teams") |
+| `/kioku-grid` "Kioku Grid" | `KiokuGridPage.vue` | Bench charts via `LuxBench.ts` in one worker per chart (`luxBenchWorker.ts`) |
+| `/sa-simulator-single` "Old Single Hit Calc" | `SingleTeamPage.vue` | First-generation `ScoreAttackTeam` formula |
+| `/sa-simulator-multiple-old` "Old Best SA Team Calculator" | `OldBestTeamPage.vue` | First-generation formula (`findBestTeam`) + `BestTeamWorker.js` |
 
 Exports: PvP `format` default, PvE `format: "exedra-pve-sim"`; both carry teams, seed, rngMode, decisions,
-readable `sequence` / `decisionLog`, `notes`. `scripts/sim/replayExport.ts` replays both;
-`scripts/sim/fixtures/*.json` are exports checked in game (the `notes` say what the game does).
+readable `sequence` / `decisionLog`, `notes`. `scripts/sim/fixtures/*.json` are exports checked in game (the `notes`
+say what the game does); `npx tsx scripts/sim/checkFixturesEngine.ts` asserts them on the engine.

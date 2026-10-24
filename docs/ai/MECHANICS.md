@@ -1,11 +1,15 @@
 # Confirmed game mechanics (3.19.0) - the cache
 
+> Code names like `PvPTeam.*`, `PvPBattle.*`, `UnitStateEngine.ts`, `DamageCalculator.ts`, `AITargetSelector.ts` below
+> point at the second-generation engine removed on 2026-10-24 (git history before branch `remove-gen2`). The game
+> facts stay valid; the code now lives in `src/engine` under the game's own class names.
+
 3.19.1 (2026-09-27) has byte-identical GameAssembly code: every RVA here is valid for both (docs/versions/3.19.1).
 
 Every line is from the decompile unless tagged. **[C]** confirmed in code, **[D]** from master data,
 **[G]** confirmed by an in-game fixture, **[?]** inferred/unverified. RVAs are for 3.19.0 (`xq rva`, `xq fn`).
 "TS:" = where the engine implements it. When you confirm something new, add it here in the same style.
-Longer derivations: `src/models/PVE_PARAMS_3.19.md`, `PVE_ENEMY_AI_3.19.md`, `MISSING_AND_UNCERTAIN.md` (R5-R9).
+Longer derivations: `docs/ai/legacy/PVE_PARAMS_3.19.md`, `PVE_ENEMY_AI_3.19.md`, `MISSING_AND_UNCERTAIN.md` (R5-R9).
 
 ---------------------------------------------------------------------------------------------------------
 ## 1. Number types (the source of most off-by-one bugs)

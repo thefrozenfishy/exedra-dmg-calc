@@ -1,43 +1,11 @@
 import battleConditionSetsJson from '../assets/base_data/getBattleConditionSetMstList.json';
 import battleConditionsJson from '../assets/base_data/getBattleConditionMstList.json';
-import { BattleState, PassiveSkill, SkillDetail } from '../types/KiokuTypes';
-import { KiokuState, PvPTeam, isAlimentEffect } from './PvPTeam';
-import { BattleRng } from './BattleRng';
 import { Ailment, KiokuElement, KiokuRole, elementMap, roleMap } from '../types/enums';
 
-/**
- * BattleConditionParser.ts
- * =========================
- * REWRITE grounded in the actual decompiled condition-checking classes, which were not
- * available when this file was first written. Specifically:
- *
- *   - ReDriveBattleCore.BattleCondition.BattleConditionUtils.Condition$$IsMatchCondition
- *     - the real DISPATCHER. It switches on CompareTarget and constructs one of three
- *       checker objects depending on the value, each of which only understands its own
- *       subset of CompareContent values. The original version of this file had ONE
- *       big if-chain that didn't distinguish CompareTarget at all (every condition was
- *       checked against whatever `target`/`actor` happened to be passed in) - that's the
- *       main reason conditions were "triggering at the wrong time" / not at all.
- *   - ReDriveBattleCore.BattleCondition.BattleUnitConditionChecker$$Check - per-unit
- *     conditions (CompareContent 1-25, 101-110).
- *   - ReDriveBattleCore.BattleCondition.BattleUnitTeamConditionChecker$$Check -
- *     team-wide conditions (CompareContent 201-210, 301-309).
- *   - ReDriveBattleCore.BattleCondition.BattleOtherConditionChecker$$Check - the
- *     remaining two (401 ACTOR_SKILL_TYPE, 402 COMBO_ACTION_STEP).
- *   - ReDriveBattleCore.BattleCondition.{Int,Float,Bool,AbilityEffectList}ValueComparer
- *     $$Compare - the exact per-type comparison semantics for each CompareOperator.
- *
- * CONFIDENCE: every case below is annotated [CONFIRMED] (read directly, unambiguous -
- * these are plain int/bool comparisons and field reads, none of the System.Decimal
- * operand-order ambiguity that plagued DamageCalculator.ts), [RECONSTRUCTED] (shape is
- * clear, some supporting piece like a lambda predicate's exact body wasn't traced), or
- * [NOT IMPLEMENTED] (recognized as a real CompareContent the source handles, but this
- * port doesn't have the underlying data/mechanic to evaluate it yet - falls through to
- * `false`, matching the source's own default-case behavior for content it doesn't
- * handle in a given checker).
- *
- * See MISSING_AND_UNCERTAIN.md for the consolidated list of open items.
- */
+// Battle condition master data (BattleConditionMst / BattleConditionSetMst) read WITHOUT a running battle: condition
+// descriptions, the old single-hit model's pre-filtering (ScoreAttackTeam), and the static questions Max Damage and the
+// Kioku Grid bench ask of a condition csv (which skill types, elements / roles, ailments, unit counts it needs). Live
+// battles evaluate conditions in the 1:1 engine (src/engine, BattleConditionUtils).
 
 interface BattleCondition {
     battleConditionMstId: number
@@ -62,31 +30,6 @@ const battleConditionSets = Object.fromEntries(
     battleConditionSetsJson.map((item: any) => [item.battleConditionSetMstId, item])
 ) as Record<string, BattleConditionSet>;
 
-
-export enum ProcessTiming {
-    NONE = 0,
-    BATTLE_START = 1,
-    WAVE_START = 2,
-    TURN_START = 3,
-    ATTACK_START = 4,
-    ATTACK_END = 5,
-    TURN_END = 6,
-    WAVE_END = 7,
-    BATTLE_END = 8,
-    AFTER_PROCESS = 9,
-    SEASON_BUFF_ACTIVE = 10, // [CONFIRMED 3.19] Solo Raid: the Labyrinth Vanguard activation phase starts
-}
-
-export const isTimingActive = (startTiming: ProcessTiming, eff: PassiveSkill) => {
-    if (!eff.startTimingIdCsv || eff.startTimingIdCsv === "0") {
-        console.error("Unknown start timing", eff)
-        return false
-    }
-    for (const startTimingId of eff.startTimingIdCsv.split(",")) {
-        if (startTiming === Number(startTimingId)) return true
-    }
-    return false
-}
 
 enum CompareContent {
     NONE = 0,
@@ -233,8 +176,6 @@ Object.values(battleConditions).forEach(c => {
 // raw CompareValue string parsed as a plain number, NOT split on commas here (some
 // specific CompareContent cases parse it themselves beforehand, e.g. EVERY_N_TURN).
 // UniqueUnitStateBase subclasses (UnitStateFactory).
-const UNIQUE_STATE_TYPES = new Set(["UNIQUE_BUFF", "UNIQUE_DEBUFF", "UNIQUE_BUFF_ACCUM", "UNIQUE_DEBUFF_ACCUM",
-    "UNIQUE_ELEMENT_STACK", "UNIQUE_ELEMENT_BREAK", "UNIQUE_ZONE", "UNIQUE_ENEMY_639002"])
 
 function compareInt(op: CompareOperator, leftValue: number, compareValueStr: string): boolean {
     const rightValue = Number(compareValueStr);
@@ -248,18 +189,11 @@ function compareInt(op: CompareOperator, leftValue: number, compareValueStr: str
         default: return false;
     }
 }
-const compareFloat = compareInt; // [CONFIRMED] identical shape in the decompiled source
 
 // [CONFIRMED] ReDriveBattleCore.BattleCondition.BoolValueComparer$$Compare - ONLY
 // EQUAL/NOT_EQUAL are implemented; every other operator (including GREATER/LESS, which
 // wouldn't make sense for a bool) returns false. rightValue is
 // `compareValue == "TRUE"` (case-sensitive exact match).
-function compareBool(op: CompareOperator, leftValue: boolean, compareValueStr: string): boolean {
-    const rightValue = compareValueStr === "TRUE";
-    if (op === CompareOperator.EQUAL) return leftValue === rightValue;
-    if (op === CompareOperator.NOT_EQUAL) return leftValue !== rightValue;
-    return false;
-}
 
 // [CONFIRMED] ReDriveBattleCore.BattleCondition.AbilityEffectListComparer$$Compare (+
 // its two lambda predicates b__1_0/b__1_1): CONTAIN = leftValue.Any(x =>
@@ -400,515 +334,6 @@ export const isActiveConditionRelevantForScoreAttack = (activeConditionSetId: st
     return true
 }
 
-export const conditionSetRequiresActorIsSelf = (eff: SkillDetail) =>
-    eff.startConditionSetIdCsv.length && eff.startConditionSetIdCsv.split(",").some(conditionSetId => {
-        if (!conditionSetId.length || conditionSetId === "0") return true
-        const battleConditionSet = battleConditionSets[conditionSetId]
-        return battleConditionSet.battleConditionMstIdCsv.split(",").some(condId => condId === "3")
-    })
-
-// ---------------------------------------------------------------------------
-// Per-unit conditions (CompareContent 1-25, 101-110)
-// ---------------------------------------------------------------------------
-// [CONFIRMED] ReDriveBattleCore.BattleCondition.BattleUnitConditionChecker$$Check.
-// `battleUnit` is whichever unit CompareTarget resolved to (see isMatchCondition's
-// dispatcher below) - NOT necessarily `state.target` the way the original file assumed.
-// Every state on the unit: timed (activeEffectDetails) and permanent (passiveEffectDetails, e.g. an enemy's
-// "cannot be removed" LOCK_TURN_ORDER). The game keeps both in one UnitCondition state list.
-const unitStates = (u: KiokuState) => [...u.activeEffectDetails.values(), ...u.passiveEffectDetails.values()]
-// Every stored state's type, active or not (UnitCondition.StateList, see CompareContent.ABILITY_EFFECT).
-const unitStateTypes = (u: KiokuState): string[] =>
-    [...u.activeEffectDetails.values(), ...u.passiveEffectDetails.values()].map(d => d.abilityEffectType)
-
-function checkUnitCondition(battleUnit: KiokuState, cond: BattleCondition, state: BattleState): boolean {
-    const notice = battleUnit.lastNotice;
-    switch (cond.compareContent as CompareContent) {
-        case CompareContent.HP:
-            return compareInt(cond.compareOperator, battleUnit.currentHp, cond.compareValue);
-        case CompareContent.HP_RATIO:
-            // [CONFIRMED] BattleUnit.CalculationHpRate() = HP*100/MaxHP, computed live
-            // (not the old `currentHpPercent` field, which nothing ever wrote to before
-            // real HP tracking existed).
-            return compareFloat(cond.compareOperator, (battleUnit.currentHp * 100) / battleUnit.maxHp, cond.compareValue);
-        case CompareContent.ATK:
-            return compareFloat(cond.compareOperator, battleUnit.kioku.getBaseAtk(), cond.compareValue);
-        case CompareContent.DEF:
-            return compareFloat(cond.compareOperator, battleUnit.kioku.getBaseDef(), cond.compareValue);
-        case CompareContent.SPD:
-            return compareFloat(cond.compareOperator, battleUnit.currentSpd, cond.compareValue);
-        case CompareContent.EP:
-            return compareInt(cond.compareOperator, battleUnit.currentMp, cond.compareValue);
-        case CompareContent.TURN:
-            // [CONFIRMED 3.19] BattleUnitConditionChecker$$Check case 7 reads BattleUnit.TurnNum
-            // (+0x88): starts at 1, +1 per finished turn - see KiokuState.turnNum.
-            return compareInt(cond.compareOperator, battleUnit.turnNum, cond.compareValue);
-        case CompareContent.IS_ACTOR:
-            // [CONFIRMED shape, RECONSTRUCTED wiring] leftValue = (trueActorUnit != null
-            // && trueActorUnit.Id == battleUnit.Id). This needs `state.trueActorUnit` -
-            // the unit that ACTUALLY performed the current action - which the ORIGINAL
-            // file never threaded through at all (it compared team labels instead,
-            // which is a different and incorrect proxy). See PvPTeam.ts's
-            // trueActorUnit/applyEffect wiring.
-            return compareBool(cond.compareOperator, !!state.trueActorUnit && state.trueActorUnit === battleUnit, cond.compareValue);
-        case CompareContent.IS_MAIN_TARGET:
-            return compareBool(cond.compareOperator, !!state.mainTargetUnit && state.mainTargetUnit === battleUnit, cond.compareValue);
-        case CompareContent.IS_FRIEND:
-            return compareBool(cond.compareOperator, state.actorTeam.kiokuStates.includes(battleUnit), cond.compareValue);
-        case CompareContent.IS_OPPONENT:
-            return compareBool(cond.compareOperator, state.enemyTeam.kiokuStates.includes(battleUnit), cond.compareValue);
-        case CompareContent.ABILITY_EFFECT: {
-            // [CONFIRMED 3.19] BattleUnitConditionChecker.Check (0x17e3f10) content 12: UnitCondition.StateList (every
-            // state the unit holds - from skills and passives, timed and permanent, active or not) mapped to
-            // UnitStateBase.EffectType (lambda b__8_0 0xe0f070), then AbilityEffectListComparer (0x17df400): Contain =
-            // any EffectType StartsWith(CompareValue), NotContain = none. So "CURSE" matches CURSE_ATK/_DEF/_HP/_BREAK;
-            // stun is "STUN", weakness "WEAKNESS", vortex "VORTEX_ATK" (state names = ability effect types).
-            const types = unitStateTypes(battleUnit);
-            return compareAbilityEffectList(cond.compareOperator, types, cond.compareValue);
-        }
-        case CompareContent.EVERY_N_TURN: {
-            // [CONFIRMED] CompareValue parsed as "N" or "N,offset" (offset missing, empty or < 1 -> 1).
-            // True iff TurnNum >= offset AND (TurnNum - offset) % N == 0.
-            const parts = cond.compareValue.split(",");
-            const n = Math.max(1, Number(parts[0]) || 1);
-            const parsedOffset = parts.length > 1 ? Number(parts[1]) : NaN;
-            const offset = Number.isNaN(parsedOffset) || parsedOffset < 1 ? 1 : parsedOffset;
-            const turnNum = battleUnit.turnNum;
-            if (turnNum < offset) return false;
-            return (turnNum - offset) % n === 0;
-        }
-        case CompareContent.CHARACTER:
-            return compareInt(cond.compareOperator, battleUnit.kioku.data.id, cond.compareValue);
-        case CompareContent.HP_GAUGE_COUNT:
-            // [CONFIRMED 3.19] CurrentHpGaugeCount (enemies; characters have none).
-            return compareInt(cond.compareOperator, battleUnit.enemy?.hpGaugeCount ?? 0, cond.compareValue);
-        case CompareContent.IS_BREAK:
-            return compareBool(cond.compareOperator, battleUnit.isBroken, cond.compareValue);
-        case CompareContent.CHARGE_POINT:
-            return compareInt(cond.compareOperator, battleUnit.currentMagic, cond.compareValue);
-        case CompareContent.CAN_NOT_ACTION:
-            // [RECONSTRUCTED] see KiokuState.canNotAction's own header comment for what
-            // is and isn't confirmed here (the field's existence and read site are
-            // confirmed; the exact source set-site and turn-consumption mechanics are not).
-            return compareBool(cond.compareOperator, battleUnit.canNotAction, cond.compareValue);
-        case CompareContent.IS_ELEMENT_TYPE:
-        case CompareContent.IS_ROLE_TYPE: {
-            // [CONFIRMED 3.19] BattleUnitConditionChecker.Check (0x17e3f10) content 19/20:
-            //   new BoolValueComparer(unit.IsMatch(Enum.Parse<TargetElementType|TargetRoleType>(CompareValue)), true)
-            //   .Compare(CompareOperator) -> Equal: IsMatch, NotEqual: !IsMatch, anything else false (0x17e8240).
-            // BattleUnit.IsMatch (0x1388540 element / 0x13884b0 role): "NotSpecified" (0) matches every unit; else only
-            // a CharacterParameter unit (never an enemy) whose element / role equals it. The only NotEqual rows in use:
-            // set 349 (EachTarget is neither Buffer nor Debuffer), skill detail 200600401 DMG_RANDOM.
-            // CompareValue is the enum NAME ("Fire" = Flame, "Neutral" = Void, "Attacker", ...): see conditionElement.
-            const isElement = cond.compareContent === CompareContent.IS_ELEMENT_TYPE
-            const isMatch = cond.compareValue === "NotSpecified" || cond.compareValue === "0" || (!battleUnit.enemy && (isElement
-                ? conditionElement(cond.compareValue) === battleUnit.kioku.data.element
-                : conditionRole(cond.compareValue) === battleUnit.kioku.data.role))
-            return compareBool(cond.compareOperator, isMatch, "TRUE");
-        }
-        case CompareContent.BREAK_DAMAGE_RECEIVE_RATE: {
-            const rate = battleUnit.breakedDamageReceiveRate;
-            return compareFloat(cond.compareOperator, rate, cond.compareValue);
-        }
-        case CompareContent.IS_MAX_BREAK_DAMAGE_RECEIVE_RATE: {
-            // [CONFIRMED 3.19] BattleUnitConditionChecker.Check (0x17e3f10) case 0x16:
-            // (float)Param.MaxBreakedDamageReceiveRate (BattleParameter +0x58) / 10 <= (float)BreakedDamageReceiveRate,
-            // then BoolValueComparer. maxRate: BreakMst (enemies) or the PvP policy (characters).
-            const max = battleUnit.breakParams.maxRate;
-            return compareBool(cond.compareOperator, Math.fround(max / 10) <= battleUnit.breakedDamageReceiveRate, cond.compareValue);
-        }
-        case CompareContent.ABNORMAL_STATE_COUNT: {
-            const count = [...battleUnit.activeEffectDetails.values()].filter(d => isAlimentEffect(d.abilityEffectType)).length;
-            return compareInt(cond.compareOperator, count, cond.compareValue);
-        }
-        case CompareContent.BUFF_COUNT:
-            return compareInt(cond.compareOperator, battleUnit.currentBuffs().length, cond.compareValue);
-        case CompareContent.DEBUFF_COUNT:
-            // [CONFIRMED] the source's b__8_3 predicate excludes Aliment-type states
-            // from DEBUFF_COUNT (they're counted separately under
-            // ABNORMAL_STATE_COUNT) - battleUnit.currentDebuffs() already does this.
-            return compareInt(cond.compareOperator, battleUnit.currentDebuffs().length, cond.compareValue);
-        case CompareContent.HAS_BUFF: {
-            // [CONFIRMED 3.19] BattleUnitConditionChecker$$Check case 0x1a: the unit's
-            // UniqueUnitStateBase states -> UniqueStatePatternMstId (value1) list, compared with
-            // IntListComparer (7 CONTAIN / 8 NOT_CONTAIN). E.g. 2791 "Fuka's unique buff
-            // (Abyssal Rose, 18) is applied". (The old note said the 1.5.0 checker had no case.)
-            const ids = [...battleUnit.passiveEffectDetails.values(), ...battleUnit.activeEffectDetails.values()]
-                .filter(d => UNIQUE_STATE_TYPES.has(d.abilityEffectType))
-                .map(d => d.value1)
-            const v = Number(cond.compareValue)
-            if (cond.compareOperator === CompareOperator.CONTAIN) return ids.includes(v)
-            if (cond.compareOperator === CompareOperator.NOT_CONTAIN) return !ids.includes(v)
-            return ids.some(id => compareInt(cond.compareOperator, id, cond.compareValue))
-        }
-        case CompareContent.UNIQUE_DEBUFF_COUNT: {
-            // [CONFIRMED 3.19] case 0x1b UniqueAbilityEffectAccumCount: "pid,n" -> sum of AccumCount of the unit's
-            // unique accum states with that pattern (plain UNIQUE_BUFF/DEBUFF count 0). No IsActive check.
-            const [pid, n] = cond.compareValue.split(",").map(Number)
-            const sum = unitStates(battleUnit).filter(d => (d.abilityEffectType === "UNIQUE_BUFF_ACCUM" || d.abilityEffectType === "UNIQUE_DEBUFF_ACCUM") && d.value1 === pid)
-                .reduce((a, d) => a + ((d as any)._accumCount ?? 1), 0)
-            return compareInt(cond.compareOperator, sum, String(n))
-        }
-        case CompareContent.CHAIN_LVL: {
-            // [CONFIRMED 3.19] case 0x1f UniqueAbilityEffectLv: "pid,n" -> Lv of the first unique Lv state
-            // (UNIQUE_ELEMENT_STACK/BREAK) with that pattern; none -> false.
-            const [pid, n] = cond.compareValue.split(",").map(Number)
-            const st = unitStates(battleUnit).find(d => (d.abilityEffectType === "UNIQUE_ELEMENT_STACK" || d.abilityEffectType === "UNIQUE_ELEMENT_BREAK") && d.value1 === pid)
-            return !!st && compareInt(cond.compareOperator, (st as any)._lv ?? 1, String(n))
-        }
-        case CompareContent.FIELD_IS_UP: {
-            // [CONFIRMED 3.19] case 0x1d IsExpandingZone: "pid,BOOL" -> pid 0: has any UNIQUE_ZONE; else its pattern == pid.
-            const [pidStr, boolStr] = cond.compareValue.split(",")
-            const pid = Number(pidStr)
-            const zones = unitStates(battleUnit).filter(d => d.abilityEffectType === "UNIQUE_ZONE")
-            const v = pid === 0 ? zones.length > 0 : zones.some(d => d.value1 === pid)
-            return compareBool(cond.compareOperator, v, boolStr ?? "TRUE")
-        }
-        case CompareContent.FIELD_START:
-        case CompareContent.FIELD_END: {
-            // [CONFIRMED 3.19] IsExpandZone / IsReleaseZone: the unit's Expand/ReleaseZoneUnitStatePatternMstId (set by
-            // ZONE_EXPAND / zone release, cleared after each passive pass) vs pid; pid 0 = "is non-zero".
-            const [pidStr, boolStr] = cond.compareValue.split(",")
-            const pid = Number(pidStr)
-            const flag = cond.compareContent === CompareContent.FIELD_START ? battleUnit.zone.expandPattern : battleUnit.zone.releasePattern
-            return compareBool(cond.compareOperator, pid === 0 ? flag !== 0 : flag === pid, boolStr ?? "TRUE")
-        }
-        case CompareContent.PLAYER_TEAM:
-            // [CONFIRMED 3.19] content 1001: the unit is on the player (Ally) team.
-            return compareBool(cond.compareOperator, !battleUnit.enemy && battleUnit.team.isTeam1, cond.compareValue);
-        case CompareContent.SELF_IS_KIOKU: {
-            // [CONFIRMED 3.19] BattleUnitConditionChecker.Check (0x17e3f10) case 0x1c StyleId: character units only
-            // (+0x84); CompareValue csv -> int list, compared with CharacterParameter.StyleMstId (+0x60). Data: one row,
-            // CONTAIN "11370101". [?] EQUAL treated as contains.
-            if (battleUnit.enemy) return false
-            const ids = cond.compareValue.split(",").filter(x => x.trim()).map(Number)
-            const has = ids.includes(Number((battleUnit.kioku.data as any).id))
-            return cond.compareOperator === CompareOperator.NOT_CONTAIN || cond.compareOperator === CompareOperator.NOT_EQUAL ? !has : has
-        }
-        case CompareContent.BREAK_COUNT:
-            // [CONFIRMED 3.19] case 0x1e: IntValueComparer(BreakPoint.BreakCount (+0x18), value). Was "not in the source".
-            return compareInt(cond.compareOperator, battleUnit.breakCount, cond.compareValue);
-        case CompareContent.DMG:
-            if (!notice || notice.isReceivedReflection) return compareInt(cond.compareOperator, 0, cond.compareValue);
-            return compareInt(cond.compareOperator, notice.totalDamageValue, cond.compareValue);
-        case CompareContent.DMG_RATIO: {
-            if (!notice || notice.isReceivedReflection) return compareFloat(cond.compareOperator, 0, cond.compareValue);
-            return compareFloat(cond.compareOperator, (notice.totalDamageValue * 100) / battleUnit.maxHp, cond.compareValue);
-        }
-        case CompareContent.IS_KILLED:
-            return compareBool(cond.compareOperator, !!notice && notice.totalDamageValue >= 1 && notice.isDead, cond.compareValue);
-        case CompareContent.IS_RECOVERY:
-            return compareBool(cond.compareOperator, !!notice && notice.isReceivedRecovery, cond.compareValue);
-        case CompareContent.IS_BARRIER_ADDED:
-            return compareBool(cond.compareOperator, !!notice && notice.isBarrierAdded, cond.compareValue);
-        case CompareContent.IS_BARRIER_ATTACKED:
-            return compareBool(cond.compareOperator, !!notice && notice.isBarrierAttacked, cond.compareValue);
-        case CompareContent.IS_BARRIER_DESTROYED:
-            return compareBool(cond.compareOperator, !!notice && notice.isBarrierDestroyed, cond.compareValue);
-        case CompareContent.BREAK_DAMAGE_RECEIVE_RATE_BECOME_MAX:
-            return compareBool(cond.compareOperator, !!notice && notice.isBreakedDamageReceiveRateBecomeMax, cond.compareValue);
-        case CompareContent.IS_WEAK_ELEMENT_ATTACKED:
-            return compareBool(cond.compareOperator, !!notice && notice.isWeakElementAttacked, cond.compareValue);
-        case CompareContent.IS_DURING_ATTACK:
-            return compareBool(cond.compareOperator, !!notice && notice.isReceivedAttack, cond.compareValue);
-        default:
-            // WHEN_DOT_IS_TRIGGERED(111)/HAS_ALIMENT(112)/FIELD_START(113)/FIELD_END(114)
-            // and anything else not covered above - [NOT IMPLEMENTED], matches the
-            // source's own default-case `false` for content this checker doesn't
-            // handle.
-            return false;
-    }
-}
-
-// ---------------------------------------------------------------------------
-// Team-wide conditions (CompareContent 201-210, 301-309)
-// ---------------------------------------------------------------------------
-// [CONFIRMED / RECONSTRUCTED per-case, see comments]
-// ReDriveBattleCore.BattleCondition.BattleUnitTeamConditionChecker$$Check.
-function checkTeamCondition(team: PvPTeam, cond: BattleCondition): boolean {
-    const units = team.kiokuStates;
-    switch (cond.compareContent as CompareContent) {
-        case CompareContent.SP:
-            return compareInt(cond.compareOperator, team.currentSp, cond.compareValue);
-        case CompareContent.ALIVE_UNIT_COUNT:
-            return compareInt(cond.compareOperator, units.filter(u => !u.isDead).length, cond.compareValue);
-        case CompareContent.DEAD_UNIT_COUNT:
-            return compareInt(cond.compareOperator, units.filter(u => u.isDead).length, cond.compareValue);
-        case CompareContent.APPLIED_SKILL_EFFECT_TYPE:
-            // [RECONSTRUCTED scope] "this action" per PvPTeam.performAction's reset -
-            // see its header comment for why (not independently confirmed whether the
-            // source's set is action-scoped or battle-cumulative).
-            return compareAbilityEffectList(cond.compareOperator, [...team.appliedSkillEffectTypesThisAction], cond.compareValue);
-        case CompareContent.ABILITY_EFFECT_UNIT_COUNT: {
-            // [CONFIRMED shape] CompareValue = "effectTypePrefix,threshold?" - counts
-            // units with an active effect type starting with that prefix (matching the
-            // ABILITY_EFFECT per-unit case's prefix semantics), compared against the
-            // SECOND CompareValue token (not the condition's own compareValue as a
-            // whole) via IntValueComparer.
-            const [prefix, threshold] = cond.compareValue.split(",");
-            const count = units.filter(u => unitStateTypes(u).some(t => t.startsWith(prefix))).length;
-            return compareInt(cond.compareOperator, count, threshold ?? "0");
-        }
-        case CompareContent.BREAK_DAMAGE_RECEIVE_RATE_GREATER_THAN_UNIT_COUNT:
-        case CompareContent.BREAK_DAMAGE_RECEIVE_RATE_LESS_THAN_UNIT_COUNT: {
-            // [CONFIRMED 3.19] BattleUnitTeamConditionChecker.Check (0x17e5f30) cases 5/6: CompareValue "rate,n";
-            // count living units with BreakedDamageReceiveRate >= rate (206, <>c__DisplayClass6_0.b__10 0x17eff50)
-            // or < rate (207, b__11 0x17effa0), IntValueComparer against n. A unit that is not broken has rate 0
-            // (the BattleUnit ctor never sets it; BreakPoint.Decrease does on break, TurnBegin resets it to 0),
-            // so "rate >= 1" = "is broken" (conditions 1398-1449, "ブレイクしている敵がN体").
-            const [rate, n] = cond.compareValue.split(",").map(Number)
-            const greater = cond.compareContent === CompareContent.BREAK_DAMAGE_RECEIVE_RATE_GREATER_THAN_UNIT_COUNT
-            const count = units.filter(u => !u.isDead && (greater ? u.breakedDamageReceiveRate >= rate : u.breakedDamageReceiveRate < rate)).length
-            return compareInt(cond.compareOperator, count, String(n ?? 0))
-        }
-        case CompareContent.NR_OF_DEBUFFS:
-            // [CONFIRMED shape] sum of debuff counts across every unit on this team
-            // (not just a unit COUNT the way BUFF_COUNT/DEBUFF_COUNT are per-unit).
-            return compareInt(cond.compareOperator, units.reduce((sum, u) => sum + u.currentDebuffs().length, 0), cond.compareValue);
-        case CompareContent.SIGILS_APPLIED_COUNT:
-            // [CONFIRMED 3.19] team checker case 8: sum of the units' CountPoint (COUNT "sigils").
-            return compareInt(cond.compareOperator, units.reduce((a, u) => a + u.countPoint, 0), cond.compareValue);
-        case CompareContent.OTHER_BUFF_COUNT: {
-            // [CONFIRMED 3.19] team checker case 9: "pid,n" -> units holding any unique state of pattern pid.
-            const [pid, n] = cond.compareValue.split(",").map(Number)
-            const count = units.filter(u => unitStates(u).some(d => UNIQUE_STATE_TYPES.has(d.abilityEffectType) && d.value1 === pid)).length
-            return compareInt(cond.compareOperator, count, String(n))
-        }
-        case CompareContent.UNIQUE_ACCUM_TEAM_TOTAL: {
-            // [CONFIRMED 3.19] team checker case 10: "pid,n" -> total AccumCount of unique accum states of pattern pid.
-            const [pid, n] = cond.compareValue.split(",").map(Number)
-            const sum = units.reduce((a, u) => a + unitStates(u).filter(d => (d.abilityEffectType === "UNIQUE_BUFF_ACCUM" || d.abilityEffectType === "UNIQUE_DEBUFF_ACCUM") && d.value1 === pid)
-                .reduce((b, d) => b + ((d as any)._accumCount ?? 1), 0), 0)
-            return compareInt(cond.compareOperator, sum, String(n))
-        }
-        case CompareContent.BREAK_COUNT_IN_GROUP:
-            // [CONFIRMED 3.19] team checker case 0xb: Sum(BreakPoint.BreakCount (b__6_25 0x17ee540)) over living units
-            // (b__6_24 = !IsDead), IntValueComparer. "敵軍のブレイク回数合計がN回" (conds 2208-2257).
-            return compareInt(cond.compareOperator, units.filter(u => !u.isDead).reduce((a, u) => a + u.breakCount, 0), cond.compareValue);
-        case CompareContent.KILLED_UNIT_COUNT:
-            return compareInt(cond.compareOperator, team.lastActionNotices.filter(n => n.isDead).length, cond.compareValue);
-        case CompareContent.BREAK_UNIT_COUNT:
-            // [RECONSTRUCTED] units that broke as a RESULT of the last action -
-            // approximated as "currently broken" rather than "newly broken this
-            // action" (the source's notice-based predicate likely distinguishes these;
-            // not independently confirmed which).
-            // [CONFIRMED 3.19] BattleUnitTeamConditionChecker case 0x12e: Count(notices where
-            // BreakDamageInfo != null) - units broken BY this skill, not "currently broken" (that
-            // reading kept e.g. Concentrated Missile Fire's follow-up re-triggering forever).
-            return compareInt(cond.compareOperator, team.lastActionNotices.filter(n => n.isBreak).length, cond.compareValue);
-        case CompareContent.CTD_UNIT_COUNT:
-            if (team.rng instanceof BattleRng && team.rng.expectedCrits) team.rng.critReads++; // see BattleRng.expectedCrits
-            return compareInt(cond.compareOperator, team.lastActionNotices.filter(n => n.isCritical).length, cond.compareValue);
-        case CompareContent.TOTAL_DAMAGE:
-            return compareInt(cond.compareOperator, team.lastActionNotices.reduce((sum, n) => sum + n.totalDamageValue, 0), cond.compareValue);
-        case CompareContent.ABILITY_EFFECT_AND_DAMAGE: {
-            // [RECONSTRUCTED] CompareValue = "effectTypePrefix,damageThreshold" - true
-            // iff ANY unit both has that effect type active AND its lastNotice damage
-            // meets the threshold.
-            const [prefix, threshold] = cond.compareValue.split(",");
-            const any = units.some(u =>
-                unitStateTypes(u).some(t => t.startsWith(prefix)) &&
-                (u.lastNotice?.totalDamageValue ?? 0) >= Number(threshold ?? "0"));
-            return compareBool(cond.compareOperator, any, "TRUE");
-        }
-        case CompareContent.BREAK_UNIT_TOTAL_COUNT:
-            // [CONFIRMED] cumulative across the whole battle - see
-            // KiokuState.resolveBreak()'s `team.breakedUnitTotalCount++`.
-            return compareInt(cond.compareOperator, team.breakedUnitTotalCount, cond.compareValue);
-        case CompareContent.WEAK_ELEMENT_ATTACKED_UNIT_COUNT:
-            return compareInt(cond.compareOperator, team.lastActionNotices.filter(n => n.isWeakElementAttacked).length, cond.compareValue);
-        case CompareContent.BREAK_DAMAGE_RECEIVE_RATE_BECOME_MAX_UNIT_COUNT:
-            return compareInt(cond.compareOperator, team.lastActionNotices.filter(n => n.isBreakedDamageReceiveRateBecomeMax).length, cond.compareValue);
-        case CompareContent.HAS_BUFF_APPLIED: {
-            const [prefix, threshold] = cond.compareValue.split(",");
-            const count = units.filter(u => unitStateTypes(u).some(t => t.startsWith(prefix))).length;
-            return compareInt(cond.compareOperator, count, threshold ?? "0");
-        }
-        case CompareContent.HIT_UNIT_COUNT:
-            // [CONFIRMED 3.19] BattleUnitTeamConditionChecker.Check (0x17e5f30) case 0x139: Count(team notices where
-            // IsReceivedAttack (<>c.b__6_5, AffectedUnitNotice +0x30)), IntValueComparer. One notice per unit per skill
-            // = KiokuState.lastNotice. "攻撃を受けた味方がN体" (conds 2103-2107, Solo Raid party buff 1600009, kits 15057...).
-            return compareInt(cond.compareOperator, units.filter(u => u.lastNotice?.isReceivedAttack).length, cond.compareValue);
-        case CompareContent.IN_BREAK_AND_RECEIVED_ATTACK_UNIT_COUNT:
-            // [CONFIRMED 3.19] case 0x13a: Count(units where b__6_40 0x17e8060): its notice has IsReceivedAttack, no
-            // BreakDamage (did not break during this skill, i.e. was already broken) and BreakedDamageReceiveRate > 0.
-            return compareInt(cond.compareOperator, units.filter(u => !!u.lastNotice?.isReceivedAttack && !u.lastNotice.isBreak && u.breakedDamageReceiveRate > 0).length, cond.compareValue);
-        case CompareContent.ADD_REMOVABLE_BUFF_TOTAL_COUNT:
-        case CompareContent.ADD_REMOVABLE_DEBUFF_TOTAL_COUNT: {
-            // [CONFIRMED 3.19] cases 0x13b / 0x13c: Σ over the team's units of their notice's AddStateInfoList entries
-            // with isRemovableBuff (b__6_43, +0x2a) / isRemovableDebuff (b__6_45, +0x2b). StateAbilityEffect.Triggering
-            // (0x1901cb0) sets them for a state that implements IBuff / IDebuff and was added by an ActiveSkill
-            // (EffectOriginType 1): see KiokuState.noteAddedState. Rose Garden Witch (passives 5001250-2) gains Magic on 316.
-            const buff = cond.compareContent === CompareContent.ADD_REMOVABLE_BUFF_TOTAL_COUNT
-            const sum = units.reduce((a, u) => a + ((buff ? u.lastNotice?.addedRemovableBuffs : u.lastNotice?.addedRemovableDebuffs) ?? 0), 0)
-            return compareInt(cond.compareOperator, sum, cond.compareValue);
-        }
-        case CompareContent.ONGOING_DAMAGE:
-            // [NOT IMPLEMENTED] case 0x136 (SlipDamageTotalCount): Count(units where b__6_34 0x17e7f50: its notice's
-            // ReceivedSlipDamageEffectTypeList matches). TS notices don't record slip-damage types yet.
-            return false;
-        default:
-            return false;
-    }
-}
-
-// ---------------------------------------------------------------------------
-// "Other" conditions (CompareContent 401, 402)
-// ---------------------------------------------------------------------------
-// [CONFIRMED / NOT IMPLEMENTED per-case]
-// ReDriveBattleCore.BattleCondition.BattleOtherConditionChecker$$Check.
-function checkOtherCondition(state: BattleState, cond: BattleCondition): boolean {
-    switch (cond.compareContent as CompareContent) {
-        case CompareContent.ACTOR_SKILL_TYPE: {
-            // [CONFIRMED 3.19] BattleOtherConditionChecker.Check (0x17e3850) reads the bundle's ActorActiveSkill:
-            // NormalAttack -> 3, ActiveSkill -> 1, SpecialAttack -> 2, AdditionalSkill -> its SkillMst type
-            // (4 AdditionalSkill, 5 EtherBlow); no skill -> false. Compared as ints with CompareValue parsed as
-            // SkillType, so a string compare of the enum names is the same thing. `actorSkillType` carries
-            // "EtherBlow" (TargetType has no value for it); otherwise TargetType's values are the enum names.
-            // For a STATE's active condition the skill is the one being launched right now on the battlefield
-            // (any unit's skill, both teams) - see PvPTeam's launch context; passives launch with no skill.
-            const skillType = state.actorSkillType ?? state.actionType
-            if (!skillType) return false;
-            if (cond.compareOperator === CompareOperator.EQUAL) return skillType === (cond.compareValue as any);
-            if (cond.compareOperator === CompareOperator.NOT_EQUAL) return skillType !== (cond.compareValue as any);
-            return false;
-        }
-        case CompareContent.COMBO_ACTION_STEP:
-            // [CONFIRMED, NEWLY IMPLEMENTED] ReDriveBattleCore.Act.ComboTurnUnitAct$$
-            // get_ActionStep/set_ActionStep - a 1-indexed "which action of the current
-            // combo burst" counter, confirmed via ActReferee$$AddComboUnitTurnActs's own
-            // loop (`for (actionStep = 1; actionStep <= actionNum; actionStep++)`). See
-            // KiokuState.currentComboActionStep (0 = not currently in a combo burst - a
-            // plain single action uses a different Act class with no such property at
-            // all, not "step 1"). Unrelated to TSUBAME_* (a separate, still-unimplemented
-            // character-specific mechanic - see MISSING_AND_UNCERTAIN.md's B5).
-            return compareInt(cond.compareOperator, state.trueActorUnit?.currentComboActionStep ?? 0, cond.compareValue);
-        case CompareContent.ACTOR_DAMAGE_RANGE: {
-            // [CONFIRMED 3.19] BattleOtherConditionChecker.Check (0x17e3850) case 0x193: the bundle's ActorAbilityEffect
-            // must be a DamageAbilityEffectBase with DamageCategory Normal (1: DMG_ATK/DEF/HP) or Random (2: DMG_RANDOM);
-            // its RangeType name ("Self", "SelectSingle", "SelectMultiple", "Everyone") is string-compared with the
-            // value. No damage effect running -> false. Aqua Tempest's "DMG taken -10% vs all-target attacks" (cond 2260).
-            const eff = state.actorEffect
-            if (!eff || !/^DMG_(ATK|DEF|HP|RANDOM)$/.test(eff.abilityEffectType)) return false
-            const rangeName = ({ [-1]: "Self", 1: "SelectSingle", 2: "SelectMultiple", 3: "Everyone" } as Record<number, string>)[eff.range] ?? ""
-            if (cond.compareOperator === CompareOperator.EQUAL) return rangeName === cond.compareValue
-            if (cond.compareOperator === CompareOperator.NOT_EQUAL) return rangeName !== cond.compareValue
-            return false
-        }
-        case CompareContent.AWAKEN:
-            // [CONFIRMED 3.19] content 1101: Solo Raid "Labyrinth Vanguard" activation phase (SoloRaidBuffReferee.IsActive).
-            return compareBool(cond.compareOperator, !!state.actorTeam.soloRaid?.active, cond.compareValue);
-        case CompareContent.COUNTDOWN: {
-            const cd = state.actorTeam.countdown
-            return !!cd?.unit && compareInt(cond.compareOperator, cd.value, cond.compareValue);
-        }
-        case CompareContent.COUNTDOWN_CANCEL_REACHED: {
-            const cd = state.actorTeam.countdown
-            return compareBool(cond.compareOperator, !!cd?.unit && cd.cancelMax > 0 && cd.cancelMax <= cd.cancelTotal, cond.compareValue);
-        }
-        default:
-            return false;
-    }
-}
-
-// ---------------------------------------------------------------------------
-// Main dispatcher
-// ---------------------------------------------------------------------------
-// [CONFIRMED] ReDriveBattleCore.BattleCondition.BattleConditionUtils.Condition
-// $$IsMatchCondition - switches on CompareTarget to decide WHICH checker to consult and,
-// for per-unit checks, WHICH unit ("battleUnit") to check it against. This is the
-// central piece the original file was missing entirely - every condition used to be
-// checked against whatever `target`/`actor` the call site happened to pass in,
-// regardless of what CompareTarget actually specified.
-//
-// State naming vs. this codebase's existing convention: `state.actor` here means "the
-// unit that owns the passive/effect being checked" (matches this codebase's established
-// use of `actor` in KiokuState.stateGen calls, e.g. `this.stateGen(this, target)`),
-// which is what CompareTarget.SELF resolves to. `state.trueActorUnit` is the C#
-// `actorUnit` - whoever REALLY performed the current action - now threaded through
-// separately (see PvPTeam.ts). `state.target` is "the specific unit currently under
-// consideration" (matches CompareTarget.EACH_TARGET most directly).
-// [CONFIRMED data] IS_ELEMENT_TYPE / IS_ROLE_TYPE CompareValues in getBattleConditionMstList.json are enum NAMES:
-// "Fire" "Aqua" "Forest" "Light" "Dark" "Neutral" and "Attacker" "Breaker" ... (never ids). They used to be looked up
-// in elementMap/roleMap (keyed by id), which matched no character, so e.g. Scorchin' Summer Spike's "Attacker
-// allies" effects (condition 1695) never applied. Ids are still accepted.
-const CONDITION_ELEMENTS: Record<string, KiokuElement> = {
-    Fire: KiokuElement.Flame, Aqua: KiokuElement.Aqua, Forest: KiokuElement.Forest,
-    Light: KiokuElement.Light, Dark: KiokuElement.Dark, Neutral: KiokuElement.Void,
-}
-function conditionElement(value: string): KiokuElement | undefined {
-    return CONDITION_ELEMENTS[value] ?? elementMap[value]
-}
-function conditionRole(value: string): KiokuRole | undefined {
-    return (Object.values(KiokuRole) as string[]).includes(value) ? value as KiokuRole : roleMap[value]
-}
-
-export function isMatchCondition(cond: BattleCondition, state: BattleState): boolean {
-    const { actor, target, actorTeam, enemyTeam, trueActorUnit, mainTargetUnit } = state;
-    switch (cond.compareTarget as CompareTarget) {
-        case CompareTarget.SELF:
-            return checkUnitCondition(actor, cond, state);
-        case CompareTarget.ACTOR:
-            // [CONFIRMED shape] Falls back to `actor` if trueActorUnit wasn't threaded
-            // through for this particular call site (better than silently returning
-            // false) - see MISSING_AND_UNCERTAIN.md for which call sites do/don't pass
-            // it yet.
-            return checkUnitCondition(trueActorUnit ?? actor, cond, state);
-        case CompareTarget.MAIN_TARGET:
-            return checkUnitCondition(mainTargetUnit ?? target, cond, state);
-        case CompareTarget.EACH_TARGET:
-            // [CONFIRMED 3.19] Condition.IsMatchCondition (0x17eca80) case 8: a null EachTargetUnit is TRUE for
-            // ConditionUseType SkillStart (start conditions) and FALSE otherwise (BattleUnitConditionChecker.Check
-            // 0x17e3f10 on a null unit). State activity flags the null case with `eachTargetUnset`.
-            if (state.eachTargetUnset) return false;
-            return checkUnitCondition(target, cond, state);
-        case CompareTarget.FRIEND_TEAM:
-            return checkTeamCondition(actorTeam, cond);
-        case CompareTarget.OPPONENT_TEAM:
-            return checkTeamCondition(enemyTeam, cond);
-        case CompareTarget.ALL_TARGETS: {
-            // [RECONSTRUCTED] The source picks friend-team-vs-opponent-team data based
-            // on whether mainTargetUnit shares actor's team. Approximated using
-            // `target`'s team when mainTargetUnit isn't available.
-            const referenceUnit = mainTargetUnit ?? target;
-            const sameTeamAsSelf = actorTeam.kiokuStates.includes(referenceUnit);
-            return checkTeamCondition(sameTeamAsSelf ? actorTeam : enemyTeam, cond);
-        }
-        case CompareTarget.OTHERS:
-            return checkOtherCondition(state, cond);
-        default:
-            return false;
-    }
-}
-
-// ---------------------------------------------------------------------------
-// Public entry points (same names/signatures as before, so PvPTeam.ts and PvPKioku.ts
-// don't need to change how they call into this file - only the internals changed).
-// ---------------------------------------------------------------------------
-export const isConditionSetActive = (eff: SkillDetail, state: BattleState) =>
-    isConditionSetActiveForPvP(eff.activeConditionSetIdCsv.split(","), state)
-    && isConditionSetActiveForPvP(eff.startConditionSetIdCsv.split(","), state)
-
-// State activity (UnitStateBase.IsActive): the active condition set only.
-export const isActiveConditionSetMet = (eff: SkillDetail, state: BattleState) =>
-    isConditionSetActiveForPvP((eff.activeConditionSetIdCsv ?? "").split(","), state)
-
-// [CONFIRMED 3.19] BattleConditionUtils.IsMatchConditionSets (0x17e30b0): an empty csv matches; otherwise the
-// csv's condition SETS are OR'd (Enumerable.Any) and the conditions inside one set are AND'd. (This used to AND
-// the sets, so e.g. an enemy's "when broken, stunned or the countdown cancel is met" never fired.)
-export const isConditionSetActiveForPvP = (conditionSetIdCsvList: string[], state: BattleState): boolean => {
-    const ids = conditionSetIdCsvList.flatMap(csv => csv.split(",")).filter(id => id.length && id !== "0")
-    if (!ids.length) return true
-    return ids.some(conditionSetId => {
-        const battleConditionSet = battleConditionSets[conditionSetId]
-        if (!battleConditionSet) return false
-        for (const conditionId of battleConditionSet.battleConditionMstIdCsv.split(",")) {
-            const battleCondition = battleConditions[conditionId]
-            if (!isMatchCondition(battleCondition, state)) return false
-        }
-        return true
-    })
-}
-
 // The skill types (CompareContent 401 names) for which an activeConditionSetIdCsv can hold when every OTHER condition
 // is assumed met; undefined = no skill-type restriction. Sets are OR'd, conditions in a set AND'd (as above). Used by
 // MaxDamage, which assumes conditions met but must not give e.g. a "special attack only" crit buff to a Battle Skill.
@@ -933,6 +358,19 @@ export function actorSkillTypeRestriction(activeConditionSetIdCsv: string | unde
         types.forEach(t => allowed.add(t))
     }
     return allowed
+}
+
+// [CONFIRMED data] IS_ELEMENT_TYPE / IS_ROLE_TYPE CompareValues in getBattleConditionMstList.json are enum NAMES:
+// "Fire" "Aqua" "Forest" "Light" "Dark" "Neutral" and "Attacker" "Breaker" ... (never ids). Ids are still accepted.
+const CONDITION_ELEMENTS: Record<string, KiokuElement> = {
+    Fire: KiokuElement.Flame, Aqua: KiokuElement.Aqua, Forest: KiokuElement.Forest,
+    Light: KiokuElement.Light, Dark: KiokuElement.Dark, Neutral: KiokuElement.Void,
+}
+function conditionElement(value: string): KiokuElement | undefined {
+    return CONDITION_ELEMENTS[value] ?? elementMap[value]
+}
+function conditionRole(value: string): KiokuRole | undefined {
+    return (Object.values(KiokuRole) as string[]).includes(value) ? value as KiokuRole : roleMap[value]
 }
 
 // Elements / roles that IS_ELEMENT_TYPE / IS_ROLE_TYPE conditions in these condition-set csvs compare a unit
@@ -1006,7 +444,7 @@ function ailmentConditionType(cond: BattleCondition | undefined): Ailment | unde
 // [APPROXIMATION] Max Damage assumes conditions are met; this keeps only the ailment checks among them: an ABILITY_EFFECT
 // condition about an ailment is evaluated against `stateTypes` (the state types the enemies carry), whichever unit it
 // names, and every other condition counts as met. Each csv's sets are OR'd, conditions in a set AND'd, as in
-// isConditionSetActiveForPvP.
+// BattleConditionUtils.IsMatchConditionSets (0x17e30b0).
 // `enemyCount`: how many units carry `stateTypes` (all enemies), for the unit-count conditions (205).
 export function ailmentConditionsMet(csvs: (string | undefined)[], stateTypes: string[], enemyCount = 1): boolean {
     return csvs.every(csv => {
