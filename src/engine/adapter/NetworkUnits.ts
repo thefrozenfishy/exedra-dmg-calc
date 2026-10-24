@@ -1,7 +1,11 @@
 // App side (not game code): builds the server's per-battle unit (Network.Definition.QuestBattle.BattleUnit) from the
 // app's kioku build. The server computes these numbers; the app's stat model (src/models/Kioku) stands in for it.
-// Passive list order = the order the game triggers them in (ability, crystalis, ascensions, portrait, support),
-// see PvPKioku.triggerOrderEffects.
+// Passive list order = the order the game triggers them in: kit (ability, ascensions) -> portrait -> support -> crystalis
+// (AbilitySourceType order Unit 1, Card 2, Support 3, SelectionAbility 4). The server builds this list; in-game check
+// 2026-10-24 (fixtures pvp-battle-start-mp-*.json): Structure Destruction's battle-start +50 MP (ascension 2) sees only
+// ascension 1's +30% MP recovery, not her crystalis' +10%, and her support's +10 MP sees +30% plus one of the portrait /
+// crystalis ups. [UNCERTAIN] portrait before support before crystalis (the checks only fix crystalis after the kit and
+// one of portrait / crystalis before the support). The old engine (PvPKioku.triggerOrderEffects) still runs crystalis second.
 import { BattleUnit as NetworkBattleUnit } from "../Network/Definition/QuestBattle/BattleUnit";
 import { AttackInfo } from "../Network/Definition/QuestBattle/AttackInfo";
 import { PassiveSkillInfo } from "../Network/Definition/QuestBattle/PassiveSkillInfo";
@@ -61,7 +65,6 @@ export function kiokuToNetworkUnit(kioku: Kioku, position: number): NetworkBattl
     u.specialAttackInfo = attack(ids.special ?? data.special_id, Math.max(1, k.specialLvl));
     const passives: PassiveSkillInfo[] = [];
     passives.push(passive(data.ability_id * 100 + k.abilityLvl, k.abilityLvl, 1)); // AbilitySourceType.Unit
-    for (const c of k.crys as number[]) passives.push(passive(c, c % 100, 4)); // SelectionAbility (crystalis passive id already has its level)
     for (let i = 1; i <= k.ascension; i++) {
         const id = (data as any)[`ascension_${i}_effect_2_id`];
         if (id) passives.push(passive(id * 100 + 1, 1, 1));
@@ -70,6 +73,7 @@ export function kiokuToNetworkUnit(kioku: Kioku, position: number): NetworkBattl
     if (k.support && [data.role, data.element].includes(k.support.data.support_target)) {
         passives.push(passive(k.support.data.support_id * 100 + k.support.supportLvl, k.support.supportLvl, 3)); // Support
     }
+    for (const c of k.crys as number[]) passives.push(passive(c, c % 100, 4)); // SelectionAbility (crystalis passive id already has its level)
     u.passiveSkillInfoList = passives;
     return u;
 }

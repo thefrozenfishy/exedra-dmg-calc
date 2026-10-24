@@ -9,7 +9,8 @@ import { EngineBattle } from "../../src/battle/EngineBattle";
 import { PendingDecision } from "../../src/models/BattleRng";
 import type { BattleSnapshot } from "../../src/types/KiokuTypes";
 
-const CASES: { file: string, action: number, actor: string, ally?: boolean, line?: RegExp }[] = [
+// action 0 = the initial state (after the battle-start passives); `actor` is then left out.
+const CASES: { file: string, action: number, actor?: string, ally?: boolean, line?: RegExp }[] = [
     { file: "heroic-grace-rika-first.json", action: 4, actor: "Brilliant Beam" },
     { file: "heroic-grace-mabayu-first.json", action: 4, actor: "Hollow Woman" },
     { file: "kyubey-battle-start-follow-up.json", action: 1, actor: "Splashin' Kyubey Blast" },
@@ -30,6 +31,12 @@ const CASES: { file: string, action: number, actor: string, ally?: boolean, line
     { file: "pve-rose-garden-fatebloom-ironspike.json", action: 14, actor: "Floral Ironspike", ally: true, line: /roll #\d+ action: Floral Ironspike \(Ally 5\) · extra action/ },
     // An ultimate fired from the manual turn prompt that wipes the endless minions: refill (TimeForward request) before
     // the turn act resumes, and the turn unit's gauge is reset only when its turn act runs (0 AV after the ultimate).
+    // Battle-start MP (in-game 2026-10-24): a unit's passives trigger kit (ability, ascensions) -> portrait -> support ->
+    // crystalis, so Structure Destruction's +50 MP sees only ascension 1's MP recovery, not her crystalis' +10%. Units
+    // trigger in slot order: Vampire Fang's barrier + MP recovery for barrier holders count only when she is before SD.
+    { file: "pvp-battle-start-mp-structure-destruction-79.json", action: 0, line: /^ +Structure Destruction +\| .*\| MP 79\/90 / },
+    { file: "pvp-battle-start-mp-vampire-fang-after-79.json", action: 0, line: /^ +Structure Destruction +\| .*\| MP 79\/90 / },
+    { file: "pvp-battle-start-mp-vampire-fang-before-85.json", action: 0, line: /^ +Structure Destruction +\| .*\| MP 85\/90 / },
 ];
 
 console.warn = () => {}; console.debug = () => {};
@@ -54,19 +61,19 @@ for (const c of CASES) {
     catch (err) { if (!(err instanceof PendingDecision)) throw err; pending = `<pending: ${err.event.label}>` }
     const s = snaps[c.action] ?? { lastActor: pending ?? "<battle over>" } as BattleSnapshot;
     const side = (ally?: boolean) => ally === undefined ? "" : ally ? " (Ally)" : " (Enemy)";
-    const got = s.lastActor + side(c.ally === undefined ? undefined : s.lastTeamIsTeam1);
-    let ok = got === c.actor + side(c.ally);
+    const got = c.actor === undefined ? "-" : s.lastActor + side(c.ally === undefined ? undefined : s.lastTeamIsTeam1);
+    let ok = c.actor === undefined || got === c.actor + side(c.ally);
     let lineNote = ""
     if (ok && c.line) {
         const seq = formatSequence(snaps)
-        const start = seq.findIndex(l => l.startsWith(`== Action ${c.action}:`))
+        const start = seq.findIndex(l => l.startsWith(c.action === 0 ? "== Initial state ==" : `== Action ${c.action}:`))
         const end = seq.findIndex((l, i) => i > start && l.startsWith("== Action"))
         const block = seq.slice(start, end < 0 ? undefined : end)
         ok = start >= 0 && block.some(l => c.line!.test(l))
         if (!ok) lineNote = `\n  expected a line matching ${c.line} in:\n${block.join("\n")}`
     }
     if (!ok) failed++;
-    console.log(`${ok ? "PASS" : "FAIL"} ${c.file}: action ${c.action} expected ${c.actor}${side(c.ally)}${c.line ? ` + ${c.line}` : ""}, got ${got}${lineNote}`);
+    console.log(`${ok ? "PASS" : "FAIL"} ${c.file}: action ${c.action} expected ${c.actor ?? "-"}${side(c.ally)}${c.line ? ` + ${c.line}` : ""}, got ${got}${lineNote}`);
     if (!ok) console.log(formatSequence(snaps).filter(l => l.startsWith("== Action")).slice(0, c.action + 2).join("\n"));
 }
 console.log(`${CASES.length - failed - skipped} pass, ${failed} fail, ${skipped} skipped`);

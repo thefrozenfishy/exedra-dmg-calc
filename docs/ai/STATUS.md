@@ -1,7 +1,19 @@
 # Status (update at the end of every session)
 
-_Last updated: 2026-10-24 (Kioku Grid ailment bars: 112/305/309 conditions, Max Damage enemies carry Weakness/Stun); before: 2026-10-15 (game 3.21.0: dumped + decompiled by Claude on Windows, engine re-ported to 3.21.0; branch claude/version-3.21.0); before: 2026-10-14 (Max Damage + Kioku Grid bench on the 1:1 engine); before: 2026-10-10 (1:1 port in src/engine started); before: 2026-10-03 (passive states per giver, UP_HP_FIXED max HP; earlier: duplicate active-skill states); before: 2026-10-02 (game 3.19.1: version diff + newsletter, Magic Seal, break/notice team conditions, IMM_SLIP_DMG burst; branch claude/version-3.19.1)._
+_Last updated: 2026-10-24 (battle-start passive order: kit -> portrait -> support -> crys; before: Kioku Grid ailment bars: 112/305/309 conditions, Max Damage enemies carry Weakness/Stun); before: 2026-10-15 (game 3.21.0: dumped + decompiled by Claude on Windows, engine re-ported to 3.21.0; branch claude/version-3.21.0); before: 2026-10-14 (Max Damage + Kioku Grid bench on the 1:1 engine); before: 2026-10-10 (1:1 port in src/engine started); before: 2026-10-03 (passive states per giver, UP_HP_FIXED max HP; earlier: duplicate active-skill states); before: 2026-10-02 (game 3.19.1: version diff + newsletter, Magic Seal, break/notice team conditions, IMM_SLIP_DMG burst; branch claude/version-3.19.1)._
 
+
+## 2026-10-24 (2): battle-start passive order (Structure Destruction's starting MP)
+
+- User report (PvP sim): Structure Destruction started at 85 / 85 / 90 MP instead of the in-game 79 / 79 / 85. The 1:1
+  engine's made-up server passive list (`src/engine/adapter/NetworkUnits.ts`) had crystalis second, so her crys'
+  +10% MP recovery applied to her ascension-2 +50 MP. Now kit (ability, ascensions) -> portrait -> support -> crystalis
+  (AbilitySourceType order; relative order of the last three [UNCERTAIN]). Side effect: barriers given at battle start
+  are computed before crys DEF ups (Vampire Fang's in those teams 1,121 -> 957), worth an in-game look.
+- Fixtures: `pvp-battle-start-mp-*.json` (3), asserted by `checkFixturesEngine.ts` on the initial state (action 0,
+  `actor` optional). Engine fixtures 15/15; old `checkFixtures.ts` 12/12 (old engine unchanged, still crys second);
+  checkMechanics 0 FAIL; engine tsc 0; app vue-tsc 242, none in changed files. benchOne (SD, Glitterjoy, Tiro) unchanged;
+  LUX_BENCH_VERSION 27 anyway (bench kits with EX crys may move).
 
 ## 2026-10-24: Kioku Grid ailment bars (Sacred Gift had no Weakness bar)
 

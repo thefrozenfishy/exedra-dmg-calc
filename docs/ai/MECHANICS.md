@@ -141,9 +141,15 @@ Ultimates (SpecialAttackAct) and follow-ups: only ExecuteSkill - no TurnStart/Tu
   `activeEffectDetails` / `passiveEffectDetails` (states).
 - **Battle-start order**: `TriggeringOnBattleStart` 0x14a1df0 stable-sorts by `IBattleStartTriggerPriority`
   (AddTurn states 200, effect-value variation 100, DWN_BARRIER_VALUE 90, others 0 = Define.DefaultPriority),
-  highest first; ties keep the unit's PassiveSkills list order. TS order: ability -> crystalis ->
-  ascension/portrait/support (`PvPKioku.triggerOrderEffects`): the kit's CHARGE must run before an EX crys
-  GAIN_CHARGE_POINT (Tenebrous Arcana) and crys SPD states before others (fixture mirrored-thunder-torrent). [C][G]
+  highest first; ties keep unit order, then the unit's PassiveSkills list order (server-built). 1:1 engine
+  (`src/engine/adapter/NetworkUnits.ts`): kit (ability, ascensions) -> portrait -> support -> crystalis. In-game
+  2026-10-24 (fixtures pvp-battle-start-mp-*.json): Structure Destruction's battle-start +50 MP (ascension 2) gets only
+  ascension 1's +30% MP recovery (65, not her crys' +10%), the support's +10 MP gets 40-49% (14) -> 79; with Vampire
+  Fang before her (her barrier + MP recovery for barrier holders already given) 70 + 15 = 85, after her 79. Effects are
+  triggered one by one, so a GAIN_EP sees exactly the MP-recovery states triggered before it. [G]; portrait vs
+  support vs crys order among themselves [UNCERTAIN] (only crys-after-kit and one of portrait/crys before the
+  support are fixed). The old engine (`PvPKioku.triggerOrderEffects`) still uses ability -> crystalis -> rest
+  (Tenebrous Arcana CHARGE before EX crys GAIN_CHARGE_POINT holds in both). [C][G]
 - Battle-start follow-ups (e.g. Splashin' Kyubey Blast) run before the first turn. [C][G]
 
 ## 6. Conditions

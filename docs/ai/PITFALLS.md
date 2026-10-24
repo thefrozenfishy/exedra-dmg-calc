@@ -45,7 +45,10 @@
 - **TurnNum is per finished turn**, not per act (Forward's +1/-1 pair is a preview). A "literal" reading of one
   function without the next lines gave the wrong answer; read the whole function.
 - Battle-start passive order matters (CHARGE before EX crys GAIN_CHARGE_POINT; crys SPD first). Moving crys last
-  broke the Thunder Torrent fixture, moving it first broke Tenebrous Arcana. Current order: ability -> crys -> rest.
+  broke the Thunder Torrent fixture, moving it first broke Tenebrous Arcana. Old engine order: ability -> crys -> rest.
+  The 1:1 engine runs kit -> portrait -> support -> crys (in-game MP check 2026-10-24; Thunder Torrent still passes
+  there): crys first gave Structure Destruction 85 / 85 / 90 starting MP instead of 79 / 79 / 85. The order also moves
+  barriers given at battle start from DEF (Vampire Fang's ascension 2 barrier no longer counts her crys DEF ups).
 - Turn gauge must be rescaled after **each** state add (f32), not once per batch - decides mirrored ties.
 - Turn-order priority is taken **once per effect**, shared by its targets - not per target.
 - Buffs are never parried; hit/parry rates only apply to Negative-direction states. (A roll applying debuff

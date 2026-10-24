@@ -1,0 +1,2169 @@
+{
+ "format": "exedra-pvp-sim",
+ "version": 1,
+ "exportedAt": "2026-10-24T16:19:35.725Z",
+ "engine": "battle-engine-3.19",
+ "seed": 1264943420,
+ "rngMode": "seed",
+ "turns": 30,
+ "notes": "In game Structure Destruction starts at 79 MP (Tiro, Hollow Woman, SD, Fatebloom, Time Stop). Her battle-start +50 MP (ascension 2) sees only ascension 1's +30% MP recovery (65); the support's +10 MP sees +30% and the portrait's +15% (14). The crystalis +10% MP recovery triggers after the kit, portrait and support passives.",
+ "decisionLog": [],
+ "sequence": [
+  "== Initial state ==",
+  "  roll #0 target: String target -> Structure Destruction (20.0%)",
+  "  roll #1 target: String target -> Final Fatebloom (20.0%)",
+  "  roll #2 target: String target -> Lux☆Magica (20.0%)",
+  "  Allies (SP 6)",
+  "    Tiro Finale                  | HP 9,903/9,903  | MP 0/75 | break 165/165 | spd 264.00 | AV 17.83 | magic 2/5",
+  "    Hollow Woman                 | HP 10,563/10,563 | MP 0/75 | break 165/165 | spd 208.25 | AV 13.56",
+  "    Structure Destruction        | HP 15,186/15,186 | MP 85/90 | break 180/180 | spd 201.25 | AV 29.64",
+  "    Final Fatebloom              | HP 10,346/10,346 | MP 60/90 | break 150/150 | spd 199.50 | AV 0.00 | magic 8/10",
+  "    Time Stop Strike             | HP 9,974/9,974  | MP 0/75 | break 165/165 | spd 237.80 | AV 22.00 | magic 4/7",
+  "  Enemies (SP 5)",
+  "    Lux☆Magica                   | HP 9,622/9,622  | MP 0/75 | break 150/150 | spd 107.00 | AV 73.41 | magic 0/5",
+  "    Lux☆Magica                   | HP 9,622/9,622  | MP 0/75 | break 150/150 | spd 107.00 | AV 73.41 | magic 0/5",
+  "    Lux☆Magica                   | HP 9,622/9,622  | MP 0/75 | break 150/150 | spd 107.00 | AV 73.41 | magic 0/5",
+  "    Lux☆Magica                   | HP 9,622/9,622  | MP 0/75 | break 150/150 | spd 107.00 | AV 73.41 | magic 0/5",
+  "    Lux☆Magica                   | HP 9,622/9,622  | MP 0/75 | break 150/150 | spd 107.00 | AV 73.41 | magic 0/5",
+  "== Action 1: Final Fatebloom (Ally) - Battle Skill ==",
+  "  Final Fatebloom -> Lux☆Magica 440 (break -47)",
+  "  Final Fatebloom -> Lux☆Magica 440 (break -47)",
+  "  Final Fatebloom -> Lux☆Magica 440 (break -47)",
+  "  Final Fatebloom -> Lux☆Magica 440 (break -47)",
+  "  Final Fatebloom -> Lux☆Magica 440 (break -47)",
+  "  roll #3 crit: Final Fatebloom → Lux☆Magica crit -> 10.0% miss",
+  "  roll #4 crit: Final Fatebloom → Lux☆Magica crit -> 10.0% miss",
+  "  roll #5 crit: Final Fatebloom → Lux☆Magica crit -> 10.0% miss",
+  "  roll #6 crit: Final Fatebloom → Lux☆Magica crit -> 10.0% miss",
+  "  roll #7 crit: Final Fatebloom → Lux☆Magica crit -> 10.0% miss",
+  "  Allies (SP 5)",
+  "    Tiro Finale                  | HP 9,903/9,903  | MP 0/75 | break 165/165 | spd 264.00 | AV 17.83 | magic 2/5",
+  "    Hollow Woman                 | HP 10,563/10,563 | MP 0/75 | break 165/165 | spd 208.25 | AV 13.56",
+  "    Structure Destruction        | HP 15,186/15,186 | MP 89/90 | break 180/180 | spd 201.25 | AV 29.64",
+  "    Final Fatebloom              | HP 10,346/10,346 | MP 90/90 | break 150/150 | spd 199.50 | AV 50.13 | magic 10/10",
+  "    Time Stop Strike             | HP 9,974/9,974  | MP 0/75 | break 165/165 | spd 237.80 | AV 22.00 | magic 5/7",
+  "  Enemies (SP 5)",
+  "    Lux☆Magica                   | HP 9,182/9,622  | MP 5/75 | break 103/150 | spd 107.00 | AV 73.41 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).]",
+  "    Lux☆Magica                   | HP 9,182/9,622  | MP 5/75 | break 103/150 | spd 107.00 | AV 73.41 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).]",
+  "    Lux☆Magica                   | HP 9,182/9,622  | MP 5/75 | break 103/150 | spd 107.00 | AV 73.41 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).]",
+  "    Lux☆Magica                   | HP 9,182/9,622  | MP 5/75 | break 103/150 | spd 107.00 | AV 73.41 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).]",
+  "    Lux☆Magica                   | HP 9,182/9,622  | MP 5/75 | break 103/150 | spd 107.00 | AV 73.41 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).]",
+  "== Action 2: Final Fatebloom (Ally) - Ultimate ==",
+  "  Final Fatebloom -> Lux☆Magica 830 (break -103, BREAK)",
+  "  Final Fatebloom -> Lux☆Magica 830 (break -103, BREAK)",
+  "  Final Fatebloom -> Lux☆Magica 830 (break -103, BREAK)",
+  "  Final Fatebloom -> Lux☆Magica 830 (break -103, BREAK)",
+  "  Final Fatebloom -> Lux☆Magica 830 (break -103, BREAK)",
+  "  roll #8 target: target -> Time Stop Strike (33.3%)",
+  "  roll #9 crit: Final Fatebloom → Lux☆Magica crit -> 10.0% miss",
+  "  roll #10 crit: Final Fatebloom → Lux☆Magica crit -> 10.0% miss",
+  "  roll #11 crit: Final Fatebloom → Lux☆Magica crit -> 10.0% miss",
+  "  roll #12 crit: Final Fatebloom → Lux☆Magica crit -> 10.0% miss",
+  "  roll #13 crit: Final Fatebloom → Lux☆Magica crit -> 10.0% miss",
+  "  Allies (SP 6)",
+  "    Tiro Finale                  | HP 9,903/9,903  | MP 0/75 | break 165/165 | spd 264.00 | AV 10.25 | magic 2/5 | buffs[Final Fatebloom - Increases ATK by 20%.]",
+  "    Hollow Woman                 | HP 10,563/10,563 | MP 0/75 | break 165/165 | spd 208.25 | AV 3.96 | buffs[Final Fatebloom - Increases ATK by 20%.]",
+  "    Structure Destruction        | HP 15,186/15,186 | MP 89/90 | break 180/180 | spd 201.25 | AV 19.70 | buffs[Final Fatebloom - Increases ATK by 20%.]",
+  "    Final Fatebloom              | HP 10,346/10,346 | MP 5/90 | break 150/150 | spd 245.10 | AV 32.64 | magic 0/10 | buffs[Final Fatebloom - Increases SPD by 20%, and decreases DMG taken by 10%.; Final Fatebloom - Increases SPD by 20%.; Final Fatebloom - Increases ATK by 20%.]",
+  "    Time Stop Strike             | HP 9,974/9,974  | MP 0/75 | break 165/165 | spd 237.80 | AV 13.59 | magic 6/7 | buffs[Final Fatebloom - Increases ATK by 20%.]",
+  "  Enemies (SP 5)",
+  "    Lux☆Magica                   | HP 8,351/9,622  | MP 10/75 | break 0/150 BROKEN(100%) | spd 107.00 | AV 96.77 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).; Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux☆Magica                   | HP 8,351/9,622  | MP 10/75 | break 0/150 BROKEN(100%) | spd 107.00 | AV 96.77 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).; Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux☆Magica                   | HP 8,351/9,622  | MP 10/75 | break 0/150 BROKEN(100%) | spd 107.00 | AV 96.77 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).; Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux☆Magica                   | HP 8,351/9,622  | MP 10/75 | break 0/150 BROKEN(100%) | spd 107.00 | AV 96.77 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).; Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux☆Magica                   | HP 8,351/9,622  | MP 10/75 | break 0/150 BROKEN(100%) | spd 107.00 | AV 96.77 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).; Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "== Action 3: Final Fatebloom (Ally) - Battle Skill [Extra action] ==",
+  "  Final Fatebloom -> Lux☆Magica 746 (crit, broken dmg +20%)",
+  "  Final Fatebloom -> Lux☆Magica 622 (broken dmg +20%)",
+  "  Final Fatebloom -> Lux☆Magica 622 (broken dmg +20%)",
+  "  Final Fatebloom -> Lux☆Magica 622 (broken dmg +20%)",
+  "  Final Fatebloom -> Lux☆Magica 746 (crit, broken dmg +20%)",
+  "  roll #14 crit: Final Fatebloom → Lux☆Magica crit -> 19.0% hit",
+  "  roll #15 crit: Final Fatebloom → Lux☆Magica crit -> 19.0% miss",
+  "  roll #16 crit: Final Fatebloom → Lux☆Magica crit -> 19.0% miss",
+  "  roll #17 crit: Final Fatebloom → Lux☆Magica crit -> 19.0% miss",
+  "  roll #18 crit: Final Fatebloom → Lux☆Magica crit -> 19.0% hit",
+  "  Allies (SP 6)",
+  "    Tiro Finale                  | HP 9,903/9,903  | MP 0/75 | break 165/165 | spd 264.00 | AV 10.25 | magic 2/5 | buffs[Final Fatebloom - Increases ATK by 20%.]",
+  "    Hollow Woman                 | HP 10,563/10,563 | MP 0/75 | break 165/165 | spd 208.25 | AV 3.96 | buffs[Final Fatebloom - Increases ATK by 20%.]",
+  "    Structure Destruction        | HP 15,186/15,186 | MP 90/90 | break 180/180 | spd 201.25 | AV 19.70 | buffs[Final Fatebloom - Increases ATK by 20%.]",
+  "    Final Fatebloom              | HP 10,346/10,346 | MP 45/90 | break 150/150 | spd 245.10 | AV 32.64 | magic 2/10 | buffs[Final Fatebloom - Increases SPD by 20%, and decreases DMG taken by 10%.; Final Fatebloom - Increases SPD by 20%.; Final Fatebloom - Increases ATK by 20%.]",
+  "    Time Stop Strike             | HP 9,974/9,974  | MP 0/75 | break 165/165 | spd 237.80 | AV 13.59 | magic 0/7 | buffs[Final Fatebloom - Increases ATK by 20%.]",
+  "  Enemies (SP 5)",
+  "    Lux☆Magica                   | HP 7,605/9,622  | MP 15/75 | break 0/150 BROKEN(120%) | spd 107.00 | AV 96.77 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).; Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux☆Magica                   | HP 7,729/9,622  | MP 15/75 | break 0/150 BROKEN(120%) | spd 107.00 | AV 96.77 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).; Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux☆Magica                   | HP 7,729/9,622  | MP 15/75 | break 0/150 BROKEN(120%) | spd 107.00 | AV 96.77 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).; Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux☆Magica                   | HP 7,729/9,622  | MP 15/75 | break 0/150 BROKEN(120%) | spd 107.00 | AV 96.77 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).; Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux☆Magica                   | HP 7,605/9,622  | MP 15/75 | break 0/150 BROKEN(120%) | spd 107.00 | AV 96.77 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).; Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "== Action 4: Structure Destruction (Ally) - Ultimate ==",
+  "  Structure Destruction -> Lux☆Magica 1,062 (broken dmg +10%)",
+  "  Structure Destruction -> Lux☆Magica 1,274 (crit, broken dmg +10%)",
+  "  Structure Destruction -> Lux☆Magica 1,062 (broken dmg +10%)",
+  "  Structure Destruction -> Lux☆Magica 1,062 (broken dmg +10%)",
+  "  Structure Destruction -> Lux☆Magica 1,062 (broken dmg +10%)",
+  "  roll #19 crit: Structure Destruction → Lux☆Magica crit -> 19.0% miss",
+  "  roll #20 crit: Structure Destruction → Lux☆Magica crit -> 19.0% hit",
+  "  roll #21 crit: Structure Destruction → Lux☆Magica crit -> 19.0% miss",
+  "  roll #22 crit: Structure Destruction → Lux☆Magica crit -> 19.0% miss",
+  "  roll #23 crit: Structure Destruction → Lux☆Magica crit -> 19.0% miss",
+  "  Allies (SP 6)",
+  "    Tiro Finale                  | HP 9,903/9,903  | MP 0/75 | break 165/165 | spd 264.00 | AV 6.29 | magic 2/5 | buffs[Final Fatebloom - Increases ATK by 20%.; Structure Destruction - Increases elemental weakness DMG dealt by 18%.]",
+  "    Hollow Woman                 | HP 10,563/10,563 | MP 0/75 | break 165/165 | spd 208.25 | AV 0.00 | buffs[Final Fatebloom - Increases ATK by 20%.; Structure Destruction - Increases elemental weakness DMG dealt by 18%.]",
+  "    Structure Destruction        | HP 15,186/15,186 | MP 8/90 | break 180/180 | spd 201.25 | AV 15.74 | buffs[Final Fatebloom - Increases ATK by 20%.; Structure Destruction - Increases elemental weakness DMG dealt by 18%.]",
+  "    Final Fatebloom              | HP 10,346/10,346 | MP 45/90 | break 150/150 | spd 245.10 | AV 28.68 | magic 2/10 | buffs[Final Fatebloom - Increases SPD by 20%, and decreases DMG taken by 10%.; Final Fatebloom - Increases SPD by 20%.; Final Fatebloom - Increases ATK by 20%.; Structure Destruction - Increases elemental weakness DMG dealt by 18%.]",
+  "    Time Stop Strike             | HP 9,974/9,974  | MP 0/75 | break 165/165 | spd 237.80 | AV 9.63 | magic 1/7 | buffs[Final Fatebloom - Increases ATK by 20%.; Structure Destruction - Increases elemental weakness DMG dealt by 18%.]",
+  "  Enemies (SP 5)",
+  "    Lux☆Magica                   | HP 6,543/9,622  | MP 20/75 | break 0/150 BROKEN(130%) | spd 107.00 | AV 92.81 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).; Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux☆Magica                   | HP 6,455/9,622  | MP 20/75 | break 0/150 BROKEN(130%) | spd 107.00 | AV 92.81 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).; Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux☆Magica                   | HP 6,667/9,622  | MP 20/75 | break 0/150 BROKEN(130%) | spd 107.00 | AV 92.81 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).; Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux☆Magica                   | HP 6,667/9,622  | MP 20/75 | break 0/150 BROKEN(130%) | spd 107.00 | AV 92.81 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).; Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux☆Magica                   | HP 6,543/9,622  | MP 20/75 | break 0/150 BROKEN(130%) | spd 107.00 | AV 92.81 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).; Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "== Action 5: Hollow Woman (Ally) - Battle Skill ==",
+  "  Allies (SP 5)",
+  "    Tiro Finale                  | HP 9,903/9,903  | MP 0/75 | break 165/165 | spd 264.00 | AV 2.51 | magic 2/5 | buffs[Final Fatebloom - Increases ATK by 20%.; Structure Destruction - Increases elemental weakness DMG dealt by 18%.]",
+  "    Hollow Woman                 | HP 10,563/10,563 | MP 30/75 | break 165/165 | spd 208.25 | AV 43.22 | buffs[Final Fatebloom - Increases ATK by 20%.; Structure Destruction - Increases elemental weakness DMG dealt by 18%.]",
+  "    Structure Destruction        | HP 15,186/15,186 | MP 12/90 | break 180/180 | spd 201.25 | AV 10.77 | buffs[Final Fatebloom - Increases ATK by 20%.; Structure Destruction - Increases elemental weakness DMG dealt by 18%.]",
+  "    Final Fatebloom              | HP 10,346/10,346 | MP 45/90 | break 150/150 | spd 245.10 | AV 24.60 | magic 2/10 | buffs[Final Fatebloom - Increases SPD by 20%, and decreases DMG taken by 10%.; Final Fatebloom - Increases SPD by 20%.; Final Fatebloom - Increases ATK by 20%.; Structure Destruction - Increases elemental weakness DMG dealt by 18%.]",
+  "    Time Stop Strike             | HP 9,974/9,974  | MP 0/75 | break 165/165 | spd 237.80 | AV 5.43 | magic 1/7 | buffs[Final Fatebloom - Increases ATK by 20%.; Structure Destruction - Increases elemental weakness DMG dealt by 18%.; Hollow Woman - At turn end, advances action order by 100%, and removes 2 debuffs.<br>On effect activation, Cutaway is removed.; Hollow Woman - Increases ATK by 50%.]",
+  "  Enemies (SP 5)",
+  "    Lux☆Magica                   | HP 6,543/9,622  | MP 20/75 | break 0/150 BROKEN(130%) | spd 107.00 | AV 92.81 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).; Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux☆Magica                   | HP 6,455/9,622  | MP 20/75 | break 0/150 BROKEN(130%) | spd 107.00 | AV 92.81 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).; Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux☆Magica                   | HP 6,667/9,622  | MP 20/75 | break 0/150 BROKEN(130%) | spd 107.00 | AV 92.81 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).; Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux☆Magica                   | HP 6,667/9,622  | MP 20/75 | break 0/150 BROKEN(130%) | spd 107.00 | AV 92.81 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).; Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux☆Magica                   | HP 6,543/9,622  | MP 20/75 | break 0/150 BROKEN(130%) | spd 107.00 | AV 92.81 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).; Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "== Action 6: Tiro Finale (Ally) - Battle Skill ==",
+  "  Tiro Finale -> Lux☆Magica 855 (broken dmg +12%)",
+  "  Tiro Finale -> Lux☆Magica 855 (broken dmg +12%)",
+  "  Tiro Finale -> Lux☆Magica 855 (broken dmg +12%)",
+  "  Tiro Finale -> Lux☆Magica 855 (broken dmg +12%)",
+  "  Tiro Finale -> Lux☆Magica 855 (broken dmg +12%)",
+  "  roll #24 crit: Tiro Finale → Lux☆Magica crit -> 19.0% miss",
+  "  roll #25 crit: Tiro Finale → Lux☆Magica crit -> 19.0% miss",
+  "  roll #26 crit: Tiro Finale → Lux☆Magica crit -> 19.0% miss",
+  "  roll #27 crit: Tiro Finale → Lux☆Magica crit -> 19.0% miss",
+  "  roll #28 crit: Tiro Finale → Lux☆Magica crit -> 19.0% miss",
+  "  Allies (SP 4)",
+  "    Tiro Finale                  | HP 9,903/9,903  | MP 30/75 | break 165/165 | spd 264.00 | AV 37.88 | magic 4/5 | buffs[Final Fatebloom - Increases ATK by 20%.; Structure Destruction - Increases elemental weakness DMG dealt by 18%.; Tiro Finale - Increases ATK by 20%.]",
+  "    Hollow Woman                 | HP 10,563/10,563 | MP 30/75 | break 165/165 | spd 208.25 | AV 40.71 | buffs[Final Fatebloom - Increases ATK by 20%.; Structure Destruction - Increases elemental weakness DMG dealt by 18%.; Tiro Finale - Increases ATK by 20%.]",
+  "    Structure Destruction        | HP 15,186/15,186 | MP 16/90 | break 180/180 | spd 201.25 | AV 8.27 | buffs[Final Fatebloom - Increases ATK by 20%.; Structure Destruction - Increases elemental weakness DMG dealt by 18%.; Tiro Finale - Increases ATK by 20%.]",
+  "    Final Fatebloom              | HP 10,346/10,346 | MP 45/90 | break 150/150 | spd 245.10 | AV 22.09 | magic 2/10 | buffs[Final Fatebloom - Increases SPD by 20%, and decreases DMG taken by 10%.; Final Fatebloom - Increases SPD by 20%.; Final Fatebloom - Increases ATK by 20%.; Structure Destruction - Increases elemental weakness DMG dealt by 18%.; Tiro Finale - Increases ATK by 20%.]",
+  "    Time Stop Strike             | HP 9,974/9,974  | MP 0/75 | break 165/165 | spd 237.80 | AV 2.92 | magic 2/7 | buffs[Final Fatebloom - Increases ATK by 20%.; Structure Destruction - Increases elemental weakness DMG dealt by 18%.; Hollow Woman - At turn end, advances action order by 100%, and removes 2 debuffs.<br>On effect activation, Cutaway is removed.; Hollow Woman - Increases ATK by 50%.; Tiro Finale - Increases ATK by 20%.]",
+  "  Enemies (SP 5)",
+  "    Lux☆Magica                   | HP 5,688/9,622  | MP 25/75 | break 0/150 BROKEN(142%) | spd 107.00 | AV 90.31 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).; Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux☆Magica                   | HP 5,600/9,622  | MP 25/75 | break 0/150 BROKEN(142%) | spd 107.00 | AV 90.31 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).; Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux☆Magica                   | HP 5,812/9,622  | MP 25/75 | break 0/150 BROKEN(142%) | spd 107.00 | AV 90.31 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).; Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux☆Magica                   | HP 5,812/9,622  | MP 25/75 | break 0/150 BROKEN(142%) | spd 107.00 | AV 90.31 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).; Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux☆Magica                   | HP 5,688/9,622  | MP 25/75 | break 0/150 BROKEN(142%) | spd 107.00 | AV 90.31 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).; Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "== Action 7: Time Stop Strike (Ally) - Battle Skill ==",
+  "  Time Stop Strike -> Lux☆Magica 2,724 (broken dmg +12%)",
+  "  roll #29 target: target -> Lux☆Magica (20.0%)",
+  "  roll #30 crit: Time Stop Strike → Lux☆Magica crit -> 19.0% miss",
+  "  Allies (SP 3)",
+  "    Tiro Finale                  | HP 9,903/9,903  | MP 30/75 | break 165/165 | spd 264.00 | AV 27.38 | magic 4/5 | buffs[Final Fatebloom - Increases ATK by 20%.; Structure Destruction - Increases elemental weakness DMG dealt by 18%.; Tiro Finale - Increases ATK by 20%.]",
+  "    Hollow Woman                 | HP 10,563/10,563 | MP 30/75 | break 165/165 | spd 208.25 | AV 28.19 | buffs[Final Fatebloom - Increases ATK by 20%.; Structure Destruction - Increases elemental weakness DMG dealt by 18%.; Tiro Finale - Increases ATK by 20%.]",
+  "    Structure Destruction        | HP 15,186/15,186 | MP 20/90 | break 180/180 | spd 201.25 | AV 0.00 | buffs[Final Fatebloom - Increases ATK by 20%.; Structure Destruction - Increases elemental weakness DMG dealt by 18%.; Tiro Finale - Increases ATK by 20%.]",
+  "    Final Fatebloom              | HP 10,346/10,346 | MP 45/90 | break 150/150 | spd 245.10 | AV 11.01 | magic 2/10 | buffs[Final Fatebloom - Increases SPD by 20%, and decreases DMG taken by 10%.; Final Fatebloom - Increases SPD by 20%.; Final Fatebloom - Increases ATK by 20%.; Structure Destruction - Increases elemental weakness DMG dealt by 18%.; Tiro Finale - Increases ATK by 20%.]",
+  "    Time Stop Strike             | HP 9,974/9,974  | MP 30/75 | break 165/165 | spd 237.80 | AV 0.00 | magic 4/7 | buffs[Final Fatebloom - Increases ATK by 20%.; Structure Destruction - Increases elemental weakness DMG dealt by 18%.; Hollow Woman - Increases ATK by 50%.; Tiro Finale - Increases ATK by 20%.]",
+  "  Enemies (SP 5)",
+  "    Lux☆Magica                   | HP 5,688/9,622  | MP 25/75 | break 0/150 BROKEN(142%) | spd 107.00 | AV 87.39 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).; Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux☆Magica                   | HP 2,876/9,622  | MP 35/75 | break 0/150 BROKEN(154%) | spd 107.00 | AV 87.39 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).; Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux☆Magica                   | HP 5,812/9,622  | MP 25/75 | break 0/150 BROKEN(142%) | spd 107.00 | AV 87.39 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).; Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux☆Magica                   | HP 5,812/9,622  | MP 25/75 | break 0/150 BROKEN(142%) | spd 107.00 | AV 87.39 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).; Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux☆Magica                   | HP 5,688/9,622  | MP 25/75 | break 0/150 BROKEN(142%) | spd 107.00 | AV 87.39 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).; Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "== Action 8: Time Stop Strike (Ally) - Battle Skill ==",
+  "  Time Stop Strike -> Lux☆Magica 2,724 (broken dmg +12%)",
+  "  roll #31 target: target -> Lux☆Magica (20.0%)",
+  "  roll #32 crit: Time Stop Strike → Lux☆Magica crit -> 19.0% miss",
+  "  Allies (SP 2)",
+  "    Tiro Finale                  | HP 9,903/9,903  | MP 30/75 | break 165/165 | spd 264.00 | AV 19.81 | magic 4/5 | buffs[Final Fatebloom - Increases ATK by 20%.; Structure Destruction - Increases elemental weakness DMG dealt by 18%.; Tiro Finale - Increases ATK by 20%.]",
+  "    Hollow Woman                 | HP 10,563/10,563 | MP 30/75 | break 165/165 | spd 208.25 | AV 18.58 | buffs[Final Fatebloom - Increases ATK by 20%.; Structure Destruction - Increases elemental weakness DMG dealt by 18%.; Tiro Finale - Increases ATK by 20%.]",
+  "    Structure Destruction        | HP 15,186/15,186 | MP 24/90 | break 180/180 | spd 201.25 | AV 0.00 | buffs[Final Fatebloom - Increases ATK by 20%.; Structure Destruction - Increases elemental weakness DMG dealt by 18%.; Tiro Finale - Increases ATK by 20%.]",
+  "    Final Fatebloom              | HP 10,346/10,346 | MP 45/90 | break 150/150 | spd 245.10 | AV 2.85 | magic 2/10 | buffs[Final Fatebloom - Increases SPD by 20%, and decreases DMG taken by 10%.; Final Fatebloom - Increases SPD by 20%.; Final Fatebloom - Increases ATK by 20%.; Structure Destruction - Increases elemental weakness DMG dealt by 18%.; Tiro Finale - Increases ATK by 20%.]",
+  "    Time Stop Strike             | HP 9,974/9,974  | MP 60/75 | break 165/165 | spd 237.80 | AV 33.64 | magic 6/7 | buffs[Hollow Woman - Increases ATK by 50%.; Tiro Finale - Increases ATK by 20%.]",
+  "  Enemies (SP 5)",
+  "    Lux☆Magica                   | HP 5,688/9,622  | MP 25/75 | break 0/150 BROKEN(142%) | spd 107.00 | AV 87.39 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).; Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux☆Magica                   | HP 2,876/9,622  | MP 35/75 | break 0/150 BROKEN(154%) | spd 107.00 | AV 87.39 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).; Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux☆Magica                   | HP 5,812/9,622  | MP 25/75 | break 0/150 BROKEN(142%) | spd 107.00 | AV 87.39 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).; Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux☆Magica                   | HP 3,088/9,622  | MP 35/75 | break 0/150 BROKEN(154%) | spd 107.00 | AV 87.39 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).; Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux☆Magica                   | HP 5,688/9,622  | MP 25/75 | break 0/150 BROKEN(142%) | spd 107.00 | AV 87.39 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).; Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "== Action 9: Structure Destruction (Ally) - Battle Skill ==",
+  "  roll #33 target: target -> Lux☆Magica (20.0%)",
+  "  Allies (SP 1)",
+  "    Tiro Finale                  | HP 9,903/9,903  | MP 30/75 | break 165/165 | spd 264.00 | AV 19.81 | magic 4/5 | buffs[Final Fatebloom - Increases ATK by 20%.; Structure Destruction - Increases elemental weakness DMG dealt by 18%.; Tiro Finale - Increases ATK by 20%.]",
+  "    Hollow Woman                 | HP 10,563/10,563 | MP 30/75 | break 165/165 | spd 208.25 | AV 18.58 | buffs[Final Fatebloom - Increases ATK by 20%.; Structure Destruction - Increases elemental weakness DMG dealt by 18%.; Tiro Finale - Increases ATK by 20%.]",
+  "    Structure Destruction        | HP 15,186/15,186 | MP 80/90 | break 180/180 | spd 201.25 | AV 49.69 | buffs[Final Fatebloom - Increases ATK by 20%.; Structure Destruction - Increases elemental weakness DMG dealt by 18%.; Tiro Finale - Increases ATK by 20%.]",
+  "    Final Fatebloom              | HP 10,346/10,346 | MP 45/90 | break 150/150 | spd 245.10 | AV 2.85 | magic 2/10 | buffs[Final Fatebloom - Increases SPD by 20%, and decreases DMG taken by 10%.; Final Fatebloom - Increases SPD by 20%.; Final Fatebloom - Increases ATK by 20%.; Structure Destruction - Increases elemental weakness DMG dealt by 18%.; Tiro Finale - Increases ATK by 20%.]",
+  "    Time Stop Strike             | HP 9,974/9,974  | MP 65/75 | break 165/165 | spd 237.80 | AV 33.64 | magic 6/7 | buffs[Hollow Woman - Increases ATK by 50%.; Tiro Finale - Increases ATK by 20%.]",
+  "  Enemies (SP 5)",
+  "    Lux☆Magica                   | HP 5,688/9,622  | MP 25/75 | break 0/150 BROKEN(142%) | spd 107.00 | AV 87.39 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).; Final Fatebloom - Increases chance to land critical hit by 9%.; Structure Destruction - Decreases ATK by 5%.]",
+  "    Lux☆Magica                   | HP 2,876/9,622  | MP 35/75 | break 0/150 BROKEN(154%) | spd 107.00 | AV 87.39 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).; Final Fatebloom - Increases chance to land critical hit by 9%.; Structure Destruction - Decreases ATK by 5%.]",
+  "    Lux☆Magica                   | HP 5,812/9,622  | MP 25/75 | break 0/150 BROKEN(142%) | spd 107.00 | AV 87.39 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).; Final Fatebloom - Increases chance to land critical hit by 9%.; Structure Destruction - Decreases ATK by 5%.]",
+  "    Lux☆Magica                   | HP 3,088/9,622  | MP 35/75 | break 0/150 BROKEN(154%) | spd 107.00 | AV 87.39 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).; Final Fatebloom - Increases chance to land critical hit by 9%.; Structure Destruction - Decreases ATK by 5%.]",
+  "    Lux☆Magica                   | HP 5,688/9,622  | MP 25/75 | break 0/150 BROKEN(142%) | spd 107.00 | AV 87.39 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).; Final Fatebloom - Increases chance to land critical hit by 9%.; Structure Destruction - Decreases ATK by 5%.]",
+  "== Action 10: Final Fatebloom (Ally) - Battle Skill ==",
+  "  Final Fatebloom -> Lux☆Magica 1,111 (broken dmg +20%)",
+  "  Final Fatebloom -> Lux☆Magica 1,205 (broken dmg +20%)",
+  "  Final Fatebloom -> Lux☆Magica 1,111 (broken dmg +20%)",
+  "  Final Fatebloom -> Lux☆Magica 1,446 (crit, broken dmg +20%)",
+  "  Final Fatebloom -> Lux☆Magica 1,111 (broken dmg +20%)",
+  "  roll #34 crit: Final Fatebloom → Lux☆Magica crit -> 19.0% miss",
+  "  roll #35 crit: Final Fatebloom → Lux☆Magica crit -> 19.0% miss",
+  "  roll #36 crit: Final Fatebloom → Lux☆Magica crit -> 19.0% miss",
+  "  roll #37 crit: Final Fatebloom → Lux☆Magica crit -> 19.0% hit",
+  "  roll #38 crit: Final Fatebloom → Lux☆Magica crit -> 19.0% miss",
+  "  Allies (SP 1)",
+  "    Tiro Finale                  | HP 9,903/9,903  | MP 30/75 | break 165/165 | spd 264.00 | AV 16.95 | magic 4/5 | buffs[Final Fatebloom - Increases ATK by 20%.; Structure Destruction - Increases elemental weakness DMG dealt by 18%.; Tiro Finale - Increases ATK by 20%.]",
+  "    Hollow Woman                 | HP 10,563/10,563 | MP 30/75 | break 165/165 | spd 208.25 | AV 15.73 | buffs[Final Fatebloom - Increases ATK by 20%.; Structure Destruction - Increases elemental weakness DMG dealt by 18%.; Tiro Finale - Increases ATK by 20%.]",
+  "    Structure Destruction        | HP 15,186/15,186 | MP 84/90 | break 180/180 | spd 201.25 | AV 46.84 | buffs[Final Fatebloom - Increases ATK by 20%.; Structure Destruction - Increases elemental weakness DMG dealt by 18%.; Tiro Finale - Increases ATK by 20%.]",
+  "    Final Fatebloom              | HP 10,346/10,346 | MP 85/90 | break 150/150 | spd 245.10 | AV 40.80 | magic 4/10 | buffs[Final Fatebloom - Increases SPD by 20%, and decreases DMG taken by 10%.; Final Fatebloom - Increases SPD by 20%.; Final Fatebloom - Increases ATK by 20%.; Structure Destruction - Increases elemental weakness DMG dealt by 18%.; Tiro Finale - Increases ATK by 20%.]",
+  "    Time Stop Strike             | HP 9,974/9,974  | MP 65/75 | break 165/165 | spd 237.80 | AV 30.79 | magic 0/7 | buffs[Hollow Woman - Increases ATK by 50%.; Tiro Finale - Increases ATK by 20%.]",
+  "  Enemies (SP 5)",
+  "    Lux☆Magica                   | HP 4,577/9,622  | MP 30/75 | break 0/150 BROKEN(162%) | spd 107.00 | AV 84.53 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).; Final Fatebloom - Increases chance to land critical hit by 9%.; Structure Destruction - Decreases ATK by 5%.]",
+  "    Lux☆Magica                   | HP 1,671/9,622  | MP 45/75 | break 0/150 BROKEN(174%) | spd 107.00 | AV 84.53 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).; Final Fatebloom - Increases chance to land critical hit by 9%.; Structure Destruction - Decreases ATK by 5%.]",
+  "    Lux☆Magica                   | HP 4,701/9,622  | MP 30/75 | break 0/150 BROKEN(162%) | spd 107.00 | AV 84.53 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).; Final Fatebloom - Increases chance to land critical hit by 9%.; Structure Destruction - Decreases ATK by 5%.]",
+  "    Lux☆Magica                   | HP 1,642/9,622  | MP 45/75 | break 0/150 BROKEN(174%) | spd 107.00 | AV 84.53 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).; Final Fatebloom - Increases chance to land critical hit by 9%.; Structure Destruction - Decreases ATK by 5%.]",
+  "    Lux☆Magica                   | HP 4,577/9,622  | MP 30/75 | break 0/150 BROKEN(162%) | spd 107.00 | AV 84.53 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).; Final Fatebloom - Increases chance to land critical hit by 9%.; Structure Destruction - Decreases ATK by 5%.]",
+  "== Action 11: Hollow Woman (Ally) - Battle Skill ==",
+  "  Allies (SP 0)",
+  "    Tiro Finale                  | HP 9,903/9,903  | MP 30/75 | break 165/165 | spd 264.00 | AV 0.00 | magic 4/5 | buffs[Final Fatebloom - Increases ATK by 20%.; Structure Destruction - Increases elemental weakness DMG dealt by 18%.; Tiro Finale - Increases ATK by 20%.]",
+  "    Hollow Woman                 | HP 10,563/10,563 | MP 60/75 | break 165/165 | spd 208.25 | AV 43.22 | buffs[Tiro Finale - Increases ATK by 20%.]",
+  "    Structure Destruction        | HP 15,186/15,186 | MP 88/90 | break 180/180 | spd 201.25 | AV 26.14 | buffs[Final Fatebloom - Increases ATK by 20%.; Structure Destruction - Increases elemental weakness DMG dealt by 18%.; Tiro Finale - Increases ATK by 20%.]",
+  "    Final Fatebloom              | HP 10,346/10,346 | MP 85/90 | break 150/150 | spd 245.10 | AV 20.99 | magic 4/10 | buffs[Final Fatebloom - Increases SPD by 20%, and decreases DMG taken by 10%.; Final Fatebloom - Increases SPD by 20%.; Final Fatebloom - Increases ATK by 20%.; Structure Destruction - Increases elemental weakness DMG dealt by 18%.; Tiro Finale - Increases ATK by 20%.]",
+  "    Time Stop Strike             | HP 9,974/9,974  | MP 65/75 | break 165/165 | spd 237.80 | AV 10.85 | magic 0/7 | buffs[Tiro Finale - Increases ATK by 20%.; Hollow Woman - At turn end, advances action order by 100%, and removes 2 debuffs.<br>On effect activation, Cutaway is removed.; Hollow Woman - Increases ATK by 50%.]",
+  "  Enemies (SP 5)",
+  "    Lux☆Magica                   | HP 4,577/9,622  | MP 30/75 | break 0/150 BROKEN(162%) | spd 107.00 | AV 68.80 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).; Final Fatebloom - Increases chance to land critical hit by 9%.; Structure Destruction - Decreases ATK by 5%.]",
+  "    Lux☆Magica                   | HP 1,671/9,622  | MP 45/75 | break 0/150 BROKEN(174%) | spd 107.00 | AV 68.80 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).; Final Fatebloom - Increases chance to land critical hit by 9%.; Structure Destruction - Decreases ATK by 5%.]",
+  "    Lux☆Magica                   | HP 4,701/9,622  | MP 30/75 | break 0/150 BROKEN(162%) | spd 107.00 | AV 68.80 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).; Final Fatebloom - Increases chance to land critical hit by 9%.; Structure Destruction - Decreases ATK by 5%.]",
+  "    Lux☆Magica                   | HP 1,642/9,622  | MP 45/75 | break 0/150 BROKEN(174%) | spd 107.00 | AV 68.80 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).; Final Fatebloom - Increases chance to land critical hit by 9%.; Structure Destruction - Decreases ATK by 5%.]",
+  "    Lux☆Magica                   | HP 4,577/9,622  | MP 30/75 | break 0/150 BROKEN(162%) | spd 107.00 | AV 68.80 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).; Final Fatebloom - Increases chance to land critical hit by 9%.; Structure Destruction - Decreases ATK by 5%.]",
+  "== Action 12: Tiro Finale (Ally) - Basic Attack ==",
+  "  Tiro Finale -> Lux☆Magica 1,053 (crit, broken dmg +12%)",
+  "  roll #39 target: target -> Lux☆Magica (20.0%)",
+  "  roll #40 crit: Tiro Finale → Lux☆Magica crit -> 19.0% hit",
+  "  Allies (SP 1)",
+  "    Tiro Finale                  | HP 9,903/9,903  | MP 45/75 | break 165/165 | spd 264.00 | AV 30.30 | magic 0/5 | buffs[Tiro Finale - Increases ATK by 20%.]",
+  "    Hollow Woman                 | HP 10,563/10,563 | MP 60/75 | break 165/165 | spd 208.25 | AV 33.61 | buffs[Tiro Finale - Increases ATK by 20%.]",
+  "    Structure Destruction        | HP 15,186/15,186 | MP 88/90 | break 180/180 | spd 201.25 | AV 16.20 | buffs[Final Fatebloom - Increases ATK by 20%.; Structure Destruction - Increases elemental weakness DMG dealt by 18%.; Tiro Finale - Increases ATK by 20%.]",
+  "    Final Fatebloom              | HP 10,346/10,346 | MP 85/90 | break 150/150 | spd 245.10 | AV 12.83 | magic 4/10 | buffs[Final Fatebloom - Increases SPD by 20%, and decreases DMG taken by 10%.; Final Fatebloom - Increases SPD by 20%.; Final Fatebloom - Increases ATK by 20%.; Structure Destruction - Increases elemental weakness DMG dealt by 18%.; Tiro Finale - Increases ATK by 20%.]",
+  "    Time Stop Strike             | HP 9,974/9,974  | MP 65/75 | break 165/165 | spd 237.80 | AV 2.44 | magic 1/7 | buffs[Tiro Finale - Increases ATK by 20%.; Hollow Woman - At turn end, advances action order by 100%, and removes 2 debuffs.<br>On effect activation, Cutaway is removed.; Hollow Woman - Increases ATK by 50%.]",
+  "  Enemies (SP 5)",
+  "    Lux☆Magica                   | HP 3,524/9,622  | MP 40/75 | break 0/150 BROKEN(174%) | spd 107.00 | AV 68.80 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).; Final Fatebloom - Increases chance to land critical hit by 9%.; Structure Destruction - Decreases ATK by 5%.]",
+  "    Lux☆Magica                   | HP 1,671/9,622  | MP 45/75 | break 0/150 BROKEN(174%) | spd 107.00 | AV 68.80 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).; Final Fatebloom - Increases chance to land critical hit by 9%.; Structure Destruction - Decreases ATK by 5%.]",
+  "    Lux☆Magica                   | HP 4,701/9,622  | MP 30/75 | break 0/150 BROKEN(162%) | spd 107.00 | AV 68.80 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).; Final Fatebloom - Increases chance to land critical hit by 9%.; Structure Destruction - Decreases ATK by 5%.]",
+  "    Lux☆Magica                   | HP 1,642/9,622  | MP 45/75 | break 0/150 BROKEN(174%) | spd 107.00 | AV 68.80 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).; Final Fatebloom - Increases chance to land critical hit by 9%.; Structure Destruction - Decreases ATK by 5%.]",
+  "    Lux☆Magica                   | HP 4,577/9,622  | MP 30/75 | break 0/150 BROKEN(162%) | spd 107.00 | AV 68.80 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).; Final Fatebloom - Increases chance to land critical hit by 9%.; Structure Destruction - Decreases ATK by 5%.]",
+  "== Action 13: Time Stop Strike (Ally) - Battle Skill ==",
+  "  Time Stop Strike -> Lux☆Magica 2,841 (broken dmg +12%)",
+  "  roll #41 target: target -> Lux☆Magica (20.0%)",
+  "  roll #42 crit: Time Stop Strike → Lux☆Magica crit -> 19.0% miss",
+  "  Allies (SP 0)",
+  "    Tiro Finale                  | HP 9,903/9,903  | MP 45/75 | break 165/165 | spd 264.00 | AV 20.28 | magic 0/5 | buffs[Tiro Finale - Increases ATK by 20%.]",
+  "    Hollow Woman                 | HP 10,563/10,563 | MP 60/75 | break 165/165 | spd 208.25 | AV 21.57 | buffs[Tiro Finale - Increases ATK by 20%.]",
+  "    Structure Destruction        | HP 15,186/15,186 | MP 90/90 | break 180/180 | spd 201.25 | AV 3.82 | buffs[Final Fatebloom - Increases ATK by 20%.; Structure Destruction - Increases elemental weakness DMG dealt by 18%.; Tiro Finale - Increases ATK by 20%.]",
+  "    Final Fatebloom              | HP 10,346/10,346 | MP 85/90 | break 150/150 | spd 245.10 | AV 2.23 | magic 4/10 | buffs[Final Fatebloom - Increases SPD by 20%, and decreases DMG taken by 10%.; Final Fatebloom - Increases SPD by 20%.; Final Fatebloom - Increases ATK by 20%.; Structure Destruction - Increases elemental weakness DMG dealt by 18%.; Tiro Finale - Increases ATK by 20%.]",
+  "    Time Stop Strike             | HP 9,974/9,974  | MP 75/75 | break 165/165 | spd 237.80 | AV 0.00 | magic 3/7 | buffs[Hollow Woman - Increases ATK by 50%.]",
+  "  Enemies (SP 5)",
+  "    Lux☆Magica                   | HP 3,524/9,622  | MP 40/75 | break 0/150 BROKEN(174%) | spd 107.00 | AV 66.36 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).; Final Fatebloom - Increases chance to land critical hit by 9%.; Structure Destruction - Decreases ATK by 5%.]",
+  "    Lux☆Magica                   | HP 1,671/9,622  | MP 45/75 | break 0/150 BROKEN(174%) | spd 107.00 | AV 66.36 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).; Final Fatebloom - Increases chance to land critical hit by 9%.; Structure Destruction - Decreases ATK by 5%.]",
+  "    Lux☆Magica                   | HP 4,701/9,622  | MP 30/75 | break 0/150 BROKEN(162%) | spd 107.00 | AV 66.36 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).; Final Fatebloom - Increases chance to land critical hit by 9%.; Structure Destruction - Decreases ATK by 5%.]",
+  "    Lux☆Magica                   | HP 1,642/9,622  | MP 45/75 | break 0/150 BROKEN(174%) | spd 107.00 | AV 66.36 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).; Final Fatebloom - Increases chance to land critical hit by 9%.; Structure Destruction - Decreases ATK by 5%.]",
+  "    Lux☆Magica                   | HP 1,736/9,622  | MP 40/75 | break 0/150 BROKEN(174%) | spd 107.00 | AV 66.36 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).; Final Fatebloom - Increases chance to land critical hit by 9%.; Structure Destruction - Decreases ATK by 5%.]",
+  "== Action 14: Time Stop Strike (Ally) - Ultimate ==",
+  "  Time Stop Strike -> Lux☆Magica 1,736 (crit, broken dmg +12%)",
+  "  roll #43 target: target -> Lux☆Magica (20.0%)",
+  "  roll #44 crit: Time Stop Strike → Lux☆Magica crit -> 19.0% hit",
+  "  roll #45 target: String target -> Lux☆Magica (25.0%)",
+  "  Allies (SP 1)",
+  "    Tiro Finale                  | HP 9,903/9,903  | MP 45/75 | break 165/165 | spd 264.00 | AV 20.28 | magic 0/5 | buffs[Tiro Finale - Increases ATK by 20%.; Time Stop Strike - Increases special attack DMG dealt by 50%.]",
+  "    Hollow Woman                 | HP 10,563/10,563 | MP 60/75 | break 165/165 | spd 208.25 | AV 21.57 | buffs[Tiro Finale - Increases ATK by 20%.; Time Stop Strike - Increases special attack DMG dealt by 50%.]",
+  "    Structure Destruction        | HP 15,186/15,186 | MP 90/90 | break 180/180 | spd 201.25 | AV 3.82 | buffs[Final Fatebloom - Increases ATK by 20%.; Structure Destruction - Increases elemental weakness DMG dealt by 18%.; Tiro Finale - Increases ATK by 20%.; Time Stop Strike - Increases special attack DMG dealt by 50%.]",
+  "    Final Fatebloom              | HP 10,346/10,346 | MP 85/90 | break 150/150 | spd 245.10 | AV 2.23 | magic 4/10 | buffs[Final Fatebloom - Increases SPD by 20%, and decreases DMG taken by 10%.; Final Fatebloom - Increases SPD by 20%.; Final Fatebloom - Increases ATK by 20%.; Structure Destruction - Increases elemental weakness DMG dealt by 18%.; Tiro Finale - Increases ATK by 20%.; Time Stop Strike - Increases special attack DMG dealt by 50%.]",
+  "    Time Stop Strike             | HP 9,974/9,974  | MP 15/75 | break 165/165 | spd 237.80 | AV 0.00 | magic 4/7 | buffs[Hollow Woman - Increases ATK by 50%.; Time Stop Strike - Increases special attack DMG dealt by 50%.]",
+  "  Enemies (SP 5)",
+  "    Lux☆Magica                   | HP 3,524/9,622  | MP 40/75 | break 0/150 BROKEN(174%) | spd 107.00 | AV 66.36 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).; Final Fatebloom - Increases chance to land critical hit by 9%.; Structure Destruction - Decreases ATK by 5%.]",
+  "    Lux☆Magica                   | HP 1,671/9,622  | MP 45/75 | break 0/150 BROKEN(174%) | spd 107.00 | AV 66.36 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).; Final Fatebloom - Increases chance to land critical hit by 9%.; Structure Destruction - Decreases ATK by 5%.]",
+  "    Lux☆Magica                   | HP 4,701/9,622  | MP 30/75 | break 0/150 BROKEN(162%) | spd 107.00 | AV 66.36 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).; Final Fatebloom - Increases chance to land critical hit by 9%.; Structure Destruction - Decreases ATK by 5%.]",
+  "    Lux☆Magica                   | HP 1,642/9,622  | MP 45/75 | break 0/150 BROKEN(174%) | spd 107.00 | AV 66.36 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).; Final Fatebloom - Increases chance to land critical hit by 9%.; Structure Destruction - Decreases ATK by 5%.]",
+  "    Lux☆Magica                   | KO              | MP 0/75 | break 0/150 BROKEN(186%) | spd 107.00 | AV 66.36 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).]",
+  "== Action 15: Structure Destruction (Ally) - Ultimate ==",
+  "  Structure Destruction -> Lux☆Magica 3,326 (broken dmg +10%)",
+  "  Structure Destruction -> Lux☆Magica 1,671 (broken dmg +10%)",
+  "  Structure Destruction -> Lux☆Magica 3,097 (broken dmg +10%)",
+  "  Structure Destruction -> Lux☆Magica 1,642 (broken dmg +10%)",
+  "  roll #46 crit: Structure Destruction → Lux☆Magica crit -> 19.0% miss",
+  "  roll #47 crit: Structure Destruction → Lux☆Magica crit -> 19.0% miss",
+  "  roll #48 crit: Structure Destruction → Lux☆Magica crit -> 19.0% miss",
+  "  roll #49 crit: Structure Destruction → Lux☆Magica crit -> 19.0% miss",
+  "  roll #50 target: String target -> Lux☆Magica (50.0%)",
+  "  Allies (SP 2)",
+  "    Tiro Finale                  | HP 9,903/9,903  | MP 45/75 | break 165/165 | spd 264.00 | AV 20.28 | magic 0/5 | buffs[Tiro Finale - Increases ATK by 20%.; Time Stop Strike - Increases special attack DMG dealt by 50%.; Structure Destruction - Increases elemental weakness DMG dealt by 18%.]",
+  "    Hollow Woman                 | HP 10,563/10,563 | MP 60/75 | break 165/165 | spd 208.25 | AV 21.57 | buffs[Tiro Finale - Increases ATK by 20%.; Time Stop Strike - Increases special attack DMG dealt by 50%.; Structure Destruction - Increases elemental weakness DMG dealt by 18%.]",
+  "    Structure Destruction        | HP 15,186/15,186 | MP 40/90 | break 180/180 | spd 201.25 | AV 3.82 | buffs[Final Fatebloom - Increases ATK by 20%.; Tiro Finale - Increases ATK by 20%.; Time Stop Strike - Increases special attack DMG dealt by 50%.; Structure Destruction - Increases elemental weakness DMG dealt by 18%.]",
+  "    Final Fatebloom              | HP 10,346/10,346 | MP 85/90 | break 150/150 | spd 245.10 | AV 2.23 | magic 4/10 | buffs[Final Fatebloom - Increases SPD by 20%, and decreases DMG taken by 10%.; Final Fatebloom - Increases SPD by 20%.; Final Fatebloom - Increases ATK by 20%.; Tiro Finale - Increases ATK by 20%.; Time Stop Strike - Increases special attack DMG dealt by 50%.; Structure Destruction - Increases elemental weakness DMG dealt by 18%.]",
+  "    Time Stop Strike             | HP 9,974/9,974  | MP 15/75 | break 165/165 | spd 237.80 | AV 0.00 | magic 5/7 | buffs[Hollow Woman - Increases ATK by 50%.; Time Stop Strike - Increases special attack DMG dealt by 50%.; Structure Destruction - Increases elemental weakness DMG dealt by 18%.]",
+  "  Enemies (SP 5)",
+  "    Lux☆Magica                   | HP 198/9,622    | MP 55/75 | break 0/150 BROKEN(184%) | spd 107.00 | AV 66.36 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).; Final Fatebloom - Increases chance to land critical hit by 9%.; Structure Destruction - Decreases ATK by 5%.]",
+  "    Lux☆Magica                   | KO              | MP 0/75 | break 0/150 BROKEN(184%) | spd 107.00 | AV 66.36 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).]",
+  "    Lux☆Magica                   | HP 1,604/9,622  | MP 40/75 | break 0/150 BROKEN(172%) | spd 107.00 | AV 66.36 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).; Final Fatebloom - Increases chance to land critical hit by 9%.; Structure Destruction - Decreases ATK by 5%.]",
+  "    Lux☆Magica                   | KO              | MP 0/75 | break 0/150 BROKEN(184%) | spd 107.00 | AV 66.36 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).]",
+  "    Lux☆Magica                   | KO              | MP 0/75 | break 0/150 BROKEN(186%) | spd 107.00 | AV 66.36 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).]",
+  "== Action 16: Time Stop Strike (Ally) - Battle Skill ==",
+  "  Time Stop Strike -> Lux☆Magica 198 (broken dmg +12%)",
+  "  roll #51 target: target -> Lux☆Magica (50.0%)",
+  "  roll #52 crit: Time Stop Strike → Lux☆Magica crit -> 19.0% miss",
+  "  Allies (SP 2)",
+  "    Tiro Finale                  | HP 9,903/9,903  | MP 45/75 | break 165/165 | spd 264.00 | AV 12.71 | magic 0/5 | buffs[Tiro Finale - Increases ATK by 20%.; Time Stop Strike - Increases special attack DMG dealt by 50%.; Structure Destruction - Increases elemental weakness DMG dealt by 18%.]",
+  "    Hollow Woman                 | HP 10,563/10,563 | MP 60/75 | break 165/165 | spd 208.25 | AV 11.96 | buffs[Tiro Finale - Increases ATK by 20%.; Time Stop Strike - Increases special attack DMG dealt by 50%.; Structure Destruction - Increases elemental weakness DMG dealt by 18%.]",
+  "    Structure Destruction        | HP 15,186/15,186 | MP 44/90 | break 180/180 | spd 201.25 | AV 0.00 | buffs[Final Fatebloom - Increases ATK by 20%.; Tiro Finale - Increases ATK by 20%.; Time Stop Strike - Increases special attack DMG dealt by 50%.; Structure Destruction - Increases elemental weakness DMG dealt by 18%.]",
+  "    Final Fatebloom              | HP 10,346/10,346 | MP 85/90 | break 150/150 | spd 245.10 | AV 0.00 | magic 4/10 | buffs[Final Fatebloom - Increases SPD by 20%, and decreases DMG taken by 10%.; Final Fatebloom - Increases SPD by 20%.; Final Fatebloom - Increases ATK by 20%.; Tiro Finale - Increases ATK by 20%.; Time Stop Strike - Increases special attack DMG dealt by 50%.; Structure Destruction - Increases elemental weakness DMG dealt by 18%.]",
+  "    Time Stop Strike             | HP 9,974/9,974  | MP 55/75 | break 165/165 | spd 237.80 | AV 33.64 | magic 0/7 | buffs[Hollow Woman - Increases ATK by 50%.; Time Stop Strike - Increases special attack DMG dealt by 50%.; Structure Destruction - Increases elemental weakness DMG dealt by 18%.]",
+  "  Enemies (SP 5)",
+  "    Lux☆Magica                   | KO              | MP 0/75 | break 0/150 BROKEN(196%) | spd 107.00 | AV 66.36 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).]",
+  "    Lux☆Magica                   | KO              | MP 0/75 | break 0/150 BROKEN(184%) | spd 107.00 | AV 66.36 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).]",
+  "    Lux☆Magica                   | HP 1,604/9,622  | MP 40/75 | break 0/150 BROKEN(172%) | spd 107.00 | AV 66.36 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).; Final Fatebloom - Increases chance to land critical hit by 9%.; Structure Destruction - Decreases ATK by 5%.]",
+  "    Lux☆Magica                   | KO              | MP 0/75 | break 0/150 BROKEN(184%) | spd 107.00 | AV 66.36 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).]",
+  "    Lux☆Magica                   | KO              | MP 0/75 | break 0/150 BROKEN(186%) | spd 107.00 | AV 66.36 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).]",
+  "== Action 17: Structure Destruction (Ally) - Battle Skill ==",
+  "  Allies (SP 1)",
+  "    Tiro Finale                  | HP 9,903/9,903  | MP 45/75 | break 165/165 | spd 264.00 | AV 12.71 | magic 0/5 | buffs[Tiro Finale - Increases ATK by 20%.; Time Stop Strike - Increases special attack DMG dealt by 50%.; Structure Destruction - Increases elemental weakness DMG dealt by 18%.]",
+  "    Hollow Woman                 | HP 10,563/10,563 | MP 60/75 | break 165/165 | spd 208.25 | AV 11.96 | buffs[Tiro Finale - Increases ATK by 20%.; Time Stop Strike - Increases special attack DMG dealt by 50%.; Structure Destruction - Increases elemental weakness DMG dealt by 18%.]",
+  "    Structure Destruction        | HP 15,186/15,186 | MP 90/90 | break 180/180 | spd 201.25 | AV 49.69 | buffs[Tiro Finale - Increases ATK by 20%.; Time Stop Strike - Increases special attack DMG dealt by 50%.; Structure Destruction - Increases elemental weakness DMG dealt by 18%.]",
+  "    Final Fatebloom              | HP 10,346/10,346 | MP 85/90 | break 150/150 | spd 245.10 | AV 0.00 | magic 4/10 | buffs[Final Fatebloom - Increases SPD by 20%, and decreases DMG taken by 10%.; Final Fatebloom - Increases SPD by 20%.; Final Fatebloom - Increases ATK by 20%.; Tiro Finale - Increases ATK by 20%.; Time Stop Strike - Increases special attack DMG dealt by 50%.; Structure Destruction - Increases elemental weakness DMG dealt by 18%.]",
+  "    Time Stop Strike             | HP 9,974/9,974  | MP 60/75 | break 165/165 | spd 237.80 | AV 33.64 | magic 0/7 | buffs[Hollow Woman - Increases ATK by 50%.; Time Stop Strike - Increases special attack DMG dealt by 50%.; Structure Destruction - Increases elemental weakness DMG dealt by 18%.]",
+  "  Enemies (SP 5)",
+  "    Lux☆Magica                   | KO              | MP 0/75 | break 0/150 BROKEN(196%) | spd 107.00 | AV 66.36 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).]",
+  "    Lux☆Magica                   | KO              | MP 0/75 | break 0/150 BROKEN(184%) | spd 107.00 | AV 66.36 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).]",
+  "    Lux☆Magica                   | HP 1,604/9,622  | MP 40/75 | break 0/150 BROKEN(172%) | spd 107.00 | AV 66.36 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).; Final Fatebloom - Increases chance to land critical hit by 9%.; Structure Destruction - Decreases ATK by 5%.]",
+  "    Lux☆Magica                   | KO              | MP 0/75 | break 0/150 BROKEN(184%) | spd 107.00 | AV 66.36 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).]",
+  "    Lux☆Magica                   | KO              | MP 0/75 | break 0/150 BROKEN(186%) | spd 107.00 | AV 66.36 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).]",
+  "== Action 18: Structure Destruction (Ally) - Ultimate ==",
+  "  Structure Destruction -> Lux☆Magica 1,604 (broken dmg +10%)",
+  "  roll #53 crit: Structure Destruction → Lux☆Magica crit -> 19.0% miss",
+  "  Allies (SP 2)",
+  "    Tiro Finale                  | HP 9,903/9,903  | MP 45/75 | break 165/165 | spd 264.00 | AV 12.71 | magic 0/5 | buffs[Tiro Finale - Increases ATK by 20%.; Time Stop Strike - Increases special attack DMG dealt by 50%.; Structure Destruction - Increases elemental weakness DMG dealt by 18%.]",
+  "    Hollow Woman                 | HP 10,563/10,563 | MP 60/75 | break 165/165 | spd 208.25 | AV 11.96 | buffs[Tiro Finale - Increases ATK by 20%.; Time Stop Strike - Increases special attack DMG dealt by 50%.; Structure Destruction - Increases elemental weakness DMG dealt by 18%.]",
+  "    Structure Destruction        | HP 15,186/15,186 | MP 24/90 | break 180/180 | spd 201.25 | AV 49.69 | buffs[Tiro Finale - Increases ATK by 20%.; Time Stop Strike - Increases special attack DMG dealt by 50%.; Structure Destruction - Increases elemental weakness DMG dealt by 18%.]",
+  "    Final Fatebloom              | HP 10,346/10,346 | MP 85/90 | break 150/150 | spd 245.10 | AV 0.00 | magic 4/10 | buffs[Final Fatebloom - Increases SPD by 20%, and decreases DMG taken by 10%.; Final Fatebloom - Increases SPD by 20%.; Final Fatebloom - Increases ATK by 20%.; Tiro Finale - Increases ATK by 20%.; Time Stop Strike - Increases special attack DMG dealt by 50%.; Structure Destruction - Increases elemental weakness DMG dealt by 18%.]",
+  "    Time Stop Strike             | HP 9,974/9,974  | MP 60/75 | break 165/165 | spd 237.80 | AV 33.64 | magic 1/7 | buffs[Hollow Woman - Increases ATK by 50%.; Time Stop Strike - Increases special attack DMG dealt by 50%.; Structure Destruction - Increases elemental weakness DMG dealt by 18%.]",
+  "  Enemies (SP 5)",
+  "    Lux☆Magica                   | KO              | MP 0/75 | break 0/150 BROKEN(196%) | spd 107.00 | AV 66.36 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).]",
+  "    Lux☆Magica                   | KO              | MP 0/75 | break 0/150 BROKEN(184%) | spd 107.00 | AV 66.36 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).]",
+  "    Lux☆Magica                   | KO              | MP 0/75 | break 0/150 BROKEN(182%) | spd 107.00 | AV 66.36 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).]",
+  "    Lux☆Magica                   | KO              | MP 0/75 | break 0/150 BROKEN(184%) | spd 107.00 | AV 66.36 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).]",
+  "    Lux☆Magica                   | KO              | MP 0/75 | break 0/150 BROKEN(186%) | spd 107.00 | AV 66.36 | magic 0/5 | debuffs[Final Fatebloom - Decreases dark RES by 2% (Stacks 5 times).]"
+ ],
+ "slots": [
+  [
+   {
+    "main": {
+     "enabled": true,
+     "dupes": 0,
+     "ascension": 5,
+     "portrait": "",
+     "kiokuLvl": 138,
+     "magicLvl": 130,
+     "heartphialLvl": 50,
+     "specialLvl": 7,
+     "name": "Lux☆Magica",
+     "id": 10010101,
+     "role": "Breaker",
+     "element": "Light",
+     "supportTarget": "Light",
+     "supportDescription": "Increases break gauge depletion (2) and increases break effect by 10%.",
+     "character_en": "Madoka Kaname",
+     "heartphial": "Madoka Kaname",
+     "rarity": 4,
+     "obtain": "Free",
+     "permaDate": "2025-03-27",
+     "releaseDate": "2025-03-27",
+     "isStandardChar": false,
+     "crysOptions": {}
+    }
+   },
+   {
+    "main": {
+     "enabled": true,
+     "dupes": 0,
+     "ascension": 5,
+     "portrait": "",
+     "kiokuLvl": 138,
+     "magicLvl": 130,
+     "heartphialLvl": 50,
+     "specialLvl": 7,
+     "name": "Lux☆Magica",
+     "id": 10010101,
+     "role": "Breaker",
+     "element": "Light",
+     "supportTarget": "Light",
+     "supportDescription": "Increases break gauge depletion (2) and increases break effect by 10%.",
+     "character_en": "Madoka Kaname",
+     "heartphial": "Madoka Kaname",
+     "rarity": 4,
+     "obtain": "Free",
+     "permaDate": "2025-03-27",
+     "releaseDate": "2025-03-27",
+     "isStandardChar": false,
+     "crysOptions": {}
+    }
+   },
+   {
+    "main": {
+     "enabled": true,
+     "dupes": 0,
+     "ascension": 5,
+     "portrait": "",
+     "kiokuLvl": 138,
+     "magicLvl": 130,
+     "heartphialLvl": 50,
+     "specialLvl": 7,
+     "name": "Lux☆Magica",
+     "id": 10010101,
+     "role": "Breaker",
+     "element": "Light",
+     "supportTarget": "Light",
+     "supportDescription": "Increases break gauge depletion (2) and increases break effect by 10%.",
+     "character_en": "Madoka Kaname",
+     "heartphial": "Madoka Kaname",
+     "rarity": 4,
+     "obtain": "Free",
+     "permaDate": "2025-03-27",
+     "releaseDate": "2025-03-27",
+     "isStandardChar": false,
+     "crysOptions": {}
+    }
+   },
+   {
+    "main": {
+     "enabled": true,
+     "dupes": 0,
+     "ascension": 5,
+     "portrait": "",
+     "kiokuLvl": 138,
+     "magicLvl": 130,
+     "heartphialLvl": 50,
+     "specialLvl": 7,
+     "name": "Lux☆Magica",
+     "id": 10010101,
+     "role": "Breaker",
+     "element": "Light",
+     "supportTarget": "Light",
+     "supportDescription": "Increases break gauge depletion (2) and increases break effect by 10%.",
+     "character_en": "Madoka Kaname",
+     "heartphial": "Madoka Kaname",
+     "rarity": 4,
+     "obtain": "Free",
+     "permaDate": "2025-03-27",
+     "releaseDate": "2025-03-27",
+     "isStandardChar": false,
+     "crysOptions": {}
+    }
+   },
+   {
+    "main": {
+     "enabled": true,
+     "dupes": 0,
+     "ascension": 5,
+     "portrait": "",
+     "kiokuLvl": 138,
+     "magicLvl": 130,
+     "heartphialLvl": 50,
+     "specialLvl": 7,
+     "name": "Lux☆Magica",
+     "id": 10010101,
+     "role": "Breaker",
+     "element": "Light",
+     "supportTarget": "Light",
+     "supportDescription": "Increases break gauge depletion (2) and increases break effect by 10%.",
+     "character_en": "Madoka Kaname",
+     "heartphial": "Madoka Kaname",
+     "rarity": 4,
+     "obtain": "Free",
+     "permaDate": "2025-03-27",
+     "releaseDate": "2025-03-27",
+     "isStandardChar": false,
+     "crysOptions": {}
+    }
+   }
+  ],
+  [
+   {
+    "main": {
+     "enabled": true,
+     "dupes": 5,
+     "ascension": 5,
+     "portrait": "",
+     "kiokuLvl": 146,
+     "magicLvl": 130,
+     "heartphialLvl": 50,
+     "specialLvl": 10,
+     "name": "Tiro Finale",
+     "id": 10030101,
+     "role": "Buffer",
+     "element": "Forest",
+     "supportTarget": "Forest",
+     "supportDescription": "Increases SPD by 25%, and MP recovery rate by 10%.",
+     "character_en": "Mami Tomoe",
+     "heartphial": "Mami Tomoe",
+     "rarity": 5,
+     "obtain": "Permanent",
+     "permaDate": "May 31, 2025",
+     "releaseDate": "2025-03-30",
+     "crysOptions": {
+      "3001": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3002": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3003": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3004": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3005": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3006": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        4034,
+        4016,
+        4075
+       ]
+      },
+      "3007": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        4057,
+        4034,
+        4088
+       ]
+      },
+      "3008": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3009": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3010": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3011": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        4018,
+        4023,
+        4034
+       ]
+      },
+      "3012": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3013": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        4022,
+        4012,
+        4034
+       ]
+      },
+      "3014": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3015": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3016": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3017": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3018": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3019": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3020": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3021": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3022": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3023": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3024": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        4018,
+        4005,
+        4034
+       ]
+      },
+      "3025": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        4034,
+        4068,
+        4015
+       ]
+      },
+      "3026": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3027": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3028": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        4071,
+        4079,
+        4034
+       ]
+      },
+      "3029": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "7012": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        4086,
+        4034,
+        4062
+       ]
+      }
+     },
+     "isStandardChar": true,
+     "isLimitedChar": false
+    }
+   },
+   {
+    "main": {
+     "enabled": true,
+     "dupes": 1,
+     "ascension": 5,
+     "portrait": "",
+     "kiokuLvl": 146,
+     "magicLvl": 140,
+     "heartphialLvl": 50,
+     "specialLvl": 10,
+     "name": "Hollow Woman",
+     "id": 10070101,
+     "role": "Buffer",
+     "element": "Light",
+     "supportTarget": "Buffer",
+     "supportDescription": "On basic attack, advances action order by 10%.<br>Increases SPD by 20%.",
+     "character_en": "Mabayu Aki",
+     "heartphial": "Mabayu Aki",
+     "rarity": 5,
+     "obtain": "Permanent",
+     "permaDate": "July 31 , 2025",
+     "releaseDate": "2025-05-30",
+     "crysOptions": {
+      "3001": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3002": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3003": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3004": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3005": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        4010,
+        4034,
+        4030
+       ]
+      },
+      "3006": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        4037,
+        4010,
+        4034
+       ]
+      },
+      "3007": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3008": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3009": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3010": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3011": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        4017,
+        4088,
+        4034
+       ]
+      },
+      "3012": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3013": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3014": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3015": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3016": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3017": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3018": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3019": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3020": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3021": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3022": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3023": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3024": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        4030,
+        4010,
+        4034
+       ]
+      },
+      "3025": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        4030,
+        4034,
+        4010
+       ]
+      },
+      "3026": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3027": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3028": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        4001,
+        4046,
+        4034
+       ]
+      },
+      "3029": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        4021,
+        4048,
+        4034
+       ]
+      },
+      "7021": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        4034,
+        4055,
+        4047
+       ]
+      }
+     },
+     "isStandardChar": true,
+     "isLimitedChar": false
+    }
+   },
+   {
+    "main": {
+     "enabled": true,
+     "dupes": 0,
+     "ascension": 4,
+     "portrait": "It's Cake Party Time!",
+     "kiokuLvl": 140,
+     "magicLvl": 130,
+     "heartphialLvl": 50,
+     "specialLvl": 7,
+     "name": "Structure Destruction",
+     "id": 10240101,
+     "role": "Healer",
+     "element": "Void",
+     "supportTarget": "Healer",
+     "supportDescription": "Increases HP recovery amount by 12%.<br>On basic attack, advances action order by 10%.",
+     "character_en": "Mitama Yakumo",
+     "heartphial": "Mitama Yakumo",
+     "rarity": 5,
+     "obtain": "Permanent",
+     "permaDate": "November 30, 2025",
+     "releaseDate": "2025-10-09",
+     "crysOptions": {
+      "3001": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3002": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3003": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3004": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3005": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3007": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3008": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3009": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3010": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3011": {
+       "enabled": true,
+       "useIndex": 2,
+       "subCrys": [
+        4093,
+        4080,
+        4034
+       ]
+      },
+      "3012": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3013": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3016": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3018": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3019": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3020": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3021": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3022": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3023": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3024": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        4092,
+        4034,
+        4010
+       ]
+      },
+      "3025": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3026": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3027": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3028": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        4037,
+        4076,
+        4024
+       ]
+      },
+      "3029": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "7035": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        4001,
+        4045,
+        4034
+       ]
+      }
+     },
+     "isStandardChar": true,
+     "isLimitedChar": false
+    },
+    "support": {
+     "enabled": true,
+     "dupes": 0,
+     "ascension": 4,
+     "portrait": "",
+     "kiokuLvl": 146,
+     "magicLvl": 135,
+     "heartphialLvl": 50,
+     "specialLvl": 7,
+     "name": "Glitterjoy Snow Globe",
+     "id": 10860201,
+     "role": "Healer",
+     "element": "Flame",
+     "supportTarget": "Healer",
+     "supportDescription": "Grants 10 MP at battle start.<br>Increases MP recovery rate by 5% and SPD by 10.",
+     "character_en": "Rika Ayano",
+     "heartphial": "Rika Ayano",
+     "rarity": 5,
+     "obtain": "Exclusive",
+     "permaDate": "",
+     "releaseDate": "2025-12-22",
+     "crysOptions": {
+      "3001": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3002": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3003": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3004": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3005": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3006": {
+       "enabled": true,
+       "useIndex": 1,
+       "subCrys": [
+        4072,
+        4034,
+        4022
+       ]
+      },
+      "3007": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3008": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3009": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3010": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3011": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        4023,
+        4071,
+        4034
+       ]
+      },
+      "3012": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3013": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3014": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3015": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3017": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3018": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3019": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3020": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3021": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3022": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3023": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3024": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        4034,
+        4019,
+        4010
+       ]
+      },
+      "3025": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        4007,
+        4030,
+        4034
+       ]
+      },
+      "3026": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3027": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3028": {
+       "enabled": true,
+       "useIndex": 2,
+       "subCrys": [
+        4006,
+        4036,
+        4034
+       ]
+      },
+      "3029": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "7043": {
+       "enabled": true,
+       "useIndex": 3,
+       "subCrys": [
+        4029,
+        4090,
+        4034
+       ]
+      }
+     },
+     "isStandardChar": false,
+     "isLimitedChar": true
+    }
+   },
+   {
+    "main": {
+     "enabled": true,
+     "dupes": 0,
+     "ascension": 5,
+     "portrait": "",
+     "kiokuLvl": 146,
+     "magicLvl": 130,
+     "heartphialLvl": 50,
+     "specialLvl": 9,
+     "name": "Final Fatebloom",
+     "id": 11460101,
+     "role": "Breaker",
+     "element": "Dark",
+     "supportTarget": "Breaker",
+     "supportDescription": "Increases break gauge depletion (2), and increases basic attack break bonus by 30%.<br>On battle skill use, increases own SPD by 25% (2 turns).",
+     "character_en": "Fuka Higure",
+     "heartphial": "Fuka Higure",
+     "rarity": 5,
+     "obtain": "Exclusive",
+     "permaDate": "",
+     "releaseDate": "2026-03-27",
+     "crysOptions": {
+      "3001": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3002": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3003": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3004": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        4001,
+        4034,
+        4028
+       ]
+      },
+      "3005": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3006": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        4034,
+        4086,
+        4083
+       ]
+      },
+      "3007": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3008": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3009": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3010": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3011": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        4012,
+        4034,
+        4065
+       ]
+      },
+      "3012": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3013": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3016": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3018": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        4015,
+        4009,
+        4034
+       ]
+      },
+      "3020": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3021": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3022": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3023": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3024": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        4034,
+        4011,
+        4067
+       ]
+      },
+      "3025": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        4029,
+        4068,
+        4034
+       ]
+      },
+      "3026": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3027": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3028": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        4004,
+        4076,
+        4034
+       ]
+      },
+      "3029": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        4091,
+        4040,
+        4076
+       ]
+      },
+      "7054": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        4016,
+        4034,
+        4094
+       ]
+      }
+     },
+     "isStandardChar": false,
+     "isLimitedChar": true
+    }
+   },
+   {
+    "main": {
+     "enabled": true,
+     "dupes": 3,
+     "ascension": 5,
+     "portrait": "",
+     "kiokuLvl": 146,
+     "magicLvl": 133,
+     "heartphialLvl": 50,
+     "specialLvl": 10,
+     "name": "Time Stop Strike",
+     "id": 10020101,
+     "role": "Buffer",
+     "element": "Void",
+     "supportTarget": "Buffer",
+     "supportDescription": "Increases SPD by 20%.<br>On battle skill use, advances all allies' action order by 5%.",
+     "character_en": "Homura Akemi",
+     "heartphial": "Homura Akemi",
+     "rarity": 5,
+     "obtain": "Permanent",
+     "permaDate": "June 30, 2025",
+     "releaseDate": "2025-04-25",
+     "crysOptions": {
+      "3001": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3002": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3003": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3004": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3005": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3006": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        4094,
+        4027,
+        4034
+       ]
+      },
+      "3007": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3008": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3009": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3010": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3011": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        4090,
+        4045,
+        4034
+       ]
+      },
+      "3012": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3013": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        4077,
+        4034,
+        4094
+       ]
+      },
+      "3015": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3017": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3019": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3020": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3021": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3022": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3023": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3024": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        4026,
+        4035,
+        4034
+       ]
+      },
+      "3025": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        4029,
+        4034,
+        4047
+       ]
+      },
+      "3026": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3027": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "3028": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        4034,
+        4046,
+        4004
+       ]
+      },
+      "3029": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        0,
+        0,
+        0
+       ]
+      },
+      "7015": {
+       "enabled": true,
+       "useIndex": 0,
+       "subCrys": [
+        4034,
+        4094,
+        4047
+       ]
+      }
+     },
+     "isStandardChar": true,
+     "isLimitedChar": false
+    }
+   }
+  ]
+ ]
+}
