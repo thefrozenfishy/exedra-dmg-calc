@@ -836,6 +836,10 @@ function effectStatus(e: MaxDmgEffect): { status: EffectStatus, statusText: stri
         const what = e.detail.abilityEffectType.includes('DEBUFF') ? 'debuffs' : 'buffs'
         return { status: 'used', statusText: `${e.detail.abilityEffectType.startsWith('UP') ? 'Strengthens' : 'Weakens'} the ${what} ${e.casterName} gives` }
     }
+    if (e.forVortex) {
+        if (excluded.has(e.key)) return { status: 'off', statusText: 'Turned off: click to turn on' }
+        return { status: 'used', statusText: `On ${e.casterName}: a vortex pops with its owner's ATK and DMG buffs` }
+    }
     if (!e.applies) {
         return e.side === 'ally'
             ? { status: 'na', statusText: `Only affects ${e.casterName} itself` }

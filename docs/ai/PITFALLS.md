@@ -103,6 +103,10 @@
   the engine without checking the decompile (its element/role gate on damage made skills hit only same-element
   enemies).
 
+- Vortex (and every slip damage) is computed with its OWNER's stats and buffs, not the popping hit's attacker
+  (GetSlipDamageResult 0x13A7580: attackUnit = state._UserUnitId). Max Damage tools that only buff the dealer miss
+  the owner's ATK / DMG dealt / vortex DMG crystalis (fixed 2026-10-24, EngineMaxDamage forVortex).
+
 ## Decompile reading
 - Ghidra names are ICF-folded: identical bodies share one name, so the `// ====` header may name another method.
   **Trust the `C#:` line** (and the RVA).

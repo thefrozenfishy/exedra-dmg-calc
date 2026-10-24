@@ -29,7 +29,7 @@ import { actorSkillTypeRestriction, ailmentConditionsMet, unitCountConditionsMet
 import { conditionCsvsExclusive } from "../models/ConditionTiers"
 import { enemyName, isMultiRaidStage, isSoloRaidStage, type QuestEnemyAppearance } from "../models/PvE"
 import type { PvPKioku } from "../models/PvPKioku"
-import { TargetType, type SkillDetail } from "../types/KiokuTypes"
+import { TargetType, targetRange, type SkillDetail } from "../types/KiokuTypes"
 
 const ORIGIN_ACTIVE = 1, ORIGIN_PASSIVE = 2
 const OUT_OF_REACH_HP = 2_000_000_000
@@ -453,13 +453,25 @@ export function computeMaxDamageEngine(allies: PvPKioku[], stage: EngineMaxDmgSt
                 : unitCountConditionsMet([e.detail.activeConditionSetIdCsv], enemies.length, allies.length))
         const ailmentsOk = (d: SkillDetail) => !opts.enemyStates
             || ailmentConditionsMet([d.startConditionSetIdCsv, d.activeConditionSetIdCsv], opts.enemyStates, enemies.length)
+        // A vortex pops through its OWNER's damage pipeline, not the popping hit's: [CONFIRMED 3.19]
+        // BattleDamageCalculator.GetSlipDamageResult (0x13A7580) takes the state's _UserUnitId as attackUnit, and
+        // GetSlipDamageValue (0x13A7DD0) uses that unit's processed ATK (GetDefenseCorrectedDamage 0x13A48E0, capped at 2x),
+        // DMG dealt / ongoing / vortex DMG dealt (GetProcessedGiveDamage 0x13A5BC0) and element bonuses. So the self-only
+        // buffs of another member whose vortex counts here are given to that member (their crystalis, portrait, ability).
+        const vortexOwners = new Set(passEffects.filter(e => e.detail.abilityEffectType === "VORTEX_ATK" && e.casterPos !== pos
+            && stacksOf(e) > 0 && ailmentsOk(e.detail) && countsOk(e)).map(e => e.casterPos))
+        const forVortex = (e: MaxDmgEffect) => !e.applies && e.side === "ally" && e.detail.range === targetRange.SELF && vortexOwners.has(e.casterPos)
         // Effects that count, and ladders of rungs that cannot count together (one rung each, chosen per column).
         const base: Given = []
         const ladderOf = new Map<string, Given>()
         for (const e of passEffects) {
-            if (pos === attackerPos) { e.tierUsed = undefined; e.reach = undefined; e.rate = undefined; e.defaultOff = vortexOffByDefault(e, pos) || undefined }
+            if (pos === attackerPos) {
+                e.tierUsed = undefined; e.reach = undefined; e.rate = undefined
+                e.defaultOff = vortexOffByDefault(e, pos) || undefined
+                e.forVortex = forVortex(e) || undefined
+            }
             const stacks = stacksOf(e)
-            if (!stacks || !ailmentsOk(e.detail) || !e.applies || !countsOk(e)) continue
+            if (!stacks || !ailmentsOk(e.detail) || !(e.applies || forVortex(e)) || !countsOk(e)) continue
             const copies = e.source === "Crystalis" ? Math.max(1, ((allies[e.casterPos] as any).crys as number[] ?? []).filter(c => c === (e.detail as any).passiveSkillMstId).length) : 1
             if (e.tier) ladderOf.set(e.tier.group, [...(ladderOf.get(e.tier.group) ?? []), { e, stacks, copies }])
             else base.push({ e, stacks, copies })

@@ -53,6 +53,9 @@ export interface MaxDmgEffect {
     // Dealer's evaluation (engine Max Damage only): off unless its key is in MaxDmgOptions.included
     // (battle/EngineMaxDamage.vortexOffByDefault: a vortex user's other vortex). UI bookkeeping.
     defaultOff?: boolean
+    // Dealer's evaluation (engine Max Damage only): a self-only buff of another member whose vortex counts, given to that
+    // member because a vortex pops with its owner's buffs (battle/EngineMaxDamage). UI bookkeeping.
+    forVortex?: boolean
 }
 
 // Buff/debuff strength (UP/DWN_BUFF/DEBUFF_EFFECT_VALUE): not a state on the dealer or an enemy, it scales every
