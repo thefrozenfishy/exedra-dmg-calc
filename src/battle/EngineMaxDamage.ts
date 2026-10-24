@@ -207,6 +207,68 @@ function effectValueRate(caster: any, effect: any): number {
 }
 
 /** Gives the listed team effects (conditions met). Returns where each landed (for the UI). */
+/** Gives `e` once (conditions cleared) from `caster`; the effect-value rate of the caster, undefined when it can't be made. */
+function launchOnce(b: Built, e: MaxDmgEffect, caster: any, info: any): number | undefined {
+    const effect = E.AbilityEffectFactory.Create(info, false)
+    if (!effect) return undefined
+    clearConditions(effect)
+    const rate = effectValueRate(caster, effect)
+    const check = new E.BattleConditionUtils_ConditionCheckDataBundle().ctor()
+    check._GameDirector = b.d
+    check._SelfUnit = caster
+    check._ActorUnit = caster
+    check._MainTargetUnit = b.main
+    const origin = isPassiveDetail(e.detail) ? ORIGIN_PASSIVE : ORIGIN_ACTIVE
+    E.AbilityEffectLauncher.Triggering$10([effect], 0, check, origin, caster, b.dic, b.d, null, b.main?._Id ?? 0, b.dealer._Id)
+    return rate
+}
+
+/** UI only: effects of one caster that feed ONE state in battle, i.e. one stack counter. Every effect is given once in a
+ *  fresh battle; UnitCondition.AddUnitState (0x15EDED0) looks up a duplicate (GetDuplicateUnitState 0x15EE430) and an
+ *  IBlendable one (accum / unique states) absorbs the new state (Blend) instead of adding it. Watched from outside: a
+ *  state that was not added but has an IBlendable duplicate created by an earlier effect of the same caster joins that
+ *  effect's group. Returns key -> group (the first effect's key), for groups of 2 or more. */
+function blendGroups(ctx: Ctx, pos: number, effects: MaxDmgEffect[]): Map<string, string> {
+    const parent = new Map<string, string>()
+    const root = (k: string): string => { let r = k; while (parent.has(r) && parent.get(r) !== r) r = parent.get(r)!; return r }
+    new MaxDamageRandom(false, 0).run(() => {
+        const b = buildBattle(ctx, pos, new MaxDamageRandom(false, 0))
+        if (!b.dealer) return
+        const createdBy = new Map<any, MaxDmgEffect>()
+        let current: MaxDmgEffect | undefined
+        for (const u of new Set<any>([...b.dic.values(), ...b.allies, ...b.enemies])) {
+            const cond = u?._Condition
+            if (!cond || typeof cond.AddUnitState !== "function") continue
+            const add = cond.AddUnitState
+            cond.AddUnitState = function (this: any, state: any, ...rest: any[]) {
+                const out = add.call(this, state, ...rest)
+                if (current) {
+                    if (this._StateList.includes(state)) createdBy.set(state, current)
+                    else {
+                        const dup = this.GetDuplicateUnitState(state)
+                        const by = dup && typeof dup.Blend === "function" ? createdBy.get(dup) : undefined
+                        if (by && by.casterPos === current.casterPos && by.key !== current.key) parent.set(root(current.key), root(by.key))
+                    }
+                }
+                return out
+            }
+        }
+        for (const e of effects) {
+            const caster = b.allies[e.casterPos]
+            const info = caster && infoOf(e)
+            if (!info) continue
+            current = e
+            try { launchOnce(b, e, caster, info) } catch { /* UI grouping only */ }
+        }
+        current = undefined
+    })
+    const groups = new Map<string, string[]>()
+    for (const e of effects) groups.set(root(e.key), [...(groups.get(root(e.key)) ?? []), e.key])
+    const out = new Map<string, string>()
+    for (const keys of groups.values()) if (keys.length > 1) for (const k of keys) out.set(k, keys[0])
+    return out
+}
+
 function giveEffects(b: Built, list: Given): Map<string, { dealer: boolean, enemies: number[], rate: number }> {
     const reach = new Map<string, { dealer: boolean, enemies: number[], rate: number }>()
     // buff / debuff strength first: it scales every state its holder gives afterwards
@@ -220,20 +282,12 @@ function giveEffects(b: Built, list: Given): Map<string, { dealer: boolean, enem
         if (!caster) continue
         const info = infoOf(e)
         if (!info) continue
-        const origin = isPassiveDetail(e.detail) ? ORIGIN_PASSIVE : ORIGIN_ACTIVE
         let rate = 1
         // every equipped copy of a crystalis is its own passive (the effect list merges them into one row)
         for (let n = 0; n < stacks * (copies ?? 1); n++) {
-            const effect = E.AbilityEffectFactory.Create(info, false)
-            if (!effect) break
-            clearConditions(effect)
-            if (n === 0) rate = effectValueRate(caster, effect)
-            const check = new E.BattleConditionUtils_ConditionCheckDataBundle().ctor()
-            check._GameDirector = b.d
-            check._SelfUnit = caster
-            check._ActorUnit = caster
-            check._MainTargetUnit = b.main
-            E.AbilityEffectLauncher.Triggering$10([effect], 0, check, origin, caster, b.dic, b.d, null, b.main?._Id ?? 0, b.dealer._Id)
+            const r = launchOnce(b, e, caster, info)
+            if (r === undefined) break
+            if (n === 0) rate = r
         }
         // [APPROXIMATION] a vortex always pops in the max: one hit left (RemainAttackCount = v2 when given,
         // VortexUnitStateBase.ctor 0x15F6CF0; VortexProcess 0x18f0260 pops it when a hit takes it to 0), so the evaluated
@@ -470,8 +524,10 @@ export function computeMaxDamageEngine(allies: PvPKioku[], stage: EngineMaxDmgSt
         // Effects that count, and ladders of rungs that cannot count together (one rung each, chosen per column).
         const base: Given = []
         const ladderOf = new Map<string, Given>()
+        const blended = pos === attackerPos ? blendGroups(ctx, pos, passEffects) : undefined
         for (const e of passEffects) {
             if (pos === attackerPos) {
+                e.blendGroup = blended?.get(e.key)
                 e.tierUsed = undefined; e.reach = undefined; e.rate = undefined
                 e.defaultOff = vortexOffByDefault(e, pos) || undefined
                 e.forOwner = forOwner(e) || undefined

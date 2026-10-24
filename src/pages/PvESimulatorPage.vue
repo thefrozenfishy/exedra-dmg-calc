@@ -390,7 +390,7 @@
                             <div v-for="e in cell" :key="e.key" class="fx-card"
                                 :class="[e.side === 'ally' ? 'fx-buff' : 'fx-debuff', e.forOwner ? (e.side === 'ally' ? 'fx-support-buff' : 'fx-support-debuff') : '', `fx-${e.status}`]"
                                 :title="e.status === 'na' ? e.statusText : e.status === 'alt' ? `${e.type}\nClick to use this tier instead` : `${e.type}\nClick to turn ${e.status === 'off' ? 'on' : 'off'}`"
-                                @click="e.status !== 'na' && toggleEffect(e.key)">
+                                @click="e.status !== 'na' && toggleCard(e)">
                                 <div class="fx-effect">
                                     <span class="fx-name">{{ e.name }}</span>
                                     <span v-if="e.value" class="fx-value">{{ e.value }}</span>
@@ -402,10 +402,12 @@
                                 <div v-if="e.description" class="fx-desc">{{ e.description }}</div>
                                 <!-- skill detail id (click to copy) and condition set ids: rows with the same text differ here -->
                                 <div class="fx-meta">
-                                    <span class="fx-id" title="Skill detail id: click to copy"
-                                        @click.stop="copyId(e.id)">{{ e.id }}</span>
-                                    <span v-if="e.startCond" class="fx-cond" title="Start condition set ids">S{{ e.startCond }}</span>
-                                    <span v-if="e.activeCond" class="fx-cond" title="Active condition set ids">A{{ e.activeCond }}</span>
+                                    <span v-for="id in e.ids" :key="id" class="fx-id" title="Skill detail id: click to copy"
+                                        @click.stop="copyId(id)">{{ id }}</span>
+                                    <span v-if="e.startConds.length" class="fx-cond" title="Start condition set ids">S{{ e.startConds.join(' / ') }}</span>
+                                    <span v-if="e.activeConds.length" class="fx-cond" title="Active condition set ids">A{{ e.activeConds.join(' / ') }}</span>
+                                    <span v-if="e.keys.length > 1" class="fx-cond"
+                                        :title="`${e.keys.length} effects that add to one stack counter in battle: shown and toggled as one`">{{ e.keys.length }} merged · {{ e.sources.join(' + ') }}</span>
                                 </div>
                                 <div class="fx-foot">
                                     <span class="fx-target">{{ e.statusText }}</span>
@@ -414,7 +416,7 @@
                                 </div>
                                 <label v-if="e.maxStacks > 1 && e.status !== 'na'" class="fx-stacks" @click.stop>
                                     Stacks <input class="num" type="number" min="0" :max="e.maxStacks" :value="e.stacks"
-                                        @change="setStacks(e.key, Number(($event.target as HTMLInputElement).value), e.maxStacks)" />
+                                        @change="setCardStacks(e, Number(($event.target as HTMLInputElement).value))" />
                                     /
                                     {{ e.maxStacks }}
                                 </label>
@@ -883,7 +885,7 @@ function effectStatus(e: MaxDmgEffect): { status: EffectStatus, statusText: stri
         : { status: 'used', statusText: enemyCount === 1 ? 'On the enemy' : `On all ${enemyCount} enemies` }
 }
 
-const effectViews = computed(() => (maxDmg.value?.effects ?? []).map(e => {
+const effectRows = computed(() => (maxDmg.value?.effects ?? []).map(e => {
     const count = Math.max(0, Math.min(e.maxStacks, stacks.get(e.key) ?? e.maxStacks))
     return {
         key: e.key, side: e.side, type: e.detail.abilityEffectType, name: effectName(e.detail.abilityEffectType),
@@ -895,13 +897,60 @@ const effectViews = computed(() => (maxDmg.value?.effects ?? []).map(e => {
         tierGroup: e.tier?.group,
         forOwner: !!e.forOwner,
         description: effectDescription(e.detail),
-        id: skillDetailId(e.detail),
-        startCond: e.detail.startConditionSetIdCsv || '',
-        activeCond: e.detail.activeConditionSetIdCsv || '',
+        blendGroup: e.blendGroup,
+        // a card of merged effects (blendGroup) lists every one of these
+        keys: [e.key],
+        ids: [skillDetailId(e.detail)],
+        sources: [e.source],
+        startConds: e.detail.startConditionSetIdCsv ? [e.detail.startConditionSetIdCsv] : [] as string[],
+        activeConds: e.detail.activeConditionSetIdCsv ? [e.detail.activeConditionSetIdCsv] : [] as string[],
         ...effectStatus(e),
     }
 }))
+// Effects that feed one state in battle (MaxDmgEffect.blendGroup: one stack counter, e.g. an ATK +2% (max 15 stacks)
+// given by several triggers of the ability and the ascension) are one card: the first effect's text and stacks, every
+// effect's id, source and conditions, the best status. Toggling or setting stacks on it acts on all of them.
+const effectViews = computed(() => {
+    const out: (typeof effectRows.value)[number][] = []
+    const byGroup = new Map<string, (typeof effectRows.value)[number]>()
+    const addUnique = (list: string[], items: string[]) => { for (const x of items) if (!list.includes(x)) list.push(x) }
+    for (const row of effectRows.value) {
+        const card = row.blendGroup ? byGroup.get(row.blendGroup) : undefined
+        if (!card) {
+            const v = { ...row, keys: [...row.keys], ids: [...row.ids], sources: [...row.sources], startConds: [...row.startConds], activeConds: [...row.activeConds] }
+            if (row.blendGroup) byGroup.set(row.blendGroup, v)
+            out.push(v)
+            continue
+        }
+        card.keys.push(row.key)
+        card.ids.push(...row.ids)
+        addUnique(card.sources, row.sources)
+        addUnique(card.startConds, row.startConds)
+        addUnique(card.activeConds, row.activeConds)
+        if (row.description && !card.description.split('\n').includes(row.description)) card.description = card.description ? `${card.description}\n${row.description}` : row.description
+        card.forOwner ||= row.forOwner
+        if (STATUS_ORDER[row.status] < STATUS_ORDER[card.status]) { card.status = row.status; card.statusText = row.statusText }
+    }
+    return out
+})
 type EffectView = (typeof effectViews.value)[number]
+
+// A card's click: one effect as before; a merged card turns all its effects on or off together.
+function toggleCard(e: EffectView) {
+    if (e.keys.length === 1) return toggleEffect(e.key)
+    const on = e.status === 'off'
+    for (const k of e.keys) {
+        if (on) { excluded.delete(k); if (isOffByDefault(k)) included.add(k) }
+        else { excluded.add(k); included.delete(k) }
+    }
+}
+// Stacks on a merged card: its stack counter gets them from the first effect, the others give none (at the max, all
+// give theirs: the counter is capped anyway).
+function setCardStacks(e: EffectView, v: number) {
+    setStacks(e.key, v, e.maxStacks)
+    const n = stacks.get(e.key) ?? e.maxStacks
+    for (const k of e.keys.slice(1)) { if (n === e.maxStacks) stacks.delete(k); else stacks.set(k, 0) }
+}
 
 function copyId(id: number) {
     const text = String(id)
@@ -949,9 +998,9 @@ const effectSections = computed(() => {
 })
 
 function setSectionOn(effects: EffectView[], on: boolean) {
-    for (const e of effects) {
-        if (on) { excluded.delete(e.key); if (isOffByDefault(e.key)) included.add(e.key) }
-        else { excluded.add(e.key); included.delete(e.key) }
+    for (const k of effects.flatMap(e => e.keys)) {
+        if (on) { excluded.delete(k); if (isOffByDefault(k)) included.add(k) }
+        else { excluded.add(k); included.delete(k) }
     }
 }
 

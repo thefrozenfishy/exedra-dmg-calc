@@ -56,6 +56,9 @@ export interface MaxDmgEffect {
     // Dealer's evaluation (engine Max Damage only): a self-only buff of another member whose vortex / DoT counts, given to
     // that member because slip damage pops with its owner's buffs (battle/EngineMaxDamage). UI bookkeeping.
     forOwner?: boolean
+    // Dealer's evaluation (engine Max Damage only): effects of this caster that feed one state in battle (accum / unique
+    // states blend, battle/EngineMaxDamage.blendGroups) share this key (the first one's). UI: shown as one card.
+    blendGroup?: string
 }
 
 // Buff/debuff strength (UP/DWN_BUFF/DEBUFF_EFFECT_VALUE): not a state on the dealer or an enemy, it scales every
