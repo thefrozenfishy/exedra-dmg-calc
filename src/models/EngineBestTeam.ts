@@ -41,9 +41,8 @@ const RELEVANT_SUPPORT_SUPPORTS = {
 
 export function scenarioOf(o: FindBestTeamOptions): TeamScoreScenario {
     return {
-        stage: (o as any).stage, enemies: o.enemies, ailments: o.activeAliments, arenaEffects: o.arenaEffectsMap ?? {}, weakElements: o.weakElements,
-        buffMultReduction: o.buffMultReduction ?? 0, offElementBuffMultReduction: o.offElementBuffMultReduction ?? undefined,
-        debuffMultReduction: o.debuffMultReduction ?? 0, offElementDebuffMultReduction: o.offElementDebuffMultReduction ?? undefined,
+        stage: (o as any).stage, enemies: o.enemies, ailments: o.activeAliments,
+        attackerHp: Number.isFinite(o.attackerHealth) ? o.attackerHealth : undefined,
     }
 }
 

@@ -18,7 +18,8 @@ Find any symbol with `python3 scripts/ai/xq.py ts <name>`.
 |---|---|
 | `EngineBattle.ts` | Runs one battle like the client (`ClientDriver.runBattleLikeClient`): setup kinds pvp / quest / soloRaid / multiRaid, `executeNextAction()` -> `BattleSnapshot`s, manual control (`BattleRng.pick`, `PendingDecision`), `RaidCarry` (Solo Raid attempt carry-over). |
 | `EngineRandom.ts` | Routes the engine's `GameRandom` hook through a `BattleRng` (page RNG modes, roll log). |
-| `EngineMaxDamage.ts` | Max Damage on the engine: `computeMaxDamageEngine` (result shape in `models/MaxDamage.ts`). |
+| `EngineMaxDamage.ts` | Max Damage on the engine: `computeMaxDamageEngine` (result shape in `models/MaxDamage.ts`; `scoreOnly` = numbers only, `trace` = "Stats for nerds"). |
+| `EngineDamageTrace.ts` | "Stats for nerds": `traceDamage` wraps `BattleDamageCalculator`'s static steps for one run and records each hit's factors; `unitStats` / `enemyStats`. |
 | `EngineBench.ts`, `EngineTeamScore.ts` | Kioku Grid bench battles; Best SA Team scoring. |
 | `engineBundle.ts` | `E`: the bundled engine module. |
 
@@ -35,6 +36,7 @@ Find any symbol with `python3 scripts/ai/xq.py ts <name>`.
 | `BattleRng.ts` | Every random decision of a simulated battle: modes seed/hit/miss/weighted/manual, `chance`, `choose`, `pickTarget`, `PendingDecision`, recorded `RngEvent`s. |
 | `BattleMath.ts` | `CsDecimal` exact decimal (.NET Core DecCalc), `seededRng`; also used by `src/engine/runtime.ts`. |
 | `LuxBench.ts`, `EngineBestTeam.ts`, `EngineTeamPool.ts` | Kioku Grid bench; Best SA Team search and its worker pool. |
+| `EngineAttackerLoadout.ts` | PvE page "find best attacker loadout": candidates (`loadoutSearch`), coordinate ascent (`findBestAttackerLoadoutEngine`), worker pool `EngineLoadoutPool` (`maxDamageWorker.ts` "loadout"). |
 | `ScoreAttackTeam.ts`, `ScoreAttackKioku.ts`, `BestTeamCalculator.ts` | The first-generation closed-form Score Attack model (Old Single Hit Calc, Old Best SA Team Calculator). `ScoreAttackKioku` is also the stats / effect-list object of Kioku Setup, Kioku Grid and Best SA. |
 | `HeartphialExp.ts`, `PowerValue.ts`, `AccountSimilarityScore.ts` | Page helpers. |
 
@@ -48,7 +50,7 @@ Data access: `src/utils/helpers.ts` (`kiokuData`, `skillDetails`, `skillDetailsB
 | Route | Page | Engine use |
 |---|---|---|
 | `/pvp-simulator` "PvP Simulator" | `src/pages/PvpTeamPage.vue` | `EngineBattle` (pvp / gvg); RNG modes (`RngControls.vue`), export/import (`src/utils/pvpExport.ts`), `BattleTimeline.vue` |
-| `/pve-simulator` "PvE Simulator" | `src/pages/PvESimulatorPage.vue` | `EngineBattle` (quest / soloRaid / multiRaid), stage picker (`StagePicker.vue`), Auto/Manual control, Solo Raid attempts, Max Damage (`maxDamageWorker.ts` -> `computeMaxDamageEngine`) |
+| `/pve-simulator` "PvE Simulator" | `src/pages/PvESimulatorPage.vue` | `EngineBattle` (quest / soloRaid / multiRaid), stage picker (`StagePicker.vue`), Auto/Manual control, Solo Raid attempts, Max Damage (`maxDamageWorker.ts` -> `computeMaxDamageEngine`), attacker loadout search (`models/EngineAttackerLoadout.ts`, anvil buttons `components/AttackerOptimizer.vue`), Stats for nerds (setting `pveStatsForNerds`) |
 | `/sa-simulator-multiple` "Best SA Team Calculator" | `BestTeamPage.vue` | `models/EngineBestTeam.ts` + `battle/EngineTeamScore.ts`, worker pool `models/EngineTeamPool.ts` (`maxDamageWorker.ts` "teams") |
 | `/kioku-grid` "Kioku Grid" | `KiokuGridPage.vue` | Bench charts via `LuxBench.ts` in one worker per chart (`luxBenchWorker.ts`) |
 | `/sa-simulator-single` "Old Single Hit Calc" | `SingleTeamPage.vue` | First-generation `ScoreAttackTeam` formula |

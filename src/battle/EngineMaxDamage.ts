@@ -19,12 +19,19 @@
 // Vortex (VORTEX_ATK) is an ailment that always pops in the theoretical max (vortexOffByDefault, giveEffects): only one
 // of a vortex user's skills is assumed to have set it, the other one is off unless the user turns it on.
 //
+// Dealer HP (MaxDmgOptions.dealerHpPercent, the Best SA Team calculator's "Attacker HP when using ultimate"): when set,
+// the dealer's HP is set to that share of its max HP and the HP-ratio conditions about the dealer (CompareContent 2 on
+// Self / Actor: the dealer's own effects' start conditions and every state's active conditions) are kept, so the game's
+// checker evaluates them ([CONFIRMED 3.19] BattleUnitConditionChecker.Check case 2 -> BattleUnit.CalculationHpRate
+// 0x13AA310 = HP * 100 / MaxHP). The other allies stay at full HP; their own HP conditions count as met as before.
+//
 // Random draws: crits forced on / off (avg = the per-enemy blend with the engine's own crit chance), every effect lands,
 // random targets go to the main target. Enemy HP is set out of reach so nothing dies mid-skill.
 import { E } from "./engineBundle"
 import { EngineBattle, type EngineBattleSetup } from "./EngineBattle"
 import { giveAilmentStates, giveFieldState } from "./EngineBench"
-import { collectTeamEffects, isEffectValueType, isSlipDamageType, kitHasEffect, type MaxDmgEffect, type MaxDmgOptions, type MaxDmgResult, type MemberDamage, type SkillDamage } from "../models/MaxDamage"
+import { collectTeamEffects, isEffectValueType, isSlipDamageType, kitHasEffect, type MaxDmgEffect, type MaxDmgOptions, type MaxDmgResult, type MaxDmgTrace, type MemberDamage, type SkillDamage } from "../models/MaxDamage"
+import { enemyStats, traceDamage, unitStats } from "./EngineDamageTrace"
 import { actorSkillTypeRestriction, ailmentConditionsMet, unitCountConditionsMet } from "../models/BattleConditionParser"
 import { conditionCsvsExclusive } from "../models/ConditionTiers"
 import { enemyName, isMultiRaidStage, isSoloRaidStage, type QuestEnemyAppearance } from "../models/PvE"
@@ -115,11 +122,27 @@ function infoOf(e: MaxDmgEffect): any {
  *  (both lists are parsed from the csv on first use, so an empty list = no conditions). The csv strings stay: the game
  *  also compares them, e.g. two states replace each other only with the same active-condition csv
  *  (UnitCondition.GetDuplicateUnitState b__1), so "ATK +30% (while X)" and "ATK +15%" still coexist as in battle. */
-function clearConditions(effect: any, follow?: Set<string>): void {
-    effect.startConditionSetList = keepHolderConditions(effect.get_StartConditionSetList(), START_HOLDER_CONDITION)
+function clearConditions(effect: any, follow?: Set<string>, hp?: { start: boolean, active: boolean }): void {
+    effect.startConditionSetList = keepHolderConditions(effect.get_StartConditionSetList(),
+        c => START_HOLDER_CONDITION(c) || (!!hp?.start && DEALER_HP_CONDITION(c)))
     const state = effect._GiveUnitState
     if (state) state.activeConditionSetList = keepHolderConditions(state.get_ActiveConditionSetList(),
-        c => ACTIVE_HOLDER_CONDITION(c) || (!!follow && FOLLOW_CONDITION(c) && follow.has(c._CompareValue)))
+        c => ACTIVE_HOLDER_CONDITION(c) || (!!follow && FOLLOW_CONDITION(c) && follow.has(c._CompareValue)) || (!!hp?.active && DEALER_HP_CONDITION(c)))
+}
+
+// App rule (MaxDmgOptions.dealerHpPercent): HP-ratio conditions (CompareContent 2 HPRatio) on Self / Actor. In a start
+// condition Self = Actor = the caster (launchOnce's check bundle; the dealer for its own skill rows), so they are kept
+// only for effects the dealer casts; in an active condition Self = the holder
+// ([CONFIRMED 3.19] UnitStateBase.IsActive(BattleUnit) 0x16dfba0), the dealer for the buffs that count.
+const DEALER_HP_CONDITION = (c: any) => c._CompareContent === 2 && (c._CompareTarget === 1 /* Self */ || c._CompareTarget === 2 /* Actor */)
+
+/** MaxDmgOptions.dealerHpPercent: the dealer's HP as that share of its current max HP (at least 1, rounded up so that
+ *  "HP >= X%" holds at X%). Set again after the team's effects, which can raise the max HP (BattleUnit.UpdateParameter). */
+function setDealerHp(b: Built): void {
+    const pct = b.dealerHp
+    if (pct === undefined || !b.dealer) return
+    const max = b.dealer._MaxHP
+    b.dealer._HP = Math.min(max, Math.max(1, Math.ceil(max * Math.min(100, Math.max(0, pct)) / 100)))
 }
 
 // App rule: an active condition "the holder has state X" (Self.AbilityEffect(12) contains X) where X is a single-target
@@ -155,7 +178,7 @@ function keepHolderConditions(sets: any[] | null, keep: (c: any) => boolean): an
     return out
 }
 
-interface Built { d: any, dic: Map<number, any>, allies: any[], enemies: (any | undefined)[], main: any, dealer: any }
+interface Built { d: any, dic: Map<number, any>, allies: any[], enemies: (any | undefined)[], main: any, dealer: any, dealerHp?: number }
 
 interface Ctx {
     setup: EngineBattleSetup
@@ -212,7 +235,9 @@ function buildBattle(ctx: Ctx, dealerPos: number, rnd: MaxDamageRandom): Built {
     if (ctx.opts.enemyStates?.length) giveAilmentStates(d, enemyUnits, ctx.opts.enemyStates)
     const main = enemies[ctx.mainIdx] ?? enemies.find(Boolean) ?? enemyUnits[0]
     rnd.mainId = main?._Id ?? 0
-    return { d, dic, allies, enemies, main, dealer: allies[dealerPos] }
+    const b: Built = { d, dic, allies, enemies, main, dealer: allies[dealerPos], dealerHp: ctx.opts.dealerHpPercent }
+    setDealerHp(b)
+    return b
 }
 
 /** Buff strength the caster applies to `effect`'s state (StateAbilityEffect.ChangeGiveUnitState), 1 = none. */
@@ -232,7 +257,8 @@ function effectValueRate(caster: any, effect: any): number {
 function launchOnce(b: Built, e: MaxDmgEffect, caster: any, info: any, main: any = b.main, friend: any = b.dealer, follow?: Set<string>): number | undefined {
     const effect = E.AbilityEffectFactory.Create(info, false)
     if (!effect) return undefined
-    clearConditions(effect, follow)
+    const hp = b.dealerHp !== undefined
+    clearConditions(effect, follow, { start: hp && caster === b.dealer, active: hp })
     const rate = effectValueRate(caster, effect)
     const check = new E.BattleConditionUtils_ConditionCheckDataBundle().ctor()
     check._GameDirector = b.d
@@ -339,6 +365,7 @@ function giveEffects(b: Built, list: Given, vortexEnemies?: Record<string, numbe
         landed.push({ key: e.key, mstId: info._MstId, casterId: caster._Id, rate })
     }
     for (const u of b.dic.values()) u.UpdateParameter?.()
+    setDealerHp(b)
     // after every effect is given: a state counts where it is held AND active (its holder conditions, e.g. "while the
     // holder has Beachball's Boon", can depend on a state given later in the list)
     for (const { key, mstId, casterId, rate } of landed) {
@@ -394,7 +421,7 @@ interface Eval { perEnemy: { normal: number, crit: number, avg: number }[], crit
  */
 export const RUNS = { n: 0 }
 function runOnce(ctx: Ctx, dealerPos: number, pick: SkillPick, crit: boolean, effects: { e: MaxDmgEffect, stacks: number }[],
-    keep: (i: number) => boolean): { damage: number[], p: number[], mainP: number } | undefined {
+    keep: (i: number) => boolean, inspect?: (b: Built) => void): { damage: number[], p: number[], mainP: number } | undefined {
     RUNS.n++
     const rnd = new MaxDamageRandom(crit, 0)
     return rnd.run(() => {
@@ -416,10 +443,11 @@ function runOnce(ctx: Ctx, dealerPos: number, pick: SkillPick, crit: boolean, ef
             if (!unitCountConditionsMet([eff._StartConditionSetIdCsv], ctx.allyCount, ctx.enemyApps.length)) return false
             return true
         })
-        own.forEach(eff => clearConditions(eff))
+        own.forEach(eff => clearConditions(eff, undefined, b.dealerHp !== undefined ? { start: true, active: true } : undefined))
         skill.launcher._AbilityEffectList = own
         const p = b.enemies.map(u => u ? Math.min(1, Math.max(0, (b.dealer.GetProcessedCtr() + u.GetProcessedRcvCtr(b.dealer)) / 100)) : 0)
         const mainP = b.main ? b.dealer.GetProcessedCtr() + b.main.GetProcessedRcvCtr(b.dealer) : 0
+        inspect?.(b)
         const notices = skill.Triggering(b.d, b.main?._Id ?? 0, b.dealer, b.dealer._Id).GetNoticeList()
         const damage = b.enemies.map(() => 0)
         for (const n of notices) {
@@ -482,7 +510,7 @@ function candidateRungs(l: Given): number[] {
  * ladder, chosen by coordinate ascent on the crit total (start: the strongest rung by value, then each ladder tries its
  * other rungs while that raises the total). `base` = every other effect.
  */
-function evaluateSkill(ctx: Ctx, dealerPos: number, pick: SkillPick, probe: any[] | undefined, base: Given, ladders: Given[]): (Eval & { rungs: string[] }) | undefined {
+function evaluateSkill(ctx: Ctx, dealerPos: number, pick: SkillPick, probe: any[] | undefined, base: Given, ladders: Given[]): (Eval & { rungs: string[], keep: (i: number) => boolean }) | undefined {
     if (!probe) return undefined
     const choice = ladders.map(() => 0)
     const given = () => [...base, ...ladders.map((l, k) => l[choice[k]])]
@@ -510,7 +538,7 @@ function evaluateSkill(ctx: Ctx, dealerPos: number, pick: SkillPick, probe: any[
         const n = normal.damage[i], p = normal.p[i]
         return { normal: n, crit: c, avg: Math.round(n * (1 - p) + c * p) }
     })
-    return { perEnemy, critChance: normal.mainP, rungs: ladders.map((l, k) => l[choice[k]].e.key) }
+    return { perEnemy, critChance: normal.mainP, rungs: ladders.map((l, k) => l[choice[k]].e.key), keep: best.keep }
 }
 
 const strongest = (list: (SkillDamage | undefined)[]) => list.reduce<SkillDamage | undefined>((b, s) => s && (!b || s.total.crit > b.total.crit) ? s : b, undefined)
@@ -533,6 +561,7 @@ export function computeMaxDamageEngine(allies: PvPKioku[], stage: EngineMaxDmgSt
     ctx.follow = followTypes(effects)
     const members: MemberDamage[] = []
     let enemySummary: MaxDmgResult["enemies"] = []
+    let trace: MaxDmgTrace | undefined
 
     for (let pos = 0; pos < allies.length; pos++) {
         if (opts.onlyPos !== undefined && pos !== opts.onlyPos) {
@@ -578,7 +607,7 @@ export function computeMaxDamageEngine(allies: PvPKioku[], stage: EngineMaxDmgSt
         // Effects that count, and ladders of rungs that cannot count together (one rung each, chosen per column).
         const base: Given = []
         const ladderOf = new Map<string, Given>()
-        const blended = pos === attackerPos ? blendGroups(ctx, pos, passEffects) : undefined
+        const blended = pos === attackerPos && !opts.scoreOnly ? blendGroups(ctx, pos, passEffects) : undefined
         for (const e of passEffects) {
             if (pos === attackerPos) {
                 e.blendGroup = blended?.get(e.key)
@@ -611,24 +640,28 @@ export function computeMaxDamageEngine(allies: PvPKioku[], stage: EngineMaxDmgSt
             return { base: s.base.map(of), switches: s.switches.map(of), followUps: s.followUps.map(of) }
         })
         if (!pickers) { members.push({ pos, name: allies[pos].name, skills: [], best: undefined }); continue }
+        // how each column was evaluated (its skill and own-ladder choice), for the trace run
+        const howOf = new Map<SkillDamage, { pick: SkillPick, keep: (i: number) => boolean }>()
         const run = ({ pick, probe }: { pick: SkillPick, probe: any[] | undefined }) => {
             try { return evaluateSkill(ctx, pos, pick, probe, base, ladders) } catch (err) { console.warn("Max damage (engine):", err); return undefined }
         }
+        const remember = (s: SkillDamage, pick: SkillPick, keep: (i: number) => boolean) => { howOf.set(s, { pick, keep }); return s }
         const skills: SkillDamage[] = []
         pickers.base.forEach(p => {
             const ev = run(p)
-            if (ev) skills.push(skillDamage(ev, TARGET_TYPE_OF[p.type], LABEL_OF[p.type] ?? p.type))
+            if (ev) skills.push(remember(skillDamage(ev, TARGET_TYPE_OF[p.type], LABEL_OF[p.type] ?? p.type), p.pick, ev.keep))
         })
         const switchSkill = strongest(pickers.switches.map(p => {
             const ev = run(p)
-            return ev ? skillDamage(ev, TARGET_TYPE_OF[p.type], "Switch Skill", p.name || undefined, `replaces ${LABEL_OF[p.type] ?? p.type}`) : undefined
+            return ev ? remember(skillDamage(ev, TARGET_TYPE_OF[p.type], "Switch Skill", p.name || undefined, `replaces ${LABEL_OF[p.type] ?? p.type}`), p.pick, ev.keep) : undefined
         }))
-        const followUp = strongest(pickers.followUps.map(p => {
+        // follow-ups come on top of an action, never the best column: not needed for a score
+        const followUp = opts.scoreOnly ? undefined : strongest(pickers.followUps.map(p => {
             const ev = run(p)
             return ev ? skillDamage(ev, TargetType.fuaId, "Follow-up", p.name || undefined, p.type === "EtherBlow" ? "Ether Blow" : "Follow-up") : undefined
         }))
         const best = strongest([...skills, switchSkill])
-        if (pos === attackerPos) {
+        if (pos === attackerPos && !opts.scoreOnly) {
             // UI bookkeeping, for the rungs the dealer's best column used: where each effect landed (every skill type
             // allowed), its strength rate, and which rungs were left out for another one
             const rungs = new Set((best as any)?._rungs ?? ladders.map(l => l[0].e.key))
@@ -645,9 +678,37 @@ export function computeMaxDamageEngine(allies: PvPKioku[], stage: EngineMaxDmgSt
                     e.rate = x.rate
                 }
             })
+            const how = best && howOf.get(best)
+            if (opts.trace && best && how) {
+                try { trace = traceBest(ctx, pos, how.pick, how.keep, given, best.name ? `${best.label} (${best.name})` : best.label, allies) }
+                catch (err) { console.warn("Max damage trace:", err) }
+            }
         }
         for (const s_ of [...skills, switchSkill, followUp]) if (s_) delete (s_ as any)._rungs
         members.push({ pos, name: allies[pos].name, skills, best, switchSkill, followUp })
     }
-    return { effects, members, enemies: enemySummary }
+    return { effects, members, enemies: enemySummary, trace }
+}
+
+/** "Stats for nerds": the dealer's best column run once more, every hit a crit, with the engine's damage steps recorded
+ *  (battle/EngineDamageTrace) and the units' stats read after the team's effects are given. */
+function traceBest(ctx: Ctx, pos: number, pick: SkillPick, keep: (i: number) => boolean, given: Given, skill: string, kiokus: PvPKioku[]): MaxDmgTrace | undefined {
+    let snap: Omit<MaxDmgTrace, "hits" | "dealt" | "skill"> | undefined
+    let ids: number[] = []
+    let from = 0   // hits recorded before the skill (giving the team's effects) are not the skill's
+    const names = new Map<number, string>()
+    const nameOf = (u: any) => names.get(u?._Id) ?? `Unit ${u?._Id ?? "?"}`
+    const { value, hits } = traceDamage(seen => runOnce(ctx, pos, pick, true, given, keep, b => {
+        from = seen.length
+        b.allies.forEach((u, i) => names.set(u._Id, kiokus[i]?.name ?? `Ally ${i + 1}`))
+        b.enemies.forEach((u, i) => { if (u) names.set(u._Id, enemyName(ctx.enemyApps[i])) })
+        ids = b.enemies.map(u => u?._Id ?? -1)
+        snap = {
+            dealer: unitStats(b.dealer, nameOf(b.dealer)),
+            allies: b.allies.map(u => unitStats(u, nameOf(u))),
+            enemies: b.enemies.map(u => u ? enemyStats(u, nameOf(u), b.dealer) : undefined),
+        }
+    }), nameOf)
+    if (!value || !snap) return undefined
+    return { skill, ...snap, hits: hits.slice(from).map(h => ({ ...h, enemyIdx: ids.indexOf(h.defenderId) })), dealt: value.damage }
 }

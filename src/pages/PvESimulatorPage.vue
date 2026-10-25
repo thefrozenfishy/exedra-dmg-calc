@@ -243,7 +243,18 @@
                 </button>
                 <h3 class="slot-title">
                     {{ index === attackerIndex ? 'Damage Dealer' : `Member ${index < attackerIndex ? index + 1 : index}`
-                        }} </h3>
+                        }}
+                    <AttackerOptimizer v-if="index === attackerIndex" :busy="loadoutBusy"
+                        :disabled="!slot.main || !wave.length"
+                        disabled-title="Pick a damage dealer and a stage first"
+                        max-title="Find the best portrait, support & crystalis for the damage dealer (highest crit damage in Max Damage, on this wave)"
+                        avg-title="Find the best portrait, support & crystalis for the damage dealer (highest average damage in Max Damage, on this wave)"
+                        @optimize="optimizeAttackerLoadout" />
+                </h3>
+                <div v-if="index === attackerIndex && loadoutBusy" class="loadout-progress">
+                    <span>Testing loadouts · {{ loadoutProgress.done }} / {{ loadoutProgress.total }}</span>
+                    <button type="button" class="link-btn" @click="cancelLoadoutSearch">Cancel</button>
+                </div>
                         <CharacterEditor :index="index" :slot="slot" :setMain="team.setMain"
                             :setSupport="team.setSupport" />
             </div>
@@ -452,6 +463,37 @@
             </div>
         </div>
 
+        <!-- Stats for nerds: the engine's numbers behind the dealer's best Max Damage skill (collapsed by default) -->
+        <section v-if="teamKiokus.length && wave.length" class="card section-card nerd-card">
+            <button type="button" class="nerd-toggle" :aria-expanded="statsForNerds" @click="statsForNerds = !statsForNerds">
+                <svg class="nerd-chevron" :class="{ open: statsForNerds }" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+                    <path d="M9 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+                <span class="section-title nerd-title">Stats for nerds</span>
+                <span v-if="statsForNerds && nerdTrace" class="title-sub">· {{ dealerName }} · {{ nerdTrace.skill }}</span>
+            </button>
+            <template v-if="statsForNerds">
+                <p class="hint-text">{{ dealerName }}'s strongest skill from Max Damage above, launched once more in the game's
+                    battle code with every hit a crit, and what each step of the game's damage formula did to each hit
+                    (break, DEF, DMG dealt, DMG taken, element resist, weak element, crit, ...). Stats are read with every
+                    buff and debuff above given, just before the skill. A vortex or DoT popped by the skill goes through its
+                    owner's stats, so it is listed under its owner.</p>
+                <p v-if="!nerdTrace" class="empty-hint">{{ maxDmgBusy ? 'Calculating…' : 'Nothing to show: the damage dealer has no damaging skill here.' }}</p>
+                <div v-else class="debug-sections">
+                    <div v-for="sec in [{ label: 'DMG Calculation', cols: nerdCalc }, { label: 'Enemy Stats', cols: nerdEnemies }, { label: 'Kioku Stats', cols: nerdKioku }]"
+                        :key="sec.label" class="debug-section-row">
+                        <div class="debug-section-header">{{ sec.label }}</div>
+                        <div class="debug-section-grid">
+                            <div v-for="(col, i) in sec.cols" :key="i" class="debug-slot">
+                                <h3 class="debug-slot-title">{{ col.title }}</h3>
+                                <pre class="debug-pre">{{ col.text }}</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </template>
+        </section>
+
         <!-- Battle simulator -->
         <section class="card section-card battle-card">
             <h2 class="section-title">Battle Simulator</h2>
@@ -628,6 +670,14 @@ import { EngineBattle, type RaidCarry } from '../battle/EngineBattle'
 import type { MaxDamageMessage, MaxDamageRequest } from '../workers/maxDamageWorker'
 import { newMaxDamageWorker } from '../workers/newMaxDamageWorker'
 import type { PvPKioku } from '../models/PvPKioku'
+import AttackerOptimizer from '../components/AttackerOptimizer.vue'
+import { useCharacterStore } from '../store/characterStore'
+import { EngineLoadoutPool, findBestAttackerLoadoutEngine, loadoutSearch, mainWithLoadout, slotsWithLoadout, type AttackerLoadoutRow, type LoadoutMode } from '../models/EngineAttackerLoadout'
+import type { LoadoutContext } from '../workers/maxDamageWorker'
+import type { TeamSlot } from '../types/BestTeamTypes'
+import type { MaxDmgOptions } from '../models/MaxDamage'
+import type { HitTrace } from '../battle/EngineDamageTrace'
+import { crystalises } from '../utils/helpers'
 
 const team = useTeamStore()
 const stageId = useSetting<number>('pveStageId', 982250)
@@ -817,6 +867,17 @@ const maxDmg = shallowRef<MaxDmgResult | undefined>()
 const maxDmgBusy = ref(false)
 let maxDmgWorker: Worker | undefined
 let maxDmgReq = 0
+// The page's Max Damage inputs (also the attacker loadout search's, so it scores what the panel shows).
+function maxDmgOpts(): MaxDmgOptions {
+    return {
+        battleType: stageBattleType(stageId.value),
+        excluded: new Set(excluded), included: new Set(included), stacks: new Map(stacks),
+        vortexEnemies: JSON.parse(JSON.stringify(vortexEnemies)),
+        allyTargets: JSON.parse(JSON.stringify(allyTargets)),
+        broken: [...broken.value], breakRate: [...breakRate.value], mainTargetIdx: mainTargetIdx.value,
+    }
+}
+const currentWaveIdx = () => Math.min(waveIdx.value, waveMetas.value.length - 1)
 function requestMaxDamage() {
     if (!teamKiokus.value.length || !wave.value.length) { maxDmg.value = undefined; maxDmgBusy.value = false; return }
     try {
@@ -834,23 +895,20 @@ function requestMaxDamage() {
         maxDmgWorker.postMessage({
             id: ++maxDmgReq,
             slots: JSON.parse(JSON.stringify(filledSlots.value.map(([s]) => s))),
-            stageId: stageId.value, waveIdx: Math.min(waveIdx.value, waveMetas.value.length - 1),
+            stageId: stageId.value, waveIdx: currentWaveIdx(),
             wave: JSON.parse(JSON.stringify(wave.value)), dealerPos: dealerPos.value,
-            opts: {
-                battleType: stageBattleType(stageId.value),
-                excluded: new Set(excluded), included: new Set(included), stacks: new Map(stacks),
-                vortexEnemies: JSON.parse(JSON.stringify(vortexEnemies)),
-                allyTargets: JSON.parse(JSON.stringify(allyTargets)),
-                broken: [...broken.value], breakRate: [...breakRate.value], mainTargetIdx: mainTargetIdx.value,
-            },
+            opts: { ...maxDmgOpts(), trace: statsForNerds.value },
         } satisfies MaxDamageRequest)
     } catch (e) {
         console.warn('Max damage failed', e)
         maxDmgBusy.value = false
     }
 }
+// "Stats for nerds" (collapsed by default): the engine's damage steps for the dealer's best skill, recorded only while open
+const statsForNerds = useSetting('pveStatsForNerds', false)
 watch([teamKiokus, wave, dealerPos, () => [...excluded], () => [...included], () => JSON.stringify(vortexEnemies), () => JSON.stringify(allyTargets), () => [...stacks], broken, breakRate, mainTargetIdx], requestMaxDamage, { deep: true, immediate: true })
-onBeforeUnmount(() => maxDmgWorker?.terminate())
+watch(statsForNerds, open => { if (open && !maxDmg.value?.trace) requestMaxDamage() })
+onBeforeUnmount(() => { maxDmgWorker?.terminate(); loadoutPool?.close() })
 const dealer = computed(() => maxDmg.value?.members[dealerPos.value])
 const dealerName = computed(() => dealer.value?.name ?? 'the damage dealer')
 const skillOf = (m: MemberDamage, t: TargetType) => m.skills.find(s => s.type === t)
@@ -867,6 +925,181 @@ const dmgCols: { label: string, title?: string, get: (m: MemberDamage) => SkillD
 const visibleDmgCols = computed(() => dmgCols.filter(col => maxDmg.value?.members.some(m => col.get(m))))
 const skillLabel = (s: SkillDamage) => s.name ? `${s.label} (${s.name})` : s.label
 const perEnemyTitle = (s: SkillDamage) => s.perEnemy.map((x, i) => x.crit ? `${enemyInfo.value[i]?.name}: ${fmt(x.crit)} crit / ${fmt(x.normal)} / avg ${fmt(x.avg)}` : '').filter(Boolean).join('\n')
+
+// ---- find best attacker loadout (models/EngineAttackerLoadout): portrait, support and crystalis of the damage dealer
+// that give the highest Max Damage above (crit total, or average total), with everything else as on the page
+const characterStore = useCharacterStore()
+const loadoutBusy = ref(false)
+const loadoutProgress = reactive({ done: 0, total: 0 })
+let loadoutPool: EngineLoadoutPool | null = null
+let loadoutCancelled = false
+const cancelLoadoutSearch = () => { loadoutCancelled = true; loadoutPool?.close() }
+const plain = <T,>(x: T): T => JSON.parse(JSON.stringify(x))
+const loadoutText = (r: AttackerLoadoutRow) => [r.portrait, r.support?.name ?? 'no support',
+    r.crysIds.map(id => crystalises[id]?.name ?? id).join(', ')].filter(Boolean).join(' · ')
+
+async function optimizeAttackerLoadout(mode: LoadoutMode) {
+    const slot = team.slots[attackerIndex.value]
+    if (loadoutBusy.value || !slot?.main || !wave.value.length) return
+    const pos = dealerPos.value
+    const slots = plain(filledSlots.value.map(([s]) => s)) as TeamSlot[]
+    // what the panel shows now (the search fills empty sub crystalis with the defaults, so its start can differ)
+    const d = maxDmg.value?.members[pos]
+    const cols = d ? [...d.skills, ...(d.switchSkill ? [d.switchSkill] : [])] : []
+    const nowValue = cols.length ? Math.max(...cols.map(c => mode === 'avg' ? c.total.avg : c.total.crit)) : undefined
+    let search: ReturnType<typeof loadoutSearch>
+    try {
+        search = loadoutSearch(plain(slot.main), slot.support ? plain(slot.support) : undefined,
+            slots.map(s => s.main!.name), plain(characterStore.characters.filter(c => c.enabled)), mode)
+    } catch (e) {
+        toast.error(String((e as Error)?.message ?? e), { position: toast.POSITION.TOP_RIGHT, icon: false })
+        return
+    }
+    const context: LoadoutContext = { stageId: stageId.value, waveIdx: currentWaveIdx(), wave: plain(wave.value), dealerPos: pos, opts: maxDmgOpts() }
+    const pool = loadoutPool = new EngineLoadoutPool(context, undefined, err => console.warn('Loadout score failed', err))
+    loadoutBusy.value = true
+    loadoutCancelled = false
+    loadoutProgress.done = 0
+    loadoutProgress.total = 0
+    try {
+        const { rows } = await findBestAttackerLoadoutEngine(search, mode, l => pool.score(slotsWithLoadout(slots, pos, l)),
+            (done, total) => { loadoutProgress.done = done; loadoutProgress.total = total }, () => loadoutCancelled)
+        if (loadoutCancelled) return
+        const best = rows[0]
+        if (!best) {
+            toast.error("Couldn't score any loadout for this damage dealer", { position: toast.POSITION.TOP_RIGHT, icon: false })
+            return
+        }
+        // the team may have changed while searching: only apply to the same dealer
+        const now = team.slots[attackerIndex.value]
+        if (now?.main?.name !== slot.main.name) return
+        const what = mode === 'avg' ? 'average' : 'crit'
+        if (nowValue !== undefined && best.value <= nowValue) {
+            toast.info(`The current loadout is already the best one found (${fmt(nowValue)} ${what} damage, ${rows.length} loadouts tested)`, { position: toast.POSITION.TOP_RIGHT, icon: false })
+            return
+        }
+        const updated = mainWithLoadout(now.main, best)
+        now.main.portrait = updated.portrait
+        for (const [id, o] of Object.entries(updated.crysOptions)) {
+            const cur = now.main.crysOptions[Number(id)]
+            if (cur) { cur.useIndex = o.useIndex; cur.subCrys = o.subCrys }
+            else now.main.crysOptions[Number(id)] = o
+        }
+        const supportChar = best.support && characterStore.characters.find(c => c.name === best.support!.name)
+        if (supportChar) team.setSupport(attackerIndex.value, supportChar)
+        toast.success(`${loadoutText(best)}: ${fmt(best.value)} ${what} damage${nowValue !== undefined ? ` (was ${fmt(nowValue)})` : ''}`, { position: toast.POSITION.TOP_RIGHT, icon: false })
+    } finally {
+        pool.close()
+        if (loadoutPool === pool) loadoutPool = null
+        loadoutBusy.value = false
+    }
+}
+
+// ---- stats for nerds: what the engine computed for the dealer's best skill (MaxDmgResult.trace)
+const nerdTrace = computed(() => statsForNerds.value ? maxDmg.value?.trace : undefined)
+const ELEMENT_NAMES: Record<number, string> = { 1: 'Flame', 2: 'Aqua', 3: 'Forest', 4: 'Light', 5: 'Dark', 6: 'Void' }
+const elName = (e: number) => ELEMENT_NAMES[e] ?? (e ? `Element ${e}` : 'None')
+const pct = (f: number) => `${+(f * 100).toFixed(1)}%`
+const signedPct = (v: number) => `${v > 0 ? '+' : ''}${+v.toFixed(1)}%`
+const line = (label: string, value: string | number) => `${label.padEnd(16)}- ${typeof value === 'number' ? fmt(value) : value}`
+// Factors that apply per hit; a group shows "(varies)" when its hits differ.
+const FACTORS: [string, (h: HitTrace) => number][] = [
+    ['Break factor', h => h.breakFactor], ['DEF factor', h => h.defFactor], ['DMG dealt fact', h => h.giveFactor],
+    ['DMG taken fact', h => h.receiveFactor], ['Elem res fact', h => h.resistFactor], ['Weak elem fact', h => h.weakFactor],
+    ['Crit factor', h => h.critFactor], ['Difficulty fact', h => h.difficultyFactor], ['Final give fact', h => h.finalGiveFactor],
+    ['Shield factor', h => h.shieldFactor],
+]
+const nerdCalc = computed(() => {
+    const t = nerdTrace.value
+    if (!t) return []
+    return t.enemies.map((en, i) => {
+        const hits = t.hits.filter(h => h.enemyIdx === i)
+        const out: string[] = [line('Skill', t.skill)]
+        // one block per attacker + kind of hit (a vortex / DoT goes through its owner's pipeline)
+        const groups = new Map<string, HitTrace[]>()
+        for (const h of hits) { const k = `${h.category} · ${h.attacker}`; groups.set(k, [...(groups.get(k) ?? []), h]) }
+        for (const [k, g] of groups) {
+            const h = g[0]
+            const varies = (f: (x: HitTrace) => number) => g.some(x => Math.abs(f(x) - f(h)) > 1e-9) ? ' (varies)' : ''
+            out.push('', `[${k}] ×${g.length}`)
+            if (h.statType) out.push(line(`${h.statType} (buffed)`, h.atk ?? h.stat ?? 0))
+            if (h.stat !== undefined && h.atk !== undefined && Math.round(h.stat) !== Math.round(h.atk)) out.push(line(`Base from ${h.statType}`, h.stat))
+            if (h.def !== undefined) out.push(line('Enemy DEF', h.def))
+            if (h.resist !== undefined) out.push(line('Elem resist', `${signedPct(h.resist)} (${elName(h.element)})`))
+            for (const [label, f] of FACTORS) out.push(line(label, pct(f(h)) + varies(f)))
+            g.forEach((x, n) => out.push(`  ${String(n + 1).padStart(2)}. ${x.power !== undefined ? `${pct(x.power).padStart(7)} ` : ''}base ${fmt(x.base)} → ${fmt(x.preCrit)}${x.crit ? ' → crit' : ''} = ${fmt(x.result)}`))
+            out.push(line('Subtotal', g.reduce((s, x) => s + x.result, 0)))
+        }
+        const traced = hits.reduce((s, x) => s + x.result, 0)
+        const dealt = t.dealt[i] ?? 0
+        out.push('')
+        if (dealt !== traced) out.push(line('Other (final..)', dealt - traced))
+        out.push(line('Result', dealt))
+        return { title: en?.name ?? enemyInfo.value[i]?.name ?? `Enemy ${i + 1}`, text: hits.length || dealt ? out.join('\n') : `${line('Skill', t.skill)}\n\nNot hit.` }
+    })
+})
+const nerdEnemies = computed(() => {
+    const t = nerdTrace.value
+    if (!t) return []
+    return t.enemies.map((en, i) => {
+        if (!en) return { title: enemyInfo.value[i]?.name ?? `Enemy ${i + 1}`, text: '(not on the field)' }
+        const brk = !en.canBreak ? "can't break" : en.broken ? `broken, ${en.breakRate}% DMG (max ${en.maxBreakRate}%)` : 'not broken'
+        return {
+            title: en.name, text: [
+                line('Enemies alive', t.enemies.filter(Boolean).length),
+                line('HP', en.hp),
+                line('Base DEF', en.defBase),
+                line('DEF (debuffed)', en.def),
+                line('DEF change', en.defBase ? signedPct((en.def / en.defBase - 1) * 100) : '–'),
+                line('Break', brk),
+                line('Weak to', en.weakElements.length ? en.weakElements.map(elName).join(', ') : 'nothing'),
+                line(`Res vs ${elName(t.dealer.element)}`, signedPct(en.resist)),
+                line('Crit rate taken', signedPct(en.rcvCtr)),
+                line('Crit DMG taken', signedPct(en.rcvCtd)),
+                line('States on it', en.states),
+            ].join('\n'),
+        }
+    })
+})
+const nerdKioku = computed(() => {
+    const t = nerdTrace.value
+    if (!t) return []
+    return t.allies.map((u, pos) => {
+        const k = teamKiokus.value[pos] as any
+        const slot = filledSlots.value[pos]?.[0]
+        const m = slot?.main
+        const lines: string[] = []
+        if (k && m) {
+            const asc = k.ascension ?? 0
+            lines.push(
+                line('Kioku Lvl', k.kiokuLvl), line('Ascension', asc), line('Magic Lvl', k.magicLvl), line('Heartphial Lvl', k.heartphialLvl),
+                line('Ult / Skill Lvl', `${k.specialLvl} / ${k.skillLvl}`), line('Ability / Basic', `${k.abilityLvl} / ${k.attackLvl}`),
+                line('Portrait', m.portrait || 'none'),
+                line('Support', slot?.support ? `${slot.support.name} (Lv ${k.support?.supportLvl ?? '?'})` : 'none'),
+                line('Crystalis', ((k.inputCrysIDs ?? []) as number[]).map(id => crystalises[id]?.name ?? id).join(', ') || 'none'),
+                '',
+                line('Kioku ATK', Math.floor(k.kiokuAtk ?? 0)),
+                line('Ascension ATK', Math.floor((k.kiokuAtk ?? 0) * 0.02 * asc)),
+                line('Portrait ATK', k.portrait?.stats?.[5]?.atk ?? 0),
+                line('Support ATK', Math.floor((k.support?.getBaseAtk?.() ?? 0) * 0.16)),
+                line('Magic ATK', k.magicAtk ?? 0), line('Heartphial ATK', k.heartAtk ?? 0),
+                line('Base ATK (app)', k.getBaseAtk?.() ?? 0),
+                '',
+            )
+        }
+        lines.push(
+            line('Base ATK (eng.)', u.atkBase), line('ATK (buffed)', u.atk),
+            line('Base DEF', u.defBase), line('DEF (buffed)', u.def),
+            line('Max HP', u.hp),
+            line('Base SPD', u.spdBase), line('SPD (buffed)', +u.spd.toFixed(2)),
+            line('Crit rate', `${+u.ctrBase.toFixed(1)}% → ${+u.ctr.toFixed(1)}%`),
+            line('Crit DMG', `${+u.ctdBase.toFixed(1)}% → ${+u.ctd.toFixed(1)}%`),
+            line('Element', elName(u.element)),
+            line('States on it', u.states),
+        )
+        return { title: `${u.name}${pos === dealerPos.value ? ' (dealer)' : ''}`, text: lines.join('\n') }
+    })
+})
 
 // ---- buffs & debuffs: where each effect comes from and whether it counts ----
 // 'alt': a rung of a tier ladder left out because another rung of it is used (MaxDmgEffect.tierUsed).
@@ -2955,5 +3188,99 @@ const saved = useSavedTeams({
     align-items: flex-start;
     gap: 0.1rem;
     text-align: left;
+}
+
+.loadout-progress {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    margin: -0.25rem 0 0.5rem;
+    font-size: 0.78rem;
+    color: var(--muted);
+}
+
+.nerd-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    width: 100%;
+    padding: 0;
+    background: transparent;
+    border: none;
+    color: var(--text);
+    cursor: pointer;
+    text-align: left;
+}
+
+.nerd-title {
+    margin: 0;
+}
+
+.nerd-chevron {
+    flex: none;
+    transition: transform 0.15s;
+}
+
+.nerd-chevron.open {
+    transform: rotate(90deg);
+}
+
+.nerd-card .hint-text {
+    margin-top: 0.75rem;
+}
+
+.debug-sections {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
+}
+
+.debug-section-row {
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.debug-section-header {
+    padding: 0.4rem 0.75rem;
+    background: rgba(255, 255, 255, 0.04);
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.debug-section-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+
+.debug-slot {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    min-width: 0;
+    padding: 0.4rem;
+    border-right: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.debug-slot:last-child {
+    border-right: none;
+}
+
+.debug-slot-title {
+    margin: 0.4rem 0 0.2rem;
+    padding: 0 0.5rem;
+    font-size: 0.95rem;
+    color: var(--text);
+}
+
+.debug-pre {
+    text-align: left;
+    margin: 0;
+    font-size: 0.78rem;
+    overflow-x: auto;
+    white-space: pre-wrap;
+    word-break: break-word;
 }
 </style>

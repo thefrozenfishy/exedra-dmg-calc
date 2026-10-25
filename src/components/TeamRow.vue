@@ -77,7 +77,9 @@
                 <div class="remove-during-export">
                     <button @click="saveToStore(idx)" class="save-button">{{ pveStageId ? 'Open team in PvE Simulator' : 'Open team in single battle editor' }}</button>
                 </div>
-                <div class="remove-during-export">
+                <div class="sa-score" :class="{ 'remove-during-export': !saScoreInputs }"
+                    :title="saScoreInputs ? 'Score Attack score estimate from this damage and the Score Attack inputs' : undefined">
+                    <strong v-if="saScoreInputs">{{ estimateScoreAttackScore(dmg, saScoreInputs).toLocaleString() }}</strong>
                 </div>
             </div>
         </div>
@@ -92,6 +94,7 @@ import { maxDmgSubCrys } from '../types/KiokuTypes';
 import { KiokuElement } from '../types/enums'
 import { useRouter } from 'vue-router'
 import { useSetting } from '../store/settingsStore'
+import { estimateScoreAttackScore, type ScoreAttackScoreInputs } from '../models/PvEScore'
 
 const presentCrysName = (id: number) => {
     const crys = crystalises[id]
@@ -129,7 +132,9 @@ const props = defineProps<{
     optimalSubCrys?: boolean,
     // Set by the engine Best SA Team page (the stage it ran against): the button then opens the PvE Simulator on that
     // stage instead of the old single hit calc.
-    pveStageId?: number
+    pveStageId?: number,
+    // Set when the run was on a Score Attack stage: the rightmost column shows the estimated SA score of each row
+    saScoreInputs?: ScoreAttackScoreInputs
 }>()
 const teamStore = useTeamStore()
 const router = useRouter()
@@ -325,6 +330,11 @@ function saveToStore(idx: number) {
     flex: 1;
     text-align: right;
     margin-left: 10px;
+}
+
+.result-row .sa-score {
+    min-width: 110px;
+    text-align: right;
 }
 
 .save-button {

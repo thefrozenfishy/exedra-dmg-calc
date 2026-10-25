@@ -2,6 +2,7 @@
 // the ladders of mutually exclusive states) and the option / result types. The evaluation itself runs on the 1:1
 // engine (battle/EngineMaxDamage.ts).
 import type { PvPKioku } from "./PvPKioku";
+import type { EnemyTraceStats, HitTrace, UnitStats } from "../battle/EngineDamageTrace";
 import { isFriendlyEffect, isOpponentEffect } from "./EffectSide";
 import { UNIT_STATE_TYPES } from "./StateAddFilter";
 import { conditionCsvsExclusive } from "./ConditionTiers";
@@ -77,6 +78,14 @@ export interface MaxDmgOptions {
     // strength cuts, an enemy's DEF up), given before the team's effects: ally `index` = team position, enemy `index` =
     // the page's enemy list index, "all" = every unit of that side. `value1` per mille as in the data.
     fieldStates?: { side: "ally" | "enemy", index: number | "all", type: string, value1: number }[]
+    // Best SA Team calculator ("Attacker HP when using ultimate"): the dealer's HP in % of its max HP; its HP-ratio
+    // conditions are evaluated against it instead of assumed met (battle/EngineMaxDamage). undefined = full HP, met.
+    dealerHpPercent?: number
+    // App tools (PvE page's attacker loadout search): only the numbers - no follow-ups, no UI bookkeeping (blend groups,
+    // where each effect landed).
+    scoreOnly?: boolean
+    // PvE page's "Stats for nerds": record the engine's damage steps for the dealer's best skill (MaxDmgResult.trace).
+    trace?: boolean
 }
 
 // A marker of an ailment on a unit: no damage and never ticks (Max Damage has no turns).
@@ -110,6 +119,18 @@ export interface MaxDmgResult {
     effects: MaxDmgEffect[]
     members: MemberDamage[]
     enemies: { name: string, hp: number, def: number, broken: boolean, breakRate: number, canBreak: boolean }[]
+    trace?: MaxDmgTrace
+}
+
+/** "Stats for nerds" (MaxDmgOptions.trace): the dealer's best skill run once with every hit a crit, as the engine
+ *  computed it (battle/EngineDamageTrace). Unit stats are read after the team's effects are given, before the skill. */
+export interface MaxDmgTrace {
+    skill: string                   // e.g. "Ultimate"
+    dealer: UnitStats
+    allies: UnitStats[]             // team order (the dealer included)
+    enemies: (EnemyTraceStats | undefined)[]   // the page's enemy order
+    hits: (HitTrace & { enemyIdx: number })[]  // in order; enemyIdx -1 = not one of the page's enemies
+    dealt: number[]                 // per enemy: everything the skill dealt (also final damage etc. not in `hits`)
 }
 
 const SKILL_TYPES: [TargetType, string][] = [

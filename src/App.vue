@@ -114,8 +114,8 @@ const group2Paths = [
     '/profile',
     '/account-compare',
     '/sa-simulator-multiple',
-    '/pvp-simulator',
     '/pve-simulator',
+    '/pvp-simulator',
 ].filter(Boolean)
 const group3Paths = [
     '/pvp-how-to',

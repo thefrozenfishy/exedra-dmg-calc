@@ -148,6 +148,14 @@
   network, `CreateCharParamFromNetworkUnit` are in other namespaces (need Ghidra on those).
 
 ## Tools and environment
+- **Max Damage clears HP conditions unless told the dealer's HP.** Without `MaxDmgOptions.dealerHpPercent` every
+  HPRatio condition counts as met (both "HP >= X" and "HP <= X" rows apply); the Best SA Team calculator passes its
+  Attacker HP input, the PvE Simulator does not.
+- **Worker messages must be plain data.** Pinia store objects (characterStore.characters, team.slots) are reactive
+  proxies and fail structured clone (DataCloneError): JSON-copy them before `postMessage` (the PvE page's `plain`).
+- **The damage trace patches static methods.** battle/EngineDamageTrace swaps `E.BattleDamageCalculator.*` for the
+  length of one synchronous run and restores them in `finally`; never await inside a traced run, and keep it out of
+  the worker's other jobs.
 - Type-check needs `NODE_OPTIONS=--max-old-space-size=3300` (4 GB VM) and `timeout 170`; compare with the
   pre-existing error set, don't chase zero.
 - Engine scripts: `import "../../src/models/BestTeamCalculator"` first (import cycle).

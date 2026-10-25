@@ -9,12 +9,13 @@
             <div class="crys">Crystal 2</div>
             <div class="crys">Crystal 3</div>
             <div class="remove-during-export" style="min-width: 200px;"></div>
+            <div class="sa-score" :class="{ 'remove-during-export': !showSaScore }">{{ showSaScore ? 'SA Score' : '' }}</div>
         </div>
     </div>
 </template>
 
 <script lang="ts" setup>
-defineProps<{ optimizeAverageDamage: boolean }>()
+defineProps<{ optimizeAverageDamage: boolean, showSaScore?: boolean }>()
 </script>
 
 <style scoped>
@@ -58,6 +59,11 @@ defineProps<{ optimizeAverageDamage: boolean }>()
     flex: 1;
     text-align: right;
     margin-left: 10px;
+}
+
+.header-columns .sa-score {
+    min-width: 110px;
+    text-align: right;
 }
 
 .results.exporting .remove-during-export {

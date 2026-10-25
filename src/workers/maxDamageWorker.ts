@@ -90,8 +90,58 @@ function scoreBatch(msg: TeamScoreBatch) {
     self.postMessage({ kind: "teams", batch: msg.batch, scores } satisfies TeamScoreReply)
 }
 
-self.onmessage = (e: MessageEvent<MaxDamageRequest | TeamScoreBatch>) => {
+// ---- PvE Simulator "find best attacker loadout" (models/EngineAttackerLoadout): the page's Max Damage with one
+// dealer loadout per job (the other members, stage, wave and effect choices stay as on the page), only the dealer
+// evaluated, numbers only. Same worker file for the same reason as above.
+
+export interface LoadoutContext {
+    stageId: number
+    waveIdx: number
+    wave: QuestEnemyAppearance[]
+    dealerPos: number
+    opts: MaxDmgOptions
+}
+/** The dealer's strongest column by crit total and by average total. */
+export interface LoadoutScore { crit: number, avg: number, critChance: number, critSkill: string, avgSkill: string }
+export interface LoadoutScoreBatch { kind: "loadout", batch: number, context?: LoadoutContext, jobs: { id: number, slots: TeamSlot[] }[] }
+export type LoadoutScoreReply = { kind: "loadout", batch: number, scores: { id: number, score?: LoadoutScore, error?: string }[] }
+
+let loadoutContext: LoadoutContext | undefined
+const loadoutKiokus = new Map<string, PvPKioku>()
+function loadoutKioku(slot: TeamSlot): PvPKioku {
+    const key = JSON.stringify(slot)
+    let k = loadoutKiokus.get(key)
+    if (!k) {
+        if (loadoutKiokus.size > 400) loadoutKiokus.clear()
+        loadoutKiokus.set(key, k = buildSlotKioku(slot))
+    }
+    return k
+}
+
+function scoreLoadout(slots: TeamSlot[], c: LoadoutContext): LoadoutScore | undefined {
+    const result = computeMaxDamageEngine(slots.map(loadoutKioku), { stageId: c.stageId, waveIdx: c.waveIdx }, c.wave, c.dealerPos,
+        { ...c.opts, onlyPos: c.dealerPos, scoreOnly: true, trace: false })
+    const m = result.members[c.dealerPos]
+    const cols = [...(m?.skills ?? []), ...(m?.switchSkill ? [m.switchSkill] : [])]
+    if (!cols.length) return undefined
+    const byCrit = cols.reduce((b, s) => s.total.crit > b.total.crit ? s : b)
+    const byAvg = cols.reduce((b, s) => s.total.avg > b.total.avg ? s : b)
+    const label = (s: typeof byCrit) => s.name ? `${s.label} (${s.name})` : s.label
+    return { crit: byCrit.total.crit, avg: byAvg.total.avg, critChance: byCrit.critChance, critSkill: label(byCrit), avgSkill: label(byAvg) }
+}
+
+function loadoutBatch(msg: LoadoutScoreBatch) {
+    if (msg.context) { loadoutContext = msg.context; loadoutKiokus.clear() }
+    const scores = msg.jobs.map(({ id, slots }) => {
+        try { return { id, score: scoreLoadout(slots, loadoutContext!) } }
+        catch (e) { return { id, error: String((e as Error)?.message ?? e) } }
+    })
+    self.postMessage({ kind: "loadout", batch: msg.batch, scores } satisfies LoadoutScoreReply)
+}
+
+self.onmessage = (e: MessageEvent<MaxDamageRequest | TeamScoreBatch | LoadoutScoreBatch>) => {
     if ((e.data as TeamScoreBatch).kind === "teams") return scoreBatch(e.data as TeamScoreBatch)
+    if ((e.data as LoadoutScoreBatch).kind === "loadout") return loadoutBatch(e.data as LoadoutScoreBatch)
     pending = e.data as MaxDamageRequest
     next()
 }

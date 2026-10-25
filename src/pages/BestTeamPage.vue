@@ -72,11 +72,37 @@ Lower = faster but more likely to skip a team that could have closed the gap.
                 <span class="field-label">Pruning margin %</span>
                 <input type="number" min="0" max="100" v-model.number="pruningMargin" style="width: 70px;" />
             </label>
+            <label class="field"
+                title="Your attacker's HP when it uses its Ultimate: conditions like &quot;while HP is 50% or more&quot; are checked against it">
+                <span class="field-label">Attacker HP when using ultimate (%)</span>
+                <input v-model.number="attackerHealth" type="number" step="1" min="0" max="100" style="width: 170px;" />
+            </label>
         </section>
 
-        <section class="card section-card">
-            <DamageReductionInputs />
-            <ArenaBuffs />
+        <section v-if="isScoreAttackStage" class="card section-card">
+            <div class="sa-score-section">
+                <h4>Score Attack Score </h4>
+                <div class="sa-fields">
+                    <label class="field"
+                        title="To find: check the final score screen. This changes for each difficulty">
+                        <span class="field-label">Difficulty score</span>
+                        <input v-model.number="difficultyScore" type="number" />
+                    </label>
+                    <label class="field">
+                        <span class="field-label">HP remaining (%)</span>
+                        <input v-model.number="hpPercentTeam" type="number" step="1" min="0" max="100" />
+                    </label>
+                    <label class="field">
+                        <span class="field-label">Turns</span>
+                        <input v-model.number="saTurns" type="number" step="1" min="1" max="16" />
+                    </label>
+                    <label class="field"
+                        title="To find: calculate (damage dealt / points from damage done) in an SA run. This changes for each SA">
+                        <span class="field-label">Score multiplier</span>
+                        <input v-model.number="scoreMultiplier" type="number" step="0.1" min="0" />
+                    </label>
+                </div>
+            </div>
         </section>
 
         <section class="card section-card">
@@ -132,7 +158,7 @@ Lower = faster but more likely to skip a team that could have closed the gap.
                         - (disabledOtherRoles.includes(KiokuRole.Defender) ? 0 : minDefender)
                         - (disabledOtherRoles.includes(KiokuRole.Healer) ? 0 : minHealer)
                         - (disabledOtherRoles.includes(KiokuRole.Breaker) ? 0 : minBreaker)
-                        }}</div>
+                    }}</div>
                 </div>
             </div>
         </section>
@@ -275,19 +301,19 @@ Lower = faster but more likely to skip a team that could have closed the gap.
                     title="Only show the best-scoring row for each unique combination of the 5 main characters, hiding rows that only differ by portrait, support, or crystalis choice">
                     <input type="checkbox" v-model="collapseMainDifferences" /> Show one line per unique team setup
                 </label>
-                <ResultsHeader :optimizeAverageDamage />
+                <ResultsHeader :optimizeAverageDamage :showSaScore="!!saScoreInputs" />
                 <div class="team-row-wrapper" v-for="(team, idx) in topResults" :key="idx">
-                    <TeamRow :team :weakElements :offElementBuffMultReduction :offElementDebuffMultReduction
-                        :loading="false" :optimalSubCrys :pveStageId="runStageId" />
+                    <TeamRow :team :weakElements :loading="false" :optimalSubCrys :pveStageId="runStageId"
+                        :saScoreInputs />
                 </div>
 
                 <div v-for="[attackerName, teams] of topTeamsByAttacker" :key="attackerName" class="attacker-section">
                     <div v-if="teams?.length">
                         <h3>Top Teams for {{ attackerName }}</h3>
-                        <ResultsHeader :optimizeAverageDamage />
+                        <ResultsHeader :optimizeAverageDamage :showSaScore="!!saScoreInputs" />
                         <div class="team-row-wrapper" v-for="(team, idx) in teams" :key="idx">
-                            <TeamRow :team :weakElements :offElementBuffMultReduction :offElementDebuffMultReduction
-                                :loading="false" :optimalSubCrys :pveStageId="runStageId" />
+                            <TeamRow :team :weakElements :loading="false" :optimalSubCrys :pveStageId="runStageId"
+                                :saScoreInputs />
                         </div>
                     </div>
                 </div>
@@ -300,8 +326,6 @@ Lower = faster but more likely to skip a team that could have closed the gap.
 import { reactive, computed, ref, ComputedRef } from 'vue'
 import TeamRow from '../components/TeamRow.vue'
 import StageEnemySelector from '../components/StageEnemySelector.vue'
-import ArenaBuffs from '../components/ArenaBuffs.vue'
-import DamageReductionInputs from '../components/DamageReductionInputs.vue'
 import ResultsHeader from '../components/ResultsHeader.vue'
 import { useEnemyStore } from '../store/singleTeamStore'
 import { useCharacterStore } from '../store/characterStore'
@@ -314,6 +338,7 @@ import ImageActionsToolbar from '../components/ImageActionsToolbar.vue'
 import { useFriendStore } from "../store/friendStore"
 import { findBestTeamEngine, scenarioOf } from '../models/EngineBestTeam'
 import { EngineTeamPool } from '../models/EngineTeamPool'
+import { getScoreAttackStage, type ScoreAttackScoreInputs } from '../models/PvEScore'
 
 const enemies = useEnemyStore()
 const store = useCharacterStore()
@@ -357,22 +382,32 @@ const stageRef = ref<InstanceType<typeof StageEnemySelector> | null>(null)
 // the stage of the last run: the result rows open the PvE Simulator on it
 const runStageId = ref<number | undefined>(undefined)
 
+// Score Attack score: the inputs show while a Score Attack stage is picked, the result rows show the estimate when the
+// last run was on one. Same settings (and formula, models/PvEScore) as the PvE Simulator and single battle editor.
+const scoreMultiplier = useSetting('scoreMultiplier', 35)
+const saTurns = useSetting('turns', 3)
+const hpPercentTeam = useSetting('hp_percentage_team', 20)
+const difficultyScore = useSetting('difficulty_score', 6_000_000)
+const isScoreAttackStage = computed(() => {
+    const id = stageRef.value?.selection?.stageId
+    return id !== undefined && !!getScoreAttackStage(id)
+})
+const saScoreInputs = computed<ScoreAttackScoreInputs | undefined>(() =>
+    runStageId.value !== undefined && getScoreAttackStage(runStageId.value)
+        ? { difficultyScore: difficultyScore.value, scoreMultiplier: scoreMultiplier.value, turns: saTurns.value, hpPercent: hpPercentTeam.value }
+        : undefined)
+
 const topTeamsPerKioku = useSetting("topTeamsPerKioku", 5)
 const topTeams = useSetting("topTeams", 20)
 const collapseMainDifferences = useSetting("collapseMainDifferences", true)
 const include4StarAttackers = useSetting("include4StarAttackers", false)
 const include4StarSupports = useSetting("include4StarSupports", false)
 const include4StarOthers = useSetting("include4StarOthers", false)
-const buffMultReduction = useSetting("buffMultReduction", 0)
-const debuffMultReduction = useSetting("debuffMultReduction", 0)
-const offElementBuffMultReduction = useSetting("offElementBuffMultReduction", undefined)
-const offElementDebuffMultReduction = useSetting("offElementDebuffMultReduction", undefined)
 const optimizeAverageDamage = useSetting("optimizeAverageDamage", false)
 const attackerHealth = useSetting("attackerHealth", 100)
 const optimalSubCrys = useSetting("optimalSubCrys", true)
 const enablePruning = useSetting("enablePruning", true)
 const pruningMargin = useSetting("pruningMargin", 15)
-const arenaEffects = useSetting<{ type: string; value: number }[]>("arenaEffects", [])
 const onlyConsiderOnElements = useSetting("onlyConsiderOnElements", true)
 
 // The weak elements and the ailments come from the picked stage (StageEnemySelector): the elements any enemy on the
@@ -677,11 +712,6 @@ async function startSimulation() {
     results.splice(0, results.length)
     progress.value = {}
 
-    const arenaEffectsMap: Record<string, number> = {}
-    for (const { type, value } of arenaEffects.value) {
-        if (!type) continue
-        arenaEffectsMap[type] = (arenaEffectsMap[type] ?? 0) + value
-    }
     const safeDeBufferCount = safeInt(deBufferCount.value, 3, 0, 4)
 
     const options: any = {
@@ -705,14 +735,9 @@ async function startSimulation() {
         minBreaker: safeInt(minBreaker.value, 0, 0, 4),
         optimalSubCrys: optimalSubCrys.value,
         enabledCharacters: JSON.parse(JSON.stringify(members.value)),
-        buffMultReduction: buffMultReduction.value,
-        offElementBuffMultReduction: offElementBuffMultReduction.value,
-        debuffMultReduction: debuffMultReduction.value,
-        offElementDebuffMultReduction: offElementDebuffMultReduction.value,
         attackerHealth: attackerHealth.value,
         optimizeAverageDamage: optimizeAverageDamage.value,
         disabledOtherRoles: [...disabledOtherRoles.value],
-        arenaEffectsMap,
         enablePruning: enablePruning.value,
         pruningMargin: safeInt(pruningMargin.value, 15, 0, 100),
     }
@@ -897,6 +922,24 @@ async function startSimulation() {
 }
 
 /* ── Generic section card ── */
+.sa-score-section {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto 1rem;
+}
+
+.sa-score-subtitle {
+    font-weight: normal;
+    font-size: 0.85em;
+    opacity: 0.7;
+}
+
+.sa-fields {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
 .section-card {
     flex-direction: column;
     align-items: stretch;
