@@ -1228,7 +1228,7 @@ const benchCharts = computed(() => [
         title: `Damage dealer strength compared to ${LuxMagica}`,
         fightType: true,
         desc: [
-            `Damage each character deals as the damage dealer, compared to ${LuxMagica} in the same spot with the character's role: ${LuxMagica} then has the average HP, ATK and DEF of the 5 star characters of that role.`,
+            `Damage each character deals as the damage dealer, compared to ${LuxMagica} in the same spot as an Attacker: ${LuxMagica} has the average HP, ATK and DEF of the 5 star Attackers, the same for every role.`,
             `${LuxMagica} is the 0% line; 100% means double of her damage.`,
             benchAverageDmg.value
                 ? `Average Damage: ${benchAv()} AV (${benchTurns.value} turns) of battle with infinite SP, supported by four ${LuxMagica}. ${CRIT_TEXT} Only the damage dealer's own damage counts.`

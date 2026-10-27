@@ -335,8 +335,8 @@ type KiokuInput = Omit<KiokuArgs, "crysIDs" | "subCrysIDs"> & Partial<KiokuArgs>
 /**
  * Support chart: a Lux dealer with the character in slot 2 and three Lux fillers, compared to five Lux; the dealer
  * has no element or role (the main bar) or one the character's kit is limited to (variant bars). Attacker chart:
- * the character as the dealer (its own element and role) compared to Lux as the dealer in the character's role (with
- * that role's average 5 star stats, see benchKioku), both with four fillers. Always 5 units (user's choice).
+ * the character as the dealer (its own element and role) compared to Lux as the dealer with the average 5 star
+ * Attacker stats (see benchKioku), the same for every role, both with four fillers. Always 5 units (user's choice).
  * Lux's baselines are computed once per identity / enemy count and reused. Every bench Lux (dealer, fillers,
  * reference) is A0 at max levels, so she has no follow-up.
  */
@@ -367,8 +367,8 @@ export class LuxBenchCharts {
         return k
     }
 
-    // Attacker chart baseline: Lux as the dealer in the measured character's role, so an Attacker is compared to Lux with
-    // average 5 star Attacker stats, a Healer to Lux with average Healer stats, and so on.
+    // Attacker chart baseline: Lux as the dealer with the average 5 star Attacker stats, the same for every role, so the
+    // bars of all roles share one 0% line (a per-role baseline made a Defender's 0% a third of an Attacker's).
     private roleReference(role: KiokuRole): PvPKioku {
         let k = this.references.get(role)
         if (!k) this.references.set(role, k = benchKioku(this.luxArgs, { role }))
@@ -469,8 +469,7 @@ export class LuxBenchCharts {
         const kitAilments = kitRestrictions(x).ailments
         return ids.map(id => {
             const immune = benchImmunities(kitAilments, id.ailment)
-            const role = x.data.role as KiokuRole
-            const base = this.cachedUlt(`a:${enemies}:${role}:${id.ailment ?? "-"}`, () => this.team(this.roleReference(role)), enemies, id.ailment, immune)
+            const base = this.cachedUlt(`a:${enemies}:${id.ailment ?? "-"}`, () => this.team(this.roleReference(KiokuRole.Attacker)), enemies, id.ailment, immune)
             const v = ultimateDamage(this.team(x), 0, enemies, id.ailment, immune)
             return { ...id, gain: pctGain(v.damage, base.damage), critRate: v.critChance }
         })
@@ -480,8 +479,7 @@ export class LuxBenchCharts {
         const kitAilments = kitRestrictions(x).ailments
         return ids.map(id => {
             const immune = benchImmunities(kitAilments, id.ailment)
-            const role = x.data.role as KiokuRole
-            const base = this.cachedSim(`a:${enemies}:${role}:${id.ailment ?? "-"}`, () => this.team(this.roleReference(role)), enemies, id.ailment, immune)
+            const base = this.cachedSim(`a:${enemies}:${id.ailment ?? "-"}`, () => this.team(this.roleReference(KiokuRole.Attacker)), enemies, id.ailment, immune)
             return { ...id, gain: pctGain(this.simTotal(this.team(x), enemies, id.ailment, immune), base) }
         })
     }
