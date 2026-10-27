@@ -57,15 +57,6 @@
         "completeAppealDescription": "",
         "featuredRewardResourceName": "",
         "missionCampaignGroupMstId": 0,
-        "missionTitleMstId": 1030,
-        "prevMissionTitleMstId": 0,
-        "priority": 1,
-        "title": "Season Missions"
-    },
-    {
-        "completeAppealDescription": "",
-        "featuredRewardResourceName": "",
-        "missionCampaignGroupMstId": 0,
         "missionTitleMstId": 1031,
         "prevMissionTitleMstId": 0,
         "priority": 1,

@@ -7592,6 +7592,10 @@
         "textMstId": "5ef59bd5777f21d0e9145e880154d9581"
     },
     {
+        "text": "* You reached the player level limit.\nYou cannot obtain any more player EXP.",
+        "textMstId": "5efe0132c74b114892e858e5fb4deac91"
+    },
+    {
         "text": "Are you sure you want to remove the following player from the group chat?",
         "textMstId": "5f2e792425b2eff6e84ed51f0a34b0741"
     },
@@ -17546,6 +17550,10 @@
     {
         "text": "Date Obtained",
         "textMstId": "dc8cf66f61eef0af02cb70b5837befab1"
+    },
+    {
+        "text": "Claimable Rewards",
+        "textMstId": "dc9845f1dd1086efc3dddfc399ef7e281"
     },
     {
         "text": "Text Zone",
