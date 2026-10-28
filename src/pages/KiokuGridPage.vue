@@ -264,10 +264,18 @@
                         </button>
                     </div>
                 </div>
-                <label class="filter-chip" :class="{ active: simulateMaxLevels }"
-                    title="On: every Kioku is simulated at A5 with max Kioku, Magic, Heartphial and Special level. Off: your own Kioku's current ascension and levels are used, and unowned Kioku are left out">
-                    <input type="checkbox" v-model="simulateMaxLevels" /> Simulate using max possible levels
-                </label>
+                <div class="fight-mode-row">
+                    <span class="fight-mode-label">Simulate using</span>
+                    <div class="fight-mode-toggle" style="--count: 2" role="radiogroup" aria-label="Simulate using">
+                        <div class="fight-mode-highlight"
+                            :style="{ transform: `translateX(${levelsModeIndex * 100}%)` }"></div>
+                        <button v-for="opt in levelsModeOptions" :key="opt.label" type="button"
+                            class="fight-mode-option" :class="{ active: simulateMaxLevels === opt.value }"
+                            :title="opt.title" @click="simulateMaxLevels = opt.value">
+                            {{ opt.label }}
+                        </button>
+                    </div>
+                </div>
                 <button type="button" class="filter-chip" :disabled="bc.running"
                     title="Results are saved in this browser and reused while nothing changes. Recalculate this chart from scratch."
                     @click="runBench(bc.kind, { fresh: true })">Recalculate</button>
@@ -463,6 +471,11 @@ const splitBreakerRange = useSetting("splitBreakerRange", true)
 const splitDebufferRange = useSetting("splitDebufferRange", true)
 const displayArchetypes = useSetting("displayArchetypes", true)
 const simulateMaxLevels = useSetting("gridSimulateMaxLevels", true)
+const levelsModeOptions = [
+    { value: true, label: "All A5", title: "Every Kioku is simulated at A5 with max Kioku, Magic, Heartphial and Special level" },
+    { value: false, label: "My Kioku", title: "Your own Kioku's current ascension and levels are used, and unowned Kioku are left out" },
+] as const
+const levelsModeIndex = computed(() => simulateMaxLevels.value ? 0 : 1)
 
 const fightModeOptions = [
     { value: "st", label: "ST", title: "Single target — only the center enemy takes damage" },
