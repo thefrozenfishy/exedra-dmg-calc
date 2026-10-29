@@ -471,10 +471,9 @@ const splitBreakerRange = useSetting("splitBreakerRange", true)
 const splitDebufferRange = useSetting("splitDebufferRange", true)
 const displayArchetypes = useSetting("displayArchetypes", true)
 const simulateMaxLevels = useSetting("gridSimulateMaxLevels", true)
-const playerLevel = useSetting("playerLevel", KiokuConstants.maxKiokuLvl)
 const levelsModeOptions = [
     { value: true, label: "All A5", title: "Every Kioku is simulated at A5 with max Kioku, Magic, Heartphial and Special level" },
-    { value: false, label: "My Kioku", title: "Your own Kioku's ascension is used with the max Kioku, Magic, Heartphial and Special level for your player level, and unowned Kioku are left out" },
+    { value: false, label: "My Kioku", title: "Your own Kioku's ascension is used with max Kioku, Magic, Heartphial and Special level, and unowned Kioku are left out" },
 ] as const
 const levelsModeIndex = computed(() => simulateMaxLevels.value ? 0 : 1)
 
@@ -714,9 +713,9 @@ const maxLevelsForChart = (c: Character): Character =>
     withMaxLevelsForPlayerLevel({ ...c, ascension: KiokuConstants.maxAscension }, KiokuConstants.maxKiokuLvl)
 
 // Lux is the fixed yardstick (dealer, filler and reference), so she always uses max levels.
-// "My Kioku" keeps the account's ascension but uses the max levels the player level allows.
+// "My Kioku" keeps the account's ascension but uses max levels.
 const prepareForChart = (c: Character): Character =>
-    simulateMaxLevels.value ? maxLevelsForChart(c) : withMaxLevelsForPlayerLevel({ ...c }, playerLevel.value)
+    simulateMaxLevels.value ? maxLevelsForChart(c) : withMaxLevelsForPlayerLevel({ ...c }, KiokuConstants.maxKiokuLvl)
 
 // Without simulated max levels only owned characters can be compared.
 const chartCharacters = () =>
@@ -724,7 +723,7 @@ const chartCharacters = () =>
 
 const levelsDescription = computed(() => (simulateMaxLevels.value
     ? `All characters are A5 and max level. ${LuxMagica} is A0 (no follow-ups).`
-    : `All characters use your current ascension with the max levels for your player level (${playerLevel.value}), unowned characters are left out. ${LuxMagica} is always max level, A0.`) + ` Everyone has only their own EX crystalis: no portrait, support or other crystalis.`)
+    : `All characters use your current ascension with max levels, unowned characters are left out. ${LuxMagica} is always max level, A0.`) + ` Everyone has only their own EX crystalis: no portrait, support or other crystalis.`)
 
 type ChartTargetContext = {
     role?: KiokuRole
@@ -1416,7 +1415,7 @@ const chartExportOpts = (selector: string): ImageExportOptions => {
 
 // The bench only runs while its charts are shown; hiding them stops the workers.
 const benchKinds: BenchChartKind[] = ["support", "attacker"]
-watch([showBenchCharts, markedCharacters, simulateMaxLevels, playerLevel, fightMode, benchSpeed], () => {
+watch([showBenchCharts, markedCharacters, simulateMaxLevels, fightMode, benchSpeed], () => {
     for (const kind of benchKinds) {
         if (showBenchCharts.value) runBench(kind)
         else stopBench(kind)
