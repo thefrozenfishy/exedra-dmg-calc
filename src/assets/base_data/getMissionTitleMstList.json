@@ -2,6 +2,7 @@
     {
         "completeAppealDescription": "",
         "featuredRewardResourceName": "",
+        "isRewardGuideTarget": false,
         "missionCampaignGroupMstId": 0,
         "missionTitleMstId": 1,
         "prevMissionTitleMstId": 0,
@@ -11,6 +12,7 @@
     {
         "completeAppealDescription": "",
         "featuredRewardResourceName": "",
+        "isRewardGuideTarget": false,
         "missionCampaignGroupMstId": 0,
         "missionTitleMstId": 2,
         "prevMissionTitleMstId": 0,
@@ -20,6 +22,7 @@
     {
         "completeAppealDescription": "",
         "featuredRewardResourceName": "",
+        "isRewardGuideTarget": false,
         "missionCampaignGroupMstId": 0,
         "missionTitleMstId": 3,
         "prevMissionTitleMstId": 0,
@@ -29,6 +32,7 @@
     {
         "completeAppealDescription": "",
         "featuredRewardResourceName": "",
+        "isRewardGuideTarget": false,
         "missionCampaignGroupMstId": 0,
         "missionTitleMstId": 4,
         "prevMissionTitleMstId": 0,
@@ -38,6 +42,7 @@
     {
         "completeAppealDescription": "",
         "featuredRewardResourceName": "",
+        "isRewardGuideTarget": false,
         "missionCampaignGroupMstId": 0,
         "missionTitleMstId": 10,
         "prevMissionTitleMstId": 0,
@@ -47,6 +52,7 @@
     {
         "completeAppealDescription": "",
         "featuredRewardResourceName": "",
+        "isRewardGuideTarget": false,
         "missionCampaignGroupMstId": 0,
         "missionTitleMstId": 15,
         "prevMissionTitleMstId": 0,
@@ -56,6 +62,7 @@
     {
         "completeAppealDescription": "",
         "featuredRewardResourceName": "",
+        "isRewardGuideTarget": false,
         "missionCampaignGroupMstId": 0,
         "missionTitleMstId": 1031,
         "prevMissionTitleMstId": 0,
@@ -65,6 +72,7 @@
     {
         "completeAppealDescription": "Get Portrait \"Walpurgisnacht Rising KV Part 1 Madoka\" x1!",
         "featuredRewardResourceName": "",
+        "isRewardGuideTarget": false,
         "missionCampaignGroupMstId": 0,
         "missionTitleMstId": 2007,
         "prevMissionTitleMstId": 0,
@@ -74,6 +82,7 @@
     {
         "completeAppealDescription": "Get Portrait \"Walpurgisnacht Rising KV Part 1 Madoka\" x1!",
         "featuredRewardResourceName": "",
+        "isRewardGuideTarget": false,
         "missionCampaignGroupMstId": 0,
         "missionTitleMstId": 2008,
         "prevMissionTitleMstId": 2007,
@@ -83,6 +92,7 @@
     {
         "completeAppealDescription": "Get Portrait \"Walpurgisnacht Rising KV Part 1 Madoka\" x1!",
         "featuredRewardResourceName": "",
+        "isRewardGuideTarget": false,
         "missionCampaignGroupMstId": 0,
         "missionTitleMstId": 2009,
         "prevMissionTitleMstId": 2008,
@@ -92,6 +102,7 @@
     {
         "completeAppealDescription": "Get Portrait \"Walpurgisnacht Rising KV Part 1 Madoka\" x1!",
         "featuredRewardResourceName": "",
+        "isRewardGuideTarget": false,
         "missionCampaignGroupMstId": 0,
         "missionTitleMstId": 2010,
         "prevMissionTitleMstId": 2009,
@@ -101,6 +112,7 @@
     {
         "completeAppealDescription": "Get Magica Stone x1,000!",
         "featuredRewardResourceName": "",
+        "isRewardGuideTarget": false,
         "missionCampaignGroupMstId": 0,
         "missionTitleMstId": 2011,
         "prevMissionTitleMstId": 2010,
@@ -110,6 +122,7 @@
     {
         "completeAppealDescription": "Get Portrait \"Walpurgisnacht Rising KV Part 1 Madoka\" x1!",
         "featuredRewardResourceName": "",
+        "isRewardGuideTarget": false,
         "missionCampaignGroupMstId": 0,
         "missionTitleMstId": 2012,
         "prevMissionTitleMstId": 2011,
@@ -119,6 +132,7 @@
     {
         "completeAppealDescription": "Get Portrait \"Walpurgisnacht Rising KV Part 1 Madoka\" x1!",
         "featuredRewardResourceName": "",
+        "isRewardGuideTarget": false,
         "missionCampaignGroupMstId": 0,
         "missionTitleMstId": 2013,
         "prevMissionTitleMstId": 2012,
@@ -128,6 +142,7 @@
     {
         "completeAppealDescription": "Get Prism Core x1!",
         "featuredRewardResourceName": "",
+        "isRewardGuideTarget": false,
         "missionCampaignGroupMstId": 0,
         "missionTitleMstId": 2014,
         "prevMissionTitleMstId": 2013,
@@ -137,6 +152,7 @@
     {
         "completeAppealDescription": "Get Prism Core x1!",
         "featuredRewardResourceName": "",
+        "isRewardGuideTarget": false,
         "missionCampaignGroupMstId": 0,
         "missionTitleMstId": 2015,
         "prevMissionTitleMstId": 2014,
@@ -146,6 +162,7 @@
     {
         "completeAppealDescription": "Get Prism Core x1!",
         "featuredRewardResourceName": "",
+        "isRewardGuideTarget": false,
         "missionCampaignGroupMstId": 0,
         "missionTitleMstId": 2016,
         "prevMissionTitleMstId": 2015,
@@ -155,6 +172,7 @@
     {
         "completeAppealDescription": "Get Magica Stone x1,000!",
         "featuredRewardResourceName": "",
+        "isRewardGuideTarget": false,
         "missionCampaignGroupMstId": 0,
         "missionTitleMstId": 2018,
         "prevMissionTitleMstId": 0,
@@ -164,6 +182,7 @@
     {
         "completeAppealDescription": "Get Magica Stone x1,000!",
         "featuredRewardResourceName": "",
+        "isRewardGuideTarget": false,
         "missionCampaignGroupMstId": 0,
         "missionTitleMstId": 2019,
         "prevMissionTitleMstId": 2018,
@@ -173,6 +192,7 @@
     {
         "completeAppealDescription": "Get Magica Stone x1,000!",
         "featuredRewardResourceName": "",
+        "isRewardGuideTarget": false,
         "missionCampaignGroupMstId": 0,
         "missionTitleMstId": 2020,
         "prevMissionTitleMstId": 2019,
@@ -182,6 +202,7 @@
     {
         "completeAppealDescription": "Get Magica Stone x1,000!",
         "featuredRewardResourceName": "",
+        "isRewardGuideTarget": false,
         "missionCampaignGroupMstId": 0,
         "missionTitleMstId": 2021,
         "prevMissionTitleMstId": 0,
@@ -191,6 +212,7 @@
     {
         "completeAppealDescription": "Get Magica Stone x1,000!",
         "featuredRewardResourceName": "",
+        "isRewardGuideTarget": false,
         "missionCampaignGroupMstId": 0,
         "missionTitleMstId": 2022,
         "prevMissionTitleMstId": 2021,
@@ -200,6 +222,7 @@
     {
         "completeAppealDescription": "Get Magica Stone x1,000!",
         "featuredRewardResourceName": "",
+        "isRewardGuideTarget": false,
         "missionCampaignGroupMstId": 0,
         "missionTitleMstId": 2023,
         "prevMissionTitleMstId": 2022,
@@ -209,6 +232,7 @@
     {
         "completeAppealDescription": "Obtain 5★ Kioku [Aqua Tempest] Sorana Nagiboshi: x1",
         "featuredRewardResourceName": "",
+        "isRewardGuideTarget": false,
         "missionCampaignGroupMstId": 0,
         "missionTitleMstId": 2024,
         "prevMissionTitleMstId": 0,
@@ -218,6 +242,7 @@
     {
         "completeAppealDescription": "Obtain 5★ Kioku [Aqua Tempest] Sorana Nagiboshi: x1",
         "featuredRewardResourceName": "",
+        "isRewardGuideTarget": false,
         "missionCampaignGroupMstId": 0,
         "missionTitleMstId": 2025,
         "prevMissionTitleMstId": 2024,
@@ -227,6 +252,7 @@
     {
         "completeAppealDescription": "Obtain 5★ Kioku [Aqua Tempest] Sorana Nagiboshi: x1",
         "featuredRewardResourceName": "",
+        "isRewardGuideTarget": false,
         "missionCampaignGroupMstId": 0,
         "missionTitleMstId": 2026,
         "prevMissionTitleMstId": 2025,
@@ -236,6 +262,7 @@
     {
         "completeAppealDescription": "Get Magica Stone x1,000!",
         "featuredRewardResourceName": "",
+        "isRewardGuideTarget": false,
         "missionCampaignGroupMstId": 0,
         "missionTitleMstId": 2027,
         "prevMissionTitleMstId": 0,
@@ -245,6 +272,7 @@
     {
         "completeAppealDescription": "Get Magica Stone x1,000!",
         "featuredRewardResourceName": "",
+        "isRewardGuideTarget": false,
         "missionCampaignGroupMstId": 0,
         "missionTitleMstId": 2028,
         "prevMissionTitleMstId": 2027,
@@ -254,6 +282,7 @@
     {
         "completeAppealDescription": "Get Magica Stone x1,000!",
         "featuredRewardResourceName": "",
+        "isRewardGuideTarget": false,
         "missionCampaignGroupMstId": 0,
         "missionTitleMstId": 2029,
         "prevMissionTitleMstId": 2028,
@@ -263,6 +292,7 @@
     {
         "completeAppealDescription": "",
         "featuredRewardResourceName": "",
+        "isRewardGuideTarget": false,
         "missionCampaignGroupMstId": 0,
         "missionTitleMstId": 5000,
         "prevMissionTitleMstId": 0,
@@ -272,6 +302,7 @@
     {
         "completeAppealDescription": "",
         "featuredRewardResourceName": "",
+        "isRewardGuideTarget": false,
         "missionCampaignGroupMstId": 0,
         "missionTitleMstId": 5044,
         "prevMissionTitleMstId": 0,
@@ -281,6 +312,7 @@
     {
         "completeAppealDescription": "",
         "featuredRewardResourceName": "",
+        "isRewardGuideTarget": false,
         "missionCampaignGroupMstId": 0,
         "missionTitleMstId": 5132,
         "prevMissionTitleMstId": 0,
@@ -290,6 +322,7 @@
     {
         "completeAppealDescription": "",
         "featuredRewardResourceName": "",
+        "isRewardGuideTarget": false,
         "missionCampaignGroupMstId": 0,
         "missionTitleMstId": 5138,
         "prevMissionTitleMstId": 0,
@@ -299,6 +332,7 @@
     {
         "completeAppealDescription": "",
         "featuredRewardResourceName": "",
+        "isRewardGuideTarget": false,
         "missionCampaignGroupMstId": 0,
         "missionTitleMstId": 5146,
         "prevMissionTitleMstId": 0,
@@ -308,6 +342,7 @@
     {
         "completeAppealDescription": "",
         "featuredRewardResourceName": "",
+        "isRewardGuideTarget": false,
         "missionCampaignGroupMstId": 0,
         "missionTitleMstId": 5147,
         "prevMissionTitleMstId": 0,
@@ -317,6 +352,7 @@
     {
         "completeAppealDescription": "",
         "featuredRewardResourceName": "",
+        "isRewardGuideTarget": false,
         "missionCampaignGroupMstId": 0,
         "missionTitleMstId": 5158,
         "prevMissionTitleMstId": 0,
@@ -326,6 +362,7 @@
     {
         "completeAppealDescription": "",
         "featuredRewardResourceName": "",
+        "isRewardGuideTarget": false,
         "missionCampaignGroupMstId": 0,
         "missionTitleMstId": 5159,
         "prevMissionTitleMstId": 0,
@@ -335,6 +372,7 @@
     {
         "completeAppealDescription": "",
         "featuredRewardResourceName": "",
+        "isRewardGuideTarget": false,
         "missionCampaignGroupMstId": 0,
         "missionTitleMstId": 5160,
         "prevMissionTitleMstId": 0,
@@ -344,6 +382,7 @@
     {
         "completeAppealDescription": "",
         "featuredRewardResourceName": "",
+        "isRewardGuideTarget": false,
         "missionCampaignGroupMstId": 0,
         "missionTitleMstId": 5161,
         "prevMissionTitleMstId": 0,
@@ -353,6 +392,7 @@
     {
         "completeAppealDescription": "",
         "featuredRewardResourceName": "",
+        "isRewardGuideTarget": false,
         "missionCampaignGroupMstId": 0,
         "missionTitleMstId": 5162,
         "prevMissionTitleMstId": 0,
@@ -362,6 +402,7 @@
     {
         "completeAppealDescription": "",
         "featuredRewardResourceName": "",
+        "isRewardGuideTarget": false,
         "missionCampaignGroupMstId": 0,
         "missionTitleMstId": 5163,
         "prevMissionTitleMstId": 0,
@@ -371,6 +412,7 @@
     {
         "completeAppealDescription": "",
         "featuredRewardResourceName": "",
+        "isRewardGuideTarget": false,
         "missionCampaignGroupMstId": 0,
         "missionTitleMstId": 5164,
         "prevMissionTitleMstId": 0,
@@ -380,6 +422,7 @@
     {
         "completeAppealDescription": "",
         "featuredRewardResourceName": "",
+        "isRewardGuideTarget": false,
         "missionCampaignGroupMstId": 0,
         "missionTitleMstId": 5165,
         "prevMissionTitleMstId": 0,
@@ -389,6 +432,7 @@
     {
         "completeAppealDescription": "",
         "featuredRewardResourceName": "",
+        "isRewardGuideTarget": false,
         "missionCampaignGroupMstId": 0,
         "missionTitleMstId": 5166,
         "prevMissionTitleMstId": 0,
@@ -398,6 +442,7 @@
     {
         "completeAppealDescription": "",
         "featuredRewardResourceName": "",
+        "isRewardGuideTarget": false,
         "missionCampaignGroupMstId": 0,
         "missionTitleMstId": 5167,
         "prevMissionTitleMstId": 0,
@@ -407,6 +452,7 @@
     {
         "completeAppealDescription": "",
         "featuredRewardResourceName": "",
+        "isRewardGuideTarget": false,
         "missionCampaignGroupMstId": 0,
         "missionTitleMstId": 5168,
         "prevMissionTitleMstId": 0,
