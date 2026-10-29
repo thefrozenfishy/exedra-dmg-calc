@@ -316,3 +316,8 @@
 - Max Damage (EngineMaxDamage) removes everything given at battle start and re-gives passives from the kit's `effects`
   list: a passive only in the unit's passive list (`crys`) works in battles but not in Max Burst. Push its rows to
   `effects` too. Same for a support whose target only matches after a bench identity change.
+- Kit summaries that scan effect rows by `abilityEffectType` miss what composite states do in code: `CUTOUT` (action
+  advance + remove N debuffs, CutoutUnitState) and `TSUBAME_LINK` (SPD + ATK + additional damage) have no row for those
+  parts. `SWITCH_SKILL` v1 and `STEP_UP_SKILL` v2 are `skillUniqueId`s (resolve via SkillMst at the skill level), and a
+  `SWITCH_SKILL` row's element is the skill's, not an element limit. Kioku Grid archetypes handle all of this in
+  `src/models/KiokuArchetypes.ts`; audit with `npx tsx scripts/audit/archetypeAudit.ts [--rows]`.

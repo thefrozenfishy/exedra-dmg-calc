@@ -52,7 +52,7 @@ Data access: `src/utils/helpers.ts` (`kiokuData`, `skillDetails`, `skillDetailsB
 | `/pvp-simulator` "PvP Simulator" | `src/pages/PvpTeamPage.vue` | `EngineBattle` (pvp / gvg); RNG modes (`RngControls.vue`), export/import (`src/utils/pvpExport.ts`), `BattleTimeline.vue` |
 | `/pve-simulator` "PvE Simulator" | `src/pages/PvESimulatorPage.vue` | `EngineBattle` (quest / soloRaid / multiRaid), stage picker (`StagePicker.vue`), Auto/Manual control, Solo Raid attempts, Max Damage (`maxDamageWorker.ts` -> `computeMaxDamageEngine`), attacker loadout search (`models/EngineAttackerLoadout.ts`, anvil buttons `components/AttackerOptimizer.vue`), Stats for nerds (setting `pveStatsForNerds`) |
 | `/sa-simulator-multiple` "Best SA Team Calculator" | `BestTeamPage.vue` | `models/EngineBestTeam.ts` + `battle/EngineTeamScore.ts`, worker pool `models/EngineTeamPool.ts` (`maxDamageWorker.ts` "teams") |
-| `/kioku-grid` "Kioku Grid" | `KiokuGridPage.vue` | Bench charts via `LuxBench.ts` in one worker per chart (`luxBenchWorker.ts`) |
+| `/kioku-grid` "Kioku Grid" | `KiokuGridPage.vue` | Bench charts via `LuxBench.ts` in one worker per chart (`luxBenchWorker.ts`); archetype icons from `models/KiokuArchetypes.ts` (kit master rows, A2 + EX crystalis) |
 | `/sa-simulator-single` "Old Single Hit Calc" | `SingleTeamPage.vue` | First-generation `ScoreAttackTeam` formula |
 | `/sa-simulator-multiple-old` "Old Best SA Team Calculator" | `OldBestTeamPage.vue` | First-generation formula (`findBestTeam`) + `BestTeamWorker.js` |
 

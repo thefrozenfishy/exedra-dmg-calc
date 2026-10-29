@@ -340,6 +340,7 @@ import { skillDetails } from "../utils/helpers"
 import ImageActionsToolbar from "../components/ImageActionsToolbar.vue"
 import type { ImageExportOptions } from "../utils/image"
 import { useFriendStore } from "../store/friendStore"
+import { archetypeRules, archetypesForKit } from "../models/KiokuArchetypes"
 import type { LuxBenchJob, LuxBenchMessage } from "../workers/luxBenchWorker"
 import type { BenchRow } from "../models/LuxBench"
 import { benchCharKey, clearBenchCache, loadBenchCache, saveBenchCache, type BenchCacheEntry, type BenchSetup } from "../utils/luxBenchCache"
@@ -379,86 +380,6 @@ const shouldShow = (r: number) => {
     if (r === 3) return show3stars.value
     return false
 }
-
-interface ArchetypeRule {
-    id: string
-    label: string
-    match: (k: ScoreAttackKioku) => boolean
-}
-
-const archetypeRules: ArchetypeRule[] = [
-    {
-        id: "mono",
-        label: "Mono Element",
-        match: (k: ScoreAttackKioku) => k.effects.some(e =>
-            e.abilityEffectType.includes("AIM")
-            || e.abilityEffectType.includes("ZONE")
-            || (!e.abilityEffectType.includes("DMG") && e.element)
-        )
-    },
-    {
-        id: "fua",
-        label: "Fua",
-        match: (k: ScoreAttackKioku) => k.effects.some(e => e.abilityEffectType === "ADDITIONAL_SKILL_ACT")
-    },
-    {
-        id: "crit",
-        label: "Crit",
-        match: (k: ScoreAttackKioku) => k.effects.some(e => e.abilityEffectType.includes("_CT"))
-        // Self crit is also crit archetype
-    },
-    {
-        id: "mp",
-        label: "MP Generator",
-        match: (k: ScoreAttackKioku) => k.effects.some(e => e.range > 0 && [
-            "GAIN_EP_FIXED",
-            "GAIN_EP_RATIO",
-            "UP_EP_RECOVER_RATE_RATIO"
-        ].includes(e.abilityEffectType))
-    },
-    {
-        id: "sp",
-        label: "SP Generator",
-        match: (k: ScoreAttackKioku) => k.effects.some(e => "GAIN_SP_FIXED" === e.abilityEffectType)
-    },
-    {
-        id: "aa",
-        label: "Action Advance",
-        match: (k: ScoreAttackKioku) => k.effects.some(e => e.range > 0 && e.abilityEffectType === "HASTE")
-    },
-    {
-        id: "spd_up",
-        label: "AoE SPD buff",
-        match: (k: ScoreAttackKioku) => k.effects.some(e => e.range > 0 && e.abilityEffectType.includes("UP_SPD"))
-    },
-    {
-        id: "spd_down",
-        label: "SPD debuff",
-        match: (k: ScoreAttackKioku) => k.effects.some(e => e.range > 0 && e.abilityEffectType.includes("N_SPD"))
-    },
-    {
-        id: "ailment",
-        label: "Ailment",
-        match: (k: ScoreAttackKioku) => k.effects.some(e => Object.values(Ailment).includes(
-            e.abilityEffectType.replace(/_(ATK|DEF|HP)$/, "") as Ailment
-        )),
-    },
-    {
-        id: "ailment_remove",
-        label: "Ailment Remove",
-        match: (k: ScoreAttackKioku) => k.effects.some(e => e.abilityEffectType === "REMOVE_ALL_ABNORMAL")
-    },
-    {
-        id: "buff_remove",
-        label: "Buff Remove",
-        match: (k: ScoreAttackKioku) => k.effects.some(e => e.abilityEffectType === "REMOVE_ALL_BUFF")
-    },
-    {
-        id: "debuff_remove",
-        label: "Debuff Remove",
-        match: (k: ScoreAttackKioku) => k.effects.some(e => e.abilityEffectType === "REMOVE_ALL_DEBUFF")
-    },
-]
 
 const show5stars = useSetting("showGrid5stars", true)
 const show4stars = useSetting("showGrid4stars", false)
@@ -620,9 +541,6 @@ const computeSkillRange = (k: ScoreAttackKioku): number => {
     return range
 }
 
-const archetypesFor = (k: ScoreAttackKioku): ArchetypeRule[] =>
-    archetypeRules.filter(rule => rule.match(k))
-
 const markedCharacters = computed(() => store.characters.map(c => {
     let range = 1
     if (c.name === LuxMagica) c.rarity = 4
@@ -634,7 +552,7 @@ const markedCharacters = computed(() => store.characters.map(c => {
         range,
         _borderClass: borderClass(c),
         _title: makeTitle(c),
-        _archetypes: archetypesFor(k),
+        _archetypes: archetypesForKit(k.data),
     }
 }))
 
