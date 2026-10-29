@@ -4,14 +4,14 @@ What the new game version changes in how battles and menus work. Data changes ar
 **⚔️ Battles**
 - No rule changes this time. Damage, buffs, conditions and auto-battle work exactly as in 3.21.0.
 
-**🐉 Solo Raid**
+**🐉 Crisis**
 - No more battle time limit: the countdown and the "time almost up" warnings are gone.
-- Practice mode was removed. A one-time pop-up explains this when you next open Solo Raid.
+- Practice mode was removed. A one-time pop-up explains this when you next open Crisis.
 - The Skip button now also shows whether you have enough stamina to skip.
-- The Solo Raid top screen can show a "ready to battle" badge.
+- The Crisis top screen can show a "ready to battle" badge.
 
 **👥 Teams**
-- The last team you used is now remembered per mode and per target (for example per Solo Raid boss or Mirror Tower), not just per battle type.
+- The last team you used is now remembered per mode and per target (for example per Crisis boss or Mirror Tower), not just per battle type.
 - This is saved with your account, so it carries over with a data transfer. Entries for ended Score Attacks are dropped.
 
 **⚠️ Retire warning**

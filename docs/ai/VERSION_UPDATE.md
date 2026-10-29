@@ -224,6 +224,10 @@ Type-check: compare the SET of errors with a baseline taken before your change
 
 ## 8. Newsletter (for players)
 
+**Names: always the in-game ones** (user, 2026-10-29), in the newsletter, the Discord notes, chat messages and docs
+prose: SoloRaid* in the code = **Crisis**, MultiRaid* = **Link Raid**, Style* = **Kioku**. Class and method names stay
+as they are in the code, but the sentence around them uses the in-game name ("Crisis (SoloRaidGameDirector)").
+
 The newsletter is for other players of the game, not for the user: gameplay only. Cover new mechanics and how they
 play (buttons, costs, limits, teambuilding hints), new kiokus and kits, events and stages, balance changes, raid / PvP
 rule changes, quality-of-life changes and one simulator-status line. Mark features nothing uses yet ("no units yet").
