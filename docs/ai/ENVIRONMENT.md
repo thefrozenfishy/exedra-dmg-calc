@@ -79,7 +79,9 @@ NODE_OPTIONS=--max-old-space-size=3300 timeout 170 npx vue-tsc --noEmit -p tscon
   from GitHub PRs lands on `main`. Check `git branch --show-current` and `git stash list` before touching
   anything; **never checkout/stash/reset over the user's uncommitted work** (see STATUS.md).
 - Commit locally as the user: `git -c user.name="TFF" -c user.email="camilla.jahr@hotmail.com" commit ...` with the
-  `Co-Authored-By` / session trailer lines from the system reminder. **No push** (the user compares branches locally).
+  `Co-Authored-By` / session trailer lines from the system reminder. **No push**, except the version-update task
+  (VERSION_UPDATE.md): it commits on `main` and, when every check passes, queues a push through the Windows watcher
+  (`E:\unpackedExedra\jobs\push_<ver>.req`; the VM has no GitHub credentials). User's decision 2026-10-29.
 - One commit per logical change, message explains the game rule with the RVA.
 
 ## New game version

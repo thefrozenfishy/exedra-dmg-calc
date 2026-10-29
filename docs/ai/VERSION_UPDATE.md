@@ -27,6 +27,10 @@ Since 2026-10-29 nothing in this runbook clicks on the user's desktop. `E:\unpac
   delete the ATTEMPTS file to retry),
 - Discord: `jobs\post_<ver>.req` (first line `public` or `private`) -> post_notes.bat; the request moves to `jobs\done\`
   with `.exit<code>` appended.
+- git push (the VM has no GitHub credentials): `jobs\push_<ver>.req`, first line = the full sha of the tested commit
+  on main (CRLF). The watcher runs `git push origin <sha>:refs/heads/main` (fast-forward only, never forced) and
+  writes `<ver>\version_report\git_push.log`, `GIT_PUSH_EXIT.txt`, `GIT_PUSHED`; the request moves to `jobs\done\`.
+  A non-zero exit (rejected: origin moved, or no credentials) is reported to the user by the next run.
 Logs: `E:\unpackedExedra\watch_runs\*.log`. Where a step below says "double-click X.bat", wait for the watcher's
 output file instead (a run without WINDOWS_READY does the VM-only parts and stops; the next daily run continues).
 Never use computer use for this pipeline.
@@ -44,7 +48,13 @@ ls $HOME/mnt/unpackedExedra                                 # versions: the new 
   unrelated, otherwise stop and ask.
 - Git writes need delete permission (git leaves `.git/index.lock`): call
   `mcp__remote-devices__device_request_delete_permission` for `E:\exedra-dmg-calc` once, then
-  `rm -f .git/index.lock` if a stale one exists. Then `git checkout -b claude/version-<ver>`.
+  `rm -f .git/index.lock` if a stale one exists.
+- **Work on `main`, commit there, push through the watcher** (user's decision 2026-10-29: "I trust you if the tests
+  pass"). Before the first commit: `git fetch origin` (works without credentials) and, if `origin/main` is ahead,
+  `git merge --ff-only origin/main`; if main has diverged from origin/main, or the user is on another branch with
+  work in progress, use a branch `claude/version-<ver>` instead and tell the user (no push).
+  Switching to main from a branch whose tree only adds commits on top of main: `git update-ref refs/heads/main <sha>`
+  + `git checkout main` (no file rewrites; a plain checkout of 500 files takes minutes on the mount).
 - OLD = the previous version folder (`ls | sort -V`), NEW = the new one. Below: `OLD=3.19.0 NEW=3.19.1`.
 
 ## 0b. Unpack the installed client (replaces the manual Senbei run + move)
@@ -250,10 +260,16 @@ Discord `<t:...:f>` tags for any time (copy them, never convert). Up to ~5000 ch
 
 - docs/ai: MECHANICS.md (new rules), STATUS.md (branch row + session log line), PITFALLS.md (new traps),
   `python3 scripts/ai/xq.py build` (EFFECT_TYPES.md).
-- Commit on the branch as the user (ENVIRONMENT.md "Git conventions"), one commit per logical change. No push.
+- Commit on `main` as the user (ENVIRONMENT.md "Git conventions"), one commit per logical change.
+- **Push only when every check passed** (step 7: checkFixturesEngine all PASS, checkEngine*/checkMechanics all pass,
+  engine tsc 0 errors, app type-check error SET unchanged vs the baseline, engineSweep / smokeNew without exceptions
+  on new content). Then queue it: `printf '%s\r\n' "$(git rev-parse HEAD)" > $HOME/mnt/unpackedExedra/jobs/push_$NEW.req`
+  (skip if `version_report/GIT_PUSHED` exists). Any failed or skipped check: no push, say which check and why.
+  Engine work that isn't finished stays uncommitted or on a branch, never on main.
 - `touch $HOME/mnt/unpackedExedra/$NEW/version_report/DONE`
 - claude.ai project: write `claude/version-<NEW>.md` (short summary + where the report is).
-- Tell the user: the newsletter link, whether the Discord notes posted, the branch name, what needs their action (merge, Il2CppDumper, data sync).
+- Tell the user: the newsletter link, whether the Discord notes posted, the commit(s) on main and whether the push is
+  queued / done (or why not), what needs their action (Il2CppDumper, data sync, a rejected push).
 
 ## Don'ts
 
