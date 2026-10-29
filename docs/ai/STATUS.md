@@ -1,7 +1,19 @@
 # Status (update at the end of every session)
 
-_Last updated: 2026-10-29: Kioku Grid bench gear + average Attacker self buffs on Lux; before: 2026-10-24 (3): second-generation engine and Fight Solver removed (branch `remove-gen2`); before: 2026-10-24 (battle-start passive order: kit -> portrait -> support -> crys; before: Kioku Grid ailment bars: 112/305/309 conditions, Max Damage enemies carry Weakness/Stun); before: 2026-10-15 (game 3.21.0: dumped + decompiled by Claude on Windows, engine re-ported to 3.21.0; branch claude/version-3.21.0); before: 2026-10-14 (Max Damage + Kioku Grid bench on the 1:1 engine); before: 2026-10-10 (1:1 port in src/engine started); before: 2026-10-03 (passive states per giver, UP_HP_FIXED max HP; earlier: duplicate active-skill states); before: 2026-10-02 (game 3.19.1: version diff + newsletter, Magic Seal, break/notice team conditions, IMM_SLIP_DMG burst; branch claude/version-3.19.1)._
+_Last updated: 2026-10-29 (2): Kioku Grid "Multiple ascensions", merged equal variant bars, precalculated bench file; before: 2026-10-29: Kioku Grid bench gear + average Attacker self buffs on Lux; before: 2026-10-24 (3): second-generation engine and Fight Solver removed (branch `remove-gen2`); before: 2026-10-24 (battle-start passive order: kit -> portrait -> support -> crys; before: Kioku Grid ailment bars: 112/305/309 conditions, Max Damage enemies carry Weakness/Stun); before: 2026-10-15 (game 3.21.0: dumped + decompiled by Claude on Windows, engine re-ported to 3.21.0; branch claude/version-3.21.0); before: 2026-10-14 (Max Damage + Kioku Grid bench on the 1:1 engine); before: 2026-10-10 (1:1 port in src/engine started); before: 2026-10-03 (passive states per giver, UP_HP_FIXED max HP; earlier: duplicate active-skill states); before: 2026-10-02 (game 3.19.1: version diff + newsletter, Magic Seal, break/notice team conditions, IMM_SLIP_DMG burst; branch claude/version-3.19.1)._
 
+
+## 2026-10-29 (2): Kioku Grid "Multiple ascensions", merged bars, precalculated bench results
+
+- "Simulate using" has a third mode (setting `gridLevelsMode`: max / mine / multi, replaces `gridSimulateMaxLevels`):
+  every character at each selected ascension (`gridMultiAscensions`), results keyed by `benchKey` = id * 10 + asc;
+  neighbouring ascensions with the same displayed value share a bar ("0-2"). "My Kioku" / multi show the ascension
+  on the icon (`.gain-asc-badge`).
+- Variant bars of one character with the same value that differ in one tag merge (`mergeEqualVariants`): Cherry
+  Ballad "Dark/Light", one icon cut on a slant; element order Dark, Forest, Light, Void, Flame, Aqua.
+- `scripts/sim/benchPrecalc.ts` (`npm run bench:precalc`) writes `public/bench-precalc.json` (version-tagged, resumable,
+  child processes); the page loads it first and only simulates what is missing. Shipped so far: 1 enemy, Fast,
+  A0-A5, both charts (1356 of 1380 entries).
 
 ## 2026-10-29: Kioku Grid bench gear + average Attacker self buffs on Lux (user's choice)
 

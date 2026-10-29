@@ -9,7 +9,7 @@ import type { Character } from "../types/KiokuTypes";
 export interface LuxBenchJob {
     chart: "support" | "attacker"
     lux: Character
-    chars: Character[]  // levels already applied
+    chars: (Character & { benchKey?: number })[]  // levels already applied; benchKey (default: id) names it in the messages
     enemies: number     // 1, 3 or 5 (the page's fight type)
     seeds: number
     av: number
@@ -33,19 +33,20 @@ self.onmessage = (e: MessageEvent<LuxBenchJob>) => {
     const units = new Map<number, PvPKioku>()
     const failed = new Set<number>()
 
-    const run = (c: Character, type: "max" | "avg") => {
-        if (failed.has(c.id)) return
+    const run = (c: LuxBenchJob["chars"][number], type: "max" | "avg") => {
+        const id = c.benchKey ?? c.id
+        if (failed.has(id)) return
         try {
-            let x = units.get(c.id)
-            if (!x) units.set(c.id, x = benchKioku(toInput(c), undefined, true))
+            let x = units.get(id)
+            if (!x) units.set(id, x = benchKioku(toInput(c), undefined, true))
             const rows = job.chart === "support"
                 ? (type === "max" ? bench.supportMax(x, job.enemies) : bench.supportAvg(x, job.enemies))
                 : (type === "max" ? bench.attackerMax(x, job.enemies) : bench.attackerAvg(x, job.enemies))
-            post({ type, id: c.id, rows })
+            post({ type, id, rows })
         } catch (err) {
-            failed.add(c.id)
-            console.warn(`Lux bench (${job.chart}): failed to calculate ${c.name}:`, err)
-            post({ type: "error", id: c.id, error: String(err) })
+            failed.add(id)
+            console.warn(`Lux bench (${job.chart}): failed to calculate ${c.name} (A${c.ascension}):`, err)
+            post({ type: "error", id, error: String(err) })
         }
     }
 

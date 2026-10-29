@@ -17,6 +17,7 @@ import `BestTeamCalculator` first: outside Vite, the Kioku <-> BestTeamCalculato
 | `engineSoloRaidDebug.ts <stageId> <fixture> <seed>` | Debug one Solo Raid run. |
 | `engineBestTeam.ts <team.json> ...` | Best SA Team search from the command line. |
 | `benchAll.ts`, `benchOne.ts` | Kioku Grid Lux bench for every / one kioku. |
+| `benchPrecalc.ts` (`npm run bench:precalc`) | Precalculates the Kioku Grid charts into `public/bench-precalc.json` (shipped with the site; the page only simulates characters missing from it). Resumable; rerun after bumping `LUX_BENCH_VERSION` or adding kioku. |
 | `compareOldModel.ts` | First-generation single-hit model vs the engine, per character (writes `docs/ai/OLD_VS_ENGINE.md`). |
 | `ingameChecks.ts`, `ingameChecksList.ts` | Scripted fights for in-game checks of the characters whose numbers moved. |
 

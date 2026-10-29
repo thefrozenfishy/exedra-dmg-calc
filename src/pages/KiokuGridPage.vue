@@ -266,18 +266,25 @@
                 </div>
                 <div class="fight-mode-row">
                     <span class="fight-mode-label">Simulate using</span>
-                    <div class="fight-mode-toggle" style="--count: 2" role="radiogroup" aria-label="Simulate using">
+                    <div class="fight-mode-toggle" style="--count: 3" role="radiogroup" aria-label="Simulate using">
                         <div class="fight-mode-highlight"
                             :style="{ transform: `translateX(${levelsModeIndex * 100}%)` }"></div>
                         <button v-for="opt in levelsModeOptions" :key="opt.label" type="button"
-                            class="fight-mode-option" :class="{ active: simulateMaxLevels === opt.value }"
-                            :title="opt.title" @click="simulateMaxLevels = opt.value">
+                            class="fight-mode-option" :class="{ active: levelsMode === opt.value }"
+                            :title="opt.title" @click="levelsMode = opt.value">
                             {{ opt.label }}
                         </button>
                     </div>
                 </div>
+                <div v-if="levelsMode === 'multi'" class="fight-mode-row" role="group" aria-label="Ascensions">
+                    <span class="fight-mode-label">Ascensions</span>
+                    <button v-for="a in ALL_ASCENSIONS" :key="a" type="button" class="filter-chip"
+                        :class="{ active: multiAscensions.includes(a) }" :aria-pressed="multiAscensions.includes(a)"
+                        :title="multiAscensions.includes(a) && multiAscensions.length === 1 ? 'At least one ascension stays selected' : `Show A${a}`"
+                        @click="toggleMultiAscension(a)">A{{ a }}</button>
+                </div>
                 <button type="button" class="filter-chip" :disabled="bc.running"
-                    title="Results are saved in this browser and reused while nothing changes. Recalculate this chart from scratch."
+                    title="Most results come precalculated with the site; anything missing is simulated here and saved in this browser. Recalculate simulates this whole chart again in your browser."
                     @click="runBench(bc.kind, { fresh: true })">Recalculate</button>
             </div>
             <p v-if="bc.chart.error" class="gain-empty">{{ bc.chart.error }}</p>
@@ -306,13 +313,30 @@
                                 </div>
                             </div>
                             <div class="gain-name" :title="bar.name">
-                                <img class="gain-char-icon" :class="bar._borderClass"
-                                    :src="`/exedra-dmg-calc/kioku_images/${bar.charId}_thumbnail.png`"
-                                    :alt="bar.name" />
+                                <span class="gain-char-icon-wrap">
+                                    <img class="gain-char-icon" :class="bar._borderClass"
+                                        :src="`/exedra-dmg-calc/kioku_images/${bar.charId}_thumbnail.png`"
+                                        :alt="bar.name" />
+                                    <span v-if="bar.ascension !== undefined" class="gain-asc-badge"
+                                        :class="ascBadgeClass(bar.ascension)"
+                                        :title="`Calculated at A${bar.ascension}`">{{ bar.ascension }}</span>
+                                </span>
 
                                 <div v-if="bar.tags.length" class="gain-tag-icons">
-                                    <img v-for="tag in bar.tags" :key="`${tag.kind}:${tag.value}`" class="gain-tag-icon"
-                                        :src="tag.icon" :alt="tag.value" :title="tag.value" />
+                                    <template v-for="tag in bar.tags" :key="`${tag.kind}:${tag.value}`">
+                                        <span v-if="tag.icons && tag.icons.length > 1" class="gain-tag-icon gain-tag-split"
+                                            :title="tag.value" role="img" :aria-label="tag.value">
+                                            <img v-for="(icon, i) in tag.icons" :key="icon" :src="icon" alt=""
+                                                :style="{ clipPath: slantSlice(i, tag.icons.length) }" />
+                                            <svg class="gain-tag-split-lines" viewBox="0 0 100 100" preserveAspectRatio="none"
+                                                aria-hidden="true">
+                                                <line v-for="k in tag.icons.length - 1" :key="k"
+                                                    :x1="(k / tag.icons.length) * 100 + SLANT" y1="0"
+                                                    :x2="(k / tag.icons.length) * 100 - SLANT" y2="100" />
+                                            </svg>
+                                        </span>
+                                        <img v-else class="gain-tag-icon" :src="tag.icon" :alt="tag.value" :title="tag.value" />
+                                    </template>
                                 </div>
                             </div>
                         </div>
@@ -343,7 +367,7 @@ import { useFriendStore } from "../store/friendStore"
 import { archetypeRules, archetypesForKit } from "../models/KiokuArchetypes"
 import type { LuxBenchJob, LuxBenchMessage } from "../workers/luxBenchWorker"
 import type { BenchRow } from "../models/LuxBench"
-import { benchCharKey, clearBenchCache, loadBenchCache, saveBenchCache, type BenchCacheEntry, type BenchSetup } from "../utils/luxBenchCache"
+import { BENCH_INFINITE_SP, BENCH_SEEDS, benchCharKey, clearBenchCache, loadBenchCache, loadBenchPrecalc, precalcEntry, saveBenchCache, type BenchCacheEntry, type BenchSetup } from "../utils/luxBenchCache"
 
 const store = useCharacterStore()
 
@@ -391,12 +415,25 @@ const splitAttackerRange = useSetting("splitAttackerRange", true)
 const splitBreakerRange = useSetting("splitBreakerRange", true)
 const splitDebufferRange = useSetting("splitDebufferRange", true)
 const displayArchetypes = useSetting("displayArchetypes", true)
-const simulateMaxLevels = useSetting("gridSimulateMaxLevels", true)
+type LevelsMode = "max" | "mine" | "multi"
+// gridLevelsMode replaced the boolean gridSimulateMaxLevels (its value is the default, so the old choice is kept)
+const legacySimulateMaxLevels = useSetting("gridSimulateMaxLevels", true)
+const levelsMode = useSetting<LevelsMode>("gridLevelsMode", legacySimulateMaxLevels.value ? "max" : "mine")
+const simulateMaxLevels = computed(() => levelsMode.value === "max")
 const levelsModeOptions = [
-    { value: true, label: "All A5", title: "Every Kioku is simulated at A5 with max Kioku, Magic, Heartphial and Special level" },
-    { value: false, label: "My Kioku", title: "Your own Kioku's ascension is used with max Kioku, Magic, Heartphial and Special level, and unowned Kioku are left out" },
-] as const
-const levelsModeIndex = computed(() => simulateMaxLevels.value ? 0 : 1)
+    { value: "max", label: "All A5", title: "Every Kioku is simulated at A5 with max Kioku, Magic, Heartphial and Special level" },
+    { value: "mine", label: "My Kioku", title: "Your own Kioku's ascension is used with max Kioku, Magic, Heartphial and Special level, and unowned Kioku are left out" },
+    { value: "multi", label: "Multiple ascensions", title: "Every Kioku is simulated at each selected ascension with max levels: one bar per ascension (equal bars are merged, e.g. A0-2)" },
+] as const satisfies readonly { value: LevelsMode, label: string, title: string }[]
+const levelsModeIndex = computed(() => Math.max(0, levelsModeOptions.findIndex(o => o.value === levelsMode.value)))
+const ALL_ASCENSIONS = [0, 1, 2, 3, 4, 5] as const
+const multiAscensions = useSetting<number[]>("gridMultiAscensions", [...ALL_ASCENSIONS])
+// at least one stays selected; always a new, sorted array (the setting is replaced, not mutated)
+const toggleMultiAscension = (a: number) => {
+    const cur = multiAscensions.value
+    if (cur.includes(a)) { if (cur.length > 1) multiAscensions.value = cur.filter(x => x !== a) }
+    else multiAscensions.value = [...cur, a].sort((x, y) => x - y)
+}
 
 const fightModeOptions = [
     { value: "st", label: "ST", title: "Single target — only the center enemy takes damage" },
@@ -635,13 +672,24 @@ const maxLevelsForChart = (c: Character): Character =>
 const prepareForChart = (c: Character): Character =>
     simulateMaxLevels.value ? maxLevelsForChart(c) : withMaxLevelsForPlayerLevel({ ...c }, KiokuConstants.maxKiokuLvl)
 
-// Without simulated max levels only owned characters can be compared.
+// Only "My Kioku" is limited to owned characters.
 const chartCharacters = () =>
-    markedCharacters.value.filter(c => c.name !== LuxMagica && (simulateMaxLevels.value || c.enabled))
+    markedCharacters.value.filter(c => c.name !== LuxMagica && (levelsMode.value !== "mine" || c.enabled))
 
-const levelsDescription = computed(() => (simulateMaxLevels.value
+// One bench unit to simulate: a character at the chart's levels. `benchKey` identifies it in the results and the worker
+// messages: the character id, or in "Multiple ascensions" one per ascension (id * 10 + ascension).
+type BenchUnitChar = Character & { benchKey: number }
+const benchUnits = (): BenchUnitChar[] => chartCharacters().flatMap(c => levelsMode.value === "multi"
+    ? multiAscensions.value.map(a => ({
+        ...withMaxLevelsForPlayerLevel({ ...c, ascension: a }, KiokuConstants.maxKiokuLvl), benchKey: c.id * 10 + a,
+    }))
+    : [{ ...prepareForChart(c), benchKey: c.id }])
+
+const levelsDescription = computed(() => (levelsMode.value === "max"
     ? `All characters are A5 and max level. ${LuxMagica} is A0 (no follow-ups).`
-    : `All characters use your current ascension with max levels, unowned characters are left out. ${LuxMagica} is always max level, A0.`) + ` Everyone wears the same gear instead of your own: their EX crystalis, Towering Offense++ (Towering Bulwark++ for DEF-based damage), the crystalis of their element, Dominant Blow++, the portrait Farewell to a Future Unseen and The Universe's Edge (A5, max level) as support, which only works on Attackers. The ${LuxMagica} everyone is compared with also gets the average self buffs of the 5 star Attackers (ATK, DMG, crit, SPD, MP recovery, ...; Ultimate- and Battle Skill-only ones only for those).`)
+    : levelsMode.value === "multi"
+        ? `Every character is simulated at max level at each selected ascension (${multiAscensions.value.map(a => `A${a}`).join(", ")}), one bar per ascension; ascensions with the same result share one bar (e.g. A0-2). The number on the icon is the ascension. ${LuxMagica} is always max level, A0.`
+        : `All characters use your current ascension with max levels, unowned characters are left out. ${LuxMagica} is always max level, A0.`) + ` Everyone wears the same gear instead of your own: their EX crystalis, Towering Offense++ (Towering Bulwark++ for DEF-based damage), the crystalis of their element, Dominant Blow++, the portrait Farewell to a Future Unseen and The Universe's Edge (A5, max level) as support, which only works on Attackers. The ${LuxMagica} everyone is compared with also gets the average self buffs of the 5 star Attackers (ATK, DMG, crit, SPD, MP recovery, ...; Ultimate- and Battle Skill-only ones only for those).`)
 
 type ChartTargetContext = {
     role?: KiokuRole
@@ -663,6 +711,7 @@ interface DealerTag {
     kind: ContextKind
     value: string
     icon: string
+    icons?: string[] // a merged tag ("Dark/Light"): one icon per value, drawn as one split icon
 }
 
 interface DealerContext {
@@ -731,6 +780,7 @@ interface GainRow {
     maxGain: number
     avgGain: number
     critRate: string
+    ascension?: string // the ascension(s) the bar was calculated at, shown on the icon ("3", or "0-2" for merged bars)
 }
 
 interface CharGainResult {
@@ -848,12 +898,12 @@ const buildBarChart = (
     const min = Math.min(0, ...gains)
     const span = max - min || 1
 
-    const bars = sorted.map(({ ch, tags, gain, maxGain, avgGain, critRate }) => ({
-        id: `${idPrefix}${ch.id}:${tags.map(t => `${t.kind}-${t.value}`).join("|") || "none"}`,
+    const bars = sorted.map(({ ch, tags, gain, maxGain, avgGain, critRate, ascension }) => ({
+        id: `${idPrefix}${ch.id}:${tags.map(t => `${t.kind}-${t.value}`).join("|") || "none"}${ascension !== undefined ? `:A${ascension}` : ""}`,
 
-        name: tags.length
+        name: (tags.length
             ? `${ch.name} (${tags.map(t => t.value).join("/")})`
-            : ch.name,
+            : ch.name) + (ascension !== undefined ? ` A${ascension}` : ""),
 
         charId: ch.id,
         tags,
@@ -865,6 +915,7 @@ const buildBarChart = (
         _borderClass: borderClass(ch),
 
         gain,
+        ascension,
         variant: tags.length > 0,
         label: fmt(gain),
         title: title({ avgGain, maxGain, critRate }, titleLabel),
@@ -897,10 +948,12 @@ const emptyBarChart = () => ({
     hasVariants: false,
 })
 
-const BENCH_SEEDS = 10 // battles averaged when a team rolls crits (a kit reacts to crits) or has other random effects
 const CRIT_TEXT = "Crits: every hit deals its average crit damage (a shortcut, not how the game works), except in teams where a kit reacts to crits (e.g. Absolute Rain's \"on critical hit\"): those roll crits as in the game and average 10 battles."
 const benchAv = () => benchTurns.value * 100 // 100 AV = 1 turn (the Length toggle)
-const BENCH_INFINITE_SP = true // SP topped up to 5 before every turn: a battle skill every turn, no SP shared out
+// Results shipped with the site (scripts/sim/benchPrecalc.ts): the charts wait for the file, then only simulate what
+// it doesn't have.
+const benchPrecalcReady = ref(false)
+loadBenchPrecalc().finally(() => { benchPrecalcReady.value = true })
 
 type BenchChartKind = LuxBenchJob["chart"]
 
@@ -910,6 +963,8 @@ interface BenchCell {
     maxGain: number
     avgGain?: number
     critRate?: number
+    charId: number
+    ascension: number // the character's ascension this was calculated at
 }
 
 interface BenchProgress {
@@ -967,6 +1022,8 @@ const runBench = (kind: BenchChartKind, { fresh = false } = {}) => {
         context: makeContext(r.element, r.role, r.ailment),
         maxGain: r.gain,
         critRate: r.critRate,
+        charId: unitOf.get(id)!.id,
+        ascension: unitOf.get(id)!.ascension,
     })))
     const setAvg = (id: number, rows: BenchRow[]) => {
         const cells = results.get(id)
@@ -979,15 +1036,20 @@ const runBench = (kind: BenchChartKind, { fresh = false } = {}) => {
     const setup = benchSetup(kind, lux)
     if (fresh) clearBenchCache(setup)
     const cache = loadBenchCache(setup)
-    const chars = chartCharacters().map(prepareForChart)
-    const keyOf = new Map(chars.map(c => [c.id, benchCharKey(c)]))
-    const todo: Character[] = []
+    const chars = benchUnits()
+    // The cache key includes the ascension (benchCharKey), so a character whose ascension changed in the roster is
+    // simulated again; its bar shows the ascension it was calculated at. Results are keyed by benchKey.
+    const keyOf = new Map(chars.map(c => [c.benchKey, benchCharKey(c)]))
+    const unitOf = new Map(chars.map(c => [c.benchKey, c]))
+    const todo: BenchUnitChar[] = []
     const progress: BenchProgress = { ...idleBench(), total: chars.length }
     for (const c of chars) {
-        const hit = cache[keyOf.get(c.id)!] // only complete entries (both metrics) are ever stored
+        // this browser's results first, then the shipped ones ("Recalculate" simulates everything again)
+        const key = keyOf.get(c.benchKey)!
+        const hit = cache[key] ?? (fresh ? undefined : precalcEntry(setup, key)) // only complete entries (both metrics)
         if (hit?.max && hit.avg) {
-            setMax(c.id, hit.max)
-            setAvg(c.id, hit.avg)
+            setMax(c.benchKey, hit.max)
+            setAvg(c.benchKey, hit.avg)
             progress.maxDone++
             progress.avgDone++
         } else todo.push(c)
@@ -997,9 +1059,11 @@ const runBench = (kind: BenchChartKind, { fresh = false } = {}) => {
     benchProgress[kind].value = { ...progress }
     if (!todo.length) return
 
-    // The cache keeps only characters still on the chart, so it doesn't grow with level changes.
+    // The cache keeps only characters still on the chart (every ascension / level set of them, so switching between
+    // "All A5", "My Kioku" and "Multiple ascensions" reuses results). benchCharKey starts with the character id.
     const kept: Record<string, BenchCacheEntry> = {}
-    for (const c of chars) { const k = keyOf.get(c.id)!; if (cache[k]?.avg) kept[k] = cache[k] }
+    const chartIds = new Set(chars.map(c => String(c.id)))
+    for (const [k, entry] of Object.entries(cache)) if (entry?.avg && chartIds.has(k.split(":")[0])) kept[k] = entry
     let saveTimer: ReturnType<typeof setTimeout> | undefined
     const save = (now = false) => {
         clearTimeout(saveTimer)
@@ -1084,6 +1148,90 @@ const benchBarTitle = (row: Pick<GainRow, "avgGain" | "maxGain" | "critRate">, l
     `Ultimate crit rate: ${row.critRate}%`,
 ].join("\n")
 
+// Merged tag icons (mergeEqualVariants): slices cut on a slant, top edge SLANT% further right than the bottom ("/").
+const SLANT = 18
+const slantSlice = (i: number, n: number): string => {
+    const edge = (k: number, top: boolean) => k <= 0 ? -100 : k >= n ? 200 : (k / n) * 100 + (top ? SLANT : -SLANT)
+    return `polygon(${edge(i, true)}% 0, ${edge(i + 1, true)}% 0, ${edge(i + 1, false)}% 100%, ${edge(i, false)}% 100%)`
+}
+
+// Left-to-right order of a merged tag's values (and its split icon): elements Dark, Forest, Light, Void, Flame, Aqua.
+const TAG_ORDER: Record<string, readonly string[]> = {
+    element: [KiokuElement.Dark, KiokuElement.Forest, KiokuElement.Light, KiokuElement.Void, KiokuElement.Flame, KiokuElement.Aqua],
+    role: Object.values(KiokuRole),
+}
+const tagOrder = (t: DealerTag) => (TAG_ORDER[t.kind]?.indexOf(t.value) ?? -1)
+
+/** Variant bars of one character (and ascension) that show the same value and differ in one tag only (Cherry Ballad:
+ *  Dark and Light) become one bar whose tag lists both ("Dark/Light", one split icon). */
+const mergeEqualVariants = (rows: GainRow[]): GainRow[] => {
+    const plain: GainRow[] = [], groups = new Map<string, GainRow[]>()
+    for (const r of rows) {
+        if (!r.tags.length) { plain.push(r); continue }
+        const k = [r.ch.id, r.ascension ?? "", fmt(r.gain), r.tags.map(t => t.kind).join(",")].join("|")
+        groups.set(k, [...(groups.get(k) ?? []), r])
+    }
+    const out = [...plain]
+    for (let list of groups.values()) {
+        for (let j = 0; j < list[0].tags.length; j++) {
+            const buckets = new Map<string, GainRow[]>()
+            for (const r of list) {
+                const other = r.tags.map((t, i) => i === j ? "" : t.value).join("|")
+                buckets.set(other, [...(buckets.get(other) ?? []), r])
+            }
+            list = [...buckets.values()].map(b => {
+                if (b.length < 2) return b[0]
+                const parts = b.flatMap(r => r.tags[j].icons
+                    ? r.tags[j].value.split("/").map((value, i) => ({ value, icon: r.tags[j].icons![i] }))
+                    : [{ value: r.tags[j].value, icon: r.tags[j].icon }])
+                parts.sort((a, b2) => tagOrder({ ...b[0].tags[j], value: a.value }) - tagOrder({ ...b[0].tags[j], value: b2.value }) || a.value.localeCompare(b2.value))
+                const tag: DealerTag = { kind: b[0].tags[j].kind, value: parts.map(p => p.value).join("/"), icon: parts[0].icon, icons: parts.map(p => p.icon) }
+                return { ...b[0], tags: b[0].tags.map((t, i) => i === j ? tag : t) }
+            })
+        }
+        out.push(...list)
+    }
+    return out
+}
+
+const ascBadgeClass = (label: string) => {
+    const a = Number(label.split("-").pop()) // a merged bar ("0-2") is coloured by its highest ascension
+    return { low: a < 2, mid: 2 <= a && a < 5, high: a === 5 }
+}
+
+/** "Multiple ascensions": one bar per ascension and dealer identity (main bar / element, role, ailment variant), with
+ *  neighbouring selected ascensions merged into one bar ("0-2") while the bar shows the same value. */
+const mergeAscensionBars = (list: { ascension: number, rows: GainRow[] }[]): GainRow[] => {
+    const tagKey = (r: GainRow) => r.tags.map(t => `${t.kind}-${t.value}`).join("|")
+    const byTags = new Map<string, { ascension: number, row: GainRow }[]>()
+    for (const { ascension, rows } of [...list].sort((a, b) => a.ascension - b.ascension)) {
+        for (const row of rows) {
+            const k = tagKey(row)
+            byTags.set(k, [...(byTags.get(k) ?? []), { ascension, row }])
+        }
+    }
+    const order = multiAscensions.value
+    const out: GainRow[] = []
+    for (const entries of byTags.values()) {
+        let run: { ascension: number, row: GainRow }[] = []
+        const flush = () => {
+            if (!run.length) return
+            const first = run[0].ascension, last = run[run.length - 1].ascension
+            out.push({ ...run[0].row, ascension: first === last ? `${first}` : `${first}-${last}` })
+            run = []
+        }
+        for (const e of entries) {
+            const prev = run[run.length - 1]
+            // neighbours among the selected ascensions with the same bar (same label = same height on the chart)
+            const adjacent = prev && order.indexOf(e.ascension) === order.indexOf(prev.ascension) + 1
+            if (prev && !(adjacent && fmt(prev.row.gain) === fmt(e.row.gain))) flush()
+            run.push(e)
+        }
+        flush()
+    }
+    return out
+}
+
 const buildBenchChart = (kind: BenchChartKind) => {
     const progress = benchProgress[kind].value
     if (progress.error) return { ...emptyBarChart(), error: progress.error, notes: [] as string[] }
@@ -1092,8 +1240,10 @@ const buildBenchChart = (kind: BenchChartKind) => {
     const visible = new Map(allChars.value.map(c => [c.id, c]))
     const rows: GainRow[] = []
 
-    for (const [id, cells] of benchResults[kind].value) {
-        const ch = visible.get(id)
+    // Per character, the bars of each ascension it was calculated at (one ascension unless "Multiple ascensions").
+    const byChar = new Map<number, { ascension: number, rows: GainRow[] }[]>()
+    for (const cells of benchResults[kind].value.values()) {
+        const ch = visible.get(cells[0]?.charId)
         if (!ch) continue
         // Average Damage: a character shows up once all of its battles are done.
         if (metric === "avg" && cells.some(c => c.avgGain === undefined)) continue
@@ -1105,11 +1255,21 @@ const buildBenchChart = (kind: BenchChartKind) => {
             avgGain: c.avgGain ?? NaN,
         }))
         const result = buildCharGainResult(ch, gains, metric)
-        if (result) rows.push(result.main, ...result.variants)
+        if (!result) continue
+        const list = byChar.get(ch.id) ?? []
+        list.push({ ascension: cells[0].ascension, rows: [result.main, ...result.variants] })
+        byChar.set(ch.id, list)
+    }
+    for (const list of byChar.values()) {
+        // With max levels everyone is A5: no badge. "My Kioku": the ascension it was calculated at.
+        if (levelsMode.value === "max") rows.push(...list.flatMap(l => l.rows))
+        else if (levelsMode.value === "mine") rows.push(...list.flatMap(l => l.rows.map(r => ({ ...r, ascension: String(l.ascension) }))))
+        else rows.push(...mergeAscensionBars(list))
     }
 
     // Like the legacy charts: the support chart only shows real gains, the attacker chart everything.
-    const shown = kind === "support" ? rows.filter(r => r.gain > 1) : rows
+    const merged = mergeEqualVariants(rows)
+    const shown = kind === "support" ? merged.filter(r => r.gain > 1) : merged
 
     return {
         ...buildBarChart(shown, {
@@ -1123,6 +1283,7 @@ const buildBenchChart = (kind: BenchChartKind) => {
 }
 
 const benchStatusText = (kind: BenchChartKind): string => {
+    if (!benchPrecalcReady.value) return "Loading results…"
     const p = benchProgress[kind].value
     if (!p.running) return ""
     return `Simulating battles… ${p.avgDone + p.failed}/${p.total}`
@@ -1333,7 +1494,8 @@ const chartExportOpts = (selector: string): ImageExportOptions => {
 
 // The bench only runs while its charts are shown; hiding them stops the workers.
 const benchKinds: BenchChartKind[] = ["support", "attacker"]
-watch([showBenchCharts, markedCharacters, simulateMaxLevels, fightMode, benchSpeed], () => {
+watch([showBenchCharts, markedCharacters, levelsMode, multiAscensions, fightMode, benchSpeed, benchPrecalcReady], () => {
+    if (!benchPrecalcReady.value) return
     for (const kind of benchKinds) {
         if (showBenchCharts.value) runBench(kind)
         else stopBench(kind)
@@ -2111,6 +2273,68 @@ watch([showBenchCharts, markedCharacters, simulateMaxLevels, fightMode, benchSpe
 .gain-char-icon,
 .gain-tag-icon {
     border-radius: 50%;
+}
+
+.gain-tag-split {
+    position: relative;
+    overflow: hidden;
+}
+
+.gain-tag-split img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.gain-tag-split-lines {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.gain-tag-split-lines line {
+    stroke: rgba(255, 255, 255, 0.85);
+    stroke-width: 1;
+    vector-effect: non-scaling-stroke;
+}
+
+.gain-char-icon-wrap {
+    position: relative;
+    display: block;
+}
+
+.gain-asc-badge {
+    position: absolute;
+    right: -4px;
+    bottom: -3px;
+    min-width: 12px;
+    padding: 0 2px;
+    white-space: nowrap;
+    box-sizing: border-box;
+    background: rgba(0, 0, 0, 0.8);
+    color: var(--text);
+    font-size: 0.55rem;
+    font-weight: bold;
+    line-height: 12px;
+    text-align: center;
+    border-radius: 6px;
+    pointer-events: none;
+}
+
+.gain-asc-badge.low {
+    color: pink;
+}
+
+.gain-asc-badge.mid {
+    color: rgb(154, 149, 212);
+}
+
+.gain-asc-badge.high {
+    color: palegreen;
 }
 
 .gain-tag-icons {
