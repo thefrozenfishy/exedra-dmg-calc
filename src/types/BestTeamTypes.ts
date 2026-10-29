@@ -46,6 +46,10 @@ export interface FindBestTeamOptions {
     // have closed the gap once fully optimized. 100 effectively disables pruning even if enablePruning
     // is true. Defaults to 15.
     pruningMargin?: number
+    // With pruning on (default true): attackers with many rosters score a sample of them, fit a per-member model of
+    // the estimate and only score the rosters it puts near the top (models/EngineBestTeam screenRosters). false =
+    // score every roster in the estimate pass.
+    screenRosters?: boolean
     onProgress?: (currChars: string[], completedRuns: number, expectedTotalRuns: number, preprocessing: boolean) => void,
     onError?: (error: any) => void
 }

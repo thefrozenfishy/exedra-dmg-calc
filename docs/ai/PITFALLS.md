@@ -159,6 +159,18 @@
 - Type-check needs `NODE_OPTIONS=--max-old-space-size=3300` (4 GB VM) and `timeout 170`; compare with the
   pre-existing error set, don't chase zero.
 - Engine scripts: `import "../../src/models/BestTeamCalculator"` first (import cycle).
+- **Searches that call Max Damage thousands of times must ask for less.** A Best SA Team score reads only the
+  attacker's Ultimate, but `computeMaxDamageEngine` evaluated every column (Ultimate, Battle Skill, Basic Attack, Switch
+  Skills, follow-ups) plus the UI bookkeeping battles: 3-4x the work. Pass `scoreOnly` and `onlyUltimate` from any
+  scorer that reads one number (battle/EngineTeamScore does).
+- **`Object.values(passiveDetails).filter(...)` per lookup is ~20 ms** (the table is ~30k rows): PvPKioku.addEffect did
+  it 6-10 times per unit (~150 ms per new PvPKioku, per worker). Look rows up through an index (PvPKioku `detailRows`,
+  helpers `passiveDetailsByMstId`).
+- **Unhinted master-table scans in `createDirector`.** `GetModel` / `GetModelList` without `indexHint` walk all of
+  getQuestEnemyAppearanceMstList (27 MB) per battle setup; QuestJudgeResultReferee.ctor and WaveReferee.Init did that
+  on every Max Damage run (~30% of a team score). Profile with `node --cpu-prof --import tsx` before guessing.
+- The device bridge mount (`$HOME/mnt/...` in device_bash) can be very slow (minutes for a few hundred small files);
+  for profiling, stage the files into the cloud container (device_stage_files, 50 per call) and `npm install` there.
 - `rm` fails in connected folders until delete permission is granted, and so does git's own cleanup: a plain
   `git status` leaves `.git/index.lock` behind. Use `git --no-optional-locks status`; ask for delete permission once
   (with a reason) before committing and remove a stale lock then.

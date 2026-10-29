@@ -8,11 +8,14 @@
 //   - scores run in a pool of workers (workers/maxDamageWorker.ts, "teams" messages), each team scored once (memo);
 //   - Phase A (Fast search) scores each roster (the 4 other members) once, with the attacker's first portrait /
 //     support / crystalis and the first support-of-support choice, and drops rosters more than the pruning margin
-//     behind that attacker's best, as the old calculator did;
+//     behind that attacker's best, as the old calculator did; with many rosters only the ones a per-member model
+//     fitted on a sample puts near the top are scored (screenRosters, end of file);
 //   - Phase B tunes each surviving roster's loadout by coordinate ascent instead of the full product: one choice
 //     (attacker support, attacker portrait, attacker crystalis set, supports' supports) at a time, every option of it
-//     scored with the others fixed, the best kept, until a full pass changes nothing (at most 3 passes). Every scored
-//     loadout is a result row, as in the old calculator.
+//     scored with the others fixed, the best kept, until a full pass changes nothing (at most 3 passes); for the
+//     supports' supports the options are the assignments one support change or swap away. Every scored loadout is a
+//     result row, as in the old calculator.
+//   - estimates only read the objective; when it is the max they skip the non-crit run (TeamScorer maxOnly).
 import type { FindBestTeamOptions } from "../types/BestTeamTypes"
 import { combinations, generateRoleDistributions, getKioku, permute } from "./BestTeamCalculator"
 import { portraitsBestOnly, getBestCrystalises, KiokuConstants, getEX, relevantCrys, SupportIdealPortrait, type Character, type KiokuArgs } from "../types/KiokuTypes"
@@ -20,11 +23,14 @@ import type { ScoreAttackKioku } from "./ScoreAttackKioku"
 import { KiokuElement, KiokuRole, type SupportKey } from "../types/enums"
 import type { TeamScore, TeamScoreScenario } from "../battle/EngineTeamScore"
 
-/** Scores teams (the attacker first). undefined = the team could not be scored. */
-export type TeamScorer = (team: KiokuArgs[]) => Promise<TeamScore | undefined>
+/** Scores teams (the attacker first). undefined = the team could not be scored. `maxOnly`: only TeamScore.max is
+ *  read (estimates when optimizing max damage), so the scorer may skip the non-crit run (scoreTeam's maxOnly). */
+export type TeamScorer = (team: KiokuArgs[], maxOnly?: boolean) => Promise<TeamScore | undefined>
 
 const LIMIT = 10_000
 const MAX_PASSES = 3
+// Model-guided screening of Phase A (FindBestTeamOptions.screenRosters): attackers with more rosters than this.
+const SCREEN_MIN_ROSTERS = 400
 const SUPPORT_PORTRAIT = "The Savior's Apostle"
 
 // Slip supports: vortex users (VORTEX_ATK in their kit; the vortex always pops in the max, battle/EngineMaxDamage) and, when
@@ -225,12 +231,15 @@ export async function findBestTeamEngine(o: FindBestTeamOptions, score: TeamScor
         ]
     }
     const memo = new Map<string, Promise<TeamScore | undefined>>()
-    const scoreOf = (team: KiokuArgs[]): Promise<TeamScore | undefined> => {
+    // estimates (Phase A, the slip prepass) only read the objective: when that is the max, they skip the non-crit run;
+    // a full score of the same team answers them too, a max-only one never answers a full request
+    const estimateMaxOnly = !optimizeAverageDamage
+    const scoreOf = (team: KiokuArgs[], maxOnly = false): Promise<TeamScore | undefined> => {
         const key = JSON.stringify(team)
-        let p = memo.get(key)
+        let p = memo.get(key) ?? (maxOnly ? memo.get("max:" + key) : undefined)
         if (!p) {
-            p = score(team).catch(e => { onError?.(e); return undefined })
-            memo.set(key, p)
+            p = score(team, maxOnly).catch(e => { onError?.(e); return undefined })
+            memo.set(maxOnly ? "max:" + key : key, p)
         }
         return p
     }
@@ -253,7 +262,7 @@ export async function findBestTeamEngine(o: FindBestTeamOptions, score: TeamScor
             .filter(x => x != null).slice(0, 3) as number[]
         let cur: SlipPreset = { supportKey: supports[0], portrait: SUPPORT_PORTRAIT, crysIDs: start }
         const valueOf = async (pre: SlipPreset) => {
-            const s = await scoreOf([attackerArgs, argsOf(c, pre)])
+            const s = await scoreOf([attackerArgs, argsOf(c, pre)], estimateMaxOnly)
             return s ? objective(s) : -Infinity
         }
         let best = await valueOf(cur)
@@ -294,25 +303,51 @@ export async function findBestTeamEngine(o: FindBestTeamOptions, score: TeamScor
     // ---- Phase A: one score per roster, prune
     const surviving: { plan: Plan, rosters: Roster[] }[] = []
     const estimates = plans.filter(p => o.enablePruning !== false && p.rosters.length > 1)
-    const totalA = estimates.reduce((s, p) => s + p.rosters.length, 0)
+    const screened = (p: Plan) => o.screenRosters !== false && p.rosters.length > SCREEN_MIN_ROSTERS
+    // a screened attacker scores a fraction of its rosters; its share of the progress bar grows as rounds add rosters
+    let totalA = estimates.reduce((s, p) => s + (screened(p) ? Math.min(p.rosters.length, 4 * screenSampleSize(p)) : p.rosters.length), 0)
     let doneA = 0
+    const estimate = async (plan: Plan, r: Roster): Promise<number> => {
+        const sup = usableSupports(plan, r)
+        const s = await scoreOf(teamOf(plan, r, { support: sup[0] ?? 0, portrait: 0, crys: 0, ss: 0 }), estimateMaxOnly)
+        doneA++
+        if (doneA % Math.max(1, Math.floor(totalA / 500)) === 0 || doneA === totalA) onProgress?.([plan.attacker.name], doneA, Math.max(doneA, totalA), true)
+        return s ? objective(s) : Infinity
+    }
     for (const plan of plans) {
         if (isCancelled()) return []
         if (!estimates.includes(plan)) { surviving.push({ plan, rosters: plan.rosters }); continue }
-        const scored = await Promise.all(plan.rosters.map(async r => {
-            const sup = usableSupports(plan, r)
-            const s = await scoreOf(teamOf(plan, r, { support: sup[0] ?? 0, portrait: 0, crys: 0, ss: 0 }))
-            doneA++
-            if (doneA % Math.max(1, Math.floor(totalA / 500)) === 0 || doneA === totalA) onProgress?.([plan.attacker.name], doneA, totalA, true)
-            return { r, est: s ? objective(s) : Infinity }
-        }))
-        const best = Math.max(...scored.map(x => x.est).filter(Number.isFinite))
+        let est: Map<Roster, number>
+        if (screened(plan)) {
+            const before = doneA
+            est = await screenRosters(plan.rosters, r => estimate(plan, r), margin, plan.attacker.name, isCancelled)
+            totalA += (doneA - before) - Math.min(plan.rosters.length, 4 * screenSampleSize(plan))
+        } else {
+            const values = await Promise.all(plan.rosters.map(r => estimate(plan, r)))
+            est = new Map(plan.rosters.map((r, i) => [r, values[i]]))
+        }
+        const best = Math.max(...[...est.values()].filter(Number.isFinite))
         const threshold = Number.isFinite(best) ? best * (1 - margin) : -Infinity
-        surviving.push({ plan, rosters: scored.filter(x => x.est >= threshold).map(x => x.r) })
+        surviving.push({ plan, rosters: plan.rosters.filter(r => est.has(r) && est.get(r)! >= threshold) })
     }
 
     // ---- Phase B: coordinate ascent per roster
-    const dimsOf = (p: Plan, r: Roster) => ({ support: usableSupports(p, r), portrait: p.portraits.map((_, i) => i), crys: p.crysCombos.map((_, i) => i), ss: r.supportSupports.map((_, i) => i) })
+    // Supports' supports: a roster's choices are whole assignments (one support per slot, r.supportSupports, often ~60).
+    // Each pass tries the assignments one step away from the current one: one slot's support changed, or two slots'
+    // supports swapped (app rule [APPROXIMATION]: the search no longer tries every assignment against the current
+    // attacker loadout, only these neighbours, as for the other choices).
+    const ssNames = new Map<Roster, string[][]>()
+    const ssNeighbours = (r: Roster, at: number): number[] => {
+        let all = ssNames.get(r)
+        if (!all) ssNames.set(r, all = r.supportSupports.map(a => a.map(k => k?.[0] ?? "")))
+        const cur = all[at]
+        return all.flatMap((a, j) => {
+            if (j === at) return []
+            const diff = a.map((n, i) => n !== cur[i] ? i : -1).filter(i => i >= 0)
+            return diff.length === 1 || (diff.length === 2 && a[diff[0]] === cur[diff[1]] && a[diff[1]] === cur[diff[0]]) ? [j] : []
+        })
+    }
+    const dimsOf = (p: Plan, r: Roster) => ({ support: usableSupports(p, r), portrait: p.portraits.map((_, i) => i), crys: p.crysCombos.map((_, i) => i), ss: [0, ...ssNeighbours(r, 0)] })
     const passCost = (d: ReturnType<typeof dimsOf>) => Object.values(d).reduce((s, list) => s + Math.max(0, list.length - 1), 0)
     let expected = surviving.reduce((s, { plan, rosters }) => s + rosters.reduce((t, r) => t + 1 + passCost(dimsOf(plan, r)), 0), 0)
     let done = 0
@@ -342,6 +377,7 @@ export async function findBestTeamEngine(o: FindBestTeamOptions, score: TeamScor
         ])
     }
 
+    const recorded = new Set<string>()
     const tune = async (p: Plan, r: Roster) => {
         const dims = dimsOf(p, r)
         if (!dims.support.length) return
@@ -349,9 +385,13 @@ export async function findBestTeamEngine(o: FindBestTeamOptions, score: TeamScor
         const cur: Loadout = { support: dims.support[0], portrait: 0, crys: 0, ss: 0 }
         const run = async (l: Loadout) => {
             if (isCancelled()) return undefined
-            const s = await scoreOf(teamOf(p, r, l))
+            const team = teamOf(p, r, l)
+            const s = await scoreOf(team)
             tick(names)
-            if (s) record(p, r, l, s)
+            // one row per distinct team: loadouts that differ only in a choice the team ignores (a slip support's
+            // supports-of-support come from its preset, a support key every slot already holds) are the same team
+            const key = JSON.stringify(team)
+            if (s && !recorded.has(key)) { recorded.add(key); record(p, r, l, s) }
             return s
         }
         let best = await run(cur)
@@ -361,7 +401,7 @@ export async function findBestTeamEngine(o: FindBestTeamOptions, score: TeamScor
             if (pass > 0) expected += passCost(dims)
             let improved = false
             for (const dim of ["support", "portrait", "crys", "ss"] as const) {
-                const options = dims[dim].filter(v => v !== cur[dim])
+                const options = dim === "ss" ? ssNeighbours(r, cur.ss) : dims[dim].filter(v => v !== cur[dim])
                 const tried = await Promise.all(options.map(async v => {
                     const l = { ...cur, [dim]: v }
                     const key = JSON.stringify(l)
@@ -389,4 +429,77 @@ export async function findBestTeamEngine(o: FindBestTeamOptions, score: TeamScor
     if (isCancelled()) return []
 
     return Object.values(results).flatMap(rows => rows.sort((a, b) => b[0] - a[0]).slice(0, LIMIT))
+}
+
+// ---- Phase A screening (app side, not game code) [APPROXIMATION]
+// Phase A needs only the rosters that end within the pruning margin of the attacker's best estimate, and an estimate
+// is close to a product of per-member factors: log(estimate) ~ bias + the sum of one weight per member. So instead of
+// scoring every roster (C(de/buffers, 3) x the other slot: ~20 000 per attacker with off-element supports on), a random
+// sample is scored, the weights fitted (least squares), and only the rosters the fit puts within the margin plus a
+// safety band (2 standard deviations of the fit's error, at least 5%) of the best are scored for real; the fit is redone
+// with them until no new roster qualifies. Survivors are then chosen from real scores exactly as before. Measured on two
+// attackers x 30 samples each (~19 400 rosters, 15% margin): every survivor of the exhaustive Phase A was found, with
+// ~550 scores instead of 19 380.
+interface ScreenPlan { rosters: Roster[] }
+function screenSampleSize(p: ScreenPlan): number {
+    const members = new Set(p.rosters.flatMap(r => r.totalSupports.map(c => c.name))).size
+    return Math.min(p.rosters.length, Math.max(120, 3 * (members + 1)))
+}
+
+async function screenRosters(rosters: Roster[], score: (r: Roster) => Promise<number>, margin: number, seedText: string,
+    isCancelled: () => boolean): Promise<Map<Roster, number>> {
+    const names = [...new Set(rosters.flatMap(r => r.totalSupports.map(c => c.name)))]
+    const col = new Map(names.map((n, i) => [n, i]))
+    const p = names.length + 1   // + bias
+    const features = rosters.map(r => r.totalSupports.map(c => col.get(c.name)!))
+    const est = new Map<Roster, number>()
+    const scoreAll = async (idx: number[]) => {
+        const values = await Promise.all(idx.map(i => score(rosters[i])))
+        idx.forEach((i, k) => est.set(rosters[i], values[k]))
+    }
+    // a deterministic sample (same roster list -> same sample)
+    let seed = [...seedText].reduce((h, c) => Math.imul(h ^ c.charCodeAt(0), 16777619), 2166136261) >>> 0
+    const rnd = () => { seed = (seed + 0x6D2B79F5) >>> 0; let t = seed; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296 }
+    const order = rosters.map((_, i) => i)
+    for (let i = order.length - 1; i > 0; i--) { const j = Math.floor(rnd() * (i + 1)); [order[i], order[j]] = [order[j], order[i]] }
+    await scoreAll(order.slice(0, screenSampleSize({ rosters })))
+    const keepBand = margin >= 1 ? -Infinity : Math.log(1 - margin)
+    for (let round = 0; round < 12 && !isCancelled(); round++) {
+        // fit log(estimate) on the rosters with a real, positive, finite score
+        const rows: number[] = []
+        rosters.forEach((r, i) => { const v = est.get(r); if (v !== undefined && Number.isFinite(v) && v > 0) rows.push(i) })
+        if (rows.length <= p) { await scoreAll(rosters.map((_, i) => i).filter(i => !est.has(rosters[i]))); break }
+        const A = Array.from({ length: p }, () => new Float64Array(p)), b = new Float64Array(p)
+        for (const i of rows) {
+            const y = Math.log(est.get(rosters[i])!), f = [...features[i], p - 1]
+            for (const j of f) { b[j] += y; for (const k of f) A[j][k] += 1 }
+        }
+        for (let j = 0; j < p; j++) A[j][j] += 1e-3
+        const w = solveSymmetric(A, b)
+        const predict = (i: number) => features[i].reduce((s, j) => s + w[j], w[p - 1])
+        let rss = 0, top = -Infinity
+        for (const i of rows) { const y = Math.log(est.get(rosters[i])!); rss += (y - predict(i)) ** 2; top = Math.max(top, y) }
+        const sigma = Math.sqrt(rss / Math.max(1, rows.length - p))
+        const pred = rosters.map((_, i) => predict(i))
+        for (const v of pred) if (v > top) top = v
+        const cut = top + keepBand - Math.max(2 * sigma, 0.05)
+        const next = rosters.map((_, i) => i).filter(i => pred[i] >= cut && !est.has(rosters[i]))
+        if (!next.length) break
+        await scoreAll(next)
+    }
+    return est
+}
+
+/** Solves A x = b for a symmetric positive definite A (Cholesky). */
+function solveSymmetric(A: Float64Array[], b: Float64Array): Float64Array {
+    const n = b.length, L = Array.from({ length: n }, () => new Float64Array(n))
+    for (let i = 0; i < n; i++) for (let j = 0; j <= i; j++) {
+        let s = A[i][j]
+        for (let k = 0; k < j; k++) s -= L[i][k] * L[j][k]
+        L[i][j] = i === j ? Math.sqrt(Math.max(s, 1e-12)) : s / L[j][j]
+    }
+    const y = new Float64Array(n), x = new Float64Array(n)
+    for (let i = 0; i < n; i++) { let s = b[i]; for (let k = 0; k < i; k++) s -= L[i][k] * y[k]; y[i] = s / L[i][i] }
+    for (let i = n - 1; i >= 0; i--) { let s = y[i]; for (let k = i + 1; k < n; k++) s -= L[k][i] * x[k]; x[i] = s / L[i][i] }
+    return x
 }

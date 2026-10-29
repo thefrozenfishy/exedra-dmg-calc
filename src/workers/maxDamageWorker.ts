@@ -66,7 +66,7 @@ function next() {
 // ---- Best SA Team calculator (pages/BestTeamPage, models/EngineBestTeam): batches of teams scored on the engine.
 // The same worker file as the Max Damage panel, so the build bundles the engine for workers once less.
 
-export interface TeamScoreBatch { kind: "teams", batch: number, scenario?: TeamScoreScenario, jobs: { id: number, team: KiokuArgs[] }[] }
+export interface TeamScoreBatch { kind: "teams", batch: number, scenario?: TeamScoreScenario, jobs: { id: number, team: KiokuArgs[], maxOnly?: boolean }[] }
 export type TeamScoreReply = { kind: "teams", batch: number, scores: { id: number, score?: TeamScore, error?: string }[] }
 
 let scenario: TeamScoreScenario | undefined
@@ -83,8 +83,8 @@ function teamKioku(args: KiokuArgs): PvPKioku {
 
 function scoreBatch(msg: TeamScoreBatch) {
     if (msg.scenario) scenario = msg.scenario
-    const scores = msg.jobs.map(({ id, team }) => {
-        try { return { id, score: scoreTeam(team.map(teamKioku), scenario!) } }
+    const scores = msg.jobs.map(({ id, team, maxOnly }) => {
+        try { return { id, score: scoreTeam(team.map(teamKioku), scenario!, maxOnly) } }
         catch (e) { return { id, error: String((e as Error)?.message ?? e) } }
     })
     self.postMessage({ kind: "teams", batch: msg.batch, scores } satisfies TeamScoreReply)

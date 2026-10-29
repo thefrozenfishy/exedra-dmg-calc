@@ -188,6 +188,9 @@ interface Ctx {
     mainIdx: number
     allyCount: number
     follow?: Set<string>   // FOLLOW_CONDITION state types (followTypes)
+    // scoreOnly: the battle the skill pickers were read from, built exactly as the member's first crit run builds its
+    // own (same hook, nothing mutated since); that run takes it instead of building another (runOnce)
+    spare?: { pos: number, b: Built }
 }
 
 /** State types only the team's single-target ally buffs give (CUTOUT): conditions "the holder has X" on them are kept
@@ -425,7 +428,9 @@ function runOnce(ctx: Ctx, dealerPos: number, pick: SkillPick, crit: boolean, ef
     RUNS.n++
     const rnd = new MaxDamageRandom(crit, 0)
     return rnd.run(() => {
-        const b = buildBattle(ctx, dealerPos, rnd)
+        const spare = crit && ctx.spare?.pos === dealerPos ? ctx.spare.b : undefined
+        if (spare) { ctx.spare = undefined; rnd.mainId = spare.main?._Id ?? 0 }
+        const b = spare ?? buildBattle(ctx, dealerPos, rnd)
         if (!b.dealer) return undefined
         const skill = pick(b.dealer)
         if (!skill) return undefined
@@ -532,6 +537,11 @@ function evaluateSkill(ctx: Ctx, dealerPos: number, pick: SkillPick, probe: any[
         })
     }
     const effects = given()
+    // max only (MaxDmgOptions.critOnly): the every-hit-crits totals are final; no normal run, no average
+    if (ctx.opts.critOnly) {
+        const perEnemy = best.crit.damage.map(c => ({ normal: NaN, crit: c, avg: NaN }))
+        return { perEnemy, critChance: NaN, rungs: ladders.map((l, k) => l[choice[k]].e.key), keep: best.keep }
+    }
     const normal = runOnce(ctx, dealerPos, pick, false, effects, best.keep)
     if (!normal) return undefined
     const perEnemy = best.crit.damage.map((c, i) => {
@@ -622,8 +632,12 @@ export function computeMaxDamageEngine(allies: PvPKioku[], stage: EngineMaxDmgSt
             else base.push({ e, stacks, copies })
         }
         const ladders = [...ladderOf.values()].map(l => l.sort((a, b) => a.e.tier!.rank - b.e.tier!.rank))
-        const pickers = new MaxDamageRandom(false, 0).run(() => {
-            const b = buildBattle(ctx, pos, new MaxDamageRandom(false, 0))
+        // scoreOnly: built under the crit hook, so the member's first crit run can use this battle (Ctx.spare)
+        const spareCrit = !!opts.scoreOnly
+        ctx.spare = undefined
+        const pickRnd = new MaxDamageRandom(spareCrit, 0)
+        const pickers = pickRnd.run(() => {
+            const b = buildBattle(ctx, pos, spareCrit ? pickRnd : new MaxDamageRandom(false, 0))
             if (!enemySummary.length) enemySummary = enemies.map((a, i) => {
                 const u = b.enemies[i]
                 const canBreak = !!u && u._BreakPoint.get_HasBreakPoint()
@@ -634,6 +648,7 @@ export function computeMaxDamageEngine(allies: PvPKioku[], stage: EngineMaxDmgSt
                 }
             })
             if (!b.dealer) return undefined
+            if (spareCrit) ctx.spare = { pos, b }
             const s = dealerSkills(b.dealer)
             const byId = (id: number) => (dealer: any) => dealer._SkillSet.GetSkill(id)
             const of = (sk: any) => ({ pick: byId(sk._Id), type: actorSkillTypeOf(sk), name: sk._Name, probe: probeSkill(sk) })
@@ -647,11 +662,13 @@ export function computeMaxDamageEngine(allies: PvPKioku[], stage: EngineMaxDmgSt
         }
         const remember = (s: SkillDamage, pick: SkillPick, keep: (i: number) => boolean) => { howOf.set(s, { pick, keep }); return s }
         const skills: SkillDamage[] = []
-        pickers.base.forEach(p => {
+        // a team score reads the Ultimate only (MaxDmgOptions.onlyUltimate): the other columns are not evaluated
+        const columns = opts.onlyUltimate ? pickers.base.filter(p => p.type === "SpecialAttack") : pickers.base
+        columns.forEach(p => {
             const ev = run(p)
             if (ev) skills.push(remember(skillDamage(ev, TARGET_TYPE_OF[p.type], LABEL_OF[p.type] ?? p.type), p.pick, ev.keep))
         })
-        const switchSkill = strongest(pickers.switches.map(p => {
+        const switchSkill = opts.onlyUltimate ? undefined : strongest(pickers.switches.map(p => {
             const ev = run(p)
             return ev ? remember(skillDamage(ev, TARGET_TYPE_OF[p.type], "Switch Skill", p.name || undefined, `replaces ${LABEL_OF[p.type] ?? p.type}`), p.pick, ev.keep) : undefined
         }))

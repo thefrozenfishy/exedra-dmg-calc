@@ -62,7 +62,9 @@ export class BattleMstModelRepositoryBase<TModel, TRecord, TKey> implements IBat
     }
     /** 0x452ce20: GetRecords().Where(expr).Select(Create).FirstOrDefault() */
     GetModel(expr: (r: TRecord) => boolean): TModel {
-        for (const r of this.GetRecords()) if (expr(r)) return this.Create(r);
+        // App side: runtime.indexHint - scan only the records with the hinted value (same records, same order)
+        const hint = (expr as any).$index as [string, unknown] | undefined;
+        for (const r of hint ? this.recordsWith(hint[0], hint[1]) : this.GetRecords()) if (expr(r)) return this.Create(r);
         return null as TModel;
     }
     /** 0x452c920: foreach key: list.Add(Create(GetRecordByKey(key))) (no null check) */

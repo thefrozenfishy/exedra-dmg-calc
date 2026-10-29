@@ -72,6 +72,10 @@ Lower = faster but more likely to skip a team that could have closed the gap.
                 <span class="field-label">Pruning margin %</span>
                 <input type="number" min="0" max="100" v-model.number="pruningMargin" style="width: 70px;" />
             </label>
+            <label class="chip" v-if="enablePruning" style="cursor: help;" :class="{ active: screenRosters }"
+                title="With many candidate teams per attacker (e.g. off-element supports allowed), estimates a sample of them, learns how much each Kioku adds, and only estimates the teams that could be near the top. Usually 20-40x fewer estimates for the same result; turn off to estimate every team.">
+                <input type="checkbox" v-model="screenRosters" /> Smart screening
+            </label>
             <label class="field"
                 title="Your attacker's HP when it uses its Ultimate: conditions like &quot;while HP is 50% or more&quot; are checked against it">
                 <span class="field-label">Attacker HP when using ultimate (%)</span>
@@ -408,6 +412,7 @@ const attackerHealth = useSetting("attackerHealth", 100)
 const optimalSubCrys = useSetting("optimalSubCrys", true)
 const enablePruning = useSetting("enablePruning", true)
 const pruningMargin = useSetting("pruningMargin", 15)
+const screenRosters = useSetting("screenRosters", true)
 const onlyConsiderOnElements = useSetting("onlyConsiderOnElements", true)
 
 // The weak elements and the ailments come from the picked stage (StageEnemySelector): the elements any enemy on the
@@ -740,6 +745,7 @@ async function startSimulation() {
         disabledOtherRoles: [...disabledOtherRoles.value],
         enablePruning: enablePruning.value,
         pruningMargin: safeInt(pruningMargin.value, 15, 0, 100),
+        screenRosters: screenRosters.value,
     }
 
     const id = ++runId
@@ -761,7 +767,7 @@ async function startSimulation() {
                 preprocessing.value = pre
             },
             onError,
-        }, team => thisPool.score(team), () => id !== runId)
+        }, (team, maxOnly) => thisPool.score(team, maxOnly), () => id !== runId)
         if (id !== runId) return
         for (const r of rows) results.push(r)
     } catch (e) {

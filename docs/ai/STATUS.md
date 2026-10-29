@@ -1,7 +1,45 @@
 # Status (update at the end of every session)
 
-_Last updated: 2026-10-29 (2): Kioku Grid "Multiple ascensions", merged equal variant bars, precalculated bench file; before: 2026-10-29: Kioku Grid bench gear + average Attacker self buffs on Lux; before: 2026-10-24 (3): second-generation engine and Fight Solver removed (branch `remove-gen2`); before: 2026-10-24 (battle-start passive order: kit -> portrait -> support -> crys; before: Kioku Grid ailment bars: 112/305/309 conditions, Max Damage enemies carry Weakness/Stun); before: 2026-10-15 (game 3.21.0: dumped + decompiled by Claude on Windows, engine re-ported to 3.21.0; branch claude/version-3.21.0); before: 2026-10-14 (Max Damage + Kioku Grid bench on the 1:1 engine); before: 2026-10-10 (1:1 port in src/engine started); before: 2026-10-03 (passive states per giver, UP_HP_FIXED max HP; earlier: duplicate active-skill states); before: 2026-10-02 (game 3.19.1: version diff + newsletter, Magic Seal, break/notice team conditions, IMM_SLIP_DMG burst; branch claude/version-3.19.1)._
+_Last updated: 2026-10-29 (3): Best SA Team calculator speed (~60x on a large search); before: 2026-10-29 (2): Kioku Grid "Multiple ascensions", merged equal variant bars, precalculated bench file; before: 2026-10-29: Kioku Grid bench gear + average Attacker self buffs on Lux; before: 2026-10-24 (3): second-generation engine and Fight Solver removed (branch `remove-gen2`); before: 2026-10-24 (battle-start passive order: kit -> portrait -> support -> crys; before: Kioku Grid ailment bars: 112/305/309 conditions, Max Damage enemies carry Weakness/Stun); before: 2026-10-15 (game 3.21.0: dumped + decompiled by Claude on Windows, engine re-ported to 3.21.0; branch claude/version-3.21.0); before: 2026-10-14 (Max Damage + Kioku Grid bench on the 1:1 engine); before: 2026-10-10 (1:1 port in src/engine started); before: 2026-10-03 (passive states per giver, UP_HP_FIXED max HP; earlier: duplicate active-skill states); before: 2026-10-02 (game 3.19.1: version diff + newsletter, Magic Seal, break/notice team conditions, IMM_SLIP_DMG burst; branch claude/version-3.19.1)._
 
+
+## 2026-10-29 (3): Best SA Team calculator speed
+
+User report: Best Team Finder very slow with every option on and 15% pruning. Measured on debugging/characters.json,
+Aqua, off-element supports allowed (2 attackers, 19 380 rosters each), in-process scorer:
+- Before: 188 ms per team score, 40 277 scores (38 760 in Phase A) = ~2 h of single-core work.
+- After: ~45 ms per score, 2 610 scores (1 093 in Phase A); the 1 539 result rows are identical to the exhaustive run.
+
+Changes:
+- `EngineTeamScore` passes `scoreOnly` + new `MaxDmgOptions.onlyUltimate` (EngineMaxDamage evaluates only the
+  SpecialAttack column; no Battle Skill / Basic Attack / Switch Skill / follow-up runs, no blend-group or reach
+  battles). runOnce 15.6 -> 3.5 per score; scores identical on a 24-team sample.
+- `PvPKioku.addEffect` looks rows up through an index (`detailRows`) instead of scanning all passive details per
+  call: a new PvPKioku went from ~150 ms to ~1 ms (each worker builds its own).
+- Engine (app-side perf hint, same records same order): `BattleMstModelRepositoryBase.GetModel` honours `indexHint`
+  like GetModelList; `QuestJudgeResultReferee.ctor$int_int` and `WaveReferee.Init` hint `questStageMstId`. These two
+  scanned the whole QuestEnemyAppearance table in every createDirector (~30% of a score). Bundle content identical
+  apart from those lines; fixtures 16/16; engine tsc 0; ledger unchanged.
+- Phase A screening ([APPROXIMATION], `EngineBestTeam.screenRosters`, option `screenRosters`, page checkbox "Smart
+  screening", default on, only with Fast search and > 400 rosters per attacker): score a seeded random sample
+  (max(120, 3 x members)), fit log(estimate) = bias + one weight per member (ridge least squares), score every roster
+  predicted within margin + max(2 sigma, 5%) of the best, refit, repeat until nothing new; survivors are chosen from
+  real scores as before. Offline on the full Phase A of both attackers, 30 seeds each: every exhaustive survivor
+  found every time with ~550 scores instead of 19 380.
+
+Follow-up the same day (user asked for the remaining ideas):
+- `scoreOnly` Max Damage builds the skill pickers' battle under the crit hook and hands it to the member's first
+  crit run (`Ctx.spare`) instead of building another: createDirector 4.5 -> 3.5 per score. Identical scores on 184
+  sampled teams over 5 elements.
+- `MaxDmgOptions.critOnly` / `scoreTeam(..., maxOnly)` / `TeamScorer(team, maxOnly)` (pool + worker carry it):
+  estimates (Phase A, slip prepass) skip the non-crit run when optimizing max and `max` doesn't read it (stage, or
+  every enabled enemy row crit). A full score answers a max-only request, never the reverse (memo).
+- Phase B supports' supports: options are the assignments one support change or two-slot swap away from the
+  current one, not the whole joint list ([APPROXIMATION]).
+- Bug (user): one row per distinct team. Loadouts differing only in a choice the team ignores (a slip support's
+  supports-of-support come from its preset) made identical rows; 5 obligatory Kioku showed one team 12 times.
+- Check, Aqua / Flame / Dark off-element (7 attackers) against the previous version: every surviving team's best
+  score identical; scores 2610 -> 2204, 2885 -> 2648, 3638 -> 3236. Fixtures 16/16, vue-tsc same as before.
 
 ## 2026-10-29 (2): Kioku Grid "Multiple ascensions", merged bars, precalculated bench results
 
@@ -337,6 +375,8 @@ Confirmed by the user's in-game observation. Buffs from allies now tick at the h
 - Sandbox Witch (509140) rotation, to confirm TurnNum-per-turn in combo enemies.
 
 ## Session log (newest first, one line each)
+- 2026-10-29 (4): Best SA Team: reuse of the pickers' battle, max-only estimates, neighbour moves for supports' supports, one row per distinct team (duplicate rows with obligatory Kioku).
+- 2026-10-29 (3): Best SA Team ~60x faster on a large search: Ultimate-only team scores, PvPKioku row index, indexHint in two createDirector scans (engine, perf only), model-guided Phase A screening ("Smart screening"); identical result rows vs the exhaustive search on Aqua off-element.
 - 2026-10-27: Kioku Grid damage-dealer chart: one baseline for every role again, Lux with the average 5 star Attacker
   stats (the per-role baseline made a Defender's 0% a third of an Attacker's; Baldamente showed +386%, now +48%).
   LUX_BENCH_VERSION 28.

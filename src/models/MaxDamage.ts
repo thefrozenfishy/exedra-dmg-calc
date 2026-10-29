@@ -84,6 +84,12 @@ export interface MaxDmgOptions {
     // App tools (PvE page's attacker loadout search): only the numbers - no follow-ups, no UI bookkeeping (blend groups,
     // where each effect landed).
     scoreOnly?: boolean
+    // App tools (Best SA Team calculator, battle/EngineTeamScore): evaluate only the dealer's Ultimate column (no Battle
+    // Skill, Basic Attack or Switch Skill runs), the only column a team score reads.
+    onlyUltimate?: boolean
+    // App tools (Best SA Team estimates): only the every-hit-crits run per column; `normal`, `avg` and `critChance`
+    // come back NaN. The crit totals are the same as without it (the ladder choices only compare crit totals).
+    critOnly?: boolean
     // PvE page's "Stats for nerds": record the engine's damage steps for the dealer's best skill (MaxDmgResult.trace).
     trace?: boolean
 }

@@ -5,7 +5,7 @@ import type { TeamScore, TeamScoreScenario } from "../battle/EngineTeamScore"
 import type { TeamScoreBatch, TeamScoreReply } from "../workers/maxDamageWorker"
 import { newMaxDamageWorker } from "../workers/newMaxDamageWorker"
 
-interface Job { id: number, team: KiokuArgs[], resolve: (s: TeamScore | undefined) => void, reject: (e: unknown) => void }
+interface Job { id: number, team: KiokuArgs[], maxOnly?: boolean, resolve: (s: TeamScore | undefined) => void, reject: (e: unknown) => void }
 
 export const defaultPoolSize = () => Math.max(1, Math.min(8, (typeof navigator !== "undefined" ? navigator.hardwareConcurrency || 2 : 2) - 1))
 
@@ -47,10 +47,11 @@ export class EngineTeamPool {
         }
     }
 
-    score(team: KiokuArgs[]): Promise<TeamScore | undefined> {
+    /** `maxOnly`: only TeamScore.max is needed (scoreTeam's maxOnly). */
+    score(team: KiokuArgs[], maxOnly = false): Promise<TeamScore | undefined> {
         if (this.closed) return Promise.resolve(undefined)
         return new Promise((resolve, reject) => {
-            this.queue.push({ id: this.nextId++, team, resolve, reject })
+            this.queue.push({ id: this.nextId++, team, maxOnly, resolve, reject })
             this.pump()
         })
     }
@@ -65,7 +66,7 @@ export class EngineTeamPool {
             const batch = this.nextBatch++
             this.inFlight.set(batch, jobs)
             slot.busy = true
-            const msg: TeamScoreBatch = { kind: "teams", batch, jobs: jobs.map(j => ({ id: j.id, team: j.team })) }
+            const msg: TeamScoreBatch = { kind: "teams", batch, jobs: jobs.map(j => ({ id: j.id, team: j.team, maxOnly: j.maxOnly })) }
             if (!slot.hasScenario) { msg.scenario = this.scenario; slot.hasScenario = true }
             slot.w.postMessage(msg)
         }

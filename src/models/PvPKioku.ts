@@ -3,6 +3,25 @@ import { passiveDetails } from '../utils/helpers';
 import { Kioku } from './Kioku';
 
 
+// The rows of `map` whose `key` is `value`, in the map's order (= Object.values(map).filter(v => v[key] === value)).
+// Indexed once per map and key: a scan of every passive detail row per lookup made each PvPKioku cost ~100-200 ms.
+const rowIndexes = new WeakMap<object, Map<string, Map<number, SkillDetail[]>>>()
+function detailRows(map: Record<any, SkillDetail>, key: SkillKey, value: number): SkillDetail[] {
+    let byKey = rowIndexes.get(map)
+    if (!byKey) rowIndexes.set(map, byKey = new Map())
+    let index = byKey.get(key)
+    if (!index) {
+        byKey.set(key, index = new Map())
+        for (const v of Object.values(map)) {
+            const k = (v as any)[key]
+            let list = index.get(k)
+            if (!list) index.set(k, list = [])
+            list.push(v)
+        }
+    }
+    return index.get(value) ?? []
+}
+
 export class PvPKioku extends Kioku {
     effects: SkillDetail[];
     // Same effects in passive TRIGGER order: ability, then crystalis, then ascensions/portrait/support.
@@ -94,7 +113,7 @@ export class PvPKioku extends Kioku {
 
     addEffect(map: Record<any, SkillDetail>, key: SkillKey, id: number, lvl: number, affectedByMult: boolean) {
         const target = affectedByMult ? this.scalableEffects : this.unscalableEffects
-        for (const eff of Object.values(map).filter(v => (v as any)[key] === id * 100 + lvl)) {
+        for (const eff of detailRows(map, key, id * 100 + lvl)) {
             // Merge crys with same ID, nothing else has same ID so this is not risky
             const key = String(skillDetailId(eff))
             if (target.has(key)) {

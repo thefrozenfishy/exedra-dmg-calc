@@ -43,11 +43,13 @@ export interface TeamScoreScenario {
 
 export interface TeamScore { max: number, avg: number, critRate: number }
 
-/** Score of `allies` (the attacker first) in `sc`. */
-export function scoreTeam(allies: PvPKioku[], sc: TeamScoreScenario): TeamScore {
-    if (sc.stage) return scoreOnStage(allies, sc, sc.stage)
+/** Score of `allies` (the attacker first) in `sc`. `maxOnly`: only `max` is needed (avg / critRate may come back NaN);
+ *  skips the non-crit run when `max` does not read it (a stage, or every enabled enemy row marked crit). */
+export function scoreTeam(allies: PvPKioku[], sc: TeamScoreScenario, maxOnly = false): TeamScore {
+    if (sc.stage) return scoreOnStage(allies, sc, sc.stage, maxOnly)
     const enabled = sc.enemies.filter(e => e.enabled)
     if (!enabled.length) return { max: 0, avg: 0, critRate: 0 }
+    const critOnly = maxOnly && enabled.every(e => e.isCrit)
     const mainIdx = Math.max(0, enabled.findIndex(e => e.name === "Target"))
     const { stageId, enemies } = customStage(enabled.map((e, i) => ({ def: e.defense, weak: e.isWeak, main: i === mainIdx })))
 
@@ -66,6 +68,7 @@ export function scoreTeam(allies: PvPKioku[], sc: TeamScoreScenario): TeamScore 
         enemyStates: sc.ailments.map(a => AILMENT_STATE[a]).filter(Boolean),
         fieldStates: field,
         dealerHpPercent: sc.attackerHp,
+        scoreOnly: true, onlyUltimate: true, trace: false, critOnly,
     })
     const ult = result.members[0]?.skills.find(s => s.type === TargetType.specialId)
     if (!ult) return { max: 0, avg: 0, critRate: 0 }
@@ -79,7 +82,7 @@ const critRateOf = (p: number) => Math.round(Math.min(100, Math.max(0, p)) * 10)
 
 /** Against a real stage's wave (its enemies, passives, break tables and battle type as in the game): every hit crits
  *  for "max", the engine's crit chance for "avg". */
-function scoreOnStage(allies: PvPKioku[], sc: TeamScoreScenario, st: TeamScoreStage): TeamScore {
+function scoreOnStage(allies: PvPKioku[], sc: TeamScoreScenario, st: TeamScoreStage, maxOnly: boolean): TeamScore {
     const result = computeMaxDamageEngine(allies, { stageId: st.stageId, waveIdx: st.waveIdx }, st.wave, 0, {
         battleType: stageBattleType(st.stageId),
         broken: st.broken,
@@ -88,6 +91,7 @@ function scoreOnStage(allies: PvPKioku[], sc: TeamScoreScenario, st: TeamScoreSt
         onlyPos: 0,
         enemyStates: sc.ailments.map(a => AILMENT_STATE[a]).filter(Boolean),
         dealerHpPercent: sc.attackerHp,
+        scoreOnly: true, onlyUltimate: true, trace: false, critOnly: maxOnly,
     })
     const ult = result.members[0]?.skills.find(s => s.type === TargetType.specialId)
     if (!ult) return { max: 0, avg: 0, critRate: 0 }

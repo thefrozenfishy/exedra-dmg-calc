@@ -8,7 +8,7 @@ import { QuestEnemyAppearanceMstReader } from "./Reader/QuestEnemyAppearanceMstR
 import { QuestEnemyWaveMstModel } from "./Model/QuestEnemyWaveMstModel";
 import { QuestEnemyAppearanceMstModel } from "./Model/QuestEnemyAppearanceMstModel";
 import { BattleMstReaderBase } from "./Reader/BattleMstReaderBase";
-import { maxBy, notPorted } from "../runtime";
+import { indexHint, maxBy, notPorted } from "../runtime";
 import type { List, int } from "../runtime";
 import type { AdditionalEnemyReferee } from "./AdditionalEnemyReferee";
 import type { BattleUnit } from "./BattleUnit";
@@ -49,7 +49,7 @@ export class WaveReferee {
     Init(questStageMstId: int, initialWave?: int /* = 1 */): void {
         this.questStageMstId = questStageMstId;
         const list = [...BattleMstReaderBase.get_Instance<QuestEnemyAppearanceMstModel, QuestEnemyAppearanceMstRecord, int>(QuestEnemyAppearanceMstModel)
-            .GetModelList(mst => this.$Init$b__19_0(mst))];
+            .GetModelList(indexHint(mst => this.$Init$b__19_0(mst), "questStageMstId", questStageMstId))];
         if (list.every(mst => WaveReferee.NoneWaveValue < mst.Wave)) { // <>c.b__19_1
             this.mode = 1 as WaveReferee_ModeType;
             this.maxWave = maxBy(list, mst => mst.Wave); // <>c.b__19_2

@@ -199,6 +199,30 @@ go to the user in the final chat message. Write only mechanics confirmed in code
 `docs/versions/3.21.0/newsletter.html`. Publish it with the Artifact tool (load the artifact-design skill first), and
 save a copy to `E:\unpackedExedra\<NEW>\version_report\newsletter.html` and `docs/versions/<NEW>/newsletter.html`.
 
+## 8b. Discord client-update notes (same channel as patch_notes.py)
+
+Only when the client code changed. `ma-ex-data/patch_notes.py` already posts the master-data changes (new kioku,
+events, stages, balance rows) to the patch-notes webhooks, so these notes cover only what is visible **in the code**:
+new mechanics and how they play (buttons, costs, caps, auto-battle rules), changed rules of existing mechanics, raid /
+PvP / tower rule changes, menu and quality-of-life features, things prepared but unused ("no units yet"), and one
+simulator line. A unit or event from the data appears only as "first used by X" context, never as its own item.
+
+Format, like patch_notes.py: Discord markdown, first line `**Client update - <NEW>**`, bold section lines with one
+emoji, short bullets, no internal ids, class/method names, RVAs, file names, tools or check counts, nothing guessed.
+Discord `<t:...:f>` tags for any time (copy them, never convert). Up to ~5000 characters (the script splits into
+2000-char messages; it refuses over 6000). Model: `docs/versions/3.21.0/discord_notes.md`.
+
+1. Write it to `docs/versions/<NEW>/discord_notes.md` and copy it to
+   `E:\unpackedExedra\<NEW>\version_report\discord_notes.md`.
+   `python3 scripts/ai/post_client_notes.py docs/versions/<NEW>/discord_notes.md --no-post` checks the title and length.
+2. Post from Windows (the VM and the cloud container can't reach discord.com): write `<NEW>` to
+   `E:\unpackedExedra\post_notes_ver.txt` (add a second line `private` for a test post) and double-click
+   `E:\unpackedExedra\post_notes.bat` in File Explorer (same computer-use steps as run_dump.bat). It runs
+   `post_client_notes.py` with ma-ex-data's venv Python, posts to `daily_runner\webhooks.json` -> patch_notes ->
+   public (or private), and writes `version_report\discord_post.log`, `DISCORD_EXIT.txt` (0 = ok) and
+   `DISCORD_POSTED`. It refuses to post publicly twice while `DISCORD_POSTED` exists.
+3. Poll `DISCORD_EXIT.txt` from the VM; if it isn't 0, tell the user what the log says. Never print webhook URLs.
+
 ## 9. Close out
 
 - docs/ai: MECHANICS.md (new rules), STATUS.md (branch row + session log line), PITFALLS.md (new traps),
@@ -206,7 +230,7 @@ save a copy to `E:\unpackedExedra\<NEW>\version_report\newsletter.html` and `doc
 - Commit on the branch as the user (ENVIRONMENT.md "Git conventions"), one commit per logical change. No push.
 - `touch $HOME/mnt/unpackedExedra/$NEW/version_report/DONE`
 - claude.ai project: write `claude/version-<NEW>.md` (short summary + where the report is).
-- Tell the user: the newsletter link, the branch name, what needs their action (merge, Il2CppDumper, data sync).
+- Tell the user: the newsletter link, whether the Discord notes posted, the branch name, what needs their action (merge, Il2CppDumper, data sync).
 
 ## Don'ts
 

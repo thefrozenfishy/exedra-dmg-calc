@@ -33,7 +33,7 @@ export class QuestJudgeResultReferee extends JudgeResultRefereeBase {
     /** @rva 0x14CAE90  public void .ctor(int stageMstId, int victoryRound = 0) { } */
     ctor$int_int(stageMstId: int, victoryRound?: int /* = 0 */): this {
         const main = BattleMstReaderBase.get_Instance<QuestEnemyAppearanceMstModel, QuestEnemyAppearanceMstRecord, int>(QuestEnemyAppearanceMstModel)
-            .GetModel(mst => mst.questStageMstId === stageMstId && mst.isMainTargetEnemy); // <>c__DisplayClass9_0.<.ctor>b__0
+            .GetModel(indexHint(mst => mst.questStageMstId === stageMstId && mst.isMainTargetEnemy, "questStageMstId", stageMstId)); // <>c__DisplayClass9_0.<.ctor>b__0
         if (main != null) this.mainTargetQuestEnemyAppearanceMstId = main.QuestEnemyAppearanceMstId;
         this.victoryRound = victoryRound ?? 0;
         return this;
