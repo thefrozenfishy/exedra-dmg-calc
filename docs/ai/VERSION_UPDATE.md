@@ -15,6 +15,22 @@ the data: stop silently, no message or notification. BUSY means Steam is still w
 silently and the next day's run picks it up. The user may be playing: screenshot before every computer-use step and
 wait (up to 60 min) while the game is in front; then skip that step and notify.
 
+## Windows watcher (no computer use)
+
+Since 2026-10-29 nothing in this runbook clicks on the user's desktop. `E:\unpackedExedra\exedra_watch.ps1` runs every
+3 h from Task Scheduler ("Exedra client watcher", registered by the user) and does every Windows-only step:
+- unpacks a new Steam client with Senbei into `E:\unpackedExedra\<ver>` (same rules as unpack_version.sh, plus
+  `steam_stamp.txt`),
+- newest version without `version_report\DONE`: Il2CppDumper (`run_dump.bat <ver>` -> `dump\EXIT.txt`), then
+  make_name_lists.py + Ghidra (`run_ghidra.bat <ver>` -> `decompiled\GHIDRA_EXIT.txt`); both OK -> `<ver>\WINDOWS_READY`.
+  At most 2 tries per step (`DUMP_ATTEMPTS.txt` / `GHIDRA_ATTEMPTS.txt`, then `DUMP_GAVE_UP` / `GHIDRA_GAVE_UP`;
+  delete the ATTEMPTS file to retry),
+- Discord: `jobs\post_<ver>.req` (first line `public` or `private`) -> post_notes.bat; the request moves to `jobs\done\`
+  with `.exit<code>` appended.
+Logs: `E:\unpackedExedra\watch_runs\*.log`. Where a step below says "double-click X.bat", wait for the watcher's
+output file instead (a run without WINDOWS_READY does the VM-only parts and stops; the next daily run continues).
+Never use computer use for this pipeline.
+
 ## 0. Orient (5 min, do not skip)
 
 ```
