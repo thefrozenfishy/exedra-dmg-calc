@@ -1,7 +1,27 @@
 # Status (update at the end of every session)
 
-_Last updated: 2026-10-24 (3): second-generation engine and Fight Solver removed (branch `remove-gen2`); before: 2026-10-24 (battle-start passive order: kit -> portrait -> support -> crys; before: Kioku Grid ailment bars: 112/305/309 conditions, Max Damage enemies carry Weakness/Stun); before: 2026-10-15 (game 3.21.0: dumped + decompiled by Claude on Windows, engine re-ported to 3.21.0; branch claude/version-3.21.0); before: 2026-10-14 (Max Damage + Kioku Grid bench on the 1:1 engine); before: 2026-10-10 (1:1 port in src/engine started); before: 2026-10-03 (passive states per giver, UP_HP_FIXED max HP; earlier: duplicate active-skill states); before: 2026-10-02 (game 3.19.1: version diff + newsletter, Magic Seal, break/notice team conditions, IMM_SLIP_DMG burst; branch claude/version-3.19.1)._
+_Last updated: 2026-10-29: Kioku Grid bench gear + average Attacker self buffs on Lux; before: 2026-10-24 (3): second-generation engine and Fight Solver removed (branch `remove-gen2`); before: 2026-10-24 (battle-start passive order: kit -> portrait -> support -> crys; before: Kioku Grid ailment bars: 112/305/309 conditions, Max Damage enemies carry Weakness/Stun); before: 2026-10-15 (game 3.21.0: dumped + decompiled by Claude on Windows, engine re-ported to 3.21.0; branch claude/version-3.21.0); before: 2026-10-14 (Max Damage + Kioku Grid bench on the 1:1 engine); before: 2026-10-10 (1:1 port in src/engine started); before: 2026-10-03 (passive states per giver, UP_HP_FIXED max HP; earlier: duplicate active-skill states); before: 2026-10-02 (game 3.19.1: version diff + newsletter, Magic Seal, break/notice team conditions, IMM_SLIP_DMG burst; branch claude/version-3.19.1)._
 
+
+## 2026-10-29: Kioku Grid bench gear + average Attacker self buffs on Lux (user's choice)
+
+- Every unit the bench measures and the dealer / reference Lux now wear the same gear (`LuxBench.benchKioku(args, as,
+  gear = true)`): EX crys + Towering Offense++ (Towering Bulwark++ when the kit's damage rows are mostly DMG_DEF:
+  Vampire Fang, Baldamente Fortissimo, Soaring Storyteller), the element's ++ crys (the identity's element for Lux),
+  Dominant Blow++, portrait Farewell to a Future Unseen, support The Universe's Edge (A5 max; target Attacker, so it
+  only works on Attackers / Attacker-identity Lux). Filler Lux stay bare (their gear only acts on themselves).
+- Dealer / reference Lux also get `averageAttackerSelfBuffs(enemies, levels)`: the 20 five-star Attackers' self buffs
+  (collectTeamEffects, caster = dealer, `applies`, strongest ladder rung) per type and skill restriction, sum / 20.
+  Ultimate / Battle Skill only -> condition sets 317 / 316; follow-up / Ether Blow only and kit-unique states left out;
+  enemy-count conditions per run (`unitCountConditionsMet`). Given as a made-up crystalis-like passive
+  (`EngineBench.benchPassive`, ids 1990001+), also pushed to `effects` because Max Damage clears battle-start states
+  and re-gives passives from the effect list.
+- Support passives follow the identity (`matchSupportToIdentity`): PvPKioku checks the support target against the
+  unit's own role / element, NetworkUnits against the identity's `data`.
+- Effect (1 enemy, Fast): Lux baseline x11.3 Max Burst / x14.7 Average Damage; attacker chart avg 5 star Attacker
+  +465% -> +80% (Max), support chart buffers shrink ~0.55-0.65x, debuffers unchanged. benchOne matched the experiment
+  (`results/geared-lux/`, git-ignored) exactly. LUX_BENCH_VERSION 30.
+- Verify: vue-tsc 222 (none in changed files); checkFixturesEngine 16/16; no src/engine change.
 
 ## 2026-10-24 (3): second-generation engine and Fight Solver removed (branch `remove-gen2`)
 

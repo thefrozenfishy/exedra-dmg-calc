@@ -13,7 +13,7 @@ const e = Number(en)
 for (const name of Object.keys(kiokuData)) {
     if (res[name]) continue
     try {
-        const x = benchKioku({ name, ...max } as any)
+        const x = benchKioku({ name, ...max } as any, undefined, true) // with the bench gear, as the page
         const key = (r: any) => `${r.element ?? "-"}/${r.role ?? "-"}/${r.ailment ?? "-"}`
         const m = chart === "support" ? bench.supportMax(x, e) : bench.attackerMax(x, e)
         const a = chart === "support" ? bench.supportAvg(x, e) : bench.attackerAvg(x, e)

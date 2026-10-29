@@ -23,7 +23,7 @@ export type LuxBenchMessage =
 
 console.debug = () => { } // the engine logs every action
 
-// Kit and its EX crystalis only (benchKioku drops portrait, support and every other crystalis).
+// The roster's portrait / support / crystalis are dropped: every character gets the bench gear instead (benchKioku `gear`).
 const toInput = (c: Character) => ({ ...c, portrait: undefined, supportKey: undefined, crysIDs: [], subCrysIDs: [] }) as any
 
 self.onmessage = (e: MessageEvent<LuxBenchJob>) => {
@@ -37,7 +37,7 @@ self.onmessage = (e: MessageEvent<LuxBenchJob>) => {
         if (failed.has(c.id)) return
         try {
             let x = units.get(c.id)
-            if (!x) units.set(c.id, x = benchKioku(toInput(c)))
+            if (!x) units.set(c.id, x = benchKioku(toInput(c), undefined, true))
             const rows = job.chart === "support"
                 ? (type === "max" ? bench.supportMax(x, job.enemies) : bench.supportAvg(x, job.enemies))
                 : (type === "max" ? bench.attackerMax(x, job.enemies) : bench.attackerAvg(x, job.enemies))

@@ -9,6 +9,11 @@
 //   - simulatedDealerDamage: a battle played for a fixed amount of action value (AV) with the bench's fixed play
 //     (BenchPolicy below), counting only the damage the dealer itself deals ("Average Damage"). The rest of the team's
 //     damage is ignored, so a support that also hits hard doesn't count, only what it changes about the dealer.
+// Gear (benchKioku `gear`): the dealer Lux, the reference Lux and every character measured wear the same build: Towering
+// Offense++ (Towering Bulwark++ for kits that deal DEF-based damage), the crystalis of their element, Dominant Blow++,
+// the portrait Farewell to a Future Unseen and The Universe's Edge (A5, max level) as support, which the game only
+// applies to Attackers. The dealer / reference Lux also gets the average self buffs of the 5 star Attackers
+// (averageAttackerSelfBuffs). The filler Lux stay bare: their gear only acts on themselves.
 // The dummies have SPD 1, so they never get a turn within the run: they don't attack, and (broken units only
 // recover at their own turn start) they stay broken once broken. In Average Damage they start unbroken with a 1-point
 // break gauge, so the first hit breaks them and "on enemy break" effects trigger once (EngineBench.benchBattle); Max
@@ -17,14 +22,14 @@ import { PvPKioku } from "./PvPKioku";
 import { Kioku } from "./Kioku";
 import { BattleType } from "../types/enums"
 import type { RngMode } from "./BattleRng";
-import { ailmentConditionValues, critConditionUsed, unitTypeConditionValues } from "./BattleConditionParser";
+import { actorSkillTypeRestriction, ailmentConditionValues, critConditionUsed, unitCountConditionsMet, unitTypeConditionValues } from "./BattleConditionParser";
 import type { QuestEnemyAppearance } from "./PvE";
-import { crystalisesByStyle, kiokuData, skillDetailsByMstId } from "../utils/helpers";
-import { TargetType, TargetTypeLookup, targetTypeToLvl, type BattleEvent, type BattleSnapshot, type KiokuArgs, type SkillDetail } from "../types/KiokuTypes";
+import { crystalisesByStyle, kiokuData, passiveDetails, skillDetailsByMstId } from "../utils/helpers";
+import { KiokuConstants, TargetType, TargetTypeLookup, targetTypeToLvl, type BattleEvent, type BattleSnapshot, type KiokuArgs, type SkillDetail } from "../types/KiokuTypes";
 import { Ailment, elementMap, roleMap, KiokuElement, KiokuRole, LuxMagica } from "../types/enums";
 import { computeMaxDamageEngine } from "../battle/EngineMaxDamage";
 import { E } from "../battle/engineBundle";
-import { AILMENT_STATE, BENCH_BROKEN_RATE, BENCH_DEF, BenchRng, benchBattle, benchSkills, benchStage, benchStyle, keepAilment, keepStates, middleEnemy } from "../battle/EngineBench";
+import { AILMENT_STATE, BENCH_BROKEN_RATE, BENCH_DEF, BenchRng, benchBattle, benchPassive, benchSkills, benchStage, benchStyle, keepAilment, keepStates, middleEnemy, type BenchPassiveRow } from "../battle/EngineBench";
 import { collectTeamEffects } from "./MaxDamage";
 
 export { BENCH_BROKEN_RATE, BENCH_DEF }
@@ -49,22 +54,60 @@ const enemyStatesOf = (ailment?: Ailment): string[] => ailment ? [AILMENT_STATE[
 export const exCrysIds = (name: string): number[] =>
     (crystalisesByStyle[kiokuData[name]?.id ?? -1] ?? []).map(c => c.selectionAbilityMstId)
 
-/** A bench unit: the kit at the given levels with only its EX crystalis - no portrait, support or other crystalis,
- *  whatever `args` carries (the same for Lux and for every character measured). */
-export function benchKioku(args: Omit<KiokuArgs, "crysIDs" | "subCrysIDs"> & Partial<KiokuArgs>, as?: BenchIdentity): PvPKioku {
-    const k = new PvPKioku({ ...args, portrait: undefined, supportKey: undefined, crysIDs: exCrysIds(args.name), subCrysIDs: [] } as KiokuArgs)
+// ── Bench gear (the same build for everyone measured, see the header)
+export const BENCH_PORTRAIT = "Farewell to a Future Unseen"
+export const BENCH_SUPPORT = "The Universe's Edge"
+const TOWERING_OFFENSE = 3004, TOWERING_BULWARK = 3005, DOMINANT_BLOW = 3023 // SelectionAbility ids (++)
+const ELEMENT_CRYS: Record<KiokuElement, number> = {
+    [KiokuElement.Flame]: 3014, [KiokuElement.Aqua]: 3015, [KiokuElement.Forest]: 3016, // Inferno++, Torrent++, Verdure++
+    [KiokuElement.Light]: 3017, [KiokuElement.Dark]: 3018, [KiokuElement.Void]: 3019,   // Radiance++, Chaos++, Nullity++
+}
+// The support unit as BestTeamCalculator.fromKey reads it: A5, max levels, no gear of its own.
+const benchSupportKey = () => [BENCH_SUPPORT, undefined, undefined, KiokuConstants.maxAscension, KiokuConstants.maxKiokuLvl,
+    KiokuConstants.maxMagicLvl, KiokuConstants.maxHeartphialLvl, KiokuConstants.maxSpecialLvl, [], []]
+
+/** Whether a kit's damage (basic attack, battle skill, ultimate) is mostly DEF-based (DMG_DEF rows): those wear
+ *  Towering Bulwark++ instead of Towering Offense++. */
+function dealsDefDamage(name: string): boolean {
+    const d = kiokuData[name] as any
+    if (!d) return false
+    let def = 0, other = 0
+    for (const id of [d.attack_id, d.skill_id, d.special_id]) {
+        for (const r of (skillDetailsByMstId.get(id * 100 + 1) ?? []) as SkillDetail[]) {
+            if (r.abilityEffectType === "DMG_DEF") def++
+            else if (r.abilityEffectType.startsWith("DMG_")) other++
+        }
+    }
+    return def > other
+}
+
+/** The gear crystalis (SelectionAbility ids) of a unit dealing damage in `element`. */
+const gearCrys = (name: string, element: KiokuElement | undefined): number[] =>
+    [dealsDefDamage(name) ? TOWERING_BULWARK : TOWERING_OFFENSE, ...(element ? [ELEMENT_CRYS[element]] : []), DOMINANT_BLOW]
+
+/** A bench unit: the kit at the given levels with its EX crystalis, whatever `args` carries. With `gear`, also the bench
+ *  gear (header): crystalis for its stat and element (the identity's element when one is given), portrait and support. */
+export function benchKioku(args: Omit<KiokuArgs, "crysIDs" | "subCrysIDs"> & Partial<KiokuArgs>, as?: BenchIdentity, gear = false): PvPKioku {
+    const bare = { ...args, portrait: undefined, supportKey: undefined, crysIDs: exCrysIds(args.name), subCrysIDs: [] } as KiokuArgs
+    const element = (as && "element" in as ? as.element : kiokuData[args.name]?.element) as KiokuElement | undefined
+    const geared = gear ? { ...bare, portrait: BENCH_PORTRAIT, supportKey: benchSupportKey(), crysIDs: [...bare.crysIDs, ...gearCrys(args.name, element)] } as KiokuArgs : bare
+    const k = new PvPKioku(geared)
     // Lux given a role (any, Breaker included) also gets that role's stats: the average HP/ATK/DEF of its 5 stars (Lux
-    // herself excluded) at her levels, so e.g. an Attacker-identity Lux hits like an average Attacker.
+    // herself excluded) at her levels, so e.g. an Attacker-identity Lux hits like an average Attacker. Gear adds what the
+    // portrait and support add to her own stats (support stats x 0.16, portrait stats, as in Kioku.getBase*).
     if (as?.role && args.name === LuxMagica) {
         const stats = averageRoleStats(as.role, args)
         if (stats) {
-            k.getBaseHp = () => stats.hp
-            k.getBaseAtk = () => stats.atk
-            k.getBaseDef = () => stats.def
+            const plain = gear ? new Kioku(bare) : k
+            const hp = stats.hp + k.getBaseHp() - plain.getBaseHp(), atk = stats.atk + k.getBaseAtk() - plain.getBaseAtk(), def = stats.def + k.getBaseDef() - plain.getBaseDef()
+            k.getBaseHp = () => hp
+            k.getBaseAtk = () => atk
+            k.getBaseDef = () => def
         }
     }
     if (as && ("element" in as || "role" in as)) {
         (k as any).data = { ...k.data, ...("element" in as ? { element: as.element } : {}), ...("role" in as ? { role: as.role } : {}) }
+        if (gear) matchSupportToIdentity(k)
         // In engine battles the unit's element and role come from its StyleMst row: a made-up style with this identity
         // (the unit then also deals its damage in that element, as any unit of that element does).
         ;(k as any).engineStyleMstId = benchStyle(k.data.id, k.data.element as KiokuElement | undefined, k.data.role as KiokuRole | undefined)
@@ -95,6 +138,95 @@ function averageRoleStats(role: KiokuRole, levels: Pick<KiokuArgs, "ascension" |
     const stats = units.length ? { hp: avg(k => k.getBaseHp()), atk: avg(k => k.getBaseAtk()), def: avg(k => k.getBaseDef()) } : undefined
     roleStatCache.set(key, stats)
     return stats
+}
+
+// A support works only on a unit of its target role / element. PvPKioku checked the unit's own (Lux: Breaker, Light);
+// engine battles check the identity's (adapter/NetworkUnits reads `data`), and Max Damage gives the passives from
+// `effects`, so the effect list follows the identity too.
+function matchSupportToIdentity(k: PvPKioku) {
+    const kk = k as any, sup = kk.support
+    if (!sup) return
+    const id = sup.data.support_id * 100 + sup.supportLvl
+    const applies = [k.data.role, k.data.element].includes(sup.data.support_target)
+    const has = k.effects.some(e => (e as any).passiveSkillMstId === id)
+    if (applies && !has) {
+        const rows = Object.values(passiveDetails).filter((d: any) => d.passiveSkillMstId === id)
+            .map(d => ({ ...d, _noEffectValueScale: true } as unknown as SkillDetail)) // support passives are never scaled (PvPKioku)
+        k.effects.push(...rows)
+        k.triggerOrderEffects.push(...rows)
+    } else if (!applies && has) {
+        k.effects = k.effects.filter(e => (e as any).passiveSkillMstId !== id)
+        k.triggerOrderEffects = k.triggerOrderEffects.filter(e => (e as any).passiveSkillMstId !== id)
+    }
+}
+
+// ── Average self buffs of the 5 star Attackers (on the dealer / reference Lux)
+
+// What counts: the stat buffs below, from every 5 star Attacker's kit at the given levels (EX crystalis included) that
+// land on the Attacker itself (own and team-wide buffs, the effect list's `applies` for the dealer), the strongest rung of
+// each ladder of exclusive ones. Summed per type and skill restriction over all of them, divided by their number.
+// Left out: kit-specific states (UNIQUE_BUFF*, shields, DMG taken down, ...), and buffs only for follow-ups or Ether Blows
+// (Lux has neither). Ultimate- / Battle Skill-only buffs keep that restriction; enemy-count conditions are checked for
+// the run's enemy count; every other condition counts as met (as Max Damage does).
+const SELF_BUFF_TYPES = new Set(["UP_ATK_RATIO", "UP_ATK_ACCUM_RATIO", "UP_GIV_DMG_RATIO", "UP_GIV_DMG_ACCUM_RATIO",
+    "UP_CTR_FIXED", "UP_CTR_RATIO", "UP_CTR_ACCUM_RATIO", "UP_CTD_FIXED", "UP_CTD_RATIO", "UP_CTD_ACCUM_RATIO",
+    "UP_SPD_RATIO", "UP_SPD_ACCUM_RATIO", "UP_WEAK_ELEMENT_DMG_RATIO", "UP_WEAK_ELEMENT_DMG_ACCUM_RATIO",
+    "UP_ELEMENT_DMG_RATE_RATIO", "UP_EP_RECOVER_RATE_RATIO"])
+// The game's condition sets for "own Ultimate" / "own Battle Skill" (ActorSkillType + Self.IsActor).
+const SPECIAL_ONLY = "317", SKILL_ONLY = "316"
+export type SelfBuffScope = "all" | "special" | "skill"
+export interface AverageSelfBuff { type: string, scope: SelfBuffScope, value1: number }
+
+function selfBuffScope(csv: string | undefined, enemies: number): SelfBuffScope | undefined {
+    if (!unitCountConditionsMet([csv], 5, enemies)) return undefined
+    const types = actorSkillTypeRestriction(csv)
+    if (!types) return "all"
+    if (types.has("SpecialAttack") && types.has("ActiveSkill")) return "all"
+    return types.has("SpecialAttack") ? "special" : types.has("ActiveSkill") ? "skill" : undefined
+}
+
+const selfBuffCache = new Map<string, AverageSelfBuff[]>()
+/** The average self buffs of the 5 star Attackers (see above) at `levels`, against `enemies` enemies. */
+export function averageAttackerSelfBuffs(enemies: number, levels: Pick<KiokuArgs, "ascension" | "kiokuLvl" | "magicLvl" | "heartphialLvl" | "specialLvl">): AverageSelfBuff[] {
+    const key = [enemies, levels.ascension, levels.kiokuLvl, levels.magicLvl, levels.heartphialLvl, levels.specialLvl].join(":")
+    let v = selfBuffCache.get(key)
+    if (v) return v
+    const names = Object.entries(kiokuData).filter(([, d]) => d.rarity === 5 && d.role === KiokuRole.Attacker).map(([n]) => n)
+    const filler = benchKioku({ ...levels, name: LuxMagica, ascension: 0 }, { element: undefined, role: undefined })
+    const sum = new Map<string, number>()
+    for (const name of names) {
+        const x = benchKioku({ ...levels, name })
+        for (const e of collectTeamEffects([x, filler, filler, filler, filler], 0)) {
+            if (e.casterPos !== 0 || e.side !== "ally" || !e.applies || (e.tier && e.tier.rank > 0)) continue
+            if (!SELF_BUFF_TYPES.has(e.detail.abilityEffectType)) continue
+            const scope = selfBuffScope(e.detail.activeConditionSetIdCsv, enemies)
+            if (!scope) continue
+            const k = `${e.detail.abilityEffectType}|${scope}`
+            sum.set(k, (sum.get(k) ?? 0) + (e.detail.value1 ?? 0) * e.maxStacks)
+        }
+    }
+    v = [...sum].map(([k, total]) => {
+        const [type, scope] = k.split("|")
+        return { type, scope: scope as SelfBuffScope, value1: names.length ? Math.round(total / names.length) : 0 }
+    }).filter(b => b.value1 > 0)
+    selfBuffCache.set(key, v)
+    return v
+}
+
+/** Gives a bench unit `buffs` as a made-up passive (EngineBench.benchPassive), equipped like a crystalis: engine battles
+ *  trigger it at battle start, Max Damage gives it from the effect list. Element-limited DMG buffs are for `k`'s element. */
+function giveSelfBuffs(k: PvPKioku, buffs: AverageSelfBuff[]) {
+    const element = Number(Object.entries(elementMap).find(([, e]) => e === k.data.element)?.[0] ?? 0)
+    const rows: BenchPassiveRow[] = buffs.map(b => ({
+        type: b.type, value1: b.value1,
+        element: b.type === "UP_ELEMENT_DMG_RATE_RATIO" ? element : 0,
+        activeConditionSetIdCsv: b.scope === "special" ? SPECIAL_ONLY : b.scope === "skill" ? SKILL_ONLY : "",
+    }))
+    const p = benchPassive(rows)
+    const kk = k as any
+    kk.crys.push(p.passiveSkillMstId)
+    k.effects.push(...p.details)
+    k.triggerOrderEffects.push(...p.details)
 }
 
 const DAMAGE_TYPES = new Set(["DMG_ATK", "DMG_DEF", "DMG_HP", "DMG_RANDOM"])
@@ -338,14 +470,16 @@ type KiokuInput = Omit<KiokuArgs, "crysIDs" | "subCrysIDs"> & Partial<KiokuArgs>
  * the character as the dealer (its own element and role) compared to Lux as the dealer with the average 5 star
  * Attacker stats (see benchKioku), the same for every role, both with four fillers. Always 5 units (user's choice).
  * Lux's baselines are computed once per identity / enemy count and reused. Every bench Lux (dealer, fillers,
- * reference) is A0 at max levels, so she has no follow-up.
+ * reference) is A0 at max levels, so she has no follow-up. The dealer / reference Lux wear the bench gear and the
+ * average 5 star Attacker self buffs; the characters measured get the gear from the caller (benchKioku `gear`).
  */
 export class LuxBenchCharts {
     private readonly luxArgs: KiokuInput
+    private readonly attackerLevels: KiokuInput
     private readonly reference: PvPKioku
     private readonly filler: PvPKioku
     private readonly dealers = new Map<string, PvPKioku>()
-    private readonly references = new Map<KiokuRole, PvPKioku>()
+    private readonly references = new Map<string, PvPKioku>()
     private readonly ultBase = new Map<string, { damage: number, critChance: number }>()
     private readonly simBase = new Map<string, number>()
     private readonly opts: BenchOptions
@@ -355,23 +489,33 @@ export class LuxBenchCharts {
     // actions) showed as a damage buff.
     constructor(lux: KiokuInput, opts: BenchOptions) {
         this.luxArgs = { ...lux, ascension: 0 }
+        // the Attackers whose self buffs Lux gets: Lux's levels at max ascension (the page passes A5, max levels)
+        this.attackerLevels = { ...lux, ascension: KiokuConstants.maxAscension }
         this.opts = opts
         this.reference = benchKioku(this.luxArgs)
         this.filler = benchKioku(this.luxArgs, { element: undefined, role: undefined })
     }
 
-    private dealer(id: BenchIdentity): PvPKioku {
-        const key = identityKey({ element: id.element, role: id.role })
+    // The dealer / reference Lux: bench gear plus the average Attacker self buffs (they depend on the enemy count).
+    private gearedLux(as: BenchIdentity, enemies: number): PvPKioku {
+        const k = benchKioku(this.luxArgs, as, true)
+        giveSelfBuffs(k, averageAttackerSelfBuffs(enemies, this.attackerLevels))
+        return k
+    }
+
+    private dealer(id: BenchIdentity, enemies: number): PvPKioku {
+        const key = `${enemies}:${identityKey({ element: id.element, role: id.role })}`
         let k = this.dealers.get(key)
-        if (!k) this.dealers.set(key, k = benchKioku(this.luxArgs, { element: id.element, role: id.role }))
+        if (!k) this.dealers.set(key, k = this.gearedLux({ element: id.element, role: id.role }, enemies))
         return k
     }
 
     // Attacker chart baseline: Lux as the dealer with the average 5 star Attacker stats, the same for every role, so the
     // bars of all roles share one 0% line (a per-role baseline made a Defender's 0% a third of an Attacker's).
-    private roleReference(role: KiokuRole): PvPKioku {
-        let k = this.references.get(role)
-        if (!k) this.references.set(role, k = benchKioku(this.luxArgs, { role }))
+    private roleReference(role: KiokuRole, enemies: number): PvPKioku {
+        const key = `${enemies}:${role}`
+        let k = this.references.get(key)
+        if (!k) this.references.set(key, k = this.gearedLux({ role }, enemies))
         return k
     }
 
@@ -447,7 +591,7 @@ export class LuxBenchCharts {
     supportMax(x: PvPKioku, enemies = 1, ids = this.supportIdentities(x)): BenchRow[] {
         const kitAilments = kitRestrictions(x).ailments
         return ids.map(id => {
-            const dealer = this.dealer(this.resolve(id, x))
+            const dealer = this.dealer(this.resolve(id, x), enemies)
             const immune = benchImmunities(kitAilments, id.ailment)
             const base = this.cachedUlt(`s:${enemies}:${identityKey(this.resolve(id, x))}`, () => this.team(dealer), enemies, id.ailment, immune)
             const v = ultimateDamage(this.team(dealer, x), 0, enemies, id.ailment, immune)
@@ -458,7 +602,7 @@ export class LuxBenchCharts {
     supportAvg(x: PvPKioku, enemies = 1, ids = this.supportIdentities(x)): BenchRow[] {
         const kitAilments = kitRestrictions(x).ailments
         return ids.map(id => {
-            const dealer = this.dealer(this.resolve(id, x))
+            const dealer = this.dealer(this.resolve(id, x), enemies)
             const immune = benchImmunities(kitAilments, id.ailment)
             const base = this.cachedSim(`s:${enemies}:${identityKey(this.resolve(id, x))}`, () => this.team(dealer), enemies, id.ailment, immune)
             return { ...id, gain: pctGain(this.simTotal(this.team(dealer, x), enemies, id.ailment, immune), base) }
@@ -469,7 +613,7 @@ export class LuxBenchCharts {
         const kitAilments = kitRestrictions(x).ailments
         return ids.map(id => {
             const immune = benchImmunities(kitAilments, id.ailment)
-            const base = this.cachedUlt(`a:${enemies}:${id.ailment ?? "-"}`, () => this.team(this.roleReference(KiokuRole.Attacker)), enemies, id.ailment, immune)
+            const base = this.cachedUlt(`a:${enemies}:${id.ailment ?? "-"}`, () => this.team(this.roleReference(KiokuRole.Attacker, enemies)), enemies, id.ailment, immune)
             const v = ultimateDamage(this.team(x), 0, enemies, id.ailment, immune)
             return { ...id, gain: pctGain(v.damage, base.damage), critRate: v.critChance }
         })
@@ -479,7 +623,7 @@ export class LuxBenchCharts {
         const kitAilments = kitRestrictions(x).ailments
         return ids.map(id => {
             const immune = benchImmunities(kitAilments, id.ailment)
-            const base = this.cachedSim(`a:${enemies}:${id.ailment ?? "-"}`, () => this.team(this.roleReference(KiokuRole.Attacker)), enemies, id.ailment, immune)
+            const base = this.cachedSim(`a:${enemies}:${id.ailment ?? "-"}`, () => this.team(this.roleReference(KiokuRole.Attacker, enemies)), enemies, id.ailment, immune)
             return { ...id, gain: pctGain(this.simTotal(this.team(x), enemies, id.ailment, immune), base) }
         })
     }

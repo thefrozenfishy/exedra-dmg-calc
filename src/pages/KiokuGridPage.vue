@@ -723,7 +723,7 @@ const chartCharacters = () =>
 
 const levelsDescription = computed(() => (simulateMaxLevels.value
     ? `All characters are A5 and max level. ${LuxMagica} is A0 (no follow-ups).`
-    : `All characters use your current ascension with max levels, unowned characters are left out. ${LuxMagica} is always max level, A0.`) + ` Everyone has only their own EX crystalis: no portrait, support or other crystalis.`)
+    : `All characters use your current ascension with max levels, unowned characters are left out. ${LuxMagica} is always max level, A0.`) + ` Everyone wears the same gear instead of your own: their EX crystalis, Towering Offense++ (Towering Bulwark++ for DEF-based damage), the crystalis of their element, Dominant Blow++, the portrait Farewell to a Future Unseen and The Universe's Edge (A5, max level) as support, which only works on Attackers. The ${LuxMagica} everyone is compared with also gets the average self buffs of the 5 star Attackers (ATK, DMG, crit, SPD, MP recovery, ...; Ultimate- and Battle Skill-only ones only for those).`)
 
 type ChartTargetContext = {
     role?: KiokuRole

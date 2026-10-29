@@ -8,6 +8,7 @@
 //     makes them immune to has its parry rate at 100% (fixed-probability ailments still land, as on any enemy);
 //   - a style per identity (Lux as another element / role): Lux's StyleMst row with that element and role (a unit
 //     always has both in the game: an identity left open keeps Lux's own, Light / Breaker).
+//   - a made-up passive (benchPassive) shaped like a crystalis: the average Attacker self buffs given to Lux.
 // What is not data is bench setup, done the way a player or the server would: the dummies start broken (the break
 // gauge at 0 with the initial broken rate, as BreakPoint.Decrease leaves it), the run's ailment is put on every dummy
 // (the game's own state from a skill row of that type, re-added if anything removes it), and Average Damage plays
@@ -159,6 +160,40 @@ export function giveFieldState(director: any, holder: any, type: string, value1:
     const state = effect._GiveUnitState.Clone()
     state.SetTriggeringInfo(1, holder, false, false, director.get_BattleType())
     holder._Condition.AddUnitState(state, holder, director.turnActSystem.turnReferee.get_NextTurnOrderPriority(), holder, true)
+}
+
+// ---- made-up passives (the Kioku Grid bench's "average Attacker self buffs" on Lux)
+
+// Made-up passive ids: 7 digits like the crystalis passives, in a range the game doesn't use (1990001+). Must stay well
+// under int.MaxValue: detail ids are id * 100 + n, and the engine reads ids as ints (a 10-digit id silently gave nothing).
+const BENCH_PASSIVE_BASE = 1990000
+const benchPassives = new Map<string, { passiveSkillMstId: number, details: any[] }>()
+
+/** One state of a made-up passive: `type` at `value1` (per mille, as in the data) on its holder from battle start for
+ *  the whole fight (turn 0), active while `activeConditionSetIdCsv` holds. ACCUM types are one stack at full value. */
+export interface BenchPassiveRow { type: string, value1: number, element?: number, activeConditionSetIdCsv?: string }
+
+/** A made-up passive (PassiveSkillMst + PassiveSkillDetailMst rows shaped like a crystalis, e.g. Towering Offense++:
+ *  battle start, self, permanent). Equip it like a crystalis: its id in the unit's passive list (`crys`). Returns the id
+ *  and its detail rows (for the effect list Max Damage gives from). Same rows -> same passive. */
+export function benchPassive(rows: BenchPassiveRow[]): { passiveSkillMstId: number, details: any[] } {
+    const key = JSON.stringify(rows)
+    let p = benchPassives.get(key)
+    if (p) return p
+    const passiveSkillMstId = BENCH_PASSIVE_BASE + benchPassives.size + 1
+    E.addMasterRecords(E.PassiveSkillMstModel, [{
+        conditionElement: 0, conditionRole: 0, description: "Bench passive", level: 1, name: "Bench passive",
+        passiveSkillMstId, skillButtonIcon: "", skillUniqueId: passiveSkillMstId,
+    }])
+    const details = rows.map((r, i) => ({
+        abilityEffectType: r.type, activeConditionSetIdCsv: r.activeConditionSetIdCsv ?? "", description: r.type, descriptionType: 0,
+        element: r.element ?? 0, isFixedProbability: false, passiveSkillDetailMstId: passiveSkillMstId * 100 + i + 1, passiveSkillMstId,
+        probability: 100, range: -1, remainCount: 0, role: 0, startConditionSetIdCsv: "", startTimingIdCsv: "1", turn: 0,
+        value1: r.value1, value2: r.type.includes("ACCUM") ? 1 : 0, value3: 0,
+    }))
+    E.addMasterRecords(E.PassiveSkillDetailMstModel, details)
+    benchPassives.set(key, p = { passiveSkillMstId, details })
+    return p
 }
 
 const styles = new Map<string, number>()

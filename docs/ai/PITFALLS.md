@@ -311,3 +311,8 @@
   python process.
 - Lambda renumbering after a patch (`b__164_0` -> `b__165_0`) shows up as GONE + NEW members: move the ported body to
   the new name and RVA, don't leave both.
+- Made-up master ids must fit an int with room for `id * 100 + n` detail ids: a 10-digit passive id (9907000101) was
+  accepted by `addMasterRecords` but the passive silently did nothing. Use 7-digit ids like the crystalis (1990001+).
+- Max Damage (EngineMaxDamage) removes everything given at battle start and re-gives passives from the kit's `effects`
+  list: a passive only in the unit's passive list (`crys`) works in battles but not in Max Burst. Push its rows to
+  `effects` too. Same for a support whose target only matches after a bench identity change.
