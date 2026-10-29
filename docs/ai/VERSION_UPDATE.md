@@ -4,9 +4,16 @@ Written 2026-10-02 while doing 3.19.0 -> 3.19.1. Follow it top to bottom; every 
 Cowork VM (`mcp__remote-devices__device_bash`, folders under `$HOME/mnt/`). A full run where the code did not change
 takes ~30 min; most of it is the engine triage in step 7. The last finished example is `docs/versions/3.19.1/`.
 
-**Trigger:** the user fires the scheduled task "Exedra new-version check" (manual only) after a patch, or asks.
+**Trigger:** the scheduled task "Exedra new-version check" runs daily (see Schedule below), or the user asks.
 Step 0b unpacks the client itself; the user no longer has to run Senbei. A version is DONE when
 `E:\unpackedExedra\<ver>\version_report\DONE` exists.
+
+Schedule: the "Exedra new-version check" scheduled task runs daily at 12:05 JST (the game patches at 12:00 JST; JST
+has no DST), at the same time as ma-ex-data's daily_update.ps1 but independent of it: before reading the new data,
+wait for that run's log in daily_runner/runs/ to finish. Most days unpack_version.sh says SAME and nothing new is in
+the data: stop silently, no message or notification. BUSY means Steam is still writing the update: wait 10 min and retry (3 times), else stop
+silently and the next day's run picks it up. The user may be playing: screenshot before every computer-use step and
+wait (up to 60 min) while the game is in front; then skip that step and notify.
 
 ## 0. Orient (5 min, do not skip)
 
