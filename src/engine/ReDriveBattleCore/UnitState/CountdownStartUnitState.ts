@@ -20,16 +20,16 @@ export class CountdownStartUnitState extends UnitStateBase {
     countdown: int = 0;
     /** 0x90 protected int canCancelMaxTotalDamage */
     canCancelMaxTotalDamage: int = 0;
-    /** @rva 0x15D9DA0  protected void .ctor() { } */
+    /** @rva 0x15C4400  protected void .ctor() { } */
     ctor(): this {
         super.ctor();
         return this;
     }
-    /** @rva 0x7421D0 slot 6  public override UnitStateBase.DirectionType get_Direction() { } */
+    /** @rva 0x7431D0 slot 6  public override UnitStateBase.DirectionType get_Direction() { } */
     get_Direction(): UnitStateBase_DirectionType { return 0 as UnitStateBase_DirectionType; /* asm: xor eax, eax; ret */ }
-    /** @rva 0x76E830 slot 12  public override bool get_IsDontShowAddStateFlip() { } */
+    /** @rva 0x76F830 slot 12  public override bool get_IsDontShowAddStateFlip() { } */
     get_IsDontShowAddStateFlip(): boolean { return true; /* asm: mov al, 1; ret */ }
-    /** @rva 0x15DD660  public void .ctor(AbilityEffectInfo info) { } */
+    /** @rva 0x15C7CC0  public void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
         super.ctor$AbilityEffectInfo(info);
         const start = info._EffectTurn - 1;
@@ -38,7 +38,7 @@ export class CountdownStartUnitState extends UnitStateBase {
         this.canCancelMaxTotalDamage = info._EffectValue1;
         return this;
     }
-    /** @rva 0x15DD5A0 slot 18  public override void OnAddedToCondition(BattleUnit unit, GameDirectorBase gameDirector) { } */
+    /** @rva 0x15C7C00 slot 18  public override void OnAddedToCondition(BattleUnit unit, GameDirectorBase gameDirector) { } */
     OnAddedToCondition(unit: BattleUnit, gameDirector: GameDirectorBase): void {
         if (gameDirector instanceof SoloRaidGameDirector) {
             if (!gameDirector.countdownReferee.get_IsCountdownActive()) {
@@ -46,11 +46,11 @@ export class CountdownStartUnitState extends UnitStateBase {
             }
         }
     }
-    /** @rva 0x15DD4A0 slot 21  public override bool CanAddTo(BattleUnit unit) { } */
+    /** @rva 0x15C7B00 slot 21  public override bool CanAddTo(BattleUnit unit) { } */
     CanAddTo(unit: BattleUnit): boolean {
         return !unit._Condition._StateList.some(s => s instanceof CountdownStartUnitState); // OfType<CountdownStartUnitState>().Any()
     }
-    /** @rva 0x15DD510 slot 24  public override AISkillTargetSelector.UnitFilterFuncOrder GetUnitFilterFuncOrder(BattleUnit userUnit, IEnumerable<BattleUnit> candidateUnits) { } */
+    /** @rva 0x15C7B70 slot 24  public override AISkillTargetSelector.UnitFilterFuncOrder GetUnitFilterFuncOrder(BattleUnit userUnit, IEnumerable<BattleUnit> candidateUnits) { } */
     GetUnitFilterFuncOrder(userUnit: BattleUnit, candidateUnits: IEnumerable<BattleUnit>): AISkillTargetSelector_UnitFilterFuncOrder {
         const list: List<(a0: IEnumerable<BattleUnit>) => IEnumerable<BattleUnit>> = [];
         return new AISkillTargetSelector_UnitFilterFuncOrder().ctor$ListFuncIEnumerableBattleUnitIEnumerableBattleUnit(list);

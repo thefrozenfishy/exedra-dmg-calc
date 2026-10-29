@@ -10,19 +10,19 @@ import type { UnitStateBase_DirectionType } from "./UnitStateBase";
 // ---- ReDriveBattleCore.UnitState.UniqueLvDebuffUnitStateBase  (TypeDefIndex 671, public abstract class) ----
 export abstract class UniqueLvDebuffUnitStateBase extends UniqueLvUnitStateBase {  // implements IDebuff
     static readonly __interfaces: readonly string[] = ['IDebuff'];
-    /** @rva 0x758B30 slot 6  public override UnitStateBase.DirectionType get_Direction() { } */
+    /** @rva 0x759B30 slot 6  public override UnitStateBase.DirectionType get_Direction() { } */
     get_Direction(): UnitStateBase_DirectionType { return 1 as UnitStateBase_DirectionType; /* asm: mov eax, 1; ret */ }
-    /** @rva 0x17088A0 slot 13  public override string get_GiveVisualEffectName() { } */
+    /** @rva 0x16F2570 slot 13  public override string get_GiveVisualEffectName() { } */
     get_GiveVisualEffectName(): string {
         return "eff_cmn_act_debuff_appear_001";
     }
-    /** @rva 0x17086F0  protected void .ctor() { } */
+    /** @rva 0x16F23C0  protected void .ctor() { } */
     ctor(): this {
         this._Lv = 1;
         super.ctor();
         return this;
     }
-    /** @rva 0x1708710  public void .ctor(AbilityEffectInfo info) { } */
+    /** @rva 0x16F23E0  public void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
         this._Lv = 1;
         this.iconName = "";

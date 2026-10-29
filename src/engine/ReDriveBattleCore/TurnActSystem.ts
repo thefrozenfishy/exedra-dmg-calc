@@ -29,19 +29,19 @@ export class TurnActSystem {
     get CurrentAct(): ActBase { return this.get_CurrentAct(); }
     get NextInfoId(): int { return this.get_NextInfoId(); }
     set NextInfoId(v: int) { this.set_NextInfoId(v); }
-    /** @rva 0x7EFA70  public ActBase get_CurrentAct() { } */
+    /** @rva 0x7F0A70  public ActBase get_CurrentAct() { } */
     get_CurrentAct(): ActBase {
         return this.actReferee.currentAct;
     }
-    /** @rva 0x75DD70  public int get_NextInfoId() { } */
+    /** @rva 0x75ED70  public int get_NextInfoId() { } */
     get_NextInfoId(): int { return this._NextInfoId; /* auto-property */ }
-    /** @rva 0x8A1230  public void set_NextInfoId(int value) { } */
+    /** @rva 0x8A2230  public void set_NextInfoId(int value) { } */
     set_NextInfoId(value: int): void { this._NextInfoId = value; /* auto-property */ }
-    /** @rva 0x15E6680  public void ClearAct() { } */
+    /** @rva 0x15D0CE0  public void ClearAct() { } */
     ClearAct(): void {
         this.actReferee.Clear();
     }
-    /** @rva 0x15E6A40  public void Forward(List<BattleUnit> battleUnitList, GameDirectorBase gameDirector) { } */
+    /** @rva 0x15D10A0  public void Forward(List<BattleUnit> battleUnitList, GameDirectorBase gameDirector) { } */
     Forward(battleUnitList: List<BattleUnit>, gameDirector: GameDirectorBase): void {
         if (this.actReferee.ShiftNextAct()) return;
         // queue empty: start the next unit's turn
@@ -60,19 +60,19 @@ export class TurnActSystem {
         gameDirector.StoreCommand(new CommandBeginTurn().ctor$BattleUnit_TurnActOrderUnitInfo_int_int_float(
             turnUnit, orderInfo, round, currentWave, this.turnReferee.deltaActionTime));
     }
-    /** @rva 0x15E6DE0  public void RegisterUnitSpecialAttack(BattleUnit unit) { } */
+    /** @rva 0x15D1440  public void RegisterUnitSpecialAttack(BattleUnit unit) { } */
     RegisterUnitSpecialAttack(unit: BattleUnit): void {
         const act = new SpecialAttackAct().ctor();
         act.actUnitId = unit.Id;
         act.actUnitTeam = unit.Team;
         this.actReferee.AddAct$SpecialAttackAct(act); // inlined in the game
     }
-    /** @rva 0x15E6E70  public void UpdateTurnActOrder(List<BattleUnit> activeUnitList) { } */
+    /** @rva 0x15D14D0  public void UpdateTurnActOrder(List<BattleUnit> activeUnitList) { } */
     UpdateTurnActOrder(activeUnitList: List<BattleUnit>): void {
         this.turnReferee.UpdateTurnOrder(activeUnitList);
         this.actReferee.UpdateActOrder(activeUnitList); // inlined in the game
     }
-    /** @rva 0x15E66A0  public TurnActOrderUnitInfo CreateTurnActUnitOrderInfo(List<BattleUnit> activeUnitList, GameDirectorBase gameDirector) { } */
+    /** @rva 0x15D0D00  public TurnActOrderUnitInfo CreateTurnActUnitOrderInfo(List<BattleUnit> activeUnitList, GameDirectorBase gameDirector) { } */
     CreateTurnActUnitOrderInfo(activeUnitList: List<BattleUnit>, gameDirector: GameDirectorBase): TurnActOrderUnitInfo {
         let seasonBuffGauge: float = 0;
         if (gameDirector instanceof SoloRaidGameDirector) seasonBuffGauge = gameDirector.soloRaidBuffReferee.activeCurrentSeasonBuffTurnGaugeValue;
@@ -86,15 +86,15 @@ export class TurnActSystem {
         info._ActiveCurrentSeasonBuffTurnGaugeValue = seasonBuffGauge;
         return info;
     }
-    /** @rva 0x72F170  public void AddActOnSkillEnd(GameDirectorBase gameDirector, BattleUnit attackUnit, BattleUnit mainTargetUnit, ActiveSkillBase activeSkill, AffectedUnitNoticeBundle noticeBundle) { } */
+    /** @rva 0x730170  public void AddActOnSkillEnd(GameDirectorBase gameDirector, BattleUnit attackUnit, BattleUnit mainTargetUnit, ActiveSkillBase activeSkill, AffectedUnitNoticeBundle noticeBundle) { } */
     AddActOnSkillEnd(gameDirector: GameDirectorBase, attackUnit: BattleUnit, mainTargetUnit: BattleUnit, activeSkill: ActiveSkillBase, noticeBundle: AffectedUnitNoticeBundle): void { /* asm: ret 0 */ }
-    /** @rva 0x15E6EC0  public void .ctor() { } */
+    /** @rva 0x15D1520  public void .ctor() { } */
     ctor(): this {
         this.turnReferee = new TurnReferee().ctor();
         this.actReferee = new ActReferee().ctor();
         this._NextInfoId = 1;
         return this;
     }
-    /** @rva 0xA24E40  private bool <Forward>b__9_0(BattleUnit u) { } */
+    /** @rva 0xA03110  private bool <Forward>b__9_0(BattleUnit u) { } */
     $Forward$b__9_0(u: BattleUnit): boolean { return u._Id === this.turnReferee.get_CurrentTurnUnitId(); }
 }

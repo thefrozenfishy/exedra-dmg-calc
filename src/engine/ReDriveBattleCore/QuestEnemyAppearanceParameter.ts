@@ -44,41 +44,41 @@ export class QuestEnemyAppearanceParameter extends BattleParameter {
     set StartHPGaugeCount(v: int) { this.set_StartHPGaugeCount(v); }
     get LinkHpWeight(): int { return this.get_LinkHpWeight(); }
     set LinkHpWeight(v: int) { this.set_LinkHpWeight(v); }
-    /** @rva 0x8A1200  public int get_QuestEnemyAppearanceMstId() { } */
+    /** @rva 0x8A2200  public int get_QuestEnemyAppearanceMstId() { } */
     get_QuestEnemyAppearanceMstId(): int { return this._QuestEnemyAppearanceMstId; /* auto-property */ }
-    /** @rva 0x8A12D0  public void set_QuestEnemyAppearanceMstId(int value) { } */
+    /** @rva 0x8A22D0  public void set_QuestEnemyAppearanceMstId(int value) { } */
     set_QuestEnemyAppearanceMstId(value: int): void { this._QuestEnemyAppearanceMstId = value; /* auto-property */ }
-    /** @rva 0xC03280  public bool get_IsMainTargetEnemy() { } */
+    /** @rva 0xBED9B0  public bool get_IsMainTargetEnemy() { } */
     get_IsMainTargetEnemy(): boolean { return this._IsMainTargetEnemy; /* auto-property */ }
-    /** @rva 0xC032D0  public void set_IsMainTargetEnemy(bool value) { } */
+    /** @rva 0xBEDA00  public void set_IsMainTargetEnemy(bool value) { } */
     set_IsMainTargetEnemy(value: boolean): void { this._IsMainTargetEnemy = value; /* auto-property */ }
-    /** @rva 0x736A30  public ElementType[] get_WeakElements() { } */
+    /** @rva 0x737A30  public ElementType[] get_WeakElements() { } */
     get_WeakElements(): ElementType[] { return this._WeakElements; /* auto-property */ }
-    /** @rva 0x736A70  public void set_WeakElements(ElementType[] value) { } */
+    /** @rva 0x737A70  public void set_WeakElements(ElementType[] value) { } */
     set_WeakElements(value: ElementType[]): void { this._WeakElements = value; /* auto-property */ }
-    /** @rva 0x736A20  public AbnormalEffectParryRate[] get_AbnormalEffectParryRates() { } */
+    /** @rva 0x737A20  public AbnormalEffectParryRate[] get_AbnormalEffectParryRates() { } */
     get_AbnormalEffectParryRates(): AbnormalEffectParryRate[] { return this._AbnormalEffectParryRates; /* auto-property */ }
-    /** @rva 0x736A60  public void set_AbnormalEffectParryRates(AbnormalEffectParryRate[] value) { } */
+    /** @rva 0x737A60  public void set_AbnormalEffectParryRates(AbnormalEffectParryRate[] value) { } */
     set_AbnormalEffectParryRates(value: AbnormalEffectParryRate[]): void { this._AbnormalEffectParryRates = value; /* auto-property */ }
-    /** @rva 0x736C60  public ElementAimDamageRate[] get_ElementAimDamageRates() { } */
+    /** @rva 0x737C60  public ElementAimDamageRate[] get_ElementAimDamageRates() { } */
     get_ElementAimDamageRates(): ElementAimDamageRate[] { return this._ElementAimDamageRates; /* auto-property */ }
-    /** @rva 0x736E10  public void set_ElementAimDamageRates(ElementAimDamageRate[] value) { } */
+    /** @rva 0x737E10  public void set_ElementAimDamageRates(ElementAimDamageRate[] value) { } */
     set_ElementAimDamageRates(value: ElementAimDamageRate[]): void { this._ElementAimDamageRates = value; /* auto-property */ }
-    /** @rva 0x900E80  public int get_HPGaugeCount() { } */
+    /** @rva 0x901E30  public int get_HPGaugeCount() { } */
     get_HPGaugeCount(): int { return this._HPGaugeCount; /* auto-property */ }
-    /** @rva 0x900E90  public void set_HPGaugeCount(int value) { } */
+    /** @rva 0x901E40  public void set_HPGaugeCount(int value) { } */
     set_HPGaugeCount(value: int): void { this._HPGaugeCount = value; /* auto-property */ }
-    /** @rva 0x901470  public int get_StartHPGaugeCount() { } */
+    /** @rva 0x902420  public int get_StartHPGaugeCount() { } */
     get_StartHPGaugeCount(): int { return this._StartHPGaugeCount; /* auto-property */ }
-    /** @rva 0x901490  public void set_StartHPGaugeCount(int value) { } */
+    /** @rva 0x902440  public void set_StartHPGaugeCount(int value) { } */
     set_StartHPGaugeCount(value: int): void { this._StartHPGaugeCount = value; /* auto-property */ }
-    /** @rva 0x9009C0  public int get_LinkHpWeight() { } */
+    /** @rva 0x901970  public int get_LinkHpWeight() { } */
     get_LinkHpWeight(): int { return this._LinkHpWeight; /* auto-property */ }
-    /** @rva 0x900A30  public void set_LinkHpWeight(int value) { } */
+    /** @rva 0x9019E0  public void set_LinkHpWeight(int value) { } */
     set_LinkHpWeight(value: int): void { this._LinkHpWeight = value; /* auto-property */ }
-    /** @rva 0x72F5E0  private void .ctor() { } */
+    /** @rva 0x7305E0  private void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
-    /** @rva 0x13B2D00  public void .ctor(in QuestEnemyAppearanceMstModel mst, BreakMstModel breakMstModel) { } */
+    /** @rva 0x139D1F0  public void .ctor(in QuestEnemyAppearanceMstModel mst, BreakMstModel breakMstModel) { } */
     ctor$QuestEnemyAppearanceMstModel_BreakMstModel(mst: QuestEnemyAppearanceMstModel, breakMstModel: BreakMstModel): this {
         // base .ctor(atk, def, ctr, ctd, hp, speed, healRate, effectHitRate, effectParryRate, damageRates, resistRates) inlined
         const hp = mst.HP, atk = mst.ATK, def = mst.DEF, ctr = mst.CriticalRate, ctd = mst.CriticalDamageRate, speed = mst.Speed;

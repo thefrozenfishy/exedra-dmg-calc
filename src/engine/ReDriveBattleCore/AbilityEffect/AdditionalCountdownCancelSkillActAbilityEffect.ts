@@ -16,7 +16,7 @@ import { AdditionalSkillActAbilityEffectBase_AdditionalSkillTargetType } from ".
 
 // ---- ReDriveBattleCore.AbilityEffect.AdditionalCountdownCancelSkillActAbilityEffect  (TypeDefIndex 1138, public class) ----
 export class AdditionalCountdownCancelSkillActAbilityEffect extends AdditionalSkillActAbilityEffectBase {
-    /** @rva 0x191F9E0  public void .ctor(AbilityEffectInfo info) { } */
+    /** @rva 0x190F570  public void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
         this.priority = ActBase_Define.AdditionalSkillDefaultPriority;
         super.ctor$AbilityEffectInfo(info);
@@ -26,7 +26,7 @@ export class AdditionalCountdownCancelSkillActAbilityEffect extends AdditionalSk
         this.priority = ActBase_Define.CountdownAdditionalSkillActPriority;
         return this;
     }
-    /** @rva 0x191F7F0 slot 5  public override AffectedUnitNoticeBundle Triggering(EffectOriginType origin, BattleUnit userUnit, Dictionary<int, BattleUnit> targetUnitDic, GameDirectorBase gameDirector) { } */
+    /** @rva 0x190F380 slot 5  public override AffectedUnitNoticeBundle Triggering(EffectOriginType origin, BattleUnit userUnit, Dictionary<int, BattleUnit> targetUnitDic, GameDirectorBase gameDirector) { } */
     Triggering(origin: EffectOriginType, userUnit: BattleUnit, targetUnitDic: Dictionary<int, BattleUnit>, gameDirector: GameDirectorBase): AffectedUnitNoticeBundle {
         if (!userUnit._Condition._StateList.some(state => state instanceof CountdownStartUnitState)) return null!; // <>c.b__1_0
         const bundle = super.Triggering(origin, userUnit, targetUnitDic, gameDirector);

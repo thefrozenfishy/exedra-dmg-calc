@@ -8,6 +8,6 @@ export abstract class AdditionalEnemyCondition {
     get IsFulfill(): boolean { return this.get_IsFulfill(); }
     /** @rva -1 slot 4  public abstract bool get_IsFulfill(); */
     abstract get_IsFulfill(): boolean;
-    /** @rva 0x72F5E0  public void .ctor() { } */
+    /** @rva 0x7305E0  public void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
 }

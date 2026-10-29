@@ -20,39 +20,39 @@ export class GveUpFinalGainEpRatioUnitState extends ParameterVariationUnitStateB
     _UpRatio: float = 0;
     get UpRatio(): float { return this.get_UpRatio(); }
     set UpRatio(v: float) { this.set_UpRatio(v); }
-    /** @rva 0x7421D0 slot 6  public override UnitStateBase.DirectionType get_Direction() { } */
+    /** @rva 0x7431D0 slot 6  public override UnitStateBase.DirectionType get_Direction() { } */
     get_Direction(): UnitStateBase_DirectionType { return 0 as UnitStateBase_DirectionType; /* asm: xor eax, eax; ret */ }
-    /** @rva 0x7421D0 slot 27  public override AdditionType get_Addition() { } */
+    /** @rva 0x7431D0 slot 27  public override AdditionType get_Addition() { } */
     get_Addition(): AdditionType { return 0 as AdditionType; /* asm: xor eax, eax; ret */ }
-    /** @rva 0x16FBAF0 slot 7  public override string get_IconName() { } */
+    /** @rva 0x16E57C0 slot 7  public override string get_IconName() { } */
     get_IconName(): string {
         return "buff";
     }
-    /** @rva 0x16FBAC0 slot 13  public override string get_GiveVisualEffectName() { } */
+    /** @rva 0x16E5790 slot 13  public override string get_GiveVisualEffectName() { } */
     get_GiveVisualEffectName(): string {
         return "eff_cmn_act_buff_appear_001";
     }
-    /** @rva 0x753560  public float get_UpRatio() { } */
+    /** @rva 0x754560  public float get_UpRatio() { } */
     get_UpRatio(): float { return this._UpRatio; /* auto-property */ }
-    /** @rva 0x753810  public void set_UpRatio(float value) { } */
+    /** @rva 0x754810  public void set_UpRatio(float value) { } */
     set_UpRatio(value: float): void { this._UpRatio = value; /* auto-property */ }
-    /** @rva 0x16F8570  protected void .ctor() { } */
+    /** @rva 0x16E2240  protected void .ctor() { } */
     ctor(): this {
         this._IconName = "";
         return this;
     }
-    /** @rva 0x16FAC30  public void .ctor(AbilityEffectInfo info) { } */
+    /** @rva 0x16E4900  public void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
         super.ctor$AbilityEffectInfo(info);
         this._UpdateableEffectValue = f32(info._EffectValue1);
         this._UpRatio = f32(f32(info._EffectValue1) / 10);
         return this;
     }
-    /** @rva 0x16FBA10  public float GetGainEpVariationValue(float epValue) { } */
+    /** @rva 0x16E56E0  public float GetGainEpVariationValue(float epValue) { } */
     GetGainEpVariationValue(epValue: float): float {
         return f32(f32(this._UpRatio / 100) * epValue);
     }
-    /** @rva 0x16FBA30 slot 24  public override AISkillTargetSelector.UnitFilterFuncOrder GetUnitFilterFuncOrder(BattleUnit userUnit, IEnumerable<BattleUnit> candidateUnits) { } */
+    /** @rva 0x16E5700 slot 24  public override AISkillTargetSelector.UnitFilterFuncOrder GetUnitFilterFuncOrder(BattleUnit userUnit, IEnumerable<BattleUnit> candidateUnits) { } */
     GetUnitFilterFuncOrder(userUnit: BattleUnit, candidateUnits: IEnumerable<BattleUnit>): AISkillTargetSelector_UnitFilterFuncOrder {
         const list: List<(a0: IEnumerable<BattleUnit>) => IEnumerable<BattleUnit>> = [];
         return new AISkillTargetSelector_UnitFilterFuncOrder().ctor$ListFuncIEnumerableBattleUnitIEnumerableBattleUnit(list);

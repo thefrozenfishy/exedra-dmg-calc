@@ -7,8 +7,8 @@ import type { RequestType } from "./RequestType";
 
 // ---- ReDriveBattleCore.Request.DebugSkipWaveRequest  (TypeDefIndex 831, public class) ----
 export class DebugSkipWaveRequest extends RequestBase {
-    /** @rva 0x16F8A30 slot 4  public override RequestType get_RequestType() { } */
+    /** @rva 0x16E2700 slot 4  public override RequestType get_RequestType() { } */
     get_RequestType(): RequestType { return 1004 as RequestType; /* asm: mov eax, 0x3ec; ret */ }
-    /** @rva 0x72F5E0  public void .ctor() { } */
+    /** @rva 0x7305E0  public void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
 }

@@ -9,9 +9,9 @@ import type { RequestType } from "./RequestType";
 export class DebugTurnGaugeEditRequest extends RequestBase {
     /** 0x10 public List<ValueTuple<int, float>> TurnGaugeList */
     TurnGaugeList: List<any /* ValueTuple<int, float> */> = null!;
-    /** @rva 0x16F8AD0 slot 4  public override RequestType get_RequestType() { } */
+    /** @rva 0x16E27A0 slot 4  public override RequestType get_RequestType() { } */
     get_RequestType(): RequestType { return 1002 as RequestType; /* asm: mov eax, 0x3ea; ret */ }
-    /** @rva 0x16F8A50  public void .ctor() { } */
+    /** @rva 0x16E2720  public void .ctor() { } */
     ctor(): this {
         this.TurnGaugeList = [];
         return this;

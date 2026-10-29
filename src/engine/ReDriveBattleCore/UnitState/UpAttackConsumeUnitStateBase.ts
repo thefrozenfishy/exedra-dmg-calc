@@ -12,22 +12,22 @@ import { UpAttackUnitStateBase } from "./UpAttackUnitStateBase";
 // ---- ReDriveBattleCore.UnitState.UpAttackConsumeUnitStateBase  (TypeDefIndex 748, public abstract class) ----
 export abstract class UpAttackConsumeUnitStateBase extends UpAttackUnitStateBase {  // implements IConsumeRemainCountOnAttack, IConsumeRemainCount
     static readonly __interfaces: readonly string[] = ['IConsumeRemainCountOnAttack', 'IConsumeRemainCount'];
-    /** @rva 0x170B100 slot 7  public override string get_IconName() { } */
+    /** @rva 0x16F4DD0 slot 7  public override string get_IconName() { } */
     get_IconName(): string {
         return "battle_icon_consume_up_atk";
     }
-    /** @rva 0x16F8570  protected void .ctor() { } */
+    /** @rva 0x16E2240  protected void .ctor() { } */
     ctor(): this {
         this._IconName = "";
         return this;
     }
-    /** @rva 0x15E14E0  public void .ctor(AbilityEffectInfo info) { } */
+    /** @rva 0x15CBB40  public void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
         super.ctor$AbilityEffectInfo(info);
         this._UpdateableEffectValue = f32(info._EffectValue1);
         return this;
     }
-    /** @rva 0x170B040 slot 30  public override Decimal GetAtkVariationValue(BattleUnit unit, Decimal processingValue) { } */
+    /** @rva 0x16F4D10 slot 30  public override Decimal GetAtkVariationValue(BattleUnit unit, Decimal processingValue) { } */
     GetAtkVariationValue(unit: BattleUnit, processingValue: Decimal): Decimal {
         if (this._RemainCount < 1) return Decimal.Zero;
         return this.GetAtkVariationValueIfRemainCount(unit, processingValue); // vslot 36

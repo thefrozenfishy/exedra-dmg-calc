@@ -17,13 +17,13 @@ import type { EffectOriginType } from "../UnitState/EffectOriginType";
 export class ZoneExpandAbilityEffect extends ZoneAbilityEffectBase {
     /** 0x68 protected int zoneEffectId */
     zoneEffectId: int = 0;
-    /** @rva 0x1934E70  protected void .ctor() { } */
+    /** @rva 0x1924A00  protected void .ctor() { } */
     ctor(): this {
         this.zoneEffectId = -1;
         super.ctor();
         return this;
     }
-    /** @rva 0x1934E20  public void .ctor(AbilityEffectInfo info) { } */
+    /** @rva 0x19249B0  public void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
         this.zoneEffectId = -1;
         super.ctor$AbilityEffectInfo(info);
@@ -31,7 +31,7 @@ export class ZoneExpandAbilityEffect extends ZoneAbilityEffectBase {
         this.zoneEffectId = info._TargetElement;
         return this;
     }
-    /** @rva 0x1934B00 slot 5  public override AffectedUnitNoticeBundle Triggering(EffectOriginType origin, BattleUnit userUnit, Dictionary<int, BattleUnit> targetUnitDic, GameDirectorBase gameDirector) { } */
+    /** @rva 0x1924690 slot 5  public override AffectedUnitNoticeBundle Triggering(EffectOriginType origin, BattleUnit userUnit, Dictionary<int, BattleUnit> targetUnitDic, GameDirectorBase gameDirector) { } */
     Triggering(origin: EffectOriginType, userUnit: BattleUnit, targetUnitDic: Dictionary<int, BattleUnit>, gameDirector: GameDirectorBase): AffectedUnitNoticeBundle {
         const affectedUnitNoticeBundle = new AffectedUnitNoticeBundle().ctor();
         for (const targetUnitId of this._TargetUnitIdList) {
@@ -52,7 +52,7 @@ export class ZoneExpandAbilityEffect extends ZoneAbilityEffectBase {
         }
         return affectedUnitNoticeBundle;
     }
-    /** @rva 0x1934860 slot 6  public override List<BattleUnit> GetAIFilteredTargets(BattleUnit userUnit, List<BattleUnit> targetUnitList, SkillType skillType, GameDirectorBase gameDirector) { } */
+    /** @rva 0x19243F0 slot 6  public override List<BattleUnit> GetAIFilteredTargets(BattleUnit userUnit, List<BattleUnit> targetUnitList, SkillType skillType, GameDirectorBase gameDirector) { } */
     GetAIFilteredTargets(userUnit: BattleUnit, targetUnitList: List<BattleUnit>, skillType: SkillType, gameDirector: GameDirectorBase): List<BattleUnit> {
         // <>c__DisplayClass4_0 { gameDirector, userUnit }; g__CheckFriendZoneStack|0 inlined
         const list: List<BattleUnit> = [];

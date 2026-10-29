@@ -6,6 +6,6 @@ import { TurnUnitActBase } from "./TurnUnitActBase";
 
 // ---- ReDriveBattleCore.Act.AdditionalTurnUnitAct  (TypeDefIndex 1108, public class) ----
 export class AdditionalTurnUnitAct extends TurnUnitActBase {
-    /** @rva 0x191AEB0  public void .ctor() { } */
+    /** @rva 0x190AA40  public void .ctor() { } */
     ctor(): this { return super.ctor(); /* folded: ActBase..ctor */ }
 }

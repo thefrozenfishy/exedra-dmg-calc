@@ -16,25 +16,25 @@ export class EnemyConditionSetsAndActionMstModel extends MstModelBase<EnemyCondi
     get IsSkillBundle(): boolean { return this.get_IsSkillBundle(); }
     get IsSkillReusable(): boolean { return this.get_IsSkillReusable(); }
     get Priority(): int { return this.get_Priority(); }
-    /** @rva 0x16FB870  public void .ctor(EnemyConditionSetsAndActionMstRecord record) { } */
+    /** @rva 0x16E5540  public void .ctor(EnemyConditionSetsAndActionMstRecord record) { } */
     ctor$EnemyConditionSetsAndActionMstRecord(record: EnemyConditionSetsAndActionMstRecord): this {
         super.ctor$TRecord(record);
         return this;
     }
-    /** @rva 0x901380  public int get_Id() { } */
+    /** @rva 0x902330  public int get_Id() { } */
     get_Id(): int { return this.record.enemyConditionSetsAndActionMstId; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x901785; mov eax, dword ptr [rax + 0x10]; add rsp, 0x28; ret */ }
-    /** @rva 0x9013A0  public int get_QuestEnemyAppearanceMstId() { } */
+    /** @rva 0x902350  public int get_QuestEnemyAppearanceMstId() { } */
     get_QuestEnemyAppearanceMstId(): int { return this.record.questEnemyAppearanceMstId; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x9017a5; mov eax, dword ptr [rax + 0x14]; add rsp, 0x28; ret */ }
-    /** @rva 0x9013C0  public int get_EnemyConditionSkillSetId() { } */
+    /** @rva 0x902370  public int get_EnemyConditionSkillSetId() { } */
     get_EnemyConditionSkillSetId(): int { return this.record.enemyConditionSkillSetId; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x902c85; mov eax, dword ptr [rax + 0x18]; add rsp, 0x28; ret */ }
-    /** @rva 0x901EA0  public string get_ConditionSetMstIdCsv() { } */
+    /** @rva 0x902E70  public string get_ConditionSetMstIdCsv() { } */
     get_ConditionSetMstIdCsv(): string { return this.record.conditionSetMstIdCsv; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x9017f6; mov rax, qword ptr [rax + 0x20]; add rsp, 0x28; ret */ }
-    /** @rva 0x901FB0  public string get_SkillMstIdCsv() { } */
+    /** @rva 0x902F80  public string get_SkillMstIdCsv() { } */
     get_SkillMstIdCsv(): string { return this.record.skillMstIdCsv; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x116ec46; mov rax, qword ptr [rax + 0x28]; add rsp, 0x28; ret */ }
-    /** @rva 0xCF6A70  public bool get_IsSkillBundle() { } */
+    /** @rva 0xCE1920  public bool get_IsSkillBundle() { } */
     get_IsSkillBundle(): boolean { return this.record.isSkillBundle; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0xcc05f6; movzx eax, byte ptr [rax + 0x30]; add rsp, 0x28; ret */ }
-    /** @rva 0x16FB8C0  public bool get_IsSkillReusable() { } */
+    /** @rva 0x16E5590  public bool get_IsSkillReusable() { } */
     get_IsSkillReusable(): boolean { return this.record.isSkillReusable; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x16d0a46; movzx eax, byte ptr [rax + 0x31]; add rsp, 0x28; ret */ }
-    /** @rva 0x901F20  public int get_Priority() { } */
+    /** @rva 0x902EF0  public int get_Priority() { } */
     get_Priority(): int { return this.record.priority; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0xa0e825; mov eax, dword ptr [rax + 0x34]; add rsp, 0x28; ret */ }
 }

@@ -9,6 +9,6 @@ import type { int } from "../../runtime";
 
 // ---- ReDriveBattleCore.Reader.BattleConditionMstReader  (TypeDefIndex 850, public class) ----
 export class BattleConditionMstReader extends BattleMstReaderBase<BattleConditionMstModel, BattleConditionMstRecord, int> {
-    /** @rva 0x16F5A50  public void .ctor() { } */
+    /** @rva 0x16DF720  public void .ctor() { } */
     ctor(): this { super.ctor(); return this; }
 }

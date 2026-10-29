@@ -10,8 +10,8 @@ import type { RequestType } from "./RequestType";
 export class ChangeBattleSpeedTypeRequest extends RequestBase {
     /** 0x10 public BattleSpeedType battleSpeedType */
     battleSpeedType: BattleSpeedType = 0 as BattleSpeedType;
-    /** @rva 0xDEFB50 slot 4  public override RequestType get_RequestType() { } */
+    /** @rva 0xDDAB70 slot 4  public override RequestType get_RequestType() { } */
     get_RequestType(): RequestType { return 9 as RequestType; /* asm: mov eax, 9; ret */ }
-    /** @rva 0x72F5E0  public void .ctor() { } */
+    /** @rva 0x7305E0  public void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
 }

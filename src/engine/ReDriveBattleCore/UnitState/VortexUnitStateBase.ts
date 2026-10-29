@@ -21,45 +21,45 @@ export abstract class VortexUnitStateBase extends ReceiveSlipDamageUnitStateBase
     set RemainAttackCount(v: int) { this.set_RemainAttackCount(v); }
     get StateIconNumber(): int { return this.get_StateIconNumber(); }
     get IsShowZeroIfZero(): boolean { return this.get_IsShowZeroIfZero(); }
-    /** @rva 0x15F6EE0 slot 7  public override string get_IconName() { } */
+    /** @rva 0x15E1540 slot 7  public override string get_IconName() { } */
     get_IconName(): string {
         return "vortex";
     }
-    /** @rva 0x15F6EB0 slot 13  public override string get_GiveVisualEffectName() { } */
+    /** @rva 0x15E1510 slot 13  public override string get_GiveVisualEffectName() { } */
     get_GiveVisualEffectName(): string {
         return "eff_cmn_act_statehit_002";
     }
-    /** @rva 0x15F6F10 slot 33  public override string get_SlipDamageVisualEffectName() { } */
+    /** @rva 0x15E1570 slot 33  public override string get_SlipDamageVisualEffectName() { } */
     get_SlipDamageVisualEffectName(): string {
         return "eff_cmn_act_state_whirlpool_001";
     }
-    /** @rva 0x7E0AD0 slot 31  public override TargetElementType get_AttackElement() { } */
+    /** @rva 0x7E1AD0 slot 31  public override TargetElementType get_AttackElement() { } */
     get_AttackElement(): TargetElementType { return 2 as TargetElementType; /* asm: mov eax, 2; ret */ }
-    /** @rva 0x76E830 slot 34  public override bool get_SkipDamageOnTurnBegin() { } */
+    /** @rva 0x76F830 slot 34  public override bool get_SkipDamageOnTurnBegin() { } */
     get_SkipDamageOnTurnBegin(): boolean { return true; /* asm: mov al, 1; ret */ }
-    /** @rva 0x76E830 slot 16  public override bool get_AllowDuplicate() { } */
+    /** @rva 0x76F830 slot 16  public override bool get_AllowDuplicate() { } */
     get_AllowDuplicate(): boolean { return true; /* asm: mov al, 1; ret */ }
-    /** @rva 0x753630  public int get_RemainAttackCount() { } */
+    /** @rva 0x754630  public int get_RemainAttackCount() { } */
     get_RemainAttackCount(): int { return this._RemainAttackCount; /* auto-property */ }
-    /** @rva 0x753900  public void set_RemainAttackCount(int value) { } */
+    /** @rva 0x754900  public void set_RemainAttackCount(int value) { } */
     set_RemainAttackCount(value: int): void { this._RemainAttackCount = value; /* auto-property */ }
-    /** @rva 0x753630 slot 38  public int get_StateIconNumber() { } */
+    /** @rva 0x754630 slot 38  public int get_StateIconNumber() { } */
     get_StateIconNumber(): int { return this._RemainAttackCount; /* asm: mov eax, dword ptr [rcx + 0xa0]; ret */ }
-    /** @rva 0x7350C0 slot 39  public bool get_IsShowZeroIfZero() { } */
+    /** @rva 0x7360C0 slot 39  public bool get_IsShowZeroIfZero() { } */
     get_IsShowZeroIfZero(): boolean { return false; /* asm: xor al, al; ret */ }
-    /** @rva 0x15DC300  protected void .ctor() { } */
+    /** @rva 0x15C6960  protected void .ctor() { } */
     ctor(): this {
         super.ctor();
         return this;
     }
-    /** @rva 0x15F6CF0  public void .ctor(AbilityEffectInfo info) { } */
+    /** @rva 0x15E1350  public void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
         super.ctor$AbilityEffectInfo(info);
         this._UpdateableEffectValue = f32(info._EffectValue1);
         this._RemainAttackCount = info._EffectValue2;
         return this;
     }
-    /** @rva 0x15F6DC0 slot 36  public override float GetSlipDamageValue(BattleUnit attackUnit, BattleUnit defenseUnit, BattleType battleType, bool isImmediately) { } */
+    /** @rva 0x15E1420 slot 36  public override float GetSlipDamageValue(BattleUnit attackUnit, BattleUnit defenseUnit, BattleType battleType, bool isImmediately) { } */
     GetSlipDamageValue(attackUnit: BattleUnit, defenseUnit: BattleUnit, battleType: BattleType, isImmediately: boolean): float {
         const damageBase = this._DamageBase;
         this._ShouldBeRemovedNow = true;

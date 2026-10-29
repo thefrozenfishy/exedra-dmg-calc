@@ -18,14 +18,14 @@ import type { RequestBase } from "./Request/RequestBase";
 
 // ---- ReDriveBattleCore.GveGameDirector  (TypeDefIndex 408, public class) ----
 export class GveGameDirector extends GameDirectorBase {
-    /** @rva 0xD8D350 slot 4  public override BattleType get_BattleType() { } */
+    /** @rva 0xD78250 slot 4  public override BattleType get_BattleType() { } */
     get_BattleType(): BattleType { return 3 as BattleType; /* asm: mov eax, 3; ret */ }
-    /** @rva 0x14C3E90  public void .ctor() { } */
+    /** @rva 0x14ADF30  public void .ctor() { } */
     ctor(): this {
         super.ctor(); // GameDirectorBase..ctor (tail call)
         return this;
     }
-    /** @rva 0x14C3A60  public void SetupBattleStage(int questStageMstId, IBattleUnitProvider unitProvider, int gainEpUpRate, int specialAttackDamageUpRate, int victoryRound) { } */
+    /** @rva 0x14ADB00  public void SetupBattleStage(int questStageMstId, IBattleUnitProvider unitProvider, int gainEpUpRate, int specialAttackDamageUpRate, int victoryRound) { } */
     SetupBattleStage(questStageMstId: int, unitProvider: IBattleUnitProvider, gainEpUpRate: int, specialAttackDamageUpRate: int, victoryRound: int): void {
         this.elapsedTime = 0;
         for (const unit of unitProvider.CreateAllyBattleUnits()) this.battleUnitBundle.AddUnit(unit);
@@ -39,7 +39,7 @@ export class GveGameDirector extends GameDirectorBase {
         }
         this.BattlePhase = 0 as Phase;
     }
-    /** @rva 0x14C34C0  public void GveSyncHp(int mainTargetEnemyHp, CommandGveSyncHpDirection cmdHpDirection) { } */
+    /** @rva 0x14AD560  public void GveSyncHp(int mainTargetEnemyHp, CommandGveSyncHpDirection cmdHpDirection) { } */
     GveSyncHp(mainTargetEnemyHp: int, cmdHpDirection: CommandGveSyncHpDirection): void {
         const unit = [...this.battleUnitBundle.dic.values()].find(u => isGveMainTargetUnit(u)) ?? null; // FirstOrDefault(<>c.b__4_0)
         if (unit == null) return;
@@ -47,14 +47,14 @@ export class GveGameDirector extends GameDirectorBase {
         this.StoreCommand(cmdHpDirection);
         this.commandSender.Flush(); // inlined
     }
-    /** @rva 0x14C38B0  private void SendGveMainTargetBreakCountCommand() { } */
+    /** @rva 0x14AD950  private void SendGveMainTargetBreakCountCommand() { } */
     SendGveMainTargetBreakCountCommand(): void {
         const unit = [...this.battleUnitBundle.dic.values()].find(u => isGveMainTargetUnit(u)) ?? null; // FirstOrDefault(<>c.b__5_0)
         const breakCount = unit == null ? 0 : unit._BreakPoint._BreakCount;
         this.StoreCommand(new CommandGveMainTargetBreakCount().ctor$int(breakCount));
         this.commandSender.Flush(); // inlined
     }
-    /** @rva 0x14C3650 slot 13  public override void Request(RequestBase request, bool dontFlushCommand = False, CancellationToken cancellationToken) { } */
+    /** @rva 0x14AD6F0 slot 13  public override void Request(RequestBase request, bool dontFlushCommand = False, CancellationToken cancellationToken) { } */
     Request(request: RequestBase, dontFlushCommand: boolean = false, cancellationToken: any = null): void {
         if (request == null) return;
         if (request.RequestType === 13 && request instanceof GveMainTargetBreakCountRequest) {

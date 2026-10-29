@@ -9,9 +9,9 @@ export class DebugDisplayableAttribute {
     /** 0x10 private readonly string <EntryName>k__BackingField */
     _EntryName: string = null!;
     get EntryName(): string { return this.get_EntryName(); }
-    /** @rva 0x72FC50  public string get_EntryName() { } */
+    /** @rva 0x730C50  public string get_EntryName() { } */
     get_EntryName(): string { return this._EntryName; /* auto-property */ }
-    /** @rva 0x72FC10  public void .ctor(string entryName = "") { } */
+    /** @rva 0x730C10  public void .ctor(string entryName = "") { } */
     ctor$string(entryName?: string /* = "" */): this {
         this._EntryName = (entryName ?? "");
         return this;

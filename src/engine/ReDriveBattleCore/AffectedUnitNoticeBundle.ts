@@ -16,11 +16,11 @@ export class AffectedUnitNoticeBundle {
     _GainSoloRaidBuffPointNoticeList: List<GainSoloRaidBuffPointNotice> = null!;
     get GainSoloRaidBuffPointNoticeList(): List<GainSoloRaidBuffPointNotice> { return this.get_GainSoloRaidBuffPointNoticeList(); }
     set GainSoloRaidBuffPointNoticeList(v: List<GainSoloRaidBuffPointNotice>) { this.set_GainSoloRaidBuffPointNoticeList(v); }
-    /** @rva 0x732E90  public List<GainSoloRaidBuffPointNotice> get_GainSoloRaidBuffPointNoticeList() { } */
+    /** @rva 0x733E90  public List<GainSoloRaidBuffPointNotice> get_GainSoloRaidBuffPointNoticeList() { } */
     get_GainSoloRaidBuffPointNoticeList(): List<GainSoloRaidBuffPointNotice> { return this._GainSoloRaidBuffPointNoticeList; /* auto-property */ }
-    /** @rva 0x735AB0  public void set_GainSoloRaidBuffPointNoticeList(List<GainSoloRaidBuffPointNotice> value) { } */
+    /** @rva 0x736AB0  public void set_GainSoloRaidBuffPointNoticeList(List<GainSoloRaidBuffPointNotice> value) { } */
     set_GainSoloRaidBuffPointNoticeList(value: List<GainSoloRaidBuffPointNotice>): void { this._GainSoloRaidBuffPointNoticeList = value; /* auto-property */ }
-    /** @rva 0x139E8A0  public void Add(AffectedUnitNotice notice) { } */
+    /** @rva 0x1388DA0  public void Add(AffectedUnitNotice notice) { } */
     Add(notice: AffectedUnitNotice): void {
         if (notice == null) return;
         if (this.noticeDic.has(notice._AffectedUnitId)) {
@@ -31,15 +31,15 @@ export class AffectedUnitNoticeBundle {
         }
         this.noticeDic.set(notice._AffectedUnitId, notice);
     }
-    /** @rva 0x139EAE0  public List<AffectedUnitNotice> GetNoticeList() { } */
+    /** @rva 0x1388FE0  public List<AffectedUnitNotice> GetNoticeList() { } */
     GetNoticeList(): List<AffectedUnitNotice> {
         return [...this.noticeDic.values()];
     }
-    /** @rva 0x139E990  public IEnumerable<AffectedUnitNotice.DamageInfo> GetAllDisplayDamageInfo() { } */
+    /** @rva 0x1388E90  public IEnumerable<AffectedUnitNotice.DamageInfo> GetAllDisplayDamageInfo() { } */
     GetAllDisplayDamageInfo(): IEnumerable<AffectedUnitNotice_DamageInfo> {
         return [...this.noticeDic.values()].flatMap(x => x.GetDisplayDamageInfoList()); // SelectMany(<>c.b__7_0)
     }
-    /** @rva 0x139EC00  public static AffectedUnitNoticeBundle op_Addition(AffectedUnitNoticeBundle bundle1, AffectedUnitNoticeBundle bundle2) { } */
+    /** @rva 0x1389100  public static AffectedUnitNoticeBundle op_Addition(AffectedUnitNoticeBundle bundle1, AffectedUnitNoticeBundle bundle2) { } */
     static op_Addition(bundle1: AffectedUnitNoticeBundle, bundle2: AffectedUnitNoticeBundle): AffectedUnitNoticeBundle {
         const maxSequence = Math.max(...bundle1.GetAllDisplayDamageInfo().map(x => x._Sequence) /* <>c.b__8_0 */, 0); // .Append(0).Max()
         const minSequence = Math.min(...bundle2.GetAllDisplayDamageInfo().map(x => x._Sequence) /* <>c.b__8_1 */, 0); // .Append(0).Min()
@@ -57,7 +57,7 @@ export class AffectedUnitNoticeBundle {
         bundle._GainSoloRaidBuffPointNoticeList.push(...bundle2._GainSoloRaidBuffPointNoticeList);
         return bundle;
     }
-    /** @rva 0x139EB40  public void .ctor() { } */
+    /** @rva 0x1389040  public void .ctor() { } */
     ctor(): this {
         this.noticeDic = new Map();
         this._GainSoloRaidBuffPointNoticeList = [];

@@ -22,19 +22,19 @@ import { AbilityEffectBase_TargetSideType } from "./AbilityEffectBase";
 export class HasteAbilityEffect extends AbilityEffectBase {
     /** 0x60 protected int hasteRate */
     hasteRate: int = 0;
-    /** @rva 0x1920EF0  protected void .ctor() { } */
+    /** @rva 0x1910A80  protected void .ctor() { } */
     ctor(): this {
         super.ctor();
         return this;
     }
-    /** @rva 0x1922F60  public void .ctor(AbilityEffectInfo info) { } */
+    /** @rva 0x1912AF0  public void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
         super.ctor$AbilityEffectInfo(info);
         this._TargetSide = 0 as AbilityEffectBase_TargetSideType;
         this.hasteRate = info._EffectValue1;
         return this;
     }
-    /** @rva 0x1929BF0 slot 5  public override AffectedUnitNoticeBundle Triggering(EffectOriginType origin, BattleUnit userUnit, Dictionary<int, BattleUnit> targetUnitDic, GameDirectorBase gameDirector) { } */
+    /** @rva 0x1919780 slot 5  public override AffectedUnitNoticeBundle Triggering(EffectOriginType origin, BattleUnit userUnit, Dictionary<int, BattleUnit> targetUnitDic, GameDirectorBase gameDirector) { } */
     Triggering(origin: EffectOriginType, userUnit: BattleUnit, targetUnitDic: Dictionary<int, BattleUnit>, gameDirector: GameDirectorBase): AffectedUnitNoticeBundle {
         const affectedUnitNoticeBundle = new AffectedUnitNoticeBundle().ctor();
         const nextTurnOrderPriority = gameDirector.turnActSystem.turnReferee.get_NextTurnOrderPriority();
@@ -50,14 +50,14 @@ export class HasteAbilityEffect extends AbilityEffectBase {
         }
         return affectedUnitNoticeBundle;
     }
-    /** @rva 0x1929790  public float GetResultGaugeValue(float gaugeValue, float speed) { } */
+    /** @rva 0x1919320  public float GetResultGaugeValue(float gaugeValue, float speed) { } */
     GetResultGaugeValue(gaugeValue: float, speed: float): float {
         const num = f32(UnitTurnGauge.RawGaugeResetValue / speed);
         let result = f32(f32(num * f32(f32(-this.hasteRate) / 1000)) + gaugeValue);
         if (result <= 0) result = 0;
         return result;
     }
-    /** @rva 0x19294F0 slot 6  public override List<BattleUnit> GetAIFilteredTargets(BattleUnit userUnit, List<BattleUnit> targetUnitList, SkillType skillType, GameDirectorBase gameDirector) { } */
+    /** @rva 0x1919080 slot 6  public override List<BattleUnit> GetAIFilteredTargets(BattleUnit userUnit, List<BattleUnit> targetUnitList, SkillType skillType, GameDirectorBase gameDirector) { } */
     GetAIFilteredTargets(userUnit: BattleUnit, targetUnitList: List<BattleUnit>, skillType: SkillType, gameDirector: GameDirectorBase): List<BattleUnit> {
         let list = targetUnitList.filter(x => !x.get_IsDead()); // <>c.b__5_0
         if (list.length > 0) {
@@ -66,7 +66,7 @@ export class HasteAbilityEffect extends AbilityEffectBase {
         }
         return list;
     }
-    /** @rva 0x1929850 slot 7  public override int SelectTargetInAIAction(BattleUnit userUnit, List<BattleUnit> targetUnitList) { } */
+    /** @rva 0x19193E0 slot 7  public override int SelectTargetInAIAction(BattleUnit userUnit, List<BattleUnit> targetUnitList) { } */
     SelectTargetInAIAction(userUnit: BattleUnit, targetUnitList: List<BattleUnit>): int {
         const candidateUnits = targetUnitList.filter(unit => !unit.get_IsDead()); // <>c.b__6_0
         const funcList = [AISkillTargetSelector.UnitFilterByMainTarget, AISkillTargetSelector.UnitFilterByRoleAttackerOrBreaker, HasteAbilityEffect.$SelectTargetInAIAction$g__UnitFilterWithLastTurnOrder_6_1];
@@ -74,7 +74,7 @@ export class HasteAbilityEffect extends AbilityEffectBase {
         if (unit != null) return unit._Id;
         return 0;
     }
-    /** @rva 0x1929F00  internal static IEnumerable<BattleUnit> <SelectTargetInAIAction>g__UnitFilterWithLastTurnOrder|6_1(IEnumerable<BattleUnit> candidateUnits) { } */
+    /** @rva 0x1919A90  internal static IEnumerable<BattleUnit> <SelectTargetInAIAction>g__UnitFilterWithLastTurnOrder|6_1(IEnumerable<BattleUnit> candidateUnits) { } */
     static $SelectTargetInAIAction$g__UnitFilterWithLastTurnOrder_6_1(candidateUnits: IEnumerable<BattleUnit>): IEnumerable<BattleUnit> {
         const sorted = TurnReferee.SortByTurnOrder(candidateUnits);
         const battleUnit = sorted.length > 0 ? sorted[sorted.length - 1] : null; // LastOrDefault

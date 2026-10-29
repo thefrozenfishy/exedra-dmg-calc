@@ -16,8 +16,8 @@ export class SkillRequest extends RequestBase {
     skillMstId: int = 0;
     /** 0x1C public int selectAllyUnitId */
     selectAllyUnitId: int = 0;
-    /** @rva 0x758B30 slot 4  public override RequestType get_RequestType() { } */
+    /** @rva 0x759B30 slot 4  public override RequestType get_RequestType() { } */
     get_RequestType(): RequestType { return 1 as RequestType; /* asm: mov eax, 1; ret */ }
-    /** @rva 0x72F5E0  public void .ctor() { } */
+    /** @rva 0x7305E0  public void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
 }

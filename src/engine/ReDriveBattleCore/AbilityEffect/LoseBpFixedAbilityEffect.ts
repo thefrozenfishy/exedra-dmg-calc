@@ -10,18 +10,18 @@ import { AbilityEffectBase_TargetSideType } from "./AbilityEffectBase";
 
 // ---- ReDriveBattleCore.AbilityEffect.LoseBpFixedAbilityEffect  (TypeDefIndex 1148, public class) ----
 export class LoseBpFixedAbilityEffect extends LoseBpAbilityEffectBase {
-    /** @rva 0x1920EF0  protected void .ctor() { } */
+    /** @rva 0x1910A80  protected void .ctor() { } */
     ctor(): this {
         super.ctor();
         return this;
     }
-    /** @rva 0x192ADF0  public void .ctor(AbilityEffectInfo info) { } */
+    /** @rva 0x191A980  public void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
         super.ctor$AbilityEffectInfo(info);
         this._TargetSide = 1 as AbilityEffectBase_TargetSideType;
         this.effectValue = info._EffectValue1;
         return this;
     }
-    /** @rva 0x8A1220 slot 8  public override int GetLosePoint(BattleUnit targetUnit) { } */
+    /** @rva 0x8A2220 slot 8  public override int GetLosePoint(BattleUnit targetUnit) { } */
     GetLosePoint(targetUnit: BattleUnit): int { return this.effectValue; /* asm: mov eax, dword ptr [rcx + 0x64]; ret */ }
 }

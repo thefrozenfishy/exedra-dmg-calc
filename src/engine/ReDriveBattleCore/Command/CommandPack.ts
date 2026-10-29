@@ -67,58 +67,58 @@ export class CommandPack {
     set Finalizations(v: CommandFinalize[]) { this.set_Finalizations(v); }
     get CommandTypeOrder(): CommandType[] { return this.get_CommandTypeOrder(); }
     set CommandTypeOrder(v: CommandType[]) { this.set_CommandTypeOrder(v); }
-    /** @rva 0x72FC50  public CommandBattlePhase[] get_BattlePhases() { } */
+    /** @rva 0x730C50  public CommandBattlePhase[] get_BattlePhases() { } */
     get_BattlePhases(): CommandBattlePhase[] { return this._BattlePhases; /* auto-property */ }
-    /** @rva 0x72FC60  public void set_BattlePhases(CommandBattlePhase[] value) { } */
+    /** @rva 0x730C60  public void set_BattlePhases(CommandBattlePhase[] value) { } */
     set_BattlePhases(value: CommandBattlePhase[]): void { this._BattlePhases = value; /* auto-property */ }
-    /** @rva 0x732E90  public CommandTarget[] get_Targets() { } */
+    /** @rva 0x733E90  public CommandTarget[] get_Targets() { } */
     get_Targets(): CommandTarget[] { return this._Targets; /* auto-property */ }
-    /** @rva 0x735AB0  public void set_Targets(CommandTarget[] value) { } */
+    /** @rva 0x736AB0  public void set_Targets(CommandTarget[] value) { } */
     set_Targets(value: CommandTarget[]): void { this._Targets = value; /* auto-property */ }
-    /** @rva 0x7359E0  public CommandSkill[] get_Skills() { } */
+    /** @rva 0x7369E0  public CommandSkill[] get_Skills() { } */
     get_Skills(): CommandSkill[] { return this._Skills; /* auto-property */ }
-    /** @rva 0x735A50  public void set_Skills(CommandSkill[] value) { } */
+    /** @rva 0x736A50  public void set_Skills(CommandSkill[] value) { } */
     set_Skills(value: CommandSkill[]): void { this._Skills = value; /* auto-property */ }
-    /** @rva 0x735EA0  public CommandBeginTurn[] get_BeginTurns() { } */
+    /** @rva 0x736EA0  public CommandBeginTurn[] get_BeginTurns() { } */
     get_BeginTurns(): CommandBeginTurn[] { return this._BeginTurns; /* auto-property */ }
-    /** @rva 0x735F10  public void set_BeginTurns(CommandBeginTurn[] value) { } */
+    /** @rva 0x736F10  public void set_BeginTurns(CommandBeginTurn[] value) { } */
     set_BeginTurns(value: CommandBeginTurn[]): void { this._BeginTurns = value; /* auto-property */ }
-    /** @rva 0x735F00  public CommandSituationSync[] get_SituationSyncs() { } */
+    /** @rva 0x736F00  public CommandSituationSync[] get_SituationSyncs() { } */
     get_SituationSyncs(): CommandSituationSync[] { return this._SituationSyncs; /* auto-property */ }
-    /** @rva 0x735F30  public void set_SituationSyncs(CommandSituationSync[] value) { } */
+    /** @rva 0x736F30  public void set_SituationSyncs(CommandSituationSync[] value) { } */
     set_SituationSyncs(value: CommandSituationSync[]): void { this._SituationSyncs = value; /* auto-property */ }
-    /** @rva 0x735970  public CommandAddEnemy[] get_AddEnemies() { } */
+    /** @rva 0x736970  public CommandAddEnemy[] get_AddEnemies() { } */
     get_AddEnemies(): CommandAddEnemy[] { return this._AddEnemies; /* auto-property */ }
-    /** @rva 0x735A30  public void set_AddEnemies(CommandAddEnemy[] value) { } */
+    /** @rva 0x736A30  public void set_AddEnemies(CommandAddEnemy[] value) { } */
     set_AddEnemies(value: CommandAddEnemy[]): void { this._AddEnemies = value; /* auto-property */ }
-    /** @rva 0x7358E0  public CommandUnitCondition[] get_UnitConditions() { } */
+    /** @rva 0x7368E0  public CommandUnitCondition[] get_UnitConditions() { } */
     get_UnitConditions(): CommandUnitCondition[] { return this._UnitConditions; /* auto-property */ }
-    /** @rva 0x735F20  public void set_UnitConditions(CommandUnitCondition[] value) { } */
+    /** @rva 0x736F20  public void set_UnitConditions(CommandUnitCondition[] value) { } */
     set_UnitConditions(value: CommandUnitCondition[]): void { this._UnitConditions = value; /* auto-property */ }
-    /** @rva 0x7358F0  public CommandReproduction[] get_Reproductions() { } */
+    /** @rva 0x7368F0  public CommandReproduction[] get_Reproductions() { } */
     get_Reproductions(): CommandReproduction[] { return this._Reproductions; /* auto-property */ }
-    /** @rva 0x735A00  public void set_Reproductions(CommandReproduction[] value) { } */
+    /** @rva 0x736A00  public void set_Reproductions(CommandReproduction[] value) { } */
     set_Reproductions(value: CommandReproduction[]): void { this._Reproductions = value; /* auto-property */ }
-    /** @rva 0x735910  public CommandDebug[] get_Debugs() { } */
+    /** @rva 0x736910  public CommandDebug[] get_Debugs() { } */
     get_Debugs(): CommandDebug[] { return this._Debugs; /* auto-property */ }
-    /** @rva 0x735A20  public void set_Debugs(CommandDebug[] value) { } */
+    /** @rva 0x736A20  public void set_Debugs(CommandDebug[] value) { } */
     set_Debugs(value: CommandDebug[]): void { this._Debugs = value; /* auto-property */ }
-    /** @rva 0x735900  public CommandInitialize[] get_Initializations() { } */
+    /** @rva 0x736900  public CommandInitialize[] get_Initializations() { } */
     get_Initializations(): CommandInitialize[] { return this._Initializations; /* auto-property */ }
-    /** @rva 0x735A10  public void set_Initializations(CommandInitialize[] value) { } */
+    /** @rva 0x736A10  public void set_Initializations(CommandInitialize[] value) { } */
     set_Initializations(value: CommandInitialize[]): void { this._Initializations = value; /* auto-property */ }
-    /** @rva 0x736A10  public CommandFinalize[] get_Finalizations() { } */
+    /** @rva 0x737A10  public CommandFinalize[] get_Finalizations() { } */
     get_Finalizations(): CommandFinalize[] { return this._Finalizations; /* auto-property */ }
-    /** @rva 0x736A50  public void set_Finalizations(CommandFinalize[] value) { } */
+    /** @rva 0x737A50  public void set_Finalizations(CommandFinalize[] value) { } */
     set_Finalizations(value: CommandFinalize[]): void { this._Finalizations = value; /* auto-property */ }
-    /** @rva 0x736A30  public CommandType[] get_CommandTypeOrder() { } */
+    /** @rva 0x737A30  public CommandType[] get_CommandTypeOrder() { } */
     get_CommandTypeOrder(): CommandType[] { return this._CommandTypeOrder; /* auto-property */ }
-    /** @rva 0x736A70  public void set_CommandTypeOrder(CommandType[] value) { } */
+    /** @rva 0x737A70  public void set_CommandTypeOrder(CommandType[] value) { } */
     set_CommandTypeOrder(value: CommandType[]): void { this._CommandTypeOrder = value; /* auto-property */ }
-    /** @rva 0x1810E40  public void SetCommands(IReadOnlyList<CommandBase> commands) { } */
-    SetCommands(commands: IReadOnlyList<CommandBase>): void { return notPorted("CommandPack.SetCommands", 0x1810E40); }
-    /** @rva 0x1810920  public CommandBase[] RestoreCommands() { } */
-    RestoreCommands(): CommandBase[] { return notPorted("CommandPack.RestoreCommands", 0x1810920); }
-    /** @rva 0x72F5E0  public void .ctor() { } */
+    /** @rva 0x17FBA70  public void SetCommands(IReadOnlyList<CommandBase> commands) { } */
+    SetCommands(commands: IReadOnlyList<CommandBase>): void { return notPorted("CommandPack.SetCommands", 0x17FBA70); }
+    /** @rva 0x17FB550  public CommandBase[] RestoreCommands() { } */
+    RestoreCommands(): CommandBase[] { return notPorted("CommandPack.RestoreCommands", 0x17FB550); }
+    /** @rva 0x7305E0  public void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
 }

@@ -12,17 +12,17 @@ export class UniqueStatePatternMstModel extends MstModelBase<UniqueStatePatternM
     get Name(): string { return this.get_Name(); }
     get StateFlipName(): string { return this.get_StateFlipName(); }
     get IconName(): string { return this.get_IconName(); }
-    /** @rva 0x17090F0  public void .ctor(UniqueStatePatternMstRecord record) { } */
+    /** @rva 0x16F2DC0  public void .ctor(UniqueStatePatternMstRecord record) { } */
     ctor$UniqueStatePatternMstRecord(record: UniqueStatePatternMstRecord): this {
         super.ctor$TRecord(record);
         return this;
     }
-    /** @rva 0x901380  public int get_UniqueStatePatternMstId() { } */
+    /** @rva 0x902330  public int get_UniqueStatePatternMstId() { } */
     get_UniqueStatePatternMstId(): int { return this.record.uniqueStatePatternMstId; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x901785; mov eax, dword ptr [rax + 0x10]; add rsp, 0x28; ret */ }
-    /** @rva 0x85D540  public string get_Name() { } */
+    /** @rva 0x85E540  public string get_Name() { } */
     get_Name(): string { return this.record.name; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x85e556; mov rax, qword ptr [rax + 0x18]; add rsp, 0x28; ret */ }
-    /** @rva 0x901EA0  public string get_StateFlipName() { } */
+    /** @rva 0x902E70  public string get_StateFlipName() { } */
     get_StateFlipName(): string { return this.record.stateFlipName; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x9017f6; mov rax, qword ptr [rax + 0x20]; add rsp, 0x28; ret */ }
-    /** @rva 0x901FB0  public string get_IconName() { } */
+    /** @rva 0x902F80  public string get_IconName() { } */
     get_IconName(): string { return this.record.iconName; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x116ec46; mov rax, qword ptr [rax + 0x28]; add rsp, 0x28; ret */ }
 }

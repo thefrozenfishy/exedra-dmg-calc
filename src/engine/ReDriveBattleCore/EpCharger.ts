@@ -22,27 +22,27 @@ export class EpCharger {
     static ReceiveDamageChargePointDic: Dictionary<int, int> = null!;
     /** 0x18 private static readonly int ReceiveSlipDamageChargePoint */
     static ReceiveSlipDamageChargePoint: int = 0;
-    /** @rva 0x14BD6D0  public static void ChargeByNormalAttack(BattleUnit attacker) { } */
+    /** @rva 0x14A7770  public static void ChargeByNormalAttack(BattleUnit attacker) { } */
     static ChargeByNormalAttack(attacker: BattleUnit): void {
         const ep = EpCharger.GetProcessedRecoveryEp(f32(EpCharger.NormalAttackChargePoint), attacker);
         attacker.AddEP(ep);
     }
-    /** @rva 0x14BD550  public static void ChargeByActiveSkill(BattleUnit attacker) { } */
+    /** @rva 0x14A75F0  public static void ChargeByActiveSkill(BattleUnit attacker) { } */
     static ChargeByActiveSkill(attacker: BattleUnit): void {
         const ep = EpCharger.GetProcessedRecoveryEp(f32(EpCharger.ActiveSkillChargePoint), attacker);
         attacker.AddEP(ep);
     }
-    /** @rva 0x14BDB30  public static void ChargeBySpecialAttack(BattleUnit attacker) { } */
+    /** @rva 0x14A7BD0  public static void ChargeBySpecialAttack(BattleUnit attacker) { } */
     static ChargeBySpecialAttack(attacker: BattleUnit): void {
         const ep = EpCharger.GetProcessedRecoveryEp(f32(EpCharger.SpecialAttackChargePoint), attacker);
         attacker.AddEP(ep);
     }
-    /** @rva 0x14BD5D0  public static void ChargeByDefeatUnit(BattleUnit attacker) { } */
+    /** @rva 0x14A7670  public static void ChargeByDefeatUnit(BattleUnit attacker) { } */
     static ChargeByDefeatUnit(attacker: BattleUnit): void {
         const ep = EpCharger.GetProcessedRecoveryEp(f32(EpCharger.DefeatUnitChargePoint), attacker);
         attacker.AddEP(ep);
     }
-    /** @rva 0x14BD750  public static void ChargeByReceiveDamage(BattleUnit receiveDamageUnit) { } */
+    /** @rva 0x14A77F0  public static void ChargeByReceiveDamage(BattleUnit receiveDamageUnit) { } */
     static ChargeByReceiveDamage(receiveDamageUnit: BattleUnit): void {
         if (receiveDamageUnit.get_IsDead()) return;
         for (const [key, value] of orderBy([...EpCharger.ReceiveDamageChargePointDic], kvp => kvp[0])) { // <ChargeByReceiveDamage>b__10_0 (kvp.Key)
@@ -53,17 +53,17 @@ export class EpCharger {
             }
         }
     }
-    /** @rva 0x14BDAB0  public static void ChargeByReceiveSlipDamage(BattleUnit receiveSlipDamageUnit) { } */
+    /** @rva 0x14A7B50  public static void ChargeByReceiveSlipDamage(BattleUnit receiveSlipDamageUnit) { } */
     static ChargeByReceiveSlipDamage(receiveSlipDamageUnit: BattleUnit): void {
         const ep = EpCharger.GetProcessedRecoveryEp(f32(EpCharger.ReceiveSlipDamageChargePoint), receiveSlipDamageUnit);
         receiveSlipDamageUnit.AddEP(ep);
     }
-    /** @rva 0x14BD650  public static void ChargeByEpAbilityEffect(float recoveryEp, BattleUnit targetUnit) { } */
+    /** @rva 0x14A76F0  public static void ChargeByEpAbilityEffect(float recoveryEp, BattleUnit targetUnit) { } */
     static ChargeByEpAbilityEffect(recoveryEp: float, targetUnit: BattleUnit): void {
         const ep = EpCharger.GetProcessedRecoveryEp(recoveryEp, targetUnit);
         targetUnit.AddEP(ep);
     }
-    /** @rva 0x14BDBB0  private static int GetProcessedRecoveryEp(float recoveryEp, BattleUnit unit) { } */
+    /** @rva 0x14A7C50  private static int GetProcessedRecoveryEp(float recoveryEp, BattleUnit unit) { } */
     static GetProcessedRecoveryEp(recoveryEp: float, unit: BattleUnit): int {
         const parameter = unit._BattleParameter;
         if (!(parameter instanceof CharacterParameter)) {
@@ -92,9 +92,9 @@ export class EpCharger {
         if (ep < 0) ep = 0;
         return trunc(Math.floor(ep)); // System.Math.Floor(double) 0x702D68, cvttsd2si
     }
-    /** @rva 0x72F5E0  public void .ctor() { } */
+    /** @rva 0x7305E0  public void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
-    /** @rva 0x14BE250  private static void .cctor() { } */
+    /** @rva 0x14A82F0  private static void .cctor() { } */
     static cctor(): void {
         EpCharger.NormalAttackChargePoint = 15;
         EpCharger.ActiveSkillChargePoint = 30;

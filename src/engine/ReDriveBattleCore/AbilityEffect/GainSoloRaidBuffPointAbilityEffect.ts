@@ -20,7 +20,7 @@ export class GainSoloRaidBuffPointAbilityEffect extends AbilityEffectBase {
     gainPoint: int = 0;
     /** 0x68 protected string IconName */
     IconName: string = null!;
-    /** @rva 0x19292D0  public void .ctor(AbilityEffectInfo info) { } */
+    /** @rva 0x1918E60  public void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
         super.ctor$AbilityEffectInfo(info);
         this.gainPoint = info._EffectValue1;
@@ -28,7 +28,7 @@ export class GainSoloRaidBuffPointAbilityEffect extends AbilityEffectBase {
         this._TargetSide = 0 as AbilityEffectBase_TargetSideType;
         return this;
     }
-    /** @rva 0x1928F70 slot 5  public override AffectedUnitNoticeBundle Triggering(EffectOriginType origin, BattleUnit userUnit, Dictionary<int, BattleUnit> targetUnitDic, GameDirectorBase gameDirector) { } */
+    /** @rva 0x1918B00 slot 5  public override AffectedUnitNoticeBundle Triggering(EffectOriginType origin, BattleUnit userUnit, Dictionary<int, BattleUnit> targetUnitDic, GameDirectorBase gameDirector) { } */
     Triggering(origin: EffectOriginType, userUnit: BattleUnit, targetUnitDic: Dictionary<int, BattleUnit>, gameDirector: GameDirectorBase): AffectedUnitNoticeBundle {
         const bundle = new AffectedUnitNoticeBundle().ctor();
         if (!(gameDirector instanceof SoloRaidGameDirector)) return bundle;

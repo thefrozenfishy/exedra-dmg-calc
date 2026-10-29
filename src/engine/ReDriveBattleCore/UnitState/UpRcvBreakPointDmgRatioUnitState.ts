@@ -20,33 +20,33 @@ import { AISkillTargetSelector } from "../AI/AISkillTargetSelector";
 export class UpRcvBreakPointDmgRatioUnitState extends BreakPointDamageWorseUnitStateBase {  // implements IReceiveBreakPointDamageVariation, IRequiredStateForDecide
     static readonly __interfaces: readonly string[] = ['IReceiveBreakPointDamageVariation', 'IRequiredStateForDecide'];
     get UpRatio(): float { return this.get_UpRatio(); }
-    /** @rva 0x15F6250 slot 7  public override string get_IconName() { } */
+    /** @rva 0x15E08B0 slot 7  public override string get_IconName() { } */
     get_IconName(): string {
         return "battle_icon_up_rcv_break_point_dmg";
     }
-    /** @rva 0x7421D0 slot 27  public override BreakPointDamageVariationUnitStateBase.CalculationType get_Calculation() { } */
+    /** @rva 0x7431D0 slot 27  public override BreakPointDamageVariationUnitStateBase.CalculationType get_Calculation() { } */
     get_Calculation(): BreakPointDamageVariationUnitStateBase_CalculationType { return 0 as BreakPointDamageVariationUnitStateBase_CalculationType; /* asm: xor eax, eax; ret */ }
-    /** @rva 0x7421D0 slot 28  public override AdditionType get_Addition() { } */
+    /** @rva 0x7431D0 slot 28  public override AdditionType get_Addition() { } */
     get_Addition(): AdditionType { return 0 as AdditionType; /* asm: xor eax, eax; ret */ }
-    /** @rva 0xC84590  public float get_UpRatio() { } */
+    /** @rva 0xC6F3E0  public float get_UpRatio() { } */
     get_UpRatio(): float { return this._UpdateableEffectValue; /* asm: movss xmm0, dword ptr [rcx + 0x88]; ret */ }
-    /** @rva 0x15D9DA0  protected void .ctor() { } */
+    /** @rva 0x15C4400  protected void .ctor() { } */
     ctor(): this {
         super.ctor();
         return this;
     }
-    /** @rva 0x15DB550  public void .ctor(AbilityEffectInfo info) { } */
+    /** @rva 0x15C5BB0  public void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
         super.ctor$AbilityEffectInfo(info);
         return this;
     }
-    /** @rva 0x15F5E10 slot 23  public override List<BattleUnit> GetAIFilteredTargets(BattleUnit userUnit, List<BattleUnit> targetUnitList, SkillType skillType, RangeType effectRange, GameDirectorBase gameDirector) { } */
+    /** @rva 0x15E0470 slot 23  public override List<BattleUnit> GetAIFilteredTargets(BattleUnit userUnit, List<BattleUnit> targetUnitList, SkillType skillType, RangeType effectRange, GameDirectorBase gameDirector) { } */
     GetAIFilteredTargets(userUnit: BattleUnit, targetUnitList: List<BattleUnit>, skillType: SkillType, effectRange: RangeType, gameDirector: GameDirectorBase): List<BattleUnit> {
         let list = targetUnitList.filter(x => !x.get_IsDead()); // <>c.b__10_0
         if (list.length > 0) list = list.filter(unit => unit._BreakPoint.get_HasBreakPoint()); // b__10_1
         return list;
     }
-    /** @rva 0x15F6080 slot 24  public override AISkillTargetSelector.UnitFilterFuncOrder GetUnitFilterFuncOrder(BattleUnit userUnit, IEnumerable<BattleUnit> candidateUnits) { } */
+    /** @rva 0x15E06E0 slot 24  public override AISkillTargetSelector.UnitFilterFuncOrder GetUnitFilterFuncOrder(BattleUnit userUnit, IEnumerable<BattleUnit> candidateUnits) { } */
     GetUnitFilterFuncOrder(userUnit: BattleUnit, candidateUnits: IEnumerable<BattleUnit>): AISkillTargetSelector_UnitFilterFuncOrder {
         const list: List<(a0: IEnumerable<BattleUnit>) => IEnumerable<BattleUnit>> = [];
         list.push(AISkillTargetSelector.UnitFilterByMainTarget);

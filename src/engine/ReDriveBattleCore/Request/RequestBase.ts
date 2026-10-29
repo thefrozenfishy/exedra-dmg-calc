@@ -9,6 +9,6 @@ export abstract class RequestBase {
     get RequestType(): RequestType { return this.get_RequestType(); }
     /** @rva -1 slot 4  public abstract RequestType get_RequestType(); */
     abstract get_RequestType(): RequestType;
-    /** @rva 0x72F5E0  protected void .ctor() { } */
+    /** @rva 0x7305E0  protected void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
 }

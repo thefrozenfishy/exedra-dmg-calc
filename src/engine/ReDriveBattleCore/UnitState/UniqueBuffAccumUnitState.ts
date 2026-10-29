@@ -10,19 +10,19 @@ import type { UnitStateBase_DirectionType } from "./UnitStateBase";
 // ---- ReDriveBattleCore.UnitState.UniqueBuffAccumUnitState  (TypeDefIndex 674, public class) ----
 export class UniqueBuffAccumUnitState extends UniqueAccumUnitStateBase {  // implements IBuff
     static readonly __interfaces: readonly string[] = ['IBuff'];
-    /** @rva 0x7421D0 slot 6  public override UnitStateBase.DirectionType get_Direction() { } */
+    /** @rva 0x7431D0 slot 6  public override UnitStateBase.DirectionType get_Direction() { } */
     get_Direction(): UnitStateBase_DirectionType { return 0 as UnitStateBase_DirectionType; /* asm: xor eax, eax; ret */ }
-    /** @rva 0x1708570 slot 13  public override string get_GiveVisualEffectName() { } */
+    /** @rva 0x16F2240 slot 13  public override string get_GiveVisualEffectName() { } */
     get_GiveVisualEffectName(): string {
         return "eff_cmn_act_buff_appear_001";
     }
-    /** @rva 0x17084C0  protected void .ctor() { } */
+    /** @rva 0x16F2190  protected void .ctor() { } */
     ctor(): this {
         this._AccumCount = 1;
         super.ctor();
         return this;
     }
-    /** @rva 0x17084E0  public void .ctor(AbilityEffectInfo info) { } */
+    /** @rva 0x16F21B0  public void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
         this._AccumCount = 1;
         this.iconName = "";

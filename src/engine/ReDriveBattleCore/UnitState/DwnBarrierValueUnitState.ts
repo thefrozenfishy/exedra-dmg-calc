@@ -25,40 +25,40 @@ export class DwnBarrierValueUnitState extends UnitStateBase {  // implements IHa
     get UpdateableEffectValue(): float { return this.get_UpdateableEffectValue(); }
     set UpdateableEffectValue(v: float) { this.set_UpdateableEffectValue(v); }
     get DownRatio(): float { return this.get_DownRatio(); }
-    /** @rva 0x758B30 slot 6  public override UnitStateBase.DirectionType get_Direction() { } */
+    /** @rva 0x759B30 slot 6  public override UnitStateBase.DirectionType get_Direction() { } */
     get_Direction(): UnitStateBase_DirectionType { return 1 as UnitStateBase_DirectionType; /* asm: mov eax, 1; ret */ }
-    /** @rva 0x15E1F50 slot 13  public override string get_GiveVisualEffectName() { } */
+    /** @rva 0x15CC5B0 slot 13  public override string get_GiveVisualEffectName() { } */
     get_GiveVisualEffectName(): string {
         return "eff_cmn_act_debuff_appear_001";
     }
-    /** @rva 0x15E1F00 slot 27  private int ReDriveBattleCore.IBattleStartTriggerPriority.get_Priority() { } */
+    /** @rva 0x15CC560 slot 27  private int ReDriveBattleCore.IBattleStartTriggerPriority.get_Priority() { } */
     get_IBattleStartTriggerPriority$Priority(): int { return IBattleStartTriggerPriority_Define.BarrierValueVariationUnitStatePriority; }
-    /** @rva 0xC84590 slot 25  public float get_UpdateableEffectValue() { } */
+    /** @rva 0xC6F3E0 slot 25  public float get_UpdateableEffectValue() { } */
     get_UpdateableEffectValue(): float { return this._UpdateableEffectValue; /* auto-property */ }
-    /** @rva 0xC845A0 slot 26  public void set_UpdateableEffectValue(float value) { } */
+    /** @rva 0xC6F3F0 slot 26  public void set_UpdateableEffectValue(float value) { } */
     set_UpdateableEffectValue(value: float): void { this._UpdateableEffectValue = value; /* auto-property */ }
-    /** @rva 0x15E1810  public float get_DownRatio() { } */
+    /** @rva 0x15CBE70  public float get_DownRatio() { } */
     get_DownRatio(): float {
         return f32(this._UpdateableEffectValue / 10);
     }
-    /** @rva 0x15D9DA0  public void .ctor() { } */
+    /** @rva 0x15C4400  public void .ctor() { } */
     ctor(): this {
         super.ctor();
         return this;
     }
-    /** @rva 0x15E14E0  public void .ctor(AbilityEffectInfo info) { } */
+    /** @rva 0x15CBB40  public void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
         super.ctor$AbilityEffectInfo(info);
         this._UpdateableEffectValue = f32(info._EffectValue1);
         return this;
     }
-    /** @rva 0x15DE3A0 slot 21  public override bool CanAddTo(BattleUnit targetUnit) { } */
+    /** @rva 0x15C8A00 slot 21  public override bool CanAddTo(BattleUnit targetUnit) { } */
     CanAddTo(targetUnit: BattleUnit): boolean {
         // DamageBetterUnitStateBase.CanAddTo (0x15B8090)
         if (!targetUnit.IsMatch$TargetRoleType(this._TargetRole)) return false;
         return targetUnit.IsMatch$TargetElementType(this._TargetElement);
     }
-    /** @rva 0x15E1CA0 slot 24  public override AISkillTargetSelector.UnitFilterFuncOrder GetUnitFilterFuncOrder(BattleUnit userUnit, IEnumerable<BattleUnit> candidateUnits) { } */
+    /** @rva 0x15CC300 slot 24  public override AISkillTargetSelector.UnitFilterFuncOrder GetUnitFilterFuncOrder(BattleUnit userUnit, IEnumerable<BattleUnit> candidateUnits) { } */
     GetUnitFilterFuncOrder(userUnit: BattleUnit, candidateUnits: IEnumerable<BattleUnit>): AISkillTargetSelector_UnitFilterFuncOrder {
         const list: List<(a0: IEnumerable<BattleUnit>) => IEnumerable<BattleUnit>> = [];
         list.push(AISkillTargetSelector.UnitFilterByMainTarget);
@@ -66,7 +66,7 @@ export class DwnBarrierValueUnitState extends UnitStateBase {  // implements IHa
         list.push(AISkillTargetSelector.UnitFilterWithMaxDef);
         return new AISkillTargetSelector_UnitFilterFuncOrder().ctor$ListFuncIEnumerableBattleUnitIEnumerableBattleUnit(list);
     }
-    /** @rva 0x15E1C80  public float GetDownRate() { } */
+    /** @rva 0x15CC2E0  public float GetDownRate() { } */
     GetDownRate(): float {
         return f32(f32(this._UpdateableEffectValue / 10) / 100);
     }

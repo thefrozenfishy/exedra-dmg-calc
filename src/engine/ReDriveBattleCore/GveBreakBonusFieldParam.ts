@@ -12,12 +12,12 @@ import { FieldParamBase } from "./FieldParamBase";
 
 // ---- ReDriveBattleCore.GveBreakBonusFieldParam  (TypeDefIndex 397, public class) ----
 export class GveBreakBonusFieldParam extends FieldParamBase {
-    /** @rva 0x14B9410  protected void .ctor() { } */
+    /** @rva 0x14A34B0  protected void .ctor() { } */
     ctor(): this {
         this.stateList = []; // FieldParamBase..ctor inlined (folded with CampaignFieldParam..ctor)
         return this;
     }
-    /** @rva 0x14C3270  public void .ctor(int upFinalGainEpRatioValue, int upFinalSpecialAttackGiveDamageRatioValue) { } */
+    /** @rva 0x14AD310  public void .ctor(int upFinalGainEpRatioValue, int upFinalSpecialAttackGiveDamageRatioValue) { } */
     ctor$int_int(upFinalGainEpRatioValue: int, upFinalSpecialAttackGiveDamageRatioValue: int): this {
         super.ctor();
         this.AddUnitState(new AbilityEffectInfo().ctor$int_string_TargetElementType_TargetRoleType_int_RangeType_int_int_int_int_int_int_int_bool_ListProcessTiming_string_string_AbilitySourceType_int(

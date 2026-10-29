@@ -11,17 +11,17 @@ export class AIActionEffectHistory {
     allyActionEffectTypes: HashSet<string> = null!;
     /** 0x18 private HashSet<string> enemyActionEffectTypes */
     enemyActionEffectTypes: HashSet<string> = null!;
-    /** @rva 0x18067E0  public void AddAppliedEffectTypes(List<string> appliedSkillEffectTypes, BattleUnit.TeamType teamType) { } */
+    /** @rva 0x17F1410  public void AddAppliedEffectTypes(List<string> appliedSkillEffectTypes, BattleUnit.TeamType teamType) { } */
     AddAppliedEffectTypes(appliedSkillEffectTypes: List<string>, teamType: BattleUnit_TeamType): void {
         const hashSet = teamType === 0 ? this.allyActionEffectTypes : this.enemyActionEffectTypes;
         if (appliedSkillEffectTypes == null) return;
         for (const effectType of appliedSkillEffectTypes) hashSet.add(effectType);
     }
-    /** @rva 0x1806920  public HashSet<string> GetAppliedEffectTypes(BattleUnit.TeamType teamType) { } */
+    /** @rva 0x17F1550  public HashSet<string> GetAppliedEffectTypes(BattleUnit.TeamType teamType) { } */
     GetAppliedEffectTypes(teamType: BattleUnit_TeamType): HashSet<string> {
         return teamType === 0 ? this.allyActionEffectTypes : this.enemyActionEffectTypes;
     }
-    /** @rva 0x1806930  public void .ctor() { } */
+    /** @rva 0x17F1560  public void .ctor() { } */
     ctor(): this {
         this.allyActionEffectTypes = new Set<string>();
         this.enemyActionEffectTypes = new Set<string>();

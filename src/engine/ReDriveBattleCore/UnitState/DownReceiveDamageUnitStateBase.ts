@@ -14,21 +14,21 @@ import { AISkillTargetSelector } from "../AI/AISkillTargetSelector";
 // ---- ReDriveBattleCore.UnitState.DownReceiveDamageUnitStateBase  (TypeDefIndex 563, public abstract class) ----
 export abstract class DownReceiveDamageUnitStateBase extends DamageBetterUnitStateBase {  // implements IReceiveDamageVariation
     static readonly __interfaces: readonly string[] = ['IReceiveDamageVariation'];
-    /** @rva 0x15E17E0 slot 7  public override string get_IconName() { } */
+    /** @rva 0x15CBE40 slot 7  public override string get_IconName() { } */
     get_IconName(): string {
         return "battle_icon_dwn_rcv_dmg";
     }
-    /** @rva 0x15D9DA0  protected void .ctor() { } */
+    /** @rva 0x15C4400  protected void .ctor() { } */
     ctor(): this {
         super.ctor();
         return this;
     }
-    /** @rva 0x15DB550  public void .ctor(AbilityEffectInfo info) { } */
+    /** @rva 0x15C5BB0  public void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
         super.ctor$AbilityEffectInfo(info);
         return this;
     }
-    /** @rva 0x15E1580 slot 24  public override AISkillTargetSelector.UnitFilterFuncOrder GetUnitFilterFuncOrder(BattleUnit userUnit, IEnumerable<BattleUnit> candidateUnits) { } */
+    /** @rva 0x15CBBE0 slot 24  public override AISkillTargetSelector.UnitFilterFuncOrder GetUnitFilterFuncOrder(BattleUnit userUnit, IEnumerable<BattleUnit> candidateUnits) { } */
     GetUnitFilterFuncOrder(userUnit: BattleUnit, candidateUnits: IEnumerable<BattleUnit>): AISkillTargetSelector_UnitFilterFuncOrder {
         const list: List<(a0: IEnumerable<BattleUnit>) => IEnumerable<BattleUnit>> = [];
         list.push(AISkillTargetSelector.UnitFilterByMainTarget);

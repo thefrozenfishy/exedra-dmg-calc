@@ -6,13 +6,13 @@ import type { TargetReferee_TargetType } from "./TargetReferee";
 
 // ---- ReDriveBattleCore.TargetTypeExtensions  (TypeDefIndex 464, public static class) ----
 export class TargetTypeExtensions {
-    /** @rva 0x15E6520  public static AbilityEffectBase.TargetSideType ToTargetSideType(TargetReferee.TargetType targetType) { } */
+    /** @rva 0x15D0B80  public static AbilityEffectBase.TargetSideType ToTargetSideType(TargetReferee.TargetType targetType) { } */
     static ToTargetSideType(targetType: TargetReferee_TargetType): AbilityEffectBase_TargetSideType {
         if (targetType === 0) return 1 as AbilityEffectBase_TargetSideType;
         if (targetType === 1) return 0 as AbilityEffectBase_TargetSideType;
         throw new RangeError(`ArgumentOutOfRangeException: targetType ${targetType}`);
     }
-    /** @rva 0x15E65D0  public static TargetReferee.TargetType ToTargetType(AbilityEffectBase.TargetSideType targetSideType) { } */
+    /** @rva 0x15D0C30  public static TargetReferee.TargetType ToTargetType(AbilityEffectBase.TargetSideType targetSideType) { } */
     static ToTargetType(targetSideType: AbilityEffectBase_TargetSideType): TargetReferee_TargetType {
         if (targetSideType === 0) return 1 as TargetReferee_TargetType;
         if (targetSideType === 1) return 0 as TargetReferee_TargetType;

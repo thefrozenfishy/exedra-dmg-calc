@@ -9,6 +9,6 @@ import type { int } from "../../runtime";
 
 // ---- ReDriveBattleCore.Reader.BreakMstReader  (TypeDefIndex 870, public class) ----
 export class BreakMstReader extends BattleMstReaderBase<BreakMstModel, BreakMstRecord, int> {
-    /** @rva 0x16F8030  public void .ctor() { } */
+    /** @rva 0x16E1D00  public void .ctor() { } */
     ctor(): this { super.ctor(); return this; }
 }

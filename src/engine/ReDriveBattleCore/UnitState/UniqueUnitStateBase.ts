@@ -25,9 +25,9 @@ export abstract class UniqueUnitStateBase extends UnitStateBase {  // implements
     _UniqueStatePatternMstId: int = 0;
     get UniqueStatePatternMstId(): int { return this.get_UniqueStatePatternMstId(); }
     set UniqueStatePatternMstId(v: int) { this.set_UniqueStatePatternMstId(v); }
-    /** @rva 0x76E830 slot 9  public override bool get_ShowStateIconAttachedByPassiveSkill() { } */
+    /** @rva 0x76F830 slot 9  public override bool get_ShowStateIconAttachedByPassiveSkill() { } */
     get_ShowStateIconAttachedByPassiveSkill(): boolean { return true; /* asm: mov al, 1; ret */ }
-    /** @rva 0x1709850 slot 7  public override string get_IconName() { } */
+    /** @rva 0x16F3520 slot 7  public override string get_IconName() { } */
     get_IconName(): string {
         if (this.iconName !== "") return this.iconName;
         const model = BattleMstReaderBase.get_Instance<UniqueStatePatternMstModel, UniqueStatePatternMstRecord, int>(UniqueStatePatternMstModel).GetModelByKey(this._UniqueStatePatternMstId);
@@ -35,7 +35,7 @@ export abstract class UniqueUnitStateBase extends UnitStateBase {  // implements
         this.iconName = model.record.iconName; // IconName getter inlined in the game
         return this.iconName;
     }
-    /** @rva 0x1709340  private string GetIconName() { } */
+    /** @rva 0x16F3010  private string GetIconName() { } */
     GetIconName(): string {
         if (this.iconName !== "") return this.iconName;
         const model = BattleMstReaderBase.get_Instance<UniqueStatePatternMstModel, UniqueStatePatternMstRecord, int>(UniqueStatePatternMstModel).GetModelByKey(this._UniqueStatePatternMstId);
@@ -43,37 +43,37 @@ export abstract class UniqueUnitStateBase extends UnitStateBase {  // implements
         this.iconName = model.record.iconName; // IconName getter inlined in the game
         return this.iconName;
     }
-    /** @rva 0x900F30  public int get_UniqueStatePatternMstId() { } */
+    /** @rva 0x901EE0  public int get_UniqueStatePatternMstId() { } */
     get_UniqueStatePatternMstId(): int { return this._UniqueStatePatternMstId; /* auto-property */ }
-    /** @rva 0x900F60  public void set_UniqueStatePatternMstId(int value) { } */
+    /** @rva 0x901F10  public void set_UniqueStatePatternMstId(int value) { } */
     set_UniqueStatePatternMstId(value: int): void { this._UniqueStatePatternMstId = value; /* auto-property */ }
-    /** @rva 0x17097C0  protected void .ctor() { } */
+    /** @rva 0x16F3490  protected void .ctor() { } */
     ctor(): this {
         this.iconName = "";
         this._IconName = "";
         return this;
     }
-    /** @rva 0x17085B0  public void .ctor(AbilityEffectInfo info) { } */
+    /** @rva 0x16F2280  public void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
         this.iconName = "";
         super.ctor$AbilityEffectInfo(info);
         this._UniqueStatePatternMstId = info._EffectValue1;
         return this;
     }
-    /** @rva 0x1709180 slot 23  public override List<BattleUnit> GetAIFilteredTargets(BattleUnit userUnit, List<BattleUnit> targetUnitList, SkillType skillType, RangeType effectRange, GameDirectorBase gameDirector) { } */
+    /** @rva 0x16F2E50 slot 23  public override List<BattleUnit> GetAIFilteredTargets(BattleUnit userUnit, List<BattleUnit> targetUnitList, SkillType skillType, RangeType effectRange, GameDirectorBase gameDirector) { } */
     GetAIFilteredTargets(userUnit: BattleUnit, targetUnitList: List<BattleUnit>, skillType: SkillType, effectRange: RangeType, gameDirector: GameDirectorBase): List<BattleUnit> {
         let list = targetUnitList.filter(x => !x.get_IsDead()); // <>c.b__12_0
         if (list.length > 0) list = list.filter(unit => this.$GetAIFilteredTargets$b__12_1(unit));
         return list;
     }
-    /** @rva 0x17094A0 slot 24  public override AISkillTargetSelector.UnitFilterFuncOrder GetUnitFilterFuncOrder(BattleUnit userUnit, IEnumerable<BattleUnit> candidateUnits) { } */
+    /** @rva 0x16F3170 slot 24  public override AISkillTargetSelector.UnitFilterFuncOrder GetUnitFilterFuncOrder(BattleUnit userUnit, IEnumerable<BattleUnit> candidateUnits) { } */
     GetUnitFilterFuncOrder(userUnit: BattleUnit, candidateUnits: IEnumerable<BattleUnit>): AISkillTargetSelector_UnitFilterFuncOrder {
         const list: List<(a0: IEnumerable<BattleUnit>) => IEnumerable<BattleUnit>> = [];
         list.push(AISkillTargetSelector.UnitFilterByMainTarget);
         list.push(AISkillTargetSelector.UnitFilterWithMaxAtk);
         return new AISkillTargetSelector_UnitFilterFuncOrder().ctor$ListFuncIEnumerableBattleUnitIEnumerableBattleUnit(list);
     }
-    /** @rva 0x1709670  private bool <GetAIFilteredTargets>b__12_1(BattleUnit unit) { } */
+    /** @rva 0x16F3340  private bool <GetAIFilteredTargets>b__12_1(BattleUnit unit) { } */
     $GetAIFilteredTargets$b__12_1(unit: BattleUnit): boolean {
         return !unit._Condition.GetSameStateList(this, false).some(state => state._EffectTurn === UnitStateBase.EffectTurnOfPermanent || state._RemainingTurn > 1); // <>c.b__12_2
     }

@@ -22,20 +22,20 @@ export class UniqueZoneUnitState extends UniqueUnitStateBase {  // implements IN
     targetTypeNum: int = 0;
     get TargetTeam(): ITargetTeam_TeamTargetType { return this.get_TargetTeam(); }
     get INeutralState$TargetSide(): AbilityEffectBase_TargetSideType { return this.get_INeutralState$TargetSide(); }
-    /** @rva 0x81F790 slot 27  public ITargetTeam.TeamTargetType get_TargetTeam() { } */
+    /** @rva 0x820790 slot 27  public ITargetTeam.TeamTargetType get_TargetTeam() { } */
     get_TargetTeam(): ITargetTeam_TeamTargetType { return this.targetTypeNum as ITargetTeam_TeamTargetType; /* asm: mov eax, dword ptr [rcx + 0x98]; ret */ }
-    /** @rva 0x758B30 slot 25  private AbilityEffectBase.TargetSideType ReDriveBattleCore.UnitState.INeutralState.get_TargetSide() { } */
+    /** @rva 0x759B30 slot 25  private AbilityEffectBase.TargetSideType ReDriveBattleCore.UnitState.INeutralState.get_TargetSide() { } */
     get_INeutralState$TargetSide(): AbilityEffectBase_TargetSideType { return 1 as AbilityEffectBase_TargetSideType; /* asm: mov eax, 1; ret */ }
-    /** @rva 0x7E0AD0 slot 6  public override UnitStateBase.DirectionType get_Direction() { } */
+    /** @rva 0x7E1AD0 slot 6  public override UnitStateBase.DirectionType get_Direction() { } */
     get_Direction(): UnitStateBase_DirectionType { return 2 as UnitStateBase_DirectionType; /* asm: mov eax, 2; ret */ }
-    /** @rva 0x76E830 slot 12  public override bool get_IsDontShowAddStateFlip() { } */
+    /** @rva 0x76F830 slot 12  public override bool get_IsDontShowAddStateFlip() { } */
     get_IsDontShowAddStateFlip(): boolean { return true; /* asm: mov al, 1; ret */ }
-    /** @rva 0x17085A0  protected void .ctor() { } */
+    /** @rva 0x16F2270  protected void .ctor() { } */
     ctor(): this {
         super.ctor();
         return this;
     }
-    /** @rva 0x1709B60  public void .ctor(AbilityEffectInfo info) { } */
+    /** @rva 0x16F3830  public void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
         this.iconName = "";
         super.ctor$AbilityEffectInfo(info);
@@ -43,11 +43,11 @@ export class UniqueZoneUnitState extends UniqueUnitStateBase {  // implements IN
         this.targetTypeNum = info._EffectValue2;
         return this;
     }
-    /** @rva 0x17099A0 slot 23  public override List<BattleUnit> GetAIFilteredTargets(BattleUnit userUnit, List<BattleUnit> targetUnitList, SkillType skillType, RangeType effectRange, GameDirectorBase gameDirector) { } */
+    /** @rva 0x16F3670 slot 23  public override List<BattleUnit> GetAIFilteredTargets(BattleUnit userUnit, List<BattleUnit> targetUnitList, SkillType skillType, RangeType effectRange, GameDirectorBase gameDirector) { } */
     GetAIFilteredTargets(userUnit: BattleUnit, targetUnitList: List<BattleUnit>, skillType: SkillType, effectRange: RangeType, gameDirector: GameDirectorBase): List<BattleUnit> {
         return targetUnitList.filter(x => !x.get_IsDead()); // <>c.b__11_0
     }
-    /** @rva 0x1709AD0 slot 24  public override AISkillTargetSelector.UnitFilterFuncOrder GetUnitFilterFuncOrder(BattleUnit userUnit, IEnumerable<BattleUnit> candidateUnits) { } */
+    /** @rva 0x16F37A0 slot 24  public override AISkillTargetSelector.UnitFilterFuncOrder GetUnitFilterFuncOrder(BattleUnit userUnit, IEnumerable<BattleUnit> candidateUnits) { } */
     GetUnitFilterFuncOrder(userUnit: BattleUnit, candidateUnits: IEnumerable<BattleUnit>): AISkillTargetSelector_UnitFilterFuncOrder {
         const list: List<(a0: IEnumerable<BattleUnit>) => IEnumerable<BattleUnit>> = [];
         return new AISkillTargetSelector_UnitFilterFuncOrder().ctor$ListFuncIEnumerableBattleUnitIEnumerableBattleUnit(list);

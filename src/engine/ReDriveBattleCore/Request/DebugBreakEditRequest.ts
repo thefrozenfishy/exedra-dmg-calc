@@ -14,8 +14,8 @@ export class DebugBreakEditRequest extends RequestBase {
     PointValue: Nullable<int> = null!;
     /** 0x1C public Nullable<int> BonusRate */
     BonusRate: Nullable<int> = null!;
-    /** @rva 0x16F8A10 slot 4  public override RequestType get_RequestType() { } */
+    /** @rva 0x16E26E0 slot 4  public override RequestType get_RequestType() { } */
     get_RequestType(): RequestType { return 1003 as RequestType; /* asm: mov eax, 0x3eb; ret */ }
-    /** @rva 0x72F5E0  public void .ctor() { } */
+    /** @rva 0x7305E0  public void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
 }

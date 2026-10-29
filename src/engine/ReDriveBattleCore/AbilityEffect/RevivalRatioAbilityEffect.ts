@@ -19,16 +19,16 @@ export class RevivalRatioAbilityEffect extends RevivalAbilityEffectBase {
     _RecoveryRatio: int = 0;
     get RecoveryRatio(): int { return this.get_RecoveryRatio(); }
     set RecoveryRatio(v: int) { this.set_RecoveryRatio(v); }
-    /** @rva 0x8A1200  public int get_RecoveryRatio() { } */
+    /** @rva 0x8A2200  public int get_RecoveryRatio() { } */
     get_RecoveryRatio(): int { return this._RecoveryRatio; /* auto-property */ }
-    /** @rva 0x8A12D0  public void set_RecoveryRatio(int value) { } */
+    /** @rva 0x8A22D0  public void set_RecoveryRatio(int value) { } */
     set_RecoveryRatio(value: int): void { this._RecoveryRatio = value; /* auto-property */ }
-    /** @rva 0x1920EF0  protected void .ctor() { } */
+    /** @rva 0x1910A80  protected void .ctor() { } */
     ctor(): this {
         super.ctor();
         return this;
     }
-    /** @rva 0x192F480  public void .ctor(AbilityEffectInfo info) { } */
+    /** @rva 0x191F010  public void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
         super.ctor$AbilityEffectInfo(info);
         this._TargetSide = 0 as AbilityEffectBase_TargetSideType;
@@ -36,7 +36,7 @@ export class RevivalRatioAbilityEffect extends RevivalAbilityEffectBase {
         this._RecoveryRatio = info._EffectValue1;
         return this;
     }
-    /** @rva 0x192F130 slot 5  public override AffectedUnitNoticeBundle Triggering(EffectOriginType origin, BattleUnit userUnit, Dictionary<int, BattleUnit> targetUnitDic, GameDirectorBase gameDirector) { } */
+    /** @rva 0x191ECC0 slot 5  public override AffectedUnitNoticeBundle Triggering(EffectOriginType origin, BattleUnit userUnit, Dictionary<int, BattleUnit> targetUnitDic, GameDirectorBase gameDirector) { } */
     Triggering(origin: EffectOriginType, userUnit: BattleUnit, targetUnitDic: Dictionary<int, BattleUnit>, gameDirector: GameDirectorBase): AffectedUnitNoticeBundle {
         const bundle = new AffectedUnitNoticeBundle().ctor();
         for (const targetUnitId of this._TargetUnitIdList) {

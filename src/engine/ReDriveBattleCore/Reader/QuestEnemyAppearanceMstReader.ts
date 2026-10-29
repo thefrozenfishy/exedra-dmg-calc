@@ -11,7 +11,7 @@ import type { QuestEnemyAppearanceMstRecord } from "../../Network/Definition/Que
 
 // ---- ReDriveBattleCore.Reader.QuestEnemyAppearanceMstReader  (TypeDefIndex 862, public class) ----
 export class QuestEnemyAppearanceMstReader extends BattleMstReaderBase<QuestEnemyAppearanceMstModel, QuestEnemyAppearanceMstRecord, int> {
-    /** @rva 0x16FF0A0  public static List<QuestEnemyAppearanceMstModel> GetModelListForBattleStart(int questStageMstId, int wave) { } */
+    /** @rva 0x16E8D70  public static List<QuestEnemyAppearanceMstModel> GetModelListForBattleStart(int questStageMstId, int wave) { } */
     static GetModelListForBattleStart(questStageMstId: int, wave: int): List<QuestEnemyAppearanceMstModel> {
         const list = [...BattleMstReaderBase.get_Instance<QuestEnemyAppearanceMstModel, QuestEnemyAppearanceMstRecord, int>(QuestEnemyAppearanceMstModel)
             .GetModelList(indexHint(mst => mst.questStageMstId === questStageMstId && mst.wave === wave, "questStageMstId", questStageMstId))] // <GetModelListForBattleStart>b__0
@@ -20,6 +20,6 @@ export class QuestEnemyAppearanceMstReader extends BattleMstReaderBase<QuestEnem
             .map(x => x.m);                                                                      // OrderBy(b__0_2), stable
         return [...QuestEnemyAppearanceMstModel.Sort(ModeChangeReferee.RemoveModeChangeFirstOther(list))];
     }
-    /** @rva 0x16FF400  public void .ctor() { } */
+    /** @rva 0x16E90D0  public void .ctor() { } */
     ctor(): this { super.ctor(); return this; }
 }

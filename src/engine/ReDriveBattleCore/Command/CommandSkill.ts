@@ -59,53 +59,53 @@ export class CommandSkill extends CommandExecuteActBase {
     get AddEnemyInfos(): AddEnemyInfo[] { return this.get_AddEnemyInfos(); }
     set AddEnemyInfos(v: AddEnemyInfo[]) { this.set_AddEnemyInfos(v); }
     get IsRandomAttack(): boolean { return this.get_IsRandomAttack(); }
-    /** @rva 0xD8D350 slot 4  public override CommandType GetCommandType() { } */
+    /** @rva 0xD78250 slot 4  public override CommandType GetCommandType() { } */
     GetCommandType(): CommandType { return 3 as CommandType; /* asm: mov eax, 3; ret */ }
-    /** @rva 0x762820  public int get_UserUnitId() { } */
+    /** @rva 0x763820  public int get_UserUnitId() { } */
     get_UserUnitId(): int { return this._ActUnitId; /* asm: mov eax, dword ptr [rcx + 0x18]; ret */ }
-    /** @rva 0x75DDA0  public int get_MainTargetUnitId() { } */
+    /** @rva 0x75EDA0  public int get_MainTargetUnitId() { } */
     get_MainTargetUnitId(): int { return this._MainTargetUnitId; /* auto-property */ }
-    /** @rva 0x8A12B0  public void set_MainTargetUnitId(int value) { } */
+    /** @rva 0x8A22B0  public void set_MainTargetUnitId(int value) { } */
     set_MainTargetUnitId(value: int): void { this._MainTargetUnitId = value; /* auto-property */ }
-    /** @rva 0x8F2F40  public int get_ResultSP() { } */
+    /** @rva 0x8F3EF0  public int get_ResultSP() { } */
     get_ResultSP(): int { return this._ResultSP; /* auto-property */ }
-    /** @rva 0x900870  public void set_ResultSP(int value) { } */
+    /** @rva 0x901820  public void set_ResultSP(int value) { } */
     set_ResultSP(value: int): void { this._ResultSP = value; /* auto-property */ }
-    /** @rva 0x7660B0  public int get_ResultSPBeforeApplyPassiveSkill() { } */
+    /** @rva 0x7670B0  public int get_ResultSPBeforeApplyPassiveSkill() { } */
     get_ResultSPBeforeApplyPassiveSkill(): int { return this._ResultSPBeforeApplyPassiveSkill; /* auto-property */ }
-    /** @rva 0x766A90  public void set_ResultSPBeforeApplyPassiveSkill(int value) { } */
+    /** @rva 0x767A90  public void set_ResultSPBeforeApplyPassiveSkill(int value) { } */
     set_ResultSPBeforeApplyPassiveSkill(value: int): void { this._ResultSPBeforeApplyPassiveSkill = value; /* auto-property */ }
-    /** @rva 0x900840  public int get_SkillMstId() { } */
+    /** @rva 0x9017F0  public int get_SkillMstId() { } */
     get_SkillMstId(): int { return this._SkillMstId; /* auto-property */ }
-    /** @rva 0x900880  public void set_SkillMstId(int value) { } */
+    /** @rva 0x901830  public void set_SkillMstId(int value) { } */
     set_SkillMstId(value: int): void { this._SkillMstId = value; /* auto-property */ }
-    /** @rva 0x7358F0  public SwitchedActiveSkillInfo get_SwitchedActiveSkillInfo() { } */
+    /** @rva 0x7368F0  public SwitchedActiveSkillInfo get_SwitchedActiveSkillInfo() { } */
     get_SwitchedActiveSkillInfo(): SwitchedActiveSkillInfo { return this._SwitchedActiveSkillInfo; /* auto-property */ }
-    /** @rva 0x735A00  public void set_SwitchedActiveSkillInfo(SwitchedActiveSkillInfo value) { } */
+    /** @rva 0x736A00  public void set_SwitchedActiveSkillInfo(SwitchedActiveSkillInfo value) { } */
     set_SwitchedActiveSkillInfo(value: SwitchedActiveSkillInfo): void { this._SwitchedActiveSkillInfo = value; /* auto-property */ }
-    /** @rva 0x7F9CD0  public void set_HasStepUpSkill(bool value) { } */
+    /** @rva 0x7FACD0  public void set_HasStepUpSkill(bool value) { } */
     set_HasStepUpSkill(value: boolean): void { this._HasStepUpSkill = value; /* auto-property */ }
-    /** @rva 0x7F9AD0  public bool get_HasStepUpSkill() { } */
+    /** @rva 0x7FAAD0  public bool get_HasStepUpSkill() { } */
     get_HasStepUpSkill(): boolean { return this._HasStepUpSkill; /* auto-property */ }
-    /** @rva 0x8A12E0  public void set_StepUpConsumeSp(int value) { } */
+    /** @rva 0x8A22E0  public void set_StepUpConsumeSp(int value) { } */
     set_StepUpConsumeSp(value: int): void { this._StepUpConsumeSp = value; /* auto-property */ }
-    /** @rva 0x8A1210  public int get_StepUpConsumeSp() { } */
+    /** @rva 0x8A2210  public int get_StepUpConsumeSp() { } */
     get_StepUpConsumeSp(): int { return this._StepUpConsumeSp; /* auto-property */ }
-    /** @rva 0x7538B0  public void set_StepUpLevel(int value) { } */
+    /** @rva 0x7548B0  public void set_StepUpLevel(int value) { } */
     set_StepUpLevel(value: int): void { this._StepUpLevel = value; /* auto-property */ }
-    /** @rva 0x7535F0  public int get_StepUpLevel() { } */
+    /** @rva 0x7545F0  public int get_StepUpLevel() { } */
     get_StepUpLevel(): int { return this._StepUpLevel; /* auto-property */ }
-    /** @rva 0x736A10  public AddEnemyInfo[] get_AddEnemyInfos() { } */
+    /** @rva 0x737A10  public AddEnemyInfo[] get_AddEnemyInfos() { } */
     get_AddEnemyInfos(): AddEnemyInfo[] { return this._AddEnemyInfos; /* auto-property */ }
-    /** @rva 0x736A50  public void set_AddEnemyInfos(AddEnemyInfo[] value) { } */
+    /** @rva 0x737A50  public void set_AddEnemyInfos(AddEnemyInfo[] value) { } */
     set_AddEnemyInfos(value: AddEnemyInfo[]): void { this._AddEnemyInfos = value; /* auto-property */ }
-    /** @rva 0x1812910  public bool get_IsRandomAttack() { } */
+    /** @rva 0x17FD540  public bool get_IsRandomAttack() { } */
     get_IsRandomAttack(): boolean {
         return this.GetRandomDamageInternal().length > 0; // Any()
     }
-    /** @rva 0x72F5E0  public void .ctor() { } */
+    /** @rva 0x7305E0  public void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
-    /** @rva 0x1811F70  public void .ctor(int id, int mainTargetUnitId, int sp, int beforeApplyPassiveSkillSp, int skillMstId, List<AffectedUnitNotice> noticeList, Dictionary<int, BattleUnit> battleUnitDic, List<GainSoloRaidBuffPointNotice> gainSoloRaidBuffPointNoticeList) { } */
+    /** @rva 0x17FCBA0  public void .ctor(int id, int mainTargetUnitId, int sp, int beforeApplyPassiveSkillSp, int skillMstId, List<AffectedUnitNotice> noticeList, Dictionary<int, BattleUnit> battleUnitDic, List<GainSoloRaidBuffPointNotice> gainSoloRaidBuffPointNoticeList) { } */
     ctor$int_int_int_int_int_ListAffectedUnitNotice_DictionaryintBattleUnit_ListGainSoloRaidBuffPointNotice(id: int, mainTargetUnitId: int, sp: int, beforeApplyPassiveSkillSp: int, skillMstId: int, noticeList: List<AffectedUnitNotice>, battleUnitDic: Dictionary<int, BattleUnit>, gainSoloRaidBuffPointNoticeList: List<GainSoloRaidBuffPointNotice>): this {
         this._ActUnitId = id;
         this._MainTargetUnitId = mainTargetUnitId;
@@ -166,11 +166,11 @@ export class CommandSkill extends CommandExecuteActBase {
         this._HasStepUpSkill = actUnit.Condition.GetUnitStateList<StepUpSkillUnitState>(StepUpSkillUnitState).length > 0; // Any()
         return this;
     }
-    /** @rva 0x1811F20  public ValueTuple<int, AffectedUnitNotice.DamageInfo>[] GetRandomDamages() { } */
+    /** @rva 0x17FCB50  public ValueTuple<int, AffectedUnitNotice.DamageInfo>[] GetRandomDamages() { } */
     GetRandomDamages(): any /* ValueTuple<int, AffectedUnitNotice.DamageInfo> */[] {
         return [...this.GetRandomDamageInternal()];
     }
-    /** @rva 0x1811BF0  private IEnumerable<ValueTuple<int, AffectedUnitNotice.DamageInfo>> GetRandomDamageInternal() { } */
+    /** @rva 0x17FC820  private IEnumerable<ValueTuple<int, AffectedUnitNotice.DamageInfo>> GetRandomDamageInternal() { } */
     GetRandomDamageInternal(): IEnumerable<any /* ValueTuple<int, AffectedUnitNotice.DamageInfo> */> {
         const all = this.AffectedUnitNoticeList.flatMap(notice => [...notice.BarrierDamages, ...notice.Damages] // <>c.b__32_0
             .map(info => [info.DamageValue, info] as [int, AffectedUnitNotice_DamageInfo])); // <>c.b__32_1

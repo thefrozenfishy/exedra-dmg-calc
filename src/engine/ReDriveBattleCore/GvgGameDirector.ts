@@ -10,14 +10,14 @@ import type { IBattleUnitProvider } from "./IBattleUnitProvider";
 
 // ---- ReDriveBattleCore.GvgGameDirector  (TypeDefIndex 409, public class) ----
 export class GvgGameDirector extends GameDirectorBase {
-    /** @rva 0xD8FC50 slot 4  public override BattleType get_BattleType() { } */
+    /** @rva 0xD7AB50 slot 4  public override BattleType get_BattleType() { } */
     get_BattleType(): BattleType { return 4 as BattleType; /* asm: mov eax, 4; ret */ }
-    /** @rva 0x14C40B0  public void .ctor() { } */
+    /** @rva 0x14AE150  public void .ctor() { } */
     ctor(): this {
         super.ctor(); // GameDirectorBase..ctor (tail call)
         return this;
     }
-    /** @rva 0x14C3F40  public void SetupBattleStage(IBattleUnitProvider unitProvider) { } */
+    /** @rva 0x14ADFE0  public void SetupBattleStage(IBattleUnitProvider unitProvider) { } */
     SetupBattleStage(unitProvider: IBattleUnitProvider): void {
         this.elapsedTime = 0;
         this.isForcedAutomatic = true;

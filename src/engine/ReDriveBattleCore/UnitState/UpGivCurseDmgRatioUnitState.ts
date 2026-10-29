@@ -10,17 +10,17 @@ import { f32 } from "../../runtime";
 
 // ---- ReDriveBattleCore.UnitState.UpGivCurseDmgRatioUnitState  (TypeDefIndex 791, public class) ----
 export class UpGivCurseDmgRatioUnitState extends UpGiveSlipDamageRatioUnitStateBase {
-    /** @rva 0x16F8570  public void .ctor() { } */
+    /** @rva 0x16E2240  public void .ctor() { } */
     ctor(): this {
         this._IconName = "";
         return this;
     }
-    /** @rva 0x15E14E0  public void .ctor(AbilityEffectInfo info) { } */
+    /** @rva 0x15CBB40  public void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
         super.ctor$AbilityEffectInfo(info);
         this._UpdateableEffectValue = f32(info._EffectValue1);
         return this;
     }
-    /** @rva 0x170F270 slot 31  public override bool IsTarget(UnitStateBase state) { } */
+    /** @rva 0x16F8F40 slot 31  public override bool IsTarget(UnitStateBase state) { } */
     IsTarget(state: UnitStateBase): boolean { return state instanceof CurseUnitStateBase; }
 }

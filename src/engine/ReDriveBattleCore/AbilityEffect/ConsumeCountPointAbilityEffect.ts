@@ -15,21 +15,21 @@ import { AbilityEffectBase_TargetSideType } from "./AbilityEffectBase";
 export class ConsumeCountPointAbilityEffect extends CountPointVariationAbilityEffectBase {
     /** 0x60 protected int consumePoint */
     consumePoint: int = 0;
-    /** @rva 0x1920EF0  protected void .ctor() { } */
+    /** @rva 0x1910A80  protected void .ctor() { } */
     ctor(): this {
         super.ctor();
         return this;
     }
-    /** @rva 0x19231E0  public void .ctor(AbilityEffectInfo info) { } */
+    /** @rva 0x1912D70  public void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
         super.ctor$AbilityEffectInfo(info);
         this._TargetSide = 1 as AbilityEffectBase_TargetSideType;
         this.consumePoint = info._EffectValue1;
         return this;
     }
-    /** @rva 0x19231D0 slot 8  protected override int GetModifyCountPoint() { } */
+    /** @rva 0x1912D60 slot 8  protected override int GetModifyCountPoint() { } */
     GetModifyCountPoint(): int { return -this.consumePoint; }
-    /** @rva 0x1922FA0 slot 6  public override List<BattleUnit> GetAIFilteredTargets(BattleUnit userUnit, List<BattleUnit> targetUnitList, SkillType skillType, GameDirectorBase gameDirector) { } */
+    /** @rva 0x1912B30 slot 6  public override List<BattleUnit> GetAIFilteredTargets(BattleUnit userUnit, List<BattleUnit> targetUnitList, SkillType skillType, GameDirectorBase gameDirector) { } */
     GetAIFilteredTargets(userUnit: BattleUnit, targetUnitList: List<BattleUnit>, skillType: SkillType, gameDirector: GameDirectorBase): List<BattleUnit> {
         let list = targetUnitList.filter(x => !x.get_IsDead()); // <>c.b__4_0
         if (list.length > 0) list = list.filter(unit => { // <>c.b__4_1

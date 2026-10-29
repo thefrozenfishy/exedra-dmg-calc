@@ -22,7 +22,7 @@ export class BattleMstReaderContainer {
     static Bind<TModel, TRecord, TKey>(TModel$: Type, reader: IBattleMstReader<TModel, TRecord, TKey>): void {
         BattleMstReaderContainer.readerDic.set(TModel$, reader); // 0x24edde0: readerDic[typeof(IBattleMstReader<...>)] = reader
     }
-    /** @rva 0x16F6FF0  private static void .cctor() { } */
+    /** @rva 0x16E0CC0  private static void .cctor() { } */
     static cctor(): void {
         BattleMstReaderContainer.readerDic = new Map<Type, any>();
     }

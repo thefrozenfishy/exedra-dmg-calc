@@ -20,19 +20,19 @@ export class GainSpFixedAbilityEffect extends AbilityEffectBase {
     static NotTriggeringSPForAI: int = 0;
     /** 0x60 protected int gainPoint */
     gainPoint: int = 0;
-    /** @rva 0x1920EF0  protected void .ctor() { } */
+    /** @rva 0x1910A80  protected void .ctor() { } */
     ctor(): this {
         super.ctor();
         return this;
     }
-    /** @rva 0x1922F60  public void .ctor(AbilityEffectInfo info) { } */
+    /** @rva 0x1912AF0  public void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
         super.ctor$AbilityEffectInfo(info);
         this._TargetSide = 0 as AbilityEffectBase_TargetSideType;
         this.gainPoint = info._EffectValue1;
         return this;
     }
-    /** @rva 0x19293F0 slot 5  public override AffectedUnitNoticeBundle Triggering(EffectOriginType origin, BattleUnit userUnit, Dictionary<int, BattleUnit> targetUnitDic, GameDirectorBase gameDirector) { } */
+    /** @rva 0x1918F80 slot 5  public override AffectedUnitNoticeBundle Triggering(EffectOriginType origin, BattleUnit userUnit, Dictionary<int, BattleUnit> targetUnitDic, GameDirectorBase gameDirector) { } */
     Triggering(origin: EffectOriginType, userUnit: BattleUnit, targetUnitDic: Dictionary<int, BattleUnit>, gameDirector: GameDirectorBase): AffectedUnitNoticeBundle {
         const affectedUnitNoticeBundle = new AffectedUnitNoticeBundle().ctor();
         if (gameDirector != null && userUnit != null && gameDirector.spReferee != null) {
@@ -41,13 +41,13 @@ export class GainSpFixedAbilityEffect extends AbilityEffectBase {
         }
         return affectedUnitNoticeBundle;
     }
-    /** @rva 0x1929320 slot 6  public override List<BattleUnit> GetAIFilteredTargets(BattleUnit userUnit, List<BattleUnit> targetUnitList, SkillType skillType, GameDirectorBase gameDirector) { } */
+    /** @rva 0x1918EB0 slot 6  public override List<BattleUnit> GetAIFilteredTargets(BattleUnit userUnit, List<BattleUnit> targetUnitList, SkillType skillType, GameDirectorBase gameDirector) { } */
     GetAIFilteredTargets(userUnit: BattleUnit, targetUnitList: List<BattleUnit>, skillType: SkillType, gameDirector: GameDirectorBase): List<BattleUnit> {
         // null gameDirector / userUnit / spReferee -> NullReferenceException in the game
         if (GainSpFixedAbilityEffect.NotTriggeringSPForAI <= gameDirector.spReferee.GetSp(userUnit._Team)) return [];
         return targetUnitList;
     }
-    /** @rva 0x19294B0  private static void .cctor() { } */
+    /** @rva 0x1919040  private static void .cctor() { } */
     static cctor(): void {
         GainSpFixedAbilityEffect.NotTriggeringSPForAI = 5;
     }

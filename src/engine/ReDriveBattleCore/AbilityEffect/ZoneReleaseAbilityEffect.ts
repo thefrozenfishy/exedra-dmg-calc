@@ -15,18 +15,18 @@ import type { EffectOriginType } from "../UnitState/EffectOriginType";
 
 // ---- ReDriveBattleCore.AbilityEffect.ZoneReleaseAbilityEffect  (TypeDefIndex 1233, public class) ----
 export class ZoneReleaseAbilityEffect extends ZoneAbilityEffectBase {
-    /** @rva 0x1A1F0A0  protected void .ctor() { } */
+    /** @rva 0x1A186F0  protected void .ctor() { } */
     ctor(): this {
         super.ctor();
         return this;
     }
-    /** @rva 0x1A1F090  public void .ctor(AbilityEffectInfo info) { } */
+    /** @rva 0x1A186E0  public void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
         super.ctor$AbilityEffectInfo(info);
         this.zoneUnitStatePatternId = info._EffectValue1;
         return this;
     }
-    /** @rva 0x1A1ED20 slot 5  public override AffectedUnitNoticeBundle Triggering(EffectOriginType origin, BattleUnit userUnit, Dictionary<int, BattleUnit> targetUnitDic, GameDirectorBase gameDirector) { } */
+    /** @rva 0x1A18370 slot 5  public override AffectedUnitNoticeBundle Triggering(EffectOriginType origin, BattleUnit userUnit, Dictionary<int, BattleUnit> targetUnitDic, GameDirectorBase gameDirector) { } */
     Triggering(origin: EffectOriginType, userUnit: BattleUnit, targetUnitDic: Dictionary<int, BattleUnit>, gameDirector: GameDirectorBase): AffectedUnitNoticeBundle {
         const affectedUnitNoticeBundle = new AffectedUnitNoticeBundle().ctor();
         for (const targetUnitId of this._TargetUnitIdList) {
@@ -45,7 +45,7 @@ export class ZoneReleaseAbilityEffect extends ZoneAbilityEffectBase {
         }
         return affectedUnitNoticeBundle;
     }
-    /** @rva 0x1A1EB20 slot 6  public override List<BattleUnit> GetAIFilteredTargets(BattleUnit userUnit, List<BattleUnit> targetUnitList, SkillType skillType, GameDirectorBase gameDirector) { } */
+    /** @rva 0x1A18170 slot 6  public override List<BattleUnit> GetAIFilteredTargets(BattleUnit userUnit, List<BattleUnit> targetUnitList, SkillType skillType, GameDirectorBase gameDirector) { } */
     GetAIFilteredTargets(userUnit: BattleUnit, targetUnitList: List<BattleUnit>, skillType: SkillType, gameDirector: GameDirectorBase): List<BattleUnit> {
         const list = targetUnitList.filter(x => !x.get_IsDead()); // <>c.b__3_0
         return list.filter(unit => unit._Condition._MaxZoneStack >= 1 && 0 < unit._Condition._ZoneStack); // <>c.b__3_1

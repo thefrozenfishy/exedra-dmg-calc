@@ -11,26 +11,26 @@ import { UpSpeedUnitStateBase } from "./UpSpeedUnitStateBase";
 // ---- ReDriveBattleCore.UnitState.UpSpdRatioUnitState  (TypeDefIndex 808, public class) ----
 export class UpSpdRatioUnitState extends UpSpeedUnitStateBase {
     get UpRatio(): float { return this.get_UpRatio(); }
-    /** @rva 0x15E1810  public float get_UpRatio() { } */
+    /** @rva 0x15CBE70  public float get_UpRatio() { } */
     get_UpRatio(): float {
         return f32(this._UpdateableEffectValue / 10);
     }
-    /** @rva 0x16F8570  protected void .ctor() { } */
+    /** @rva 0x16E2240  protected void .ctor() { } */
     ctor(): this {
         this._IconName = "";
         return this;
     }
-    /** @rva 0x15E14E0  public void .ctor(AbilityEffectInfo info) { } */
+    /** @rva 0x15CBB40  public void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
         super.ctor$AbilityEffectInfo(info);
         this._UpdateableEffectValue = f32(info._EffectValue1);
         return this;
     }
-    /** @rva 0x1711C80 slot 33  public override Decimal GetSpeedVariationValue(BattleUnit unit, Decimal processingValue) { } */
+    /** @rva 0x16FB950 slot 33  public override Decimal GetSpeedVariationValue(BattleUnit unit, Decimal processingValue) { } */
     GetSpeedVariationValue$BattleUnit_Decimal(unit: BattleUnit, processingValue: Decimal): Decimal {
         // based on the unit's Speed, not on processingValue
         return Decimal.fromInt(unit.get_Speed()).mul(Decimal.fromFloat(f32(this._UpdateableEffectValue / 10)).div(Decimal.fromInt(100)));
     }
-    /** @rva 0x1711B50 slot 34  public override Decimal GetSpeedVariationValue(BattleUnitData unit, Decimal processingValue) { } */
-    GetSpeedVariationValue$BattleUnitData_Decimal(unit: any /* BattleUnitData */, processingValue: Decimal): Decimal { return notPorted("UpSpdRatioUnitState.GetSpeedVariationValue", 0x1711B50); }
+    /** @rva 0x16FB820 slot 34  public override Decimal GetSpeedVariationValue(BattleUnitData unit, Decimal processingValue) { } */
+    GetSpeedVariationValue$BattleUnitData_Decimal(unit: any /* BattleUnitData */, processingValue: Decimal): Decimal { return notPorted("UpSpdRatioUnitState.GetSpeedVariationValue", 0x16FB820); }
 }

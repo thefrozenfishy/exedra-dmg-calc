@@ -12,15 +12,15 @@ export class CommandGveMainTargetBreakCount extends CommandBase {
     _BreakCount: int = 0;
     get BreakCount(): int { return this.get_BreakCount(); }
     set BreakCount(v: int) { this.set_BreakCount(v); }
-    /** @rva 0x15DD490 slot 4  public override CommandType GetCommandType() { } */
+    /** @rva 0x15C7AF0 slot 4  public override CommandType GetCommandType() { } */
     GetCommandType(): CommandType { return 20 as CommandType; /* asm: mov eax, 0x14; ret */ }
-    /** @rva 0x762820  public int get_BreakCount() { } */
+    /** @rva 0x763820  public int get_BreakCount() { } */
     get_BreakCount(): int { return this._BreakCount; /* auto-property */ }
-    /** @rva 0x8A1240  public void set_BreakCount(int value) { } */
+    /** @rva 0x8A2240  public void set_BreakCount(int value) { } */
     set_BreakCount(value: int): void { this._BreakCount = value; /* auto-property */ }
-    /** @rva 0x72F5E0  public void .ctor() { } */
+    /** @rva 0x7305E0  public void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
-    /** @rva 0x14C3F00  public void .ctor(int breakCount) { } */
+    /** @rva 0x14ADFA0  public void .ctor(int breakCount) { } */
     ctor$int(breakCount: int): this {
         this._BreakCount = breakCount;
         return this;

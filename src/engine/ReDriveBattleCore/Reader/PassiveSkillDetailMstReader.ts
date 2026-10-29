@@ -11,7 +11,7 @@ import type { PassiveSkillDetailMstRecord } from "../../Network/Definition/Skill
 
 // ---- ReDriveBattleCore.Reader.PassiveSkillDetailMstReader  (TypeDefIndex 855, public class) ----
 export class PassiveSkillDetailMstReader extends BattleMstReaderBase<PassiveSkillDetailMstModel, PassiveSkillDetailMstRecord, int> {
-    /** @rva 0x16FD3D0  public static List<PassiveSkillDetailMstModel> GetDetailModelsByMstId(int id) { } */
+    /** @rva 0x16E70A0  public static List<PassiveSkillDetailMstModel> GetDetailModelsByMstId(int id) { } */
     static GetDetailModelsByMstId(id: int): List<PassiveSkillDetailMstModel> {
         const reader = BattleMstReaderBase.get_Instance<PassiveSkillDetailMstModel, PassiveSkillDetailMstRecord, int>(PassiveSkillDetailMstModel);
         // 3.21.0: a holder whose dictionary is null also takes the fallback
@@ -26,6 +26,6 @@ export class PassiveSkillDetailMstReader extends BattleMstReaderBase<PassiveSkil
         return [...BattleMstReaderBase.get_Instance<PassiveSkillDetailMstModel, PassiveSkillDetailMstRecord, int>(PassiveSkillDetailMstModel)
             .GetModelList(m => m.passiveSkillDetailMstId === id)]; // <GetDetailModelsByMstId>b__0
     }
-    /** @rva 0x16FD660  public void .ctor() { } */
+    /** @rva 0x16E7330  public void .ctor() { } */
     ctor(): this { super.ctor(); return this; }
 }

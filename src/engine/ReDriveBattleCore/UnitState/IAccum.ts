@@ -14,11 +14,11 @@ export interface IAccum extends IBlendable, IHasUpdateableEffectValue, IStateIco
     AccumCount: int;
     readonly IStateIconNumberDisplayable$StateIconNumber: int;
     readonly IStateIconNumberDisplayable$IsShowZeroIfZero: boolean;
-    /** @rva 0x16FBEF0 slot 4  private sealed override int ReDriveBattleCore.UnitState.IStateIconNumberDisplayable.get_StateIconNumber() { } */
+    /** @rva 0x16E5BC0 slot 4  private sealed override int ReDriveBattleCore.UnitState.IStateIconNumberDisplayable.get_StateIconNumber() { } */
     get_IStateIconNumberDisplayable$StateIconNumber(): int;
-    /** @rva 0x7350C0 slot 5  private sealed override bool ReDriveBattleCore.UnitState.IStateIconNumberDisplayable.get_IsShowZeroIfZero() { } */
+    /** @rva 0x7360C0 slot 5  private sealed override bool ReDriveBattleCore.UnitState.IStateIconNumberDisplayable.get_IsShowZeroIfZero() { } */
     get_IStateIconNumberDisplayable$IsShowZeroIfZero(): boolean;
-    /** @rva 0x16FBB50 slot 6  public virtual bool Accumulate(UnitStateBase injectionState) { } */
+    /** @rva 0x16E5820 slot 6  public virtual bool Accumulate(UnitStateBase injectionState) { } */
     Accumulate(injectionState: UnitStateBase): boolean;
 }
 
@@ -32,7 +32,7 @@ export function IAccum$get_IStateIconNumberDisplayable$StateIconNumber(self: IAc
 export function IAccum$get_IStateIconNumberDisplayable$IsShowZeroIfZero(self: IAccum): boolean {
     return false;
 }
-/** @rva 0x16FBB50  public virtual bool Accumulate(UnitStateBase injectionState) { } */
+/** @rva 0x16E5820  public virtual bool Accumulate(UnitStateBase injectionState) { } */
 export function IAccum$Accumulate(self: IAccum, injectionState: UnitStateBase): boolean {
     if (injectionState == null) throw new TypeError("NullReferenceException");
     if (injectionState.constructor !== (self as object).constructor) return false; // GetType() != GetType()

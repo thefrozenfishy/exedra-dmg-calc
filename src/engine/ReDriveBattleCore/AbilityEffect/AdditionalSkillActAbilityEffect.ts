@@ -9,7 +9,7 @@ import { AdditionalSkillActAbilityEffectBase_AdditionalSkillTargetType } from ".
 
 // ---- ReDriveBattleCore.AbilityEffect.AdditionalSkillActAbilityEffect  (TypeDefIndex 1136, public class) ----
 export class AdditionalSkillActAbilityEffect extends AdditionalSkillActAbilityEffectBase {
-    /** @rva 0x1920A70  public void .ctor(AbilityEffectInfo info) { } */
+    /** @rva 0x1910600  public void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
         this.priority = ActBase_Define.AdditionalSkillDefaultPriority;
         super.ctor$AbilityEffectInfo(info);

@@ -20,18 +20,18 @@ export class SimulationBattleFinishBattleData extends CommandBattlePhase_FinishP
     set Turn(v: int) { this.set_Turn(v); }
     get GameSituationData(): GameSituationData { return this.get_GameSituationData(); }
     set GameSituationData(v: GameSituationData) { this.set_GameSituationData(v); }
-    /** @rva 0x762820  public int get_Round() { } */
+    /** @rva 0x763820  public int get_Round() { } */
     get_Round(): int { return this._Round; /* auto-property */ }
-    /** @rva 0x8A1240  public void set_Round(int value) { } */
+    /** @rva 0x8A2240  public void set_Round(int value) { } */
     set_Round(value: int): void { this._Round = value; /* auto-property */ }
-    /** @rva 0x7F8800  public int get_Turn() { } */
+    /** @rva 0x7F9800  public int get_Turn() { } */
     get_Turn(): int { return this._Turn; /* auto-property */ }
-    /** @rva 0x7F8820  public void set_Turn(int value) { } */
+    /** @rva 0x7F9820  public void set_Turn(int value) { } */
     set_Turn(value: int): void { this._Turn = value; /* auto-property */ }
-    /** @rva 0x7359E0  public GameSituationData get_GameSituationData() { } */
+    /** @rva 0x7369E0  public GameSituationData get_GameSituationData() { } */
     get_GameSituationData(): GameSituationData { return this._GameSituationData; /* auto-property */ }
-    /** @rva 0x735A50  public void set_GameSituationData(GameSituationData value) { } */
+    /** @rva 0x736A50  public void set_GameSituationData(GameSituationData value) { } */
     set_GameSituationData(value: GameSituationData): void { this._GameSituationData = value; /* auto-property */ }
-    /** @rva 0x7440E0  public void .ctor() { } */
-    ctor(): this { return notPorted("SimulationBattleFinishBattleData..ctor", 0x7440E0); }
+    /** @rva 0x7450E0  public void .ctor() { } */
+    ctor(): this { return notPorted("SimulationBattleFinishBattleData..ctor", 0x7450E0); }
 }

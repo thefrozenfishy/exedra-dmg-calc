@@ -15,28 +15,28 @@ export class AbnormalEffectParryRate {
     set ParryRate(v: int) { this.set_ParryRate(v); }
     get TypeName(): string { return this.get_TypeName(); }
     get AbnormalUnitStateBaseType(): Type { return this.get_AbnormalUnitStateBaseType(); }
-    /** @rva 0x7354F0  public int get_ParryRate() { } */
+    /** @rva 0x7364F0  public int get_ParryRate() { } */
     get_ParryRate(): int { return this._ParryRate; /* auto-property */ }
-    /** @rva 0x738D00  public void set_ParryRate(int value) { } */
+    /** @rva 0x739D00  public void set_ParryRate(int value) { } */
     set_ParryRate(value: int): void { this._ParryRate = value; /* auto-property */ }
-    /** @rva 0x72F5E0  public void .ctor() { } */
+    /** @rva 0x7305E0  public void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
-    /** @rva 0x732EE0  public void .ctor(int parryRate) { } */
+    /** @rva 0x733EE0  public void .ctor(int parryRate) { } */
     ctor$int(parryRate: int): this {
         this._ParryRate = parryRate;
         return this;
     }
-    /** @rva 0x139B530 slot 4  public virtual string get_TypeName() { } */
+    /** @rva 0x1385A30 slot 4  public virtual string get_TypeName() { } */
     get_TypeName(): string { return ""; /* string.Empty */ }
-    /** @rva 0x7421D0 slot 5  public virtual Type get_AbnormalUnitStateBaseType() { } */
+    /** @rva 0x7431D0 slot 5  public virtual Type get_AbnormalUnitStateBaseType() { } */
     get_AbnormalUnitStateBaseType(): Type { return null!; /* asm: xor eax, eax; ret */ }
-    /** @rva 0x139B4B0  public bool TryGetAbnormalType(out AbnormalType abnormalType) { } */
+    /** @rva 0x13859B0  public bool TryGetAbnormalType(out AbnormalType abnormalType) { } */
     TryGetAbnormalType(abnormalType: Ref<AbnormalType>): boolean {
         return AbnormalUnitStateBase.TryGetAbnormalTypeOfState(this.get_AbnormalUnitStateBaseType(), abnormalType);
     }
-    /** @rva 0x7350C0 slot 6  public virtual bool IsTargetType(UnitStateBase unitState) { } */
+    /** @rva 0x7360C0 slot 6  public virtual bool IsTargetType(UnitStateBase unitState) { } */
     IsTargetType$UnitStateBase(unitState: UnitStateBase): boolean { return false; /* asm: xor al, al; ret */ }
-    /** @rva 0x7350C0 slot 7  public virtual bool IsTargetType(Type type) { } */
+    /** @rva 0x7360C0 slot 7  public virtual bool IsTargetType(Type type) { } */
     IsTargetType$Type(type_: Type): boolean { return false; /* asm: xor al, al; ret */ }
 }
 

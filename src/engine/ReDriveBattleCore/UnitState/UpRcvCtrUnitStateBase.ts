@@ -18,24 +18,24 @@ import { AISkillTargetSelector } from "../AI/AISkillTargetSelector";
 // ---- ReDriveBattleCore.UnitState.UpRcvCtrUnitStateBase  (TypeDefIndex 802, public abstract class) ----
 export abstract class UpRcvCtrUnitStateBase extends ParameterVariationUnitStateBase {  // implements IRcvCtrVariation, IDebuff
     static readonly __interfaces: readonly string[] = ['IRcvCtrVariation', 'IDebuff'];
-    /** @rva 0x758B30 slot 6  public override UnitStateBase.DirectionType get_Direction() { } */
+    /** @rva 0x759B30 slot 6  public override UnitStateBase.DirectionType get_Direction() { } */
     get_Direction(): UnitStateBase_DirectionType { return 1 as UnitStateBase_DirectionType; /* asm: mov eax, 1; ret */ }
-    /** @rva 0x7421D0 slot 27  public override AdditionType get_Addition() { } */
+    /** @rva 0x7431D0 slot 27  public override AdditionType get_Addition() { } */
     get_Addition(): AdditionType { return 0 as AdditionType; /* asm: xor eax, eax; ret */ }
-    /** @rva 0x1711200 slot 7  public override string get_IconName() { } */
+    /** @rva 0x16FAED0 slot 7  public override string get_IconName() { } */
     get_IconName(): string {
         return "battle_icon_up_rcv_ctr";
     }
-    /** @rva 0x17111D0 slot 13  public override string get_GiveVisualEffectName() { } */
+    /** @rva 0x16FAEA0 slot 13  public override string get_GiveVisualEffectName() { } */
     get_GiveVisualEffectName(): string {
         return "eff_cmn_act_debuff_appear_001";
     }
-    /** @rva 0x16F8570  protected void .ctor() { } */
+    /** @rva 0x16E2240  protected void .ctor() { } */
     ctor(): this {
         this._IconName = "";
         return this;
     }
-    /** @rva 0x15E14E0  public void .ctor(AbilityEffectInfo info) { } */
+    /** @rva 0x15CBB40  public void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
         super.ctor$AbilityEffectInfo(info);
         this._UpdateableEffectValue = f32(info._EffectValue1);
@@ -43,9 +43,9 @@ export abstract class UpRcvCtrUnitStateBase extends ParameterVariationUnitStateB
     }
     /** @rva -1 slot 30  public abstract float GetRcvCtrVariationValue(BattleUnit unit, float processingValue); */
     abstract GetRcvCtrVariationValue(unit: BattleUnit, processingValue: float): float;
-    /** @rva 0x76E830 slot 21  public override bool CanAddTo(BattleUnit targetUnit) { } */
+    /** @rva 0x76F830 slot 21  public override bool CanAddTo(BattleUnit targetUnit) { } */
     CanAddTo(targetUnit: BattleUnit): boolean { return true; /* asm: mov al, 1; ret */ }
-    /** @rva 0x1711000 slot 24  public override AISkillTargetSelector.UnitFilterFuncOrder GetUnitFilterFuncOrder(BattleUnit userUnit, IEnumerable<BattleUnit> candidateUnits) { } */
+    /** @rva 0x16FACD0 slot 24  public override AISkillTargetSelector.UnitFilterFuncOrder GetUnitFilterFuncOrder(BattleUnit userUnit, IEnumerable<BattleUnit> candidateUnits) { } */
     GetUnitFilterFuncOrder(userUnit: BattleUnit, candidateUnits: IEnumerable<BattleUnit>): AISkillTargetSelector_UnitFilterFuncOrder {
         const list: List<(a0: IEnumerable<BattleUnit>) => IEnumerable<BattleUnit>> = [];
         list.push(AISkillTargetSelector.UnitFilterByMainTarget);

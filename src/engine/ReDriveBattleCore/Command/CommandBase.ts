@@ -11,12 +11,12 @@ export class CommandBase {
     _Time: float = 0;
     get Time(): float { return this.get_Time(); }
     set Time(v: float) { this.set_Time(v); }
-    /** @rva 0x7421D0 slot 4  public virtual CommandType GetCommandType() { } */
+    /** @rva 0x7431D0 slot 4  public virtual CommandType GetCommandType() { } */
     GetCommandType(): CommandType { return 0 as CommandType; /* asm: xor eax, eax; ret */ }
-    /** @rva 0x8869E0  public float get_Time() { } */
+    /** @rva 0x8879E0  public float get_Time() { } */
     get_Time(): float { return this._Time; /* auto-property */ }
-    /** @rva 0x886A00  public void set_Time(float value) { } */
+    /** @rva 0x887A00  public void set_Time(float value) { } */
     set_Time(value: float): void { this._Time = value; /* auto-property */ }
-    /** @rva 0x72F5E0  public void .ctor() { } */
+    /** @rva 0x7305E0  public void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
 }

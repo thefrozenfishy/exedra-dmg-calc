@@ -8,7 +8,7 @@ import type { BattleUnit } from "../BattleUnit";
 export interface IStateIconNumberDisplayable {
     readonly StateIconNumber: int;
     readonly IsShowZeroIfZero: boolean;
-    /** @rva 0x72F170 slot 0  public virtual void RefreshStateIconNumber(BattleUnit unit) { } */
+    /** @rva 0x730170 slot 0  public virtual void RefreshStateIconNumber(BattleUnit unit) { } */
     RefreshStateIconNumber(unit: BattleUnit): void;
 }
 

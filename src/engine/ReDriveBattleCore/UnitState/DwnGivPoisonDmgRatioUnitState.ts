@@ -10,17 +10,17 @@ import { f32 } from "../../runtime";
 
 // ---- ReDriveBattleCore.UnitState.DwnGivPoisonDmgRatioUnitState  (TypeDefIndex 608, public class) ----
 export class DwnGivPoisonDmgRatioUnitState extends DownGiveSlipDamageRatioUnitStateBase {
-    /** @rva 0x16F8D40  public void .ctor() { } */
+    /** @rva 0x16E2A10  public void .ctor() { } */
     ctor(): this {
         super.ctor();
         return this;
     }
-    /** @rva 0x15DB550  public void .ctor(AbilityEffectInfo info) { } */
+    /** @rva 0x15C5BB0  public void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
         super.ctor$AbilityEffectInfo(info);
         this._UpdateableEffectValue = f32(info._EffectValue1);
         return this;
     }
-    /** @rva 0x16F9F50 slot 31  public override bool IsTarget(UnitStateBase state) { } */
+    /** @rva 0x16E3C20 slot 31  public override bool IsTarget(UnitStateBase state) { } */
     IsTarget(state: UnitStateBase): boolean { return state instanceof PoisonUnitStateBase; }
 }

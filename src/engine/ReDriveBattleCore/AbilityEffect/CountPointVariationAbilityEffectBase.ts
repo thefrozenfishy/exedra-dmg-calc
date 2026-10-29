@@ -15,12 +15,12 @@ import { AbilityEffectBase_TargetSideType } from "./AbilityEffectBase";
 
 // ---- ReDriveBattleCore.AbilityEffect.CountPointVariationAbilityEffectBase  (TypeDefIndex 1165, public abstract class) ----
 export abstract class CountPointVariationAbilityEffectBase extends AbilityEffectBase {
-    /** @rva 0x1920EF0  protected void .ctor() { } */
+    /** @rva 0x1910A80  protected void .ctor() { } */
     ctor(): this {
         super.ctor();
         return this;
     }
-    /** @rva 0x1923C60  protected void .ctor(AbilityEffectInfo info) { } */
+    /** @rva 0x19137F0  protected void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
         super.ctor$AbilityEffectInfo(info);
         this._TargetSide = 1 as AbilityEffectBase_TargetSideType;
@@ -28,7 +28,7 @@ export abstract class CountPointVariationAbilityEffectBase extends AbilityEffect
     }
     /** @rva -1 slot 8  protected abstract int GetModifyCountPoint(); */
     abstract GetModifyCountPoint(): int;
-    /** @rva 0x1923A40 slot 5  public override AffectedUnitNoticeBundle Triggering(EffectOriginType origin, BattleUnit userUnit, Dictionary<int, BattleUnit> targetUnitDic, GameDirectorBase gameDirector) { } */
+    /** @rva 0x19135D0 slot 5  public override AffectedUnitNoticeBundle Triggering(EffectOriginType origin, BattleUnit userUnit, Dictionary<int, BattleUnit> targetUnitDic, GameDirectorBase gameDirector) { } */
     Triggering(origin: EffectOriginType, userUnit: BattleUnit, targetUnitDic: Dictionary<int, BattleUnit>, gameDirector: GameDirectorBase): AffectedUnitNoticeBundle {
         const bundle = new AffectedUnitNoticeBundle().ctor();
         for (const targetUnitId of this._TargetUnitIdList) {
@@ -39,7 +39,7 @@ export abstract class CountPointVariationAbilityEffectBase extends AbilityEffect
         }
         return bundle;
     }
-    /** @rva 0x1923730 slot 7  public override int SelectTargetInAIAction(BattleUnit userUnit, List<BattleUnit> targetUnitList) { } */
+    /** @rva 0x19132C0 slot 7  public override int SelectTargetInAIAction(BattleUnit userUnit, List<BattleUnit> targetUnitList) { } */
     SelectTargetInAIAction(userUnit: BattleUnit, targetUnitList: List<BattleUnit>): int {
         const candidateUnits = targetUnitList.filter(unit => !unit.get_IsDead()); // <>c.b__4_0
         const funcList = [AISkillTargetSelector.UnitFilterByMainTarget, AISkillTargetSelector.UnitFilterWithMaxAtk];

@@ -22,18 +22,18 @@ export abstract class RecoveryHpAbilityEffectBase extends AbilityEffectBase {
     static MaxHpRateToUseSpecialAttackWithHpRecoveryEffect: float = 0;
     /** 0x4 private static readonly float MaxHpRateToUseActiveSkillWithHpRecoveryEffect */
     static MaxHpRateToUseActiveSkillWithHpRecoveryEffect: float = 0;
-    /** @rva 0x1920EF0  protected void .ctor() { } */
+    /** @rva 0x1910A80  protected void .ctor() { } */
     ctor(): this {
         super.ctor();
         return this;
     }
-    /** @rva 0x192C260  public void .ctor(AbilityEffectInfo info) { } */
+    /** @rva 0x191BDF0  public void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
         super.ctor$AbilityEffectInfo(info);
         this._TargetSide = 0 as AbilityEffectBase_TargetSideType;
         return this;
     }
-    /** @rva 0x192C900 slot 5  public override AffectedUnitNoticeBundle Triggering(EffectOriginType origin, BattleUnit userUnit, Dictionary<int, BattleUnit> targetUnitDic, GameDirectorBase gameDirector) { } */
+    /** @rva 0x191C490 slot 5  public override AffectedUnitNoticeBundle Triggering(EffectOriginType origin, BattleUnit userUnit, Dictionary<int, BattleUnit> targetUnitDic, GameDirectorBase gameDirector) { } */
     Triggering(origin: EffectOriginType, userUnit: BattleUnit, targetUnitDic: Dictionary<int, BattleUnit>, gameDirector: GameDirectorBase): AffectedUnitNoticeBundle {
         const bundle = new AffectedUnitNoticeBundle().ctor();
         for (const targetUnitId of this._TargetUnitIdList) {
@@ -53,7 +53,7 @@ export abstract class RecoveryHpAbilityEffectBase extends AbilityEffectBase {
     }
     /** @rva -1 slot 8  public abstract Decimal GetBaseRecoveryValue(BattleUnit userUnit); */
     abstract GetBaseRecoveryValue(userUnit: BattleUnit): Decimal;
-    /** @rva 0x192C280 slot 6  public override List<BattleUnit> GetAIFilteredTargets(BattleUnit userUnit, List<BattleUnit> targetUnitList, SkillType skillType, GameDirectorBase gameDirector) { } */
+    /** @rva 0x191BE10 slot 6  public override List<BattleUnit> GetAIFilteredTargets(BattleUnit userUnit, List<BattleUnit> targetUnitList, SkillType skillType, GameDirectorBase gameDirector) { } */
     GetAIFilteredTargets(userUnit: BattleUnit, targetUnitList: List<BattleUnit>, skillType: SkillType, gameDirector: GameDirectorBase): List<BattleUnit> {
         const list = targetUnitList.filter(x => !x.get_IsDead()); // <>c.b__6_0
         if (!(list.length > 0)) return list;
@@ -64,7 +64,7 @@ export abstract class RecoveryHpAbilityEffectBase extends AbilityEffectBase {
         if (skillType !== 1) return list;
         return source.filter(unit => unit.CalculationHpRate() < RecoveryHpAbilityEffectBase.MaxHpRateToUseActiveSkillWithHpRecoveryEffect); // b__6_2
     }
-    /** @rva 0x192C5F0 slot 7  public override int SelectTargetInAIAction(BattleUnit userUnit, List<BattleUnit> targetUnitList) { } */
+    /** @rva 0x191C180 slot 7  public override int SelectTargetInAIAction(BattleUnit userUnit, List<BattleUnit> targetUnitList) { } */
     SelectTargetInAIAction(userUnit: BattleUnit, targetUnitList: List<BattleUnit>): int {
         const candidateUnits = targetUnitList.filter(unit => !unit.get_IsDead()); // <>c.b__7_0
         const funcList = [AISkillTargetSelector.UnitFilterByMainTarget, AISkillTargetSelector.UnitFilterWithMinHpRate];
@@ -72,7 +72,7 @@ export abstract class RecoveryHpAbilityEffectBase extends AbilityEffectBase {
         if (unit != null) return unit._Id;
         return 0;
     }
-    /** @rva 0x192CD10  private static void .cctor() { } */
+    /** @rva 0x191C8A0  private static void .cctor() { } */
     static cctor(): void {
         RecoveryHpAbilityEffectBase.MaxHpRateToUseSpecialAttackWithHpRecoveryEffect = 50; // 0x42480000
         RecoveryHpAbilityEffectBase.MaxHpRateToUseActiveSkillWithHpRecoveryEffect = 80; // 0x42a00000

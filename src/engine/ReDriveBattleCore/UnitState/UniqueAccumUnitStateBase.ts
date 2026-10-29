@@ -26,25 +26,25 @@ export abstract class UniqueAccumUnitStateBase extends UniqueUnitStateBase {  //
     set AccumCount(v: int) { this.set_AccumCount(v); }
     get StateIconNumber(): int { return this.get_StateIconNumber(); }
     get IsShowZeroIfZero(): boolean { return this.get_IsShowZeroIfZero(); }
-    /** @rva 0x81F790  public int get_AccumCountMax() { } */
+    /** @rva 0x820790  public int get_AccumCountMax() { } */
     get_AccumCountMax(): int { return this._AccumCountMax; /* auto-property */ }
-    /** @rva 0x820190  public void set_AccumCountMax(int value) { } */
+    /** @rva 0x821190  public void set_AccumCountMax(int value) { } */
     set_AccumCountMax(value: int): void { this._AccumCountMax = value; /* auto-property */ }
-    /** @rva 0xA06FF0  public int get_AccumCount() { } */
+    /** @rva 0xA05C20  public int get_AccumCount() { } */
     get_AccumCount(): int { return this._AccumCount; /* auto-property */ }
-    /** @rva 0xA070A0  public void set_AccumCount(int value) { } */
+    /** @rva 0xA05CD0  public void set_AccumCount(int value) { } */
     set_AccumCount(value: int): void { this._AccumCount = value; /* auto-property */ }
-    /** @rva 0xA06FF0 slot 27  public int get_StateIconNumber() { } */
+    /** @rva 0xA05C20 slot 27  public int get_StateIconNumber() { } */
     get_StateIconNumber(): int { return this._AccumCount; /* asm: mov eax, dword ptr [rcx + 0x9c]; ret */ }
-    /** @rva 0x7350C0 slot 28  public bool get_IsShowZeroIfZero() { } */
+    /** @rva 0x7360C0 slot 28  public bool get_IsShowZeroIfZero() { } */
     get_IsShowZeroIfZero(): boolean { return false; /* asm: xor al, al; ret */ }
-    /** @rva 0x17084C0  protected void .ctor() { } */
+    /** @rva 0x16F2190  protected void .ctor() { } */
     ctor(): this {
         this._AccumCount = 1;
         super.ctor();
         return this;
     }
-    /** @rva 0x17084E0  public void .ctor(AbilityEffectInfo info) { } */
+    /** @rva 0x16F21B0  public void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
         this._AccumCount = 1;
         this.iconName = "";
@@ -53,7 +53,7 @@ export abstract class UniqueAccumUnitStateBase extends UniqueUnitStateBase {  //
         this._AccumCountMax = info._EffectValue2;
         return this;
     }
-    /** @rva 0x1707FA0 slot 25  public bool Blend(UnitStateBase injectUnitState) { } */
+    /** @rva 0x16F1C70 slot 25  public bool Blend(UnitStateBase injectUnitState) { } */
     Blend(injectUnitState: UnitStateBase): boolean {
         if (injectUnitState.constructor !== this.constructor) return false; // GetType() != GetType()
         if (!(injectUnitState instanceof UniqueAccumUnitStateBase)) return false;
@@ -63,13 +63,13 @@ export abstract class UniqueAccumUnitStateBase extends UniqueUnitStateBase {  //
         this.IsExemptPassingTurnOnce = injectUnitState.IsExemptPassingTurnOnce;
         return true;
     }
-    /** @rva 0x17080C0 slot 23  public override List<BattleUnit> GetAIFilteredTargets(BattleUnit userUnit, List<BattleUnit> targetUnitList, SkillType skillType, RangeType effectRange, GameDirectorBase gameDirector) { } */
+    /** @rva 0x16F1D90 slot 23  public override List<BattleUnit> GetAIFilteredTargets(BattleUnit userUnit, List<BattleUnit> targetUnitList, SkillType skillType, RangeType effectRange, GameDirectorBase gameDirector) { } */
     GetAIFilteredTargets(userUnit: BattleUnit, targetUnitList: List<BattleUnit>, skillType: SkillType, effectRange: RangeType, gameDirector: GameDirectorBase): List<BattleUnit> {
         let list = targetUnitList.filter(x => !x.get_IsDead()); // <>c.b__15_0
         if (list.length > 0) list = list.filter(unit => this.$GetAIFilteredTargets$b__15_1(unit));
         return list;
     }
-    /** @rva 0x1708280  private bool <GetAIFilteredTargets>b__15_1(BattleUnit unit) { } */
+    /** @rva 0x16F1F50  private bool <GetAIFilteredTargets>b__15_1(BattleUnit unit) { } */
     $GetAIFilteredTargets$b__15_1(unit: BattleUnit): boolean {
         const same = unit._Condition.GetSameStateList(this, false).filter((s): s is UniqueAccumUnitStateBase => s instanceof UniqueAccumUnitStateBase); // OfType (lazy, enumerated twice)
         if (same.some(state => state._AccumCount < state._AccumCountMax)) return true; // <>c.b__15_2

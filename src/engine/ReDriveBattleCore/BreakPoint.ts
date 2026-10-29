@@ -42,33 +42,33 @@ export class BreakPoint {
     get MaxBreakDamageRate(): float { return this.get_MaxBreakDamageRate(); }
     get BreakCount(): int { return this.get_BreakCount(); }
     set BreakCount(v: int) { this.set_BreakCount(v); }
-    /** @rva 0xE1FF20  public bool get_HasBreakPoint() { } */
+    /** @rva 0xE0A390  public bool get_HasBreakPoint() { } */
     get_HasBreakPoint(): boolean { return 0 < this.maxPointValue; }
-    /** @rva 0x802350  public int get_PointValue() { } */
+    /** @rva 0x803350  public int get_PointValue() { } */
     get_PointValue(): int { return this._PointValue; /* auto-property */ }
-    /** @rva 0x802540  public void set_PointValue(int value) { } */
+    /** @rva 0x803540  public void set_PointValue(int value) { } */
     set_PointValue(value: int): void { this._PointValue = value; /* auto-property */ }
-    /** @rva 0x14B9350  public bool get_IsBreak() { } */
+    /** @rva 0x14A33F0  public bool get_IsBreak() { } */
     get_IsBreak(): boolean {
         if (this.maxPointValue < 1) return false;
         return this._PointValue < 1;
     }
-    /** @rva 0x14B9370  public float get_MaxBreakDamageRate() { } */
+    /** @rva 0x14A3410  public float get_MaxBreakDamageRate() { } */
     get_MaxBreakDamageRate(): float {
         return f32(f32(this.maxPointValue + 0.5) / 360);
     }
-    /** @rva 0x762820  public int get_BreakCount() { } */
+    /** @rva 0x763820  public int get_BreakCount() { } */
     get_BreakCount(): int { return this._BreakCount; /* auto-property */ }
-    /** @rva 0x8A1240  public void set_BreakCount(int value) { } */
+    /** @rva 0x8A2240  public void set_BreakCount(int value) { } */
     set_BreakCount(value: int): void { this._BreakCount = value; /* auto-property */ }
-    /** @rva 0x14B8D50  public void Initialize(int maxValue) { } */
+    /** @rva 0x14A2DF0  public void Initialize(int maxValue) { } */
     Initialize(maxValue: int): void {
         this.maxPointValue = maxValue;
         this._PointValue = maxValue;
     }
-    /** @rva 0x14B8D60  public void ResetValue() { } */
+    /** @rva 0x14A2E00  public void ResetValue() { } */
     ResetValue(): void { this._PointValue = this.maxPointValue; }
-    /** @rva 0x14B8760  public AffectedUnitNotice Decrease(BattleUnit attackUnit, BattleUnit defenseUnit, TargetElementType attackElement, int decreaseValue, int turnOrderPriority) { } */
+    /** @rva 0x14A2800  public AffectedUnitNotice Decrease(BattleUnit attackUnit, BattleUnit defenseUnit, TargetElementType attackElement, int decreaseValue, int turnOrderPriority) { } */
     Decrease(attackUnit: BattleUnit, defenseUnit: BattleUnit, attackElement: TargetElementType, decreaseValue: int, turnOrderPriority: int): AffectedUnitNotice {
         // <>c__DisplayClass21_0 { attackUnit, defenseUnit }
         const affectedUnitNotice = new AffectedUnitNotice().ctor$int(defenseUnit._Id);
@@ -89,7 +89,7 @@ export class BreakPoint {
         defenseUnit.SetBreakedDamageReceiveRate(trunc(battleParameter._InitialBreakedDamageReceiveRate / 10));
         return affectedUnitNotice;
     }
-    /** @rva 0x14B76F0  public static int CalculateProcessedBreakPointDamage(IEnumerable<UnitStateBase> attackUnitStates, IEnumerable<UnitStateBase> defenceUnitStates, int damage, TargetElementType attackElement, ElementType[] weakElements) { } */
+    /** @rva 0x14A1790  public static int CalculateProcessedBreakPointDamage(IEnumerable<UnitStateBase> attackUnitStates, IEnumerable<UnitStateBase> defenceUnitStates, int damage, TargetElementType attackElement, ElementType[] weakElements) { } */
     static CalculateProcessedBreakPointDamage(attackUnitStates: IEnumerable<UnitStateBase>, defenceUnitStates: IEnumerable<UnitStateBase>, damage: int, attackElement: TargetElementType, weakElements: ElementType[]): int {
         const damageValue = Decimal.fromInt(damage);
         let processingValue = damageValue;
@@ -133,12 +133,12 @@ export class BreakPoint {
         if (processingValue.le(Decimal.Zero)) processingValue = Decimal.Zero;
         return processingValue.ceiling().toInt(); // (int)decimal.Ceiling(processingValue)
     }
-    /** @rva 0x14B86D0  private bool DecreaseValue(int decreaseValue) { } */
+    /** @rva 0x14A2770  private bool DecreaseValue(int decreaseValue) { } */
     DecreaseValue(decreaseValue: int): boolean {
         this._PointValue = clamp(this._PointValue - decreaseValue, 0, this.maxPointValue);
         return this.get_IsBreak(); // inlined in the game
     }
-    /** @rva 0x14B8AD0  public static ValueTuple<int, int> GetDecreaseValue(SkillType skillType, RangeType range, RoleType attackerRoleType, bool isRandom = False) { } */
+    /** @rva 0x14A2B70  public static ValueTuple<int, int> GetDecreaseValue(SkillType skillType, RangeType range, RoleType attackerRoleType, bool isRandom = False) { } */
     static GetDecreaseValue(skillType: SkillType, range: RangeType, attackerRoleType: RoleType, isRandom: boolean = false): [int, int] {
         if (isRandom) return [1, 0];
         switch (skillType as number) {
@@ -150,19 +150,19 @@ export class BreakPoint {
             default: throw new Error(`定義されていない SkillType です：${enumToString(SkillType$, skillType)}`);
         }
     }
-    /** @rva 0x14B8CC0  public void IncreaseValueByRatio(float ratio) { } */
+    /** @rva 0x14A2D60  public void IncreaseValueByRatio(float ratio) { } */
     IncreaseValueByRatio(ratio: float): void {
         this._PointValue = clamp(trunc(f32(this.maxPointValue * ratio)) + this._PointValue, 0, this.maxPointValue);
     }
-    /** @rva 0x72F5E0  public void .ctor() { } */
+    /** @rva 0x7305E0  public void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
-    /** @rva 0x14B9280  private static void .cctor() { } */
+    /** @rva 0x14A3320  private static void .cctor() { } */
     static cctor(): void {
         BreakPoint.DamageRatioOnNormal = Decimal.fromParts(10, 0, 0, false, 1); // 1.0
         BreakPoint.BreakTurnGaugeSlowRatio = 25;
         BreakPoint.BreakPointWeakElementDecreaseRatio = Decimal.fromParts(2, 0, 0, false, 1); // 0.2
     }
-    /** @rva 0x14B8F20  internal static ValueTuple<int, int> <GetDecreaseValue>g__GetNormalAttackDecreaseValue|24_0(RangeType range, RoleType roleType, bool isRandom) { } */
+    /** @rva 0x14A2FC0  internal static ValueTuple<int, int> <GetDecreaseValue>g__GetNormalAttackDecreaseValue|24_0(RangeType range, RoleType roleType, bool isRandom) { } */
     static $GetDecreaseValue$g__GetNormalAttackDecreaseValue_24_0(range: RangeType, roleType: RoleType, isRandom: boolean): [int, int] {
         if (roleType === 2) {
             if (range === 1) return [20, 0];
@@ -175,7 +175,7 @@ export class BreakPoint {
         }
         throw new Error(`定義されていない RangeType です：${range}`); // formatted as int
     }
-    /** @rva 0x14B8D70  internal static ValueTuple<int, int> <GetDecreaseValue>g__GetActiveSkillDecreaseValue|24_1(RangeType range, RoleType roleType, bool isRandom) { } */
+    /** @rva 0x14A2E10  internal static ValueTuple<int, int> <GetDecreaseValue>g__GetActiveSkillDecreaseValue|24_1(RangeType range, RoleType roleType, bool isRandom) { } */
     static $GetDecreaseValue$g__GetActiveSkillDecreaseValue_24_1(range: RangeType, roleType: RoleType, isRandom: boolean): [int, int] {
         if (roleType === 2) {
             if (range === 1) return [45, 0];
@@ -188,7 +188,7 @@ export class BreakPoint {
         }
         throw new Error(`定義されていない RangeType です：${range}`); // formatted as int
     }
-    /** @rva 0x14B90D0  internal static ValueTuple<int, int> <GetDecreaseValue>g__GetSpecialAttackDecreaseValue|24_2(RangeType range, RoleType roleType, bool isRandom) { } */
+    /** @rva 0x14A3170  internal static ValueTuple<int, int> <GetDecreaseValue>g__GetSpecialAttackDecreaseValue|24_2(RangeType range, RoleType roleType, bool isRandom) { } */
     static $GetDecreaseValue$g__GetSpecialAttackDecreaseValue_24_2(range: RangeType, roleType: RoleType, isRandom: boolean): [int, int] {
         if (roleType === 2) {
             if (range === 1) return [60, 0];

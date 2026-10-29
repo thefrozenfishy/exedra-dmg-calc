@@ -52,16 +52,16 @@ export abstract class SoloGameDirectorBase extends EnemyAppearanceGameDirectorBa
     /** 0x98 protected readonly ModeChangeReferee modeChangeReferee */
     modeChangeReferee: ModeChangeReferee = null!;
     get ModeChangeReferee(): ModeChangeReferee { return this.get_ModeChangeReferee(); }
-    /** @rva 0x736DA0  public ModeChangeReferee get_ModeChangeReferee() { } */
+    /** @rva 0x737DA0  public ModeChangeReferee get_ModeChangeReferee() { } */
     get_ModeChangeReferee(): ModeChangeReferee { return this.modeChangeReferee; /* asm: mov rax, qword ptr [rcx + 0x98]; ret */ }
-    /** @rva 0x14CD3A0  public void .ctor() { } */
+    /** @rva 0x14B7440  public void .ctor() { } */
     ctor(): this {
         this.waveReferee = new WaveReferee().ctor();
         this.modeChangeReferee = new ModeChangeReferee().ctor(); // inlined in the game
         super.ctor();
         return this;
     }
-    /** @rva 0x14CBD70  public void SetupBattleStage(int questStageMstId, int repeatNum, IBattleUnitProvider unitProvider, int campUpDmg = 0, int campUpBreakPointDmg = 0, int victoryRound = 0) { } */
+    /** @rva 0x14B5E10  public void SetupBattleStage(int questStageMstId, int repeatNum, IBattleUnitProvider unitProvider, int campUpDmg = 0, int campUpBreakPointDmg = 0, int victoryRound = 0) { } */
     SetupBattleStage(questStageMstId: int, repeatNum: int, unitProvider: IBattleUnitProvider, campUpDmg?: int /* = 0 */, campUpBreakPointDmg?: int /* = 0 */, victoryRound?: int /* = 0 */): void {
         campUpDmg ??= 0; campUpBreakPointDmg ??= 0; victoryRound ??= 0;
         this.elapsedTime = 0;
@@ -93,7 +93,7 @@ export abstract class SoloGameDirectorBase extends EnemyAppearanceGameDirectorBa
         }
         this.BattlePhase = 0 as Phase;
     }
-    /** @rva 0x14CB100 slot 9  public override void BattleEnd() { } */
+    /** @rva 0x14B51A0 slot 9  public override void BattleEnd() { } */
     BattleEnd(): void {
         if (this.judgeResultReferee.result === ResultStatus.Winning && this.waveReferee.HasNextWave) {
             this.waveReferee.BeginTransition();
@@ -105,7 +105,7 @@ export abstract class SoloGameDirectorBase extends EnemyAppearanceGameDirectorBa
         this.ChangeBattlePhase(Phase.Finish);
         this.SyncGameSituation();
     }
-    /** @rva 0x14CC6A0 slot 10  public override int TurnTransition() { } */
+    /** @rva 0x14B6740 slot 10  public override int TurnTransition() { } */
     TurnTransition(): int {
         const waveReferee = this.waveReferee;
         const currentWave = waveReferee.currentWave;
@@ -115,7 +115,7 @@ export abstract class SoloGameDirectorBase extends EnemyAppearanceGameDirectorBa
         this.turnActSystem.turnReferee.ShiftNextTurn(this.battleUnitBundle.activeList, this);
         return currentWave;
     }
-    /** @rva 0x14CCCF0 slot 20  protected virtual void WaveTransition() { } */
+    /** @rva 0x14B6D90 slot 20  protected virtual void WaveTransition() { } */
     WaveTransition(): void {
         PassiveSkill.RemoveByTeam(BattleUnit_TeamType.Enemy, this.battleUnitBundle.dic);
         this.battleUnitBundle.RemoveAllEnemyUnits();
@@ -141,7 +141,7 @@ export abstract class SoloGameDirectorBase extends EnemyAppearanceGameDirectorBa
         this.StoreCommand(new CommandSyncLinkHp().ctor$LinkHpType_string_int_int(r.linkHpType, r.linkHpName, r.currentLinkHp, r.maxLinkHp));
         this.StoreCommand(new CommandBeginWave().ctor$int_int_ListBattleUnit_TurnActOrderUnitInfo(this.waveReferee.questStageMstId, this.waveReferee.currentWave, this.battleUnitBundle.enemyList, orderInfo));
     }
-    /** @rva 0x14CC8D0 slot 21  protected virtual void WaveTransitionForForceWinDebug() { } */
+    /** @rva 0x14B6970 slot 21  protected virtual void WaveTransitionForForceWinDebug() { } */
     WaveTransitionForForceWinDebug(): void {
         PassiveSkill.RemoveByTeam(BattleUnit_TeamType.Enemy, this.battleUnitBundle.dic);
         this.battleUnitBundle.RemoveAllEnemyUnits();
@@ -160,7 +160,7 @@ export abstract class SoloGameDirectorBase extends EnemyAppearanceGameDirectorBa
         this.modeChangeReferee.Init(this.waveReferee.questStageMstId, this.waveReferee.currentWave, this.battleUnitBundle.enemyList);
         this.unitBrain.SetEnabledActiveEnemyUnitsStartConditionTimingAction(this.battleUnitBundle.enemyList, 2); // tail call (inlined in the decompile)
     }
-    /** @rva 0x14CB3A0 slot 17  protected override void CheckModeChange() { } */
+    /** @rva 0x14B5440 slot 17  protected override void CheckModeChange() { } */
     CheckModeChange(): void {
         const result = this.modeChangeReferee.CanModeChange(this.battleUnitBundle.enemyList) as [boolean, BattleUnit, int]; // <>c__DisplayClass10_0
         const unit = result[1];
@@ -174,7 +174,7 @@ export abstract class SoloGameDirectorBase extends EnemyAppearanceGameDirectorBa
         act.NextModeChangeStep = step;
         actReferee.AddAct$ActBase(act);
     }
-    /** @rva 0x14CB580 slot 11  protected override CommandInitialize CreateCommandInitialize(BattleUnitInfo[] battleUnitInfoArray, TargetReferee targetReferee, SpReferee spReferee, GameSituationData gameSituationData) { } */
+    /** @rva 0x14B5620 slot 11  protected override CommandInitialize CreateCommandInitialize(BattleUnitInfo[] battleUnitInfoArray, TargetReferee targetReferee, SpReferee spReferee, GameSituationData gameSituationData) { } */
     CreateCommandInitialize(battleUnitInfoArray: BattleUnitInfo[], targetReferee: TargetReferee, spReferee: SpReferee, gameSituationData: GameSituationData): CommandInitialize {
         const command = new CommandInitialize().ctor$BattleUnitInfo_int_int_int_int_int_int_bool_GameSituationData(battleUnitInfoArray,
             targetReferee.allyAttackTargetId, targetReferee.allyFriendTargetId, targetReferee.enemyAttackTargetId, targetReferee.enemyFriendTargetId,
@@ -186,7 +186,7 @@ export abstract class SoloGameDirectorBase extends EnemyAppearanceGameDirectorBa
         command.SetModeChangeData(this.modeChangeReferee.modeChangeInfoList, this.modeChangeReferee.currentModeChangeStep);
         return command;
     }
-    /** @rva 0x14CB730 slot 13  public override void Request(RequestBase request, bool dontFlushCommand = False, CancellationToken cancellationToken) { } */
+    /** @rva 0x14B57D0 slot 13  public override void Request(RequestBase request, bool dontFlushCommand = False, CancellationToken cancellationToken) { } */
     Request(request: RequestBase, dontFlushCommand: boolean /* = False */, cancellationToken: any /* CancellationToken */): void {
         const type = request.RequestType;
         if (type === 3) {
@@ -223,11 +223,11 @@ export abstract class SoloGameDirectorBase extends EnemyAppearanceGameDirectorBa
         }
         super.Request(request, dontFlushCommand, cancellationToken);
     }
-    /** @rva 0x72F170  private void OnForceWinDebugRequested() { } */
+    /** @rva 0x730170  private void OnForceWinDebugRequested() { } */
     OnForceWinDebugRequested(): void { /* asm: ret 0 */ }
-    /** @rva 0x72F170  protected void ResetForceWinDebugRequestFlag() { } */
+    /** @rva 0x730170  protected void ResetForceWinDebugRequestFlag() { } */
     ResetForceWinDebugRequestFlag(): void { /* asm: ret 0 */ }
-    /** @rva 0x14CBBB0 slot 14  protected override void RunBattleToEnd(CancellationToken ct) { } */
+    /** @rva 0x14B5C50 slot 14  protected override void RunBattleToEnd(CancellationToken ct) { } */
     RunBattleToEnd(ct: any /* CancellationToken */): void {
         if (this.waveReferee.mode === 0) {
             while (this.BattlePhase !== Phase.Finish) {
@@ -252,11 +252,11 @@ export abstract class SoloGameDirectorBase extends EnemyAppearanceGameDirectorBa
             judge = this.judgeResultReferee;
         }
     }
-    /** @rva 0x14CB710 slot 19  protected override void PrepareEndlessEnemySupply() { } */
+    /** @rva 0x14B57B0 slot 19  protected override void PrepareEndlessEnemySupply() { } */
     PrepareEndlessEnemySupply(): void {
         this.targetReferee.CacheAttackTargetBeforeEndlessSupply(); // inlined in the game
     }
-    /** @rva 0x14CC5A0  protected List<BattleUnit> TrySupplyEndlessEnemyUnits() { } */
+    /** @rva 0x14B6640  protected List<BattleUnit> TrySupplyEndlessEnemyUnits() { } */
     TrySupplyEndlessEnemyUnits(): List<BattleUnit> {
         const list = this.additionalEnemyReferee.CreateSuppliedEndlessEnemyUnitList(this.battleUnitBundle.enemyList);
         if (list == null) return list;
@@ -264,7 +264,7 @@ export abstract class SoloGameDirectorBase extends EnemyAppearanceGameDirectorBa
         list.forEach(bindDelegate(this, this.$TrySupplyEndlessEnemyUnits$b__17_0));
         return list;
     }
-    /** @rva 0x14CC250  private void SupplyEndlessEnemy(List<BattleUnit> suppliedEndlessEnemyUnitList) { } */
+    /** @rva 0x14B62F0  private void SupplyEndlessEnemy(List<BattleUnit> suppliedEndlessEnemyUnitList) { } */
     SupplyEndlessEnemy(suppliedEndlessEnemyUnitList: List<BattleUnit>): void {
         this.ChangeAttackTargetAtSamePosition(this.targetReferee.attackTargetIdBeforeEndlessSupply, BattleUnit_TeamType.Ally); // inlined in the game
         this.CheckTargetUnit(BattleUnit_TeamType.Ally);
@@ -274,7 +274,7 @@ export abstract class SoloGameDirectorBase extends EnemyAppearanceGameDirectorBa
         this.StoreCommand(new CommandAddEndlessEnemy().ctor$ListBattleUnit(suppliedEndlessEnemyUnitList));
         this.commandSender.Flush();
     }
-    /** @rva 0x14CB210  private void ChangeAttackTargetAtSamePosition(int attackTargetId, BattleUnit.TeamType targetTeam) { } */
+    /** @rva 0x14B52B0  private void ChangeAttackTargetAtSamePosition(int attackTargetId, BattleUnit.TeamType targetTeam) { } */
     ChangeAttackTargetAtSamePosition(attackTargetId: int, targetTeam: BattleUnit_TeamType): void {
         if (this.BattlePhase === Phase.Finish) return; // <>c__DisplayClass19_0
         const target = this.battleUnitBundle.dic.get(attackTargetId);
@@ -283,7 +283,7 @@ export abstract class SoloGameDirectorBase extends EnemyAppearanceGameDirectorBa
         const unit = this.battleUnitBundle.activeList.find(u => u.Team !== targetTeam && u.PositionId === target.PositionId) ?? null; // b__0
         if (unit != null) this.ChangeTarget(targetTeam, TargetReferee_TargetType.Attack, unit.Id, true);
     }
-    /** @rva 0x14CC7D0  internal static bool <SetupBattleStage>g__TryGetQuestJudgeData|5_0(int stageMstId, out JudgeResultType judgeResultType, out int judgeResultValue) { } */
+    /** @rva 0x14B6870  internal static bool <SetupBattleStage>g__TryGetQuestJudgeData|5_0(int stageMstId, out JudgeResultType judgeResultType, out int judgeResultValue) { } */
     static $SetupBattleStage$g__TryGetQuestJudgeData_5_0(stageMstId: int, judgeResultType: Ref<JudgeResultType>, judgeResultValue: Ref<int>): boolean {
         judgeResultType.v = 0 as JudgeResultType;
         judgeResultValue.v = 0;
@@ -293,19 +293,19 @@ export abstract class SoloGameDirectorBase extends EnemyAppearanceGameDirectorBa
         judgeResultValue.v = stage.JudgeResultValue;
         return true;
     }
-    /** @rva 0x14BBF90  private void <TurnTransition>b__7_0(BattleUnit unit) { } */
+    /** @rva 0x14A6030  private void <TurnTransition>b__7_0(BattleUnit unit) { } */
     $TurnTransition$b__7_0(unit: BattleUnit): void {
         this.AddEnemyBattleUnit(unit, true, true); // same code as <OnBattleUnitDeath>b__5_0
     }
-    /** @rva 0x14CC8B0  private void <WaveTransition>b__8_0(BattleUnit unit) { } */
+    /** @rva 0x14B6950  private void <WaveTransition>b__8_0(BattleUnit unit) { } */
     $WaveTransition$b__8_0(unit: BattleUnit): void {
         this.AddEnemyBattleUnit(unit, false, false);
     }
-    /** @rva 0x14CC8B0  private void <WaveTransitionForForceWinDebug>b__9_0(BattleUnit unit) { } */
+    /** @rva 0x14B6950  private void <WaveTransitionForForceWinDebug>b__9_0(BattleUnit unit) { } */
     $WaveTransitionForForceWinDebug$b__9_0(unit: BattleUnit): void {
         this.AddEnemyBattleUnit(unit, false, false);
     }
-    /** @rva 0x14CC890  private void <TrySupplyEndlessEnemyUnits>b__17_0(BattleUnit unit) { } */
+    /** @rva 0x14B6930  private void <TrySupplyEndlessEnemyUnits>b__17_0(BattleUnit unit) { } */
     $TrySupplyEndlessEnemyUnits$b__17_0(unit: BattleUnit): void {
         this.AddEnemyBattleUnit(unit, false, true);
     }

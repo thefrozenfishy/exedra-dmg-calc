@@ -35,19 +35,19 @@ export class PassiveSkill {
     launcher: AbilityEffectLauncher = null!;
     get Id(): int { return this.get_Id(); }
     set Id(v: int) { this.set_Id(v); }
-    /** @rva 0x7354F0  public int get_Id() { } */
+    /** @rva 0x7364F0  public int get_Id() { } */
     get_Id(): int { return this._Id; /* auto-property */ }
-    /** @rva 0x738D00  public void set_Id(int value) { } */
+    /** @rva 0x739D00  public void set_Id(int value) { } */
     set_Id(value: int): void { this._Id = value; /* auto-property */ }
-    /** @rva 0x72F5E0  public void .ctor() { } */
+    /** @rva 0x7305E0  public void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
-    /** @rva 0x14CA760  public void .ctor(int id, List<AbilityEffectInfo> infoList) { } */
+    /** @rva 0x14B4800  public void .ctor(int id, List<AbilityEffectInfo> infoList) { } */
     ctor$int_ListAbilityEffectInfo(id: int, infoList: List<AbilityEffectInfo>): this {
         this._Id = id;
         this.launcher = new AbilityEffectLauncher().ctor$ListAbilityEffectInfo_bool(infoList, true);
         return this;
     }
-    /** @rva 0x14CA7E0  public void .ctor(PassiveSkillMstModel passiveSkillMstModel, List<PassiveSkillDetailMstModel> passiveSkillDetailMstList, AbilitySourceType abilitySource) { } */
+    /** @rva 0x14B4880  public void .ctor(PassiveSkillMstModel passiveSkillMstModel, List<PassiveSkillDetailMstModel> passiveSkillDetailMstList, AbilitySourceType abilitySource) { } */
     ctor$PassiveSkillMstModel_ListPassiveSkillDetailMstModel_AbilitySourceType(passiveSkillMstModel: PassiveSkillMstModel, passiveSkillDetailMstList: List<PassiveSkillDetailMstModel>, abilitySource: AbilitySourceType): this {
         if (passiveSkillMstModel == null) return this;
         this._Id = passiveSkillMstModel.PassiveSkillMstId;
@@ -56,14 +56,14 @@ export class PassiveSkill {
         this.launcher = new AbilityEffectLauncher().ctor$ListAbilityEffectInfo_bool(infos, true);
         return this;
     }
-    /** @rva 0x14C93A0  public AffectedUnitNoticeBundle Triggering(ProcessTiming startTiming, BattleConditionUtils.ConditionCheckDataBundle conditionCheckDataBundle, BattleUnit userUnit, Dictionary<int, BattleUnit> targetUnitDic, GameDirectorBase gameDirector) { } */
+    /** @rva 0x14B3440  public AffectedUnitNoticeBundle Triggering(ProcessTiming startTiming, BattleConditionUtils.ConditionCheckDataBundle conditionCheckDataBundle, BattleUnit userUnit, Dictionary<int, BattleUnit> targetUnitDic, GameDirectorBase gameDirector) { } */
     Triggering$5(startTiming: ProcessTiming, conditionCheckDataBundle: BattleConditionUtils_ConditionCheckDataBundle, userUnit: BattleUnit, targetUnitDic: Dictionary<int, BattleUnit>, gameDirector: GameDirectorBase): AffectedUnitNoticeBundle {
         if (this.launcher == null) return null!;
         return this.launcher.Triggering$9(startTiming, conditionCheckDataBundle, 2 as EffectOriginType, userUnit, targetUnitDic, gameDirector, null!, 0, 0);
     }
-    /** @rva 0x7EFA70  public List<AbilityEffectBase> GetAbilityEffectList() { } */
+    /** @rva 0x7F0A70  public List<AbilityEffectBase> GetAbilityEffectList() { } */
     GetAbilityEffectList(): List<AbilityEffectBase> { return this.launcher.AbilityEffectList; }
-    /** @rva 0x14C93F0  public static AffectedUnitNoticeBundle Triggering(GameDirectorBase gameDirector, ProcessTiming startTiming, BattleUnit actorUnit, BattleUnit mainTargetUnit, ActiveSkillBase actorActiveSkill, AffectedUnitNoticeBundle noticeBundle) { } */
+    /** @rva 0x14B3490  public static AffectedUnitNoticeBundle Triggering(GameDirectorBase gameDirector, ProcessTiming startTiming, BattleUnit actorUnit, BattleUnit mainTargetUnit, ActiveSkillBase actorActiveSkill, AffectedUnitNoticeBundle noticeBundle) { } */
     static Triggering$6(gameDirector: GameDirectorBase, startTiming: ProcessTiming, actorUnit: BattleUnit, mainTargetUnit: BattleUnit, actorActiveSkill: ActiveSkillBase, noticeBundle: AffectedUnitNoticeBundle): AffectedUnitNoticeBundle {
         // DisplayClass11_0 { battleUnitDic, addNoticeBundle, startTiming, gameDirector }
         if (startTiming === 1) {
@@ -114,7 +114,7 @@ export class PassiveSkill {
         for (const unit of gameDirector.battleUnitBundle.dic.values()) unit.Condition.ResetZoneStatePatternMstId();
         return addNoticeBundle;
     }
-    /** @rva 0x14C85C0  public static AffectedUnitNoticeBundle TriggeringOnBattleStart(GameDirectorBase gameDirector, Dictionary<int, BattleUnit> triggerUnitDic, Dictionary<int, BattleUnit> receiveUnitDic, bool isStateOnly = False) { } */
+    /** @rva 0x14B2660  public static AffectedUnitNoticeBundle TriggeringOnBattleStart(GameDirectorBase gameDirector, Dictionary<int, BattleUnit> triggerUnitDic, Dictionary<int, BattleUnit> receiveUnitDic, bool isStateOnly = False) { } */
     static TriggeringOnBattleStart(gameDirector: GameDirectorBase, triggerUnitDic: Dictionary<int, BattleUnit>, receiveUnitDic: Dictionary<int, BattleUnit>, isStateOnly: boolean = false): AffectedUnitNoticeBundle {
         let noticeBundle = new AffectedUnitNoticeBundle().ctor();
         let infos: BattleStartPassiveSkillTriggerInfo[] = [];
@@ -152,18 +152,18 @@ export class PassiveSkill {
         for (const unit of gameDirector.battleUnitBundle.dic.values()) unit.Condition.ResetZoneStatePatternMstId();
         return noticeBundle;
     }
-    /** @rva 0x14C8190  public static void RemoveByBattleUnit(BattleUnit userUnit, Dictionary<int, BattleUnit> battleUnitDic) { } */
+    /** @rva 0x14B2230  public static void RemoveByBattleUnit(BattleUnit userUnit, Dictionary<int, BattleUnit> battleUnitDic) { } */
     static RemoveByBattleUnit(userUnit: BattleUnit, battleUnitDic: Dictionary<int, BattleUnit>): void {
         for (const unit of battleUnitDic.values()) {
             unit.Condition.RemoveUnitState$BattleUnit_EffectOriginType_BattleUnit_FuncUnitStateBasebool(unit, 2 as EffectOriginType, userUnit, PassiveSkill.$RemoveByBattleUnit$g__StateRemovingPredicate_13_0);
         }
     }
-    /** @rva 0x14C8340  public static void RemoveByTeam(BattleUnit.TeamType team, Dictionary<int, BattleUnit> battleUnitDic) { } */
+    /** @rva 0x14B23E0  public static void RemoveByTeam(BattleUnit.TeamType team, Dictionary<int, BattleUnit> battleUnitDic) { } */
     static RemoveByTeam(team: BattleUnit_TeamType, battleUnitDic: Dictionary<int, BattleUnit>): void {
         for (const unit of [...battleUnitDic.values()].filter(u => u.Team === team && !u.IsDead)) // DisplayClass14_0 b__0
             PassiveSkill.RemoveByBattleUnit(unit, battleUnitDic);
     }
-    /** @rva 0x14CA700  internal static bool <RemoveByBattleUnit>g__StateRemovingPredicate|13_0(UnitStateBase state) { } */
+    /** @rva 0x14B47A0  internal static bool <RemoveByBattleUnit>g__StateRemovingPredicate|13_0(UnitStateBase state) { } */
     static $RemoveByBattleUnit$g__StateRemovingPredicate_13_0(state: UnitStateBase): boolean {
         if (!isImpl(state, "INeutralState")) return true;
         return !(state as unknown as INeutralState).DontRemoveOnPassiveSkillUserLeaveBattle;

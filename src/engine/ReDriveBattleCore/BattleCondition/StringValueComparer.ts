@@ -7,12 +7,12 @@ import { ValueComparerBase } from "./ValueComparerBase";
 
 // ---- ReDriveBattleCore.BattleCondition.StringValueComparer  (TypeDefIndex 1069, public class) ----
 export class StringValueComparer extends ValueComparerBase<string> {
-    /** @rva 0x1816480  public void .ctor(string leftValue, string rightValue) { } */
+    /** @rva 0x18010B0  public void .ctor(string leftValue, string rightValue) { } */
     ctor$string_string(leftValue: string, rightValue: string): this {
         super.ctor$T_T(leftValue, rightValue);
         return this;
     }
-    /** @rva 0x1816430 slot 5  public override bool Compare(CompareOperator compareOperator) { } */
+    /** @rva 0x1801060 slot 5  public override bool Compare(CompareOperator compareOperator) { } */
     Compare(compareOperator: CompareOperator): boolean {
         if (compareOperator === 1) return this.leftValue === this.rightValue; // String.Equals(a, b)
         if (compareOperator === 2) return !(this.leftValue === this.rightValue);

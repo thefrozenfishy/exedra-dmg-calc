@@ -9,7 +9,7 @@ import type { BattleUnit } from "./BattleUnit";
 
 // ---- ReDriveBattleCore.HpRecoveryCalculator  (TypeDefIndex 411, public class) ----
 export class HpRecoveryCalculator {
-    /** @rva 0x14C4100  public static Decimal GetProcessedRecoveryValue(BattleUnit userUnit, BattleUnit targetUnit, Decimal recoveryValue, bool shouldSuppress) { } */
+    /** @rva 0x14AE1A0  public static Decimal GetProcessedRecoveryValue(BattleUnit userUnit, BattleUnit targetUnit, Decimal recoveryValue, bool shouldSuppress) { } */
     static GetProcessedRecoveryValue(userUnit: BattleUnit, targetUnit: BattleUnit, recoveryValue: Decimal, shouldSuppress: boolean): Decimal {
         const healRatio = Decimal.fromFloat(userUnit.GetProcessedHealRatio());
         const baseValue = healRatio.div(Decimal.fromInt(100)).add(Decimal.One).mul(recoveryValue);
@@ -35,6 +35,6 @@ export class HpRecoveryCalculator {
         }
         return Decimal.max(value, Decimal.Zero); // Math.Max
     }
-    /** @rva 0x72F5E0  public void .ctor() { } */
+    /** @rva 0x7305E0  public void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
 }

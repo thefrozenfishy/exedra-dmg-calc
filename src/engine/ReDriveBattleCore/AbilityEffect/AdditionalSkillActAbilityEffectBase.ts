@@ -24,13 +24,13 @@ export abstract class AdditionalSkillActAbilityEffectBase extends AbilityEffectB
     isForcedAct: boolean = false;
     /** 0x6C protected int priority */
     priority: int = 0;
-    /** @rva 0x1920B00  protected void .ctor() { } */
+    /** @rva 0x1910690  protected void .ctor() { } */
     ctor(): this {
         this.priority = ActBase_Define.AdditionalSkillDefaultPriority;
         super.ctor();
         return this;
     }
-    /** @rva 0x1920A70  public void .ctor(AbilityEffectInfo info) { } */
+    /** @rva 0x1910600  public void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
         this.priority = ActBase_Define.AdditionalSkillDefaultPriority;
         super.ctor$AbilityEffectInfo(info);
@@ -38,7 +38,7 @@ export abstract class AdditionalSkillActAbilityEffectBase extends AbilityEffectB
         this.additionalSkillTargetType = info._EffectValue2 as AdditionalSkillActAbilityEffectBase_AdditionalSkillTargetType;
         return this;
     }
-    /** @rva 0x1920100 slot 5  public override AffectedUnitNoticeBundle Triggering(EffectOriginType origin, BattleUnit userUnit, Dictionary<int, BattleUnit> targetUnitDic, GameDirectorBase gameDirector) { } */
+    /** @rva 0x190FC90 slot 5  public override AffectedUnitNoticeBundle Triggering(EffectOriginType origin, BattleUnit userUnit, Dictionary<int, BattleUnit> targetUnitDic, GameDirectorBase gameDirector) { } */
     Triggering(origin: EffectOriginType, userUnit: BattleUnit, targetUnitDic: Dictionary<int, BattleUnit>, gameDirector: GameDirectorBase): AffectedUnitNoticeBundle {
         const dc = { userUnit, gameDirector, targetUnitDic }; // <>c__DisplayClass7_0 (struct, passed by ref)
         if (!this.isForcedAct) {
@@ -82,7 +82,7 @@ export abstract class AdditionalSkillActAbilityEffectBase extends AbilityEffectB
         referee.AddActToListAndSort(newAct, false);
         return new AffectedUnitNoticeBundle().ctor();
     }
-    /** @rva 0x1920670  internal static int <Triggering>g__GetSelectedTargetUnit|7_0(bool isFriendTarget, ref AdditionalSkillActAbilityEffectBase.<>c__DisplayClass7_0 ) { } */
+    /** @rva 0x1910200  internal static int <Triggering>g__GetSelectedTargetUnit|7_0(bool isFriendTarget, ref AdditionalSkillActAbilityEffectBase.<>c__DisplayClass7_0 ) { } */
     static $Triggering$g__GetSelectedTargetUnit_7_0(isFriendTarget: boolean, dc: { userUnit: BattleUnit; gameDirector: GameDirectorBase; targetUnitDic: Dictionary<int, BattleUnit> }): int {
         const referee = dc.gameDirector.targetReferee;
         let targetId: int;

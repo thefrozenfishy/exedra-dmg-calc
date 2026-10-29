@@ -9,6 +9,6 @@ import type { int } from "../../runtime";
 
 // ---- ReDriveBattleCore.Reader.AbilityEffectTypeMstReader  (TypeDefIndex 847, public class) ----
 export class AbilityEffectTypeMstReader extends BattleMstReaderBase<AbilityEffectTypeMstModel, AbilityEffectTypeMstRecord, int> {
-    /** @rva 0x16F59C0  public void .ctor() { } */
+    /** @rva 0x16DF690  public void .ctor() { } */
     ctor(): this { super.ctor(); return this; }
 }

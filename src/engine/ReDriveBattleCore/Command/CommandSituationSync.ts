@@ -17,19 +17,19 @@ export class CommandSituationSync extends CommandBase {
     set GameSituationData(v: GameSituationData) { this.set_GameSituationData(v); }
     get ElapsedTime(): float { return this.get_ElapsedTime(); }
     set ElapsedTime(v: float) { this.set_ElapsedTime(v); }
-    /** @rva 0x1056B90 slot 4  public override CommandType GetCommandType() { } */
+    /** @rva 0x10410E0 slot 4  public override CommandType GetCommandType() { } */
     GetCommandType(): CommandType { return 5 as CommandType; /* asm: mov eax, 5; ret */ }
-    /** @rva 0x732E90  public GameSituationData get_GameSituationData() { } */
+    /** @rva 0x733E90  public GameSituationData get_GameSituationData() { } */
     get_GameSituationData(): GameSituationData { return this._GameSituationData; /* auto-property */ }
-    /** @rva 0x735AB0  public void set_GameSituationData(GameSituationData value) { } */
+    /** @rva 0x736AB0  public void set_GameSituationData(GameSituationData value) { } */
     set_GameSituationData(value: GameSituationData): void { this._GameSituationData = value; /* auto-property */ }
-    /** @rva 0x96C430  public float get_ElapsedTime() { } */
+    /** @rva 0x951C10  public float get_ElapsedTime() { } */
     get_ElapsedTime(): float { return this._ElapsedTime; /* auto-property */ }
-    /** @rva 0x96C4A0  public void set_ElapsedTime(float value) { } */
+    /** @rva 0x951C80  public void set_ElapsedTime(float value) { } */
     set_ElapsedTime(value: float): void { this._ElapsedTime = value; /* auto-property */ }
-    /** @rva 0x72F5E0  public void .ctor() { } */
+    /** @rva 0x7305E0  public void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
-    /** @rva 0x1811BA0  public void .ctor(GameSituationData gameSituationData, float elapsedTime) { } */
+    /** @rva 0x17FC7D0  public void .ctor(GameSituationData gameSituationData, float elapsedTime) { } */
     ctor$GameSituationData_float(gameSituationData: GameSituationData, elapsedTime: float): this {
         this._GameSituationData = gameSituationData;
         this._ElapsedTime = elapsedTime;

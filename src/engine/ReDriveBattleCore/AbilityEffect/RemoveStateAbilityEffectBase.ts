@@ -21,18 +21,18 @@ export abstract class RemoveStateAbilityEffectBase extends AbilityEffectBase {
     static readonly RemoveAllNum: int = 0;
     /** 0x60 protected int maxRemoveCount */
     maxRemoveCount: int = 0;
-    /** @rva 0x1920EF0  protected void .ctor() { } */
+    /** @rva 0x1910A80  protected void .ctor() { } */
     ctor(): this {
         super.ctor();
         return this;
     }
-    /** @rva 0x192EA40  public void .ctor(AbilityEffectInfo info) { } */
+    /** @rva 0x191E5D0  public void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
         super.ctor$AbilityEffectInfo(info);
         this.maxRemoveCount = info._EffectValue1;
         return this;
     }
-    /** @rva 0x192E610 slot 5  public override AffectedUnitNoticeBundle Triggering(EffectOriginType origin, BattleUnit userUnit, Dictionary<int, BattleUnit> targetUnitDic, GameDirectorBase gameDirector) { } */
+    /** @rva 0x191E1A0 slot 5  public override AffectedUnitNoticeBundle Triggering(EffectOriginType origin, BattleUnit userUnit, Dictionary<int, BattleUnit> targetUnitDic, GameDirectorBase gameDirector) { } */
     Triggering(origin: EffectOriginType, userUnit: BattleUnit, targetUnitDic: Dictionary<int, BattleUnit>, gameDirector: GameDirectorBase): AffectedUnitNoticeBundle {
         const bundle = new AffectedUnitNoticeBundle().ctor();
         for (const targetUnitId of this._TargetUnitIdList) {
@@ -51,7 +51,7 @@ export abstract class RemoveStateAbilityEffectBase extends AbilityEffectBase {
     }
     /** @rva -1 slot 8  public abstract bool IsRemovable(UnitStateBase state); */
     abstract IsRemovable(state: UnitStateBase): boolean;
-    /** @rva 0x192E1A0 slot 6  public override List<BattleUnit> GetAIFilteredTargets(BattleUnit userUnit, List<BattleUnit> targetUnitList, SkillType skillType, GameDirectorBase gameDirector) { } */
+    /** @rva 0x191DD30 slot 6  public override List<BattleUnit> GetAIFilteredTargets(BattleUnit userUnit, List<BattleUnit> targetUnitList, SkillType skillType, GameDirectorBase gameDirector) { } */
     GetAIFilteredTargets(userUnit: BattleUnit, targetUnitList: List<BattleUnit>, skillType: SkillType, gameDirector: GameDirectorBase): List<BattleUnit> {
         let list: BattleUnit[];
         if (this._EffectRange === -1) {
@@ -62,19 +62,19 @@ export abstract class RemoveStateAbilityEffectBase extends AbilityEffectBase {
         if (list.length > 0) list = list.filter(unit => this.$GetAIFilteredTargets$b__6_1(unit));
         return list;
     }
-    /** @rva 0x192E3E0 slot 7  public override int SelectTargetInAIAction(BattleUnit userUnit, List<BattleUnit> targetUnitList) { } */
+    /** @rva 0x191DF70 slot 7  public override int SelectTargetInAIAction(BattleUnit userUnit, List<BattleUnit> targetUnitList) { } */
     SelectTargetInAIAction(userUnit: BattleUnit, targetUnitList: List<BattleUnit>): int {
         const funcList = [AISkillTargetSelector.UnitFilterByMainTarget, AISkillTargetSelector.UnitFilterWithMinHpRate];
         const unit = AISkillTargetSelector.SelectTargetUnitInOrder(targetUnitList, new AISkillTargetSelector_UnitFilterFuncOrder().ctor$ListFuncIEnumerableBattleUnitIEnumerableBattleUnit(funcList));
         if (unit != null) return unit._Id;
         return 0;
     }
-    /** @rva 0x192DA40  private bool <Triggering>b__4_0(UnitStateBase state) { } */
+    /** @rva 0x191D5D0  private bool <Triggering>b__4_0(UnitStateBase state) { } */
     $Triggering$b__4_0(state: UnitStateBase): boolean { return this.IsRemovable(state); /* vslot 8 */ }
-    /** @rva 0x192E990  private bool <GetAIFilteredTargets>b__6_1(BattleUnit unit) { } */
+    /** @rva 0x191E520  private bool <GetAIFilteredTargets>b__6_1(BattleUnit unit) { } */
     $GetAIFilteredTargets$b__6_1(unit: BattleUnit): boolean {
         return unit._Condition._StateList.some(state => this.$GetAIFilteredTargets$b__6_2(state));
     }
-    /** @rva 0x192DA40  private bool <GetAIFilteredTargets>b__6_2(UnitStateBase state) { } */
+    /** @rva 0x191D5D0  private bool <GetAIFilteredTargets>b__6_2(UnitStateBase state) { } */
     $GetAIFilteredTargets$b__6_2(state: UnitStateBase): boolean { return this.IsRemovable(state); /* vslot 8 */ }
 }

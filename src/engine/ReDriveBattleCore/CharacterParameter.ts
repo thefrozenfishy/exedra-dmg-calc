@@ -52,45 +52,45 @@ export class CharacterParameter extends BattleParameter {
     set BreakDamageRate(v: int) { this.set_BreakDamageRate(v); }
     get RecoveryEpRate(): int { return this.get_RecoveryEpRate(); }
     set RecoveryEpRate(v: int) { this.set_RecoveryEpRate(v); }
-    /** @rva 0x8A1200  public int get_StyleMstId() { } */
+    /** @rva 0x8A2200  public int get_StyleMstId() { } */
     get_StyleMstId(): int { return this._StyleMstId; /* auto-property */ }
-    /** @rva 0x8A12D0  public void set_StyleMstId(int value) { } */
+    /** @rva 0x8A22D0  public void set_StyleMstId(int value) { } */
     set_StyleMstId(value: int): void { this._StyleMstId = value; /* auto-property */ }
-    /** @rva 0x8A1220  public int get_LevelReactionBreakDamageValue() { } */
+    /** @rva 0x8A2220  public int get_LevelReactionBreakDamageValue() { } */
     get_LevelReactionBreakDamageValue(): int { return this._LevelReactionBreakDamageValue; /* auto-property */ }
-    /** @rva 0x8A12F0  public void set_LevelReactionBreakDamageValue(int value) { } */
+    /** @rva 0x8A22F0  public void set_LevelReactionBreakDamageValue(int value) { } */
     set_LevelReactionBreakDamageValue(value: int): void { this._LevelReactionBreakDamageValue = value; /* auto-property */ }
-    /** @rva 0x900770  public int get_LevelReactionSlipDamageValue() { } */
+    /** @rva 0x901720  public int get_LevelReactionSlipDamageValue() { } */
     get_LevelReactionSlipDamageValue(): int { return this._LevelReactionSlipDamageValue; /* auto-property */ }
-    /** @rva 0x9007B0  public void set_LevelReactionSlipDamageValue(int value) { } */
+    /** @rva 0x901760  public void set_LevelReactionSlipDamageValue(int value) { } */
     set_LevelReactionSlipDamageValue(value: int): void { this._LevelReactionSlipDamageValue = value; /* auto-property */ }
-    /** @rva 0x8560F0  public ElementType get_Element() { } */
+    /** @rva 0x8570F0  public ElementType get_Element() { } */
     get_Element(): ElementType { return this._Element; /* auto-property */ }
-    /** @rva 0x900A00  public void set_Element(ElementType value) { } */
+    /** @rva 0x9019B0  public void set_Element(ElementType value) { } */
     set_Element(value: ElementType): void { this._Element = value; /* auto-property */ }
-    /** @rva 0x8E9CC0  public RoleType get_Role() { } */
+    /** @rva 0x8EAC70  public RoleType get_Role() { } */
     get_Role(): RoleType { return this._Role; /* auto-property */ }
-    /** @rva 0x900A20  public void set_Role(RoleType value) { } */
+    /** @rva 0x9019D0  public void set_Role(RoleType value) { } */
     set_Role(value: RoleType): void { this._Role = value; /* auto-property */ }
-    /** @rva 0x8E06F0  public int get_EP() { } */
+    /** @rva 0x8E16A0  public int get_EP() { } */
     get_EP(): int { return this._EP; /* auto-property */ }
-    /** @rva 0x8772F0  public void set_EP(int value) { } */
+    /** @rva 0x8782F0  public void set_EP(int value) { } */
     set_EP(value: int): void { this._EP = value; /* auto-property */ }
-    /** @rva 0x901610  public int get_BP() { } */
+    /** @rva 0x9025C0  public int get_BP() { } */
     get_BP(): int { return this._BP; /* auto-property */ }
-    /** @rva 0x901650  public void set_BP(int value) { } */
+    /** @rva 0x902610  public void set_BP(int value) { } */
     set_BP(value: int): void { this._BP = value; /* auto-property */ }
-    /** @rva 0x95CE30  public int get_BreakDamageRate() { } */
+    /** @rva 0x943510  public int get_BreakDamageRate() { } */
     get_BreakDamageRate(): int { return this._BreakDamageRate; /* auto-property */ }
-    /** @rva 0x95CE40  public void set_BreakDamageRate(int value) { } */
+    /** @rva 0x943520  public void set_BreakDamageRate(int value) { } */
     set_BreakDamageRate(value: int): void { this._BreakDamageRate = value; /* auto-property */ }
-    /** @rva 0x900E80  public int get_RecoveryEpRate() { } */
+    /** @rva 0x901E30  public int get_RecoveryEpRate() { } */
     get_RecoveryEpRate(): int { return this._RecoveryEpRate; /* auto-property */ }
-    /** @rva 0x900E90  public void set_RecoveryEpRate(int value) { } */
+    /** @rva 0x901E40  public void set_RecoveryEpRate(int value) { } */
     set_RecoveryEpRate(value: int): void { this._RecoveryEpRate = value; /* auto-property */ }
-    /** @rva 0x72F5E0  private void .ctor() { } */
+    /** @rva 0x7305E0  private void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
-    /** @rva 0x13B2630  public void .ctor(in int atk, in int def, in int ctr, in int ctd, in int hp, in int speed, in int healRate, in int effectHitRate, in int effectParryRate, in ElementDamageRate[] elementDamageRates, in ElementResistRate[] elementResistRates, in int levelReactionBreakDamageValue, in int levelReactionSlipDamageValue, in int breakDamageRate, in int recoveryEpRate, in StyleMstModel styleMst, in bool isPvpOrGvg = False) { } */
+    /** @rva 0x139CB20  public void .ctor(in int atk, in int def, in int ctr, in int ctd, in int hp, in int speed, in int healRate, in int effectHitRate, in int effectParryRate, in ElementDamageRate[] elementDamageRates, in ElementResistRate[] elementResistRates, in int levelReactionBreakDamageValue, in int levelReactionSlipDamageValue, in int breakDamageRate, in int recoveryEpRate, in StyleMstModel styleMst, in bool isPvpOrGvg = False) { } */
     ctor$int_int_int_int_int_int_int_int_int_ElementDamageRate_ElementResistRate_int_int_int_int_StyleMstModel_bool(atk: int, def: int, ctr: int, ctd: int, hp: int, speed: int, healRate: int, effectHitRate: int, effectParryRate: int, elementDamageRates: ElementDamageRate[], elementResistRates: ElementResistRate[], levelReactionBreakDamageValue: int, levelReactionSlipDamageValue: int, breakDamageRate: int, recoveryEpRate: int, styleMst: StyleMstModel, isPvpOrGvg: boolean = false): this {
         super.ctor$int_int_int_int_int_int_int_int_int_ElementDamageRate_ElementResistRate(atk, def, ctr, ctd, hp, speed, healRate, effectHitRate, effectParryRate, elementDamageRates, elementResistRates);
         this._StyleMstId = styleMst.StyleMstId;
@@ -121,7 +121,7 @@ export class CharacterParameter extends BattleParameter {
         this._BreakedDamageReceiveRateIncreaseRate = 1000;
         return this;
     }
-    /** @rva 0x13B2250  private static int CalculateBreakPoint(int rarity, RoleType roleType) { } */
+    /** @rva 0x139C740  private static int CalculateBreakPoint(int rarity, RoleType roleType) { } */
     static CalculateBreakPoint(rarity: int, roleType: RoleType): int {
         const reader = () => BattleMstReaderBase.get_Instance<CalculationPointPolicyMstModel, CalculationPointPolicyMstRecord, int>(CalculationPointPolicyMstModel);
         const baseMst = reader().GetModel(x => x.coefficientName === "baseBreakGaugeValue");                                  // <CalculateBreakPoint>b__38_0

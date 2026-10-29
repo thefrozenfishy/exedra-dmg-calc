@@ -14,6 +14,6 @@ export class GveHistoryData {
     AttackTime: any /* DateTimeOffset */ = null!;
     /** 0x30 public int Damage */
     Damage: int = 0;
-    /** @rva 0x72F5E0  public void .ctor() { } */
+    /** @rva 0x7305E0  public void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
 }

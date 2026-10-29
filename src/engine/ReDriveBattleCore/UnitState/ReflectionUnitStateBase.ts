@@ -26,32 +26,32 @@ export abstract class ReflectionUnitStateBase extends UnitStateBase {  // implem
     _DamageTarget: ReflectionUnitStateBase_DamageTargetType = 0 as ReflectionUnitStateBase_DamageTargetType;
     get DamageTarget(): ReflectionUnitStateBase_DamageTargetType { return this.get_DamageTarget(); }
     set DamageTarget(v: ReflectionUnitStateBase_DamageTargetType) { this.set_DamageTarget(v); }
-    /** @rva 0x7421D0 slot 6  public override UnitStateBase.DirectionType get_Direction() { } */
+    /** @rva 0x7431D0 slot 6  public override UnitStateBase.DirectionType get_Direction() { } */
     get_Direction(): UnitStateBase_DirectionType { return 0 as UnitStateBase_DirectionType; /* asm: xor eax, eax; ret */ }
-    /** @rva 0x1700EA0 slot 7  public override string get_IconName() { } */
+    /** @rva 0x16EAB70 slot 7  public override string get_IconName() { } */
     get_IconName(): string {
         return "battle_icon_reflection";
     }
-    /** @rva 0x1700E70 slot 13  public override string get_GiveVisualEffectName() { } */
+    /** @rva 0x16EAB40 slot 13  public override string get_GiveVisualEffectName() { } */
     get_GiveVisualEffectName(): string {
         return "eff_cmn_act_buff_appear_001";
     }
-    /** @rva 0x9009C0  public ReflectionUnitStateBase.DamageTargetType get_DamageTarget() { } */
+    /** @rva 0x901970  public ReflectionUnitStateBase.DamageTargetType get_DamageTarget() { } */
     get_DamageTarget(): ReflectionUnitStateBase_DamageTargetType { return this._DamageTarget; /* auto-property */ }
-    /** @rva 0x900A30  public void set_DamageTarget(ReflectionUnitStateBase.DamageTargetType value) { } */
+    /** @rva 0x9019E0  public void set_DamageTarget(ReflectionUnitStateBase.DamageTargetType value) { } */
     set_DamageTarget(value: ReflectionUnitStateBase_DamageTargetType): void { this._DamageTarget = value; /* auto-property */ }
-    /** @rva 0x16F8570  protected void .ctor() { } */
+    /** @rva 0x16E2240  protected void .ctor() { } */
     ctor(): this {
         this._IconName = "";
         return this;
     }
-    /** @rva 0x1700E20  public void .ctor(AbilityEffectInfo info) { } */
+    /** @rva 0x16EAAF0  public void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
         super.ctor$AbilityEffectInfo(info);
         this._DamageTarget = (info._EffectValue2 > 0 ? 1 : 0) as ReflectionUnitStateBase_DamageTargetType;
         return this;
     }
-    /** @rva 0x1700690  protected List<BattleUnit> GetTargetUnitList(BattleUnit userUnit, BattleUnit attackUnit, List<BattleUnit> selectUnitList) { } */
+    /** @rva 0x16EA360  protected List<BattleUnit> GetTargetUnitList(BattleUnit userUnit, BattleUnit attackUnit, List<BattleUnit> selectUnitList) { } */
     GetTargetUnitList(userUnit: BattleUnit, attackUnit: BattleUnit, selectUnitList: List<BattleUnit>): List<BattleUnit> {
         const list: BattleUnit[] = [];
         if (this._DamageTarget === 1) {
@@ -63,7 +63,7 @@ export abstract class ReflectionUnitStateBase extends UnitStateBase {  // implem
         }
         return list;
     }
-    /** @rva 0x1700B30  public AffectedUnitNoticeBundle Triggering(BattleUnit userUnit, BattleUnit attackUnit, List<BattleUnit> selectUnitList, BattleType battleType, GameDirectorBase gameDirector) { } */
+    /** @rva 0x16EA800  public AffectedUnitNoticeBundle Triggering(BattleUnit userUnit, BattleUnit attackUnit, List<BattleUnit> selectUnitList, BattleType battleType, GameDirectorBase gameDirector) { } */
     Triggering(userUnit: BattleUnit, attackUnit: BattleUnit, selectUnitList: List<BattleUnit>, battleType: BattleType, gameDirector: GameDirectorBase): AffectedUnitNoticeBundle {
         const bundle = new AffectedUnitNoticeBundle().ctor();
         for (const targetUnit of this.GetTargetUnitList(userUnit, attackUnit, selectUnitList)) {
@@ -82,13 +82,13 @@ export abstract class ReflectionUnitStateBase extends UnitStateBase {  // implem
     }
     /** @rva -1 slot 25  protected abstract Decimal GetDamageBase(BattleUnit userUnit); */
     abstract GetDamageBase(userUnit: BattleUnit): Decimal;
-    /** @rva 0x1700460 slot 23  public override List<BattleUnit> GetAIFilteredTargets(BattleUnit userUnit, List<BattleUnit> targetUnitList, SkillType skillType, RangeType effectRange, GameDirectorBase gameDirector) { } */
+    /** @rva 0x16EA130 slot 23  public override List<BattleUnit> GetAIFilteredTargets(BattleUnit userUnit, List<BattleUnit> targetUnitList, SkillType skillType, RangeType effectRange, GameDirectorBase gameDirector) { } */
     GetAIFilteredTargets(userUnit: BattleUnit, targetUnitList: List<BattleUnit>, skillType: SkillType, effectRange: RangeType, gameDirector: GameDirectorBase): List<BattleUnit> {
         let list = targetUnitList.filter(x => !x.get_IsDead()); // <>c.b__16_0
         if (list.length > 0) list = list.filter(unit => unit._Condition._BarrierEndurance > 0); // b__16_1
         return list;
     }
-    /** @rva 0x17008D0 slot 24  public override AISkillTargetSelector.UnitFilterFuncOrder GetUnitFilterFuncOrder(BattleUnit userUnit, IEnumerable<BattleUnit> candidateUnits) { } */
+    /** @rva 0x16EA5A0 slot 24  public override AISkillTargetSelector.UnitFilterFuncOrder GetUnitFilterFuncOrder(BattleUnit userUnit, IEnumerable<BattleUnit> candidateUnits) { } */
     GetUnitFilterFuncOrder(userUnit: BattleUnit, candidateUnits: IEnumerable<BattleUnit>): AISkillTargetSelector_UnitFilterFuncOrder {
         const list: List<(a0: IEnumerable<BattleUnit>) => IEnumerable<BattleUnit>> = [];
         list.push(AISkillTargetSelector.UnitFilterByMainTarget);

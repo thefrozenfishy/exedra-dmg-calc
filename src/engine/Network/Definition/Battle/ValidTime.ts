@@ -10,6 +10,6 @@ export class ValidTime {
     static readonly Minutes: int = 1440;
     /** public const int EventEndMinutes */
     static readonly EventEndMinutes: int = 30;
-    /** @rva 0x72F5E0  public void .ctor() { } */
+    /** @rva 0x7305E0  public void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
 }

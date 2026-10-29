@@ -14,6 +14,6 @@ export interface IGiveSlipDamageVariation {
     IsTarget(state: UnitStateBase): boolean;
     /** @rva -1 slot 2  public abstract Decimal GetSlipDamageVariationValue(ReceiveSlipDamageUnitStateBase state, BattleUnit attackUnit, BattleUnit defenseUnit, Decimal damageValue, Decimal processingValue); */
     GetSlipDamageVariationValue(state: ReceiveSlipDamageUnitStateBase, attackUnit: BattleUnit, defenseUnit: BattleUnit, damageValue: Decimal, processingValue: Decimal): Decimal;
-    /** @rva 0x16FBFD0 slot 3  public virtual IEnumerable<BattleUnit> UnitFilterWithMaxSlipDamage(IEnumerable<BattleUnit> candidateUnits) { } */
+    /** @rva 0x16E5CA0 slot 3  public virtual IEnumerable<BattleUnit> UnitFilterWithMaxSlipDamage(IEnumerable<BattleUnit> candidateUnits) { } */
     UnitFilterWithMaxSlipDamage(candidateUnits: IEnumerable<BattleUnit>): IEnumerable<BattleUnit>;
 }

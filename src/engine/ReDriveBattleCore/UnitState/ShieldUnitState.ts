@@ -22,28 +22,28 @@ export class ShieldUnitState extends UnitStateBase {  // implements IBuff, ICons
     _DecreaseRatio: float = 0;
     get DecreaseRatio(): float { return this.get_DecreaseRatio(); }
     set DecreaseRatio(v: float) { this.set_DecreaseRatio(v); }
-    /** @rva 0x7421D0 slot 6  public override UnitStateBase.DirectionType get_Direction() { } */
+    /** @rva 0x7431D0 slot 6  public override UnitStateBase.DirectionType get_Direction() { } */
     get_Direction(): UnitStateBase_DirectionType { return 0 as UnitStateBase_DirectionType; /* asm: xor eax, eax; ret */ }
-    /** @rva 0x1701D00 slot 7  public override string get_IconName() { } */
+    /** @rva 0x16EB9D0 slot 7  public override string get_IconName() { } */
     get_IconName(): string {
         return "battle_icon_shield";
     }
-    /** @rva 0xC84590  public float get_DecreaseRatio() { } */
+    /** @rva 0xC6F3E0  public float get_DecreaseRatio() { } */
     get_DecreaseRatio(): float { return this._DecreaseRatio; /* auto-property */ }
-    /** @rva 0xC845A0  public void set_DecreaseRatio(float value) { } */
+    /** @rva 0xC6F3F0  public void set_DecreaseRatio(float value) { } */
     set_DecreaseRatio(value: float): void { this._DecreaseRatio = value; /* auto-property */ }
-    /** @rva 0x16F8570  protected void .ctor() { } */
+    /** @rva 0x16E2240  protected void .ctor() { } */
     ctor(): this {
         this._IconName = "";
         return this;
     }
-    /** @rva 0x1701CB0  public void .ctor(AbilityEffectInfo info) { } */
+    /** @rva 0x16EB980  public void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
         super.ctor$AbilityEffectInfo(info);
         this._DecreaseRatio = f32(f32(info._EffectValue1) / 1000);
         return this;
     }
-    /** @rva 0x1701A50 slot 24  public override AISkillTargetSelector.UnitFilterFuncOrder GetUnitFilterFuncOrder(BattleUnit userUnit, IEnumerable<BattleUnit> candidateUnits) { } */
+    /** @rva 0x16EB720 slot 24  public override AISkillTargetSelector.UnitFilterFuncOrder GetUnitFilterFuncOrder(BattleUnit userUnit, IEnumerable<BattleUnit> candidateUnits) { } */
     GetUnitFilterFuncOrder(userUnit: BattleUnit, candidateUnits: IEnumerable<BattleUnit>): AISkillTargetSelector_UnitFilterFuncOrder {
         const list: List<(a0: IEnumerable<BattleUnit>) => IEnumerable<BattleUnit>> = [];
         list.push(AISkillTargetSelector.UnitFilterByMainTarget);
@@ -51,7 +51,7 @@ export class ShieldUnitState extends UnitStateBase {  // implements IBuff, ICons
         list.push(AISkillTargetSelector.UnitFilterWithMinDef);
         return new AISkillTargetSelector_UnitFilterFuncOrder().ctor$ListFuncIEnumerableBattleUnitIEnumerableBattleUnit(list);
     }
-    /** @rva 0x1701A00  public void ConsumeRemainCount() { } */
+    /** @rva 0x16EB6D0  public void ConsumeRemainCount() { } */
     ConsumeRemainCount(): void {
         IConsumeRemainCount$ConsumeRemainCount(this as unknown as IConsumeRemainCount, 1); // ((IConsumeRemainCount)this).ConsumeRemainCount(1), default interface method
     }

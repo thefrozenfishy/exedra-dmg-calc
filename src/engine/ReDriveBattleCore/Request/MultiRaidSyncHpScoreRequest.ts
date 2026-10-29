@@ -7,8 +7,8 @@ import type { RequestType } from "./RequestType";
 
 // ---- ReDriveBattleCore.Request.MultiRaidSyncHpScoreRequest  (TypeDefIndex 836, public class) ----
 export class MultiRaidSyncHpScoreRequest extends RequestBase {
-    /** @rva 0xD8FF70 slot 4  public override RequestType get_RequestType() { } */
+    /** @rva 0xD7AE70 slot 4  public override RequestType get_RequestType() { } */
     get_RequestType(): RequestType { return 15 as RequestType; /* asm: mov eax, 0xf; ret */ }
-    /** @rva 0x72F5E0  public void .ctor() { } */
+    /** @rva 0x7305E0  public void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
 }

@@ -15,11 +15,11 @@ export class AdditionalSkillAct extends ActBase {
     IsTargetingCurrentActUnit: boolean = false;
     /** 0x39 public bool IsForcedAct */
     IsForcedAct: boolean = false;
-    /** @rva 0x75DD60 slot 4  public override int get_Priority() { } */
+    /** @rva 0x75ED60 slot 4  public override int get_Priority() { } */
     get_Priority(): int { return this._Priority$AdditionalSkillAct; /* auto-property */ }
-    /** @rva 0x8735A0 slot 5  public override void set_Priority(int value) { } */
+    /** @rva 0x8745A0 slot 5  public override void set_Priority(int value) { } */
     set_Priority(value: int): void { this._Priority$AdditionalSkillAct = value; /* auto-property */ }
-    /** @rva 0x1920B60  public void .ctor() { } */
+    /** @rva 0x19106F0  public void .ctor() { } */
     ctor(): this {
         this._Priority$AdditionalSkillAct = ActBase_Define.AdditionalSkillDefaultPriority;
         return super.ctor();

@@ -15,12 +15,12 @@ import type { EffectOriginType } from "../UnitState/EffectOriginType";
 
 // ---- ReDriveBattleCore.AbilityEffect.CountdownDecreaseAbilityEffect  (TypeDefIndex 1163, public class) ----
 export class CountdownDecreaseAbilityEffect extends AbilityEffectBase {
-    /** @rva 0x1920EE0  public void .ctor(AbilityEffectInfo info) { } */
+    /** @rva 0x1910A70  public void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
         super.ctor$AbilityEffectInfo(info);
         return this;
     }
-    /** @rva 0x1923C80 slot 5  public override AffectedUnitNoticeBundle Triggering(EffectOriginType origin, BattleUnit userUnit, Dictionary<int, BattleUnit> targetUnitDic, GameDirectorBase gameDirector) { } */
+    /** @rva 0x1913810 slot 5  public override AffectedUnitNoticeBundle Triggering(EffectOriginType origin, BattleUnit userUnit, Dictionary<int, BattleUnit> targetUnitDic, GameDirectorBase gameDirector) { } */
     Triggering(origin: EffectOriginType, userUnit: BattleUnit, targetUnitDic: Dictionary<int, BattleUnit>, gameDirector: GameDirectorBase): AffectedUnitNoticeBundle {
         if (!userUnit._Condition._StateList.some(state => state instanceof CountdownStartUnitState)) return null!; // <>c.b__1_0
         const bundle = new AffectedUnitNoticeBundle().ctor();

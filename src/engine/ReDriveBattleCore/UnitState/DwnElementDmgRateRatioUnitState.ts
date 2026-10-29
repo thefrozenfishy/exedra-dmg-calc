@@ -11,21 +11,21 @@ import { DownElementDamageRateUnitStateBase } from "./DownElementDamageRateUnitS
 // ---- ReDriveBattleCore.UnitState.DwnElementDmgRateRatioUnitState  (TypeDefIndex 600, public class) ----
 export class DwnElementDmgRateRatioUnitState extends DownElementDamageRateUnitStateBase {
     get DownRatio(): Decimal { return this.get_DownRatio(); }
-    /** @rva 0x15E2800  public Decimal get_DownRatio() { } */
+    /** @rva 0x15CCE60  public Decimal get_DownRatio() { } */
     get_DownRatio(): Decimal {
         return Decimal.fromFloat(this._UpdateableEffectValue).div(Decimal.fromInt(10)); // (decimal)float / 10m
     }
-    /** @rva 0x15D9DA0  protected void .ctor() { } */
+    /** @rva 0x15C4400  protected void .ctor() { } */
     ctor(): this {
         super.ctor();
         return this;
     }
-    /** @rva 0x15DB550  public void .ctor(AbilityEffectInfo info) { } */
+    /** @rva 0x15C5BB0  public void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
         super.ctor$AbilityEffectInfo(info);
         return this;
     }
-    /** @rva 0x15E26A0 slot 30  public override Decimal GetElementDamageRateVariationValue(BattleUnit unit, TargetElementType attackElement) { } */
+    /** @rva 0x15CCD00 slot 30  public override Decimal GetElementDamageRateVariationValue(BattleUnit unit, TargetElementType attackElement) { } */
     GetElementDamageRateVariationValue(unit: BattleUnit, attackElement: TargetElementType): Decimal {
         if (this._TargetElement === 0 || (this._TargetElement as number) === (attackElement as number)) return Decimal.fromFloat(this._UpdateableEffectValue).div(Decimal.fromInt(10)).neg();
         return Decimal.Zero;

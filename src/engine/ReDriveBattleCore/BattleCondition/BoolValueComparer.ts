@@ -7,12 +7,12 @@ import { ValueComparerBase } from "./ValueComparerBase";
 
 // ---- ReDriveBattleCore.BattleCondition.BoolValueComparer  (TypeDefIndex 1068, public class) ----
 export class BoolValueComparer extends ValueComparerBase<boolean> {
-    /** @rva 0x180F230  public void .ctor(bool leftValue, bool rightValue) { } */
+    /** @rva 0x17F9E60  public void .ctor(bool leftValue, bool rightValue) { } */
     ctor$bool_bool(leftValue: boolean, rightValue: boolean): this {
         super.ctor$T_T(leftValue, rightValue);
         return this;
     }
-    /** @rva 0x180F200 slot 5  public override bool Compare(CompareOperator compareOperator) { } */
+    /** @rva 0x17F9E30 slot 5  public override bool Compare(CompareOperator compareOperator) { } */
     Compare(compareOperator: CompareOperator): boolean {
         if (compareOperator === 1) return this.leftValue === this.rightValue;
         if (compareOperator === 2) return this.leftValue !== this.rightValue;

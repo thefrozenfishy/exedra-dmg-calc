@@ -23,12 +23,12 @@ export abstract class GainEpAbilityEffectBase extends AbilityEffectBase {
     gainPoint: float = 0;
     /** 0x64 protected readonly int effectValue */
     effectValue: int = 0;
-    /** @rva 0x1920EF0  protected void .ctor() { } */
+    /** @rva 0x1910A80  protected void .ctor() { } */
     ctor(): this {
         super.ctor();
         return this;
     }
-    /** @rva 0x1927A60  public void .ctor(AbilityEffectInfo info) { } */
+    /** @rva 0x19175F0  public void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
         super.ctor$AbilityEffectInfo(info);
         this._TargetSide = 0 as AbilityEffectBase_TargetSideType;
@@ -37,7 +37,7 @@ export abstract class GainEpAbilityEffectBase extends AbilityEffectBase {
     }
     /** @rva -1 slot 8  public abstract float GetGainPoint(BattleUnit targetUnit); */
     abstract GetGainPoint(targetUnit: BattleUnit): float;
-    /** @rva 0x1928C80 slot 5  public override AffectedUnitNoticeBundle Triggering(EffectOriginType origin, BattleUnit userUnit, Dictionary<int, BattleUnit> targetUnitDic, GameDirectorBase gameDirector) { } */
+    /** @rva 0x1918810 slot 5  public override AffectedUnitNoticeBundle Triggering(EffectOriginType origin, BattleUnit userUnit, Dictionary<int, BattleUnit> targetUnitDic, GameDirectorBase gameDirector) { } */
     Triggering(origin: EffectOriginType, userUnit: BattleUnit, targetUnitDic: Dictionary<int, BattleUnit>, gameDirector: GameDirectorBase): AffectedUnitNoticeBundle {
         const affectedUnitNoticeBundle = new AffectedUnitNoticeBundle().ctor();
         for (const targetUnitId of this._TargetUnitIdList) {
@@ -51,7 +51,7 @@ export abstract class GainEpAbilityEffectBase extends AbilityEffectBase {
         }
         return affectedUnitNoticeBundle;
     }
-    /** @rva 0x1928500 slot 6  public override List<BattleUnit> GetAIFilteredTargets(BattleUnit userUnit, List<BattleUnit> targetUnitList, SkillType skillType, GameDirectorBase gameDirector) { } */
+    /** @rva 0x1918090 slot 6  public override List<BattleUnit> GetAIFilteredTargets(BattleUnit userUnit, List<BattleUnit> targetUnitList, SkillType skillType, GameDirectorBase gameDirector) { } */
     GetAIFilteredTargets(userUnit: BattleUnit, targetUnitList: List<BattleUnit>, skillType: SkillType, gameDirector: GameDirectorBase): List<BattleUnit> {
         let list = targetUnitList.filter(u => !u.get_IsDead()); // <>c.b__6_0
         if (list.length > 0) {
@@ -60,7 +60,7 @@ export abstract class GainEpAbilityEffectBase extends AbilityEffectBase {
         }
         return list;
     }
-    /** @rva 0x19287A0 slot 7  public override int SelectTargetInAIAction(BattleUnit userUnit, List<BattleUnit> targetUnitList) { } */
+    /** @rva 0x1918330 slot 7  public override int SelectTargetInAIAction(BattleUnit userUnit, List<BattleUnit> targetUnitList) { } */
     SelectTargetInAIAction(userUnit: BattleUnit, targetUnitList: List<BattleUnit>): int {
         const candidateUnits = targetUnitList.filter(u => !u.get_IsDead()); // <>c.b__7_0
         const bpUnits = candidateUnits.filter(u => u._MaxBP > 0); // <>c.b__7_1

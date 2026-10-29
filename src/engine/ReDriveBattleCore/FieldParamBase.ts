@@ -14,7 +14,7 @@ import { EffectOriginType } from "./UnitState/EffectOriginType";
 export class FieldParamBase {
     /** 0x10 protected List<UnitStateBase> stateList */
     stateList: List<UnitStateBase> = null!;
-    /** @rva 0x14BE5E0  public void Triggering(BattleUnit unit, BattleType battleType, int turnOrderPriority) { } */
+    /** @rva 0x14A8680  public void Triggering(BattleUnit unit, BattleType battleType, int turnOrderPriority) { } */
     Triggering(unit: BattleUnit, battleType: BattleType, turnOrderPriority: int): void {
         for (const state of this.stateList) {
             const clone = state.Clone();
@@ -22,18 +22,18 @@ export class FieldParamBase {
             unit.Condition.AddUnitState(clone, unit, turnOrderPriority, null!, true);
         }
     }
-    /** @rva 0x14BE490  public void TriggeringUnitOnBattleStart(List<BattleUnit> unitList, BattleType battleType, int turnOrderPriority) { } */
+    /** @rva 0x14A8530  public void TriggeringUnitOnBattleStart(List<BattleUnit> unitList, BattleType battleType, int turnOrderPriority) { } */
     TriggeringUnitOnBattleStart(unitList: List<BattleUnit>, battleType: BattleType, turnOrderPriority: int): void {
         if (this.stateList == null || unitList == null) return;
         for (const unit of unitList) this.Triggering(unit, battleType, turnOrderPriority);
     }
-    /** @rva 0x14BE3B0  protected void AddUnitState(AbilityEffectInfo info) { } */
+    /** @rva 0x14A8450  protected void AddUnitState(AbilityEffectInfo info) { } */
     AddUnitState(info: AbilityEffectInfo): void {
         const state = UnitStateFactory.Create(info);
         if (state == null) return;
         this.stateList.push(state);
     }
-    /** @rva 0x14BE790  public void .ctor() { } */
+    /** @rva 0x14A8830  public void .ctor() { } */
     ctor(): this {
         this.stateList = [];
         return this;

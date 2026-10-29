@@ -26,36 +26,36 @@ export class DwnDefAccumRatioUnitState extends DownDefenseUnitStateBase {  // im
     set AccumCountMax(v: int) { this.set_AccumCountMax(v); }
     get AccumCount(): int { return this.get_AccumCount(); }
     set AccumCount(v: int) { this.set_AccumCount(v); }
-    /** @rva 0x15E1810  public float get_DownRatio() { } */
+    /** @rva 0x15CBE70  public float get_DownRatio() { } */
     get_DownRatio(): float {
         return f32(this._UpdateableEffectValue / 10);
     }
-    /** @rva 0x900F30 slot 31  public int get_AccumCountMax() { } */
+    /** @rva 0x901EE0 slot 31  public int get_AccumCountMax() { } */
     get_AccumCountMax(): int { return this._AccumCountMax; /* auto-property */ }
-    /** @rva 0x900F60 slot 32  public void set_AccumCountMax(int value) { } */
+    /** @rva 0x901F10 slot 32  public void set_AccumCountMax(int value) { } */
     set_AccumCountMax(value: int): void { this._AccumCountMax = value; /* auto-property */ }
-    /** @rva 0x900F20 slot 33  public int get_AccumCount() { } */
+    /** @rva 0x901ED0 slot 33  public int get_AccumCount() { } */
     get_AccumCount(): int { return this._AccumCount; /* auto-property */ }
-    /** @rva 0x900F50 slot 34  public void set_AccumCount(int value) { } */
+    /** @rva 0x901F00 slot 34  public void set_AccumCount(int value) { } */
     set_AccumCount(value: int): void { this._AccumCount = value; /* auto-property */ }
-    /** @rva 0x15E1A20  protected void .ctor() { } */
+    /** @rva 0x15CC080  protected void .ctor() { } */
     ctor(): this {
         this._AccumCount = 1;
         super.ctor();
         return this;
     }
-    /** @rva 0x15E19D0  public void .ctor(AbilityEffectInfo info) { } */
+    /** @rva 0x15CC030  public void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
         this._AccumCount = 1;
         super.ctor$AbilityEffectInfo(info);
         this._AccumCountMax = info._EffectValue2;
         return this;
     }
-    /** @rva 0x15E2430 slot 30  public override Decimal GetDefVariationValue(BattleUnit unit, Decimal processingValue) { } */
+    /** @rva 0x15CCA90 slot 30  public override Decimal GetDefVariationValue(BattleUnit unit, Decimal processingValue) { } */
     GetDefVariationValue(unit: BattleUnit, processingValue: Decimal): Decimal {
         return processingValue.mul(Decimal.fromFloat(f32(this._UpdateableEffectValue / 10)).mul(Decimal.fromInt(this._AccumCount)).div(Decimal.fromInt(100))).neg();
     }
-    /** @rva 0x15E23E0 slot 38  public bool Blend(UnitStateBase injectUnitState) { } */
+    /** @rva 0x15CCA40 slot 38  public bool Blend(UnitStateBase injectUnitState) { } */
     Blend(injectUnitState: UnitStateBase): boolean {
         return IAccum$Accumulate(this as unknown as IAccum, injectUnitState); // ((IAccum)this).Accumulate (default interface method, IAccum slot 6)
     }

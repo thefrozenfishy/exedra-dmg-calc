@@ -7,8 +7,8 @@ import { SkillDecisionActBase } from "./SkillDecisionActBase";
 
 // ---- ReDriveBattleCore.Act.SpecialAttackAct  (TypeDefIndex 1110, public class) ----
 export class SpecialAttackAct extends SkillDecisionActBase {
-    /** @rva 0x8A1230  public void SetDecisionContent(int friendUnitId) { } */
+    /** @rva 0x8A2230  public void SetDecisionContent(int friendUnitId) { } */
     SetDecisionContent(friendUnitId: int): void { this.targetFriendUnitId = friendUnitId; /* asm: mov dword ptr [rcx + 0x20], edx; ret */ }
-    /** @rva 0x191AEB0  public void .ctor() { } */
+    /** @rva 0x190AA40  public void .ctor() { } */
     ctor(): this { return super.ctor(); /* folded: ActBase..ctor */ }
 }

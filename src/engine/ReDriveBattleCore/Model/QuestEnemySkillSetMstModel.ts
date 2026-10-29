@@ -14,21 +14,21 @@ export class QuestEnemySkillSetMstModel extends MstModelBase<QuestEnemySkillSetM
     get WeightValue(): int { return this.get_WeightValue(); }
     get HpGaugeValue(): int { return this.get_HpGaugeValue(); }
     get IsDescriptionHidden(): boolean { return this.get_IsDescriptionHidden(); }
-    /** @rva 0x16FF5E0  public void .ctor(QuestEnemySkillSetMstRecord record) { } */
+    /** @rva 0x16E92B0  public void .ctor(QuestEnemySkillSetMstRecord record) { } */
     ctor$QuestEnemySkillSetMstRecord(record: QuestEnemySkillSetMstRecord): this {
         super.ctor$TRecord(record);
         return this;
     }
-    /** @rva 0x901380  public int get_QuestEnemySkillSetMstId() { } */
+    /** @rva 0x902330  public int get_QuestEnemySkillSetMstId() { } */
     get_QuestEnemySkillSetMstId(): int { return this.record.questEnemySkillSetMstId; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x901785; mov eax, dword ptr [rax + 0x10]; add rsp, 0x28; ret */ }
-    /** @rva 0x9013A0  public int get_EnemySkillSetId() { } */
+    /** @rva 0x902350  public int get_EnemySkillSetId() { } */
     get_EnemySkillSetId(): int { return this.record.enemySkillSetId; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x9017a5; mov eax, dword ptr [rax + 0x14]; add rsp, 0x28; ret */ }
-    /** @rva 0x9013C0  public int get_SkillMstId() { } */
+    /** @rva 0x902370  public int get_SkillMstId() { } */
     get_SkillMstId(): int { return this.record.skillMstId; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x902c85; mov eax, dword ptr [rax + 0x18]; add rsp, 0x28; ret */ }
-    /** @rva 0x901360  public int get_WeightValue() { } */
+    /** @rva 0x902310  public int get_WeightValue() { } */
     get_WeightValue(): int { return this.record.weightValue; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x902c65; mov eax, dword ptr [rax + 0x1c]; add rsp, 0x28; ret */ }
-    /** @rva 0xA06180  public int get_HpGaugeValue() { } */
+    /** @rva 0xA04DB0  public int get_HpGaugeValue() { } */
     get_HpGaugeValue(): int { return this.record.hpGaugeValue; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0xa0d855; mov eax, dword ptr [rax + 0x20]; add rsp, 0x28; ret */ }
-    /** @rva 0xA07A80  public bool get_IsDescriptionHidden() { } */
+    /** @rva 0xA066B0  public bool get_IsDescriptionHidden() { } */
     get_IsDescriptionHidden(): boolean { return this.record.isDescriptionHidden; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0xa11cf6; movzx eax, byte ptr [rax + 0x24]; add rsp, 0x28; ret */ }
 }

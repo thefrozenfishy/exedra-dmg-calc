@@ -44,7 +44,7 @@ export class BackupAgent {  // implements IObserver<IReadOnlyList<CommandBase>>
     get BackupData(): BackupData { return this.get_BackupData(); }
     get AllLogCommandList(): List<CommandBase> { return this.get_AllLogCommandList(); }
     get LogCommandListForBackup(): List<CommandBase> { return this.get_LogCommandListForBackup(); }
-    /** @rva 0x13A1EA0  public void .ctor(GameDirectorBase backupTarget) { } */
+    /** @rva 0x138C3A0  public void .ctor(GameDirectorBase backupTarget) { } */
     ctor$GameDirectorBase(backupTarget: GameDirectorBase): this {
         this.backupData = new BackupData().ctor();
         this.allLogCommandList = [];
@@ -52,19 +52,19 @@ export class BackupAgent {  // implements IObserver<IReadOnlyList<CommandBase>>
         this.backupTarget = backupTarget;
         return this;
     }
-    /** @rva 0x732E90  public BackupData get_BackupData() { } */
+    /** @rva 0x733E90  public BackupData get_BackupData() { } */
     get_BackupData(): BackupData { return this.backupData; /* asm: mov rax, qword ptr [rcx + 0x18]; ret */ }
-    /** @rva 0x7359E0  public List<CommandBase> get_AllLogCommandList() { } */
+    /** @rva 0x7369E0  public List<CommandBase> get_AllLogCommandList() { } */
     get_AllLogCommandList(): List<CommandBase> { return this.allLogCommandList; /* asm: mov rax, qword ptr [rcx + 0x20]; ret */ }
-    /** @rva 0x735EA0  public List<CommandBase> get_LogCommandListForBackup() { } */
+    /** @rva 0x736EA0  public List<CommandBase> get_LogCommandListForBackup() { } */
     get_LogCommandListForBackup(): List<CommandBase> { return this.logCommandListForBackup; /* asm: mov rax, qword ptr [rcx + 0x28]; ret */ }
     /** @rva -1  public static string SerializeObject<T>(T obj, bool withEncrypt = True, bool isLog = False) { } */
     static SerializeObject<T>(obj: T, withEncrypt?: boolean /* = True */, isLog?: boolean /* = False */): string { return notPorted("BackupAgent.SerializeObject", 0); }
     /** @rva -1  public static T DeserializeObject<T>(string json, bool withDecrypt = True) { } */
     static DeserializeObject<T>(T$: abstract new (...args: any[]) => T, json: string, withDecrypt?: boolean /* = True */): T { return notPorted("BackupAgent.DeserializeObject", 0); }
-    /** @rva 0x13A0D20  public void MakeBackup(IReadOnlyList<CommandBase> commands) { } */
-    MakeBackup(commands: IReadOnlyList<CommandBase>): void { return notPorted("BackupAgent.MakeBackup", 0x13A0D20); }
-    /** @rva 0x13A1050  private void RecordLogCommands(IReadOnlyList<CommandBase> commands) { } */
+    /** @rva 0x138B220  public void MakeBackup(IReadOnlyList<CommandBase> commands) { } */
+    MakeBackup(commands: IReadOnlyList<CommandBase>): void { return notPorted("BackupAgent.MakeBackup", 0x138B220); }
+    /** @rva 0x138B550  private void RecordLogCommands(IReadOnlyList<CommandBase> commands) { } */
     RecordLogCommands(commands: IReadOnlyList<CommandBase>): void {
         for (let i = 0; i < commands.length; i++) {
             const command = commands[i];
@@ -74,9 +74,9 @@ export class BackupAgent {  // implements IObserver<IReadOnlyList<CommandBase>>
             }
         }
     }
-    /** @rva 0x13A0F30  public static bool NeedBackup(IReadOnlyList<CommandBase> commands) { } */
-    static NeedBackup(commands: IReadOnlyList<CommandBase>): boolean { return notPorted("BackupAgent.NeedBackup", 0x13A0F30); }
-    /** @rva 0x13A1290  public void RefreshPrevBackup() { } */
+    /** @rva 0x138B430  public static bool NeedBackup(IReadOnlyList<CommandBase> commands) { } */
+    static NeedBackup(commands: IReadOnlyList<CommandBase>): boolean { return notPorted("BackupAgent.NeedBackup", 0x138B430); }
+    /** @rva 0x138B790  public void RefreshPrevBackup() { } */
     RefreshPrevBackup(): void {
         const figureUnits: List<BattleUnit> = [];
         const byPosition = new Map<int, BattleUnit>();
@@ -95,39 +95,39 @@ export class BackupAgent {  // implements IObserver<IReadOnlyList<CommandBase>>
         this.prevSituation = GameDirectorBase_GameSituationDataCreator.Create(this.backupTarget);
         this.prevTurnOrder = this.backupTarget.turnActSystem.CreateTurnActUnitOrderInfo(this.backupTarget.ActiveUnitList, this.backupTarget);
     }
-    /** @rva 0x13A18E0  public static GameDirectorBase RestoreGameDirector(BackupData backupData) { } */
-    static RestoreGameDirector(backupData: BackupData): GameDirectorBase { return notPorted("BackupAgent.RestoreGameDirector", 0x13A18E0); }
-    /** @rva 0x13A1810  public List<CommandBase> RestoreCommands() { } */
+    /** @rva 0x138BDE0  public static GameDirectorBase RestoreGameDirector(BackupData backupData) { } */
+    static RestoreGameDirector(backupData: BackupData): GameDirectorBase { return notPorted("BackupAgent.RestoreGameDirector", 0x138BDE0); }
+    /** @rva 0x138BD10  public List<CommandBase> RestoreCommands() { } */
     RestoreCommands(): List<CommandBase> {
         if (isNullOrEmpty(this.backupData.commandsJson)) return [];
         return BackupAgent.DeserializeObject<List<CommandBase>>(Array as any, this.backupData.commandsJson, true);
     }
-    /** @rva 0x13A1760  public BattleUnitInfo[] RestoreBattleUnitInfoArray() { } */
+    /** @rva 0x138BC60  public BattleUnitInfo[] RestoreBattleUnitInfoArray() { } */
     RestoreBattleUnitInfoArray(): BattleUnitInfo[] {
         if (isNullOrEmpty(this.backupData.prevUnitsJson)) return []; // Array.Empty<BattleUnitInfo>()
         return BackupAgent.DeserializeObject<BattleUnitInfo[]>(Array as any, this.backupData.prevUnitsJson, true);
     }
-    /** @rva 0x13A1A80  public GameSituationData RestorePrevSituationData() { } */
+    /** @rva 0x138BF80  public GameSituationData RestorePrevSituationData() { } */
     RestorePrevSituationData(): GameSituationData {
         if (isNullOrEmpty(this.backupData.prevSituationJson)) return null!;
         return BackupAgent.DeserializeObject<GameSituationData>(GameSituationData, this.backupData.prevSituationJson, true);
     }
-    /** @rva 0x13A1B10  public TurnActOrderUnitInfo RestoreTurnActOrderUnitInfo() { } */
+    /** @rva 0x138C010  public TurnActOrderUnitInfo RestoreTurnActOrderUnitInfo() { } */
     RestoreTurnActOrderUnitInfo(): TurnActOrderUnitInfo {
         if (isNullOrEmpty(this.backupData.turnOrderJson)) return new TurnActOrderUnitInfo().ctor();
         return BackupAgent.DeserializeObject<TurnActOrderUnitInfo>(TurnActOrderUnitInfo, this.backupData.turnOrderJson, true);
     }
     /** @rva -1  public void RestoreLogCommands<T>(T logCommandsJsons) { } */
     RestoreLogCommands<T>(logCommandsJsons: T): void { return notPorted("BackupAgent.RestoreLogCommands", 0); }
-    /** @rva 0x72F170 slot 6  private void System.IObserver<System.Collections.Generic.IReadOnlyList<ReDriveBattleCore.Command.CommandBase>>.OnCompleted() { } */
+    /** @rva 0x730170 slot 6  private void System.IObserver<System.Collections.Generic.IReadOnlyList<ReDriveBattleCore.Command.CommandBase>>.OnCompleted() { } */
     IObserver$OnCompleted(): void { /* asm: ret 0 */ }
-    /** @rva 0x13A1BD0 slot 4  private void System.IObserver<System.Collections.Generic.IReadOnlyList<ReDriveBattleCore.Command.CommandBase>>.OnNext(IReadOnlyList<CommandBase> commands) { } */
+    /** @rva 0x138C0D0 slot 4  private void System.IObserver<System.Collections.Generic.IReadOnlyList<ReDriveBattleCore.Command.CommandBase>>.OnNext(IReadOnlyList<CommandBase> commands) { } */
     IObserver$OnNext(commands: IReadOnlyList<CommandBase>): void {
         this.RecordLogCommands(commands); // inlined in the game
     }
-    /** @rva 0x72F170 slot 5  private void System.IObserver<System.Collections.Generic.IReadOnlyList<ReDriveBattleCore.Command.CommandBase>>.OnError(Exception e) { } */
+    /** @rva 0x730170 slot 5  private void System.IObserver<System.Collections.Generic.IReadOnlyList<ReDriveBattleCore.Command.CommandBase>>.OnError(Exception e) { } */
     IObserver$OnError(e: any /* Exception */): void { /* asm: ret 0 */ }
-    /** @rva 0x13A1BE0  private static void .cctor() { } */
+    /** @rva 0x138C0E0  private static void .cctor() { } */
     static cctor(): void {
         BackupAgent.EnableEncryption = true;
         // JsonSerializerSettings / JsonSerializerSettingsForLog (Newtonsoft TypeNameHandling etc.) are client serialization
@@ -139,10 +139,10 @@ export class BackupAgent {  // implements IObserver<IReadOnlyList<CommandBase>>
 // base type DefaultContractResolver is outside the ported set
 // ---- ReDriveBattleCore.BackupAgent.ReDriveDefaultContractResolver  (TypeDefIndex 319, private class) ----
 export class BackupAgent_ReDriveDefaultContractResolver {
-    /** @rva 0x13B3090 slot 19  protected override IList<JsonProperty> CreateProperties(Type type, MemberSerialization memberSerialization) { } */
-    CreateProperties(type_: Type, memberSerialization: any /* MemberSerialization */): IList<any /* JsonProperty */> { return notPorted("BackupAgent_ReDriveDefaultContractResolver.CreateProperties", 0x13B3090); }
-    /** @rva 0x13B3220  public void .ctor() { } */
-    ctor(): this { return notPorted("BackupAgent_ReDriveDefaultContractResolver..ctor", 0x13B3220); }
+    /** @rva 0x139D580 slot 19  protected override IList<JsonProperty> CreateProperties(Type type, MemberSerialization memberSerialization) { } */
+    CreateProperties(type_: Type, memberSerialization: any /* MemberSerialization */): IList<any /* JsonProperty */> { return notPorted("BackupAgent_ReDriveDefaultContractResolver.CreateProperties", 0x139D580); }
+    /** @rva 0x139D710  public void .ctor() { } */
+    ctor(): this { return notPorted("BackupAgent_ReDriveDefaultContractResolver..ctor", 0x139D710); }
 }
 
 // ---- ReDriveBattleCore.BackupAgent.TypeDontSerializePropertyInfo  (TypeDefIndex 320, private class) ----
@@ -151,9 +151,9 @@ export class BackupAgent_TypeDontSerializePropertyInfo {
     type_: Type = null!;
     /** 0x18 public List<string> propertyNameList */
     propertyNameList: List<string> = null!;
-    /** @rva 0x13B3F60  public bool ShouldRemoveProperty(JsonProperty jsonProperty) { } */
-    ShouldRemoveProperty(jsonProperty: any /* JsonProperty */): boolean { return notPorted("BackupAgent_TypeDontSerializePropertyInfo.ShouldRemoveProperty", 0x13B3F60); }
-    /** @rva 0x72F5E0  public void .ctor() { } */
+    /** @rva 0x139E450  public bool ShouldRemoveProperty(JsonProperty jsonProperty) { } */
+    ShouldRemoveProperty(jsonProperty: any /* JsonProperty */): boolean { return notPorted("BackupAgent_TypeDontSerializePropertyInfo.ShouldRemoveProperty", 0x139E450); }
+    /** @rva 0x7305E0  public void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
 }
 
@@ -161,24 +161,24 @@ export class BackupAgent_TypeDontSerializePropertyInfo {
 export class BackupAgent_ReDriveLogContractResolver extends BackupAgent_ReDriveDefaultContractResolver {
     /** 0x0 private static readonly List<BackupAgent.TypeDontSerializePropertyInfo> TypeDontSerializePropertyInfoList */
     static TypeDontSerializePropertyInfoList: List<BackupAgent_TypeDontSerializePropertyInfo> = null!;
-    /** @rva 0x13B3270 slot 19  protected override IList<JsonProperty> CreateProperties(Type type, MemberSerialization memberSerialization) { } */
-    CreateProperties(type_: Type, memberSerialization: any /* MemberSerialization */): IList<any /* JsonProperty */> { return notPorted("BackupAgent_ReDriveLogContractResolver.CreateProperties", 0x13B3270); }
-    /** @rva 0x13B3220  public void .ctor() { } */
-    ctor(): this { return notPorted("BackupAgent_ReDriveLogContractResolver..ctor", 0x13B3220); }
-    /** @rva 0x13B3620  private static void .cctor() { } */
-    static cctor(): void { return notPorted("BackupAgent_ReDriveLogContractResolver..cctor", 0x13B3620); }
+    /** @rva 0x139D760 slot 19  protected override IList<JsonProperty> CreateProperties(Type type, MemberSerialization memberSerialization) { } */
+    CreateProperties(type_: Type, memberSerialization: any /* MemberSerialization */): IList<any /* JsonProperty */> { return notPorted("BackupAgent_ReDriveLogContractResolver.CreateProperties", 0x139D760); }
+    /** @rva 0x139D710  public void .ctor() { } */
+    ctor(): this { return notPorted("BackupAgent_ReDriveLogContractResolver..ctor", 0x139D710); }
+    /** @rva 0x139DB10  private static void .cctor() { } */
+    static cctor(): void { return notPorted("BackupAgent_ReDriveLogContractResolver..cctor", 0x139DB10); }
 }
 
 // ---- ReDriveBattleCore.BackupAgent.GameDirectorSerializeWrapper  (TypeDefIndex 322, private class) ----
 export class BackupAgent_GameDirectorSerializeWrapper {
     /** 0x10 private readonly GameDirectorBase gameDirector */
     gameDirector: GameDirectorBase = null!;
-    /** @rva 0x736FB0  public void .ctor(GameDirectorBase gameDirector) { } */
+    /** @rva 0x737FB0  public void .ctor(GameDirectorBase gameDirector) { } */
     ctor$GameDirectorBase(gameDirector: GameDirectorBase): this {
         this.gameDirector = gameDirector;
         return this;
     }
-    /** @rva 0x72FC50  public GameDirectorBase GetGameDirector() { } */
+    /** @rva 0x730C50  public GameDirectorBase GetGameDirector() { } */
     GetGameDirector(): GameDirectorBase { return this.gameDirector; /* asm: mov rax, qword ptr [rcx + 0x10]; ret */ }
 }
 

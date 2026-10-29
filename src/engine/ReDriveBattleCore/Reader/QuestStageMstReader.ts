@@ -9,6 +9,6 @@ import type { int } from "../../runtime";
 
 // ---- ReDriveBattleCore.Reader.QuestStageMstReader  (TypeDefIndex 865, public class) ----
 export class QuestStageMstReader extends BattleMstReaderBase<QuestStageMstModel, QuestStageMstRecord, int> {
-    /** @rva 0x16FFB20  public void .ctor() { } */
+    /** @rva 0x16E97F0  public void .ctor() { } */
     ctor(): this { super.ctor(); return this; }
 }

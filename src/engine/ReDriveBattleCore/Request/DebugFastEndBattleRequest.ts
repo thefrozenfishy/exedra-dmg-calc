@@ -11,13 +11,13 @@ export class DebugFastEndBattleRequest extends RequestBase {
     _EndType: DebugFastEndBattleRequest_BattleEndType = 0 as DebugFastEndBattleRequest_BattleEndType;
     get EndType(): DebugFastEndBattleRequest_BattleEndType { return this.get_EndType(); }
     set EndType(v: DebugFastEndBattleRequest_BattleEndType) { this.set_EndType(v); }
-    /** @rva 0x7354F0  public DebugFastEndBattleRequest.BattleEndType get_EndType() { } */
+    /** @rva 0x7364F0  public DebugFastEndBattleRequest.BattleEndType get_EndType() { } */
     get_EndType(): DebugFastEndBattleRequest_BattleEndType { return this._EndType; /* auto-property */ }
-    /** @rva 0x738D00  public void set_EndType(DebugFastEndBattleRequest.BattleEndType value) { } */
+    /** @rva 0x739D00  public void set_EndType(DebugFastEndBattleRequest.BattleEndType value) { } */
     set_EndType(value: DebugFastEndBattleRequest_BattleEndType): void { this._EndType = value; /* auto-property */ }
-    /** @rva 0x16F8A20 slot 4  public override RequestType get_RequestType() { } */
+    /** @rva 0x16E26F0 slot 4  public override RequestType get_RequestType() { } */
     get_RequestType(): RequestType { return 1000 as RequestType; /* asm: mov eax, 0x3e8; ret */ }
-    /** @rva 0x72F5E0  public void .ctor() { } */
+    /** @rva 0x7305E0  public void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
 }
 

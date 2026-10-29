@@ -16,30 +16,30 @@ import { AISkillTargetSelector } from "../AI/AISkillTargetSelector";
 // ---- ReDriveBattleCore.UnitState.UpAimGiveDamageUnitStateBase  (TypeDefIndex 530, public abstract class) ----
 export abstract class UpAimGiveDamageUnitStateBase extends AimDamageBetterUnitStateBase {  // implements IGiveDamageVariation
     static readonly __interfaces: readonly string[] = ['IGiveDamageVariation'];
-    /** @rva 0x15F4BD0 slot 7  public override string get_IconName() { } */
+    /** @rva 0x15DF230 slot 7  public override string get_IconName() { } */
     get_IconName(): string {
         return "battle_icon_up_giv_dmg";
     }
-    /** @rva 0x7421D0 slot 28  public override AdditionType get_Addition() { } */
+    /** @rva 0x7431D0 slot 28  public override AdditionType get_Addition() { } */
     get_Addition(): AdditionType { return 0 as AdditionType; /* asm: xor eax, eax; ret */ }
-    /** @rva 0x15D9DA0  protected void .ctor() { } */
+    /** @rva 0x15C4400  protected void .ctor() { } */
     ctor(): this {
         super.ctor();
         return this;
     }
-    /** @rva 0x15DB550  public void .ctor(AbilityEffectInfo info) { } */
+    /** @rva 0x15C5BB0  public void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
         super.ctor$AbilityEffectInfo(info);
         return this;
     }
-    /** @rva 0x15F4860 slot 29  public override Decimal GetDamageVariationValue(BattleUnit attackUnit, BattleUnit defenseUnit, Decimal damageValue, Decimal processingValue) { } */
+    /** @rva 0x15DEEC0 slot 29  public override Decimal GetDamageVariationValue(BattleUnit attackUnit, BattleUnit defenseUnit, Decimal damageValue, Decimal processingValue) { } */
     GetDamageVariationValue(attackUnit: BattleUnit, defenseUnit: BattleUnit, damageValue: Decimal, processingValue: Decimal): Decimal {
         if (defenseUnit.IsMatch$TargetRoleType(this._TargetRole) && defenseUnit.IsMatch$TargetElementType(this._TargetElement)) {
             return super.GetDamageVariationValue(attackUnit, defenseUnit, damageValue, processingValue); // DamageVariationUnitStateBase (non-virtual call)
         }
         return Decimal.Zero;
     }
-    /** @rva 0x15F4970 slot 24  public override AISkillTargetSelector.UnitFilterFuncOrder GetUnitFilterFuncOrder(BattleUnit userUnit, IEnumerable<BattleUnit> candidateUnits) { } */
+    /** @rva 0x15DEFD0 slot 24  public override AISkillTargetSelector.UnitFilterFuncOrder GetUnitFilterFuncOrder(BattleUnit userUnit, IEnumerable<BattleUnit> candidateUnits) { } */
     GetUnitFilterFuncOrder(userUnit: BattleUnit, candidateUnits: IEnumerable<BattleUnit>): AISkillTargetSelector_UnitFilterFuncOrder {
         const list: List<(a0: IEnumerable<BattleUnit>) => IEnumerable<BattleUnit>> = [];
         list.push(AISkillTargetSelector.UnitFilterByMainTarget);

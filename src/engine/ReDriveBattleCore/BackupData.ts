@@ -16,8 +16,8 @@ export class BackupData {
     /** 0x30 public string turnOrderJson */
     turnOrderJson: string = null!;
     get IsValid(): boolean { return this.get_IsValid(); }
-    /** @rva 0x13A1FA0  public bool get_IsValid() { } */
+    /** @rva 0x138C4A0  public bool get_IsValid() { } */
     get_IsValid(): boolean { return !isNullOrEmpty(this.gameDirectorJson); }
-    /** @rva 0x72F5E0  public void .ctor() { } */
+    /** @rva 0x7305E0  public void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
 }

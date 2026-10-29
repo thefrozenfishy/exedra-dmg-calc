@@ -7,12 +7,12 @@ import { UpGivDmgRatioUnitState } from "./UpGivDmgRatioUnitState";
 
 // ---- ReDriveBattleCore.UnitState.CpnUpGivDmgRatioUnitState  (TypeDefIndex 552, public class) ----
 export class CpnUpGivDmgRatioUnitState extends UpGivDmgRatioUnitState {
-    /** @rva 0x15D9DA0  protected void .ctor() { } */
+    /** @rva 0x15C4400  protected void .ctor() { } */
     ctor(): this {
         super.ctor();
         return this;
     }
-    /** @rva 0x15DB550  public void .ctor(AbilityEffectInfo info) { } */
+    /** @rva 0x15C5BB0  public void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
         super.ctor$AbilityEffectInfo(info);
         return this;

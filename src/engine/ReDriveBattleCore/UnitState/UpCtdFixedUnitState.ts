@@ -11,22 +11,22 @@ import { f32 } from "../../runtime";
 // ---- ReDriveBattleCore.UnitState.UpCtdFixedUnitState  (TypeDefIndex 762, public class) ----
 export class UpCtdFixedUnitState extends UpCtdUnitStateBase {
     get UpFixed(): float { return this.get_UpFixed(); }
-    /** @rva 0x15E1810  public float get_UpFixed() { } */
+    /** @rva 0x15CBE70  public float get_UpFixed() { } */
     get_UpFixed(): float {
         return f32(this._UpdateableEffectValue / 10);
     }
-    /** @rva 0x16F8570  protected void .ctor() { } */
+    /** @rva 0x16E2240  protected void .ctor() { } */
     ctor(): this {
         this._IconName = "";
         return this;
     }
-    /** @rva 0x15E14E0  public void .ctor(AbilityEffectInfo info) { } */
+    /** @rva 0x15CBB40  public void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
         super.ctor$AbilityEffectInfo(info);
         this._UpdateableEffectValue = f32(info._EffectValue1);
         return this;
     }
-    /** @rva 0x15E1810 slot 30  public override float GetCtdVariationValue(BattleUnit unit, float processingValue) { } */
+    /** @rva 0x15CBE70 slot 30  public override float GetCtdVariationValue(BattleUnit unit, float processingValue) { } */
     GetCtdVariationValue(unit: BattleUnit, processingValue: float): float {
         return f32(this._UpdateableEffectValue / 10);
     }

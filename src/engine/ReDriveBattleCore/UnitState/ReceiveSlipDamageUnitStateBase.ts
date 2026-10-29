@@ -35,17 +35,17 @@ export abstract class ReceiveSlipDamageUnitStateBase extends AbnormalUnitStateBa
     get SlipDamageVisualEffectName(): string { return this.get_SlipDamageVisualEffectName(); }
     get SkipDamageOnTurnBegin(): boolean { return this.get_SkipDamageOnTurnBegin(); }
     get DamageBaseType(): DamageBaseType { return this.get_DamageBaseType(); }
-    /** @rva 0xC84590 slot 29  public float get_UpdateableEffectValue() { } */
+    /** @rva 0xC6F3E0 slot 29  public float get_UpdateableEffectValue() { } */
     get_UpdateableEffectValue(): float { return this._UpdateableEffectValue; /* auto-property */ }
-    /** @rva 0xC845A0 slot 30  public void set_UpdateableEffectValue(float value) { } */
+    /** @rva 0xC6F3F0 slot 30  public void set_UpdateableEffectValue(float value) { } */
     set_UpdateableEffectValue(value: float): void { this._UpdateableEffectValue = value; /* auto-property */ }
-    /** @rva 0x15E3EC0  public float get_DamagePower() { } */
+    /** @rva 0x15CE520  public float get_DamagePower() { } */
     get_DamagePower(): float {
         return f32(this._UpdateableEffectValue / 1000);
     }
-    /** @rva 0x9009A0  public Decimal get_DamageBase() { } */
+    /** @rva 0x901950  public Decimal get_DamageBase() { } */
     get_DamageBase(): Decimal { return this._DamageBase; /* auto-property */ }
-    /** @rva 0x9009F0  public void set_DamageBase(Decimal value) { } */
+    /** @rva 0x9019A0  public void set_DamageBase(Decimal value) { } */
     set_DamageBase(value: Decimal): void { this._DamageBase = value; /* auto-property */ }
     /** @rva -1 slot 31  public abstract TargetElementType get_AttackElement(); */
     abstract get_AttackElement(): TargetElementType;
@@ -53,9 +53,9 @@ export abstract class ReceiveSlipDamageUnitStateBase extends AbnormalUnitStateBa
     abstract get_DamageType(): Nullable<ReceiveSlipDamageUnitStateBase_ParameterType>;
     /** @rva -1 slot 33  public abstract string get_SlipDamageVisualEffectName(); */
     abstract get_SlipDamageVisualEffectName(): string;
-    /** @rva 0x7350C0 slot 34  public virtual bool get_SkipDamageOnTurnBegin() { } */
+    /** @rva 0x7360C0 slot 34  public virtual bool get_SkipDamageOnTurnBegin() { } */
     get_SkipDamageOnTurnBegin(): boolean { return false; /* asm: xor al, al; ret */ }
-    /** @rva 0x15E3DB0  protected DamageBaseType get_DamageBaseType() { } */
+    /** @rva 0x15CE410  protected DamageBaseType get_DamageBaseType() { } */
     get_DamageBaseType(): DamageBaseType {
         const type = this.get_DamageType(); // vslot 32
         if (type != null) {
@@ -65,23 +65,23 @@ export abstract class ReceiveSlipDamageUnitStateBase extends AbnormalUnitStateBa
         }
         throw new Error(`Error SlipDamageType ${type}`); // String.Format("Error_SlipDamageType {0}") -> Exception
     }
-    /** @rva 0x15DC300  public void .ctor() { } */
+    /** @rva 0x15C6960  public void .ctor() { } */
     ctor(): this {
         super.ctor();
         return this;
     }
-    /** @rva 0x15DC280  public void .ctor(AbilityEffectInfo info) { } */
+    /** @rva 0x15C68E0  public void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
         super.ctor$AbilityEffectInfo(info);
         this._UpdateableEffectValue = f32(info._EffectValue1);
         return this;
     }
-    /** @rva 0x15E3AE0 slot 17  public override void SetTriggeringInfo(EffectOriginType effectOrigin, BattleUnit userUnit, bool isOwnSkill = False, bool isConditionActivation = False, BattleType battleType = 1) { } */
+    /** @rva 0x15CE140 slot 17  public override void SetTriggeringInfo(EffectOriginType effectOrigin, BattleUnit userUnit, bool isOwnSkill = False, bool isConditionActivation = False, BattleType battleType = 1) { } */
     SetTriggeringInfo(effectOrigin: EffectOriginType, userUnit: BattleUnit, isOwnSkill: boolean = false, isConditionActivation: boolean = false, battleType: BattleType = 1 as BattleType): void {
         super.SetTriggeringInfo(effectOrigin, userUnit, isOwnSkill, isConditionActivation, battleType);
         this._DamageBase = this.GetDamageBase(userUnit); // vslot 35
     }
-    /** @rva 0x15E3930 slot 24  public override AISkillTargetSelector.UnitFilterFuncOrder GetUnitFilterFuncOrder(BattleUnit userUnit, IEnumerable<BattleUnit> candidateUnits) { } */
+    /** @rva 0x15CDF90 slot 24  public override AISkillTargetSelector.UnitFilterFuncOrder GetUnitFilterFuncOrder(BattleUnit userUnit, IEnumerable<BattleUnit> candidateUnits) { } */
     GetUnitFilterFuncOrder(userUnit: BattleUnit, candidateUnits: IEnumerable<BattleUnit>): AISkillTargetSelector_UnitFilterFuncOrder {
         const order = new AISkillTargetSelector_UnitFilterFuncOrder().ctor();
         if (!userUnit.isCharacter) {
@@ -94,27 +94,27 @@ export abstract class ReceiveSlipDamageUnitStateBase extends AbnormalUnitStateBa
         }
         return order;
     }
-    /** @rva 0x15E3770 slot 35  protected virtual Decimal GetDamageBase(BattleUnit userUnit) { } */
+    /** @rva 0x15CDDD0 slot 35  protected virtual Decimal GetDamageBase(BattleUnit userUnit) { } */
     GetDamageBase(userUnit: BattleUnit): Decimal {
         const type = this.get_DamageBaseType();
         return BattleDamageCalculator.GetDamageBase(userUnit.GetInitialDamageBaseParamValue(type), f32(this._UpdateableEffectValue / 1000));
     }
-    /** @rva 0x15E3830 slot 36  public virtual float GetSlipDamageValue(BattleUnit attackUnit, BattleUnit defenseUnit, BattleType battleType, bool isImmediately) { } */
+    /** @rva 0x15CDE90 slot 36  public virtual float GetSlipDamageValue(BattleUnit attackUnit, BattleUnit defenseUnit, BattleType battleType, bool isImmediately) { } */
     GetSlipDamageValue(attackUnit: BattleUnit, defenseUnit: BattleUnit, battleType: BattleType, isImmediately: boolean): float {
         let damage = BattleDamageCalculator.GetSlipDamageValue(attackUnit, defenseUnit, this._DamageBase, this.get_AttackElement(), this.get_DamageBaseType(), battleType, this);
         if (isImmediately && !this.get_IsPermanent()) damage = Math.imul(damage, this._RemainingTurn);
         return f32(damage);
     }
-    /** @rva 0x15E3D20  private IEnumerable<BattleUnit> <GetUnitFilterFuncOrder>g__UnitFilterMatchWeakElement|24_0(IEnumerable<BattleUnit> candidateUnits) { } */
+    /** @rva 0x15CE380  private IEnumerable<BattleUnit> <GetUnitFilterFuncOrder>g__UnitFilterMatchWeakElement|24_0(IEnumerable<BattleUnit> candidateUnits) { } */
     $GetUnitFilterFuncOrder$g__UnitFilterMatchWeakElement_24_0(candidateUnits: IEnumerable<BattleUnit>): IEnumerable<BattleUnit> {
         return candidateUnits.filter(unit => this.$GetUnitFilterFuncOrder$b__24_2(unit));
     }
-    /** @rva 0x15E3B50  private bool <GetUnitFilterFuncOrder>b__24_2(BattleUnit unit) { } */
+    /** @rva 0x15CE1B0  private bool <GetUnitFilterFuncOrder>b__24_2(BattleUnit unit) { } */
     $GetUnitFilterFuncOrder$b__24_2(unit: BattleUnit): boolean {
         const attackElement = this.get_AttackElement(); // vslot 31, read before the null check in the game
         return CorrelationEffect.IsMatchWeakElement(attackElement, unit._WeakElements);
     }
-    /** @rva 0x15E3BD0  internal static IEnumerable<BattleUnit> <GetUnitFilterFuncOrder>g__UnitFilterByRoleAtWeightedRandom|24_1(IEnumerable<BattleUnit> candidateUnits) { } */
+    /** @rva 0x15CE230  internal static IEnumerable<BattleUnit> <GetUnitFilterFuncOrder>g__UnitFilterByRoleAtWeightedRandom|24_1(IEnumerable<BattleUnit> candidateUnits) { } */
     static $GetUnitFilterFuncOrder$g__UnitFilterByRoleAtWeightedRandom_24_1(candidateUnits: IEnumerable<BattleUnit>): IEnumerable<BattleUnit> {
         const unit = AISkillTargetSelector.SelectUnitAtWeightedRandom(AISkillTargetSelector.GetUnitWeightDic(candidateUnits, false));
         if (unit == null) return []; // Array.Empty<BattleUnit>()

@@ -11,22 +11,22 @@ import { UpBreakEffectUnitStateBase } from "./UpBreakEffectUnitStateBase";
 // ---- ReDriveBattleCore.UnitState.UpBreakEffectRatioUnitState  (TypeDefIndex 760, public class) ----
 export class UpBreakEffectRatioUnitState extends UpBreakEffectUnitStateBase {
     get UpRatio(): float { return this.get_UpRatio(); }
-    /** @rva 0x15E1810  public float get_UpRatio() { } */
+    /** @rva 0x15CBE70  public float get_UpRatio() { } */
     get_UpRatio(): float {
         return f32(this._UpdateableEffectValue / 10);
     }
-    /** @rva 0x16F8570  protected void .ctor() { } */
+    /** @rva 0x16E2240  protected void .ctor() { } */
     ctor(): this {
         this._IconName = "";
         return this;
     }
-    /** @rva 0x15E14E0  public void .ctor(AbilityEffectInfo info) { } */
+    /** @rva 0x15CBB40  public void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
         super.ctor$AbilityEffectInfo(info);
         this._UpdateableEffectValue = f32(info._EffectValue1);
         return this;
     }
-    /** @rva 0x170B3F0 slot 30  public override Decimal GetBreakEffectVariationValue(BattleUnit unit, Decimal processingValue) { } */
+    /** @rva 0x16F50C0 slot 30  public override Decimal GetBreakEffectVariationValue(BattleUnit unit, Decimal processingValue) { } */
     GetBreakEffectVariationValue(unit: BattleUnit, processingValue: Decimal): Decimal {
         return Decimal.fromFloat(f32(this._UpdateableEffectValue / 10));
     }

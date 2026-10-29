@@ -16,23 +16,23 @@ import { AISkillTargetSelector } from "../AI/AISkillTargetSelector";
 
 // ---- ReDriveBattleCore.UnitState.AddBuffTurnUnitState  (TypeDefIndex 525, public class) ----
 export class AddBuffTurnUnitState extends AddTurnUnitStateBase {
-    /** @rva 0x15D9DA0  protected void .ctor() { } */
+    /** @rva 0x15C4400  protected void .ctor() { } */
     ctor(): this {
         super.ctor();
         return this;
     }
-    /** @rva 0x15DA300  public void .ctor(AbilityEffectInfo info) { } */
+    /** @rva 0x15C4960  public void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
         super.ctor$AbilityEffectInfo(info);
         this._AddTurnNum = info._EffectValue1;
         return this;
     }
-    /** @rva 0x15D9DC0 slot 26  public override void AddTurnTo(UnitStateBase targetUnitState) { } */
+    /** @rva 0x15C4420 slot 26  public override void AddTurnTo(UnitStateBase targetUnitState) { } */
     AddTurnTo(targetUnitState: UnitStateBase): void {
         if (targetUnitState instanceof AddTurnUnitStateBase) return;
         if (isImpl(targetUnitState, "IBuff")) targetUnitState.AddEffectTurn(this._AddTurnNum);
     }
-    /** @rva 0x15D9E70 slot 23  public override List<BattleUnit> GetAIFilteredTargets(BattleUnit userUnit, List<BattleUnit> targetUnitList, SkillType skillType, RangeType effectRange, GameDirectorBase gameDirector) { } */
+    /** @rva 0x15C44D0 slot 23  public override List<BattleUnit> GetAIFilteredTargets(BattleUnit userUnit, List<BattleUnit> targetUnitList, SkillType skillType, RangeType effectRange, GameDirectorBase gameDirector) { } */
     GetAIFilteredTargets(userUnit: BattleUnit, targetUnitList: List<BattleUnit>, skillType: SkillType, effectRange: RangeType, gameDirector: GameDirectorBase): List<BattleUnit> {
         let list = targetUnitList.filter(x => !x.get_IsDead()); // <>c.b__3_0
         if (list.length > 0) {
@@ -42,7 +42,7 @@ export class AddBuffTurnUnitState extends AddTurnUnitStateBase {
         }
         return list;
     }
-    /** @rva 0x15DA0A0 slot 24  public override AISkillTargetSelector.UnitFilterFuncOrder GetUnitFilterFuncOrder(BattleUnit userUnit, IEnumerable<BattleUnit> candidateUnits) { } */
+    /** @rva 0x15C4700 slot 24  public override AISkillTargetSelector.UnitFilterFuncOrder GetUnitFilterFuncOrder(BattleUnit userUnit, IEnumerable<BattleUnit> candidateUnits) { } */
     GetUnitFilterFuncOrder(userUnit: BattleUnit, candidateUnits: IEnumerable<BattleUnit>): AISkillTargetSelector_UnitFilterFuncOrder {
         const list: List<(a0: IEnumerable<BattleUnit>) => IEnumerable<BattleUnit>> = [];
         list.push(AISkillTargetSelector.UnitFilterByMainTarget);

@@ -18,27 +18,27 @@ import { AISkillTargetSelector } from "../AI/AISkillTargetSelector";
 export class DwnGivBreakPointDmgFixedUnitState extends BreakPointDamageWorseUnitStateBase {  // implements IGiveBreakPointDamageVariation, IRequiredStateForDecide
     static readonly __interfaces: readonly string[] = ['IGiveBreakPointDamageVariation', 'IRequiredStateForDecide'];
     get DownFixed(): float { return this.get_DownFixed(); }
-    /** @rva 0x15E2E50 slot 7  public override string get_IconName() { } */
+    /** @rva 0x15CD4B0 slot 7  public override string get_IconName() { } */
     get_IconName(): string {
         return "battle_icon_dwn_giv_break_point_dmg";
     }
-    /** @rva 0x758B30 slot 27  public override BreakPointDamageVariationUnitStateBase.CalculationType get_Calculation() { } */
+    /** @rva 0x759B30 slot 27  public override BreakPointDamageVariationUnitStateBase.CalculationType get_Calculation() { } */
     get_Calculation(): BreakPointDamageVariationUnitStateBase_CalculationType { return 1 as BreakPointDamageVariationUnitStateBase_CalculationType; /* asm: mov eax, 1; ret */ }
-    /** @rva 0x758B30 slot 28  public override AdditionType get_Addition() { } */
+    /** @rva 0x759B30 slot 28  public override AdditionType get_Addition() { } */
     get_Addition(): AdditionType { return 1 as AdditionType; /* asm: mov eax, 1; ret */ }
-    /** @rva 0xC84590  public float get_DownFixed() { } */
+    /** @rva 0xC6F3E0  public float get_DownFixed() { } */
     get_DownFixed(): float { return this._UpdateableEffectValue; /* asm: movss xmm0, dword ptr [rcx + 0x88]; ret */ }
-    /** @rva 0x15D9DA0  protected void .ctor() { } */
+    /** @rva 0x15C4400  protected void .ctor() { } */
     ctor(): this {
         super.ctor();
         return this;
     }
-    /** @rva 0x15DB550  public void .ctor(AbilityEffectInfo info) { } */
+    /** @rva 0x15C5BB0  public void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
         super.ctor$AbilityEffectInfo(info);
         return this;
     }
-    /** @rva 0x15E2B60 slot 24  public override AISkillTargetSelector.UnitFilterFuncOrder GetUnitFilterFuncOrder(BattleUnit userUnit, IEnumerable<BattleUnit> candidateUnits) { } */
+    /** @rva 0x15CD1C0 slot 24  public override AISkillTargetSelector.UnitFilterFuncOrder GetUnitFilterFuncOrder(BattleUnit userUnit, IEnumerable<BattleUnit> candidateUnits) { } */
     GetUnitFilterFuncOrder(userUnit: BattleUnit, candidateUnits: IEnumerable<BattleUnit>): AISkillTargetSelector_UnitFilterFuncOrder {
         const list: List<(a0: IEnumerable<BattleUnit>) => IEnumerable<BattleUnit>> = [];
         list.push(AISkillTargetSelector.UnitFilterByMainTarget);

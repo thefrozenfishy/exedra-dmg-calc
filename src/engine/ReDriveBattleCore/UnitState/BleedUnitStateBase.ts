@@ -9,26 +9,26 @@ import { f32 } from "../../runtime";
 
 // ---- ReDriveBattleCore.UnitState.BleedUnitStateBase  (TypeDefIndex 501, public abstract class) ----
 export abstract class BleedUnitStateBase extends ReceiveSlipDamageUnitStateBase {
-    /** @rva 0x15DC470 slot 7  public override string get_IconName() { } */
+    /** @rva 0x15C6AD0 slot 7  public override string get_IconName() { } */
     get_IconName(): string {
         return "bleed";
     }
-    /** @rva 0x15DC440 slot 13  public override string get_GiveVisualEffectName() { } */
+    /** @rva 0x15C6AA0 slot 13  public override string get_GiveVisualEffectName() { } */
     get_GiveVisualEffectName(): string {
         return "eff_cmn_act_statehit_006";
     }
-    /** @rva 0x15DC4A0 slot 33  public override string get_SlipDamageVisualEffectName() { } */
+    /** @rva 0x15C6B00 slot 33  public override string get_SlipDamageVisualEffectName() { } */
     get_SlipDamageVisualEffectName(): string {
         return "eff_cmn_act_state_lacerate_001";
     }
-    /** @rva 0xDD5EF0 slot 31  public override TargetElementType get_AttackElement() { } */
+    /** @rva 0xDC0E00 slot 31  public override TargetElementType get_AttackElement() { } */
     get_AttackElement(): TargetElementType { return 6 as TargetElementType; /* asm: mov eax, 6; ret */ }
-    /** @rva 0x15DC300  protected void .ctor() { } */
+    /** @rva 0x15C6960  protected void .ctor() { } */
     ctor(): this {
         super.ctor();
         return this;
     }
-    /** @rva 0x15DC280  public void .ctor(AbilityEffectInfo info) { } */
+    /** @rva 0x15C68E0  public void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
         super.ctor$AbilityEffectInfo(info);
         this._UpdateableEffectValue = f32(info._EffectValue1);

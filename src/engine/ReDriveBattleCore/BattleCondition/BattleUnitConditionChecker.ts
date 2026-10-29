@@ -41,7 +41,7 @@ export class BattleUnitConditionChecker extends ConditionCheckerBase {
     opponentUnits: List<BattleUnit> = null!;
     /** 0x48 private AffectedUnitNotice notice */
     notice: AffectedUnitNotice = null!;
-    /** @rva 0x180C1D0  public void .ctor(BattleConditionUtils.Condition condition, BattleUnit battleUnit, BattleUnit selfUnit, BattleUnit actorUnit, BattleUnit mainTargetUnit, List<BattleUnit> friendUnits, List<BattleUnit> opponentUnits, AffectedUnitNotice notice) { } */
+    /** @rva 0x17F6E00  public void .ctor(BattleConditionUtils.Condition condition, BattleUnit battleUnit, BattleUnit selfUnit, BattleUnit actorUnit, BattleUnit mainTargetUnit, List<BattleUnit> friendUnits, List<BattleUnit> opponentUnits, AffectedUnitNotice notice) { } */
     ctor$Condition_BattleUnit_BattleUnit_BattleUnit_BattleUnit_ListBattleUnit_ListBattleUnit_AffectedUnitNotice(condition: BattleConditionUtils_Condition, battleUnit: BattleUnit, selfUnit: BattleUnit, actorUnit: BattleUnit, mainTargetUnit: BattleUnit, friendUnits: List<BattleUnit>, opponentUnits: List<BattleUnit>, notice: AffectedUnitNotice): this {
         super.ctor$Condition(condition); // inlined in the game
         this.battleUnit = battleUnit;
@@ -53,7 +53,7 @@ export class BattleUnitConditionChecker extends ConditionCheckerBase {
         this.notice = notice;
         return this;
     }
-    /** @rva 0x180A330 slot 4  public override bool Check() { } */
+    /** @rva 0x17F4F60 slot 4  public override bool Check() { } */
     Check(): boolean {
         if (this.battleUnit == null) return false;
         const cond = this.condition;

@@ -9,6 +9,6 @@ import type { int } from "../../runtime";
 
 // ---- ReDriveBattleCore.Reader.SoloRaidSeasonBuffMstReader  (TypeDefIndex 857, public class) ----
 export class SoloRaidSeasonBuffMstReader extends BattleMstReaderBase<SoloRaidSeasonBuffMstModel, SoloRaidSeasonBuffMstRecord, int> {
-    /** @rva 0x17023A0  public void .ctor() { } */
+    /** @rva 0x16EC070  public void .ctor() { } */
     ctor(): this { super.ctor(); return this; }
 }

@@ -7,8 +7,8 @@ import type { RequestType } from "./RequestType";
 
 // ---- ReDriveBattleCore.Request.ClientReadyRequest  (TypeDefIndex 827, public sealed class) ----
 export class ClientReadyRequest extends RequestBase {
-    /** @rva 0xDBAD00 slot 4  public override RequestType get_RequestType() { } */
+    /** @rva 0xDA5C10 slot 4  public override RequestType get_RequestType() { } */
     get_RequestType(): RequestType { return 8 as RequestType; /* asm: mov eax, 8; ret */ }
-    /** @rva 0x72F5E0  public void .ctor() { } */
+    /** @rva 0x7305E0  public void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
 }

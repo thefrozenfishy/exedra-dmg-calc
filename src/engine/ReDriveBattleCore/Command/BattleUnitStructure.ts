@@ -59,61 +59,61 @@ export class BattleUnitStructure {
     set MaxBreakDamageReceiveRatio(v: int) { this.set_MaxBreakDamageReceiveRatio(v); }
     get BreakTurnGaugeSlowRatio(): int { return this.get_BreakTurnGaugeSlowRatio(); }
     set BreakTurnGaugeSlowRatio(v: int) { this.set_BreakTurnGaugeSlowRatio(v); }
-    /** @rva 0x7354F0  public int get_MstId() { } */
+    /** @rva 0x7364F0  public int get_MstId() { } */
     get_MstId(): int { return this._MstId; /* auto-property */ }
-    /** @rva 0x738D00  public void set_MstId(int value) { } */
+    /** @rva 0x739D00  public void set_MstId(int value) { } */
     set_MstId(value: int): void { this._MstId = value; /* auto-property */ }
-    /** @rva 0x802350  public int get_StyleMstId() { } */
+    /** @rva 0x803350  public int get_StyleMstId() { } */
     get_StyleMstId(): int { return this._StyleMstId; /* auto-property */ }
-    /** @rva 0x802540  public void set_StyleMstId(int value) { } */
+    /** @rva 0x803540  public void set_StyleMstId(int value) { } */
     set_StyleMstId(value: int): void { this._StyleMstId = value; /* auto-property */ }
-    /** @rva 0x762820  public int get_MaxHP() { } */
+    /** @rva 0x763820  public int get_MaxHP() { } */
     get_MaxHP(): int { return this._MaxHP; /* auto-property */ }
-    /** @rva 0x8A1240  public void set_MaxHP(int value) { } */
+    /** @rva 0x8A2240  public void set_MaxHP(int value) { } */
     set_MaxHP(value: int): void { this._MaxHP = value; /* auto-property */ }
-    /** @rva 0x7F8800  public int get_EP() { } */
+    /** @rva 0x7F9800  public int get_EP() { } */
     get_EP(): int { return this._EP; /* auto-property */ }
-    /** @rva 0x7F8820  public void set_EP(int value) { } */
+    /** @rva 0x7F9820  public void set_EP(int value) { } */
     set_EP(value: int): void { this._EP = value; /* auto-property */ }
-    /** @rva 0x75DD70  public int get_Speed() { } */
+    /** @rva 0x75ED70  public int get_Speed() { } */
     get_Speed(): int { return this._Speed; /* auto-property */ }
-    /** @rva 0x8A1230  public void set_Speed(int value) { } */
+    /** @rva 0x8A2230  public void set_Speed(int value) { } */
     set_Speed(value: int): void { this._Speed = value; /* auto-property */ }
-    /** @rva 0x759830  public int get_SpecialAttackMstId() { } */
+    /** @rva 0x75A830  public int get_SpecialAttackMstId() { } */
     get_SpecialAttackMstId(): int { return this._SpecialAttackMstId; /* auto-property */ }
-    /** @rva 0x759840  public void set_SpecialAttackMstId(int value) { } */
+    /** @rva 0x75A840  public void set_SpecialAttackMstId(int value) { } */
     set_SpecialAttackMstId(value: int): void { this._SpecialAttackMstId = value; /* auto-property */ }
-    /** @rva 0x735EA0  public int[] get_ActiveSkillAttackMstIds() { } */
+    /** @rva 0x736EA0  public int[] get_ActiveSkillAttackMstIds() { } */
     get_ActiveSkillAttackMstIds(): int[] { return this._ActiveSkillAttackMstIds; /* auto-property */ }
-    /** @rva 0x735F10  public void set_ActiveSkillAttackMstIds(int[] value) { } */
+    /** @rva 0x736F10  public void set_ActiveSkillAttackMstIds(int[] value) { } */
     set_ActiveSkillAttackMstIds(value: int[]): void { this._ActiveSkillAttackMstIds = value; /* auto-property */ }
-    /** @rva 0x75DD60  public int get_NormalAttackMstId() { } */
+    /** @rva 0x75ED60  public int get_NormalAttackMstId() { } */
     get_NormalAttackMstId(): int { return this._NormalAttackMstId; /* auto-property */ }
-    /** @rva 0x8735A0  public void set_NormalAttackMstId(int value) { } */
+    /** @rva 0x8745A0  public void set_NormalAttackMstId(int value) { } */
     set_NormalAttackMstId(value: int): void { this._NormalAttackMstId = value; /* auto-property */ }
-    /** @rva 0x735970  public BattleUnitStructure.PassiveSkillInfo[] get_PassiveSkills() { } */
+    /** @rva 0x736970  public BattleUnitStructure.PassiveSkillInfo[] get_PassiveSkills() { } */
     get_PassiveSkills(): BattleUnitStructure_PassiveSkillInfo[] { return this._PassiveSkills; /* auto-property */ }
-    /** @rva 0x735A30  public void set_PassiveSkills(BattleUnitStructure.PassiveSkillInfo[] value) { } */
+    /** @rva 0x736A30  public void set_PassiveSkills(BattleUnitStructure.PassiveSkillInfo[] value) { } */
     set_PassiveSkills(value: BattleUnitStructure_PassiveSkillInfo[]): void { this._PassiveSkills = value; /* auto-property */ }
-    /** @rva 0x7660B0  public int get_BreakPoint() { } */
+    /** @rva 0x7670B0  public int get_BreakPoint() { } */
     get_BreakPoint(): int { return this._BreakPoint; /* auto-property */ }
-    /** @rva 0x766A90  public void set_BreakPoint(int value) { } */
+    /** @rva 0x767A90  public void set_BreakPoint(int value) { } */
     set_BreakPoint(value: int): void { this._BreakPoint = value; /* auto-property */ }
-    /** @rva 0x900840  public int get_InitialBreakDamageReceiveRatio() { } */
+    /** @rva 0x9017F0  public int get_InitialBreakDamageReceiveRatio() { } */
     get_InitialBreakDamageReceiveRatio(): int { return this._InitialBreakDamageReceiveRatio; /* auto-property */ }
-    /** @rva 0x900880  public void set_InitialBreakDamageReceiveRatio(int value) { } */
+    /** @rva 0x901830  public void set_InitialBreakDamageReceiveRatio(int value) { } */
     set_InitialBreakDamageReceiveRatio(value: int): void { this._InitialBreakDamageReceiveRatio = value; /* auto-property */ }
-    /** @rva 0x853810  public int get_MaxBreakDamageReceiveRatio() { } */
+    /** @rva 0x854810  public int get_MaxBreakDamageReceiveRatio() { } */
     get_MaxBreakDamageReceiveRatio(): int { return this._MaxBreakDamageReceiveRatio; /* auto-property */ }
-    /** @rva 0x9007A0  public void set_MaxBreakDamageReceiveRatio(int value) { } */
+    /** @rva 0x901750  public void set_MaxBreakDamageReceiveRatio(int value) { } */
     set_MaxBreakDamageReceiveRatio(value: int): void { this._MaxBreakDamageReceiveRatio = value; /* auto-property */ }
-    /** @rva 0x87ACD0  public int get_BreakTurnGaugeSlowRatio() { } */
+    /** @rva 0x87BCD0  public int get_BreakTurnGaugeSlowRatio() { } */
     get_BreakTurnGaugeSlowRatio(): int { return this._BreakTurnGaugeSlowRatio; /* auto-property */ }
-    /** @rva 0x900790  public void set_BreakTurnGaugeSlowRatio(int value) { } */
+    /** @rva 0x901740  public void set_BreakTurnGaugeSlowRatio(int value) { } */
     set_BreakTurnGaugeSlowRatio(value: int): void { this._BreakTurnGaugeSlowRatio = value; /* auto-property */ }
-    /** @rva 0x72F5E0  public void .ctor() { } */
+    /** @rva 0x7305E0  public void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
-    /** @rva 0x180CE40  public void .ctor(int mstId, int styleMstId, int maxHP, int speed, int specialAttackMstId, int[] activeSkillAttackMstIds, int normalAttackMstId, BattleUnitStructure.PassiveSkillInfo[] passiveSkills, int breakPoint, int initialBreakDamageReceiveRatio, int maxBreakDamageReceiveRatio, int breakTurnGaugeSlowRatio) { } */
+    /** @rva 0x17F7A70  public void .ctor(int mstId, int styleMstId, int maxHP, int speed, int specialAttackMstId, int[] activeSkillAttackMstIds, int normalAttackMstId, BattleUnitStructure.PassiveSkillInfo[] passiveSkills, int breakPoint, int initialBreakDamageReceiveRatio, int maxBreakDamageReceiveRatio, int breakTurnGaugeSlowRatio) { } */
     ctor$int_int_int_int_int_int_int_PassiveSkillInfo_int_int_int_int(mstId: int, styleMstId: int, maxHP: int, speed: int, specialAttackMstId: int, activeSkillAttackMstIds: int[], normalAttackMstId: int, passiveSkills: BattleUnitStructure_PassiveSkillInfo[], breakPoint: int, initialBreakDamageReceiveRatio: int, maxBreakDamageReceiveRatio: int, breakTurnGaugeSlowRatio: int): this {
         this._Speed = speed;
         this._SpecialAttackMstId = specialAttackMstId;
@@ -141,14 +141,14 @@ export class BattleUnitStructure_PassiveSkillInfo {
     set PassiveSkillMstId(v: int) { this.set_PassiveSkillMstId(v); }
     get AbilitySourceType(): AbilitySourceType { return this.get_AbilitySourceType(); }
     set AbilitySourceType(v: AbilitySourceType) { this.set_AbilitySourceType(v); }
-    /** @rva 0x7354F0  public int get_PassiveSkillMstId() { } */
+    /** @rva 0x7364F0  public int get_PassiveSkillMstId() { } */
     get_PassiveSkillMstId(): int { return this._PassiveSkillMstId; /* auto-property */ }
-    /** @rva 0x738D00  public void set_PassiveSkillMstId(int value) { } */
+    /** @rva 0x739D00  public void set_PassiveSkillMstId(int value) { } */
     set_PassiveSkillMstId(value: int): void { this._PassiveSkillMstId = value; /* auto-property */ }
-    /** @rva 0x802350  public AbilitySourceType get_AbilitySourceType() { } */
+    /** @rva 0x803350  public AbilitySourceType get_AbilitySourceType() { } */
     get_AbilitySourceType(): AbilitySourceType { return this._AbilitySourceType; /* auto-property */ }
-    /** @rva 0x802540  public void set_AbilitySourceType(AbilitySourceType value) { } */
+    /** @rva 0x803540  public void set_AbilitySourceType(AbilitySourceType value) { } */
     set_AbilitySourceType(value: AbilitySourceType): void { this._AbilitySourceType = value; /* auto-property */ }
-    /** @rva 0x72F5E0  public void .ctor() { } */
+    /** @rva 0x7305E0  public void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
 }

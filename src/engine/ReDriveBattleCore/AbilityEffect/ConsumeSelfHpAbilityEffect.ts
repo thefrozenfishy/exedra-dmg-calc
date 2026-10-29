@@ -21,12 +21,12 @@ export class ConsumeSelfHpAbilityEffect extends AbilityEffectBase {
     consumeHpRatio: int = 0;
     /** 0x64 protected int consumeHpFixed */
     consumeHpFixed: int = 0;
-    /** @rva 0x1920EF0  protected void .ctor() { } */
+    /** @rva 0x1910A80  protected void .ctor() { } */
     ctor(): this {
         super.ctor();
         return this;
     }
-    /** @rva 0x19226E0  public void .ctor(AbilityEffectInfo info) { } */
+    /** @rva 0x1912270  public void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
         super.ctor$AbilityEffectInfo(info);
         this._TargetSide = 0 as AbilityEffectBase_TargetSideType;
@@ -34,13 +34,13 @@ export class ConsumeSelfHpAbilityEffect extends AbilityEffectBase {
         this.consumeHpFixed = info._EffectValue2;
         return this;
     }
-    /** @rva 0x1923220 slot 4  public override void SelectTargets(BattleUnit userUnit, Dictionary<int, BattleUnit> targetUnitDic, int selectFriendUnitId, int attackTargetId = 0) { } */
+    /** @rva 0x1912DB0 slot 4  public override void SelectTargets(BattleUnit userUnit, Dictionary<int, BattleUnit> targetUnitDic, int selectFriendUnitId, int attackTargetId = 0) { } */
     SelectTargets(userUnit: BattleUnit, targetUnitDic: Dictionary<int, BattleUnit>, selectFriendUnitId: int, attackTargetId?: int /* = 0 */): void {
         this._TargetUnitIdList = [];
         if (this._EffectRange !== -1) return;
         this._TargetUnitIdList.push(userUnit._Id);
     }
-    /** @rva 0x1923320 slot 5  public override AffectedUnitNoticeBundle Triggering(EffectOriginType origin, BattleUnit userUnit, Dictionary<int, BattleUnit> targetUnitDic, GameDirectorBase gameDirector) { } */
+    /** @rva 0x1912EB0 slot 5  public override AffectedUnitNoticeBundle Triggering(EffectOriginType origin, BattleUnit userUnit, Dictionary<int, BattleUnit> targetUnitDic, GameDirectorBase gameDirector) { } */
     Triggering(origin: EffectOriginType, userUnit: BattleUnit, targetUnitDic: Dictionary<int, BattleUnit>, gameDirector: GameDirectorBase): AffectedUnitNoticeBundle {
         const bundle = new AffectedUnitNoticeBundle().ctor();
         if (this._TargetUnitIdList.length !== 1) return bundle;

@@ -22,24 +22,24 @@ import { TargetRoleType } from "../../Network/Definition/Battle/TargetRoleType";
 // ---- ReDriveBattleCore.UnitState.UpBreakedDamageReceiveRatioUnitStateBase  (TypeDefIndex 755, public abstract class) ----
 export abstract class UpBreakedDamageReceiveRatioUnitStateBase extends ParameterVariationUnitStateBase {  // implements IBreakedDamageReceiveRatioVariation, IRequiredStateForDecide, IBuff
     static readonly __interfaces: readonly string[] = ['IBreakedDamageReceiveRatioVariation', 'IRequiredStateForDecide', 'IBuff'];
-    /** @rva 0x7421D0 slot 6  public override UnitStateBase.DirectionType get_Direction() { } */
+    /** @rva 0x7431D0 slot 6  public override UnitStateBase.DirectionType get_Direction() { } */
     get_Direction(): UnitStateBase_DirectionType { return 0 as UnitStateBase_DirectionType; /* asm: xor eax, eax; ret */ }
-    /** @rva 0x7421D0 slot 27  public override AdditionType get_Addition() { } */
+    /** @rva 0x7431D0 slot 27  public override AdditionType get_Addition() { } */
     get_Addition(): AdditionType { return 0 as AdditionType; /* asm: xor eax, eax; ret */ }
-    /** @rva 0x170C050 slot 7  public override string get_IconName() { } */
+    /** @rva 0x16F5D20 slot 7  public override string get_IconName() { } */
     get_IconName(): string {
         return "battle_icon_up_break_damage_receive";
     }
-    /** @rva 0x170C020 slot 13  public override string get_GiveVisualEffectName() { } */
+    /** @rva 0x16F5CF0 slot 13  public override string get_GiveVisualEffectName() { } */
     get_GiveVisualEffectName(): string {
         return "eff_cmn_act_buff_appear_001";
     }
-    /** @rva 0x16F8570  protected void .ctor() { } */
+    /** @rva 0x16E2240  protected void .ctor() { } */
     ctor(): this {
         this._IconName = "";
         return this;
     }
-    /** @rva 0x15E14E0  public void .ctor(AbilityEffectInfo info) { } */
+    /** @rva 0x15CBB40  public void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
         super.ctor$AbilityEffectInfo(info);
         this._UpdateableEffectValue = f32(info._EffectValue1);
@@ -47,7 +47,7 @@ export abstract class UpBreakedDamageReceiveRatioUnitStateBase extends Parameter
     }
     /** @rva -1 slot 30  public abstract float GetBreakedDamageReceiveRatioVariationValue(BattleUnit unit, float processingValue); */
     abstract GetBreakedDamageReceiveRatioVariationValue(unit: BattleUnit, processingValue: float): float;
-    /** @rva 0x170B9D0 slot 23  public override List<BattleUnit> GetAIFilteredTargets(BattleUnit userUnit, List<BattleUnit> targetUnitList, SkillType skillType, RangeType effectRange, GameDirectorBase gameDirector) { } */
+    /** @rva 0x16F56A0 slot 23  public override List<BattleUnit> GetAIFilteredTargets(BattleUnit userUnit, List<BattleUnit> targetUnitList, SkillType skillType, RangeType effectRange, GameDirectorBase gameDirector) { } */
     GetAIFilteredTargets(userUnit: BattleUnit, targetUnitList: List<BattleUnit>, skillType: SkillType, effectRange: RangeType, gameDirector: GameDirectorBase): List<BattleUnit> {
         let list = targetUnitList.filter(x => !x.get_IsDead()); // <>c.b__11_0
         if (list.length > 0) {
@@ -56,7 +56,7 @@ export abstract class UpBreakedDamageReceiveRatioUnitStateBase extends Parameter
         }
         return list;
     }
-    /** @rva 0x170BC80 slot 24  public override AISkillTargetSelector.UnitFilterFuncOrder GetUnitFilterFuncOrder(BattleUnit userUnit, IEnumerable<BattleUnit> candidateUnits) { } */
+    /** @rva 0x16F5950 slot 24  public override AISkillTargetSelector.UnitFilterFuncOrder GetUnitFilterFuncOrder(BattleUnit userUnit, IEnumerable<BattleUnit> candidateUnits) { } */
     GetUnitFilterFuncOrder(userUnit: BattleUnit, candidateUnits: IEnumerable<BattleUnit>): AISkillTargetSelector_UnitFilterFuncOrder {
         const list: List<(a0: IEnumerable<BattleUnit>) => IEnumerable<BattleUnit>> = [];
         list.push(AISkillTargetSelector.UnitFilterByMainTarget);
@@ -64,7 +64,7 @@ export abstract class UpBreakedDamageReceiveRatioUnitStateBase extends Parameter
         list.push(AISkillTargetSelector.UnitFilterWithMaxAtk);
         return new AISkillTargetSelector_UnitFilterFuncOrder().ctor$ListFuncIEnumerableBattleUnitIEnumerableBattleUnit(list);
     }
-    /** @rva 0x170BEE0  internal static IEnumerable<BattleUnit> <GetUnitFilterFuncOrder>g__UnitFilterByRoleBreakerAndMaxSpeed|12_0(IEnumerable<BattleUnit> candidateUnits) { } */
+    /** @rva 0x16F5BB0  internal static IEnumerable<BattleUnit> <GetUnitFilterFuncOrder>g__UnitFilterByRoleBreakerAndMaxSpeed|12_0(IEnumerable<BattleUnit> candidateUnits) { } */
     static $GetUnitFilterFuncOrder$g__UnitFilterByRoleBreakerAndMaxSpeed_12_0(candidateUnits: IEnumerable<BattleUnit>): IEnumerable<BattleUnit> {
         const units = candidateUnits.filter(unit => unit.IsMatch$TargetRoleType(2 as TargetRoleType)); // <>c.b__12_1 (Breaker)
         return AISkillTargetSelector.UnitFilterWithMaxSpeed(units); // inlined in the game

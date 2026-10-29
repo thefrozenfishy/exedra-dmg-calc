@@ -18,29 +18,29 @@ import { AISkillTargetSelector } from "../AI/AISkillTargetSelector";
 export class PreventAbnormalUnitState extends UnitStateBase {  // implements IBuff, IConsumeRemainCount
     static readonly __interfaces: readonly string[] = ['IBuff', 'IConsumeRemainCount'];
     get IsStateIconNumberAggregated(): boolean { return this.get_IsStateIconNumberAggregated(); }
-    /** @rva 0x7421D0 slot 6  public override UnitStateBase.DirectionType get_Direction() { } */
+    /** @rva 0x7431D0 slot 6  public override UnitStateBase.DirectionType get_Direction() { } */
     get_Direction(): UnitStateBase_DirectionType { return 0 as UnitStateBase_DirectionType; /* asm: xor eax, eax; ret */ }
-    /** @rva 0x16FDA10 slot 7  public override string get_IconName() { } */
+    /** @rva 0x16E76E0 slot 7  public override string get_IconName() { } */
     get_IconName(): string {
         return "battle_icon_prevent_abnormal";
     }
-    /** @rva 0x16FD9E0 slot 13  public override string get_GiveVisualEffectName() { } */
+    /** @rva 0x16E76B0 slot 13  public override string get_GiveVisualEffectName() { } */
     get_GiveVisualEffectName(): string {
         return "eff_cmn_act_buff_appear_001";
     }
-    /** @rva 0x76E830 slot 27  public bool get_IsStateIconNumberAggregated() { } */
+    /** @rva 0x76F830 slot 27  public bool get_IsStateIconNumberAggregated() { } */
     get_IsStateIconNumberAggregated(): boolean { return true; /* asm: mov al, 1; ret */ }
-    /** @rva 0x16F8570  protected void .ctor() { } */
+    /** @rva 0x16E2240  protected void .ctor() { } */
     ctor(): this {
         this._IconName = "";
         return this;
     }
-    /** @rva 0x15D9DB0  public void .ctor(AbilityEffectInfo info) { } */
+    /** @rva 0x15C4410  public void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
         super.ctor$AbilityEffectInfo(info);
         return this;
     }
-    /** @rva 0x16FD780 slot 24  public override AISkillTargetSelector.UnitFilterFuncOrder GetUnitFilterFuncOrder(BattleUnit userUnit, IEnumerable<BattleUnit> candidateUnits) { } */
+    /** @rva 0x16E7450 slot 24  public override AISkillTargetSelector.UnitFilterFuncOrder GetUnitFilterFuncOrder(BattleUnit userUnit, IEnumerable<BattleUnit> candidateUnits) { } */
     GetUnitFilterFuncOrder(userUnit: BattleUnit, candidateUnits: IEnumerable<BattleUnit>): AISkillTargetSelector_UnitFilterFuncOrder {
         const list: List<(a0: IEnumerable<BattleUnit>) => IEnumerable<BattleUnit>> = [];
         list.push(AISkillTargetSelector.UnitFilterByMainTarget);
@@ -48,7 +48,7 @@ export class PreventAbnormalUnitState extends UnitStateBase {  // implements IBu
         list.push(AISkillTargetSelector.UnitFilterWithMinDef);
         return new AISkillTargetSelector_UnitFilterFuncOrder().ctor$ListFuncIEnumerableBattleUnitIEnumerableBattleUnit(list);
     }
-    /** @rva 0x16FD730  public void ConsumeRemainCount() { } */
+    /** @rva 0x16E7400  public void ConsumeRemainCount() { } */
     ConsumeRemainCount(): void {
         IConsumeRemainCount$ConsumeRemainCount(this as any, 1); // ((IConsumeRemainCount)this).ConsumeRemainCount(1)
     }

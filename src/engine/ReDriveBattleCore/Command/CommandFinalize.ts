@@ -7,8 +7,8 @@ import type { CommandType } from "./CommandType";
 
 // ---- ReDriveBattleCore.Command.CommandFinalize  (TypeDefIndex 993, public class) ----
 export class CommandFinalize extends CommandBase {
-    /** @rva 0x17022B0 slot 4  public override CommandType GetCommandType() { } */
+    /** @rva 0x16EBF80 slot 4  public override CommandType GetCommandType() { } */
     GetCommandType(): CommandType { return 14 as CommandType; /* asm: mov eax, 0xe; ret */ }
-    /** @rva 0x72F5E0  public void .ctor() { } */
+    /** @rva 0x7305E0  public void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
 }

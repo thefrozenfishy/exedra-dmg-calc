@@ -36,7 +36,7 @@ export class BattleOtherConditionChecker extends ConditionCheckerBase {
     countdownReferee: CountdownReferee = null!;
     /** 0x38 private bool isSeasonBuffActive */
     isSeasonBuffActive: boolean = false;
-    /** @rva 0x180A200  public void .ctor(BattleConditionUtils.Condition condition, ActBase act, ActiveSkillBase actorActiveSkill, AbilityEffectBase actorAbilityEffect, GameDirectorBase gameDirector) { } */
+    /** @rva 0x17F4E30  public void .ctor(BattleConditionUtils.Condition condition, ActBase act, ActiveSkillBase actorActiveSkill, AbilityEffectBase actorAbilityEffect, GameDirectorBase gameDirector) { } */
     ctor$Condition_ActBase_ActiveSkillBase_AbilityEffectBase_GameDirectorBase(condition: BattleConditionUtils_Condition, act: ActBase, actorActiveSkill: ActiveSkillBase, actorAbilityEffect: AbilityEffectBase, gameDirector: GameDirectorBase): this {
         this.condition = condition; // base..ctor(condition) inlined in the game
         this.act = act;
@@ -48,7 +48,7 @@ export class BattleOtherConditionChecker extends ConditionCheckerBase {
         }
         return this;
     }
-    /** @rva 0x1809C70 slot 4  public override bool Check() { } */
+    /** @rva 0x17F48A0 slot 4  public override bool Check() { } */
     Check(): boolean {
         let comparer: IComparer | null = null;
         switch (this.condition._CompareContent) {

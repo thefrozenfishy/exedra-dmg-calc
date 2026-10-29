@@ -35,30 +35,30 @@ export class TurnReferee {
     get NextTurnOrderPriority(): int { return this.get_NextTurnOrderPriority(); }
     get DeltaActionTime(): float { return this.get_DeltaActionTime(); }
     get CurrentRound(): int { return this.get_CurrentRound(); }
-    /** @rva 0x7354F0  public int get_CurrentTurnUnitId() { } */
+    /** @rva 0x7364F0  public int get_CurrentTurnUnitId() { } */
     get_CurrentTurnUnitId(): int { return this._CurrentTurnUnitId; /* auto-property */ }
-    /** @rva 0x738D00  public void set_CurrentTurnUnitId(int value) { } */
+    /** @rva 0x739D00  public void set_CurrentTurnUnitId(int value) { } */
     set_CurrentTurnUnitId(value: int): void { this._CurrentTurnUnitId = value; /* auto-property */ }
-    /** @rva 0x802350  public int get_CurrentTurn() { } */
+    /** @rva 0x803350  public int get_CurrentTurn() { } */
     get_CurrentTurn(): int { return this._CurrentTurn; /* auto-property */ }
-    /** @rva 0x802540  public void set_CurrentTurn(int value) { } */
+    /** @rva 0x803540  public void set_CurrentTurn(int value) { } */
     set_CurrentTurn(value: int): void { this._CurrentTurn = value; /* auto-property */ }
-    /** @rva 0x15E80B0  public int get_NextTurnOrderPriority() { } */
+    /** @rva 0x15D2710  public int get_NextTurnOrderPriority() { } */
     get_NextTurnOrderPriority(): int {
         return ++this.turnOrderPriority;
     }
-    /** @rva 0x96C430  public float get_DeltaActionTime() { } */
+    /** @rva 0x951C10  public float get_DeltaActionTime() { } */
     get_DeltaActionTime(): float { return this.deltaActionTime; /* asm: movss xmm0, dword ptr [rcx + 0x20]; ret */ }
-    /** @rva 0x15E8050  public int get_CurrentRound() { } */
+    /** @rva 0x15D26B0  public int get_CurrentRound() { } */
     get_CurrentRound(): int {
         return TurnReferee.CalculateCurrentRound(this.elapsedActionTime);
     }
-    /** @rva 0x15E70E0  private static int CalculateCurrentRound(float totalActionTime) { } */
+    /** @rva 0x15D1740  private static int CalculateCurrentRound(float totalActionTime) { } */
     static CalculateCurrentRound(totalActionTime: float): int {
         if (totalActionTime < TurnReferee.FirstRoundTime) return 1;
         return Math.trunc(f32(f32(totalActionTime - TurnReferee.FirstRoundTime) / TurnReferee.DefaultRoundTime)) + 2;
     }
-    /** @rva 0x15E7180  public int CalculateNextRound(List<BattleUnit> activeUnitList) { } */
+    /** @rva 0x15D17E0  public int CalculateNextRound(List<BattleUnit> activeUnitList) { } */
     CalculateNextRound(activeUnitList: List<BattleUnit>): int {
         const list = [...activeUnitList];
         let time: float;
@@ -70,7 +70,7 @@ export class TurnReferee {
         }
         return TurnReferee.CalculateCurrentRound(time); // inlined in the game
     }
-    /** @rva 0x15E74F0  public List<int> ShiftNextTurn(List<BattleUnit> activeUnitList, GameDirectorBase gameDirector) { } */
+    /** @rva 0x15D1B50  public List<int> ShiftNextTurn(List<BattleUnit> activeUnitList, GameDirectorBase gameDirector) { } */
     ShiftNextTurn(activeUnitList: List<BattleUnit>, gameDirector: GameDirectorBase): List<int> {
         this._CurrentTurn = this._CurrentTurn + 1;
         const list = [...activeUnitList];
@@ -100,15 +100,15 @@ export class TurnReferee {
         this.deltaActionTime = elapsed;
         return sorted.map(u => u.Id); // <ShiftNextTurn>b__22_0
     }
-    /** @rva 0x15E7EE0  public void UpdateTurnOrder(List<BattleUnit> activeUnitList) { } */
+    /** @rva 0x15D2540  public void UpdateTurnOrder(List<BattleUnit> activeUnitList) { } */
     UpdateTurnOrder(activeUnitList: List<BattleUnit>): void {
         for (const unit of activeUnitList) unit.UpdateTurnGaugeBySpeed();
     }
-    /** @rva 0x15E7390  public List<TurnOrderUnitInfo> GetTurnOrderUnitInfoList(List<BattleUnit> activeUnitList) { } */
+    /** @rva 0x15D19F0  public List<TurnOrderUnitInfo> GetTurnOrderUnitInfoList(List<BattleUnit> activeUnitList) { } */
     GetTurnOrderUnitInfoList(activeUnitList: List<BattleUnit>): List<TurnOrderUnitInfo> {
         return TurnReferee.SortByTurnOrder(activeUnitList).map(u => new TurnOrderUnitInfo().ctor$BattleUnit(u)); // b__24_0 (ctor inlined)
     }
-    /** @rva 0x15E7D40  public static bool TryGetNextAllyTurnUnitId(List<BattleUnit> candidateUnitList, out int nextAllyTurnUnitId) { } */
+    /** @rva 0x15D23A0  public static bool TryGetNextAllyTurnUnitId(List<BattleUnit> candidateUnitList, out int nextAllyTurnUnitId) { } */
     static TryGetNextAllyTurnUnitId(candidateUnitList: List<BattleUnit>, nextAllyTurnUnitId: Ref<int>): boolean {
         nextAllyTurnUnitId.v = 0;
         const allies = candidateUnitList.filter(u => u.Team === BattleUnit_TeamType.Ally); // b__25_0
@@ -116,12 +116,12 @@ export class TurnReferee {
         nextAllyTurnUnitId.v = TurnReferee.SortByTurnOrder(allies)[0].Id;
         return true;
     }
-    /** @rva 0x15E72B0  public float GetGaugeValueToNextRound() { } */
+    /** @rva 0x15D1910  public float GetGaugeValueToNextRound() { } */
     GetGaugeValueToNextRound(): float {
         if (this.elapsedActionTime < TurnReferee.FirstRoundTime) return f32(TurnReferee.FirstRoundTime - this.elapsedActionTime);
         return f32(TurnReferee.DefaultRoundTime - fmodf(f32(this.elapsedActionTime - TurnReferee.FirstRoundTime), TurnReferee.DefaultRoundTime));
     }
-    /** @rva 0x15E79C0  public static IEnumerable<BattleUnit> SortByTurnOrder(IEnumerable<BattleUnit> candidateUnits) { } */
+    /** @rva 0x15D2020  public static IEnumerable<BattleUnit> SortByTurnOrder(IEnumerable<BattleUnit> candidateUnits) { } */
     static SortByTurnOrder(candidateUnits: IEnumerable<BattleUnit>): IEnumerable<BattleUnit> {
         // OrderBy(gauge) ThenByDescending(TurnOrderPriority) ThenBy(Team == Enemy) ThenBy(Id); LINQ ordering is stable
         return [...candidateUnits].sort((a, b) =>
@@ -130,9 +130,9 @@ export class TurnReferee {
             || ((a.Team === BattleUnit_TeamType.Enemy ? 1 : 0) - (b.Team === BattleUnit_TeamType.Enemy ? 1 : 0))
             || (a.Id - b.Id));
     }
-    /** @rva 0x72F5E0  public void .ctor() { } */
+    /** @rva 0x7305E0  public void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
-    /** @rva 0x15E7FE0  private static void .cctor() { } */
+    /** @rva 0x15D2640  private static void .cctor() { } */
     static cctor(): void {
         TurnReferee.AddValueToEnemySequence = 1000;
         TurnReferee.FirstRoundTime = 150;

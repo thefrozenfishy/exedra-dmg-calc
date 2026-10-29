@@ -38,35 +38,35 @@ export class CountdownReferee {
     get CanActiveEnemyUnitId(): int { return this.get_CanActiveEnemyUnitId(); }
     get HasActiveCountdownSkill(): boolean { return this.get_HasActiveCountdownSkill(); }
     get IsCountdownActive(): boolean { return this.get_IsCountdownActive(); }
-    /** @rva 0x7354F0  public int get_MaxCountdown() { } */
+    /** @rva 0x7364F0  public int get_MaxCountdown() { } */
     get_MaxCountdown(): int { return this.maxCountdown; /* asm: mov eax, dword ptr [rcx + 0x10]; ret */ }
-    /** @rva 0x802350  public int get_Countdown() { } */
+    /** @rva 0x803350  public int get_Countdown() { } */
     get_Countdown(): int { return this.countdown; /* asm: mov eax, dword ptr [rcx + 0x14]; ret */ }
-    /** @rva 0x762820  public int get_CancelMaxTotalDamage() { } */
+    /** @rva 0x763820  public int get_CancelMaxTotalDamage() { } */
     get_CancelMaxTotalDamage(): int { return this.cancelMaxTotalDamage; /* asm: mov eax, dword ptr [rcx + 0x18]; ret */ }
-    /** @rva 0x7F8800  public int get_CancelTotalDamage() { } */
+    /** @rva 0x7F9800  public int get_CancelTotalDamage() { } */
     get_CancelTotalDamage(): int { return this.cancelTotalDamage; /* asm: mov eax, dword ptr [rcx + 0x1c]; ret */ }
-    /** @rva 0x75DD70  public int get_BattleUnitId() { } */
+    /** @rva 0x75ED70  public int get_BattleUnitId() { } */
     get_BattleUnitId(): int { return this.battleUnitId; /* asm: mov eax, dword ptr [rcx + 0x20]; ret */ }
-    /** @rva 0x759830  public int get_CanActiveSkillMstId() { } */
+    /** @rva 0x75A830  public int get_CanActiveSkillMstId() { } */
     get_CanActiveSkillMstId(): int { return this.canActiveSkillMstId; /* asm: mov eax, dword ptr [rcx + 0x24]; ret */ }
-    /** @rva 0x7627A0  public int get_CanActiveSkillDetailMstId() { } */
+    /** @rva 0x7637A0  public int get_CanActiveSkillDetailMstId() { } */
     get_CanActiveSkillDetailMstId(): int { return this.canActiveSkillDetailMstId; /* asm: mov eax, dword ptr [rcx + 0x28]; ret */ }
-    /** @rva 0x85D530  public int get_CanActiveEnemyUnitId() { } */
+    /** @rva 0x85E530  public int get_CanActiveEnemyUnitId() { } */
     get_CanActiveEnemyUnitId(): int { return this.canActiveEnemyUnitId; /* asm: mov eax, dword ptr [rcx + 0x2c]; ret */ }
-    /** @rva 0x14BAE00  public bool get_HasActiveCountdownSkill() { } */
+    /** @rva 0x14A4EA0  public bool get_HasActiveCountdownSkill() { } */
     get_HasActiveCountdownSkill(): boolean {
         if (this.canActiveSkillMstId === 0) return false;
         return this.canActiveSkillDetailMstId !== 0;
     }
-    /** @rva 0x14BAE20  public bool get_IsCountdownActive() { } */
+    /** @rva 0x14A4EC0  public bool get_IsCountdownActive() { } */
     get_IsCountdownActive(): boolean { return this.countdown > 0; }
-    /** @rva 0x14BA6E0  public void Initialize(Dictionary<int, BattleUnit> battleUnitDic) { } */
+    /** @rva 0x14A4780  public void Initialize(Dictionary<int, BattleUnit> battleUnitDic) { } */
     Initialize(battleUnitDic: Dictionary<int, BattleUnit>): void {
         this.ResetParameter(); // inlined in the game
         this.LoadCanActiveCountdownSkill(battleUnitDic);
     }
-    /** @rva 0x14BA540  public void InitializeForRestart(Dictionary<int, BattleUnit> battleUnitDic, int currentCount, int currentDamage, int turnOrderPriority) { } */
+    /** @rva 0x14A45E0  public void InitializeForRestart(Dictionary<int, BattleUnit> battleUnitDic, int currentCount, int currentDamage, int turnOrderPriority) { } */
     InitializeForRestart(battleUnitDic: Dictionary<int, BattleUnit>, currentCount: int, currentDamage: int, turnOrderPriority: int): void {
         this.ResetParameter(); // inlined in the game
         this.LoadCanActiveCountdownSkill(battleUnitDic);
@@ -75,7 +75,7 @@ export class CountdownReferee {
             this.SetCountdownForRestart(currentCount, detail.get_Turn() - 1, currentDamage, detail.get_Value1(), this.canActiveEnemyUnitId, battleUnitDic, turnOrderPriority);
         }
     }
-    /** @rva 0x14BAA90  private void ResetParameter() { } */
+    /** @rva 0x14A4B30  private void ResetParameter() { } */
     ResetParameter(): void {
         // qword stores at 0x10/0x18/0x20/0x28: every int field 0x10..0x2c is cleared
         this.maxCountdown = 0;
@@ -87,7 +87,7 @@ export class CountdownReferee {
         this.canActiveSkillDetailMstId = 0;
         this.canActiveEnemyUnitId = 0;
     }
-    /** @rva 0x14BA700  private void LoadCanActiveCountdownSkill(Dictionary<int, BattleUnit> battleUnitDic) { } */
+    /** @rva 0x14A47A0  private void LoadCanActiveCountdownSkill(Dictionary<int, BattleUnit> battleUnitDic) { } */
     LoadCanActiveCountdownSkill(battleUnitDic: Dictionary<int, BattleUnit>): void {
         const enemies = [...battleUnitDic.values()].filter(data => data._Team === 1); // <>c.b__31_0
         for (const unit of enemies) {
@@ -104,18 +104,18 @@ export class CountdownReferee {
             }
         }
     }
-    /** @rva 0x14BA520  public void DecreaseCountdown() { } */
+    /** @rva 0x14A45C0  public void DecreaseCountdown() { } */
     DecreaseCountdown(): void {
         let v = this.countdown - 1;
         if (v < 0) v = 0;
         this.countdown = v;
     }
-    /** @rva 0x14BA500  public void AddCancelTotalDamage(int damage) { } */
+    /** @rva 0x14A45A0  public void AddCancelTotalDamage(int damage) { } */
     AddCancelTotalDamage(damage: int): void {
         this.cancelTotalDamage = damage + this.cancelTotalDamage;
         if (this.cancelMaxTotalDamage < this.cancelTotalDamage) this.cancelTotalDamage = this.cancelMaxTotalDamage;
     }
-    /** @rva 0x14BADC0  public void StartCountdown(int maxCountdown, int maxCancelTotalDamage, int battleUnitId) { } */
+    /** @rva 0x14A4E60  public void StartCountdown(int maxCountdown, int maxCancelTotalDamage, int battleUnitId) { } */
     StartCountdown(maxCountdown: int, maxCancelTotalDamage: int, battleUnitId: int): void {
         this.maxCountdown = maxCountdown;
         this.countdown = maxCountdown;
@@ -123,7 +123,7 @@ export class CountdownReferee {
         this.cancelTotalDamage = 0;
         this.battleUnitId = battleUnitId;
     }
-    /** @rva 0x14BAAB0  public void SetCountdownForRestart(int countdown, int maxCountdown, int cancelTotalDamage, int cancelMaxTotalDamage, int battleUnitId, Dictionary<int, BattleUnit> battleUnitDic, int turnOrderPriority) { } */
+    /** @rva 0x14A4B50  public void SetCountdownForRestart(int countdown, int maxCountdown, int cancelTotalDamage, int cancelMaxTotalDamage, int battleUnitId, Dictionary<int, BattleUnit> battleUnitDic, int turnOrderPriority) { } */
     SetCountdownForRestart(countdown: int, maxCountdown: int, cancelTotalDamage: int, cancelMaxTotalDamage: int, battleUnitId: int, battleUnitDic: Dictionary<int, BattleUnit>, turnOrderPriority: int): void {
         const unit = [...battleUnitDic.values()].find(u => this.$SetCountdownForRestart$b__35_0(u)) ?? null;
         for (const skill of unit!.get_ActiveSkills()) {
@@ -141,7 +141,7 @@ export class CountdownReferee {
         this.battleUnitId = battleUnitId;
         this.cancelTotalDamage = cancelTotalDamage;
     }
-    /** @rva 0x14BA530  public void EndCountdown() { } */
+    /** @rva 0x14A45D0  public void EndCountdown() { } */
     EndCountdown(): void {
         // qword stores at 0x10/0x18 and a dword at 0x20
         this.maxCountdown = 0;
@@ -150,8 +150,8 @@ export class CountdownReferee {
         this.cancelTotalDamage = 0;
         this.battleUnitId = 0;
     }
-    /** @rva 0x72F5E0  public void .ctor() { } */
+    /** @rva 0x7305E0  public void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
-    /** @rva 0x14BADE0  private bool <SetCountdownForRestart>b__35_0(BattleUnit unit) { } */
+    /** @rva 0x14A4E80  private bool <SetCountdownForRestart>b__35_0(BattleUnit unit) { } */
     $SetCountdownForRestart$b__35_0(unit: BattleUnit): boolean { return unit._Id === this.canActiveEnemyUnitId; }
 }

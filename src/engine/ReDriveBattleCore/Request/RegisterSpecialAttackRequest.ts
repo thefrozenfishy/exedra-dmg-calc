@@ -12,8 +12,8 @@ export class RegisterSpecialAttackRequest extends RequestBase {
     battleUnitId: int = 0;
     /** 0x14 public bool isRegister */
     isRegister: boolean = false;
-    /** @rva 0xEF6690 slot 4  public override RequestType get_RequestType() { } */
+    /** @rva 0xEE0BE0 slot 4  public override RequestType get_RequestType() { } */
     get_RequestType(): RequestType { return 12 as RequestType; /* asm: mov eax, 0xc; ret */ }
-    /** @rva 0x72F5E0  public void .ctor() { } */
+    /** @rva 0x7305E0  public void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
 }

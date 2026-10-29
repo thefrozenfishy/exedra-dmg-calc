@@ -16,12 +16,12 @@ export class SimulationBattleGameDirector extends GameDirectorBase {
     waveReferee: WaveReferee = null!;
     /** 0x88 private readonly AdditionalEnemyReferee additionalEnemyReferee */
     additionalEnemyReferee: AdditionalEnemyReferee = null!;
-    /** @rva 0x104C0A0 slot 4  public override BattleType get_BattleType() { } */
+    /** @rva 0x10365F0 slot 4  public override BattleType get_BattleType() { } */
     get_BattleType(): BattleType { return 7 as BattleType; /* asm: mov eax, 7; ret */ }
-    /** @rva 0x72F170  public void SetupBattleStage(int questStageMstId, int repeatNum, IBattleUnitProvider unitProvider, SimulationDataForMultiRaid simulationDataForMultiRaid, int campUpDmg = 0, int campUpBreakPointDmg = 0) { } */
+    /** @rva 0x730170  public void SetupBattleStage(int questStageMstId, int repeatNum, IBattleUnitProvider unitProvider, SimulationDataForMultiRaid simulationDataForMultiRaid, int campUpDmg = 0, int campUpBreakPointDmg = 0) { } */
     SetupBattleStage(questStageMstId: int, repeatNum: int, unitProvider: IBattleUnitProvider, simulationDataForMultiRaid: SimulationDataForMultiRaid, campUpDmg?: int /* = 0 */, campUpBreakPointDmg?: int /* = 0 */): void { /* asm: ret 0 */ }
-    /** @rva 0x72F170 slot 5  protected override void StoreBattlePhaseCommand() { } */
+    /** @rva 0x730170 slot 5  protected override void StoreBattlePhaseCommand() { } */
     StoreBattlePhaseCommand(): void { /* asm: ret 0 */ }
-    /** @rva 0x1701D30  public void .ctor() { } */
-    ctor(): this { return notPorted("SimulationBattleGameDirector..ctor", 0x1701D30); }
+    /** @rva 0x16EBA00  public void .ctor() { } */
+    ctor(): this { return notPorted("SimulationBattleGameDirector..ctor", 0x16EBA00); }
 }

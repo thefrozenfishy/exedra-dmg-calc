@@ -26,27 +26,27 @@ export class CommandTarget extends CommandBase {
     set TargetId(v: int) { this.set_TargetId(v); }
     get IsChangeTargetAfterAct(): boolean { return this.get_IsChangeTargetAfterAct(); }
     set IsChangeTargetAfterAct(v: boolean) { this.set_IsChangeTargetAfterAct(v); }
-    /** @rva 0x7E0AD0 slot 4  public override CommandType GetCommandType() { } */
+    /** @rva 0x7E1AD0 slot 4  public override CommandType GetCommandType() { } */
     GetCommandType(): CommandType { return 2 as CommandType; /* asm: mov eax, 2; ret */ }
-    /** @rva 0x762820  public BattleUnit.TeamType get_TargetTeam() { } */
+    /** @rva 0x763820  public BattleUnit.TeamType get_TargetTeam() { } */
     get_TargetTeam(): BattleUnit_TeamType { return this._TargetTeam; /* auto-property */ }
-    /** @rva 0x8A1240  public void set_TargetTeam(BattleUnit.TeamType value) { } */
+    /** @rva 0x8A2240  public void set_TargetTeam(BattleUnit.TeamType value) { } */
     set_TargetTeam(value: BattleUnit_TeamType): void { this._TargetTeam = value; /* auto-property */ }
-    /** @rva 0x7F8800  public TargetReferee.TargetType get_TargetType() { } */
+    /** @rva 0x7F9800  public TargetReferee.TargetType get_TargetType() { } */
     get_TargetType(): TargetReferee_TargetType { return this._TargetType; /* auto-property */ }
-    /** @rva 0x7F8820  public void set_TargetType(TargetReferee.TargetType value) { } */
+    /** @rva 0x7F9820  public void set_TargetType(TargetReferee.TargetType value) { } */
     set_TargetType(value: TargetReferee_TargetType): void { this._TargetType = value; /* auto-property */ }
-    /** @rva 0x75DD70  public int get_TargetId() { } */
+    /** @rva 0x75ED70  public int get_TargetId() { } */
     get_TargetId(): int { return this._TargetId; /* auto-property */ }
-    /** @rva 0x8A1230  public void set_TargetId(int value) { } */
+    /** @rva 0x8A2230  public void set_TargetId(int value) { } */
     set_TargetId(value: int): void { this._TargetId = value; /* auto-property */ }
-    /** @rva 0x8A11C0  public bool get_IsChangeTargetAfterAct() { } */
+    /** @rva 0x8A21C0  public bool get_IsChangeTargetAfterAct() { } */
     get_IsChangeTargetAfterAct(): boolean { return this._IsChangeTargetAfterAct; /* auto-property */ }
-    /** @rva 0x8A1270  public void set_IsChangeTargetAfterAct(bool value) { } */
+    /** @rva 0x8A2270  public void set_IsChangeTargetAfterAct(bool value) { } */
     set_IsChangeTargetAfterAct(value: boolean): void { this._IsChangeTargetAfterAct = value; /* auto-property */ }
-    /** @rva 0x72F5E0  public void .ctor() { } */
+    /** @rva 0x7305E0  public void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
-    /** @rva 0x1812BA0  public void .ctor(in BattleUnit.TeamType targetTeam, TargetReferee.TargetType targetType, in int targetId, bool isChangeTargetAfterAct = False) { } */
+    /** @rva 0x17FD7D0  public void .ctor(in BattleUnit.TeamType targetTeam, TargetReferee.TargetType targetType, in int targetId, bool isChangeTargetAfterAct = False) { } */
     ctor$TeamType_TargetType_int_bool(targetTeam: BattleUnit_TeamType, targetType: TargetReferee_TargetType, targetId: int, isChangeTargetAfterAct?: boolean /* = False */): this {
         this._TargetTeam = targetTeam;
         this._TargetType = targetType;

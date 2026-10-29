@@ -40,33 +40,33 @@ export class ActOrderUnitInfo {
     set ComboActionId(v: int) { this.set_ComboActionId(v); }
     get IsDecided(): boolean { return this.get_IsDecided(); }
     set IsDecided(v: boolean) { this.set_IsDecided(v); }
-    /** @rva 0x7354F0  public int get_ActId() { } */
+    /** @rva 0x7364F0  public int get_ActId() { } */
     get_ActId(): int { return this._ActId; /* auto-property */ }
-    /** @rva 0x738D00  public void set_ActId(int value) { } */
+    /** @rva 0x739D00  public void set_ActId(int value) { } */
     set_ActId(value: int): void { this._ActId = value; /* auto-property */ }
-    /** @rva 0x802350  public int get_BattleUnitId() { } */
+    /** @rva 0x803350  public int get_BattleUnitId() { } */
     get_BattleUnitId(): int { return this._BattleUnitId; /* auto-property */ }
-    /** @rva 0x802540  public void set_BattleUnitId(int value) { } */
+    /** @rva 0x803540  public void set_BattleUnitId(int value) { } */
     set_BattleUnitId(value: int): void { this._BattleUnitId = value; /* auto-property */ }
-    /** @rva 0x7F87F0  public bool get_ShouldShow() { } */
+    /** @rva 0x7F97F0  public bool get_ShouldShow() { } */
     get_ShouldShow(): boolean { return this._ShouldShow; /* auto-property */ }
-    /** @rva 0x7F8810  public void set_ShouldShow(bool value) { } */
+    /** @rva 0x7F9810  public void set_ShouldShow(bool value) { } */
     set_ShouldShow(value: boolean): void { this._ShouldShow = value; /* auto-property */ }
-    /** @rva 0x7F8800  public DisplayActType get_ActType() { } */
+    /** @rva 0x7F9800  public DisplayActType get_ActType() { } */
     get_ActType(): DisplayActType { return this._ActType; /* auto-property */ }
-    /** @rva 0x7F8820  public void set_ActType(DisplayActType value) { } */
+    /** @rva 0x7F9820  public void set_ActType(DisplayActType value) { } */
     set_ActType(value: DisplayActType): void { this._ActType = value; /* auto-property */ }
-    /** @rva 0x75DD70  public int get_ComboActionId() { } */
+    /** @rva 0x75ED70  public int get_ComboActionId() { } */
     get_ComboActionId(): int { return this._ComboActionId; /* auto-property */ }
-    /** @rva 0x8A1230  public void set_ComboActionId(int value) { } */
+    /** @rva 0x8A2230  public void set_ComboActionId(int value) { } */
     set_ComboActionId(value: int): void { this._ComboActionId = value; /* auto-property */ }
-    /** @rva 0x8A11C0  public bool get_IsDecided() { } */
+    /** @rva 0x8A21C0  public bool get_IsDecided() { } */
     get_IsDecided(): boolean { return this._IsDecided; /* auto-property */ }
-    /** @rva 0x8A1270  public void set_IsDecided(bool value) { } */
+    /** @rva 0x8A2270  public void set_IsDecided(bool value) { } */
     set_IsDecided(value: boolean): void { this._IsDecided = value; /* auto-property */ }
-    /** @rva 0x72F5E0  public void .ctor() { } */
+    /** @rva 0x7305E0  public void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
-    /** @rva 0x139B730  public void .ctor(ActBase act) { } */
+    /** @rva 0x1385C30  public void .ctor(ActBase act) { } */
     ctor$ActBase(act: ActBase): this {
         if (act == null) return this;
         this._ActId = act.id;
@@ -77,7 +77,7 @@ export class ActOrderUnitInfo {
         if (act instanceof SkillDecisionActBase) this._IsDecided = act._IsDecided;
         return this;
     }
-    /** @rva 0x139B570  public DisplayActType GetDisplayActType(ActBase act) { } */
+    /** @rva 0x1385A70  public DisplayActType GetDisplayActType(ActBase act) { } */
     GetDisplayActType(act: ActBase): DisplayActType {
         if (act instanceof TurnUnitAct) return 1 as DisplayActType;
         if (act instanceof SpecialAttackAct) return 2 as DisplayActType;

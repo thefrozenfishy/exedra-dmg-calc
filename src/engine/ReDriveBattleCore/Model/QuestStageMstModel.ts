@@ -38,7 +38,7 @@ export class QuestStageMstModel extends MstModelBase<QuestStageMstRecord> {
     get Element(): ElementType { return this.get_Element(); }
     get IsAutoModeOff(): boolean { return this.get_IsAutoModeOff(); }
     get SelectionAbilityLotteryMstId(): int { return this.get_SelectionAbilityLotteryMstId(); }
-    /** @rva 0x16FF700  public void .ctor(QuestStageMstRecord record) { } */
+    /** @rva 0x16E93D0  public void .ctor(QuestStageMstRecord record) { } */
     ctor$QuestStageMstRecord(record: QuestStageMstRecord): this {
         super.ctor$TRecord(record);
         this.recommendationElements = isNullOrEmpty(record.recommendationElementCsv)
@@ -46,56 +46,56 @@ export class QuestStageMstModel extends MstModelBase<QuestStageMstRecord> {
             : record.recommendationElementCsv.split(",").map(i => intParse(i) as ElementType); // <.ctor>b__0_0: int.Parse
         return this;
     }
-    /** @rva 0x72FC50  public QuestStageMstRecord get_Record() { } */
+    /** @rva 0x730C50  public QuestStageMstRecord get_Record() { } */
     get_Record(): QuestStageMstRecord { return this.record; }
-    /** @rva 0x901380  public int get_QuestStageMstId() { } */
+    /** @rva 0x902330  public int get_QuestStageMstId() { } */
     get_QuestStageMstId(): int { return this.record.questStageMstId; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x901785; mov eax, dword ptr [rax + 0x10]; add rsp, 0x28; ret */ }
-    /** @rva 0x9013A0  public int get_QuestGroupMstId() { } */
+    /** @rva 0x902350  public int get_QuestGroupMstId() { } */
     get_QuestGroupMstId(): int { return this.record.questGroupMstId; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x9017a5; mov eax, dword ptr [rax + 0x14]; add rsp, 0x28; ret */ }
-    /** @rva 0x85D540  public string get_StageName() { } */
+    /** @rva 0x85E540  public string get_StageName() { } */
     get_StageName(): string { return this.record.name; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x85e556; mov rax, qword ptr [rax + 0x18]; add rsp, 0x28; ret */ }
-    /** @rva 0x901F20  public int get_UseStamina() { } */
+    /** @rva 0x902EF0  public int get_UseStamina() { } */
     get_UseStamina(): int { return this.record.useStamina; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0xa0e825; mov eax, dword ptr [rax + 0x34]; add rsp, 0x28; ret */ }
-    /** @rva 0x901F40  public int get_PrevQuestStageMstId() { } */
+    /** @rva 0x902F10  public int get_PrevQuestStageMstId() { } */
     get_PrevQuestStageMstId(): int { return this.record.prevQuestStageMstId; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x16cbee5; mov eax, dword ptr [rax + 0x38]; add rsp, 0x28; ret */ }
-    /** @rva 0x901F00  public int get_ConditionGroupId() { } */
+    /** @rva 0x902ED0  public int get_ConditionGroupId() { } */
     get_ConditionGroupId(): int { return this.record.conditionGroupId; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x16d3205; mov eax, dword ptr [rax + 0x3c]; add rsp, 0x28; ret */ }
-    /** @rva 0x901E80  public int get_QuestMissionGroupId() { } */
+    /** @rva 0x902E50  public int get_QuestMissionGroupId() { } */
     get_QuestMissionGroupId(): int { return this.record.questMissionGroupId; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x901975; mov eax, dword ptr [rax + 0x40]; add rsp, 0x28; ret */ }
-    /** @rva 0x16FF9B0  public object get_Difficulty() { } */
+    /** @rva 0x16E9680  public object get_Difficulty() { } */
     get_Difficulty(): any { return this.record.difficulty; /* boxed int */ }
-    /** @rva 0x16FFB00  public string get_StagePrefabName() { } */
+    /** @rva 0x16E97D0  public string get_StagePrefabName() { } */
     get_StagePrefabName(): string { return this.record.stagePrefabName; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x16d5c39; mov rax, qword ptr [rax + 0x98]; add rsp, 0x28; ret */ }
-    /** @rva 0x16FF990  public string get_BgmCueSheetName() { } */
+    /** @rva 0x16E9660  public string get_BgmCueSheetName() { } */
     get_BgmCueSheetName(): string { return this.record.bgmCueSheetName; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x16d5ac9; mov rax, qword ptr [rax + 0x88]; add rsp, 0x28; ret */ }
-    /** @rva 0x16FF970  public string get_BgmCueName() { } */
+    /** @rva 0x16E9640  public string get_BgmCueName() { } */
     get_BgmCueName(): string { return this.record.bgmCueName; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x16d5aa9; mov rax, qword ptr [rax + 0x90]; add rsp, 0x28; ret */ }
-    /** @rva 0x7F8C00  public string get_ResourceName() { } */
+    /** @rva 0x7F9C00  public string get_ResourceName() { } */
     get_ResourceName(): string { return this.record.resourceName; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x7f9c16; mov rax, qword ptr [rax + 0x48]; add rsp, 0x28; ret */ }
-    /** @rva 0x16FE220  public int get_RewardGroupId() { } */
+    /** @rva 0x16E7EF0  public int get_RewardGroupId() { } */
     get_RewardGroupId(): int { return this.record.rewardGroupId; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x16d4355; mov eax, dword ptr [rax + 0x5c]; add rsp, 0x28; ret */ }
-    /** @rva 0x16FECC0  public int get_FirstClearRewardGroupId() { } */
+    /** @rva 0x16E8990  public int get_FirstClearRewardGroupId() { } */
     get_FirstClearRewardGroupId(): int { return this.record.firstClearRewardGroupId; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x16d4df5; mov eax, dword ptr [rax + 0x60]; add rsp, 0x28; ret */ }
-    /** @rva 0x16FFAC0  public ElementType get_RecommendationElement() { } */
+    /** @rva 0x16E9790  public ElementType get_RecommendationElement() { } */
     get_RecommendationElement(): ElementType { return this.record.recommendationElement as ElementType; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x16d5bf8; mov eax, dword ptr [rax + 0xcc]; add rsp, 0x28; ret */ }
-    /** @rva 0x732E90  public ElementType[] get_RecommendationElements() { } */
+    /** @rva 0x733E90  public ElementType[] get_RecommendationElements() { } */
     get_RecommendationElements(): ElementType[] { return this.recommendationElements; /* asm: mov rax, qword ptr [rcx + 0x18]; ret */ }
-    /** @rva 0x16FB9B0  public int get_RecommendationPartyPower() { } */
+    /** @rva 0x16E5680  public int get_RecommendationPartyPower() { } */
     get_RecommendationPartyPower(): int { return this.record.recommendationPartyPower; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x16d0b35; mov eax, dword ptr [rax + 0x58]; add rsp, 0x28; ret */ }
-    /** @rva 0x16FF950  public int get_BeforeBattleScenarioMstId() { } */
+    /** @rva 0x16E9620  public int get_BeforeBattleScenarioMstId() { } */
     get_BeforeBattleScenarioMstId(): int { return this.record.beforeBattleScenarioMstId; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x16d5a88; mov eax, dword ptr [rax + 0xa8]; add rsp, 0x28; ret */ }
-    /** @rva 0x16FF930  public int get_AfterBattleScenarioMstId() { } */
+    /** @rva 0x16E9600  public int get_AfterBattleScenarioMstId() { } */
     get_AfterBattleScenarioMstId(): int { return this.record.afterBattleScenarioMstId; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x16d5a68; mov eax, dword ptr [rax + 0xac]; add rsp, 0x28; ret */ }
-    /** @rva 0x16FFA60  public JudgeResultType get_JudgeResultType() { } */
+    /** @rva 0x16E9730  public JudgeResultType get_JudgeResultType() { } */
     get_JudgeResultType(): JudgeResultType { return this.record.judgeResultType as JudgeResultType; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x16d5b98; mov eax, dword ptr [rax + 0xa0]; add rsp, 0x28; ret */ }
-    /** @rva 0x16FFA80  public int get_JudgeResultValue() { } */
+    /** @rva 0x16E9750  public int get_JudgeResultValue() { } */
     get_JudgeResultValue(): int { return this.record.judgeResultValue; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x16d5bb8; mov eax, dword ptr [rax + 0xa4]; add rsp, 0x28; ret */ }
-    /** @rva 0x16FFAA0  public string get_OverrideComponentPrefabName() { } */
+    /** @rva 0x16E9770  public string get_OverrideComponentPrefabName() { } */
     get_OverrideComponentPrefabName(): string { return this.record.overrideComponentPrefabName; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x16d5bd9; mov rax, qword ptr [rax + 0xb8]; add rsp, 0x28; ret */ }
-    /** @rva 0x16FFA10  public ElementType get_Element() { } */
+    /** @rva 0x16E96E0  public ElementType get_Element() { } */
     get_Element(): ElementType { return this.record.element as ElementType; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x16d5b48; mov eax, dword ptr [rax + 0xc8]; add rsp, 0x28; ret */ }
-    /** @rva 0x16FFA30  public bool get_IsAutoModeOff() { } */
+    /** @rva 0x16E9700  public bool get_IsAutoModeOff() { } */
     get_IsAutoModeOff(): boolean { return this.record.isAutoModeOff === 1; }
-    /** @rva 0x16FFAE0  public int get_SelectionAbilityLotteryMstId() { } */
+    /** @rva 0x16E97B0  public int get_SelectionAbilityLotteryMstId() { } */
     get_SelectionAbilityLotteryMstId(): int { return this.record.selectionAbilityLotteryMstId; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x16d5c18; mov eax, dword ptr [rax + 0xc4]; add rsp, 0x28; ret */ }
 }

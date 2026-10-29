@@ -21,23 +21,23 @@ export class CommandBattlePhase extends CommandBase {
     set ReadyPhase(v: CommandBattlePhase_ReadyPhaseData) { this.set_ReadyPhase(v); }
     get FinishPhase(): CommandBattlePhase_FinishPhaseData { return this.get_FinishPhase(); }
     set FinishPhase(v: CommandBattlePhase_FinishPhaseData) { this.set_FinishPhase(v); }
-    /** @rva 0x762820  public Phase get_Phase() { } */
+    /** @rva 0x763820  public Phase get_Phase() { } */
     get_Phase(): Phase { return this._Phase; /* auto-property */ }
-    /** @rva 0x8A1240  public void set_Phase(Phase value) { } */
+    /** @rva 0x8A2240  public void set_Phase(Phase value) { } */
     set_Phase(value: Phase): void { this._Phase = value; /* auto-property */ }
-    /** @rva 0x7359E0  public CommandBattlePhase.ReadyPhaseData get_ReadyPhase() { } */
+    /** @rva 0x7369E0  public CommandBattlePhase.ReadyPhaseData get_ReadyPhase() { } */
     get_ReadyPhase(): CommandBattlePhase_ReadyPhaseData { return this._ReadyPhase; /* auto-property */ }
-    /** @rva 0x735A50  public void set_ReadyPhase(CommandBattlePhase.ReadyPhaseData value) { } */
+    /** @rva 0x736A50  public void set_ReadyPhase(CommandBattlePhase.ReadyPhaseData value) { } */
     set_ReadyPhase(value: CommandBattlePhase_ReadyPhaseData): void { this._ReadyPhase = value; /* auto-property */ }
-    /** @rva 0x735EA0  public CommandBattlePhase.FinishPhaseData get_FinishPhase() { } */
+    /** @rva 0x736EA0  public CommandBattlePhase.FinishPhaseData get_FinishPhase() { } */
     get_FinishPhase(): CommandBattlePhase_FinishPhaseData { return this._FinishPhase; /* auto-property */ }
-    /** @rva 0x735F10  public void set_FinishPhase(CommandBattlePhase.FinishPhaseData value) { } */
+    /** @rva 0x736F10  public void set_FinishPhase(CommandBattlePhase.FinishPhaseData value) { } */
     set_FinishPhase(value: CommandBattlePhase_FinishPhaseData): void { this._FinishPhase = value; /* auto-property */ }
-    /** @rva 0x758B30 slot 4  public override CommandType GetCommandType() { } */
+    /** @rva 0x759B30 slot 4  public override CommandType GetCommandType() { } */
     GetCommandType(): CommandType { return 1 as CommandType; /* asm: mov eax, 1; ret */ }
-    /** @rva 0x72F5E0  public void .ctor() { } */
+    /** @rva 0x7305E0  public void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
-    /** @rva 0x180F720  public void .ctor(in Phase phase, CommandBattlePhase.ReadyPhaseData readyPhase, CommandBattlePhase.FinishPhaseData finishPhase) { } */
+    /** @rva 0x17FA350  public void .ctor(in Phase phase, CommandBattlePhase.ReadyPhaseData readyPhase, CommandBattlePhase.FinishPhaseData finishPhase) { } */
     ctor$Phase_ReadyPhaseData_FinishPhaseData(phase: Phase, readyPhase: CommandBattlePhase_ReadyPhaseData, finishPhase: CommandBattlePhase_FinishPhaseData): this {
         this._Phase = phase;
         this._ReadyPhase = readyPhase;
@@ -48,7 +48,7 @@ export class CommandBattlePhase extends CommandBase {
 
 // ---- ReDriveBattleCore.Command.CommandBattlePhase.PhaseDataBase  (TypeDefIndex 974, public class) ----
 export class CommandBattlePhase_PhaseDataBase {
-    /** @rva 0x72F5E0  public void .ctor() { } */
+    /** @rva 0x7305E0  public void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
 }
 
@@ -58,11 +58,11 @@ export class CommandBattlePhase_ReadyPhaseData extends CommandBattlePhase_PhaseD
     _firstAllyUnitId: int = 0;
     get firstAllyUnitId(): int { return this.get_firstAllyUnitId(); }
     set firstAllyUnitId(v: int) { this.set_firstAllyUnitId(v); }
-    /** @rva 0x7354F0  public int get_firstAllyUnitId() { } */
+    /** @rva 0x7364F0  public int get_firstAllyUnitId() { } */
     get_firstAllyUnitId(): int { return this._firstAllyUnitId; /* auto-property */ }
-    /** @rva 0x738D00  public void set_firstAllyUnitId(int value) { } */
+    /** @rva 0x739D00  public void set_firstAllyUnitId(int value) { } */
     set_firstAllyUnitId(value: int): void { this._firstAllyUnitId = value; /* auto-property */ }
-    /** @rva 0x72F5E0  public void .ctor() { } */
+    /** @rva 0x7305E0  public void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
 }
 
@@ -80,18 +80,18 @@ export class CommandBattlePhase_FinishPhaseData extends CommandBattlePhase_Phase
     set battleFinishByRoundLimit(v: boolean) { this.set_battleFinishByRoundLimit(v); }
     get battleFinishByTimeLimit(): boolean { return this.get_battleFinishByTimeLimit(); }
     set battleFinishByTimeLimit(v: boolean) { this.set_battleFinishByTimeLimit(v); }
-    /** @rva 0x72FA80  public bool get_isWinPlayer() { } */
+    /** @rva 0x730A80  public bool get_isWinPlayer() { } */
     get_isWinPlayer(): boolean { return this._isWinPlayer; /* auto-property */ }
-    /** @rva 0x72FA90  public void set_isWinPlayer(bool value) { } */
+    /** @rva 0x730A90  public void set_isWinPlayer(bool value) { } */
     set_isWinPlayer(value: boolean): void { this._isWinPlayer = value; /* auto-property */ }
-    /** @rva 0x900AA0  public bool get_battleFinishByRoundLimit() { } */
+    /** @rva 0x901A50  public bool get_battleFinishByRoundLimit() { } */
     get_battleFinishByRoundLimit(): boolean { return this._battleFinishByRoundLimit; /* auto-property */ }
-    /** @rva 0x900B70  public void set_battleFinishByRoundLimit(bool value) { } */
+    /** @rva 0x901B20  public void set_battleFinishByRoundLimit(bool value) { } */
     set_battleFinishByRoundLimit(value: boolean): void { this._battleFinishByRoundLimit = value; /* auto-property */ }
-    /** @rva 0x900A60  public bool get_battleFinishByTimeLimit() { } */
+    /** @rva 0x901A10  public bool get_battleFinishByTimeLimit() { } */
     get_battleFinishByTimeLimit(): boolean { return this._battleFinishByTimeLimit; /* auto-property */ }
-    /** @rva 0x900B20  public void set_battleFinishByTimeLimit(bool value) { } */
+    /** @rva 0x901AD0  public void set_battleFinishByTimeLimit(bool value) { } */
     set_battleFinishByTimeLimit(value: boolean): void { this._battleFinishByTimeLimit = value; /* auto-property */ }
-    /** @rva 0x72F5E0  public void .ctor() { } */
+    /** @rva 0x7305E0  public void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
 }

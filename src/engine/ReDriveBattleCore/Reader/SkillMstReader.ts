@@ -9,6 +9,6 @@ import type { int } from "../../runtime";
 
 // ---- ReDriveBattleCore.Reader.SkillMstReader  (TypeDefIndex 868, public class) ----
 export class SkillMstReader extends BattleMstReaderBase<SkillMstModel, SkillMstRecord, int> {
-    /** @rva 0x1702270  public void .ctor() { } */
+    /** @rva 0x16EBF40  public void .ctor() { } */
     ctor(): this { super.ctor(); return this; }
 }

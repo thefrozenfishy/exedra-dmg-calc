@@ -12,13 +12,13 @@ export class CommandError extends CommandBase {
     _ErrorType: BattleCoreErrorType = 0 as BattleCoreErrorType;
     get ErrorType(): BattleCoreErrorType { return this.get_ErrorType(); }
     set ErrorType(v: BattleCoreErrorType) { this.set_ErrorType(v); }
-    /** @rva 0x1810420 slot 4  public override CommandType GetCommandType() { } */
+    /** @rva 0x17FB050 slot 4  public override CommandType GetCommandType() { } */
     GetCommandType(): CommandType { return 27 as CommandType; /* asm: mov eax, 0x1b; ret */ }
-    /** @rva 0x762820  public BattleCoreErrorType get_ErrorType() { } */
+    /** @rva 0x763820  public BattleCoreErrorType get_ErrorType() { } */
     get_ErrorType(): BattleCoreErrorType { return this._ErrorType; /* auto-property */ }
-    /** @rva 0x8A1240  public void set_ErrorType(BattleCoreErrorType value) { } */
+    /** @rva 0x8A2240  public void set_ErrorType(BattleCoreErrorType value) { } */
     set_ErrorType(value: BattleCoreErrorType): void { this._ErrorType = value; /* auto-property */ }
-    /** @rva 0x14C3F00  public void .ctor(BattleCoreErrorType errorType) { } */
+    /** @rva 0x14ADFA0  public void .ctor(BattleCoreErrorType errorType) { } */
     ctor$BattleCoreErrorType(errorType: BattleCoreErrorType): this {
         this._ErrorType = errorType;
         return this;

@@ -9,6 +9,6 @@ import type { int } from "../../runtime";
 
 // ---- ReDriveBattleCore.Reader.QuestEnemySkillSetMstReader  (TypeDefIndex 863, public class) ----
 export class QuestEnemySkillSetMstReader extends BattleMstReaderBase<QuestEnemySkillSetMstModel, QuestEnemySkillSetMstRecord, int> {
-    /** @rva 0x16FF630  public void .ctor() { } */
+    /** @rva 0x16E9300  public void .ctor() { } */
     ctor(): this { super.ctor(); return this; }
 }

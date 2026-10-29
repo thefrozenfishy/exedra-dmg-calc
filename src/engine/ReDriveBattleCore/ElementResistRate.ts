@@ -15,17 +15,17 @@ export class ElementResistRate {
     set Element(v: ElementType) { this.set_Element(v); }
     get ResistRate(): int { return this.get_ResistRate(); }
     set ResistRate(v: int) { this.set_ResistRate(v); }
-    /** @rva 0x7354F0  public ElementType get_Element() { } */
+    /** @rva 0x7364F0  public ElementType get_Element() { } */
     get_Element(): ElementType { return this._Element; /* auto-property */ }
-    /** @rva 0x738D00  public void set_Element(ElementType value) { } */
+    /** @rva 0x739D00  public void set_Element(ElementType value) { } */
     set_Element(value: ElementType): void { this._Element = value; /* auto-property */ }
-    /** @rva 0x802350  public int get_ResistRate() { } */
+    /** @rva 0x803350  public int get_ResistRate() { } */
     get_ResistRate(): int { return this._ResistRate; /* auto-property */ }
-    /** @rva 0x802540  public void set_ResistRate(int value) { } */
+    /** @rva 0x803540  public void set_ResistRate(int value) { } */
     set_ResistRate(value: int): void { this._ResistRate = value; /* auto-property */ }
-    /** @rva 0x72F5E0  public void .ctor() { } */
+    /** @rva 0x7305E0  public void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
-    /** @rva 0x902BD0  public void .ctor(ElementType element, int resistRate) { } */
+    /** @rva 0x903860  public void .ctor(ElementType element, int resistRate) { } */
     ctor$ElementType_int(element: ElementType, resistRate: int): this {
         this._Element = element;
         this._ResistRate = resistRate;

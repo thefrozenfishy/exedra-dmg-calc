@@ -10,14 +10,14 @@ import { f32 } from "../../runtime";
 
 // ---- ReDriveBattleCore.UnitState.BurnAtkUnitState  (TypeDefIndex 503, public class) ----
 export class BurnAtkUnitState extends BurnUnitStateBase {
-    /** @rva 0x15DC530 slot 32  protected override Nullable<ReceiveSlipDamageUnitStateBase.ParameterType> get_DamageType() { } */
+    /** @rva 0x15C6B90 slot 32  protected override Nullable<ReceiveSlipDamageUnitStateBase.ParameterType> get_DamageType() { } */
     get_DamageType(): Nullable<ReceiveSlipDamageUnitStateBase_ParameterType> { return 0 as ReceiveSlipDamageUnitStateBase_ParameterType; /* new Nullable<ParameterType>(Atk) */ }
-    /** @rva 0x15DC300  protected void .ctor() { } */
+    /** @rva 0x15C6960  protected void .ctor() { } */
     ctor(): this {
         super.ctor();
         return this;
     }
-    /** @rva 0x15DC280  public void .ctor(AbilityEffectInfo info) { } */
+    /** @rva 0x15C68E0  public void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
         super.ctor$AbilityEffectInfo(info);
         this._UpdateableEffectValue = f32(info._EffectValue1);

@@ -18,26 +18,26 @@ export abstract class AddTurnUnitStateBase extends UnitStateBase {  // implement
     get AddTurnNum(): int { return this.get_AddTurnNum(); }
     set AddTurnNum(v: int) { this.set_AddTurnNum(v); }
     get IBattleStartTriggerPriority$Priority(): int { return this.get_IBattleStartTriggerPriority$Priority(); }
-    /** @rva 0x7421D0 slot 6  public override UnitStateBase.DirectionType get_Direction() { } */
+    /** @rva 0x7431D0 slot 6  public override UnitStateBase.DirectionType get_Direction() { } */
     get_Direction(): UnitStateBase_DirectionType { return 0 as UnitStateBase_DirectionType; /* asm: xor eax, eax; ret */ }
-    /** @rva 0x15DA970 slot 7  public override string get_IconName() { } */
+    /** @rva 0x15C4FD0 slot 7  public override string get_IconName() { } */
     get_IconName(): string {
         return "battle_icon_up_time";
     }
-    /** @rva 0x15DA940 slot 13  public override string get_GiveVisualEffectName() { } */
+    /** @rva 0x15C4FA0 slot 13  public override string get_GiveVisualEffectName() { } */
     get_GiveVisualEffectName(): string {
         return "eff_cmn_act_buff_appear_001";
     }
-    /** @rva 0x9009C0  public int get_AddTurnNum() { } */
+    /** @rva 0x901970  public int get_AddTurnNum() { } */
     get_AddTurnNum(): int { return this._AddTurnNum; /* auto-property */ }
-    /** @rva 0x900A30  public void set_AddTurnNum(int value) { } */
+    /** @rva 0x9019E0  public void set_AddTurnNum(int value) { } */
     set_AddTurnNum(value: int): void { this._AddTurnNum = value; /* auto-property */ }
-    /** @rva 0x15D9DA0  protected void .ctor() { } */
+    /** @rva 0x15C4400  protected void .ctor() { } */
     ctor(): this {
         super.ctor();
         return this;
     }
-    /** @rva 0x15DA300  public void .ctor(AbilityEffectInfo info) { } */
+    /** @rva 0x15C4960  public void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
         super.ctor$AbilityEffectInfo(info);
         this._AddTurnNum = info._EffectValue1;
@@ -45,7 +45,7 @@ export abstract class AddTurnUnitStateBase extends UnitStateBase {  // implement
     }
     /** @rva -1 slot 26  public abstract void AddTurnTo(UnitStateBase targetUnitState); */
     abstract AddTurnTo(targetUnitState: UnitStateBase): void;
-    /** @rva 0x15DA8F0 slot 25  private int ReDriveBattleCore.IBattleStartTriggerPriority.get_Priority() { } */
+    /** @rva 0x15C4F50 slot 25  private int ReDriveBattleCore.IBattleStartTriggerPriority.get_Priority() { } */
     get_IBattleStartTriggerPriority$Priority(): int {
         return IBattleStartTriggerPriority_Define.AddTurnUnitStatePriority;
     }

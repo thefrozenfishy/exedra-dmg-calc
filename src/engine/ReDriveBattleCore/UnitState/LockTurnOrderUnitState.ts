@@ -15,27 +15,27 @@ import { AISkillTargetSelector } from "../AI/AISkillTargetSelector";
 // ---- ReDriveBattleCore.UnitState.LockTurnOrderUnitState  (TypeDefIndex 640, public class) ----
 export class LockTurnOrderUnitState extends UnitStateBase {  // implements IRequiredStateForDecide
     static readonly __interfaces: readonly string[] = ['IRequiredStateForDecide'];
-    /** @rva 0x758B30 slot 6  public override UnitStateBase.DirectionType get_Direction() { } */
+    /** @rva 0x759B30 slot 6  public override UnitStateBase.DirectionType get_Direction() { } */
     get_Direction(): UnitStateBase_DirectionType { return 1 as UnitStateBase_DirectionType; /* asm: mov eax, 1; ret */ }
-    /** @rva 0x16FD060 slot 7  public override string get_IconName() { } */
+    /** @rva 0x16E6D30 slot 7  public override string get_IconName() { } */
     get_IconName(): string {
         return "battle_icon_lock_turn_order";
     }
-    /** @rva 0x16FD030 slot 13  public override string get_GiveVisualEffectName() { } */
+    /** @rva 0x16E6D00 slot 13  public override string get_GiveVisualEffectName() { } */
     get_GiveVisualEffectName(): string {
         return "eff_cmn_act_debuff_appear_001";
     }
-    /** @rva 0x16F8570  protected void .ctor() { } */
+    /** @rva 0x16E2240  protected void .ctor() { } */
     ctor(): this {
         this._IconName = "";
         return this;
     }
-    /** @rva 0x15D9DB0  public void .ctor(AbilityEffectInfo info) { } */
+    /** @rva 0x15C4410  public void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
         super.ctor$AbilityEffectInfo(info);
         return this;
     }
-    /** @rva 0x16FCDD0 slot 24  public override AISkillTargetSelector.UnitFilterFuncOrder GetUnitFilterFuncOrder(BattleUnit userUnit, IEnumerable<BattleUnit> candidateUnits) { } */
+    /** @rva 0x16E6AA0 slot 24  public override AISkillTargetSelector.UnitFilterFuncOrder GetUnitFilterFuncOrder(BattleUnit userUnit, IEnumerable<BattleUnit> candidateUnits) { } */
     GetUnitFilterFuncOrder(userUnit: BattleUnit, candidateUnits: IEnumerable<BattleUnit>): AISkillTargetSelector_UnitFilterFuncOrder {
         const list: List<(a0: IEnumerable<BattleUnit>) => IEnumerable<BattleUnit>> = [];
         list.push(AISkillTargetSelector.UnitFilterByMainTarget);

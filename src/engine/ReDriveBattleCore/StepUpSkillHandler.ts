@@ -19,7 +19,7 @@ import type { SpReferee } from "./SpReferee";
 
 // ---- ReDriveBattleCore.StepUpSkillHandler  (TypeDefIndex 473, public static class) ----
 export class StepUpSkillHandler {
-    /** @rva 0x15E4E00  public static void HandleRequest(GameDirectorBase gameDirector, StepUpSkillRequest request) { } */
+    /** @rva 0x15CF460  public static void HandleRequest(GameDirectorBase gameDirector, StepUpSkillRequest request) { } */
     static HandleRequest(gameDirector: GameDirectorBase, request: StepUpSkillRequest): void {
         const unit = gameDirector.get_battleUnitDic().get(request.battleUnitId); // <>c__DisplayClass0_0.unit
         if (unit === undefined) return; // TryGetValue
@@ -59,11 +59,11 @@ export class StepUpSkillHandler {
         }
         StepUpSkillHandler.EmitResult(gameDirector, unit, currentSkillMstId, false, 0, 0, false);
     }
-    /** @rva 0x15E4900  public static int CalcStepUpTotalConsumeSp(int baseConsumeSp, int stepLevel) { } */
+    /** @rva 0x15CEF60  public static int CalcStepUpTotalConsumeSp(int baseConsumeSp, int stepLevel) { } */
     static CalcStepUpTotalConsumeSp(baseConsumeSp: int, stepLevel: int): int {
         return baseConsumeSp + stepLevel;
     }
-    /** @rva 0x15E4AB0  public static int GetActiveStepUpLevel(BattleUnit unit, int skillMstId) { } */
+    /** @rva 0x15CF110  public static int GetActiveStepUpLevel(BattleUnit unit, int skillMstId) { } */
     static GetActiveStepUpLevel(unit: BattleUnit, skillMstId: int): int {
         if (unit == null || unit.Condition == null) return 0;
         const s = unit.Condition.StateList.filter(x => x instanceof StepUpSkillUnitState) as StepUpSkillUnitState[]; // OfType
@@ -71,13 +71,13 @@ export class StepUpSkillHandler {
         const hit = s.find(x => x.IsActive$BattleUnit(unit) && x.GetSkillMstId$BattleUnit(unit) === skillMstId);
         return hit === undefined ? 0 : hit.stepLevel;
     }
-    /** @rva 0x15E4910  public static bool CanStepUpFromLevel(BattleUnit unit, int currentStepLevel, SpReferee spReferee) { } */
+    /** @rva 0x15CEF70  public static bool CanStepUpFromLevel(BattleUnit unit, int currentStepLevel, SpReferee spReferee) { } */
     static CanStepUpFromLevel(unit: BattleUnit, currentStepLevel: int, spReferee: SpReferee): boolean {
         const list = StepUpSkillHandler.GetActiveStepUpStateList(unit);
         if (list.length === 0) return false;
         return StepUpSkillHandler.TryEvaluateNextStepUp(unit, list, currentStepLevel, spReferee, ref<int>(0), ref<int>(0));
     }
-    /** @rva 0x15E5C00  public static bool TrySelectStepUpActiveSkills(BattleUnit actUnit, GameDirectorBase gameDirector, List<BattleUnit> opponentUnitList, List<BattleUnit> friendUnitList, out ActiveSkill[] activeSkills) { } */
+    /** @rva 0x15D0260  public static bool TrySelectStepUpActiveSkills(BattleUnit actUnit, GameDirectorBase gameDirector, List<BattleUnit> opponentUnitList, List<BattleUnit> friendUnitList, out ActiveSkill[] activeSkills) { } */
     static TrySelectStepUpActiveSkills(actUnit: BattleUnit, gameDirector: GameDirectorBase, opponentUnitList: List<BattleUnit>, friendUnitList: List<BattleUnit>, activeSkills: Ref<ActiveSkill[]>): boolean {
         activeSkills.v = null!;
         if (!StepUpSkillHandler.ShouldUseStepUpSkillByRole(actUnit, opponentUnitList, friendUnitList)) return false;
@@ -103,7 +103,7 @@ export class StepUpSkillHandler {
         }
         return false;
     }
-    /** @rva 0x15E5260  private static bool ShouldUseStepUpSkillByRole(BattleUnit actUnit, List<BattleUnit> opponentUnitList, List<BattleUnit> friendUnitList) { } */
+    /** @rva 0x15CF8C0  private static bool ShouldUseStepUpSkillByRole(BattleUnit actUnit, List<BattleUnit> opponentUnitList, List<BattleUnit> friendUnitList) { } */
     static ShouldUseStepUpSkillByRole(actUnit: BattleUnit, opponentUnitList: List<BattleUnit>, friendUnitList: List<BattleUnit>): boolean {
         const p = actUnit.BattleParameter;
         if (!(p instanceof CharacterParameter)) return false;
@@ -126,7 +126,7 @@ export class StepUpSkillHandler {
                 return false;
         }
     }
-    /** @rva 0x15E51C0  private static ActiveSkillBase ResolveInitialActiveSkill(BattleUnit unit) { } */
+    /** @rva 0x15CF820  private static ActiveSkillBase ResolveInitialActiveSkill(BattleUnit unit) { } */
     static ResolveInitialActiveSkill(unit: BattleUnit): ActiveSkillBase {
         const skill = ref<ActiveSkillBase>(null!);
         const state = ref<SwitchSkillUnitState>(null!);
@@ -134,12 +134,12 @@ export class StepUpSkillHandler {
         if (unit._SkillSet != null && unit._SkillSet._ActiveSkills != null) return unit._SkillSet._ActiveSkills[0] ?? null!; // FirstOrDefault
         return null!;
     }
-    /** @rva 0x15E4CE0  private static List<StepUpSkillUnitState> GetActiveStepUpStateList(BattleUnit unit) { } */
+    /** @rva 0x15CF340  private static List<StepUpSkillUnitState> GetActiveStepUpStateList(BattleUnit unit) { } */
     static GetActiveStepUpStateList(unit: BattleUnit): List<StepUpSkillUnitState> {
         return unit.Condition.GetUnitStateList<StepUpSkillUnitState>(StepUpSkillUnitState)
             .filter(s => s.IsActive$BattleUnit(unit) && 0 < s.GetSkillMstId$BattleUnit(unit)); // <>c__DisplayClass7_0.b__0
     }
-    /** @rva 0x15E5A20  private static bool TryEvaluateNextStepUp(BattleUnit unit, List<StepUpSkillUnitState> stepUpStateList, int currentStepLevel, SpReferee spReferee, out int nextSkillMstId, out int expectedConsumeSp) { } */
+    /** @rva 0x15D0080  private static bool TryEvaluateNextStepUp(BattleUnit unit, List<StepUpSkillUnitState> stepUpStateList, int currentStepLevel, SpReferee spReferee, out int nextSkillMstId, out int expectedConsumeSp) { } */
     static TryEvaluateNextStepUp(unit: BattleUnit, stepUpStateList: List<StepUpSkillUnitState>, currentStepLevel: int, spReferee: SpReferee, nextSkillMstId: Ref<int>, expectedConsumeSp: Ref<int>): boolean {
         nextSkillMstId.v = 0;
         expectedConsumeSp.v = 0;
@@ -161,7 +161,7 @@ export class StepUpSkillHandler {
         }
         return false;
     }
-    /** @rva 0x15E49C0  private static void EmitResult(GameDirectorBase gameDirector, BattleUnit unit, int skillMstId, bool isSucceeded, int stepLevel, int expectedConsumeSp, bool canStepUpFurther) { } */
+    /** @rva 0x15CF020  private static void EmitResult(GameDirectorBase gameDirector, BattleUnit unit, int skillMstId, bool isSucceeded, int stepLevel, int expectedConsumeSp, bool canStepUpFurther) { } */
     static EmitResult(gameDirector: GameDirectorBase, unit: BattleUnit, skillMstId: int, isSucceeded: boolean, stepLevel: int, expectedConsumeSp: int, canStepUpFurther: boolean): void {
         const sp = gameDirector.spReferee.GetSp(unit._Team);
         const cmd = new CommandStepUpSkill().ctor();

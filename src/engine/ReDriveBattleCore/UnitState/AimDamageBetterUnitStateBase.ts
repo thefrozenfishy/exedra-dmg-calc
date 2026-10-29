@@ -10,18 +10,18 @@ import type { UnitStateBase_DirectionType } from "./UnitStateBase";
 // ---- ReDriveBattleCore.UnitState.AimDamageBetterUnitStateBase  (TypeDefIndex 528, public abstract class) ----
 export abstract class AimDamageBetterUnitStateBase extends DamageVariationUnitStateBase {  // implements IBuff
     static readonly __interfaces: readonly string[] = ['IBuff'];
-    /** @rva 0x7421D0 slot 6  public override UnitStateBase.DirectionType get_Direction() { } */
+    /** @rva 0x7431D0 slot 6  public override UnitStateBase.DirectionType get_Direction() { } */
     get_Direction(): UnitStateBase_DirectionType { return 0 as UnitStateBase_DirectionType; /* asm: xor eax, eax; ret */ }
-    /** @rva 0x15DB560 slot 13  public override string get_GiveVisualEffectName() { } */
+    /** @rva 0x15C5BC0 slot 13  public override string get_GiveVisualEffectName() { } */
     get_GiveVisualEffectName(): string {
         return "eff_cmn_act_buff_appear_001";
     }
-    /** @rva 0x15D9DA0  protected void .ctor() { } */
+    /** @rva 0x15C4400  protected void .ctor() { } */
     ctor(): this {
         super.ctor();
         return this;
     }
-    /** @rva 0x15DB550  public void .ctor(AbilityEffectInfo info) { } */
+    /** @rva 0x15C5BB0  public void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
         super.ctor$AbilityEffectInfo(info);
         return this;

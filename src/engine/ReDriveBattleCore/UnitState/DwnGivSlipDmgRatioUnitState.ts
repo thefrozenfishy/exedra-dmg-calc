@@ -10,17 +10,17 @@ import { f32 } from "../../runtime";
 
 // ---- ReDriveBattleCore.UnitState.DwnGivSlipDmgRatioUnitState  (TypeDefIndex 606, public class) ----
 export class DwnGivSlipDmgRatioUnitState extends DownGiveSlipDamageRatioUnitStateBase {
-    /** @rva 0x16F8D40  public void .ctor() { } */
+    /** @rva 0x16E2A10  public void .ctor() { } */
     ctor(): this {
         super.ctor();
         return this;
     }
-    /** @rva 0x15DB550  public void .ctor(AbilityEffectInfo info) { } */
+    /** @rva 0x15C5BB0  public void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
         super.ctor$AbilityEffectInfo(info);
         this._UpdateableEffectValue = f32(info._EffectValue1);
         return this;
     }
-    /** @rva 0x16F9FD0 slot 31  public override bool IsTarget(UnitStateBase state) { } */
+    /** @rva 0x16E3CA0 slot 31  public override bool IsTarget(UnitStateBase state) { } */
     IsTarget(state: UnitStateBase): boolean { return state instanceof ReceiveSlipDamageUnitStateBase; }
 }

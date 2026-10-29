@@ -9,6 +9,6 @@ import type { int } from "../../runtime";
 
 // ---- ReDriveBattleCore.Reader.SoloRaidPartyBuffMstReader  (TypeDefIndex 858, public class) ----
 export class SoloRaidPartyBuffMstReader extends BattleMstReaderBase<SoloRaidPartyBuffMstModel, SoloRaidPartyBuffMstRecord, int> {
-    /** @rva 0x1702310  public void .ctor() { } */
+    /** @rva 0x16EBFE0  public void .ctor() { } */
     ctor(): this { super.ctor(); return this; }
 }

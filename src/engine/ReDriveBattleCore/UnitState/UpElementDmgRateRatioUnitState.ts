@@ -11,22 +11,22 @@ import { UpElementDamageRateUnitStateBase } from "./UpElementDamageRateUnitState
 // ---- ReDriveBattleCore.UnitState.UpElementDmgRateRatioUnitState  (TypeDefIndex 781, public class) ----
 export class UpElementDmgRateRatioUnitState extends UpElementDamageRateUnitStateBase {
     get UpRatio(): Decimal { return this.get_UpRatio(); }
-    /** @rva 0x170E970  public Decimal get_UpRatio() { } */
+    /** @rva 0x16F8640  public Decimal get_UpRatio() { } */
     get_UpRatio(): Decimal {
         return Decimal.fromFloat(this._UpdateableEffectValue).div(Decimal.fromInt(10)); // (decimal)float / 10m
     }
-    /** @rva 0x16F8570  protected void .ctor() { } */
+    /** @rva 0x16E2240  protected void .ctor() { } */
     ctor(): this {
         this._IconName = "";
         return this;
     }
-    /** @rva 0x15E14E0  public void .ctor(AbilityEffectInfo info) { } */
+    /** @rva 0x15CBB40  public void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
         super.ctor$AbilityEffectInfo(info);
         this._UpdateableEffectValue = f32(info._EffectValue1);
         return this;
     }
-    /** @rva 0x170E840 slot 30  public override Decimal GetElementDamageRateVariationValue(BattleUnit unit, TargetElementType attackElement) { } */
+    /** @rva 0x16F8510 slot 30  public override Decimal GetElementDamageRateVariationValue(BattleUnit unit, TargetElementType attackElement) { } */
     GetElementDamageRateVariationValue(unit: BattleUnit, attackElement: TargetElementType): Decimal {
         if (this._TargetElement === 0 || (this._TargetElement as number) === (attackElement as number)) return Decimal.fromFloat(this._UpdateableEffectValue).div(Decimal.fromInt(10));
         return Decimal.Zero;

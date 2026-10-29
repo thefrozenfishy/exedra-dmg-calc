@@ -10,13 +10,13 @@ import { SkillDecisionActBase } from "./SkillDecisionActBase";
 export class StartTimingAct extends SkillDecisionActBase {
     /** 0x38 private int <Priority>k__BackingField */
     _Priority$StartTimingAct: int = 0;
-    /** @rva 0x7350C0 slot 7  public override bool get_IsCanInterrupt() { } */
+    /** @rva 0x7360C0 slot 7  public override bool get_IsCanInterrupt() { } */
     get_IsCanInterrupt(): boolean { return false; /* asm: xor al, al; ret */ }
-    /** @rva 0x75DDA0 slot 4  public override int get_Priority() { } */
+    /** @rva 0x75EDA0 slot 4  public override int get_Priority() { } */
     get_Priority(): int { return this._Priority$StartTimingAct; /* auto-property */ }
-    /** @rva 0x8A12B0 slot 5  public override void set_Priority(int value) { } */
+    /** @rva 0x8A22B0 slot 5  public override void set_Priority(int value) { } */
     set_Priority(value: int): void { this._Priority$StartTimingAct = value; /* auto-property */ }
-    /** @rva 0x192FD50  public void .ctor() { } */
+    /** @rva 0x191F8E0  public void .ctor() { } */
     ctor(): this {
         this._Priority$StartTimingAct = ActBase_Define.StartTimingActPriority;
         return super.ctor();

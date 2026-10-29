@@ -21,25 +21,25 @@ export class StepUpSkillUnitState extends UnitStateBase {
     skillUniqueId: int = 0;
     get StepLevel(): int { return this.get_StepLevel(); }
     get StepUpSkillUniqueId(): int { return this.get_StepUpSkillUniqueId(); }
-    /** @rva 0x7421D0 slot 6  public override UnitStateBase.DirectionType get_Direction() { } */
+    /** @rva 0x7431D0 slot 6  public override UnitStateBase.DirectionType get_Direction() { } */
     get_Direction(): UnitStateBase_DirectionType { return 0 as UnitStateBase_DirectionType; /* asm: xor eax, eax; ret */ }
-    /** @rva 0x9009C0  public int get_StepLevel() { } */
+    /** @rva 0x901970  public int get_StepLevel() { } */
     get_StepLevel(): int { return this.stepLevel; /* asm: mov eax, dword ptr [rcx + 0x88]; ret */ }
-    /** @rva 0xA06F50  public int get_StepUpSkillUniqueId() { } */
+    /** @rva 0xA05B80  public int get_StepUpSkillUniqueId() { } */
     get_StepUpSkillUniqueId(): int { return this.skillUniqueId; /* asm: mov eax, dword ptr [rcx + 0x8c]; ret */ }
-    /** @rva 0x16F8570  protected void .ctor() { } */
+    /** @rva 0x16E2240  protected void .ctor() { } */
     ctor(): this {
         super.ctor();
         return this;
     }
-    /** @rva 0x15DE2E0  public void .ctor(AbilityEffectInfo info) { } */
+    /** @rva 0x15C8940  public void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
         super.ctor$AbilityEffectInfo(info);
         this.stepLevel = info._EffectValue1;
         this.skillUniqueId = info._EffectValue2;
         return this;
     }
-    /** @rva 0x1702580  public int GetSkillMstId(BattleUnit battleUnit) { } */
+    /** @rva 0x16EC250  public int GetSkillMstId(BattleUnit battleUnit) { } */
     GetSkillMstId$BattleUnit(battleUnit: BattleUnit): int {
         if (battleUnit == null) return 0;
         // the unit's first Battle Skill gives the level (Nullable<int>, 0 without one)
@@ -50,14 +50,14 @@ export class StepUpSkillUnitState extends UnitStateBase {
             .GetModel(m => m.skillUniqueId === this.skillUniqueId && m.level === activeSkillLevel); // <>c__DisplayClass11_0.<GetSkillMstId>b__0
         return mst == null ? 0 : mst.SkillMstId;
     }
-    /** @rva 0x17023E0  public int GetSkillMstId(int activeSkillLevel) { } */
+    /** @rva 0x16EC0B0  public int GetSkillMstId(int activeSkillLevel) { } */
     GetSkillMstId$int(activeSkillLevel: int): int {
         if (this.skillUniqueId < 1 || activeSkillLevel < 1) return 0;
         const mst = BattleMstReaderBase.get_Instance<SkillMstModel, SkillMstRecord, int>(SkillMstModel)
             .GetModel(m => m.skillUniqueId === this.skillUniqueId && m.level === activeSkillLevel); // <>c__DisplayClass11_0.<GetSkillMstId>b__0
         return mst == null ? 0 : mst.SkillMstId;
     }
-    /** @rva 0x17027B0 slot 24  public override AISkillTargetSelector.UnitFilterFuncOrder GetUnitFilterFuncOrder(BattleUnit userUnit, IEnumerable<BattleUnit> candidateUnits) { } */
+    /** @rva 0x16EC480 slot 24  public override AISkillTargetSelector.UnitFilterFuncOrder GetUnitFilterFuncOrder(BattleUnit userUnit, IEnumerable<BattleUnit> candidateUnits) { } */
     GetUnitFilterFuncOrder(userUnit: BattleUnit, candidateUnits: IEnumerable<BattleUnit>): AISkillTargetSelector_UnitFilterFuncOrder {
         const list: List<(a0: IEnumerable<BattleUnit>) => IEnumerable<BattleUnit>> = [];
         return new AISkillTargetSelector_UnitFilterFuncOrder().ctor$ListFuncIEnumerableBattleUnitIEnumerableBattleUnit(list);

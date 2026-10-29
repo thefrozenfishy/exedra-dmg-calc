@@ -6,7 +6,7 @@ import type { float, int } from "../runtime";
 
 // ---- ReDriveBattleCore.MathExtension  (TypeDefIndex 433, public static class) ----
 export class MathExtension {
-    /** @rva 0x14C5B60  public static float Floor(float value, int n = 0) { } */
+    /** @rva 0x14AFC00  public static float Floor(float value, int n = 0) { } */
     static Floor(value: float, n: int = 0): float {
         // [CONFIRMED 3.19] asm 0x149f830: the scale is 10^(n-1), so Floor(x, 2) keeps ONE decimal
         if (n > 0) {

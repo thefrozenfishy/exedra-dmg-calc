@@ -20,7 +20,7 @@ export class IBattleStartTriggerPriority_Define {
     static EffectValueVariationUnitStatePriority: int = 0;
     /** 0xC public static readonly int AddTurnUnitStatePriority */
     static AddTurnUnitStatePriority: int = 0;
-    /** @rva 0x14BAE30  private static void .cctor() { } */
+    /** @rva 0x14A4ED0  private static void .cctor() { } */
     static cctor(): void {
         IBattleStartTriggerPriority_Define.DefaultPriority = 0;
         IBattleStartTriggerPriority_Define.BarrierValueVariationUnitStatePriority = 90;

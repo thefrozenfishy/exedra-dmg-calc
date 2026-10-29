@@ -7,8 +7,8 @@ import type { RequestType } from "./RequestType";
 
 // ---- ReDriveBattleCore.Request.TimeForwardRequest  (TypeDefIndex 844, public class) ----
 export class TimeForwardRequest extends RequestBase {
-    /** @rva 0xA65F30 slot 4  public override RequestType get_RequestType() { } */
+    /** @rva 0xA408A0 slot 4  public override RequestType get_RequestType() { } */
     get_RequestType(): RequestType { return 11 as RequestType; /* asm: mov eax, 0xb; ret */ }
-    /** @rva 0x72F5E0  public void .ctor() { } */
+    /** @rva 0x7305E0  public void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
 }

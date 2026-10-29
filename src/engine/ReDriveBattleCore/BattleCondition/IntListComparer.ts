@@ -8,7 +8,7 @@ import type { CompareOperator } from "./CompareOperator";
 // base type ListComparer<ICollection<int>, int> is outside the ported set
 // ---- ReDriveBattleCore.BattleCondition.IntListComparer  (TypeDefIndex 1072, public class) ----
 export class IntListComparer {
-    /** @rva 0x1815FE0  public void .ctor(ICollection<int> leftValue, int rightValue) { } */
+    /** @rva 0x1800C10  public void .ctor(ICollection<int> leftValue, int rightValue) { } */
     /** 0x10 public ICollection<int> leftValue (ListComparer<ICollection<int>, int>) */
     leftValue: ICollection<int> = null!;
     /** 0x18 public int rightValue (ListComparer<ICollection<int>, int>) */
@@ -18,7 +18,7 @@ export class IntListComparer {
         this.rightValue = rightValue;
         return this;
     }
-    /** @rva 0x1815F40 slot 5  public override bool Compare(CompareOperator compareOperator) { } */
+    /** @rva 0x1800B70 slot 5  public override bool Compare(CompareOperator compareOperator) { } */
     Compare(compareOperator: CompareOperator): boolean {
         if (compareOperator === 7) return [...this.leftValue].includes(this.rightValue);
         if (compareOperator === 8) return !([...this.leftValue].includes(this.rightValue));

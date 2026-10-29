@@ -11,15 +11,15 @@ export class BattleConditionSetMstModel extends MstModelBase<BattleConditionSetM
     get Id(): int { return this.get_Id(); }
     get Description(): string { return this.get_Description(); }
     get BattleConditionMstIdCsv(): string { return this.get_BattleConditionMstIdCsv(); }
-    /** @rva 0x16F5A90  public void .ctor(BattleConditionSetMstRecord record) { } */
+    /** @rva 0x16DF760  public void .ctor(BattleConditionSetMstRecord record) { } */
     ctor$BattleConditionSetMstRecord(record: BattleConditionSetMstRecord): this {
         super.ctor$TRecord(record);
         return this;
     }
-    /** @rva 0x901380  public int get_Id() { } */
+    /** @rva 0x902330  public int get_Id() { } */
     get_Id(): int { return this.record.battleConditionSetMstId; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x901785; mov eax, dword ptr [rax + 0x10]; add rsp, 0x28; ret */ }
-    /** @rva 0x85D540  public string get_Description() { } */
+    /** @rva 0x85E540  public string get_Description() { } */
     get_Description(): string { return this.record.description; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x85e556; mov rax, qword ptr [rax + 0x18]; add rsp, 0x28; ret */ }
-    /** @rva 0x901EA0  public string get_BattleConditionMstIdCsv() { } */
+    /** @rva 0x902E70  public string get_BattleConditionMstIdCsv() { } */
     get_BattleConditionMstIdCsv(): string { return this.record.battleConditionMstIdCsv; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x9017f6; mov rax, qword ptr [rax + 0x20]; add rsp, 0x28; ret */ }
 }

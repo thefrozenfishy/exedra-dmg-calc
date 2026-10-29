@@ -7,8 +7,8 @@ import type { CommandType } from "./CommandType";
 
 // ---- ReDriveBattleCore.Command.CommandEndWave  (TypeDefIndex 986, public sealed class) ----
 export class CommandEndWave extends CommandBase {
-    /** @rva 0xDBAD00 slot 4  public override CommandType GetCommandType() { } */
+    /** @rva 0xDA5C10 slot 4  public override CommandType GetCommandType() { } */
     GetCommandType(): CommandType { return 8 as CommandType; /* asm: mov eax, 8; ret */ }
-    /** @rva 0x72F5E0  public void .ctor() { } */
+    /** @rva 0x7305E0  public void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
 }

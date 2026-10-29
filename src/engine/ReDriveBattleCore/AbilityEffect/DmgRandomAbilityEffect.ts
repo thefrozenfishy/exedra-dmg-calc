@@ -26,14 +26,14 @@ export class DmgRandomAbilityEffect extends DmgAtkAbilityEffect {
     static MinDamageCount: int = 0;
     /** 0x90 protected int damageCount */
     damageCount: int = 0;
-    /** @rva 0x7E0AD0 slot 13  public override DamageCategory get_DamageCategory() { } */
+    /** @rva 0x7E1AD0 slot 13  public override DamageCategory get_DamageCategory() { } */
     get_DamageCategory(): DamageCategory { return 2 as DamageCategory; /* asm: mov eax, 2; ret */ }
-    /** @rva 0x1926190  protected void .ctor() { } */
+    /** @rva 0x1915D20  protected void .ctor() { } */
     ctor(): this {
         super.ctor();
         return this;
     }
-    /** @rva 0x1926B90  public void .ctor(AbilityEffectInfo info) { } */
+    /** @rva 0x1916720  public void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
         DamageAbilityEffectBase.prototype.ctor$AbilityEffectInfo.call(this, info); // the game calls DamageAbilityEffectBase..ctor directly
         this.damagePower = [f32(info._EffectValue1 / 1000), f32(info._EffectValue1 / 1000)];
@@ -42,7 +42,7 @@ export class DmgRandomAbilityEffect extends DmgAtkAbilityEffect {
         this.breakedDamageReceiveRatio = f32(info._EffectValue4 / 10);
         return this;
     }
-    /** @rva 0x1926230 slot 5  public override AffectedUnitNoticeBundle Triggering(EffectOriginType origin, BattleUnit userUnit, Dictionary<int, BattleUnit> targetUnitDic, GameDirectorBase gameDirector) { } */
+    /** @rva 0x1915DC0 slot 5  public override AffectedUnitNoticeBundle Triggering(EffectOriginType origin, BattleUnit userUnit, Dictionary<int, BattleUnit> targetUnitDic, GameDirectorBase gameDirector) { } */
     Triggering(origin: EffectOriginType, userUnit: BattleUnit, targetUnitDic: Dictionary<int, BattleUnit>, gameDirector: GameDirectorBase): AffectedUnitNoticeBundle {
         const affectedUnitNoticeBundle = new AffectedUnitNoticeBundle().ctor();
         const attackSkill = userUnit._SkillSet.GetSkill(this.skillMstId);
@@ -90,7 +90,7 @@ export class DmgRandomAbilityEffect extends DmgAtkAbilityEffect {
         }
         return affectedUnitNoticeBundle;
     }
-    /** @rva 0x19261A0 slot 14  public override ValueTuple<int, int> GetVariationBreakPoint(Nullable<RoleType> attackerRoleType) { } */
+    /** @rva 0x1915D30 slot 14  public override ValueTuple<int, int> GetVariationBreakPoint(Nullable<RoleType> attackerRoleType) { } */
     GetVariationBreakPoint(attackerRoleType: Nullable<RoleType>): any /* ValueTuple<int, int> */ {
         // game quirk: only Item1 of SpecifiedVariationBreakPoint is tested, and GetDecreaseValue gets `true` (the base passes false)
         if (this._SpecifiedVariationBreakPoint[0] === 0) {
@@ -98,7 +98,7 @@ export class DmgRandomAbilityEffect extends DmgAtkAbilityEffect {
         }
         return this._SpecifiedVariationBreakPoint;
     }
-    /** @rva 0x1926B50  private static void .cctor() { } */
+    /** @rva 0x19166E0  private static void .cctor() { } */
     static cctor(): void {
         DmgRandomAbilityEffect.MinDamageCount = 3;
     }

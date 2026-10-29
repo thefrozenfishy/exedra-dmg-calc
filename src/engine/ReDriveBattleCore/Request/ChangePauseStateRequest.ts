@@ -9,8 +9,8 @@ import type { RequestType } from "./RequestType";
 export class ChangePauseStateRequest extends RequestBase {
     /** 0x10 public bool isPaused */
     isPaused: boolean = false;
-    /** @rva 0x11F9BE0 slot 4  public override RequestType get_RequestType() { } */
+    /** @rva 0x11BBF90 slot 4  public override RequestType get_RequestType() { } */
     get_RequestType(): RequestType { return 10 as RequestType; /* asm: mov eax, 0xa; ret */ }
-    /** @rva 0x72F5E0  public void .ctor() { } */
+    /** @rva 0x7305E0  public void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
 }

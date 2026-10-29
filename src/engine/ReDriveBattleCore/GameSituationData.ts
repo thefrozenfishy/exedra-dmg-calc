@@ -9,11 +9,11 @@ export class GameSituationData {
     _BattleUnitSituationDatas: BattleUnitSituationData[] = null!;
     get BattleUnitSituationDatas(): BattleUnitSituationData[] { return this.get_BattleUnitSituationDatas(); }
     set BattleUnitSituationDatas(v: BattleUnitSituationData[]) { this.set_BattleUnitSituationDatas(v); }
-    /** @rva 0x72FC50  public BattleUnitSituationData[] get_BattleUnitSituationDatas() { } */
+    /** @rva 0x730C50  public BattleUnitSituationData[] get_BattleUnitSituationDatas() { } */
     get_BattleUnitSituationDatas(): BattleUnitSituationData[] { return this._BattleUnitSituationDatas; /* auto-property */ }
-    /** @rva 0x72FC60  public void set_BattleUnitSituationDatas(BattleUnitSituationData[] value) { } */
+    /** @rva 0x730C60  public void set_BattleUnitSituationDatas(BattleUnitSituationData[] value) { } */
     set_BattleUnitSituationDatas(value: BattleUnitSituationData[]): void { this._BattleUnitSituationDatas = value; /* auto-property */ }
-    /** @rva 0x14C31C0  public void .ctor() { } */
+    /** @rva 0x14AD260  public void .ctor() { } */
     ctor(): this {
         this._BattleUnitSituationDatas = []; // Array.Empty<BattleUnitSituationData>()
         return this;

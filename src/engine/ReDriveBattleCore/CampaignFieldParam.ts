@@ -13,12 +13,12 @@ import { TargetElementType } from "../Network/Definition/Battle/TargetElementTyp
 
 // ---- ReDriveBattleCore.CampaignFieldParam  (TypeDefIndex 398, public class) ----
 export class CampaignFieldParam extends FieldParamBase {
-    /** @rva 0x14B9410  protected void .ctor() { } */
+    /** @rva 0x14A34B0  protected void .ctor() { } */
     ctor(): this {
         this.stateList = []; // FieldParamBase..ctor inlined
         return this;
     }
-    /** @rva 0x14B9420  public void .ctor(int upDmgValue, int upBreakPointDmgValue) { } */
+    /** @rva 0x14A34C0  public void .ctor(int upDmgValue, int upBreakPointDmgValue) { } */
     ctor$int_int(upDmgValue: int, upBreakPointDmgValue: int): this {
         super.ctor();
         if (0 < upDmgValue) {

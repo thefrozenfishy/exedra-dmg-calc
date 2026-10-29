@@ -14,13 +14,13 @@ import type { List } from "../../runtime";
 export class StateTeamAbilityEffect extends StateAbilityEffect {
     /** 0x68 public ITargetTeam.TeamTargetType TeamTargetType */
     TeamTargetType: ITargetTeam_TeamTargetType = 0 as ITargetTeam_TeamTargetType;
-    /** @rva 0x1931590  protected void .ctor() { } */
+    /** @rva 0x1921120  protected void .ctor() { } */
     ctor(): this {
         this.TeamTargetType = 2 as ITargetTeam_TeamTargetType;
         super.ctor();
         return this;
     }
-    /** @rva 0x19313F0  public void .ctor(AbilityEffectInfo info, UnitStateBase giveUnitState, bool isIncludeDeadUnitInTarget) { } */
+    /** @rva 0x1920F80  public void .ctor(AbilityEffectInfo info, UnitStateBase giveUnitState, bool isIncludeDeadUnitInTarget) { } */
     ctor$AbilityEffectInfo_UnitStateBase_bool(info: AbilityEffectInfo, giveUnitState: UnitStateBase, isIncludeDeadUnitInTarget: boolean): this {
         this.TeamTargetType = 2 as ITargetTeam_TeamTargetType;
         super.ctor$AbilityEffectInfo_UnitStateBase_bool(info, giveUnitState, isIncludeDeadUnitInTarget); // inlined in the game
@@ -30,7 +30,7 @@ export class StateTeamAbilityEffect extends StateAbilityEffect {
         }
         return this;
     }
-    /** @rva 0x1930FF0 slot 4  public override void SelectTargets(BattleUnit userUnit, Dictionary<int, BattleUnit> targetUnitDic, int selectFriendUnitId, int attackTargetId = 0) { } */
+    /** @rva 0x1920B80 slot 4  public override void SelectTargets(BattleUnit userUnit, Dictionary<int, BattleUnit> targetUnitDic, int selectFriendUnitId, int attackTargetId = 0) { } */
     SelectTargets(userUnit: BattleUnit, targetUnitDic: Dictionary<int, BattleUnit>, selectFriendUnitId: int, attackTargetId?: int /* = 0 */): void {
         // <>c__DisplayClass3_0: 0x10 userUnit
         this._TargetUnitIdList = [];

@@ -22,23 +22,23 @@ export class DmgRatioAbilityEffect extends DamageAbilityEffectBase {
     damagePowerCurrentHpRatio: float = 0;
     /** 0x94 protected float damagePowerMaxHpRatio */
     damagePowerMaxHpRatio: float = 0;
-    /** @rva 0x7421D0 slot 9  protected override DamageBaseType get_DamageBaseType() { } */
+    /** @rva 0x7431D0 slot 9  protected override DamageBaseType get_DamageBaseType() { } */
     get_DamageBaseType(): DamageBaseType { return 0 as DamageBaseType; /* asm: xor eax, eax; ret */ }
-    /** @rva 0xDD5EF0 slot 13  public override DamageCategory get_DamageCategory() { } */
+    /** @rva 0xDC0E00 slot 13  public override DamageCategory get_DamageCategory() { } */
     get_DamageCategory(): DamageCategory { return 6 as DamageCategory; /* asm: mov eax, 6; ret */ }
-    /** @rva 0x1926190  protected void .ctor() { } */
+    /** @rva 0x1915D20  protected void .ctor() { } */
     ctor(): this {
         super.ctor();
         return this;
     }
-    /** @rva 0x1927120  public void .ctor(AbilityEffectInfo info) { } */
+    /** @rva 0x1916CB0  public void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
         super.ctor$AbilityEffectInfo(info);
         this.damagePowerCurrentHpRatio = f32(f32(info._EffectValue1) / 1000);
         this.damagePowerMaxHpRatio = f32(f32(info._EffectValue2) / 1000);
         return this;
     }
-    /** @rva 0x1926CA0 slot 5  public override AffectedUnitNoticeBundle Triggering(EffectOriginType origin, BattleUnit userUnit, Dictionary<int, BattleUnit> targetUnitDic, GameDirectorBase gameDirector) { } */
+    /** @rva 0x1916830 slot 5  public override AffectedUnitNoticeBundle Triggering(EffectOriginType origin, BattleUnit userUnit, Dictionary<int, BattleUnit> targetUnitDic, GameDirectorBase gameDirector) { } */
     Triggering(origin: EffectOriginType, userUnit: BattleUnit, targetUnitDic: Dictionary<int, BattleUnit>, gameDirector: GameDirectorBase): AffectedUnitNoticeBundle {
         const bundle = new AffectedUnitNoticeBundle().ctor();
         for (const targetUnitId of this._TargetUnitIdList) {

@@ -7,8 +7,8 @@ import type { RequestType } from "./RequestType";
 
 // ---- ReDriveBattleCore.Request.GveMainTargetBreakCountRequest  (TypeDefIndex 835, public class) ----
 export class GveMainTargetBreakCountRequest extends RequestBase {
-    /** @rva 0xEF0DD0 slot 4  public override RequestType get_RequestType() { } */
+    /** @rva 0xEDB320 slot 4  public override RequestType get_RequestType() { } */
     get_RequestType(): RequestType { return 13 as RequestType; /* asm: mov eax, 0xd; ret */ }
-    /** @rva 0x72F5E0  public void .ctor() { } */
+    /** @rva 0x7305E0  public void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
 }

@@ -12,23 +12,23 @@ import type { BattleUnit } from "../BattleUnit";
 export abstract class ZoneAbilityEffectBase extends AbilityEffectBase {
     /** 0x60 protected int zoneUnitStatePatternId */
     zoneUnitStatePatternId: int = 0;
-    /** @rva 0x1920EF0  protected void .ctor() { } */
+    /** @rva 0x1910A80  protected void .ctor() { } */
     ctor(): this {
         super.ctor();
         return this;
     }
-    /** @rva 0x192EA40  public void .ctor(AbilityEffectInfo info) { } */
+    /** @rva 0x191E5D0  public void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
         super.ctor$AbilityEffectInfo(info);
         this.zoneUnitStatePatternId = info._EffectValue1;
         return this;
     }
-    /** @rva 0x1934590 slot 4  public override void SelectTargets(BattleUnit userUnit, Dictionary<int, BattleUnit> targetUnitDic, int selectFriendUnitId, int attackTargetId = 0) { } */
+    /** @rva 0x1924120 slot 4  public override void SelectTargets(BattleUnit userUnit, Dictionary<int, BattleUnit> targetUnitDic, int selectFriendUnitId, int attackTargetId = 0) { } */
     SelectTargets(userUnit: BattleUnit, targetUnitDic: Dictionary<int, BattleUnit>, selectFriendUnitId: int, attackTargetId: int = 0): void {
         this._TargetUnitIdList = [];
         this._TargetUnitIdList = [...targetUnitDic.values()].filter(unit => !unit.get_IsDead()).map(unit => unit._Id); // <>c.b__3_0, b__3_1
     }
-    /** @rva 0x1934350  protected bool CanRemoveZone(BattleUnit targetUnit, int targetPatternId = 0) { } */
+    /** @rva 0x1923EE0  protected bool CanRemoveZone(BattleUnit targetUnit, int targetPatternId = 0) { } */
     CanRemoveZone(targetUnit: BattleUnit, targetPatternId: int = 0): boolean {
         if (targetUnit.get_IsDead()) return false;
         const condition = targetUnit._Condition;
@@ -38,7 +38,7 @@ export abstract class ZoneAbilityEffectBase extends AbilityEffectBase {
         }
         return false;
     }
-    /** @rva 0x19343D0 slot 7  public override int SelectTargetInAIAction(BattleUnit userUnit, List<BattleUnit> targetUnitList) { } */
+    /** @rva 0x1923F60 slot 7  public override int SelectTargetInAIAction(BattleUnit userUnit, List<BattleUnit> targetUnitList) { } */
     SelectTargetInAIAction(userUnit: BattleUnit, targetUnitList: List<BattleUnit>): int {
         const candidateUnits = targetUnitList.filter(unit => !unit.get_IsDead()); // <>c.b__5_0
         const unit = AISkillTargetSelector.SelectTargetUnitInOrder(candidateUnits, new AISkillTargetSelector_UnitFilterFuncOrder().ctor$ListFuncIEnumerableBattleUnitIEnumerableBattleUnit([]));

@@ -9,6 +9,6 @@ import type { int } from "../../runtime";
 
 // ---- ReDriveBattleCore.Reader.PassiveSkillMstReader  (TypeDefIndex 856, public class) ----
 export class PassiveSkillMstReader extends BattleMstReaderBase<PassiveSkillMstModel, PassiveSkillMstRecord, int> {
-    /** @rva 0x16FD6F0  public void .ctor() { } */
+    /** @rva 0x16E73C0  public void .ctor() { } */
     ctor(): this { super.ctor(); return this; }
 }

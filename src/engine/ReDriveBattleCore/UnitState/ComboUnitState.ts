@@ -16,26 +16,26 @@ export class ComboUnitState extends UnitStateBase {
     /** 0x88 private readonly int actionNum */
     actionNum: int = 0;
     get ActionNum(): int { return this.get_ActionNum(); }
-    /** @rva 0x7421D0 slot 6  public override UnitStateBase.DirectionType get_Direction() { } */
+    /** @rva 0x7431D0 slot 6  public override UnitStateBase.DirectionType get_Direction() { } */
     get_Direction(): UnitStateBase_DirectionType { return 0 as UnitStateBase_DirectionType; /* asm: xor eax, eax; ret */ }
-    /** @rva 0x15DC880 slot 7  public override string get_IconName() { } */
+    /** @rva 0x15C6EE0 slot 7  public override string get_IconName() { } */
     get_IconName(): string {
         return "battle_icon_combo";
     }
-    /** @rva 0x9009C0  public int get_ActionNum() { } */
+    /** @rva 0x901970  public int get_ActionNum() { } */
     get_ActionNum(): int { return this.actionNum; /* asm: mov eax, dword ptr [rcx + 0x88]; ret */ }
-    /** @rva 0x15D9DA0  protected void .ctor() { } */
+    /** @rva 0x15C4400  protected void .ctor() { } */
     ctor(): this {
         super.ctor();
         return this;
     }
-    /** @rva 0x15DA300  public void .ctor(AbilityEffectInfo info) { } */
+    /** @rva 0x15C4960  public void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
         super.ctor$AbilityEffectInfo(info);
         this.actionNum = info._EffectValue1;
         return this;
     }
-    /** @rva 0x15DC6B0 slot 24  public override AISkillTargetSelector.UnitFilterFuncOrder GetUnitFilterFuncOrder(BattleUnit userUnit, IEnumerable<BattleUnit> candidateUnits) { } */
+    /** @rva 0x15C6D10 slot 24  public override AISkillTargetSelector.UnitFilterFuncOrder GetUnitFilterFuncOrder(BattleUnit userUnit, IEnumerable<BattleUnit> candidateUnits) { } */
     GetUnitFilterFuncOrder(userUnit: BattleUnit, candidateUnits: IEnumerable<BattleUnit>): AISkillTargetSelector_UnitFilterFuncOrder {
         const list: List<(a0: IEnumerable<BattleUnit>) => IEnumerable<BattleUnit>> = [];
         list.push(AISkillTargetSelector.UnitFilterByMainTarget);

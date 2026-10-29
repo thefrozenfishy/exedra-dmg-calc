@@ -11,22 +11,22 @@ import { DownSpeedUnitStateBase } from "./DownSpeedUnitStateBase";
 // ---- ReDriveBattleCore.UnitState.DwnSpdFixedUnitState  (TypeDefIndex 622, public class) ----
 export class DwnSpdFixedUnitState extends DownSpeedUnitStateBase {
     get DownFixed(): float { return this.get_DownFixed(); }
-    /** @rva 0xC84590  public float get_DownFixed() { } */
+    /** @rva 0xC6F3E0  public float get_DownFixed() { } */
     get_DownFixed(): float { return this._UpdateableEffectValue; /* asm: movss xmm0, dword ptr [rcx + 0x88]; ret */ }
-    /** @rva 0x16F8570  protected void .ctor() { } */
+    /** @rva 0x16E2240  protected void .ctor() { } */
     ctor(): this {
         super.ctor();
         return this;
     }
-    /** @rva 0x15E14E0  public void .ctor(AbilityEffectInfo info) { } */
+    /** @rva 0x15CBB40  public void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
         super.ctor$AbilityEffectInfo(info);
         return this;
     }
-    /** @rva 0x16FB4A0 slot 33  public override Decimal GetSpeedVariationValue(BattleUnit unit, Decimal processingValue) { } */
+    /** @rva 0x16E5170 slot 33  public override Decimal GetSpeedVariationValue(BattleUnit unit, Decimal processingValue) { } */
     GetSpeedVariationValue$BattleUnit_Decimal(unit: BattleUnit, processingValue: Decimal): Decimal {
         return Decimal.fromFloat(this._UpdateableEffectValue).neg();
     }
-    /** @rva 0x16FB540 slot 34  public override Decimal GetSpeedVariationValue(BattleUnitData unit, Decimal processingValue) { } */
-    GetSpeedVariationValue$BattleUnitData_Decimal(unit: any /* BattleUnitData */, processingValue: Decimal): Decimal { return notPorted("DwnSpdFixedUnitState.GetSpeedVariationValue", 0x16FB540); }
+    /** @rva 0x16E5210 slot 34  public override Decimal GetSpeedVariationValue(BattleUnitData unit, Decimal processingValue) { } */
+    GetSpeedVariationValue$BattleUnitData_Decimal(unit: any /* BattleUnitData */, processingValue: Decimal): Decimal { return notPorted("DwnSpdFixedUnitState.GetSpeedVariationValue", 0x16E5210); }
 }

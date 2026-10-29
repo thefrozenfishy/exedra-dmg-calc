@@ -9,13 +9,13 @@ import { ActBase, ActBase_Define } from "./ActBase";
 export class TurnBeginAct extends ActBase {
     /** 0x30 private int <Priority>k__BackingField */
     _Priority$TurnBeginAct: int = 0;
-    /** @rva 0x75DD60 slot 4  public override int get_Priority() { } */
+    /** @rva 0x75ED60 slot 4  public override int get_Priority() { } */
     get_Priority(): int { return this._Priority$TurnBeginAct; /* auto-property */ }
-    /** @rva 0x8735A0 slot 5  public override void set_Priority(int value) { } */
+    /** @rva 0x8745A0 slot 5  public override void set_Priority(int value) { } */
     set_Priority(value: int): void { this._Priority$TurnBeginAct = value; /* auto-property */ }
-    /** @rva 0x7350C0 slot 6  public override bool get_ShouldShow() { } */
+    /** @rva 0x7360C0 slot 6  public override bool get_ShouldShow() { } */
     get_ShouldShow(): boolean { return false; /* asm: xor al, al; ret */ }
-    /** @rva 0x1931C20  public void .ctor() { } */
+    /** @rva 0x19217B0  public void .ctor() { } */
     ctor(): this {
         this._Priority$TurnBeginAct = ActBase_Define.TurnBeginPriority;
         return super.ctor();

@@ -16,17 +16,17 @@ export class AdditionalSkill extends ActiveSkillBase {
     /** 0x38 private SkillType skillType */
     skillType: SkillType = 0 as SkillType;
     get SkillType(): SkillType { return this.get_SkillType(); }
-    /** @rva 0x75DDA0  public SkillType get_SkillType() { } */
+    /** @rva 0x75EDA0  public SkillType get_SkillType() { } */
     get_SkillType(): SkillType { return this.skillType; /* asm: mov eax, dword ptr [rcx + 0x38]; ret */ }
-    /** @rva 0x72F5E0  protected void .ctor() { } */
+    /** @rva 0x7305E0  protected void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
-    /** @rva 0x139C9D0  public void .ctor(int skillMstId) { } */
+    /** @rva 0x1386ED0  public void .ctor(int skillMstId) { } */
     ctor$int(skillMstId: int): this { super.ctor$int(skillMstId); return this; }
-    /** @rva 0x139C690  public void .ctor(int id, int uniqueId, int level, string name, int consumeSP) { } */
+    /** @rva 0x1386B90  public void .ctor(int id, int uniqueId, int level, string name, int consumeSP) { } */
     ctor$int_int_int_string_int(id: int, uniqueId: int, level: int, name: string, consumeSP: int): this { super.ctor$int_int_int_string_int(id, uniqueId, level, name, consumeSP); return this; }
-    /** @rva 0x139E860  public void .ctor(SkillMstModel skillMst, List<SkillDetailMstModel> skillDetailMstList) { } */
+    /** @rva 0x1388D60  public void .ctor(SkillMstModel skillMst, List<SkillDetailMstModel> skillDetailMstList) { } */
     ctor$SkillMstModel_ListSkillDetailMstModel(skillMst: SkillMstModel, skillDetailMstList: List<SkillDetailMstModel>): this { super.ctor$SkillMstModel_ListSkillDetailMstModel(skillMst, skillDetailMstList); return this; }
-    /** @rva 0x139E790 slot 4  public override AffectedUnitNoticeBundle Execute(GameDirectorBase gameDirector, int attackTargetId, BattleUnit userUnit, int selectFriendUnitId, bool isForcedAct = False) { } */
+    /** @rva 0x1388C90 slot 4  public override AffectedUnitNoticeBundle Execute(GameDirectorBase gameDirector, int attackTargetId, BattleUnit userUnit, int selectFriendUnitId, bool isForcedAct = False) { } */
     Execute(gameDirector: GameDirectorBase, attackTargetId: int, userUnit: BattleUnit, selectFriendUnitId: int, isForcedAct: boolean = false): AffectedUnitNoticeBundle {
         if (userUnit.Condition.CanNotUseSkill || userUnit.BreakPoint.IsBreak) {
             if (!isForcedAct) return null!;

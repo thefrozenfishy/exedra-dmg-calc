@@ -41,43 +41,43 @@ export class CommandSoloRaidSyncCountdown extends CommandBase {
     set CanActiveSkillMstId(v: int) { this.set_CanActiveSkillMstId(v); }
     get CanActiveSkillDetailMstId(): int { return this.get_CanActiveSkillDetailMstId(); }
     set CanActiveSkillDetailMstId(v: int) { this.set_CanActiveSkillDetailMstId(v); }
-    /** @rva 0x1812A40 slot 4  public override CommandType GetCommandType() { } */
+    /** @rva 0x17FD670 slot 4  public override CommandType GetCommandType() { } */
     GetCommandType(): CommandType { return 29 as CommandType; /* asm: mov eax, 0x1d; ret */ }
-    /** @rva 0x762820  public int get_MaxCountdown() { } */
+    /** @rva 0x763820  public int get_MaxCountdown() { } */
     get_MaxCountdown(): int { return this._MaxCountdown; /* auto-property */ }
-    /** @rva 0x8A1240  public void set_MaxCountdown(int value) { } */
+    /** @rva 0x8A2240  public void set_MaxCountdown(int value) { } */
     set_MaxCountdown(value: int): void { this._MaxCountdown = value; /* auto-property */ }
-    /** @rva 0x7F8800  public int get_Countdown() { } */
+    /** @rva 0x7F9800  public int get_Countdown() { } */
     get_Countdown(): int { return this._Countdown; /* auto-property */ }
-    /** @rva 0x7F8820  public void set_Countdown(int value) { } */
+    /** @rva 0x7F9820  public void set_Countdown(int value) { } */
     set_Countdown(value: int): void { this._Countdown = value; /* auto-property */ }
-    /** @rva 0x75DD70  public int get_CancelMaxTotalDamage() { } */
+    /** @rva 0x75ED70  public int get_CancelMaxTotalDamage() { } */
     get_CancelMaxTotalDamage(): int { return this._CancelMaxTotalDamage; /* auto-property */ }
-    /** @rva 0x8A1230  public void set_CancelMaxTotalDamage(int value) { } */
+    /** @rva 0x8A2230  public void set_CancelMaxTotalDamage(int value) { } */
     set_CancelMaxTotalDamage(value: int): void { this._CancelMaxTotalDamage = value; /* auto-property */ }
-    /** @rva 0x759830  public int get_CancelTotalDamage() { } */
+    /** @rva 0x75A830  public int get_CancelTotalDamage() { } */
     get_CancelTotalDamage(): int { return this._CancelTotalDamage; /* auto-property */ }
-    /** @rva 0x759840  public void set_CancelTotalDamage(int value) { } */
+    /** @rva 0x75A840  public void set_CancelTotalDamage(int value) { } */
     set_CancelTotalDamage(value: int): void { this._CancelTotalDamage = value; /* auto-property */ }
-    /** @rva 0x7627A0  public int get_BattleUnitId() { } */
+    /** @rva 0x7637A0  public int get_BattleUnitId() { } */
     get_BattleUnitId(): int { return this._BattleUnitId; /* auto-property */ }
-    /** @rva 0x8A1250  public void set_BattleUnitId(int value) { } */
+    /** @rva 0x8A2250  public void set_BattleUnitId(int value) { } */
     set_BattleUnitId(value: int): void { this._BattleUnitId = value; /* auto-property */ }
-    /** @rva 0x85D530  public int get_SyncTypeNum() { } */
+    /** @rva 0x85E530  public int get_SyncTypeNum() { } */
     get_SyncTypeNum(): int { return this._SyncTypeNum; /* auto-property */ }
-    /** @rva 0x8A1260  public void set_SyncTypeNum(int value) { } */
+    /** @rva 0x8A2260  public void set_SyncTypeNum(int value) { } */
     set_SyncTypeNum(value: int): void { this._SyncTypeNum = value; /* auto-property */ }
-    /** @rva 0x75DD60  public int get_CanActiveSkillMstId() { } */
+    /** @rva 0x75ED60  public int get_CanActiveSkillMstId() { } */
     get_CanActiveSkillMstId(): int { return this._CanActiveSkillMstId; /* auto-property */ }
-    /** @rva 0x8735A0  public void set_CanActiveSkillMstId(int value) { } */
+    /** @rva 0x8745A0  public void set_CanActiveSkillMstId(int value) { } */
     set_CanActiveSkillMstId(value: int): void { this._CanActiveSkillMstId = value; /* auto-property */ }
-    /** @rva 0x75DD50  public int get_CanActiveSkillDetailMstId() { } */
+    /** @rva 0x75ED50  public int get_CanActiveSkillDetailMstId() { } */
     get_CanActiveSkillDetailMstId(): int { return this._CanActiveSkillDetailMstId; /* auto-property */ }
-    /** @rva 0x8A12A0  public void set_CanActiveSkillDetailMstId(int value) { } */
+    /** @rva 0x8A22A0  public void set_CanActiveSkillDetailMstId(int value) { } */
     set_CanActiveSkillDetailMstId(value: int): void { this._CanActiveSkillDetailMstId = value; /* auto-property */ }
-    /** @rva 0x72F5E0  public void .ctor() { } */
+    /** @rva 0x7305E0  public void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
-    /** @rva 0x1812A50  public void .ctor(CountdownReferee countdownReferee, int syncTypeNum) { } */
+    /** @rva 0x17FD680  public void .ctor(CountdownReferee countdownReferee, int syncTypeNum) { } */
     ctor$CountdownReferee_int(countdownReferee: CountdownReferee, syncTypeNum: int): this {
         if (countdownReferee == null) return this;
         this._MaxCountdown = countdownReferee.maxCountdown;

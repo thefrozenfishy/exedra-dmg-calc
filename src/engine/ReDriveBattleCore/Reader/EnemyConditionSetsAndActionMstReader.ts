@@ -9,6 +9,6 @@ import type { int } from "../../runtime";
 
 // ---- ReDriveBattleCore.Reader.EnemyConditionSetsAndActionMstReader  (TypeDefIndex 852, public class) ----
 export class EnemyConditionSetsAndActionMstReader extends BattleMstReaderBase<EnemyConditionSetsAndActionMstModel, EnemyConditionSetsAndActionMstRecord, int> {
-    /** @rva 0x16FB8E0  public void .ctor() { } */
+    /** @rva 0x16E55B0  public void .ctor() { } */
     ctor(): this { super.ctor(); return this; }
 }

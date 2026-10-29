@@ -27,22 +27,22 @@ export class AbilityEffectLauncher {
     _AbilityEffectList: List<AbilityEffectBase> = null!;
     get AbilityEffectList(): List<AbilityEffectBase> { return this.get_AbilityEffectList(); }
     set AbilityEffectList(v: List<AbilityEffectBase>) { this.set_AbilityEffectList(v); }
-    /** @rva 0x72FC50  public List<AbilityEffectBase> get_AbilityEffectList() { } */
+    /** @rva 0x730C50  public List<AbilityEffectBase> get_AbilityEffectList() { } */
     get_AbilityEffectList(): List<AbilityEffectBase> { return this._AbilityEffectList; /* auto-property */ }
-    /** @rva 0x72FC60  public void set_AbilityEffectList(List<AbilityEffectBase> value) { } */
+    /** @rva 0x730C60  public void set_AbilityEffectList(List<AbilityEffectBase> value) { } */
     set_AbilityEffectList(value: List<AbilityEffectBase>): void { this._AbilityEffectList = value; /* auto-property */ }
-    /** @rva 0x139B430  protected void .ctor() { } */
+    /** @rva 0x1385930  protected void .ctor() { } */
     ctor(): this {
         this._AbilityEffectList = [];
         return this;
     }
-    /** @rva 0x139B380  public void .ctor(List<AbilityEffectInfo> infoList, bool isIncludeDeadUnitInTarget = False) { } */
+    /** @rva 0x1385880  public void .ctor(List<AbilityEffectInfo> infoList, bool isIncludeDeadUnitInTarget = False) { } */
     ctor$ListAbilityEffectInfo_bool(infoList: List<AbilityEffectInfo>, isIncludeDeadUnitInTarget: boolean = false): this {
         this._AbilityEffectList = [];
         this.SetAbilityEffectList(infoList, isIncludeDeadUnitInTarget); // inlined
         return this;
     }
-    /** @rva 0x139B1C0  public void .ctor(List<AbilityEffectInfo> infoList, SkillType skillType, int skillMstId) { } */
+    /** @rva 0x13856C0  public void .ctor(List<AbilityEffectInfo> infoList, SkillType skillType, int skillMstId) { } */
     ctor$ListAbilityEffectInfo_SkillType_int(infoList: List<AbilityEffectInfo>, skillType: SkillType, skillMstId: int): this {
         this._AbilityEffectList = [];
         this.SetAbilityEffectList(infoList, false);
@@ -51,7 +51,7 @@ export class AbilityEffectLauncher {
         }
         return this;
     }
-    /** @rva 0x139A1C0  private void SetAbilityEffectList(List<AbilityEffectInfo> infoList, bool isIncludeDeadUnitInTarget = False) { } */
+    /** @rva 0x13846C0  private void SetAbilityEffectList(List<AbilityEffectInfo> infoList, bool isIncludeDeadUnitInTarget = False) { } */
     SetAbilityEffectList(infoList: List<AbilityEffectInfo>, isIncludeDeadUnitInTarget: boolean = false): void {
         if (infoList == null) return;
         for (const info of infoList) {
@@ -60,11 +60,11 @@ export class AbilityEffectLauncher {
             this.AbilityEffectList.push(effect);
         }
     }
-    /** @rva 0x139A340  public AffectedUnitNoticeBundle Triggering(ProcessTiming startTiming, BattleConditionUtils.ConditionCheckDataBundle conditionCheckDataBundle, EffectOriginType origin, BattleUnit userUnit, Dictionary<int, BattleUnit> targetUnitDic, GameDirectorBase gameDirector, ActiveSkillBase triggeringSkill, int attackTargetId = 0, int selectFriendUnitId = 0) { } */
+    /** @rva 0x1384840  public AffectedUnitNoticeBundle Triggering(ProcessTiming startTiming, BattleConditionUtils.ConditionCheckDataBundle conditionCheckDataBundle, EffectOriginType origin, BattleUnit userUnit, Dictionary<int, BattleUnit> targetUnitDic, GameDirectorBase gameDirector, ActiveSkillBase triggeringSkill, int attackTargetId = 0, int selectFriendUnitId = 0) { } */
     Triggering$9(startTiming: ProcessTiming, conditionCheckDataBundle: BattleConditionUtils_ConditionCheckDataBundle, origin: EffectOriginType, userUnit: BattleUnit, targetUnitDic: Dictionary<int, BattleUnit>, gameDirector: GameDirectorBase, triggeringSkill: ActiveSkillBase, attackTargetId: int = 0, selectFriendUnitId: int = 0): AffectedUnitNoticeBundle {
         return AbilityEffectLauncher.Triggering$10(this.AbilityEffectList, startTiming, conditionCheckDataBundle, origin, userUnit, targetUnitDic, gameDirector, triggeringSkill, attackTargetId, selectFriendUnitId); // tail call
     }
-    /** @rva 0x139A360  public static AffectedUnitNoticeBundle Triggering(List<AbilityEffectBase> abilityEffectList, ProcessTiming startTiming, BattleConditionUtils.ConditionCheckDataBundle conditionCheckDataBundle, EffectOriginType origin, BattleUnit userUnit, Dictionary<int, BattleUnit> targetUnitDic, GameDirectorBase gameDirector, ActiveSkillBase triggeringSkill, int attackTargetId = 0, int selectFriendUnitId = 0) { } */
+    /** @rva 0x1384860  public static AffectedUnitNoticeBundle Triggering(List<AbilityEffectBase> abilityEffectList, ProcessTiming startTiming, BattleConditionUtils.ConditionCheckDataBundle conditionCheckDataBundle, EffectOriginType origin, BattleUnit userUnit, Dictionary<int, BattleUnit> targetUnitDic, GameDirectorBase gameDirector, ActiveSkillBase triggeringSkill, int attackTargetId = 0, int selectFriendUnitId = 0) { } */
     static Triggering$10(abilityEffectList: List<AbilityEffectBase>, startTiming: ProcessTiming, conditionCheckDataBundle: BattleConditionUtils_ConditionCheckDataBundle, origin: EffectOriginType, userUnit: BattleUnit, targetUnitDic: Dictionary<int, BattleUnit>, gameDirector: GameDirectorBase, triggeringSkill: ActiveSkillBase, attackTargetId: int = 0, selectFriendUnitId: int = 0): AffectedUnitNoticeBundle {
         let noticeBundle = new AffectedUnitNoticeBundle().ctor();
         const effectList = abilityEffectList.filter(effect => // DisplayClass9_0 <Triggering>b__0
@@ -106,7 +106,7 @@ export class AbilityEffectLauncher {
         }
         return noticeBundle;
     }
-    /** @rva 0x1399D80  private static AffectedUnitNotice GetAdditionalRecoveryResult(BattleUnit userUnit, AffectedUnitNoticeBundle noticeBundle, GameDirectorBase gameDirector) { } */
+    /** @rva 0x1384280  private static AffectedUnitNotice GetAdditionalRecoveryResult(BattleUnit userUnit, AffectedUnitNoticeBundle noticeBundle, GameDirectorBase gameDirector) { } */
     static GetAdditionalRecoveryResult(userUnit: BattleUnit, noticeBundle: AffectedUnitNoticeBundle, gameDirector: GameDirectorBase): AffectedUnitNotice {
         let value: Decimal = Decimal.Zero;
         for (const state of userUnit.Condition.StateList) {

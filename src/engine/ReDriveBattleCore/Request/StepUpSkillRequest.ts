@@ -14,8 +14,8 @@ export class StepUpSkillRequest extends RequestBase {
     currentSkillMstId: int = 0;
     /** 0x18 public bool isCanceled */
     isCanceled: boolean = false;
-    /** @rva 0xAD2AC0 slot 4  public override RequestType get_RequestType() { } */
+    /** @rva 0xAC4D70 slot 4  public override RequestType get_RequestType() { } */
     get_RequestType(): RequestType { return 16 as RequestType; /* asm: mov eax, 0x10; ret */ }
-    /** @rva 0x72F5E0  public void .ctor() { } */
+    /** @rva 0x7305E0  public void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x72f170 */ }
 }

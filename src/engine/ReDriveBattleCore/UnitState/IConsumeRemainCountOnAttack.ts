@@ -8,7 +8,7 @@ import type { IConsumeRemainCount } from "./IConsumeRemainCount";
 
 // ---- ReDriveBattleCore.UnitState.IConsumeRemainCountOnAttack  (TypeDefIndex 736, public interface) ----
 export interface IConsumeRemainCountOnAttack extends IConsumeRemainCount {
-    /** @rva 0x76E830 slot 0  public virtual bool ShouldConsume(ActiveSkillBase attackSkill, List<AffectedUnitNotice> noticeList) { } */
+    /** @rva 0x76F830 slot 0  public virtual bool ShouldConsume(ActiveSkillBase attackSkill, List<AffectedUnitNotice> noticeList) { } */
     ShouldConsume(attackSkill: ActiveSkillBase, noticeList: List<AffectedUnitNotice>): boolean;
 }
 

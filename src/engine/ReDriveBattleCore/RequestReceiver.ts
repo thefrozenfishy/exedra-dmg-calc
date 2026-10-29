@@ -5,6 +5,6 @@ import { notPorted } from "../runtime";
 
 // ---- ReDriveBattleCore.RequestReceiver  (TypeDefIndex 449, public sealed class) ----
 export class RequestReceiver {
-    /** @rva 0x72F5E0  public void .ctor() { } */
+    /** @rva 0x7305E0  public void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
 }

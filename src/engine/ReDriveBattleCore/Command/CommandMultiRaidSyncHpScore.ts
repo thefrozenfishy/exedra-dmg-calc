@@ -28,31 +28,31 @@ export class CommandMultiRaidSyncHpScore extends CommandBase {
     set IsLastSyncAfterBattleEnd(v: boolean) { this.set_IsLastSyncAfterBattleEnd(v); }
     get IsRequestedByPlayer(): boolean { return this.get_IsRequestedByPlayer(); }
     set IsRequestedByPlayer(v: boolean) { this.set_IsRequestedByPlayer(v); }
-    /** @rva 0x8D1D60 slot 4  public override CommandType GetCommandType() { } */
+    /** @rva 0x8D2D10 slot 4  public override CommandType GetCommandType() { } */
     GetCommandType(): CommandType { return 24 as CommandType; /* asm: mov eax, 0x18; ret */ }
-    /** @rva 0x762820  public int get_Hp() { } */
+    /** @rva 0x763820  public int get_Hp() { } */
     get_Hp(): int { return this._Hp; /* auto-property */ }
-    /** @rva 0x8A1240  public void set_Hp(int value) { } */
+    /** @rva 0x8A2240  public void set_Hp(int value) { } */
     set_Hp(value: int): void { this._Hp = value; /* auto-property */ }
-    /** @rva 0x7359E0  public CommandMultiRaidSyncHpScore.ParticipantInfo[] get_ParticipantInfos() { } */
+    /** @rva 0x7369E0  public CommandMultiRaidSyncHpScore.ParticipantInfo[] get_ParticipantInfos() { } */
     get_ParticipantInfos(): CommandMultiRaidSyncHpScore_ParticipantInfo[] { return this._ParticipantInfos; /* auto-property */ }
-    /** @rva 0x735A50  public void set_ParticipantInfos(CommandMultiRaidSyncHpScore.ParticipantInfo[] value) { } */
+    /** @rva 0x736A50  public void set_ParticipantInfos(CommandMultiRaidSyncHpScore.ParticipantInfo[] value) { } */
     set_ParticipantInfos(value: CommandMultiRaidSyncHpScore_ParticipantInfo[]): void { this._ParticipantInfos = value; /* auto-property */ }
-    /** @rva 0x7394E0  public bool get_IsInitialize() { } */
+    /** @rva 0x73A4E0  public bool get_IsInitialize() { } */
     get_IsInitialize(): boolean { return this._IsInitialize; /* auto-property */ }
-    /** @rva 0x7394F0  public void set_IsInitialize(bool value) { } */
+    /** @rva 0x73A4F0  public void set_IsInitialize(bool value) { } */
     set_IsInitialize(value: boolean): void { this._IsInitialize = value; /* auto-property */ }
-    /** @rva 0x96C450  public bool get_IsLastSyncAfterBattleEnd() { } */
+    /** @rva 0x951C30  public bool get_IsLastSyncAfterBattleEnd() { } */
     get_IsLastSyncAfterBattleEnd(): boolean { return this._IsLastSyncAfterBattleEnd; /* auto-property */ }
-    /** @rva 0x96C4C0  public void set_IsLastSyncAfterBattleEnd(bool value) { } */
+    /** @rva 0x951CA0  public void set_IsLastSyncAfterBattleEnd(bool value) { } */
     set_IsLastSyncAfterBattleEnd(value: boolean): void { this._IsLastSyncAfterBattleEnd = value; /* auto-property */ }
-    /** @rva 0x128D1D0  public bool get_IsRequestedByPlayer() { } */
+    /** @rva 0x1277600  public bool get_IsRequestedByPlayer() { } */
     get_IsRequestedByPlayer(): boolean { return this._IsRequestedByPlayer; /* auto-property */ }
-    /** @rva 0x128D1E0  public void set_IsRequestedByPlayer(bool value) { } */
+    /** @rva 0x1277610  public void set_IsRequestedByPlayer(bool value) { } */
     set_IsRequestedByPlayer(value: boolean): void { this._IsRequestedByPlayer = value; /* auto-property */ }
-    /** @rva 0x72F5E0  public void .ctor() { } */
+    /** @rva 0x7305E0  public void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
-    /** @rva 0x1810840  public void .ctor(int hp, CommandMultiRaidSyncHpScore.ParticipantInfo[] participantInfos, bool isInitialize, bool isLastSync, bool isRequestedByPlayer) { } */
+    /** @rva 0x17FB470  public void .ctor(int hp, CommandMultiRaidSyncHpScore.ParticipantInfo[] participantInfos, bool isInitialize, bool isLastSync, bool isRequestedByPlayer) { } */
     ctor$int_ParticipantInfo_bool_bool_bool(hp: int, participantInfos: CommandMultiRaidSyncHpScore_ParticipantInfo[], isInitialize: boolean, isLastSync: boolean, isRequestedByPlayer: boolean): this {
         this._Hp = hp;
         this._ParticipantInfos = participantInfos ?? [];
@@ -75,6 +75,6 @@ export class CommandMultiRaidSyncHpScore_ParticipantInfo {
     iconStyleMstId: int = 0;
     /** 0x28 public bool isJoining */
     isJoining: boolean = false;
-    /** @rva 0x72F5E0  public void .ctor() { } */
+    /** @rva 0x7305E0  public void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
 }

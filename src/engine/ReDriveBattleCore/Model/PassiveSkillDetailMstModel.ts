@@ -27,50 +27,50 @@ export class PassiveSkillDetailMstModel extends MstModelBase<PassiveSkillDetailM
     get ActiveConditionSetIdCsv(): string { return this.get_ActiveConditionSetIdCsv(); }
     get Description(): string { return this.get_Description(); }
     get DescriptionType(): int { return this.get_DescriptionType(); }
-    /** @rva 0x16FD090  public void .ctor(PassiveSkillDetailMstRecord record) { } */
+    /** @rva 0x16E6D60  public void .ctor(PassiveSkillDetailMstRecord record) { } */
     ctor$PassiveSkillDetailMstRecord(record: PassiveSkillDetailMstRecord): this {
         super.ctor$TRecord(record);
         return this;
     }
-    /** @rva 0x901380  public int get_PassiveSkillDetailMstId() { } */
+    /** @rva 0x902330  public int get_PassiveSkillDetailMstId() { } */
     get_PassiveSkillDetailMstId(): int { return this.record.passiveSkillDetailMstId; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x901785; mov eax, dword ptr [rax + 0x10]; add rsp, 0x28; ret */ }
-    /** @rva 0x9013A0  public int get_PassiveSkillMstId() { } */
+    /** @rva 0x902350  public int get_PassiveSkillMstId() { } */
     get_PassiveSkillMstId(): int { return this.record.passiveSkillMstId; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x9017a5; mov eax, dword ptr [rax + 0x14]; add rsp, 0x28; ret */ }
-    /** @rva 0x85D540  public string get_AbilityEffectType() { } */
+    /** @rva 0x85E540  public string get_AbilityEffectType() { } */
     get_AbilityEffectType(): string { return this.record.abilityEffectType; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x85e556; mov rax, qword ptr [rax + 0x18]; add rsp, 0x28; ret */ }
-    /** @rva 0xA06180  public int get_Value1() { } */
+    /** @rva 0xA04DB0  public int get_Value1() { } */
     get_Value1(): int { return this.record.value1; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0xa0d855; mov eax, dword ptr [rax + 0x20]; add rsp, 0x28; ret */ }
-    /** @rva 0xA066A0  public int get_Value2() { } */
+    /** @rva 0xA052D0  public int get_Value2() { } */
     get_Value2(): int { return this.record.value2; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0xa0e7e5; mov eax, dword ptr [rax + 0x24]; add rsp, 0x28; ret */ }
-    /** @rva 0xA06660  public int get_Value3() { } */
+    /** @rva 0xA05290  public int get_Value3() { } */
     get_Value3(): int { return this.record.value3; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0xa0e7a5; mov eax, dword ptr [rax + 0x28]; add rsp, 0x28; ret */ }
-    /** @rva 0xA06680  public int get_Element() { } */
+    /** @rva 0xA052B0  public int get_Element() { } */
     get_Element(): int { return this.record.element; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0xa0e7c5; mov eax, dword ptr [rax + 0x2c]; add rsp, 0x28; ret */ }
-    /** @rva 0x901F40  public int get_Role() { } */
+    /** @rva 0x902F10  public int get_Role() { } */
     get_Role(): int { return this.record.role; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x16cbee5; mov eax, dword ptr [rax + 0x38]; add rsp, 0x28; ret */ }
-    /** @rva 0x901EE0  public int get_Turn() { } */
+    /** @rva 0x902EB0  public int get_Turn() { } */
     get_Turn(): int { return this.record.turn; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x901955; mov eax, dword ptr [rax + 0x30]; add rsp, 0x28; ret */ }
-    /** @rva 0x901F20  public int get_RemainCount() { } */
+    /** @rva 0x902EF0  public int get_RemainCount() { } */
     get_RemainCount(): int { return this.record.remainCount; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0xa0e825; mov eax, dword ptr [rax + 0x34]; add rsp, 0x28; ret */ }
-    /** @rva 0x901F00  public int get_Range() { } */
+    /** @rva 0x902ED0  public int get_Range() { } */
     get_Range(): int { return this.record.range; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x16d3205; mov eax, dword ptr [rax + 0x3c]; add rsp, 0x28; ret */ }
-    /** @rva 0x901E80  public int get_Probability() { } */
+    /** @rva 0x902E50  public int get_Probability() { } */
     get_Probability(): int { return this.record.probability; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x901975; mov eax, dword ptr [rax + 0x40]; add rsp, 0x28; ret */ }
-    /** @rva 0xA063E0  public bool get_IsFixedProbability() { } */
+    /** @rva 0xA05010  public bool get_IsFixedProbability() { } */
     get_IsFixedProbability(): boolean { return this.record.isFixedProbability; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x9017d6; movzx eax, byte ptr [rax + 0x44]; add rsp, 0x28; ret */ }
-    /** @rva 0x16FD120  public List<ProcessTiming> get_StartTimings() { } */
+    /** @rva 0x16E6DF0  public List<ProcessTiming> get_StartTimings() { } */
     get_StartTimings(): List<ProcessTiming> {
         if (isNullOrEmpty(this.record.startTimingIdCsv)) return [];
         return this.record.startTimingIdCsv.split(",")
             .filter(x => !isNullOrEmpty(x))            // <get_StartTimings>b__28_0
             .map(y => intParse(y.trim()) as ProcessTiming); // <get_StartTimings>b__28_1: int.Parse(y.Trim())
     }
-    /** @rva 0x16FD100  public string get_StartConditionSetIdCsv() { } */
+    /** @rva 0x16E6DD0  public string get_StartConditionSetIdCsv() { } */
     get_StartConditionSetIdCsv(): string { return this.record.startConditionSetIdCsv; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x16d3226; mov rax, qword ptr [rax + 0x60]; add rsp, 0x28; ret */ }
-    /** @rva 0x16FD0E0  public string get_ActiveConditionSetIdCsv() { } */
+    /** @rva 0x16E6DB0  public string get_ActiveConditionSetIdCsv() { } */
     get_ActiveConditionSetIdCsv(): string { return this.record.activeConditionSetIdCsv; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x16d31e6; mov rax, qword ptr [rax + 0x68]; add rsp, 0x28; ret */ }
-    /** @rva 0x7F8C00  public string get_Description() { } */
+    /** @rva 0x7F9C00  public string get_Description() { } */
     get_Description(): string { return this.record.description; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x7f9c16; mov rax, qword ptr [rax + 0x48]; add rsp, 0x28; ret */ }
-    /** @rva 0x16F5980  public int get_DescriptionType() { } */
+    /** @rva 0x16DF650  public int get_DescriptionType() { } */
     get_DescriptionType(): int { return this.record.descriptionType; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x16cbea5; mov eax, dword ptr [rax + 0x50]; add rsp, 0x28; ret */ }
 }

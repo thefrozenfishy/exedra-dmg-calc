@@ -17,28 +17,28 @@ import { f32 } from "../../runtime";
 
 // ---- ReDriveBattleCore.UnitState.DwnDebuffEffectValueUnitState  (TypeDefIndex 633, public class) ----
 export class DwnDebuffEffectValueUnitState extends DownEffectValueUnitStateBase {
-    /** @rva 0x16F8570  protected void .ctor() { } */
+    /** @rva 0x16E2240  protected void .ctor() { } */
     ctor(): this {
         super.ctor();
         return this;
     }
-    /** @rva 0x16F8AE0  public void .ctor(AbilityEffectInfo info) { } */
+    /** @rva 0x16E27B0  public void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
         super.ctor$AbilityEffectInfo(info);
         return this;
     }
-    /** @rva 0x16F9BA0 slot 27  public override float GetEffectValueVariationRate(UnitStateBase targetState) { } */
+    /** @rva 0x16E3870 slot 27  public override float GetEffectValueVariationRate(UnitStateBase targetState) { } */
     GetEffectValueVariationRate(targetState: UnitStateBase): float {
         if (targetState.get_Direction() === 1) return -f32(this._DownRatio / 100);
         return 0;
     }
-    /** @rva 0x16F9970 slot 23  public override List<BattleUnit> GetAIFilteredTargets(BattleUnit userUnit, List<BattleUnit> targetUnitList, SkillType skillType, RangeType effectRange, GameDirectorBase gameDirector) { } */
+    /** @rva 0x16E3640 slot 23  public override List<BattleUnit> GetAIFilteredTargets(BattleUnit userUnit, List<BattleUnit> targetUnitList, SkillType skillType, RangeType effectRange, GameDirectorBase gameDirector) { } */
     GetAIFilteredTargets(userUnit: BattleUnit, targetUnitList: List<BattleUnit>, skillType: SkillType, effectRange: RangeType, gameDirector: GameDirectorBase): List<BattleUnit> {
         let list = targetUnitList.filter(x => !x.get_IsDead()); // <>c.b__3_0
         if (list.length > 0) list = list.filter(unit => unit._SkillSet.GetList().some(skill => skill.GetAbilityEffectList().some(effect => effect instanceof StateAbilityEffect && effect._GiveUnitState.get_Direction() === 1)) /* b__3_2, b__3_3 */); // b__3_1
         return list;
     }
-    /** @rva 0x16F9C00 slot 24  public override AISkillTargetSelector.UnitFilterFuncOrder GetUnitFilterFuncOrder(BattleUnit userUnit, IEnumerable<BattleUnit> candidateUnits) { } */
+    /** @rva 0x16E38D0 slot 24  public override AISkillTargetSelector.UnitFilterFuncOrder GetUnitFilterFuncOrder(BattleUnit userUnit, IEnumerable<BattleUnit> candidateUnits) { } */
     GetUnitFilterFuncOrder(userUnit: BattleUnit, candidateUnits: IEnumerable<BattleUnit>): AISkillTargetSelector_UnitFilterFuncOrder {
         const list: List<(a0: IEnumerable<BattleUnit>) => IEnumerable<BattleUnit>> = [];
         list.push(AISkillTargetSelector.UnitFilterByMainTarget);

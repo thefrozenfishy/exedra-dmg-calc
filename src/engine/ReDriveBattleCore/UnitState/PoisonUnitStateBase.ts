@@ -9,26 +9,26 @@ import { f32 } from "../../runtime";
 
 // ---- ReDriveBattleCore.UnitState.PoisonUnitStateBase  (TypeDefIndex 499, public abstract class) ----
 export abstract class PoisonUnitStateBase extends ReceiveSlipDamageUnitStateBase {
-    /** @rva 0x15E3710 slot 7  public override string get_IconName() { } */
+    /** @rva 0x15CDD70 slot 7  public override string get_IconName() { } */
     get_IconName(): string {
         return "poison";
     }
-    /** @rva 0x15E36E0 slot 13  public override string get_GiveVisualEffectName() { } */
+    /** @rva 0x15CDD40 slot 13  public override string get_GiveVisualEffectName() { } */
     get_GiveVisualEffectName(): string {
         return "eff_cmn_act_statehit_003";
     }
-    /** @rva 0x15E3740 slot 33  public override string get_SlipDamageVisualEffectName() { } */
+    /** @rva 0x15CDDA0 slot 33  public override string get_SlipDamageVisualEffectName() { } */
     get_SlipDamageVisualEffectName(): string {
         return "eff_cmn_act_state_poison_001";
     }
-    /** @rva 0xD8D350 slot 31  public override TargetElementType get_AttackElement() { } */
+    /** @rva 0xD78250 slot 31  public override TargetElementType get_AttackElement() { } */
     get_AttackElement(): TargetElementType { return 3 as TargetElementType; /* asm: mov eax, 3; ret */ }
-    /** @rva 0x15DC300  protected void .ctor() { } */
+    /** @rva 0x15C6960  protected void .ctor() { } */
     ctor(): this {
         super.ctor();
         return this;
     }
-    /** @rva 0x15DC280  public void .ctor(AbilityEffectInfo info) { } */
+    /** @rva 0x15C68E0  public void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
         super.ctor$AbilityEffectInfo(info);
         this._UpdateableEffectValue = f32(info._EffectValue1);

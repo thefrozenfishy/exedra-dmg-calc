@@ -15,25 +15,25 @@ import type { List } from "../../runtime";
 // ---- ReDriveBattleCore.UnitState.GveUpSpecialAttackFinalGiveDamageRatioUnitState  (TypeDefIndex 569, public class) ----
 export class GveUpSpecialAttackFinalGiveDamageRatioUnitState extends DamageBetterUnitStateBase {
     get UpRatio(): float { return this.get_UpRatio(); }
-    /** @rva 0x7421D0 slot 27  public override DamageVariationUnitStateBase.CalculationType get_Calculation() { } */
+    /** @rva 0x7431D0 slot 27  public override DamageVariationUnitStateBase.CalculationType get_Calculation() { } */
     get_Calculation(): DamageVariationUnitStateBase_CalculationType { return 0 as DamageVariationUnitStateBase_CalculationType; /* asm: xor eax, eax; ret */ }
-    /** @rva 0x7421D0 slot 28  public override AdditionType get_Addition() { } */
+    /** @rva 0x7431D0 slot 28  public override AdditionType get_Addition() { } */
     get_Addition(): AdditionType { return 0 as AdditionType; /* asm: xor eax, eax; ret */ }
-    /** @rva 0x15E1810  public float get_UpRatio() { } */
+    /** @rva 0x15CBE70  public float get_UpRatio() { } */
     get_UpRatio(): float {
         return f32(this._UpdateableEffectValue / 10);
     }
-    /** @rva 0x15D9DA0  protected void .ctor() { } */
+    /** @rva 0x15C4400  protected void .ctor() { } */
     ctor(): this {
         super.ctor();
         return this;
     }
-    /** @rva 0x15DB550  public void .ctor(AbilityEffectInfo info) { } */
+    /** @rva 0x15C5BB0  public void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
         super.ctor$AbilityEffectInfo(info);
         return this;
     }
-    /** @rva 0x15E3560 slot 24  public override AISkillTargetSelector.UnitFilterFuncOrder GetUnitFilterFuncOrder(BattleUnit userUnit, IEnumerable<BattleUnit> candidateUnits) { } */
+    /** @rva 0x15CDBC0 slot 24  public override AISkillTargetSelector.UnitFilterFuncOrder GetUnitFilterFuncOrder(BattleUnit userUnit, IEnumerable<BattleUnit> candidateUnits) { } */
     GetUnitFilterFuncOrder(userUnit: BattleUnit, candidateUnits: IEnumerable<BattleUnit>): AISkillTargetSelector_UnitFilterFuncOrder {
         const list: List<(a0: IEnumerable<BattleUnit>) => IEnumerable<BattleUnit>> = [];
         return new AISkillTargetSelector_UnitFilterFuncOrder().ctor$ListFuncIEnumerableBattleUnitIEnumerableBattleUnit(list);

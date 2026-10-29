@@ -14,17 +14,17 @@ import type { EffectOriginType } from "../UnitState/EffectOriginType";
 
 // ---- ReDriveBattleCore.AbilityEffect.AdditionalTurnUnitActAbilityEffect  (TypeDefIndex 1142, public class) ----
 export class AdditionalTurnUnitActAbilityEffect extends AbilityEffectBase {
-    /** @rva 0x1920EF0  protected void .ctor() { } */
+    /** @rva 0x1910A80  protected void .ctor() { } */
     ctor(): this {
         super.ctor();
         return this;
     }
-    /** @rva 0x1920EE0  public void .ctor(AbilityEffectInfo info) { } */
+    /** @rva 0x1910A70  public void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
         super.ctor$AbilityEffectInfo(info);
         return this;
     }
-    /** @rva 0x1920C10 slot 5  public override AffectedUnitNoticeBundle Triggering(EffectOriginType origin, BattleUnit userUnit, Dictionary<int, BattleUnit> targetUnitDic, GameDirectorBase gameDirector) { } */
+    /** @rva 0x19107A0 slot 5  public override AffectedUnitNoticeBundle Triggering(EffectOriginType origin, BattleUnit userUnit, Dictionary<int, BattleUnit> targetUnitDic, GameDirectorBase gameDirector) { } */
     Triggering(origin: EffectOriginType, userUnit: BattleUnit, targetUnitDic: Dictionary<int, BattleUnit>, gameDirector: GameDirectorBase): AffectedUnitNoticeBundle {
         const userUnitId = userUnit._Id; // <>c__DisplayClass2_0
         const actReferee = gameDirector.turnActSystem.actReferee;

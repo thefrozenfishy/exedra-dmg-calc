@@ -11,13 +11,13 @@ import { UniqueLvDebuffUnitStateBase } from "./UniqueLvDebuffUnitStateBase";
 export class UniqueElementStackUnitState extends UniqueLvDebuffUnitStateBase {  // implements ILvUp
     static readonly __interfaces: readonly string[] = ['ILvUp'];
     get TargetLvUpType(): ILvUp_LvUpType { return this.get_TargetLvUpType(); }
-    /** @rva 0x17086F0  protected void .ctor() { } */
+    /** @rva 0x16F23C0  protected void .ctor() { } */
     ctor(): this {
         this._Lv = 1;
         super.ctor();
         return this;
     }
-    /** @rva 0x1708710  public void .ctor(AbilityEffectInfo info) { } */
+    /** @rva 0x16F23E0  public void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
         this._Lv = 1;
         this.iconName = "";
@@ -26,9 +26,9 @@ export class UniqueElementStackUnitState extends UniqueLvDebuffUnitStateBase {  
         this._UniqueStateLevelMstGroupId = info._EffectValue2;
         return this;
     }
-    /** @rva 0x758B30 slot 29  public ILvUp.LvUpType get_TargetLvUpType() { } */
+    /** @rva 0x759B30 slot 29  public ILvUp.LvUpType get_TargetLvUpType() { } */
     get_TargetLvUpType(): ILvUp_LvUpType { return 1 as ILvUp_LvUpType; /* asm: mov eax, 1; ret */ }
-    /** @rva 0x17087A0 slot 30  public void LvUpProcess(BattleUnit userUnit, BattleUnit targetUnit) { } */
+    /** @rva 0x16F2470 slot 30  public void LvUpProcess(BattleUnit userUnit, BattleUnit targetUnit) { } */
     LvUpProcess(userUnit: BattleUnit, targetUnit: BattleUnit): void {
         if (!userUnit.IsMatch$TargetElementType(this._TargetElement)) return;
         this.TryCountUp();

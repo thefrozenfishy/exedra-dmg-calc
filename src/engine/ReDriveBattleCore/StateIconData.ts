@@ -19,9 +19,9 @@ export class StateIconData {
     Priority: int = 0;
     /** 0x28 public bool IsShowStateCountZeroIfZero */
     IsShowStateCountZeroIfZero: boolean = false;
-    /** @rva 0x72F5E0  public void .ctor() { } */
+    /** @rva 0x7305E0  public void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
-    /** @rva 0x15E4860  public void .ctor(UnitStateBase state, int stateCount, bool isShowStateCountZeroIfZero) { } */
+    /** @rva 0x15CEEC0  public void .ctor(UnitStateBase state, int stateCount, bool isShowStateCountZeroIfZero) { } */
     ctor$UnitStateBase_int_bool(state: UnitStateBase, stateCount: int, isShowStateCountZeroIfZero: boolean): this {
         if (state == null) return this;
         this.IconName = state.get_IconName();

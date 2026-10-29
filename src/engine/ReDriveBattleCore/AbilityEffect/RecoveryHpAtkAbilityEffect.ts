@@ -19,20 +19,20 @@ export class RecoveryHpAtkAbilityEffect extends RecoveryHpAbilityEffectBase {
     set RecoveryRatio(v: int) { this.set_RecoveryRatio(v); }
     get RecoveryFixed(): int { return this.get_RecoveryFixed(); }
     set RecoveryFixed(v: int) { this.set_RecoveryFixed(v); }
-    /** @rva 0x8A1200  public int get_RecoveryRatio() { } */
+    /** @rva 0x8A2200  public int get_RecoveryRatio() { } */
     get_RecoveryRatio(): int { return this._RecoveryRatio; /* auto-property */ }
-    /** @rva 0x8A12D0  public void set_RecoveryRatio(int value) { } */
+    /** @rva 0x8A22D0  public void set_RecoveryRatio(int value) { } */
     set_RecoveryRatio(value: int): void { this._RecoveryRatio = value; /* auto-property */ }
-    /** @rva 0x8A1220  public int get_RecoveryFixed() { } */
+    /** @rva 0x8A2220  public int get_RecoveryFixed() { } */
     get_RecoveryFixed(): int { return this._RecoveryFixed; /* auto-property */ }
-    /** @rva 0x8A12F0  public void set_RecoveryFixed(int value) { } */
+    /** @rva 0x8A22F0  public void set_RecoveryFixed(int value) { } */
     set_RecoveryFixed(value: int): void { this._RecoveryFixed = value; /* auto-property */ }
-    /** @rva 0x192D210  protected void .ctor() { } */
+    /** @rva 0x191CDA0  protected void .ctor() { } */
     ctor(): this {
         super.ctor();
         return this;
     }
-    /** @rva 0x192D190  public void .ctor(AbilityEffectInfo info) { } */
+    /** @rva 0x191CD20  public void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
         super.ctor$AbilityEffectInfo(info);
         this._TargetSide = 0 as AbilityEffectBase_TargetSideType;
@@ -40,7 +40,7 @@ export class RecoveryHpAtkAbilityEffect extends RecoveryHpAbilityEffectBase {
         this._RecoveryFixed = info._EffectValue2;
         return this;
     }
-    /** @rva 0x192CFE0 slot 8  public override Decimal GetBaseRecoveryValue(BattleUnit userUnit) { } */
+    /** @rva 0x191CB70 slot 8  public override Decimal GetBaseRecoveryValue(BattleUnit userUnit) { } */
     GetBaseRecoveryValue(userUnit: BattleUnit): Decimal {
         const value = userUnit.GetProcessedAtkDecimal().mul(Decimal.fromInt(this._RecoveryRatio).div(Decimal.fromInt(1000))).add(Decimal.fromInt(this._RecoveryFixed));
         if (value.lt(Decimal.Zero)) return Decimal.Zero;

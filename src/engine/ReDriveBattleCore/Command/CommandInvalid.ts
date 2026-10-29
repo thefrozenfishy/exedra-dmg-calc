@@ -10,13 +10,13 @@ export class CommandInvalid extends CommandBase {
     /** 0x0 private static readonly CommandInvalid <Default>k__BackingField */
     static _Default: CommandInvalid = null!;
     static get Default(): CommandInvalid { return CommandInvalid.get_Default(); }
-    /** @rva 0x7421D0 slot 4  public override CommandType GetCommandType() { } */
+    /** @rva 0x7431D0 slot 4  public override CommandType GetCommandType() { } */
     GetCommandType(): CommandType { return 0 as CommandType; /* asm: xor eax, eax; ret */ }
-    /** @rva 0x72F5E0  private void .ctor() { } */
+    /** @rva 0x7305E0  private void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
-    /** @rva 0x18107E0  public static CommandInvalid get_Default() { } */
+    /** @rva 0x17FB410  public static CommandInvalid get_Default() { } */
     static get_Default(): CommandInvalid { return CommandInvalid._Default; /* auto-property */ }
-    /** @rva 0x1810770  private static void .cctor() { } */
+    /** @rva 0x17FB3A0  private static void .cctor() { } */
     static cctor(): void {
         CommandInvalid._Default = new CommandInvalid().ctor();
     }

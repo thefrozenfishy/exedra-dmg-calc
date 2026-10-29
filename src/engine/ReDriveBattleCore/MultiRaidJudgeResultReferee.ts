@@ -12,16 +12,16 @@ export class MultiRaidJudgeResultReferee extends QuestJudgeResultReferee {
     roundLimit: int = 0;
     /** 0x30 private DateTimeOffset endTime */
     endTime: DateTimeOffset = 0;
-    /** @rva 0x7627A0 slot 4  public override int get_RoundLimit() { } */
+    /** @rva 0x7637A0 slot 4  public override int get_RoundLimit() { } */
     get_RoundLimit(): int { return this.roundLimit; /* asm: mov eax, dword ptr [rcx + 0x28]; ret */ }
-    /** @rva 0x14C8150  public void .ctor(int questStageMstId, int roundLimit, DateTimeOffset endTime) { } */
+    /** @rva 0x14B21F0  public void .ctor(int questStageMstId, int roundLimit, DateTimeOffset endTime) { } */
     ctor$int_int_DateTimeOffset(questStageMstId: int, roundLimit: int, endTime: DateTimeOffset): this {
         super.ctor$int_int(questStageMstId, 0);
         this.roundLimit = roundLimit;
         this.endTime = endTime;
         return this;
     }
-    /** @rva 0x14C8080 slot 8  public override void CheckBattleFinishByTimeLimit(DateTimeOffset currentTime) { } */
+    /** @rva 0x14B2120 slot 8  public override void CheckBattleFinishByTimeLimit(DateTimeOffset currentTime) { } */
     CheckBattleFinishByTimeLimit(currentTime: DateTimeOffset): void {
         const millisecond = Math.floor(currentTime) % 1000; // currentTime.Millisecond (UTC offsets are whole minutes)
         if (currentTime - millisecond > this.endTime) { // currentTime.AddMilliseconds(-Millisecond) > endTime
@@ -29,7 +29,7 @@ export class MultiRaidJudgeResultReferee extends QuestJudgeResultReferee {
             this.BattleFinishByTimeLimit = true;
         }
     }
-    /** @rva 0x14C8130  public void ForceSetBattleFinishByTimeLimit() { } */
+    /** @rva 0x14B21D0  public void ForceSetBattleFinishByTimeLimit() { } */
     ForceSetBattleFinishByTimeLimit(): void {
         this.BattleFinishByTimeLimit = true;
         if (this.result === 0) this.result = 2 as ResultStatus;

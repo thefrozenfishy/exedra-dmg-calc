@@ -53,33 +53,33 @@ export class BattleUnitSkillSet {
     set SwitchableSkills(v: ActiveSkillBase[]) { this.set_SwitchableSkills(v); }
     set StepUpSkills(v: ActiveSkillBase[]) { this.set_StepUpSkills(v); }
     get StepUpSkills(): ActiveSkillBase[] { return this.get_StepUpSkills(); }
-    /** @rva 0x72FC50  public ActiveSkill[] get_ActiveSkills() { } */
+    /** @rva 0x730C50  public ActiveSkill[] get_ActiveSkills() { } */
     get_ActiveSkills(): ActiveSkill[] { return this._ActiveSkills; /* auto-property */ }
-    /** @rva 0x72FC60  public void set_ActiveSkills(ActiveSkill[] value) { } */
+    /** @rva 0x730C60  public void set_ActiveSkills(ActiveSkill[] value) { } */
     set_ActiveSkills(value: ActiveSkill[]): void { this._ActiveSkills = value; /* auto-property */ }
-    /** @rva 0x732E90  public SpecialAttack get_SpecialAttack() { } */
+    /** @rva 0x733E90  public SpecialAttack get_SpecialAttack() { } */
     get_SpecialAttack(): SpecialAttack { return this._SpecialAttack; /* auto-property */ }
-    /** @rva 0x735AB0  public void set_SpecialAttack(SpecialAttack value) { } */
+    /** @rva 0x736AB0  public void set_SpecialAttack(SpecialAttack value) { } */
     set_SpecialAttack(value: SpecialAttack): void { this._SpecialAttack = value; /* auto-property */ }
-    /** @rva 0x7359E0  public NormalAttack get_NormalAttack() { } */
+    /** @rva 0x7369E0  public NormalAttack get_NormalAttack() { } */
     get_NormalAttack(): NormalAttack { return this._NormalAttack; /* auto-property */ }
-    /** @rva 0x735A50  public void set_NormalAttack(NormalAttack value) { } */
+    /** @rva 0x736A50  public void set_NormalAttack(NormalAttack value) { } */
     set_NormalAttack(value: NormalAttack): void { this._NormalAttack = value; /* auto-property */ }
-    /** @rva 0x735EA0  public AdditionalSkill[] get_AdditionalSkills() { } */
+    /** @rva 0x736EA0  public AdditionalSkill[] get_AdditionalSkills() { } */
     get_AdditionalSkills(): AdditionalSkill[] { return this._AdditionalSkills; /* auto-property */ }
-    /** @rva 0x735F10  public void set_AdditionalSkills(AdditionalSkill[] value) { } */
+    /** @rva 0x736F10  public void set_AdditionalSkills(AdditionalSkill[] value) { } */
     set_AdditionalSkills(value: AdditionalSkill[]): void { this._AdditionalSkills = value; /* auto-property */ }
-    /** @rva 0x735F00  public ActiveSkillBase[] get_SwitchableSkills() { } */
+    /** @rva 0x736F00  public ActiveSkillBase[] get_SwitchableSkills() { } */
     get_SwitchableSkills(): ActiveSkillBase[] { return this._SwitchableSkills; /* auto-property */ }
-    /** @rva 0x735F30  public void set_SwitchableSkills(ActiveSkillBase[] value) { } */
+    /** @rva 0x736F30  public void set_SwitchableSkills(ActiveSkillBase[] value) { } */
     set_SwitchableSkills(value: ActiveSkillBase[]): void { this._SwitchableSkills = value; /* auto-property */ }
-    /** @rva 0x735A30  public void set_StepUpSkills(ActiveSkillBase[] value) { } */
+    /** @rva 0x736A30  public void set_StepUpSkills(ActiveSkillBase[] value) { } */
     set_StepUpSkills(value: ActiveSkillBase[]): void { this._StepUpSkills = value; /* auto-property */ }
-    /** @rva 0x735970  public ActiveSkillBase[] get_StepUpSkills() { } */
+    /** @rva 0x736970  public ActiveSkillBase[] get_StepUpSkills() { } */
     get_StepUpSkills(): ActiveSkillBase[] { return this._StepUpSkills; /* auto-property */ }
-    /** @rva 0x72F5E0  protected void .ctor() { } */
+    /** @rva 0x7305E0  protected void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
-    /** @rva 0x13A9CB0  public void .ctor(ActiveSkill[] activeSkills, SpecialAttack specialAttack, NormalAttack normalAttack, AdditionalSkill[] additionalSkills, ActiveSkillBase[] switchableSkills, ActiveSkillBase[] stepUpSkills) { } */
+    /** @rva 0x13941B0  public void .ctor(ActiveSkill[] activeSkills, SpecialAttack specialAttack, NormalAttack normalAttack, AdditionalSkill[] additionalSkills, ActiveSkillBase[] switchableSkills, ActiveSkillBase[] stepUpSkills) { } */
     ctor$ActiveSkill_SpecialAttack_NormalAttack_AdditionalSkill_ActiveSkillBase_ActiveSkillBase(activeSkills: ActiveSkill[], specialAttack: SpecialAttack, normalAttack: NormalAttack, additionalSkills: AdditionalSkill[], switchableSkills: ActiveSkillBase[], stepUpSkills: ActiveSkillBase[]): this {
         this._ActiveSkills = activeSkills;
         this._SpecialAttack = specialAttack;
@@ -89,7 +89,7 @@ export class BattleUnitSkillSet {
         this._StepUpSkills = stepUpSkills ?? []; // [UNCERTAIN] the store goes through a helper call (Array.Empty when null?)
         return this;
     }
-    /** @rva 0x13A8700  public List<ActiveSkillBase> GetList() { } */
+    /** @rva 0x1392C00  public List<ActiveSkillBase> GetList() { } */
     GetList(): List<ActiveSkillBase> {
         const list: ActiveSkillBase[] = [];
         if (this.ActiveSkills != null) for (const s of this.ActiveSkills) list.push(s);
@@ -100,12 +100,12 @@ export class BattleUnitSkillSet {
         if (this._StepUpSkills != null) for (const s of this._StepUpSkills) list.push(s); // 3.21.0
         return list;
     }
-    /** @rva 0x13A8AE0  public ActiveSkillBase GetSkill(int skillMstId) { } */
+    /** @rva 0x1392FE0  public ActiveSkillBase GetSkill(int skillMstId) { } */
     GetSkill(skillMstId: int): ActiveSkillBase {
         return this.GetList().find(skill => skill.Id === skillMstId) ?? null!; // DisplayClass23_0 <GetSkill>b__0
     }
-    /** @rva 0x13A93D0  public void OnSerializing(StreamingContext _) { } */
-    OnSerializing(_: any /* StreamingContext */): void { return notPorted("BattleUnitSkillSet.OnSerializing", 0x13A93D0); }
-    /** @rva 0x13A8BB0  public void OnDeserialized(StreamingContext _) { } */
-    OnDeserialized(_: any /* StreamingContext */): void { return notPorted("BattleUnitSkillSet.OnDeserialized", 0x13A8BB0); }
+    /** @rva 0x13938D0  public void OnSerializing(StreamingContext _) { } */
+    OnSerializing(_: any /* StreamingContext */): void { return notPorted("BattleUnitSkillSet.OnSerializing", 0x13938D0); }
+    /** @rva 0x13930B0  public void OnDeserialized(StreamingContext _) { } */
+    OnDeserialized(_: any /* StreamingContext */): void { return notPorted("BattleUnitSkillSet.OnDeserialized", 0x13930B0); }
 }

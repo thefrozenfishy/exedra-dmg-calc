@@ -25,17 +25,17 @@ export class SummonAbilityEffect extends AbilityEffectBase {
     _SummonIdList: List<int> = null!;
     get SummonIdList(): List<int> { return this.get_SummonIdList(); }
     set SummonIdList(v: List<int>) { this.set_SummonIdList(v); }
-    /** @rva 0x736A10  public List<int> get_SummonIdList() { } */
+    /** @rva 0x737A10  public List<int> get_SummonIdList() { } */
     get_SummonIdList(): List<int> { return this._SummonIdList; /* auto-property */ }
-    /** @rva 0x736A50  public void set_SummonIdList(List<int> value) { } */
+    /** @rva 0x737A50  public void set_SummonIdList(List<int> value) { } */
     set_SummonIdList(value: List<int>): void { this._SummonIdList = value; /* auto-property */ }
-    /** @rva 0x1931B40  protected void .ctor() { } */
+    /** @rva 0x19216D0  protected void .ctor() { } */
     ctor(): this {
         this._SummonIdList = [];
         super.ctor();
         return this;
     }
-    /** @rva 0x19319F0  public void .ctor(AbilityEffectInfo info) { } */
+    /** @rva 0x1921580  public void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
         this._SummonIdList = [];
         super.ctor$AbilityEffectInfo(info);
@@ -46,7 +46,7 @@ export class SummonAbilityEffect extends AbilityEffectBase {
         }
         return this;
     }
-    /** @rva 0x1931730 slot 5  public override AffectedUnitNoticeBundle Triggering(EffectOriginType origin, BattleUnit userUnit, Dictionary<int, BattleUnit> targetUnitDic, GameDirectorBase gameDirector) { } */
+    /** @rva 0x19212C0 slot 5  public override AffectedUnitNoticeBundle Triggering(EffectOriginType origin, BattleUnit userUnit, Dictionary<int, BattleUnit> targetUnitDic, GameDirectorBase gameDirector) { } */
     Triggering(origin: EffectOriginType, userUnit: BattleUnit, targetUnitDic: Dictionary<int, BattleUnit>, gameDirector: GameDirectorBase): AffectedUnitNoticeBundle {
         const affectedUnitNoticeBundle = new AffectedUnitNoticeBundle().ctor();
         if (gameDirector instanceof EnemyAppearanceGameDirectorBase) {
@@ -58,14 +58,14 @@ export class SummonAbilityEffect extends AbilityEffectBase {
         }
         return affectedUnitNoticeBundle;
     }
-    /** @rva 0x19315A0 slot 6  public override List<BattleUnit> GetAIFilteredTargets(BattleUnit userUnit, List<BattleUnit> targetUnitList, SkillType skillType, GameDirectorBase gameDirector) { } */
+    /** @rva 0x1921130 slot 6  public override List<BattleUnit> GetAIFilteredTargets(BattleUnit userUnit, List<BattleUnit> targetUnitList, SkillType skillType, GameDirectorBase gameDirector) { } */
     GetAIFilteredTargets(userUnit: BattleUnit, targetUnitList: List<BattleUnit>, skillType: SkillType, gameDirector: GameDirectorBase): List<BattleUnit> {
         if (SummonAbilityEffect.NotTriggeringUnitCountForAI <= targetUnitList.filter(u => !u.get_IsDead()).length /* <>c.b__9_0 */) {
             return [];
         }
         return targetUnitList;
     }
-    /** @rva 0x1931940  private static void .cctor() { } */
+    /** @rva 0x19214D0  private static void .cctor() { } */
     static cctor(): void {
         SummonAbilityEffect.NotTriggeringUnitCountForAI = 5;
         SummonAbilityEffect.PriorityPositionIds = [3, 2, 4, 1, 5]; // <PrivateImplementationDetails> 79C1DCEC… (global-metadata 0x100C440)

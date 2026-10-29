@@ -9,6 +9,6 @@ import type { int } from "../../runtime";
 
 // ---- ReDriveBattleCore.Reader.UniqueStateLevelMstReader  (TypeDefIndex 849, public class) ----
 export class UniqueStateLevelMstReader extends BattleMstReaderBase<UniqueStateLevelMstModel, UniqueStateLevelMstRecord, int> {
-    /** @rva 0x17090B0  public void .ctor() { } */
+    /** @rva 0x16F2D80  public void .ctor() { } */
     ctor(): this { super.ctor(); return this; }
 }
