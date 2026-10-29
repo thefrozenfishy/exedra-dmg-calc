@@ -1,5 +1,6 @@
 [
     {
+        "appealPriority": 0,
         "bannerImageName": "banner_00018",
         "bingoMissionMstId": 0,
         "bonusStyleIds": "0",
@@ -23,6 +24,7 @@
         "topImageName": "2"
     },
     {
+        "appealPriority": 0,
         "bannerImageName": "banner_00019",
         "bingoMissionMstId": 0,
         "bonusStyleIds": "0",
@@ -46,6 +48,7 @@
         "topImageName": "3"
     },
     {
+        "appealPriority": 0,
         "bannerImageName": "banner_00020",
         "bingoMissionMstId": 0,
         "bonusStyleIds": "0",
@@ -69,6 +72,7 @@
         "topImageName": "4"
     },
     {
+        "appealPriority": 0,
         "bannerImageName": "banner_00034",
         "bingoMissionMstId": 0,
         "bonusStyleIds": "0",
@@ -92,6 +96,7 @@
         "topImageName": "5"
     },
     {
+        "appealPriority": 0,
         "bannerImageName": "banner_00035",
         "bingoMissionMstId": 0,
         "bonusStyleIds": "0",
@@ -115,6 +120,7 @@
         "topImageName": "6"
     },
     {
+        "appealPriority": 0,
         "bannerImageName": "banner_00036",
         "bingoMissionMstId": 0,
         "bonusStyleIds": "0",
@@ -138,6 +144,7 @@
         "topImageName": "7"
     },
     {
+        "appealPriority": 0,
         "bannerImageName": "banner_00056",
         "bingoMissionMstId": 0,
         "bonusStyleIds": "0",
@@ -161,6 +168,7 @@
         "topImageName": "8"
     },
     {
+        "appealPriority": 0,
         "bannerImageName": "banner_00072",
         "bingoMissionMstId": 0,
         "bonusStyleIds": "0",
@@ -184,6 +192,7 @@
         "topImageName": "10"
     },
     {
+        "appealPriority": 0,
         "bannerImageName": "banner_00078",
         "bingoMissionMstId": 0,
         "bonusStyleIds": "0",
@@ -207,6 +216,7 @@
         "topImageName": "11"
     },
     {
+        "appealPriority": 0,
         "bannerImageName": "banner_00085",
         "bingoMissionMstId": 0,
         "bonusStyleIds": "0",
@@ -230,6 +240,7 @@
         "topImageName": "12"
     },
     {
+        "appealPriority": 0,
         "bannerImageName": "banner_00090",
         "bingoMissionMstId": 0,
         "bonusStyleIds": "0",
@@ -253,6 +264,7 @@
         "topImageName": "13"
     },
     {
+        "appealPriority": 0,
         "bannerImageName": "banner_00098",
         "bingoMissionMstId": 0,
         "bonusStyleIds": "0",
@@ -276,6 +288,7 @@
         "topImageName": "16"
     },
     {
+        "appealPriority": 0,
         "bannerImageName": "banner_00097",
         "bingoMissionMstId": 0,
         "bonusStyleIds": "0",
@@ -299,6 +312,7 @@
         "topImageName": "15"
     },
     {
+        "appealPriority": 0,
         "bannerImageName": "banner_00092",
         "bingoMissionMstId": 0,
         "bonusStyleIds": "0",
@@ -322,6 +336,7 @@
         "topImageName": "14"
     },
     {
+        "appealPriority": 0,
         "bannerImageName": "banner_00101",
         "bingoMissionMstId": 0,
         "bonusStyleIds": "0",
@@ -345,6 +360,7 @@
         "topImageName": "17"
     },
     {
+        "appealPriority": 0,
         "bannerImageName": "banner_00108",
         "bingoMissionMstId": 0,
         "bonusStyleIds": "0",
@@ -368,6 +384,7 @@
         "topImageName": "18"
     },
     {
+        "appealPriority": 0,
         "bannerImageName": "banner_00117",
         "bingoMissionMstId": 0,
         "bonusStyleIds": "0",
@@ -391,6 +408,7 @@
         "topImageName": "19"
     },
     {
+        "appealPriority": 0,
         "bannerImageName": "banner_00120",
         "bingoMissionMstId": 0,
         "bonusStyleIds": "0",
@@ -414,6 +432,7 @@
         "topImageName": "20"
     },
     {
+        "appealPriority": 0,
         "bannerImageName": "banner_00121",
         "bingoMissionMstId": 0,
         "bonusStyleIds": "0",
@@ -437,6 +456,7 @@
         "topImageName": "21"
     },
     {
+        "appealPriority": 0,
         "bannerImageName": "banner_00130",
         "bingoMissionMstId": 0,
         "bonusStyleIds": "0",
@@ -460,6 +480,7 @@
         "topImageName": "22"
     },
     {
+        "appealPriority": 0,
         "bannerImageName": "banner_00143",
         "bingoMissionMstId": 0,
         "bonusStyleIds": "0",
@@ -483,6 +504,7 @@
         "topImageName": "24"
     },
     {
+        "appealPriority": 0,
         "bannerImageName": "banner_00142",
         "bingoMissionMstId": 0,
         "bonusStyleIds": "0",
@@ -506,6 +528,7 @@
         "topImageName": "23"
     },
     {
+        "appealPriority": 0,
         "bannerImageName": "banner_00147",
         "bingoMissionMstId": 0,
         "bonusStyleIds": "0",
@@ -529,6 +552,7 @@
         "topImageName": "25"
     },
     {
+        "appealPriority": 0,
         "bannerImageName": "banner_00155",
         "bingoMissionMstId": 0,
         "bonusStyleIds": "0",
@@ -552,6 +576,7 @@
         "topImageName": "26"
     },
     {
+        "appealPriority": 0,
         "bannerImageName": "banner_00160",
         "bingoMissionMstId": 0,
         "bonusStyleIds": "0",
@@ -575,6 +600,7 @@
         "topImageName": "27"
     },
     {
+        "appealPriority": 0,
         "bannerImageName": "banner_00173",
         "bingoMissionMstId": 0,
         "bonusStyleIds": "0",
@@ -598,6 +624,7 @@
         "topImageName": "28"
     },
     {
+        "appealPriority": 0,
         "bannerImageName": "banner_00176",
         "bingoMissionMstId": 0,
         "bonusStyleIds": "0",
@@ -621,6 +648,7 @@
         "topImageName": "29"
     },
     {
+        "appealPriority": 0,
         "bannerImageName": "banner_00182",
         "bingoMissionMstId": 0,
         "bonusStyleIds": "0",
@@ -644,6 +672,7 @@
         "topImageName": "30"
     },
     {
+        "appealPriority": 0,
         "bannerImageName": "banner_00191",
         "bingoMissionMstId": 0,
         "bonusStyleIds": "0",
@@ -667,6 +696,7 @@
         "topImageName": "31"
     },
     {
+        "appealPriority": 0,
         "bannerImageName": "banner_00195",
         "bingoMissionMstId": 0,
         "bonusStyleIds": "0",
@@ -690,6 +720,7 @@
         "topImageName": "32"
     },
     {
+        "appealPriority": 0,
         "bannerImageName": "banner_00201",
         "bingoMissionMstId": 0,
         "bonusStyleIds": "0",
@@ -713,6 +744,7 @@
         "topImageName": "33"
     },
     {
+        "appealPriority": 0,
         "bannerImageName": "banner_00204",
         "bingoMissionMstId": 0,
         "bonusStyleIds": "0",
@@ -736,6 +768,7 @@
         "topImageName": "34"
     },
     {
+        "appealPriority": 0,
         "bannerImageName": "banner_00205",
         "bingoMissionMstId": 0,
         "bonusStyleIds": "0",
@@ -759,6 +792,7 @@
         "topImageName": "35"
     },
     {
+        "appealPriority": 0,
         "bannerImageName": "banner_00220",
         "bingoMissionMstId": 0,
         "bonusStyleIds": "0",
@@ -782,6 +816,7 @@
         "topImageName": "36"
     },
     {
+        "appealPriority": 0,
         "bannerImageName": "banner_00223",
         "bingoMissionMstId": 0,
         "bonusStyleIds": "0",
@@ -805,6 +840,7 @@
         "topImageName": "37"
     },
     {
+        "appealPriority": 0,
         "bannerImageName": "banner_00231",
         "bingoMissionMstId": 0,
         "bonusStyleIds": "0",
@@ -828,6 +864,7 @@
         "topImageName": "15"
     },
     {
+        "appealPriority": 0,
         "bannerImageName": "banner_00230",
         "bingoMissionMstId": 0,
         "bonusStyleIds": "0",
@@ -851,6 +888,7 @@
         "topImageName": "38"
     },
     {
+        "appealPriority": 0,
         "bannerImageName": "banner_00237",
         "bingoMissionMstId": 0,
         "bonusStyleIds": "0",
@@ -874,6 +912,7 @@
         "topImageName": "40"
     },
     {
+        "appealPriority": 0,
         "bannerImageName": "banner_00236",
         "bingoMissionMstId": 0,
         "bonusStyleIds": "0",
@@ -897,6 +936,7 @@
         "topImageName": "39"
     },
     {
+        "appealPriority": 0,
         "bannerImageName": "banner_00249",
         "bingoMissionMstId": 0,
         "bonusStyleIds": "0",
@@ -920,6 +960,7 @@
         "topImageName": "41"
     },
     {
+        "appealPriority": 0,
         "bannerImageName": "banner_00251",
         "bingoMissionMstId": 0,
         "bonusStyleIds": "0",
@@ -943,6 +984,7 @@
         "topImageName": "42"
     },
     {
+        "appealPriority": 0,
         "bannerImageName": "banner_00257",
         "bingoMissionMstId": 0,
         "bonusStyleIds": "0",
@@ -966,6 +1008,7 @@
         "topImageName": "43"
     },
     {
+        "appealPriority": 0,
         "bannerImageName": "banner_00262",
         "bingoMissionMstId": 0,
         "bonusStyleIds": "0",
@@ -989,6 +1032,7 @@
         "topImageName": "44"
     },
     {
+        "appealPriority": 0,
         "bannerImageName": "banner_00277",
         "bingoMissionMstId": 0,
         "bonusStyleIds": "0",
@@ -1012,6 +1056,7 @@
         "topImageName": "47"
     },
     {
+        "appealPriority": 0,
         "bannerImageName": "banner_00278",
         "bingoMissionMstId": 0,
         "bonusStyleIds": "0",
@@ -1035,6 +1080,7 @@
         "topImageName": "48"
     },
     {
+        "appealPriority": 0,
         "bannerImageName": "banner_00269",
         "bingoMissionMstId": 0,
         "bonusStyleIds": "0",
@@ -1058,6 +1104,7 @@
         "topImageName": "45"
     },
     {
+        "appealPriority": 0,
         "bannerImageName": "banner_00271",
         "bingoMissionMstId": 0,
         "bonusStyleIds": "0",
@@ -1081,6 +1128,7 @@
         "topImageName": "46"
     },
     {
+        "appealPriority": 0,
         "bannerImageName": "banner_00296",
         "bingoMissionMstId": 0,
         "bonusStyleIds": "0",
@@ -1104,6 +1152,7 @@
         "topImageName": "49"
     },
     {
+        "appealPriority": 0,
         "bannerImageName": "banner_00297",
         "bingoMissionMstId": 0,
         "bonusStyleIds": "0",
@@ -1127,6 +1176,7 @@
         "topImageName": "50"
     },
     {
+        "appealPriority": 0,
         "bannerImageName": "banner_00299",
         "bingoMissionMstId": 0,
         "bonusStyleIds": "0",
@@ -1150,6 +1200,7 @@
         "topImageName": "15"
     },
     {
+        "appealPriority": 0,
         "bannerImageName": "banner_00303",
         "bingoMissionMstId": 0,
         "bonusStyleIds": "0",
@@ -1173,6 +1224,7 @@
         "topImageName": "51"
     },
     {
+        "appealPriority": 0,
         "bannerImageName": "banner_00308",
         "bingoMissionMstId": 0,
         "bonusStyleIds": "0",
@@ -1196,6 +1248,7 @@
         "topImageName": "52"
     },
     {
+        "appealPriority": 0,
         "bannerImageName": "banner_00311",
         "bingoMissionMstId": 0,
         "bonusStyleIds": "0",
@@ -1219,6 +1272,7 @@
         "topImageName": "53"
     },
     {
+        "appealPriority": 0,
         "bannerImageName": "banner_00317",
         "bingoMissionMstId": 0,
         "bonusStyleIds": "0",
@@ -1242,6 +1296,7 @@
         "topImageName": "54"
     },
     {
+        "appealPriority": 0,
         "bannerImageName": "banner_00319",
         "bingoMissionMstId": 0,
         "bonusStyleIds": "0",
@@ -1265,6 +1320,7 @@
         "topImageName": "56"
     },
     {
+        "appealPriority": 0,
         "bannerImageName": "banner_00318",
         "bingoMissionMstId": 0,
         "bonusStyleIds": "0",
@@ -1288,6 +1344,7 @@
         "topImageName": "55"
     },
     {
+        "appealPriority": 0,
         "bannerImageName": "banner_00331",
         "bingoMissionMstId": 0,
         "bonusStyleIds": "0",
@@ -1311,6 +1368,7 @@
         "topImageName": "57"
     },
     {
+        "appealPriority": 0,
         "bannerImageName": "banner_00342",
         "bingoMissionMstId": 0,
         "bonusStyleIds": "0",
@@ -1334,6 +1392,7 @@
         "topImageName": "60"
     },
     {
+        "appealPriority": 0,
         "bannerImageName": "banner_00332",
         "bingoMissionMstId": 0,
         "bonusStyleIds": "0",
@@ -1357,6 +1416,7 @@
         "topImageName": "58"
     },
     {
+        "appealPriority": 0,
         "bannerImageName": "banner_00346",
         "bingoMissionMstId": 0,
         "bonusStyleIds": "0",
@@ -1380,6 +1440,7 @@
         "topImageName": "62"
     },
     {
+        "appealPriority": 0,
         "bannerImageName": "banner_00334",
         "bingoMissionMstId": 0,
         "bonusStyleIds": "0",
@@ -1403,6 +1464,7 @@
         "topImageName": "59"
     },
     {
+        "appealPriority": 0,
         "bannerImageName": "banner_00352",
         "bingoMissionMstId": 0,
         "bonusStyleIds": "0",
@@ -1426,6 +1488,7 @@
         "topImageName": "65"
     },
     {
+        "appealPriority": 0,
         "bannerImageName": "banner_00351",
         "bingoMissionMstId": 0,
         "bonusStyleIds": "0",
@@ -1449,6 +1512,7 @@
         "topImageName": "64"
     },
     {
+        "appealPriority": 0,
         "bannerImageName": "banner_00358",
         "bingoMissionMstId": 0,
         "bonusStyleIds": "0",
@@ -1472,6 +1536,7 @@
         "topImageName": "15"
     },
     {
+        "appealPriority": 0,
         "bannerImageName": "banner_00350",
         "bingoMissionMstId": 0,
         "bonusStyleIds": "0",
@@ -1495,6 +1560,7 @@
         "topImageName": "38"
     },
     {
+        "appealPriority": 0,
         "bannerImageName": "banner_00357",
         "bingoMissionMstId": 0,
         "bonusStyleIds": "0",
@@ -1518,6 +1584,7 @@
         "topImageName": "67"
     },
     {
+        "appealPriority": 0,
         "bannerImageName": "banner_00356",
         "bingoMissionMstId": 0,
         "bonusStyleIds": "0",
@@ -1541,6 +1608,7 @@
         "topImageName": "66"
     },
     {
+        "appealPriority": 0,
         "bannerImageName": "banner_00385",
         "bingoMissionMstId": 0,
         "bonusStyleIds": "0",
@@ -1564,6 +1632,7 @@
         "topImageName": "70"
     },
     {
+        "appealPriority": 0,
         "bannerImageName": "banner_00365",
         "bingoMissionMstId": 0,
         "bonusStyleIds": "0",
@@ -1587,6 +1656,7 @@
         "topImageName": "2"
     },
     {
+        "appealPriority": 0,
         "bannerImageName": "banner_00366",
         "bingoMissionMstId": 0,
         "bonusStyleIds": "0",
@@ -1610,6 +1680,7 @@
         "topImageName": "4"
     },
     {
+        "appealPriority": 0,
         "bannerImageName": "banner_00367",
         "bingoMissionMstId": 0,
         "bonusStyleIds": "0",
@@ -1633,6 +1704,7 @@
         "topImageName": "5"
     },
     {
+        "appealPriority": 0,
         "bannerImageName": "banner_00368",
         "bingoMissionMstId": 0,
         "bonusStyleIds": "0",
@@ -1656,6 +1728,7 @@
         "topImageName": "6"
     },
     {
+        "appealPriority": 0,
         "bannerImageName": "banner_00369",
         "bingoMissionMstId": 0,
         "bonusStyleIds": "0",
@@ -1679,6 +1752,7 @@
         "topImageName": "8"
     },
     {
+        "appealPriority": 0,
         "bannerImageName": "banner_00370",
         "bingoMissionMstId": 0,
         "bonusStyleIds": "0",
@@ -1702,6 +1776,7 @@
         "topImageName": "12"
     },
     {
+        "appealPriority": 0,
         "bannerImageName": "banner_00387",
         "bingoMissionMstId": 0,
         "bonusStyleIds": "0",
@@ -1725,6 +1800,7 @@
         "topImageName": "72"
     },
     {
+        "appealPriority": 0,
         "bannerImageName": "banner_00382",
         "bingoMissionMstId": 0,
         "bonusStyleIds": "0",
@@ -1748,6 +1824,7 @@
         "topImageName": "69"
     },
     {
+        "appealPriority": 0,
         "bannerImageName": "banner_00376",
         "bingoMissionMstId": 0,
         "bonusStyleIds": "0",
@@ -1771,6 +1848,7 @@
         "topImageName": "68"
     },
     {
+        "appealPriority": 0,
         "bannerImageName": "banner_00386",
         "bingoMissionMstId": 0,
         "bonusStyleIds": "0",
@@ -1794,6 +1872,7 @@
         "topImageName": "71"
     },
     {
+        "appealPriority": 0,
         "bannerImageName": "banner_00407",
         "bingoMissionMstId": 0,
         "bonusStyleIds": "0",
@@ -1817,6 +1896,7 @@
         "topImageName": "74"
     },
     {
+        "appealPriority": 0,
         "bannerImageName": "banner_00396",
         "bingoMissionMstId": 0,
         "bonusStyleIds": "0",
@@ -1840,6 +1920,7 @@
         "topImageName": "73"
     },
     {
+        "appealPriority": 0,
         "bannerImageName": "banner_00402",
         "bingoMissionMstId": 0,
         "bonusStyleIds": "0",
@@ -1863,6 +1944,7 @@
         "topImageName": "29"
     },
     {
+        "appealPriority": 0,
         "bannerImageName": "banner_00403",
         "bingoMissionMstId": 0,
         "bonusStyleIds": "0",
@@ -1886,6 +1968,7 @@
         "topImageName": "30"
     },
     {
+        "appealPriority": 0,
         "bannerImageName": "banner_00017",
         "bingoMissionMstId": 0,
         "bonusStyleIds": "0",
