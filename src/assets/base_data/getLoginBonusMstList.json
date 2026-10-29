@@ -761,7 +761,7 @@
         "appealIconObjectReceiveType": 8,
         "conditionDescription": "From login bonuses",
         "cycleType": 2,
-        "endTime": "2026-10-29T11:59:59+09:00",
+        "endTime": "2026-11-30T11:59:59+09:00",
         "loginBonusMstId": 64,
         "sortOrder": 1035,
         "startTime": "2026-08-28T22:00:00+09:00",
