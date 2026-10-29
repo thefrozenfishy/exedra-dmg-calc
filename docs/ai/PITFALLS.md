@@ -333,3 +333,12 @@
   parts. `SWITCH_SKILL` v1 and `STEP_UP_SKILL` v2 are `skillUniqueId`s (resolve via SkillMst at the skill level), and a
   `SWITCH_SKILL` row's element is the skill's, not an element limit. Kioku Grid archetypes handle all of this in
   `src/models/KiokuArchetypes.ts`; audit with `npx tsx scripts/audit/archetypeAudit.ts [--rows]`.
+- `node scripts/engine/bundle.mjs` takes more than 180 s in the Cowork VM (3 GB) and device_bash kills background
+  processes. Tar `src/engine` (without dist) + `src/models/BattleMath.ts` + bundle.mjs, stage it to the cloud
+  container, `npm i typescript@<repo version>`, build there (5 s) and commit `src/engine/dist/engine.js` back. Without
+  BattleMath.ts the bundle silently emits a different import (`../../models/BattleMath` without `.ts`, bare `f32`).
+  The Linux build orders a few classes differently from the Windows one; content is otherwise identical.
+- `verdiff.py funcs` byte sizes come from script.json's function boundaries: a size jump (16 B -> 464 B) on a folded
+  getter or a trivial ctor is not a code change. Confirm with `decdiff.py --ignore-offsets --loose` before porting.
+- `fields_check.py` reports GONE FIELD for classes whose base is a generic (`ListComparer<ICollection<int>, int>`):
+  parser artefact, compare the dump lines.

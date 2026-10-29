@@ -1,6 +1,6 @@
 # Status (update at the end of every session)
 
-_Last updated: 2026-10-29 (3): Best SA Team calculator speed (~60x on a large search); before: 2026-10-29 (2): Kioku Grid "Multiple ascensions", merged equal variant bars, precalculated bench file; before: 2026-10-29: Kioku Grid bench gear + average Attacker self buffs on Lux; before: 2026-10-24 (3): second-generation engine and Fight Solver removed (branch `remove-gen2`); before: 2026-10-24 (battle-start passive order: kit -> portrait -> support -> crys; before: Kioku Grid ailment bars: 112/305/309 conditions, Max Damage enemies carry Weakness/Stun); before: 2026-10-15 (game 3.21.0: dumped + decompiled by Claude on Windows, engine re-ported to 3.21.0; branch claude/version-3.21.0); before: 2026-10-14 (Max Damage + Kioku Grid bench on the 1:1 engine); before: 2026-10-10 (1:1 port in src/engine started); before: 2026-10-03 (passive states per giver, UP_HP_FIXED max HP; earlier: duplicate active-skill states); before: 2026-10-02 (game 3.19.1: version diff + newsletter, Magic Seal, break/notice team conditions, IMM_SLIP_DMG burst; branch claude/version-3.19.1)._
+_Last updated: 2026-10-29 (5): game 3.22.0 (battle code identical, @rva tags moved; branch claude/version-3.22.0); before: 2026-10-29 (3): Best SA Team calculator speed (~60x on a large search); before: 2026-10-29 (2): Kioku Grid "Multiple ascensions", merged equal variant bars, precalculated bench file; before: 2026-10-29: Kioku Grid bench gear + average Attacker self buffs on Lux; before: 2026-10-24 (3): second-generation engine and Fight Solver removed (branch `remove-gen2`); before: 2026-10-24 (battle-start passive order: kit -> portrait -> support -> crys; before: Kioku Grid ailment bars: 112/305/309 conditions, Max Damage enemies carry Weakness/Stun); before: 2026-10-15 (game 3.21.0: dumped + decompiled by Claude on Windows, engine re-ported to 3.21.0; branch claude/version-3.21.0); before: 2026-10-14 (Max Damage + Kioku Grid bench on the 1:1 engine); before: 2026-10-10 (1:1 port in src/engine started); before: 2026-10-03 (passive states per giver, UP_HP_FIXED max HP; earlier: duplicate active-skill states); before: 2026-10-02 (game 3.19.1: version diff + newsletter, Magic Seal, break/notice team conditions, IMM_SLIP_DMG burst; branch claude/version-3.19.1)._
 
 
 ## 2026-10-29 (3): Best SA Team calculator speed
@@ -275,11 +275,29 @@ Findings for src/models: MathExtension.Floor scale (PITFALLS), RegisterSpecialAt
 |---|---|
 | `main` | = origin/main 0643b138 on 2026-10-24. The `claude/*` branches (engine-1to1, engine-best-team, version-3.19.1, version-3.19.11, version-3.21.0) are all merged into it. |
 | `remove-gen2` | 2026-10-24, from main 0643b138: second-generation engine + Fight Solver removed (entry above). |
+| `claude/version-3.22.0` | 2026-10-29, from main e8eb639a: game 3.22.0 (moved @rva tags, GAME_VER, docs/versions/3.22.0). Not pushed. The user's uncommitted `public/bench-precalc.json` was left alone. |
 
 `docs/ai/EFFECT_TYPES.md` is committed per branch (its header says which); rebuild with `xq build` after switching
 branches or changing the engine. On battle-engine-3.19 `xq build` still lists UNIQUE_BUFF / UNIQUE_DEBUFF /
 UNIQUE_10030301 / UNIQUE_10070201 (pure marker states: stored generically, read by conditions 12/26 - nothing more to
 do) and UP_BREAK_EFFECT (blocked, open question 1).
+
+## Game 3.22.0 (Steam files 2026-10-29 07:26 UTC, PE build 2026-10-22), compared with 3.21.0
+
+CODE CHANGED, layout moved (139.26 -> 139.31 MB), **battle logic identical**. Dump and decompile by the Windows watcher
+(`3.22.0\dump`, `3.22.0\decompiled`, 5,513 functions). `verdiff.py funcs --prefix ReDriveBattleCore`: 2185 identical,
+3340 moved only, 13 "changed", 87 added / 87 removed (all generic-instance renames: same names once `<...>` is
+stripped). All 13 are the same code under `decdiff.py --ignore-offsets --loose` (RIP-relative globals moved; the size
+changes of ZoneStackAbilityEffect.Triggering, AbilityEffectInfo..ctor and ActionBase.get_IsAvailable are folding /
+function-boundary noise in script.json). Network.Definition.Battle unchanged. No enum, factory or field-offset change
+in battle code (fields_check's 2 GONE FIELDs on AbilityEffectListComparer / IntListComparer and ledger's 2
+GONE/CHANGED IAccum entries are parser artefacts: the dump lines are identical). Engine: 4,138 @rva tags moved
+(`ledger.py --apply-moves`, 516 files, hex only), `GAME_VER` = 3.22.0, ledger written. Checks: engine tsc 0,
+checkFixturesEngine 16/16, checkEngine321 all pass; app type-check not re-run (only comments changed in src/engine).
+Bundle rebuilt in the cloud container (the VM needs > 180 s). Master data 0a3d40e8^..HEAD: no new rows, no balance
+change (isRewardGuideTarget, appealPriority, end times). Outside battle: Solo Raid time limit and practice removed,
+last-used party per QuestCategory + target (SelectedQuestPartyInfo, server-side), gacha main pick-up, mission
+reward guide / jump by MissionTitle, monthly-reset skip per shop series. Report: docs/versions/3.22.0/.
 
 ## Game 3.21.0 (Steam files 2026-10-15 16:12 UTC, PE build 2026-10-08), compared with 3.19.11
 
@@ -375,6 +393,7 @@ Confirmed by the user's in-game observation. Buffs from allies now tick at the h
 - Sandbox Witch (509140) rotation, to confirm TurnNum-per-turn in combo enemies.
 
 ## Session log (newest first, one line each)
+- 2026-10-29 (5): game 3.22.0 (scheduled run): battle code identical, 4,138 @rva tags moved, GAME_VER 3.22.0, fixtures 16/16; newsletter + Discord client notes (queued via jobs\\post_3.22.0.req); wikicheck OK unchanged. Branch claude/version-3.22.0.
 - 2026-10-29 (4): Best SA Team: reuse of the pickers' battle, max-only estimates, neighbour moves for supports' supports, one row per distinct team (duplicate rows with obligatory Kioku).
 - 2026-10-29 (3): Best SA Team ~60x faster on a large search: Ultimate-only team scores, PvPKioku row index, indexHint in two createDirector scans (engine, perf only), model-guided Phase A screening ("Smart screening"); identical result rows vs the exhaustive search on Aqua off-element.
 - 2026-10-27: Kioku Grid damage-dealer chart: one baseline for every role again, Lux with the average 5 star Attacker

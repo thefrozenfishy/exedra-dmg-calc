@@ -394,6 +394,7 @@
 "311": "ByTowerQuestStageMstId",
 "400": "ByShopSeriesMstId",
 "500": "CollectionFirstViewTop",
+"600": "ByMissionTitleMstId",
 "1": "ByQuestStageMstId",
 "2": "ByQuestMapMstId",
 "3": "ByQuestCategoryMstId",
@@ -447,7 +448,8 @@
 "10": "StyleParamUpTraining",
 "11": "SelectionAbilityTraining",
 "12": "CharacterHeart",
-"13": "CollectionFirstView"
+"13": "CollectionFirstView",
+"14": "Mission"
 },
 "TabType": {
 "0": "None",
@@ -975,6 +977,7 @@
 "231": "SoloRaidBossBattleExplanation",
 "233": "AlternativeStoryModeChangeExplanation",
 "234": "StyleRentalExplanation",
+"235": "SoloRaidPracticeRemoved",
 "236": "MultiRaidAddExMode",
 "300": "FinishTutorialWallBannerEffected",
 "301": "NamaeStoryEpisode02Unlocked",

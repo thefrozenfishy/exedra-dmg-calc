@@ -1,0 +1,105 @@
+<title>Exedra 3.22.0 Dispatch</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: single reading column like the 3.21.0 dispatch; teal accent this time (a menus-and-raids patch), green for "live", amber for "no units yet". */
+:root {
+  --bg: #f4f7f7; --surface: #ffffff; --fg: #18201f; --muted: #56646a; --line: #dbe4e4;
+  --accent: #19706b; --accent-soft: #dff1ef; --ok: #2f7d55; --ok-soft: #e1f2e8; --warn: #9a5b06; --warn-soft: #fbefd9;
+  --display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #111818; --surface: #192222; --fg: #e6eeee; --muted: #9db0b2; --line: #2b3a3a;
+  --accent: #6fd3c9; --accent-soft: #1b3533; --ok: #6fcf9b; --ok-soft: #1c3127; --warn: #f0b45c; --warn-soft: #3a2c16; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #111818; --surface: #192222; --fg: #e6eeee; --muted: #9db0b2; --line: #2b3a3a;
+  --accent: #6fd3c9; --accent-soft: #1b3533; --ok: #6fcf9b; --ok-soft: #1c3127; --warn: #f0b45c; --warn-soft: #3a2c16; color-scheme: dark }
+body { background: var(--bg); color: var(--fg); font: 15px/1.6 var(--body); }
+.wrap { max-width: 720px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 40px 72px; display: flex; flex-direction: column; gap: 36px; }
+h1, h2, h3 { font-family: var(--display); text-wrap: balance; margin: 0; line-height: 1.15; }
+h1 { font-size: clamp(30px, 6vw, 44px); font-weight: 700; letter-spacing: -0.01em; }
+h2 { font-size: 24px; font-weight: 700; }
+h3 { font-size: 18px; font-weight: 700; }
+p { margin: 0; }
+section { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+.eyebrow { font: 500 12px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--accent); }
+.lede { font-size: 17px; color: var(--muted); max-width: 62ch; }
+.tldr { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 16px 18px; display: flex; flex-direction: column; gap: 8px; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 18px 20px; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.head { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: baseline; }
+.chip { font: 500 12px var(--mono); background: var(--accent-soft); color: var(--accent); border-radius: 4px; padding: 1px 7px; white-space: nowrap; }
+.chip.live { background: var(--ok-soft); color: var(--ok); }
+.tip { border-left: 3px solid var(--accent); padding: 2px 0 2px 12px; color: var(--muted); font-size: 14px; }
+ul { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 6px; }
+.item { border-top: 1px solid var(--line); padding-top: 12px; display: flex; flex-direction: column; gap: 4px; }
+.note { color: var(--muted); font-size: 14px; }
+footer { color: var(--muted); font-size: 13px; border-top: 1px solid var(--line); padding-top: 16px; }
+</style>
+
+<div class="wrap">
+  <header style="display:flex;flex-direction:column;gap:14px">
+    <div class="eyebrow">Madoka Exedra · patch notes from the files · 29 Oct 2026</div>
+    <h1>Version 3.22.0: Solo Raid drops its timer and practice mode, and parties remember each mode</h1>
+    <p class="lede">3.22.0 is a menus-and-modes patch. Combat rules are exactly the same as in 3.21.0, and the data that came with it has no new kioku and no balance changes. What changed is how Solo Raid runs and how the game remembers your teams.</p>
+  </header>
+
+  <div class="tldr">
+    <h3>In short</h3>
+    <ul>
+      <li><b>Solo Raid</b>: no more battle time limit, practice mode is gone, and the skip button now shows whether you have the stamina for it.</li>
+      <li><b>Teams</b>: the game remembers the last team you used per mode and per boss, saved with your account.</li>
+      <li><b>Battles</b>: no rule changes. Every damage, buff and AI rule works as in 3.21.0.</li>
+      <li><b>Smaller things</b>: featured characters on banners, mission reward guides, idle-reward screen, shop resets.</li>
+    </ul>
+  </div>
+
+  <section id="soloraid">
+    <div class="eyebrow">Mode change</div>
+    <div class="card">
+      <div class="head"><h2>Solo Raid</h2><span class="chip live">live in 3.22.0</span></div>
+      <ul>
+        <li><b>No battle time limit.</b> The countdown on the stage screen and in battle is gone, along with the "time almost up" warnings.</li>
+        <li><b>Practice mode was removed.</b> A one-time tutorial pop-up tells you about it the first time you open Solo Raid.</li>
+        <li><b>Skip</b>: the button now also shows whether you have enough stamina to skip.</li>
+        <li>The Solo Raid top screen can show a <b>"ready to battle"</b> badge.</li>
+      </ul>
+      <p class="tip">Without a timer you can take your time with manual turns, for example to line up a Break before the big ultimates.</p>
+    </div>
+  </section>
+
+  <section id="teams">
+    <div class="eyebrow">Quality of life</div>
+    <div class="card">
+      <div class="head"><h2>Teams remembered per mode</h2></div>
+      <p>The game used to remember one last-used team per battle type. It now keeps the last team <b>per mode and per target</b>, for example per Solo Raid boss or per Mirror Tower. That choice is stored with your account, so it carries over when you move your data to another device. Entries for Score Attacks that have ended are dropped.</p>
+    </div>
+  </section>
+
+  <section id="retire">
+    <div class="eyebrow">Wording</div>
+    <div class="card">
+      <div class="head"><h2>Retire warning</h2></div>
+      <p>The warning before retiring from a high-score battle used to say your attempt would not be refunded. It now says the battle <b>counts as a defeat</b> and your high score will not update.</p>
+    </div>
+  </section>
+
+  <section id="more">
+    <div class="eyebrow">Also in 3.22.0</div>
+    <div class="item"><h3>Summons</h3><p>Banners can now mark some rate-up characters as the <b>main</b> pick-up, separate from the other featured ones. Some characters can get their own special summon animation.</p></div>
+    <div class="item"><h3>Missions</h3><p>Missions can be flagged for the reward guide (the new data flags many of them), and links in the game can now jump straight to one mission or bingo card and open its pop-up.</p></div>
+    <div class="item"><h3>Events</h3><p>Story events now have a display priority, which decides the order they are shown in.</p></div>
+    <div class="item"><h3>Idle rewards</h3><p>Player EXP shows as an item icon in the rewards pop-up instead of a separate text line.</p></div>
+    <div class="item"><h3>Shop</h3><p>Monthly-reset shops show their own countdown, and some shop lines can be set to skip the monthly reset.</p></div>
+  </section>
+
+  <section id="calc">
+    <div class="eyebrow">exedra-dmg-calc</div>
+    <h2>Simulator status</h2>
+    <p>The simulator now runs on version 3.22.0. The battle code did not change, so every result stays the same as on 3.21.0.</p>
+  </section>
+
+  <footer>Read from the 3.22.0 game files and the game data downloaded on 29 Oct 2026.</footer>
+</div>

@@ -5,6 +5,8 @@
 > facts stay valid; the code now lives in `src/engine` under the game's own class names.
 
 3.19.1 (2026-09-27) has byte-identical GameAssembly code: every RVA here is valid for both (docs/versions/3.19.1).
+3.22.0 (2026-10-29): battle logic identical to 3.21.0, only the layout moved; src/engine @rva tags are 3.22.0
+(`ledger.py --apply-moves`). RVAs quoted below stay those of the version they name (docs/versions/3.22.0).
 
 Every line is from the decompile unless tagged. **[C]** confirmed in code, **[D]** from master data,
 **[G]** confirmed by an in-game fixture, **[?]** inferred/unverified. RVAs are for 3.19.0 (`xq rva`, `xq fn`).
@@ -418,6 +420,9 @@ Ultimates (SpecialAttackAct) and follow-ups: only ExecuteSkill - no TurnStart/Tu
   (0x15bfd20). Between acts (`Request(TimeForward)` 0x14a4f60 -> `SoloRaidBuffReferee.CheckActive` 0x15c0190):
   at 100 points and inactive -> active, points 0, phase gauge = enhancedSkillTurnGaugeValue (runs down with the
   same dt as turns), SeasonBuffActive (10) passives fire. Party/season buff passives from SoloRaid*BuffMst. [C]
+- 3.22.0 client (outside battle core): the Solo Raid real-time limit is gone (SoloRaidUILogic timer + warnings,
+  SoloRaidStagePartsView.SetTimeLimit, SoloRaidApiLogic removed), practice removed (MiniTutorial 235). Battle
+  rules above unchanged. [C, names only]
 
 ## 13. Kit mechanics (3.x classes)
 
