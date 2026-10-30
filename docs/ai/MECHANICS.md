@@ -31,7 +31,8 @@ Longer derivations: `docs/ai/legacy/PVE_PARAMS_3.19.md`, `PVE_ENEMY_AI_3.19.md`,
 `BattleDamageCalculator.GetAttackDamageResult` 0x137cb10, TS `DamageCalculator.getAttackDamageResult`: [C]
 1. base = `GetDamageBase(stat, power)` 0x137d8a0: `(decimal)f32(stat * power)`; power = value1/1000
    (splash: non-main targets of range 2 use value2/1000, `damagePower`).
-2. break: × (1 + BreakedDamageReceiveRate/100) while broken (`GetAppliedDamageOfBreakSituation`).
+2. break: × BreakedDamageReceiveRate/100 while broken, × 1.0 otherwise (`GetAppliedDamageOfBreakSituation`; a rate of
+   500 = ×5).
 3. defense: × `min((10+atk)/(10+def) * 0.12, 2)` (DEF-based types swap stats).
 4. give variations (attacker, Up pass then Down pass) -> receive variations (defender, Up then Down).
 5. element resist: `rate/10` + resist states, clamp ±100, × (1 - r/100) (`GetElementResistDamage` 0x137e130).

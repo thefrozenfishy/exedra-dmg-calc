@@ -4,13 +4,14 @@
 // readers with addMasterRecords), so the battle code treats them like any stage / unit:
 //   - a quest stage per enemy count (and ailment-immunity set) with dummy enemies: DEF 3000, weak to every element,
 //     HP out of reach (int max), SPD 1 (first turn after 10,000 AV: they never act within a run), no skills, no
-//     passives, and a break table that keeps them broken at a fixed 500% (gauge 1, increase 0); an ailment the run
-//     makes them immune to has its parry rate at 100% (fixed-probability ailments still land, as on any enemy);
+//     passives, and a break table with a 1-point gauge that keeps them broken at a fixed 500% once broken (increase 0;
+//     the break chart's stage instead has a gauge that never runs out, `gauge`); an ailment the run makes them immune
+//     to has its parry rate at 100% (fixed-probability ailments still land, as on any enemy);
 //   - a style per identity (Lux as another element / role): Lux's StyleMst row with that element and role (a unit
 //     always has both in the game: an identity left open keeps Lux's own, Light / Breaker).
 //   - a made-up passive (benchPassive) shaped like a crystalis: the average Attacker self buffs given to Lux.
-// What is not data is bench setup, done the way a player or the server would: the dummies start broken (the break
-// gauge at 0 with the initial broken rate, as BreakPoint.Decrease leaves it), the run's ailment is put on every dummy
+// What is not data is bench setup, done the way a player or the server would: Max Burst evaluates the dummies broken
+// (MaxDmgOptions.broken), battles start them unbroken and the first hit breaks them (benchBattle), the run's ailment is put on every dummy
 // (the game's own state from a skill row of that type, re-added if anything removes it), and Average Damage plays
 // the allies "by hand" (Manual control) with a fixed policy (BenchPolicy): ultimates as soon as ready, Battle Skill
 // whenever there is SP, single-target skills on the middle dummy, ally-target skills on the dealer, plus the kit

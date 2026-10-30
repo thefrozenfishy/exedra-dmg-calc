@@ -211,8 +211,9 @@
                 title="Runs a battle simulation for every Kioku in the background. Heavy on phones and low-memory devices.">
                 <input type="checkbox" v-model="showBenchCharts" /> Show damage simulation charts
             </label>
-            <p v-if="!showBenchCharts" class="gain-desc">The Lux support and attacker charts simulate battles for every
-                Kioku in the background, which can use a lot of memory (may crash the tab on some phones).</p>
+            <p v-if="!showBenchCharts" class="gain-desc">The Lux support and damage dealer charts load precalculated
+                results and simulate whatever is missing in your browser, which can use a lot of memory (may crash the tab
+                on some phones).</p>
         </section>
 
         <section v-for="bc in (showBenchCharts ? benchCharts : [])" :key="bc.sectionClass" class="card gain-section" :class="bc.sectionClass">
@@ -450,9 +451,9 @@ const toggleMultiAscension = (a: number) => {
 }
 
 const fightModeOptions = [
-    { value: "st", label: "ST", title: "Single target — only the center enemy takes damage" },
-    { value: "prox", label: "Prox", title: "Proximity — the center enemy and its two neighbors take damage" },
-    { value: "aoe", label: "AoE", title: "Area of effect — all five enemies take damage" },
+    { value: "st", label: "ST", title: "One enemy" },
+    { value: "prox", label: "Prox", title: "Three enemies: proximity and AoE skills hit all three" },
+    { value: "aoe", label: "AoE", title: "Five enemies: proximity skills hit the middle three, AoE skills all five" },
 ] as const
 type FightMode = typeof fightModeOptions[number]["value"]
 const fightMode = useSetting<FightMode>("fightMode", "aoe")
@@ -464,8 +465,8 @@ const showBenchCharts = useSetting("gridShowBenchCharts", false)
 // Beta charts (battle engine): their own metric toggle, since "average" means something else there.
 const benchAverageDmg = useSetting("gridBenchAverageDmg", false)
 const benchMetricOptions = [
-    { value: false, label: "Max Burst", title: "How much the Ultimate's dmg changes, every hit a crit, with all buffs and debuffs at full stacks" },
-    { value: true, label: "Average Damage", title: "How much the attacker's total dmg changes over a few turns of auto battle with SP refilled every turn, averaged over seeded battles (crits are rolled, as in the game)" },
+    { value: false, label: "Max Burst", title: "The damage dealer's Ultimate, every hit a crit, with every buff and debuff at full stacks" },
+    { value: true, label: "Average Damage", title: "The damage dealer's total damage over 5, 15 or 100 turns of simulated battle with SP refilled every turn (average crit damage per hit; crits rolled over 10 battles when a kit reacts to crits)" },
 ] as const
 const benchMetricIndex = computed(() => benchMetricOptions.findIndex(opt => opt.value === benchAverageDmg.value))
 // The damage dealer chart's third display: break gauge removed per 100 AV (its own bench job, "break").
@@ -714,7 +715,7 @@ const levelsOnlyDescription = computed(() => levelsMode.value === "max"
     : levelsMode.value === "multi"
         ? `Every character is simulated at max level at each selected ascension (${multiAscensions.value.map(a => `A${a}`).join(", ")}), one bar per ascension; ascensions with the same result share one bar (e.g. A0-2). The number on the icon is the ascension. ${LuxMagica} is always max level, A0.`
         : `All characters use your current ascension with max levels, unowned characters are left out. ${LuxMagica} is always max level, A0.`)
-const levelsDescription = computed(() => levelsOnlyDescription.value + ` Everyone wears the same gear instead of your own: their EX crystalis, Towering Offense++ (Towering Bulwark++ for DEF-based damage), the crystalis of their element, Dominant Blow++, the portrait Farewell to a Future Unseen and The Universe's Edge (A5, max level) as support, which only works on Attackers. The ${LuxMagica} everyone is compared with also gets the average self buffs of the 5 star Attackers (ATK, DMG, crit, SPD, MP recovery, ...; Ultimate- and Battle Skill-only ones only for those).`)
+const levelsDescription = computed(() => levelsOnlyDescription.value + ` Every character measured and the ${LuxMagica} damage dealer wear the same gear instead of your own: their EX crystalis, Towering Offense++ (Towering Bulwark++ for DEF-based damage), the crystalis of their element, Dominant Blow++, the portrait Farewell to a Future Unseen (crit rate +15%) and The Universe's Edge (A5, max level) as support, which only works on Attackers. The ${LuxMagica} damage dealer also gets the average self buffs of the 5 star Attackers (ATK, DMG, crit, SPD, MP recovery, ...; Ultimate- and Battle Skill-only ones only for those). The other ${LuxMagica} in the team have no gear.`)
 
 type ChartTargetContext = {
     role?: KiokuRole
@@ -951,7 +952,7 @@ const buildBarChart = (
         gain,
         ascension,
         // break chart: the SP cost per 100 AV under the icon
-        spLabel: sp !== undefined ? `${sp.toFixed(1)} SP` : "",
+        spLabel: sp !== undefined ? sp.toFixed(2) : "",
         variant: tags.length > 0,
         label: format(value),
         title: title({ avgGain, maxGain, critRate, sp }, titleLabel),
@@ -985,7 +986,9 @@ const emptyBarChart = () => ({
     hasVariants: false,
 })
 
-const CRIT_TEXT = "Crits: every hit deals its average crit damage (a shortcut, not how the game works), except in teams where a kit reacts to crits (e.g. Absolute Rain's \"on critical hit\"): those roll crits as in the game and average 10 battles."
+const CRIT_TEXT = "Crits: every hit deals its average crit damage (a shortcut, not how the game works), except in teams where a kit reacts to crits (e.g. Absolute Rain's \"on critical hit\"): those roll crits as in the game and average 10 battles, as do teams with other random effects (proc chances, random targets)."
+// Average Damage / Break are rates, not a hard cut (LuxBench SimOptions.perAv).
+const RATE_TEXT = (av: number) => `It is a rate: what the dealer does in its actions within the battle, divided by the time of its next own turn and scaled to ${av} AV, so a faster unit counts even when it doesn't fit one more action in.`
 const benchAv = () => benchTurns.value * 100 // 100 AV = 1 turn (the Length toggle)
 // Results shipped with the site (scripts/sim/benchPrecalc.ts): the charts wait for the file, then only simulate what
 // it doesn't have.
@@ -1355,6 +1358,9 @@ const benchStatusText = (kind: BenchChartKind): string => {
     return `Simulating battles… ${p.avgDone + p.failed}/${p.total}`
 }
 
+const enemyDamageText = () => `${benchEnemyText.value} with 3000 DEF, weak to every element and broken for the whole battle (500% damage taken, x5): in Average Damage they start unbroken and the first hit breaks each of them, so on-break effects trigger once per enemy; in Max Burst they are broken from the start. They never act. Single-target and proximity skills aim at the middle enemy, so a single-target debuff covers one enemy and an AoE one all of them.`
+const AILMENT_TEXT = "Ailment bonuses (enemies under Curse, Burn, ... for the whole battle) get their own bar when they change the result; every other bar makes the enemies immune to those ailments, so a character that applies an ailment itself and reacts to it shows that only in its ailment bar."
+
 const benchEnemyText = computed(() =>
     fightMode.value === "st" ? "One enemy" : fightMode.value === "aoe" ? "Five enemies" : "Three enemies")
 
@@ -1378,14 +1384,14 @@ const benchCharts = computed(() => [
         title: "Relative buff strength",
         fightType: true,
         desc: [
-            `How much each character increases the damage of a ${LuxMagica} as damage dealer, ${LuxMagica} is modified to be simulated as with any role and any element. When the element or role version had a different damage output, that element or role will be given a separate bar. ${levelsDescription.value}`,
+            `How much each character increases the damage of a ${LuxMagica} damage dealer. The dealer is ${LuxMagica} as her own Light Breaker (another element or role when the character's kit is limited to Light or Breakers), with the average HP, ATK and DEF of the 5 star units of that role. She is also simulated as each element and role the character's kit is limited to; those get their own bar when the result differs. ${levelsDescription.value}`,
             benchAverageDmg.value
-                ? `Average Damage: ${benchAv()} AV (${benchTurns.value} turns) of battle on the game's battle code with infinite SP (ultimates as soon as they are ready, Battle Skill every turn, ally-target skills on the damage dealer), the character next to the damage dealer and three ${LuxMagica}. ${CRIT_TEXT} Only the damage dealer's own damage counts (including additional damage it deals), never the rest of the team's.`
+                ? `Average Damage: ${benchAv()} AV (${benchTurns.value} turns) of battle on the game's battle code with infinite SP (topped up to 5 before every turn): ultimates as soon as they are ready, Battle Skill every turn, ally-target skills on the damage dealer (a few kits have their own play, e.g. Tenebrous Arcana uses her Basic Attack at 3 Magic). The character is next to the damage dealer, with three ${LuxMagica} filling the team. ${CRIT_TEXT} Only the damage dealer's own damage counts (including additional damage it deals), never the rest of the team's. ${RATE_TEXT(benchAv())}`
                 : `Max Burst: the damage dealer's Ultimate with every buff and debuff of the team at full stacks and every hit a crit.`,
-            `${benchEnemyText.value} with 3000 def, weak to every element and broken (500% dmg taken) for the whole battle (in Average Damage from the first hit on, which breaks them, so on-break effects trigger once). Everyone aims single-target and proximity skills at the middle enemy, so a single-target debuff covers one enemy and an AoE one all of them.`,
-            `Element, role or ailment bonuses (enemies under Curse, Burn, ... for the whole battle) get their own bar when they change the result; in Average Damage the other bars make the enemies immune to those ailments, so a character that applies an ailment itself and reacts to it shows that in its ailment bar, so a bonus can show in one metric only: crit rate or procs (chains, follow-ups) don't change Max Burst, and Max Burst counts every buff as already applied.`,
+            enemyDamageText(),
+            `${AILMENT_TEXT} A bonus can show in one metric only: crit rate and procs (chains, follow-ups) don't change Max Burst, and Max Burst counts every buff as already applied.`,
             benchAverageDmg.value
-                ? `Be aware: Since the attacker is ${LuxMagica}, additional dmg and vortex ailment is going to weight higher here than it will on other attackers with higher base atk.`
+                ? `Be aware: additional damage and vortex scale on the ATK of the character giving them, not on the damage dealer's, and the damage dealer is ${LuxMagica} with average stats, so they weigh more here than they would on an Attacker with higher ATK.`
                 : ``,
         ],
         chart: buildBenchChart("support"),
@@ -1402,9 +1408,10 @@ const benchCharts = computed(() => [
         title: benchBreakPerSp.value ? "Break gauge depletion per SP" : "Break gauge depletion per 100 AV",
         fightType: true,
         desc: [
-            `Breakers only. Break gauge each Breaker removes as the damage dealer per 100 AV (one turn), over ${benchAv()} AV (${benchTurns.value} turns) of battle on the game's battle code with infinite SP (ultimates as soon as they are ready, Battle Skill every turn), supported by four ${LuxMagica}. Not compared to ${LuxMagica}: the bar is the gauge itself, added up over every enemy the character hits. Only the character's own hits count. Every Breaker wears Quickstep++, its EX crystalis and Mana Infusion++, the portrait Proof of Friends Again (SPD +20%) and Cherry Blizzard as support (SPD +20%).`,
-            `SP cost (under each icon): the SP the Breaker's own actions cost per 100 AV, Battle Skills minus the SP it generates (+1 per Basic Attack, its own SP gain effects). SP gained "on enemy break" never counts, as the enemies never break. ${benchBreakPerSp.value ? "Break per SP sorts the Breakers from least to most SP efficient; a rotation that costs no SP shows as \"no SP\" at the end." : "Switch \"Break per\" to SP to see the break per SP spent."}`,
-            `${levelsOnlyDescription.value} ${benchEnemyText.value} with 3000 def, weak to every element (x1.2 break) and a break gauge that never runs out, so they are never broken and every hit removes its full break value (on-break effects never trigger); single-target and proximity skills aim at the middle one. Ailment bonuses (enemies under Curse, Burn, ...) get their own bar when they change the result.`,
+            `Breakers only. The break gauge each Breaker removes as the damage dealer per 100 AV (one turn), over ${benchAv()} AV (${benchTurns.value} turns) of battle on the game's battle code with infinite SP (topped up to 5 before every turn): ultimates as soon as they are ready and Battle Skill every turn (Tenebrous Arcana: Basic Attack at 3 Magic), the other four units being ${LuxMagica} without gear. Not compared to ${LuxMagica}: the bar is the gauge itself, added up over every enemy the Breaker hits; only its own hits count. ${RATE_TEXT(100)}`,
+            `Every Breaker wears its EX crystalis, Quickstep++ (SPD +8) and Mana Infusion++ (MP recovery +10%), the portrait Proof of Friends Again (SPD +20%) and Cherry Blizzard (A5, max level) as support: SPD +20%, and +2 MP on dealing damage while the enemies carry 2 or more debuffs.`,
+            `The number under each icon is the SP the Breaker's own actions cost per 100 AV: its Battle Skills minus the SP it generates itself (+1 per Basic Attack, its own SP gain effects). SP gained on enemy break (e.g. Tenebrous Arcana's A2) never counts, as the enemies never break. ${benchBreakPerSp.value ? "Break per SP sorts the Breakers from least to most SP efficient; a rotation that costs no SP shows as \"no SP\" at the end." : "Switch \"Break per\" to SP to see the break per SP spent."}`,
+            `${levelsOnlyDescription.value} ${benchEnemyText.value} with 3000 DEF, weak to every element (+20% break gauge depletion) and a break gauge that never runs out, so they are never broken: every hit removes its full break value and on-break effects never trigger. They never act. Single-target and proximity skills aim at the middle enemy. ${AILMENT_TEXT}`,
         ],
         chart: buildBenchChart("break"),
         status: benchStatusText("break"),
@@ -1419,14 +1426,16 @@ const benchCharts = computed(() => [
         title: `Damage dealer strength compared to ${LuxMagica}`,
         fightType: true,
         desc: [
-            `Damage each character deals as the damage dealer, compared to ${LuxMagica} in the same spot as an Attacker: ${LuxMagica} has the average HP, ATK and DEF of the 5 star Attackers, the same for every role.`,
+            `Damage each character deals as the damage dealer, compared to ${LuxMagica} in the same spot as an Attacker: ${LuxMagica} has the average HP, ATK and DEF of the 5 star Attackers (and, as an Attacker, gets The Universe's Edge), the same for every role.`,
             `${LuxMagica} is the 0% line; 100% means double of her damage.`,
             benchAverageDmg.value
-                ? `Average Damage: ${benchAv()} AV (${benchTurns.value} turns) of battle with infinite SP, supported by four ${LuxMagica}. ${CRIT_TEXT} Only the damage dealer's own damage counts.`
+                ? `Average Damage: ${benchAv()} AV (${benchTurns.value} turns) of battle on the game's battle code with infinite SP (topped up to 5 before every turn): ultimates as soon as they are ready and Battle Skill every turn (a few kits have their own play, e.g. Tenebrous Arcana uses her Basic Attack at 3 Magic), the other four units being ${LuxMagica} without gear. ${CRIT_TEXT} Only the damage dealer's own damage counts. ${RATE_TEXT(benchAv())}`
                 : `Max Burst: the Ultimate with the damage dealer's own buffs and debuffs at full stacks and every hit a crit.`,
-            `${levelsDescription.value} ${benchEnemyText.value} with 3000 def, weak to every element and broken (500% dmg taken) for the whole battle (in Average Damage from the first hit on, which breaks them, so on-break effects trigger once); single-target and proximity skills aim at the middle one. Ailment bonuses (enemies under Curse, Burn, ...) get their own bar when they change the result; in Average Damage the other bars make the enemies immune to those ailments.`,
+            levelsDescription.value,
+            enemyDamageText(),
+            AILMENT_TEXT,
             benchAverageDmg.value
-                ? `Be aware: Dot poppers (e.g. Marigold Dadaism) requires a team of dot appliers and uniquely scales on the entire teams dps, not just their own, so their damage output is not well reflected here.`
+                ? `Be aware: DoT poppers (e.g. Marigold Dadaism) need a team of DoT appliers and scale on the whole team's DoTs, not just their own; with ${LuxMagica} as the rest of the team their damage is not well reflected here.`
                 : ``,
         ],
         chart: buildBenchChart("attacker"),
