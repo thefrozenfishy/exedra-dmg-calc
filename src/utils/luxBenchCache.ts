@@ -14,8 +14,8 @@ export const LUX_BENCH_VERSION = 30 // 8: expected-crit battles, battle length t
 const STORAGE_KEY = "kiokuGridBenchCache"
 // Bumped (instead of LUX_BENCH_VERSION) when only some characters' numbers changed and the shipped file was redone for
 // them: this browser's cache is dropped, the shipped file stays valid. 1: Tenebrous Arcana's play reads her Magic; break
-// rows carry their SP cost; 2: break runs break each dummy once (on-break effects).
-const BROWSER_CACHE_REV = 2
+// rows carry their SP cost; 2: break runs break each dummy once (on-break effects); 3: break "100% crit" bar.
+const BROWSER_CACHE_REV = 3
 const STORED_VERSION = `${LUX_BENCH_VERSION}.${BROWSER_CACHE_REV}`
 const MAX_SETUPS = 24 // most recently used setups kept (chart x enemies x levels mode x battle length ...)
 
@@ -101,14 +101,15 @@ export function clearBenchCache(setup: BenchSetup) {
 
 /** public/bench-precalc.json: `v` = LUX_BENCH_VERSION it was made with; `s` = setupKey -> benchCharKey -> [max rows,
  *  avg rows] (the "break" chart: [[], [], break rows]). A max row is [gain, crit rate, identity], an avg row [gain,
- *  identity], a break row [gain, identity, SP cost]; identity = "element/role/ailment" ("" for none). Gains keep 3 decimals. */
+ *  identity], a break row [gain, identity, SP cost]; identity = "element/role/ailment" ("" for none), plus "/crit" for the
+ *  break chart's 100% crit bar. Gains keep 3 decimals. */
 type PrecalcEntry = [unknown[][], unknown[][]] | [unknown[][], unknown[][], unknown[][]]
 export interface BenchPrecalcFile { v: number, s: Record<string, Record<string, PrecalcEntry>> }
 
-const idOf = (r: BenchRow) => `${r.element ?? ""}/${r.role ?? ""}/${r.ailment ?? ""}`
-const identityOf = (id: string): Pick<BenchRow, "element" | "role" | "ailment"> => {
-    const [element, role, ailment] = id.split("/")
-    return { ...(element ? { element } : {}), ...(role ? { role } : {}), ...(ailment ? { ailment } : {}) } as Pick<BenchRow, "element" | "role" | "ailment">
+const idOf = (r: BenchRow) => `${r.element ?? ""}/${r.role ?? ""}/${r.ailment ?? ""}${r.crit ? "/crit" : ""}`
+const identityOf = (id: string): Pick<BenchRow, "element" | "role" | "ailment" | "crit"> => {
+    const [element, role, ailment, crit] = id.split("/")
+    return { ...(element ? { element } : {}), ...(role ? { role } : {}), ...(ailment ? { ailment } : {}), ...(crit ? { crit: true } : {}) } as Pick<BenchRow, "element" | "role" | "ailment" | "crit">
 }
 const round = (v: number, d: number) => Math.round(v * 10 ** d) / 10 ** d
 

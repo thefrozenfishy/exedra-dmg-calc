@@ -46,7 +46,8 @@ export function benchEnemies(count: number): QuestEnemyAppearance[] {
 /** What a bench unit counts as for element/role-limited effects. A key that is present replaces the unit's own
  *  value, `undefined` included: such a unit matches no element (or role) restriction, like the legacy charts'
  *  "no context" Lux. `ailment` is not about the unit: every enemy carries that ailment for the whole run. */
-export interface BenchIdentity { element?: KiokuElement, role?: KiokuRole, ailment?: Ailment }
+// crit: the break chart's "100% crit" bar (every ally crits on every hit, SimOptions.teamCrit)
+export interface BenchIdentity { element?: KiokuElement, role?: KiokuRole, ailment?: Ailment, crit?: boolean }
 
 const enemyStatesOf = (ailment?: Ailment): string[] => ailment ? [AILMENT_STATE[ailment]] : []
 
@@ -326,6 +327,9 @@ export interface SimOptions {
     // [BENCH] "break": count the break gauge the dealer removes instead of its damage (trackBreak), on dummies whose
     // gauge never runs out (benchStage `gauge`) except for one break each, see simulatedDealerDamage
     measure?: "damage" | "break"
+    // [BENCH] Every ally's base crit rate (BattleParameter.CTR, per mille) is set to 1000 = 100% before every action, so
+    // every hit crits (GetProcessedCtr adds the crit buffs on top; the roll is f32(rand*100) < rate)
+    teamCrit?: boolean
     // [BENCH] Filled with the SP the dealer's own actions cost over the run (scaled like the result with perAv): SP
     // spent minus SP it generated (a Basic Attack +1, its SP-gain effects), see trackSp
     sp?: { cost: number }
@@ -471,6 +475,7 @@ export function simulatedDealerDamage(allies: PvPKioku[], dealerPos: number, ene
     // before every action: the kept states, and (break runs) a broken dummy recovers
     const prepare = (d: any) => {
         keep(d)
+        if (opts.teamCrit) for (const u of d.battleUnitBundle.allyList) u._BattleParameter._CTR = Math.max(u._BattleParameter._CTR, 1000)
         if (breakRun) for (const u of enemyUnits()) if (u._BreakPoint.get_IsBreak()) recoverBreak(u)
     }
     const battle = benchBattle(allies, stageId, rng, {
@@ -555,7 +560,7 @@ export function simulatedDealerDamage(allies: PvPKioku[], dealerPos: number, ene
 
 // ── The two Kioku Grid charts ──
 
-const identityKey = (id: BenchIdentity) => `${id.element ?? "-"}/${id.role ?? "-"}/${id.ailment ?? "-"}`
+const identityKey = (id: BenchIdentity) => `${id.element ?? "-"}/${id.role ?? "-"}/${id.ailment ?? "-"}${id.crit ? "/crit" : ""}`
 
 /** Max Burst and Average Damage: an ailment the kit reacts to is a question of whether the enemies CAN carry it, not of who puts it
  *  there. A run without that ailment makes the enemies immune to it, so a kit that applies it itself and reacts to it
@@ -639,9 +644,9 @@ export class LuxBenchCharts {
     // (runtime.AppMods.expectedCritDamage, not game code): one battle gives the average; `seeds` battles only when
     // something else in it is random (proc chances, random targets).
     // `spOut`: filled with the dealer's SP cost over the run, averaged the same way.
-    private simTotal(team: PvPKioku[], enemies: number, ailment?: Ailment, immune: Ailment[] = [], measure: SimOptions["measure"] = "damage", spOut?: { cost: number }): number {
+    private simTotal(team: PvPKioku[], enemies: number, ailment?: Ailment, immune: Ailment[] = [], measure: SimOptions["measure"] = "damage", spOut?: { cost: number }, teamCrit = false): number {
         const expectedCrits = !team.some(k => kitReactsToCrits(k))
-        const base = { av: this.opts.av, infiniteSp: this.opts.infiniteSp, expectedCrits, ailment, immune, perAv: true, measure }
+        const base = { av: this.opts.av, infiniteSp: this.opts.infiniteSp, expectedCrits, ailment, immune, perAv: true, measure, teamCrit }
         const report = { random: false }
         const sp = { cost: 0 }
         let total = simulatedDealerDamage(team, 0, enemies, { ...base, seed: 0, report, sp: spOut && sp })
@@ -751,14 +756,15 @@ export class LuxBenchCharts {
 
     /** Break chart (Breakers, wearing benchKioku `gear: "break"`): the break gauge the character removes as the dealer
      *  (same team and play as attackerAvg) per 100 AV, summed over every enemy it hits. An absolute value (`gain` holds
-     *  it), not compared to Lux. `sp`: the SP its own actions cost per 100 AV (trackSp; negative when it generates more
+     *  it), not compared to Lux. The last identity, `crit`, is the "100% crit" bar: the whole team crits on every hit
+     *  (on-crit effects, crit-consuming states), enemies immune to the kit's ailments as in the main bar. `sp`: the SP its own actions cost per 100 AV (trackSp; negative when it generates more
      *  than it spends). */
-    attackerBreak(x: PvPKioku, enemies: number, ids = this.attackerIdentities(x)): BenchRow[] {
+    attackerBreak(x: PvPKioku, enemies: number, ids: BenchIdentity[] = [...this.attackerIdentities(x), { crit: true }]): BenchRow[] {
         const kitAilments = kitRestrictions(x).ailments
         return ids.map(id => {
             const immune = benchImmunities(kitAilments, id.ailment)
             const sp = { cost: 0 }
-            const brk = this.simTotal(this.team(x), enemies, id.ailment, immune, "break", sp)
+            const brk = this.simTotal(this.team(x), enemies, id.ailment, immune, "break", sp, !!id.crit)
             return { ...id, gain: brk * 100 / this.opts.av, sp: sp.cost * 100 / this.opts.av }
         })
     }

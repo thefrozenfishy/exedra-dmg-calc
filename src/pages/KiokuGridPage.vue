@@ -731,7 +731,7 @@ const toKioku = (c: Character, targetContext?: ChartTargetContext): ScoreAttackK
     )
 }
 
-type ContextKind = "element" | "role" | "ailment" | "noConsume"
+type ContextKind = "element" | "role" | "ailment" | "noConsume" | "crit"
 
 interface DealerTag {
     kind: ContextKind
@@ -745,6 +745,7 @@ interface DealerContext {
     role?: KiokuRole
     ailment?: Ailment
     noConsume?: boolean
+    crit?: boolean // break chart: the whole team at 100% crit rate
     tags: DealerTag[]
 }
 
@@ -767,7 +768,9 @@ const makeTag = (kind: ContextKind, value: string): DealerTag => ({
                 ? `/exedra-dmg-calc/roles/${value}.png`
                 : kind === "ailment"
                     ? `/exedra-dmg-calc/aliments/${capitalize(value)}.png`
-                    : `/exedra-dmg-calc/no-consume.png`,
+                    : kind === "crit"
+                        ? `/exedra-dmg-calc/archetypes/crit.png` // the Crit archetype's icon
+                        : `/exedra-dmg-calc/no-consume.png`,
 })
 
 const makeContext = (
@@ -775,16 +778,19 @@ const makeContext = (
     role?: KiokuRole,
     ailment?: Ailment,
     noConsume = false,
+    crit = false,
 ): DealerContext => ({
     element,
     role,
     ailment,
     noConsume,
+    crit,
     tags: [
         element !== undefined ? makeTag("element", element) : null,
         role !== undefined ? makeTag("role", role) : null,
         ailment !== undefined ? makeTag("ailment", ailment) : null,
         noConsume ? makeTag("noConsume", "No 1 time buffs") : null,
+        crit ? makeTag("crit", "100% crit") : null,
     ].filter((tag): tag is DealerTag => tag !== null),
 })
 
@@ -794,6 +800,7 @@ const contextKey = (context: DealerContext): string =>
         context.role ?? null,
         context.ailment ?? null,
         context.noConsume ?? false,
+        context.crit ?? false,
     ])
 
 type Metric = "max" | "avg"
@@ -1061,9 +1068,9 @@ const runBench = (kind: BenchChartKind, { fresh = false } = {}) => {
         return
     }
 
-    const identityKey = (r: BenchRow) => contextKey(makeContext(r.element, r.role, r.ailment))
+    const identityKey = (r: BenchRow) => contextKey(makeContext(r.element, r.role, r.ailment, false, r.crit))
     const setMax = (id: number, rows: BenchRow[]) => results.set(id, rows.map(r => ({
-        context: makeContext(r.element, r.role, r.ailment),
+        context: makeContext(r.element, r.role, r.ailment, false, r.crit),
         maxGain: r.gain,
         critRate: r.critRate,
         sp: r.sp,
@@ -1412,6 +1419,7 @@ const benchCharts = computed(() => [
             `Every Breaker wears its EX crystalis, Quickstep++ (SPD +8) and Mana Infusion++ (MP recovery +10%), the portrait Proof of Friends Again (SPD +20%) and Cherry Blizzard (A5, max level) as support: SPD +20%, and +2 MP on dealing damage while the enemies carry 2 or more debuffs.`,
             `The number under each icon is the SP the Breaker's own actions cost per 100 AV: its Battle Skills minus the SP it generates itself (+1 per Basic Attack, its own SP gain effects). SP gained on enemy break (e.g. Tenebrous Arcana's A2) counts too: each enemy is broken once (see below). ${benchBreakPerSp.value ? "Break per SP sorts the Breakers from least to most SP efficient; a rotation that costs no SP shows as \"no SP\" at the end." : "Switch \"Break per\" to SP to see the break per SP spent."}`,
             `${levelsOnlyDescription.value} ${benchEnemyText.value} with 3000 DEF, weak to every element (+20% break gauge depletion) and a break gauge that never runs out, with one exception: the damage dealer's first hit on each enemy breaks it, so on-break effects (Weakness, follow-ups, SPD, SP, ...) trigger once per enemy, as in the damage charts. The enemy recovers right away, the way a broken enemy recovers at its turn start, and is never broken again. Every hit counts the full break value the game computes for it, the breaking hit included, so the bars show what the Breaker removes from a gauge that never runs out, plus what its on-break effects add. They never act. Single-target and proximity skills aim at the middle enemy. ${AILMENT_TEXT}`,
+            `The 100% crit bar: the same battle with every unit of the team critting on every hit (base crit rate set to 100%), for kits that react to crits (on-crit effects, crit-consuming buffs). Crits themselves don't change the break value. Like the other extra bars, it only shows when it changes the result.`,
         ],
         chart: buildBenchChart("break"),
         status: benchStatusText("break"),
