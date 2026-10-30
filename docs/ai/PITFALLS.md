@@ -351,3 +351,10 @@
   break / damage of the action or the unit's `_Condition._ChargePoint`, not the type, before concluding what was played.
   A bench play rule should read the unit's state (Magic) rather than count actions: a count missed the 3 Magic her
   Ultimate gives (fixed 2026-10-30).
+
+- **Max Damage strips ALL ally passives, not only the kit's.** buildBattle clears `_PassiveSkills` and every state an
+  ally gave at battle start, so anything the stage mode gives the player's units must come back as effects
+  (`EngineBattle.stagePassives` -> `stageEffectsOf` -> source "Stage"). A new server-sent passive source goes into
+  `stagePassives`, not into `createDirector` alone, or the PvE battle has it and Max Damage / Highest Dmg Calc don't.
+- **Style id -> characterMstId is / 10000** (10020101 -> 1002 Homura). `NetworkUnits` battleUnitMstId (/ 100) is not
+  the character id.

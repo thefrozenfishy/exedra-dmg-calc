@@ -44,6 +44,9 @@ export interface MaxDmgEffect {
     // Dealer's evaluation (engine Max Damage only): a self-only buff of another member whose vortex / DoT counts, given to
     // that member because slip damage pops with its owner's buffs (battle/EngineMaxDamage). UI bookkeeping.
     forOwner?: boolean
+    // Stage-mode passives (source "Stage": Link Raid bonuses, Solo Raid Vanguard / party buffs): the AbilitySourceType
+    // they arrive with (EngineBattle.stagePassives). Kit effects: unset (derived from `source`).
+    abilitySource?: number
     // Engine Max Damage: the single-target ally buffs of one of the caster's skills share one target choice
     // (MaxDmgOptions.allyTargets[allyGroup]); allyGroup = the key of the first of them (the card with the ally chips).
     allyGroup?: string
@@ -78,6 +81,8 @@ export interface MaxDmgOptions {
     // strength cuts, an enemy's DEF up), given before the team's effects: ally `index` = team position, enemy `index` =
     // the page's enemy list index, "all" = every unit of that side. `value1` per mille as in the data.
     fieldStates?: { side: "ally" | "enemy", index: number | "all", type: string, value1: number }[]
+    // Solo Raid: the party buff picked (SoloRaidPartyBuffMst id; default the raid's first)
+    partyBuffId?: number
     // Best SA Team calculator ("Attacker HP when using ultimate"): the dealer's HP in % of its max HP; its HP-ratio
     // conditions are evaluated against it instead of assumed met (battle/EngineMaxDamage). undefined = full HP, met.
     dealerHpPercent?: number
@@ -218,11 +223,15 @@ function passiveOrigin(k: PvPKioku, d: SkillDetail): string {
     return "Passive"
 }
 
-// Every buff/debuff the team can produce (`slipDamage`: DoT ailments too).
-export function collectTeamEffects(allies: PvPKioku[], attackerPos: number, opts: { slipDamage?: boolean } = {}): MaxDmgEffect[] {
+/** Passive skills a stage's mode gives one ally (battle/EngineMaxDamage stageEffectsOf): detail rows + source. */
+export interface StagePassive { passiveSkillMstId: number, source: number, details: SkillDetail[] }
+
+// Every buff/debuff the team can produce (`slipDamage`: DoT ailments too; `stagePassives`: per ally position, the
+// passives the stage's mode gives it, listed with source "Stage").
+export function collectTeamEffects(allies: PvPKioku[], attackerPos: number, opts: { slipDamage?: boolean, stagePassives?: StagePassive[][] } = {}): MaxDmgEffect[] {
     const out: MaxDmgEffect[] = []
     const seen = new Set<string>()
-    const add = (casterPos: number, casterName: string, source: string, d: SkillDetail, alt?: { family: string, variant: string }) => {
+    const add = (casterPos: number, casterName: string, source: string, d: SkillDetail, alt?: { family: string, variant: string }, abilitySource?: number) => {
         if (!isState(d, opts.slipDamage)) return
         const side: EffectSide | undefined = isFriendlyEffect(d.abilityEffectType) ? "ally" : isOpponentEffect(d.abilityEffectType) ? "enemy" : undefined
         if (!side) return
@@ -231,7 +240,7 @@ export function collectTeamEffects(allies: PvPKioku[], attackerPos: number, opts
         seen.add(key)
         const isAccum = d.abilityEffectType.includes("ACCUM")
         out.push({
-            key, casterPos, casterName, source, side, detail: d, alt,
+            key, casterPos, casterName, source, side, detail: d, alt, abilitySource,
             maxStacks: isAccum ? Math.max(1, d.value2 || 1) : 1,
             applies: isEffectValueType(d.abilityEffectType) || d.range !== targetRange.SELF || (side === "ally" && casterPos === attackerPos),
         })
@@ -253,6 +262,7 @@ export function collectTeamEffects(allies: PvPKioku[], attackerPos: number, opts
             const alt = followUps.length > 1 ? { family: "followUp", variant: `${fu.id}` } : undefined
             for (const d of fu.details) add(pos, k.name, "Follow-up", d, alt)
         }
+        for (const p of opts.stagePassives?.[pos] ?? []) for (const d of p.details) add(pos, k.name, "Stage", d, undefined, p.source)
     })
     assignTiers(out)
     return out

@@ -1,6 +1,6 @@
 <template>
     <div class="setup-page gallery-page">
-        <h1 class="page-title">Best Team Finder</h1>
+        <h1 class="page-title">Highest Dmg Calc</h1>
 
         <StageEnemySelector ref="stageRef" />
 
@@ -327,7 +327,7 @@ Lower = faster but more likely to skip a team that could have closed the gap.
 </template>
 
 <script lang="ts" setup>
-import { reactive, computed, ref, ComputedRef } from 'vue'
+import { reactive, computed, ref, watch, ComputedRef } from 'vue'
 import TeamRow from '../components/TeamRow.vue'
 import StageEnemySelector from '../components/StageEnemySelector.vue'
 import ResultsHeader from '../components/ResultsHeader.vue'
@@ -395,6 +395,12 @@ const difficultyScore = useSetting('difficulty_score', 6_000_000)
 const isScoreAttackStage = computed(() => {
     const id = stageRef.value?.selection?.stageId
     return id !== undefined && !!getScoreAttackStage(id)
+})
+// Picking another stage sets "Average damage (LR)": off on a Score Attack stage (score = every hit crits), on for any
+// other stage (Link Raid etc.: many hits, so the average counts). Only on a change, so a reload keeps the user's choice.
+watch(() => stageRef.value?.selection?.stageId, (id, old) => {
+    if (id === undefined || old === undefined || id === old) return
+    optimizeAverageDamage.value = !getScoreAttackStage(id)
 })
 const saScoreInputs = computed<ScoreAttackScoreInputs | undefined>(() =>
     runStageId.value !== undefined && getScoreAttackStage(runStageId.value)

@@ -149,6 +149,8 @@ import soloRaidPartyBuffJson from "../assets/base_data/getSoloRaidPartyBuffMstLi
 import multiRaidStageJson from "../assets/base_data/getMultiRaidStageMstList.json";
 import multiRaidJson from "../assets/base_data/getMultiRaidMstList.json";
 import multiRaidBonusJson from "../assets/base_data/getMultiRaidBattleBonusMstList.json";
+import multiRaidExCharacterBonusJson from "../assets/base_data/getMultiRaidExCharacterBonusMstList.json";
+import questBuffJson from "../assets/base_data/getQuestBuffMstList.json";
 export interface SoloRaidSeasonBuff {
     soloRaidSeasonBuffMstId: number, groupId: number, passiveSkillMstId: number, enhancedPassiveSkillMstId: number,
     buffPointChargePassiveSkillMstId: number, maxBuffPoint: number, maxBuffPointOnEnhanced: number, enhancedSkillTurnGaugeValue: number
@@ -171,7 +173,13 @@ export function soloRaidInfo(questStageMstId: number): SoloRaidInfo | undefined 
 // Link Raid (Multi-Raid): MultiRaidStageMst -> the quest stage, its round limit, and the season's battle bonus passives
 // (MultiRaidMst.multiRaidBattleBonusGroupId -> MultiRaidBattleBonusMst.groupId). Those passives carry their own
 // role / element condition (PassiveSkillMst.conditionRole / conditionElement, checked by BattleUnit.GetPassiveSkills).
-export interface MultiRaidInfo { multiRaidStageMstId: number, seasonId: number, difficulty: number, limitRoundCount: number, bonusPassiveIds: number[] }
+// EX character bonus (3.21.0+): MultiRaidMst.exCharacterBonusPassiveSkillMstId for the characters of
+// MultiRaidExCharacterBonusMst.groupId == MultiRaidMst.exCharacterBonusGroupId (e.g. "EX Bonus" 1900: HP +40%, ATK +80%,
+// DEF +40%, SPD +10%; the passive itself has no condition, so the character list decides who gets it).
+export interface MultiRaidInfo {
+    multiRaidStageMstId: number, seasonId: number, difficulty: number, limitRoundCount: number, bonusPassiveIds: number[],
+    exBonusPassiveId: number, exBonusCharacterIds: number[]
+}
 export function multiRaidInfo(questStageMstId: number): MultiRaidInfo | undefined {
     const st = (multiRaidStageJson as any[]).find(s => s.questStageMstId === questStageMstId)
     if (!st) return undefined
@@ -179,7 +187,37 @@ export function multiRaidInfo(questStageMstId: number): MultiRaidInfo | undefine
     const season = (multiRaidJson as any[]).filter(r => r.seasonId === st.seasonId).pop()
     const bonus = (multiRaidBonusJson as any[]).filter(b => b.groupId === season?.multiRaidBattleBonusGroupId)
         .sort((a, b) => a.multiRaidBattleBonusMstId - b.multiRaidBattleBonusMstId)
-    return { multiRaidStageMstId: st.multiRaidStageMstId, seasonId: st.seasonId, difficulty: st.difficulty, limitRoundCount: st.limitRoundCount, bonusPassiveIds: bonus.map(b => b.passiveSkillMstId) }
+    const exGroup = season?.exCharacterBonusGroupId ?? 0
+    const exBonusCharacterIds = exGroup > 0 ? (multiRaidExCharacterBonusJson as any[]).filter(b => b.groupId === exGroup).map(b => b.characterMstId as number) : []
+    return {
+        multiRaidStageMstId: st.multiRaidStageMstId, seasonId: st.seasonId, difficulty: st.difficulty, limitRoundCount: st.limitRoundCount,
+        bonusPassiveIds: bonus.map(b => b.passiveSkillMstId),
+        exBonusPassiveId: exBonusCharacterIds.length ? season?.exCharacterBonusPassiveSkillMstId ?? 0 : 0, exBonusCharacterIds,
+    }
+}
+
+// Quest buffs (QuestBuffMst: per quest category + stage difficulty, within start/end time; buffType 1 = DMG dealt,
+// 2 = break gauge depletion, buffValue per mille). [UNCERTAIN] chosen by the client/server outside ReDriveBattleCore;
+// they reach the battle as the directors' campUpDmg / campUpBreakPointDmg arguments ([CONFIRMED 3.21]
+// SoloGameDirectorBase.SetupBattleStage / MultiRaidGameDirector.SetupBattleStage -> CampaignFieldParam
+// (0x14A34C0): CPN_UP_GIV_DMG_RATIO / CPN_UP_GIV_BREAK_POINT_DMG_RATIO on every ally at battle start). E.g. Link Raid
+// Lvl. 1-12: DMG dealt +100%, break gauge depletion +50%.
+export interface QuestCampaign { upDmg: number, upBreakPointDmg: number, descriptions: string[] }
+const groupCategory = new Map<number, number>((questGroupJson as any[]).map(g => [g.questGroupMstId, g.questCategoryMstId]))
+export function questCampaign(questStageMstId: number, now: number = Date.now()): QuestCampaign {
+    const out: QuestCampaign = { upDmg: 0, upBreakPointDmg: 0, descriptions: [] }
+    const st = questStages.get(questStageMstId)
+    const category = st ? groupCategory.get(st.questGroupMstId) : undefined
+    if (!st || category === undefined) return out
+    for (const b of questBuffJson as any[]) {
+        if (b.questCategoryMstId !== category || b.difficulty !== st.difficulty) continue
+        if (now < Date.parse(b.startTime) || now > Date.parse(b.endTime)) continue
+        if (b.buffType === 1) out.upDmg += b.buffValue
+        else if (b.buffType === 2) out.upBreakPointDmg += b.buffValue
+        else continue
+        out.descriptions.push(`${b.buffType === 1 ? "DMG dealt" : "Break gauge depletion"} +${b.buffValue / 10}%`)
+    }
+    return out
 }
 const multiRaidStageIds = new Set<number>((multiRaidStageJson as any[]).map(s => s.questStageMstId))
 export const isMultiRaidStage = (questStageMstId: number) => multiRaidStageIds.has(questStageMstId)

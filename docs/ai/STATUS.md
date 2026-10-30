@@ -1,7 +1,30 @@
 # Status (update at the end of every session)
 
-_Last updated: 2026-10-30: Kioku Grid damage dealer chart "Break" display; before: 2026-10-29 (5): game 3.22.0 (battle code identical, @rva tags moved; branch claude/version-3.22.0); before: 2026-10-29 (3): Best SA Team calculator speed (~60x on a large search); before: 2026-10-29 (2): Kioku Grid "Multiple ascensions", merged equal variant bars, precalculated bench file; before: 2026-10-29: Kioku Grid bench gear + average Attacker self buffs on Lux; before: 2026-10-24 (3): second-generation engine and Fight Solver removed (branch `remove-gen2`); before: 2026-10-24 (battle-start passive order: kit -> portrait -> support -> crys; before: Kioku Grid ailment bars: 112/305/309 conditions, Max Damage enemies carry Weakness/Stun); before: 2026-10-15 (game 3.21.0: dumped + decompiled by Claude on Windows, engine re-ported to 3.21.0; branch claude/version-3.21.0); before: 2026-10-14 (Max Damage + Kioku Grid bench on the 1:1 engine); before: 2026-10-10 (1:1 port in src/engine started); before: 2026-10-03 (passive states per giver, UP_HP_FIXED max HP; earlier: duplicate active-skill states); before: 2026-10-02 (game 3.19.1: version diff + newsletter, Magic Seal, break/notice team conditions, IMM_SLIP_DMG burst; branch claude/version-3.19.1)._
+_Last updated: 2026-10-30 (2): stage-mode buffs in Max Damage / Highest Dmg Calc, quest buffs, Link Raid EX bonus; before: 2026-10-30: Kioku Grid damage dealer chart "Break" display; before: 2026-10-29 (5): game 3.22.0 (battle code identical, @rva tags moved; branch claude/version-3.22.0); before: 2026-10-29 (3): Best SA Team calculator speed (~60x on a large search); before: 2026-10-29 (2): Kioku Grid "Multiple ascensions", merged equal variant bars, precalculated bench file; before: 2026-10-29: Kioku Grid bench gear + average Attacker self buffs on Lux; before: 2026-10-24 (3): second-generation engine and Fight Solver removed (branch `remove-gen2`); before: 2026-10-24 (battle-start passive order: kit -> portrait -> support -> crys; before: Kioku Grid ailment bars: 112/305/309 conditions, Max Damage enemies carry Weakness/Stun); before: 2026-10-15 (game 3.21.0: dumped + decompiled by Claude on Windows, engine re-ported to 3.21.0; branch claude/version-3.21.0); before: 2026-10-14 (Max Damage + Kioku Grid bench on the 1:1 engine); before: 2026-10-10 (1:1 port in src/engine started); before: 2026-10-03 (passive states per giver, UP_HP_FIXED max HP; earlier: duplicate active-skill states); before: 2026-10-02 (game 3.19.1: version diff + newsletter, Magic Seal, break/notice team conditions, IMM_SLIP_DMG burst; branch claude/version-3.19.1)._
 
+
+## 2026-10-30 (2): stage-mode buffs everywhere; "Highest Dmg Calc" (user's request)
+
+- Found: Max Damage (PvE page panel and the Best SA Team calculator, both `computeMaxDamageEngine`) dropped every
+  stage-mode buff: buildBattle clears the allies' passives (kit AND the Link Raid bonus / Solo Raid Vanguard ones) and
+  their battle-start states. The PvE battle itself had them. Quest buffs (campaign) and the Link Raid EX character bonus
+  were missing everywhere.
+- Now: `EngineBattle.stagePassives(setup)` (Link Raid bonus + EX bonus, Solo Raid common/season/party) feeds both
+  `createDirector` and Max Damage (`stageEffectsOf`: role / element filter as GetPassiveSkills, then
+  `collectTeamEffects(..., { stagePassives })` lists them with source "Stage", `MaxDmgEffect.abilitySource` keeps
+  their AbilitySourceType). They count like kit effects: conditions met (Vanguard Activation Phase active, accum at
+  max, ladders at the top rung, e.g. 1028 "per enemy defeated, max 50" = ATK +100%: the user can lower it on the PvE
+  page; the Highest Dmg Calc has no per-effect toggles). Start conditions on Self element / role are now kept
+  (EngineMaxDamage START_HOLDER_CONDITION; only stage passives use them in the data).
+- `questCampaign(stageId)` (QuestBuffMst) -> campUpDmg / campUpBreakPointDmg for quest and Link Raid directors; the
+  CPN states have no user unit, so buildBattle keeps them. Link Raid Lvl. 1-12 now deal ~+100% DMG.
+- Solo Raid party buff: `MaxDmgOptions.partyBuffId` (PvE page's choice), StageEnemySelector chips (setting
+  `<prefix>PartyBuff`, `selection.partyBuffId` -> TeamScoreStage). StageEnemySelector lists the stage's buffs.
+- Best SA Team page renamed "Highest Dmg Calc" (route name, title, About); picking another stage sets "Average damage
+  (LR)" off for Score Attack, on for anything else (only on a change, not on load).
+- Probe (Final Fatebloom team, Ult crit total): Link Raid 1211101 488k -> 851k, 1306101 1.10M -> 3.24M (1028 at 50
+  kills, 1031, Dark bonus), Solo Raid 1401101 1.10M -> 1.86M (Vanguard), Score Attack 982250 unchanged.
+  fixtures 16/16, checkEngine321 pass, engineMultiRaid 120/120, engine tsc 0, app type-check 222 (unchanged).
 
 ## 2026-10-30: Kioku Grid damage dealer chart "Break" display (user's request)
 

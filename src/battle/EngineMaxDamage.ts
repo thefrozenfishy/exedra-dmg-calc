@@ -30,12 +30,13 @@
 import { E } from "./engineBundle"
 import { EngineBattle, type EngineBattleSetup } from "./EngineBattle"
 import { giveAilmentStates, giveFieldState } from "./EngineBench"
-import { collectTeamEffects, isEffectValueType, isSlipDamageType, kitHasEffect, type MaxDmgEffect, type MaxDmgOptions, type MaxDmgResult, type MaxDmgTrace, type MemberDamage, type SkillDamage } from "../models/MaxDamage"
+import { collectTeamEffects, isEffectValueType, isSlipDamageType, kitHasEffect, type StagePassive, type MaxDmgEffect, type MaxDmgOptions, type MaxDmgResult, type MaxDmgTrace, type MemberDamage, type SkillDamage } from "../models/MaxDamage"
 import { enemyStats, traceDamage, unitStats } from "./EngineDamageTrace"
 import { actorSkillTypeRestriction, ailmentConditionsMet, unitCountConditionsMet } from "../models/BattleConditionParser"
 import { conditionCsvsExclusive } from "../models/ConditionTiers"
 import { enemyName, isMultiRaidStage, isSoloRaidStage, type QuestEnemyAppearance } from "../models/PvE"
 import type { PvPKioku } from "../models/PvPKioku"
+import { passiveDetailsByMstId } from "../utils/helpers"
 import { TargetType, targetRange, type SkillDetail } from "../types/KiokuTypes"
 
 const ORIGIN_ACTIVE = 1, ORIGIN_PASSIVE = 2
@@ -108,7 +109,7 @@ function infoOf(e: MaxDmgEffect): any {
     if (isPassiveDetail(e.detail)) {
         const model = E.BattleMstReaderBase.get_Instance(E.PassiveSkillDetailMstModel).GetModelByKey(d.passiveSkillDetailMstId)
         if (model == null) return null
-        info = E.AbilityEffectInfo.CreateFromMst$PassiveSkillDetailMstModel_AbilitySourceType_string(model, PASSIVE_SOURCE[e.source] ?? 1, null)
+        info = E.AbilityEffectInfo.CreateFromMst$PassiveSkillDetailMstModel_AbilitySourceType_string(model, e.abilitySource ?? PASSIVE_SOURCE[e.source] ?? 1, null)
     } else {
         const model = E.BattleMstReaderBase.get_Instance(E.SkillDetailMstModel).GetModelByKey(d.skillDetailMstId)
         if (model == null) return null
@@ -161,8 +162,12 @@ const FOLLOW_CONDITION = (c: any) => c._CompareTarget === 1 /* Self */ && c._Com
 //   holder's bundle): 19 / 20 and 26 UniqueAbilityEffect, e.g. Scorchin' Summer Spike's ability gives every ally ATK +50%,
 //   additional DMG +40%, SPD +2..10% and DMG taken -10% that are active only while the holder has Beachball's Boon
 //   (set 3169 "Self.UniqueAbilityEffect contains 22"), so a non-Attacker dealer never has them.
+// - START conditions on Self = the caster (19 / 20): the caster's own element / role never changes in a fight, e.g. the
+//   Link Raid bonus 1046 "ATK +2% to allies of the same element as self" has one row per element, each with start
+//   condition "Self.IsElementType == X" (sets 2575..): only the caster's own element's row is given (launchOnce: the
+//   check bundle's SelfUnit is the caster).
 // A set left without conditions always matches, so then the whole list matches (sets are OR'd).
-const START_HOLDER_CONDITION = (c: any) => c._CompareTarget === 8 /* EachTarget */ && (c._CompareContent === 19 || c._CompareContent === 20)
+const START_HOLDER_CONDITION = (c: any) => (c._CompareTarget === 8 /* EachTarget */ || c._CompareTarget === 1 /* Self */) && (c._CompareContent === 19 || c._CompareContent === 20)
 const ACTIVE_HOLDER_CONDITION = (c: any) => c._CompareTarget === 1 /* Self */ && (c._CompareContent === 19 || c._CompareContent === 20 || c._CompareContent === 26)
 function keepHolderConditions(sets: any[] | null, keep: (c: any) => boolean): any[] {
     const out: any[] = []
@@ -560,14 +565,40 @@ function skillDamage(ev: Eval & { rungs?: string[] }, type: TargetType, label: s
     return out
 }
 
+/** The stage mode's passives each ally holds in battle (EngineBattle.stagePassives, kept only where the passive's role /
+ *  element condition matches the unit: [CONFIRMED 3.19] BattleUnit.GetPassiveSkills (0x1395AB0) -> IsMatch(element)
+ *  0x1399F00 / IsMatch(role) 0x1399F60 against CharacterParameter.Element / Role = the style's (CharacterParameter
+ *  .ctor)). buildBattle removes them with the kit's passives; they come back as "Stage" effects with conditions met,
+ *  like the kit's (e.g. the Vanguard Activation Phase buffs count as active, accumulating buffs at max stacks). */
+function stageEffectsOf(setup: EngineBattleSetup): StagePassive[][] {
+    const lists = EngineBattle.stagePassives(setup)
+    if (!lists.length) return []
+    E.bindMasterData()
+    const passiveMst = E.BattleMstReaderBase.get_Instance(E.PassiveSkillMstModel)
+    const styleMst = E.BattleMstReaderBase.get_Instance(E.StyleMstModel)
+    return lists.map((list, i) => {
+        const k: any = setup.allies[i]
+        const style = styleMst.GetModelByKey(k?.engineStyleMstId ?? k?.data?.id)
+        return list.flatMap(({ passiveSkillMstId, source }) => {
+            const mst = passiveMst.GetModelByKey(passiveSkillMstId)
+            if (mst == null || !style) return []
+            if (mst.ConditionElement !== 0 && style.Element !== mst.ConditionElement) return []
+            if (mst.ConditionRole !== 0 && style.Role !== mst.ConditionRole) return []
+            const details = (passiveDetailsByMstId.get(passiveSkillMstId) ?? []) as unknown as SkillDetail[]
+            return details.length ? [{ passiveSkillMstId, source, details }] : []
+        })
+    })
+}
+
 /** Max Damage on the 1:1 engine; `enemies` = the page's wave list (index order of the result). */
 export function computeMaxDamageEngine(allies: PvPKioku[], stage: EngineMaxDmgStage, enemies: QuestEnemyAppearance[], attackerPos: number, opts: MaxDmgOptions = {}): MaxDmgResult {
     const setup: EngineBattleSetup = isMultiRaidStage(stage.stageId) ? { kind: "multiRaid", allies, stageId: stage.stageId, noRoundLimit: true } : isSoloRaidStage(stage.stageId)
-        ? { kind: "soloRaid", allies, stageId: stage.stageId, noRoundLimit: true }
+        ? { kind: "soloRaid", allies, stageId: stage.stageId, noRoundLimit: true, partyBuffId: opts.partyBuffId }
         : { kind: "quest", allies, stageId: stage.stageId }
     const mainIdx = Math.min(Math.max(0, opts.mainTargetIdx ?? 0), Math.max(0, enemies.length - 1))
     const ctx: Ctx = { setup, waveIdx: stage.waveIdx, enemyApps: enemies, opts, mainIdx, allyCount: allies.length }
-    const effects = collectTeamEffects(allies, attackerPos, { slipDamage: true })
+    const stagePassives = stageEffectsOf(setup)
+    const effects = collectTeamEffects(allies, attackerPos, { slipDamage: true, stagePassives })
     ctx.follow = followTypes(effects)
     const members: MemberDamage[] = []
     let enemySummary: MaxDmgResult["enemies"] = []
@@ -578,7 +609,7 @@ export function computeMaxDamageEngine(allies: PvPKioku[], stage: EngineMaxDmgSt
             members.push({ pos, name: allies[pos].name, skills: [], best: undefined })
             continue
         }
-        const passEffects = pos === attackerPos ? effects : collectTeamEffects(allies, pos, { slipDamage: true })
+        const passEffects = pos === attackerPos ? effects : collectTeamEffects(allies, pos, { slipDamage: true, stagePassives })
         // one target choice per skill for its single-target ally buffs, anchored on the first of them
         const anchors = new Map<string, string>()
         for (const e of passEffects) if (isAllyTargetBuff(e)) {

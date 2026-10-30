@@ -5,7 +5,7 @@
 // TimeForward / EndWave / BeginWave between waves. Every engine call runs with this battle's EngineRandom installed.
 import { TargetType, type BattleEvent, type BattleSnapshot, type TeamSnapshot } from "../types/KiokuTypes"
 import { BattleRng, type RngDecision, type RngMode } from "../models/BattleRng"
-import { enemyName, multiRaidInfo, skillName, soloRaidInfo, SOLO_RAID_COMMON_CHARGE_PASSIVE, type QuestEnemyAppearance } from "../models/PvE"
+import { enemyName, multiRaidInfo, questCampaign, skillName, soloRaidInfo, SOLO_RAID_COMMON_CHARGE_PASSIVE, type QuestEnemyAppearance } from "../models/PvE"
 import { passiveDetails, skillDetails } from "../utils/helpers"
 import questEnemyAppearanceJson from "../assets/base_data/getQuestEnemyAppearanceMstList.json"
 import { E } from "./engineBundle"
@@ -132,46 +132,76 @@ export class EngineBattle {
             return d
         }
         const provider = new E.QuestBattleUnitProvider().ctor(setup.stageId, allies)
+        // the stage mode's passives the server sends with the player's units (Link Raid battle bonus + EX character
+        // bonus, Solo Raid Vanguard / season / party buffs): EngineBattle.stagePassives
+        if (opts.allyPassives !== false) EngineBattle.stagePassives(setup).forEach((list, i) => {
+            const u = allies[i]
+            if (u) for (const { passiveSkillMstId, source } of list) {
+                const info = new E.PassiveSkillInfo()
+                info.passiveSkillMstId = passiveSkillMstId
+                info.level = 1
+                info.abilitySourceType = source
+                u.passiveSkillInfoList = [...u.passiveSkillInfoList, info]
+            }
+        })
+        const camp = questCampaign(setup.stageId)
         if (setup.kind === "quest") {
             const d = new E.QuestGameDirector().ctor()
-            d.SetupBattleStage(setup.stageId, 0, provider)
+            d.SetupBattleStage(setup.stageId, 0, provider, camp.upDmg, camp.upBreakPointDmg)
             return d
         }
         if (setup.kind === "multiRaid") {
             const info = multiRaidInfo(setup.stageId)!
-            // [UNCERTAIN] the season's battle bonus passives arrive with every player unit (source Bonus 5), like the Solo
-            // Raid buffs; each one's role / element condition is checked by the engine (BattleUnit.GetPassiveSkills).
-            for (const u of allies) for (const id of info.bonusPassiveIds) {
-                const p = new E.PassiveSkillInfo()
-                p.passiveSkillMstId = id
-                p.level = 1
-                p.abilitySourceType = 5
-                u.passiveSkillInfoList = [...u.passiveSkillInfoList, p]
-            }
             const d = new E.MultiRaidGameDirector().ctor()
             d.SetupBattleStage(setup.stageId, provider, setup.bossHp ?? EngineBattle.multiRaidBossHp(setup.stageId), [],
-                setup.noRoundLimit ? 0 : info.limitRoundCount, 8.64e15, 0, 0, false)
+                setup.noRoundLimit ? 0 : info.limitRoundCount, 8.64e15, camp.upDmg, camp.upBreakPointDmg, false)
             return d
         }
         const raid = soloRaidInfo(setup.stageId)!
-        const party = raid.partyBuffs.find(p => p.soloRaidPartyBuffMstId === setup.partyBuffId) ?? raid.partyBuffs[0]
-        // The player's units arrive from the server with the Solo Raid buff passives (the same list
-        // SoloRaidBuffReferee.AddSoloRaidBuffToUnit gives the enemies: common 8, season 6, party 7).
-        const season = raid.season
-        const extra: [number | undefined, number][] = [[SOLO_RAID_COMMON_CHARGE_PASSIVE, 8], [season?.passiveSkillMstId, 6], [season?.enhancedPassiveSkillMstId, 6],
-            [season?.buffPointChargePassiveSkillMstId, 6], [party?.passiveSkillMstId, 7], [party?.buffPointChargePassiveSkillMstId, 7]]
-        if (opts.allyPassives !== false) for (const u of allies) for (const [id, source] of extra) {
-            if (!id || !(id > 0)) continue
-            const info = new E.PassiveSkillInfo()
-            info.passiveSkillMstId = id
-            info.level = 1
-            info.abilitySourceType = source
-            u.passiveSkillInfoList = [...u.passiveSkillInfoList, info]
-        }
+        const party = EngineBattle.soloRaidPartyBuff(setup)
         const d = new E.SoloRaidGameDirector().ctor()
         d.SetupBattleStageForSoloRaid(setup.stageId, 0, provider, EngineBattle.battleInfoOf(setup.carry), SOLO_RAID_COMMON_CHARGE_PASSIVE,
             raid.season?.soloRaidSeasonBuffMstId ?? 0, party?.soloRaidPartyBuffMstId ?? 0, setup.noRoundLimit ? 0 : raid.limitRoundCount, 8.64e15)
         return d
+    }
+
+    /** The Solo Raid party buff of `setup` (the chosen one, else the raid's first). */
+    static soloRaidPartyBuff(setup: EngineBattleSetup) {
+        if (setup.kind !== "soloRaid") return undefined
+        const raid = soloRaidInfo(setup.stageId)
+        return raid?.partyBuffs.find(p => p.soloRaidPartyBuffMstId === setup.partyBuffId) ?? raid?.partyBuffs[0]
+    }
+
+    /** Passive skills the stage's mode gives each player unit (index = ally index), as the server sends them in
+     *  PassiveSkillInfo lists. Each passive's own role / element condition is still the engine's
+     *  (BattleUnit.GetPassiveSkills 0x1395AB0).
+     *  - Link Raid: the season's battle bonus passives on every ally (source Bonus 5), and the EX character bonus
+     *    passive on the allies whose character is in the run's EX list (source Bonus 5). [UNCERTAIN: server side]
+     *  - Solo Raid: the same list SoloRaidBuffReferee.AddSoloRaidBuffToUnit gives the enemies: common 8 (Vanguard base
+     *    points), season 6 (execution phase, Vanguard activation phase, charge), party 7 (buff, charge). */
+    static stagePassives(setup: EngineBattleSetup): { passiveSkillMstId: number, source: number }[][] {
+        if (setup.kind === "multiRaid") {
+            const info = multiRaidInfo(setup.stageId)
+            if (!info) return []
+            return setup.allies.map(k => {
+                const list = info.bonusPassiveIds.map(id => ({ passiveSkillMstId: id, source: 5 }))
+                // style id = characterMstId * 10000 + style number (e.g. 10020101 -> Homura Akemi 1002)
+                const characterMstId = Math.trunc(((k.data as any)?.id ?? 0) / 10000)
+                if (info.exBonusPassiveId > 0 && info.exBonusCharacterIds.includes(characterMstId)) list.push({ passiveSkillMstId: info.exBonusPassiveId, source: 5 })
+                return list
+            })
+        }
+        if (setup.kind === "soloRaid") {
+            const raid = soloRaidInfo(setup.stageId)
+            if (!raid) return []
+            const party = EngineBattle.soloRaidPartyBuff(setup)
+            const season = raid.season
+            const extra: [number | undefined, number][] = [[SOLO_RAID_COMMON_CHARGE_PASSIVE, 8], [season?.passiveSkillMstId, 6], [season?.enhancedPassiveSkillMstId, 6],
+                [season?.buffPointChargePassiveSkillMstId, 6], [party?.passiveSkillMstId, 7], [party?.buffPointChargePassiveSkillMstId, 7]]
+            const list = extra.filter(([id]) => !!id && id > 0).map(([id, source]) => ({ passiveSkillMstId: id!, source }))
+            return setup.allies.map(() => list)
+        }
+        return []
     }
 
     /** Full HP of a Link Raid stage's boss (its main-target appearance at battle start). */

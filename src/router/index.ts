@@ -31,7 +31,7 @@ const routes = [
     { path: '/team-setup', name: 'Kioku Setup', component: TeamSetupPage, meta: { version: 3 } },
     { path: '/portraits', name: 'Portraits', component: PortraitSetupPage, meta: { version: 1 } },
     { path: '/account-compare', name: 'Account Comparison', component: AccountComparisonPage, meta: { version: 0 } },
-    { path: '/sa-simulator-multiple', name: 'Best SA Team Calculator', component: BestTeamPage, meta: { version: 0 } },
+    { path: '/sa-simulator-multiple', name: 'Highest Dmg Calc', component: BestTeamPage, meta: { version: 0 } },
     { path: '/sa-simulator-single', name: 'Old Single Hit Calc', component: SingleTeamPage, meta: { version: 0 } },
     { path: '/sa-simulator-multiple-old', name: 'Old Best SA Team Calculator', component: OldBestTeamPage, meta: { version: 0 } },
     { path: '/pvp-simulator', name: 'PvP Simulator', component: PvpTeamPage, meta: { version: 1 } },

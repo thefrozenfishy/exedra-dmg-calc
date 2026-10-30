@@ -867,6 +867,8 @@ const maxDmg = shallowRef<MaxDmgResult | undefined>()
 const maxDmgBusy = ref(false)
 let maxDmgWorker: Worker | undefined
 let maxDmgReq = 0
+// Solo Raid party buff (the battle's and Max Damage's)
+const partyBuffId = useSetting<number>('pveRaidPartyBuff', 0)
 // The page's Max Damage inputs (also the attacker loadout search's, so it scores what the panel shows).
 function maxDmgOpts(): MaxDmgOptions {
     return {
@@ -875,6 +877,7 @@ function maxDmgOpts(): MaxDmgOptions {
         vortexEnemies: JSON.parse(JSON.stringify(vortexEnemies)),
         allyTargets: JSON.parse(JSON.stringify(allyTargets)),
         broken: [...broken.value], breakRate: [...breakRate.value], mainTargetIdx: mainTargetIdx.value,
+        partyBuffId: isSoloRaidStage(stageId.value) ? partyBuffId.value || undefined : undefined,
     }
 }
 const currentWaveIdx = () => Math.min(waveIdx.value, waveMetas.value.length - 1)
@@ -906,7 +909,7 @@ function requestMaxDamage() {
 }
 // "Stats for nerds" (collapsed by default): the engine's damage steps for the dealer's best skill, recorded only while open
 const statsForNerds = useSetting('pveStatsForNerds', false)
-watch([teamKiokus, wave, dealerPos, () => [...excluded], () => [...included], () => JSON.stringify(vortexEnemies), () => JSON.stringify(allyTargets), () => [...stacks], broken, breakRate, mainTargetIdx], requestMaxDamage, { deep: true, immediate: true })
+watch([teamKiokus, wave, dealerPos, () => [...excluded], () => [...included], () => JSON.stringify(vortexEnemies), () => JSON.stringify(allyTargets), () => [...stacks], broken, breakRate, mainTargetIdx, partyBuffId], requestMaxDamage, { deep: true, immediate: true })
 watch(statsForNerds, open => { if (open && !maxDmg.value?.trace) requestMaxDamage() })
 onBeforeUnmount(() => { maxDmgWorker?.terminate(); loadoutPool?.close() })
 const dealer = computed(() => maxDmg.value?.members[dealerPos.value])
@@ -1106,7 +1109,7 @@ const nerdKioku = computed(() => {
 type EffectStatus = 'used' | 'partial' | 'alt' | 'off' | 'na'
 const STATUS_ORDER: Record<EffectStatus, number> = { used: 0, partial: 1, alt: 2, off: 3, na: 4 }
 // Sections, in this order: active skills first, then the kit's passives and what's equipped.
-const SOURCE_ORDER = ['Battle Skill', 'Ultimate', 'Basic Attack', 'Switch Skill', 'Follow-up', 'Ability', 'Ascension', 'Crystalis', 'Portrait', 'Support', 'Passive']
+const SOURCE_ORDER = ['Battle Skill', 'Ultimate', 'Basic Attack', 'Switch Skill', 'Follow-up', 'Ability', 'Ascension', 'Crystalis', 'Portrait', 'Support', 'Passive', 'Stage']
 const showUnreachable = useSetting('pveShowUnreachableEffects', false)
 // Buffs on a vortex / DoT owner who isn't the dealer (MaxDmgEffect.forOwner): hidden unless asked for, still counted.
 const showSupportBuffs = useSetting('pveShowSupportBuffs', false)
@@ -1381,7 +1384,6 @@ const linkRaidBonuses = computed(() => (linkRaid.value?.bonusPassiveIds ?? []).m
     const p = (passiveMstJson as any[]).find(x => x.passiveSkillMstId === id)
     return p ? String(p.description).replace(/<br>/g, ' ') : `#${id}`
 }))
-const partyBuffId = useSetting<number>('pveRaidPartyBuff', 0)
 // Solo Raid party buff choices: the buffs each gives every ally, and how it earns Vanguard points.
 const partyBuffViews = computed(() => (raid.value?.partyBuffs ?? []).map(p => ({
     value: String(p.soloRaidPartyBuffMstId),

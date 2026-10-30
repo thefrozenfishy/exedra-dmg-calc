@@ -425,6 +425,21 @@ Ultimates (SpecialAttackAct) and follow-ups: only ExecuteSkill - no TurnStart/Tu
   SoloRaidStagePartsView.SetTimeLimit, SoloRaidApiLogic removed), practice removed (MiniTutorial 235). Battle
   rules above unchanged. [C, names only]
 
+- Stage-mode buffs on the player's units (2026-10-30). Server side, so [UNCERTAIN] how they are chosen; how they act is
+  the engine's:
+  - Link Raid battle bonus (MultiRaidBattleBonusMst by the season's group) and EX character bonus
+    (MultiRaidMst.exCharacterBonusPassiveSkillMstId for the characters of MultiRaidExCharacterBonusMst, 3.21.0+; style
+    id / 10000 = characterMstId) arrive as PassiveSkillInfo, source Bonus 5; Solo Raid common 8 / season 6 / party 7.
+    BattleUnit.GetPassiveSkills (0x1395AB0) drops a passive whose PassiveSkillMst.conditionElement / conditionRole
+    don't match the style (e.g. 1020 "Dark: DMG +20%", 1030 Attackers only). App: `EngineBattle.stagePassives`.
+  - Quest buffs (QuestBuffMst: category + stage difficulty + time window; buffType 1 DMG dealt, 2 break, per mille)
+    = the directors' campUpDmg / campUpBreakPointDmg -> CampaignFieldParam (0x14A34C0): CPN_UP_GIV_DMG_RATIO /
+    CPN_UP_GIV_BREAK_POINT_DMG_RATIO (subclasses of the UP_GIV ones) on every ally at battle start, source 5, no
+    user unit. Link Raid Lvl. 1-12: DMG +100%, break +50% (2026-01-01..2051). App: `models/PvE.questCampaign`. [UNCERTAIN]
+    that the client passes exactly these values (the caller is outside ReDriveBattleCore).
+  - Link Raid 1046 / 1029 give one row per element with start condition Self.IsElementType == X: only the caster's
+    own element's row fires.
+
 ## 13. Kit mechanics (3.x classes)
 
 - IMM_SLIP_DMG "Instant DOT DMG Burst" (Nightmare Stinger / My Creations / Marigold Dadaism ultimates, 36 enemy

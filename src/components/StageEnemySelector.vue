@@ -26,6 +26,18 @@
                 class="elem-icon" />
         </div>
 
+        <div v-if="raid && raid.partyBuffs.length" class="derived-row">
+            <span class="filters-heading">Party buff</span>
+            <button v-for="p in raid.partyBuffs" :key="p.soloRaidPartyBuffMstId" type="button" class="chip"
+                :class="{ active: p.soloRaidPartyBuffMstId === partyBuffChoice }" :title="passiveText(p.passiveSkillMstId)"
+                @click="partyBuffId = p.soloRaidPartyBuffMstId">{{ passiveName(p.passiveSkillMstId) }}</button>
+        </div>
+
+        <div v-if="stageBuffs.length" class="derived-row stage-buffs" title="Given to your units by this stage's mode and counted in every score (conditions met, like the kits' own buffs)">
+            <span class="filters-heading">Stage buffs</span>
+            <span v-for="(b, i) in stageBuffs" :key="i" class="stage-buff">{{ b }}</span>
+        </div>
+
         <div v-if="enemyInfo.length" class="enemies-block">
             <div class="team-grid enemy-grid">
                 <div v-for="(e, i) in enemyInfo" :key="e.id" class="enemy-card"
@@ -90,7 +102,9 @@
 // that score teams against a real stage (the Best SA Team calculator). `selection` is what battle/EngineTeamScore needs.
 import { computed, ref, watch } from 'vue'
 import StagePicker from './StagePicker.vue'
-import { stageWaveMeta, wavePositionIds, enemyName, breakMstOf, ELEMENT_KEYS, type QuestEnemyAppearance, type ModeChangeInfo } from '../models/PvE'
+import { stageWaveMeta, wavePositionIds, enemyName, breakMstOf, ELEMENT_KEYS, soloRaidInfo, multiRaidInfo, questCampaign, SOLO_RAID_COMMON_CHARGE_PASSIVE, type QuestEnemyAppearance, type ModeChangeInfo } from '../models/PvE'
+import passiveMstJson from '../assets/base_data/getPassiveSkillMstList.json'
+import characterMstJson from '../assets/base_data/getCharacterMstList.json'
 import { waveStartUnits } from '../models/PvEBattle'
 import { Ailment, elementMap, type KiokuElement } from '../types/enums'
 import { useSetting } from '../store/settingsStore'
@@ -121,6 +135,35 @@ watch(wave, w => {
     broken.value = w.map(a => (breakMstOf(a)?.breakPoint ?? 0) > 0)
     breakRate.value = w.map(() => undefined)
 }, { immediate: true })
+
+// Buffs the stage's mode gives the player's units (battle/EngineBattle.stagePassives, models/PvE.questCampaign): shown
+// here, counted by the engine in every score. Solo Raid: the party buff is a choice (default the raid's first).
+const raid = computed(() => stageId.value ? soloRaidInfo(stageId.value) : undefined)
+const partyBuffId = useSetting<number>(`${props.settingPrefix}PartyBuff`, 0)
+const partyBuffChoice = computed(() => raid.value?.partyBuffs.find(p => p.soloRaidPartyBuffMstId === partyBuffId.value)?.soloRaidPartyBuffMstId
+    ?? raid.value?.partyBuffs[0]?.soloRaidPartyBuffMstId)
+const passiveMst = new Map<number, any>((passiveMstJson as any[]).map(p => [p.passiveSkillMstId, p]))
+const passiveName = (id: number) => passiveMst.get(id)?.name ?? `#${id}`
+const passiveText = (id: number) => String(passiveMst.get(id)?.description ?? '').replace(/<br>/g, ' ')
+const characterName = (id: number) => (characterMstJson as any[]).find(c => c.characterMstId === id)?.name ?? `#${id}`
+const stageBuffs = computed<string[]>(() => {
+    const id = stageId.value
+    if (!id) return []
+    const out = questCampaign(id).descriptions.map(d => `Quest buff: ${d}`)
+    const lr = multiRaidInfo(id)
+    if (lr) {
+        out.push(...lr.bonusPassiveIds.map(passiveText).filter(Boolean))
+        if (lr.exBonusPassiveId > 0) out.push(`EX bonus (${lr.exBonusCharacterIds.map(characterName).join(', ')}): ${passiveText(lr.exBonusPassiveId)}`)
+    }
+    const r = raid.value
+    if (r) {
+        const party = r.partyBuffs.find(p => p.soloRaidPartyBuffMstId === partyBuffChoice.value)
+        for (const pid of [SOLO_RAID_COMMON_CHARGE_PASSIVE, r.season?.passiveSkillMstId, r.season?.enhancedPassiveSkillMstId, party?.passiveSkillMstId]) {
+            if (pid && pid > 0 && passiveText(pid)) out.push(`${passiveName(pid)}: ${passiveText(pid)}`)
+        }
+    }
+    return out
+})
 
 const setBroken = (i: number, v: boolean) => { const b = [...broken.value]; b[i] = v; broken.value = b }
 const setBreakRate = (i: number, v: number, max: number) => {
@@ -171,6 +214,7 @@ const selection = computed(() => stageId.value && wave.value.length ? {
     breakRate: [...breakRate.value],
     weakElements: [...weakElements.value],
     ailments: [...ailments.value],
+    partyBuffId: raid.value ? partyBuffChoice.value : undefined,
 } : undefined)
 
 defineExpose({ selection })
@@ -270,6 +314,18 @@ defineExpose({ selection })
     align-items: center;
     gap: 0.4rem;
     margin: 0.6rem 0 0;
+}
+
+.stage-buffs {
+    align-items: flex-start;
+}
+
+.stage-buff {
+    font-size: 0.76rem;
+    color: var(--text);
+    padding: 0.15rem 0.55rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
 }
 
 .derived-gap {

@@ -18,7 +18,7 @@
         <p><b>Kioku Setup</b> and <b>My Kioku Viewer</b> may be used to edit the Kioku on your account.</p>
 
         <h2>Calculators</h2>
-        <p>The <b>Best SA Team Calculator</b> may be used to find the highest dmg team in any given stage. Find the
+        <p>The <b>Highest Dmg Calc</b> may be used to find the highest dmg team in any given stage. Find the
             enemy stats on the <a href="https://exedra.wiki/wiki/Magia_Exedra_Wiki">Exedra Wiki</a>. To check futher
             details, such as checking the damage without spesific buffs you can open the team in the <b>Single Battle
                 Calculator</b>. The damage calc is based on the <a

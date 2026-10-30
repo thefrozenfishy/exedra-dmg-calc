@@ -10,8 +10,11 @@
 //   - active ailments -> the ailment conditions are checked against them (as Kioku Grid's Max Burst).
 //   - "Attacker HP when using ultimate" -> the attacker's HP (MaxDmgOptions.dealerHpPercent): its HP-ratio conditions
 //     (e.g. Kugatachi's "ATK +20% while HP >= 50%") are checked against it, every other condition counts as met.
-// Not used (old-model inputs with no engine meaning here): buff / debuff bonus reduction and stage buffs (removed from
-// the page: a real stage's own gimmicks come with its wave), hits to kill
+// A real stage's mode buffs count as in battle (battle/EngineMaxDamage stageEffectsOf, EngineBattle.stagePassives /
+// createDirector): Link Raid battle bonus (role / element / everyone) and EX character bonus, quest buffs (e.g. Link
+// Raid Lvl. 1-12 DMG +100%), Solo Raid Vanguard (execution + activation phase, counted active) and the picked party buff.
+// Not used (old-model inputs with no engine meaning here): buff / debuff bonus reduction and the manual stage buffs
+// (removed from the page: a real stage's own gimmicks come with its wave), hits to kill
 // (the dummies never die mid-skill), additional-damage crit (the game decides which hits can crit).
 import { computeMaxDamageEngine } from "./EngineMaxDamage"
 import { customStage, AILMENT_STATE } from "./EngineBench"
@@ -32,6 +35,7 @@ export interface TeamScoreStage {
     mainTargetIdx: number
     broken: boolean[]
     breakRate: (number | undefined)[]
+    partyBuffId?: number           // Solo Raid: the party buff picked (default the raid's first)
 }
 
 export interface TeamScoreScenario {
@@ -88,6 +92,7 @@ function scoreOnStage(allies: PvPKioku[], sc: TeamScoreScenario, st: TeamScoreSt
         broken: st.broken,
         breakRate: st.breakRate,
         mainTargetIdx: st.mainTargetIdx,
+        partyBuffId: st.partyBuffId,
         onlyPos: 0,
         enemyStates: sc.ailments.map(a => AILMENT_STATE[a]).filter(Boolean),
         dealerHpPercent: sc.attackerHp,
