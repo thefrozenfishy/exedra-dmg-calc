@@ -756,10 +756,10 @@ export class LuxBenchCharts {
 
     /** Break chart (Breakers, wearing benchKioku `gear: "break"`): the break gauge the character removes as the dealer
      *  (same team and play as attackerAvg) per 100 AV, summed over every enemy it hits. An absolute value (`gain` holds
-     *  it), not compared to Lux. The last identity, `crit`, is the "100% crit" bar: the whole team crits on every hit
-     *  (on-crit effects, crit-consuming states), enemies immune to the kit's ailments as in the main bar. `sp`: the SP its own actions cost per 100 AV (trackSp; negative when it generates more
+     *  it), not compared to Lux. Every identity (main, each ailment) also comes with `crit`, the "100% crit" bars: the
+     *  whole team crits on every hit (on-crit effects, crit-consuming states), ailments as in that identity. `sp`: the SP its own actions cost per 100 AV (trackSp; negative when it generates more
      *  than it spends). */
-    attackerBreak(x: PvPKioku, enemies: number, ids: BenchIdentity[] = [...this.attackerIdentities(x), { crit: true }]): BenchRow[] {
+    attackerBreak(x: PvPKioku, enemies: number, ids: BenchIdentity[] = this.attackerIdentities(x).flatMap(id => [id, { ...id, crit: true }])): BenchRow[] {
         const kitAilments = kitRestrictions(x).ailments
         return ids.map(id => {
             const immune = benchImmunities(kitAilments, id.ailment)

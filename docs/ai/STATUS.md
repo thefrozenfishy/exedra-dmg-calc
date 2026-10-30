@@ -425,6 +425,7 @@ Confirmed by the user's in-game observation. Buffs from allies now tick at the h
 - Sandbox Witch (509140) rotation, to confirm TurnNum-per-turn in combo enemies.
 
 ## Session log (newest first, one line each)
+- 2026-10-30 (7): Break chart: every identity (main, each ailment) also gets a 100% crit version (ailment + crit bars). Assault Paranoia: Curse + crit = crit (Curse only gives crit rate +35% vs cursed enemies), so that bar folds into the crit bar.
 - 2026-10-30 (6): Break chart "100% crit" extra bar (BenchIdentity.crit, SimOptions.teamCrit: every ally's BattleParameter._CTR set to 1000 before each action; all hits crit, 337/337 in a check). Differs for Assault Paranoia, Crimson Confectioner, Strada Futuro (1 enemy, 15 turns); icon = archetypes/crit.png; BROWSER_CACHE_REV 3.
 - 2026-10-30 (5): Break chart breaks each dummy once (on-break effects trigger), counts processed break per hit (trackBreak); BROWSER_CACHE_REV 2. Tenebrous Arcana's precalc entries redone again (a merge of the user's precalc run had restored her pre-fix entries).
 - 2026-10-30 (4): Kioku Grid bench texts reviewed against code + runs (gear passive ids on the engine units, 0 break events in the break chart, 1 per enemy in damage runs incl. 10000 AV, broken x rate/100, weak break +20%, Universe's Edge = Attackers, fillers bare, support dealer identity = neutral + kit-limited ones, both metrics use immunities, fight types = enemy count); SP under the icons 2 decimals without "SP"; MECHANICS broken-damage formula fixed (x rate/100, not 1 + rate/100).
