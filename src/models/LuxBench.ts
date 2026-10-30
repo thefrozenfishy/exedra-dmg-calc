@@ -323,12 +323,41 @@ export interface SimOptions {
     // the time of its next own turn (scaled back to `av`). Speed then counts continuously: a turn that comes 3 AV earlier
     // shows, where with the hard cut it only matters once it fits one more action in.
     perAv?: boolean
-    // [BENCH] "break": count the break gauge the dealer removes instead of its damage, on dummies whose gauge never
-    // runs out (benchStage `gauge`), so they never break
+    // [BENCH] "break": count the break gauge the dealer removes instead of its damage (trackBreak), on dummies whose
+    // gauge never runs out (benchStage `gauge`) except for one break each, see simulatedDealerDamage
     measure?: "damage" | "break"
     // [BENCH] Filled with the SP the dealer's own actions cost over the run (scaled like the result with perAv): SP
     // spent minus SP it generated (a Basic Attack +1, its SP-gain effects), see trackSp
     sp?: { cost: number }
+}
+
+/** [BENCH] Instrumentation, not game code: the break value of every hit as the game computes it, reported with the
+ *  hit's attacker: BreakPoint.Decrease (0x14A2800) passes its processed break damage (CalculateProcessedBreakPointDamage)
+ *  to DecreaseValue before the clamp to the gauge, so a hit that empties the gauge still counts in full. A dummy that is
+ *  still broken when the next hit's Decrease runs (Decrease removes nothing while broken) is first recovered the way the
+ *  game recovers a broken unit at its turn start (ActExecutor.TurnBegin: BreakPoint.ResetValue, broken rate 0), so it is
+ *  only broken in between: the rest of the breaking action's hits count too. Returns the undo. */
+function trackBreak(onValue: (attacker: any, value: number) => void): () => void {
+    const proto = E.BreakPoint.prototype as any
+    const decrease = proto.Decrease, decreaseValue = proto.DecreaseValue
+    const stack: any[] = []
+    proto.Decrease = function (this: any, attackUnit: any, defenseUnit: any, ...rest: any[]) {
+        if (this.get_HasBreakPoint() && this.get_IsBreak()) recoverBreak(defenseUnit)
+        stack.push(attackUnit)
+        try { return decrease.call(this, attackUnit, defenseUnit, ...rest) } finally { stack.pop() }
+    }
+    proto.DecreaseValue = function (this: any, value: number) {
+        if (stack.length) onValue(stack[stack.length - 1], value)
+        return decreaseValue.call(this, value)
+    }
+    return () => { proto.Decrease = decrease; proto.DecreaseValue = decreaseValue }
+}
+
+/** [BENCH] A broken unit's turn-start recovery (ActExecutor.TurnBegin, a broken unit that can act): gauge full, broken
+ *  damage rate 0. */
+function recoverBreak(unit: any) {
+    unit._BreakPoint.ResetValue()
+    unit.BreakedDamageReceiveRate = 0
 }
 
 /** [BENCH] Instrumentation, not game code: every SpReferee.AddSp made while a unit runs a Basic Attack, a Battle Skill
@@ -388,7 +417,13 @@ const PLAY_PATTERNS: Record<string, {
 }
 
 /** Average Damage: total damage dealt by the dealer slot during a bench battle of `opts.av` action value (with
- *  `measure: "break"`, the break gauge it removes). */
+ *  `measure: "break"`, the break gauge it removes).
+ *  Break runs [BENCH]: the dummies' gauge never runs out (benchStage `gauge`), but at the dealer's first decision every
+ *  dummy's gauge is set to 1 point, so the dealer's first hit on each breaks it through the game's break code and
+ *  "on enemy break" effects trigger once (as in the damage runs, whose 1-point gauges break on the first hit). A broken
+ *  dummy is recovered before the next action or break hit (trackBreak / recoverBreak), and every hit counts the break
+ *  value the game computes for it, the breaking one included: the result is what the dealer would remove from a gauge
+ *  that never runs out, plus what its on-break effects add. */
 export function simulatedDealerDamage(allies: PvPKioku[], dealerPos: number, enemyCount: number, opts: SimOptions): number {
     const breakRun = opts.measure === "break"
     const { stageId } = benchStage(enemyCount, opts.immune ?? [], breakRun)
@@ -431,12 +466,24 @@ export function simulatedDealerDamage(allies: PvPKioku[], dealerPos: number, ene
         }
     }
     let lastRefill = -1
+    let primed = !breakRun
+    const enemyUnits = () => [...director.battleUnitBundle.enemyList] as any[]
+    // before every action: the kept states, and (break runs) a broken dummy recovers
+    const prepare = (d: any) => {
+        keep(d)
+        if (breakRun) for (const u of enemyUnits()) if (u._BreakPoint.get_IsBreak()) recoverBreak(u)
+    }
     const battle = benchBattle(allies, stageId, rng, {
-        beforeAction: keep,
+        beforeAction: prepare,
         // Refill only when time has moved since the last refill: an extra action at the same moment (a haste to 100%,
         // Tenebrous Arcana's extra action) keeps the SP it has.
         beforeDecision: (unit, b) => {
             actor = unit
+            // break runs: one break per dummy, by the dealer's first hit (see the doc comment)
+            if (!primed && unit === dealerUnit()) {
+                primed = true
+                for (const u of enemyUnits()) if (u._BreakPoint._PointValue > 1) u._BreakPoint._PointValue = 1
+            }
             if (!opts.infiniteSp) return
             if (lastRefill < 0 || b.elapsed > lastRefill) {
                 const sp = b.director.spReferee
@@ -452,20 +499,17 @@ export function simulatedDealerDamage(allies: PvPKioku[], dealerPos: number, ene
     mods.expectedCritDamage = !!opts.expectedCrits
     let spCost = 0
     const untrack = opts.sp ? trackSp((user, sp) => { if (user === dealerUnit()) spCost -= sp }) : undefined
+    const untrackBreak = breakRun ? trackBreak((attacker, v) => { if (attacker === dealerUnit()) total += v }) : undefined
     try {
     // A vortex pops inside the hit that sets it off; the engine reports it with that hit (its attacker), not as its
     // owner's damage [APPROXIMATION vs the old bench, which moved it to the owner].
+    // (break runs count in trackBreak)
     const count = (events: BattleEvent[] | undefined) => {
-        // Break: an event's breakDamage is the target's gauge drop over the whole action (EngineBattle.eventsOf), so
-        // it is taken once per target.
-        const gauge = new Map<number, number>()
+        if (breakRun) return
         for (const ev of events ?? []) {
             if (!ev.sourceIsTeam1 || ev.sourcePos !== dealerPos) continue
-            if (breakRun) {
-                if (ev.kind === "hit" && ev.breakDamage) gauge.set(ev.targetPos ?? -1, Math.max(gauge.get(ev.targetPos ?? -1) ?? 0, ev.breakDamage))
-            } else if (ev.kind === "hit" || ev.kind === "dot") total += ev.amount
+            if (ev.kind === "hit" || ev.kind === "dot") total += ev.amount
         }
-        for (const v of gauge.values()) total += v
     }
     // An action counts if it starts within the run: the one that would start after it is played (the battle only
     // knows its time once it advances to it) but not counted.
@@ -473,22 +517,24 @@ export function simulatedDealerDamage(allies: PvPKioku[], dealerPos: number, ene
         && st.lastTargetType !== TargetType.fuaId
     let nextTurn = 0
     while (!battle.isOver) {
-        keep(director)
-        const spBefore = spCost
+        prepare(director)
+        const spBefore = spCost, totalBefore = total
         const states = battle.executeNextAction()
         if (!states.length) break
         if (battle.elapsed > opts.av) {
             spCost = spBefore // the action past the run doesn't count
+            total = totalBefore
             if (states.some(isDealerTurn)) nextTurn = battle.elapsed
             break
         }
         for (const state of states) { count(state.events); opts.onAction?.(state, battle.elapsed) }
     }
     untrack?.()
+    untrackBreak?.()
     // Per-AV rate: play on (counting nothing) to the dealer's first own turn past the run.
     if (opts.perAv && !nextTurn) {
         while (!battle.isOver && battle.elapsed < opts.av * 3) {
-            keep(director)
+            prepare(director)
             const states = battle.executeNextAction()
             if (!states.length) break
             if (states.some(isDealerTurn)) { nextTurn = battle.elapsed; break }
@@ -502,6 +548,7 @@ export function simulatedDealerDamage(allies: PvPKioku[], dealerPos: number, ene
     return total * scale
     } finally {
         untrack?.()
+        untrackBreak?.()
         mods.expectedCritDamage = savedMod
     }
 }

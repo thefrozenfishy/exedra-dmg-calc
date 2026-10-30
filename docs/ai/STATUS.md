@@ -9,10 +9,14 @@ _Last updated: 2026-10-30: Kioku Grid damage dealer chart "Break" display; befor
   only** (user's choice: the other roles break about the same): the break gauge each removes as the dealer per 100 AV, over the Simulation depth (5 / 15 / 100 turns). An absolute
   value, not compared to Lux; summed over every enemy hit. Same team and play as Average Damage
   (`LuxBenchCharts.attackerBreak`, `simulatedDealerDamage` `measure: "break"`).
-- [BENCH] Its dummies (`benchStage(count, immune, gauge = true)`) have a 1e9 break gauge (BreakMst 990000002), so they
-  never break and every hit removes its full processed break value (BreakPoint.Decrease removes none while broken,
-  MECHANICS section 9); on-break effects never trigger there. `breakDamage` of an event is the target's gauge drop
-  over the whole act (EngineBattle.eventsOf), so it is counted once per target per act.
+- [BENCH] Its dummies (`benchStage(count, immune, gauge = true)`) have a 1e9 break gauge (BreakMst 990000002). Each is
+  broken once on purpose (user's request, 2026-10-30 (5)): at the dealer's first decision every dummy's gauge is set to
+  1 point, so its first hit breaks them through the game's code and on-break effects trigger once; a broken dummy is
+  recovered (ActExecutor.TurnBegin's ResetValue + broken rate 0) before the next action or the next Decrease.
+  `trackBreak` counts the processed break value BreakPoint.Decrease hands to DecreaseValue (before the clamp), so the
+  breaking hit counts in full. 15 / 100 turns: within 0-5% of the never-breaking numbers (Glittering Hurricane
+  143.2 vs 143.3, 152.5 vs 152.4); 5 turns differ more (on-break effects weigh more, an Ultimate can land just
+  past the cut: Glittering Hurricane's A4 haste moves the fillers' turns, her 3rd Ultimate fires at ~507).
 - Break gear (user's choice, `benchKioku` `gear: "break"`): EX crystalis + Quickstep++ (3006) + Mana Infusion++ (3011),
   portrait Proof of Friends Again (SPD +20%), support Cherry Blizzard for everyone (Breaker target, SPD +20% at battle
   start: the highest unconditional Breaker-support SPD, tied with Absolute Venus / Assault Paranoia / Groundhog Daze /
@@ -421,6 +425,8 @@ Confirmed by the user's in-game observation. Buffs from allies now tick at the h
 - Sandbox Witch (509140) rotation, to confirm TurnNum-per-turn in combo enemies.
 
 ## Session log (newest first, one line each)
+- 2026-10-30 (5): Break chart breaks each dummy once (on-break effects trigger), counts processed break per hit (trackBreak); BROWSER_CACHE_REV 2. Tenebrous Arcana's precalc entries redone again (a merge of the user's precalc run had restored her pre-fix entries).
+- 2026-10-30 (4): Kioku Grid bench texts reviewed against code + runs (gear passive ids on the engine units, 0 break events in the break chart, 1 per enemy in damage runs incl. 10000 AV, broken x rate/100, weak break +20%, Universe's Edge = Attackers, fillers bare, support dealer identity = neutral + kit-limited ones, both metrics use immunities, fight types = enemy count); SP under the icons 2 decimals without "SP"; MECHANICS broken-damage formula fixed (x rate/100, not 1 + rate/100).
 - 2026-10-30 (3): Break display: SP cost per 100 AV + "Break per" 100 AV / SP toggle; Tenebrous Arcana plays by her Magic (her precalc entries redone, BROWSER_CACHE_REV 1).
 - 2026-10-30 (2): Kioku Grid damage dealer chart: Break display, Breakers only with SPD / MP gear (break gauge per 100 AV on never-breaking dummies), not precalculated yet; fixtures 16/16, damage precalc entries unchanged, app type-check 222.
 - 2026-10-30: data drop under client 3.22.0 (scheduled run, code unchanged): base_data be3d827f (bot sync) adds Pumpkin Death Squall (Karin, Flame Debuffer), Doppel of Agitation (Felicia, Dark Breaker), All Souls' Repose (Kyoko, Dark Healer, 6 Nov), Halloween Part I/II + Felicia Doppel story, Crisis 8 Graffiti Witch, Score Attack 30, Link Raid Kumanoko no Yume EX, enemy countdown/summon skills. New conditions 208/210/211/304/313 and every new effect type were already in src/engine (verdiff's coverage column reads the old src/models parser). engineSweep new stages + WITH new kiokus: 0 exceptions; fixtures 16/16, checkEngine321 pass, engine tsc 0, app type-check 222 (docs-only commit). wikicheck OK unchanged. Report docs/versions/3.22.0/data-2026-10-30.md, newsletter-2026-10-30.html.
