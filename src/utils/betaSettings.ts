@@ -397,13 +397,11 @@ export const BETA_SECTIONS = [
                     { name: "Absolute Rain", ascension: 5, },
                     { name: "Baldamente Fortissimo", ascension: 4, },
                     { name: "Thunderous Waltz", ascension: 4, },
-                    // Doppel of Agitation: higher priority when Falsified Phenomena or Final Fatebloom is A4+
                     {
                         name: "Doppel of Agitation", ascension: 4,
                         ifHave: {
                             mode: "or",
                             conditions: [
-                                { name: "Falsified Phenomena", ascension: 4, },
                                 { name: "Final Fatebloom", ascension: 4, },
                             ],
                         },
