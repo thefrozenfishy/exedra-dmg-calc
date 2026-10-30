@@ -215,7 +215,7 @@
                 Kioku in the background, which can use a lot of memory (may crash the tab on some phones).</p>
         </section>
 
-        <section v-for="bc in (showBenchCharts ? benchCharts : [])" :key="bc.kind" class="card gain-section" :class="bc.sectionClass">
+        <section v-for="bc in (showBenchCharts ? benchCharts : [])" :key="bc.sectionClass" class="card gain-section" :class="bc.sectionClass">
             <div class="chart-export-toolbar">
                 <ImageActionsToolbar :target="`.${bc.sectionClass}`" :filename="bc.filename"
                     :export-options="() => chartExportOpts(`.${bc.sectionClass}`)"
@@ -227,19 +227,19 @@
             <div class="gain-bar-options">
                 <div class="fight-mode-row">
                     <span class="fight-mode-label">Display</span>
-                    <div class="fight-mode-toggle" style="--count: 2" role="radiogroup" aria-label="Damage metric">
+                    <div class="fight-mode-toggle" :style="{ '--count': bc.metrics.length }" role="radiogroup" aria-label="Damage metric">
                         <div class="fight-mode-highlight"
-                            :style="{ transform: `translateX(${benchMetricIndex * 100}%)` }">
+                            :style="{ transform: `translateX(${bc.metricIndex * 100}%)` }">
                         </div>
-                        <button v-for="opt in benchMetricOptions" :key="opt.label" type="button"
-                            class="fight-mode-option" :class="{ active: benchAverageDmg === opt.value }"
-                            :title="opt.title" @click="benchAverageDmg = opt.value">
+                        <button v-for="(opt, i) in bc.metrics" :key="opt.label" type="button"
+                            class="fight-mode-option" :class="{ active: bc.metricIndex === i }"
+                            :title="opt.title" @click="opt.select()">
                             {{ opt.label }}
                         </button>
                     </div>
                 </div>
 
-                <div v-if="benchAverageDmg" class="fight-mode-row">
+                <div v-if="bc.battleLength" class="fight-mode-row">
                     <span class="fight-mode-label">Simulation depth</span>
                     <div class="fight-mode-toggle" style="--count: 3" role="radiogroup" aria-label="Battle length">
                         <div class="fight-mode-highlight"
@@ -454,6 +454,8 @@ const benchMetricOptions = [
     { value: true, label: "Average Damage", title: "How much the attacker's total dmg changes over a few turns of auto battle with SP refilled every turn, averaged over seeded battles (crits are rolled, as in the game)" },
 ] as const
 const benchMetricIndex = computed(() => benchMetricOptions.findIndex(opt => opt.value === benchAverageDmg.value))
+// The damage dealer chart's third display: break gauge removed per 100 AV (its own bench job, "break").
+const benchAttackerBreak = useSetting("gridBenchAttackerBreak", false)
 
 // Average Damage battle length. Each length is its own setup in the bench cache (the AV is part of its key), so
 // switching back and forth reuses the results of every length already calculated.
@@ -679,7 +681,8 @@ const chartCharacters = () =>
 // One bench unit to simulate: a character at the chart's levels. `benchKey` identifies it in the results and the worker
 // messages: the character id, or in "Multiple ascensions" one per ascension (id * 10 + ascension).
 type BenchUnitChar = Character & { benchKey: number }
-const benchUnits = (): BenchUnitChar[] => chartCharacters().flatMap(c => levelsMode.value === "multi"
+// The break chart only has Breakers (a subset of the other charts' characters).
+const benchUnits = (kind?: BenchChartKind): BenchUnitChar[] => chartCharacters().filter(c => kind !== "break" || c.role === KiokuRole.Breaker).flatMap(c => levelsMode.value === "multi"
     ? multiAscensions.value.map(a => ({
         ...withMaxLevelsForPlayerLevel({ ...c, ascension: a }, KiokuConstants.maxKiokuLvl), benchKey: c.id * 10 + a,
     }))
@@ -884,10 +887,11 @@ const buildCharGainResult = (
 // Negative gains are drawn below the zero line.
 const buildBarChart = (
     rows: GainRow[],
-    { idPrefix = "", titleLabel = "dmg increase", title = makeBarTitle }: {
+    { idPrefix = "", titleLabel = "dmg increase", title = makeBarTitle, format = fmt }: {
         idPrefix?: string
         titleLabel?: string
         title?: (row: Pick<GainRow, "avgGain" | "maxGain" | "critRate">, label: string) => string
+        format?: (gain: number) => string // the bar's label (default: a signed %)
     } = {},
 ) => {
     const sorted = [...rows].sort((a, b) => a.gain - b.gain)
@@ -917,7 +921,7 @@ const buildBarChart = (
         gain,
         ascension,
         variant: tags.length > 0,
-        label: fmt(gain),
+        label: format(gain),
         title: title({ avgGain, maxGain, critRate }, titleLabel),
 
         style: gain < 0
@@ -978,13 +982,16 @@ interface BenchProgress {
 
 const idleBench = (): BenchProgress => ({ running: false, total: 0, maxDone: 0, avgDone: 0, failed: 0, error: "" })
 
+// "break": the damage dealer chart's Break display; its cells hold the break gauge per 100 AV in maxGain and avgGain.
 const benchResults: Record<BenchChartKind, ShallowRef<Map<number, BenchCell[]>>> = {
     support: shallowRef(new Map()),
     attacker: shallowRef(new Map()),
+    break: shallowRef(new Map()),
 }
 const benchProgress: Record<BenchChartKind, ShallowRef<BenchProgress>> = {
     support: shallowRef(idleBench()),
     attacker: shallowRef(idleBench()),
+    break: shallowRef(idleBench()),
 }
 // Several workers per chart: the characters are dealt out round-robin (each worker computes Lux's baselines itself).
 const benchWorkers: Partial<Record<BenchChartKind, Worker[]>> = {}
@@ -1031,12 +1038,15 @@ const runBench = (kind: BenchChartKind, { fresh = false } = {}) => {
         const avg = new Map(rows.map(r => [identityKey(r), r.gain]))
         results.set(id, cells.map(c => ({ ...c, avgGain: avg.get(contextKey(c.context)) })))
     }
+    const setBreak = (id: number, rows: BenchRow[]) => { setMax(id, rows); setAvg(id, rows) }
+    // a cache / precalc entry with everything this chart shows
+    const complete = (e?: BenchCacheEntry) => kind === "break" ? !!e?.brk : !!(e?.max && e.avg)
 
     // Cached characters are shown right away; only new or changed ones are simulated.
     const setup = benchSetup(kind, lux)
     if (fresh) clearBenchCache(setup)
     const cache = loadBenchCache(setup)
-    const chars = benchUnits()
+    const chars = benchUnits(kind)
     // The cache key includes the ascension (benchCharKey), so a character whose ascension changed in the roster is
     // simulated again; its bar shows the ascension it was calculated at. Results are keyed by benchKey.
     const keyOf = new Map(chars.map(c => [c.benchKey, benchCharKey(c)]))
@@ -1047,9 +1057,12 @@ const runBench = (kind: BenchChartKind, { fresh = false } = {}) => {
         // this browser's results first, then the shipped ones ("Recalculate" simulates everything again)
         const key = keyOf.get(c.benchKey)!
         const hit = cache[key] ?? (fresh ? undefined : precalcEntry(setup, key)) // only complete entries (both metrics)
-        if (hit?.max && hit.avg) {
-            setMax(c.benchKey, hit.max)
-            setAvg(c.benchKey, hit.avg)
+        if (hit && complete(hit)) {
+            if (hit.brk) setBreak(c.benchKey, hit.brk)
+            else {
+                setMax(c.benchKey, hit.max!)
+                setAvg(c.benchKey, hit.avg!)
+            }
             progress.maxDone++
             progress.avgDone++
         } else todo.push(c)
@@ -1063,7 +1076,7 @@ const runBench = (kind: BenchChartKind, { fresh = false } = {}) => {
     // "All A5", "My Kioku" and "Multiple ascensions" reuses results). benchCharKey starts with the character id.
     const kept: Record<string, BenchCacheEntry> = {}
     const chartIds = new Set(chars.map(c => String(c.id)))
-    for (const [k, entry] of Object.entries(cache)) if (entry?.avg && chartIds.has(k.split(":")[0])) kept[k] = entry
+    for (const [k, entry] of Object.entries(cache)) if (complete(entry) && chartIds.has(k.split(":")[0])) kept[k] = entry
     let saveTimer: ReturnType<typeof setTimeout> | undefined
     const save = (now = false) => {
         clearTimeout(saveTimer)
@@ -1114,6 +1127,12 @@ const runBench = (kind: BenchChartKind, { fresh = false } = {}) => {
             if (max) kept[keyOf.get(msg.id)!] = { max, avg: msg.rows }
             save()
             progress.avgDone++
+        } else if (msg.type === "break") {
+            setBreak(msg.id, msg.rows)
+            kept[keyOf.get(msg.id)!] = { brk: msg.rows }
+            save()
+            progress.maxDone++
+            progress.avgDone++
         } else if (msg.type === "error") {
             progress.failed++
         } else if (--running === 0) { // every worker is done
@@ -1140,6 +1159,7 @@ const runBench = (kind: BenchChartKind, { fresh = false } = {}) => {
 onBeforeUnmount(() => {
     stopBench("support")
     stopBench("attacker")
+    stopBench("break")
 })
 
 const benchBarTitle = (row: Pick<GainRow, "avgGain" | "maxGain" | "critRate">, label: string) => [
@@ -1147,6 +1167,8 @@ const benchBarTitle = (row: Pick<GainRow, "avgGain" | "maxGain" | "critRate">, l
     `Average Damage ${label}: ${Number.isNaN(row.avgGain) ? "calculating…" : fmt(row.avgGain)}`,
     `Ultimate crit rate: ${row.critRate}%`,
 ].join("\n")
+const fmtBreak = (v: number) => v.toFixed(1)
+const benchBreakTitle = (row: Pick<GainRow, "avgGain" | "maxGain" | "critRate">) => `Break gauge removed per 100 AV: ${fmtBreak(row.maxGain)}`
 
 // Merged tag icons (mergeEqualVariants): slices cut on a slant, top edge SLANT% further right than the bottom ("/").
 const SLANT = 18
@@ -1236,7 +1258,8 @@ const buildBenchChart = (kind: BenchChartKind) => {
     const progress = benchProgress[kind].value
     if (progress.error) return { ...emptyBarChart(), error: progress.error, notes: [] as string[] }
 
-    const metric: Metric = benchAverageDmg.value ? "avg" : "max"
+    // the break chart's cells hold the same value in both metrics
+    const metric: Metric = kind !== "break" && benchAverageDmg.value ? "avg" : "max"
     const visible = new Map(allChars.value.map(c => [c.id, c]))
     const rows: GainRow[] = []
 
@@ -1272,11 +1295,13 @@ const buildBenchChart = (kind: BenchChartKind) => {
     const shown = kind === "support" ? merged.filter(r => r.gain > 1) : merged
 
     return {
-        ...buildBarChart(shown, {
-            idPrefix: `bench-${kind}:`,
-            titleLabel: kind === "support" ? "dmg increase" : "dmg vs Lux",
-            title: benchBarTitle,
-        }),
+        ...buildBarChart(shown, kind === "break"
+            ? { idPrefix: `bench-${kind}:`, title: benchBreakTitle, format: fmtBreak }
+            : {
+                idPrefix: `bench-${kind}:`,
+                titleLabel: kind === "support" ? "dmg increase" : "dmg vs Lux",
+                title: benchBarTitle,
+            }),
         error: "",
         notes: progress.failed ? [`${progress.failed} character(s) could not be simulated (see console).`] : [],
     }
@@ -1292,9 +1317,21 @@ const benchStatusText = (kind: BenchChartKind): string => {
 const benchEnemyText = computed(() =>
     fightMode.value === "st" ? "One enemy" : fightMode.value === "aoe" ? "Five enemies" : "Three enemies")
 
+const damageMetrics = (onSelect?: () => void) => benchMetricOptions.map(opt => ({
+    label: opt.label, title: opt.title, select: () => { benchAverageDmg.value = opt.value; onSelect?.() },
+}))
+
+const attackerMetrics = () => [
+    ...damageMetrics(() => { benchAttackerBreak.value = false }),
+    { label: "Break", title: "Breakers only: break gauge each removes per 100 AV (one turn) as the damage dealer", select: () => { benchAttackerBreak.value = true } },
+]
+
 const benchCharts = computed(() => [
     {
-        kind: "support" as const,
+        kind: "support" as BenchChartKind,
+        metrics: damageMetrics(),
+        metricIndex: benchMetricIndex.value,
+        battleLength: benchAverageDmg.value,
         sectionClass: "bench-buff-chart-section",
         filename: "relative-buff-strength-battle-engine.png",
         title: "Relative buff strength",
@@ -1314,8 +1351,27 @@ const benchCharts = computed(() => [
         status: benchStatusText("support"),
         running: benchProgress.support.value.running,
     },
-    {
-        kind: "attacker" as const,
+    benchAttackerBreak.value ? {
+        kind: "break" as BenchChartKind,
+        metrics: attackerMetrics(),
+        metricIndex: 2,
+        battleLength: true,
+        sectionClass: "bench-attacker-chart-section",
+        filename: "break-per-100-av-battle-engine.png",
+        title: "Break gauge depletion per 100 AV",
+        fightType: true,
+        desc: [
+            `Breakers only. Break gauge each Breaker removes as the damage dealer per 100 AV (one turn), over ${benchAv()} AV (${benchTurns.value} turns) of battle on the game's battle code with infinite SP (ultimates as soon as they are ready, Battle Skill every turn), supported by four ${LuxMagica}. Not compared to ${LuxMagica}: the bar is the gauge itself, added up over every enemy the character hits. Only the character's own hits count. Every Breaker wears Quickstep++, its EX crystalis and Mana Infusion++, the portrait Proof of Friends Again (SPD +20%) and Cherry Blizzard as support (SPD +20%).`,
+            `${levelsDescription.value} ${benchEnemyText.value} with 3000 def, weak to every element (x1.2 break) and a break gauge that never runs out, so they are never broken and every hit removes its full break value (on-break effects never trigger); single-target and proximity skills aim at the middle one. Ailment bonuses (enemies under Curse, Burn, ...) get their own bar when they change the result.`,
+        ],
+        chart: buildBenchChart("break"),
+        status: benchStatusText("break"),
+        running: benchProgress.break.value.running,
+    } : {
+        kind: "attacker" as BenchChartKind,
+        metrics: attackerMetrics(),
+        metricIndex: benchMetricIndex.value,
+        battleLength: benchAverageDmg.value,
         sectionClass: "bench-attacker-chart-section",
         filename: "attacker-strength-vs-lux-battle-engine.png",
         title: `Damage dealer strength compared to ${LuxMagica}`,
@@ -1493,11 +1549,13 @@ const chartExportOpts = (selector: string): ImageExportOptions => {
 }
 
 // The bench only runs while its charts are shown; hiding them stops the workers.
-const benchKinds: BenchChartKind[] = ["support", "attacker"]
-watch([showBenchCharts, markedCharacters, levelsMode, multiAscensions, fightMode, benchSpeed, benchPrecalcReady], () => {
+// The damage dealer chart runs either its damage job or its break job, whichever it shows.
+const benchKinds: BenchChartKind[] = ["support", "attacker", "break"]
+watch([showBenchCharts, markedCharacters, levelsMode, multiAscensions, fightMode, benchSpeed, benchPrecalcReady, benchAttackerBreak], () => {
     if (!benchPrecalcReady.value) return
     for (const kind of benchKinds) {
-        if (showBenchCharts.value) runBench(kind)
+        const shown = kind === "support" || (kind === "break") === benchAttackerBreak.value
+        if (showBenchCharts.value && shown) runBench(kind)
         else stopBench(kind)
     }
 }, { immediate: true })

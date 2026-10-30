@@ -17,6 +17,7 @@ const MAX_SETUPS = 24 // most recently used setups kept (chart x enemies x level
 export interface BenchCacheEntry {
     max?: BenchRow[]
     avg?: BenchRow[]
+    brk?: BenchRow[] // the "break" chart's only rows (break gauge per 100 AV)
 }
 
 interface CacheFile {
@@ -94,9 +95,10 @@ export function clearBenchCache(setup: BenchSetup) {
 // ── Precalculated results shipped with the site
 
 /** public/bench-precalc.json: `v` = LUX_BENCH_VERSION it was made with; `s` = setupKey -> benchCharKey -> [max rows,
- *  avg rows]. A max row is [gain, crit rate, identity], an avg row [gain, identity]; identity = "element/role/ailment"
- *  ("" for none). Gains keep 3 decimals. */
-export interface BenchPrecalcFile { v: number, s: Record<string, Record<string, [unknown[][], unknown[][]]>> }
+ *  avg rows] (the "break" chart: [[], [], break rows]). A max row is [gain, crit rate, identity], an avg / break row
+ *  [gain, identity]; identity = "element/role/ailment" ("" for none). Gains keep 3 decimals. */
+type PrecalcEntry = [unknown[][], unknown[][]] | [unknown[][], unknown[][], unknown[][]]
+export interface BenchPrecalcFile { v: number, s: Record<string, Record<string, PrecalcEntry>> }
 
 const idOf = (r: BenchRow) => `${r.element ?? ""}/${r.role ?? ""}/${r.ailment ?? ""}`
 const identityOf = (id: string): Pick<BenchRow, "element" | "role" | "ailment"> => {
@@ -105,14 +107,18 @@ const identityOf = (id: string): Pick<BenchRow, "element" | "role" | "ailment"> 
 }
 const round = (v: number, d: number) => Math.round(v * 10 ** d) / 10 ** d
 
-export function encodePrecalcEntry(e: Required<BenchCacheEntry>): [unknown[][], unknown[][]] {
-    return [e.max.map(r => [round(r.gain, 3), round(r.critRate ?? 0, 1), idOf(r)]), e.avg.map(r => [round(r.gain, 3), idOf(r)])]
+export function encodePrecalcEntry(e: BenchCacheEntry): PrecalcEntry {
+    const plain = (rows: BenchRow[] = []) => rows.map(r => [round(r.gain, 3), idOf(r)])
+    if (e.brk) return [[], [], plain(e.brk)]
+    return [(e.max ?? []).map(r => [round(r.gain, 3), round(r.critRate ?? 0, 1), idOf(r)]), plain(e.avg)]
 }
 
-function decodePrecalcEntry([max, avg]: [unknown[][], unknown[][]]): BenchCacheEntry {
+function decodePrecalcEntry([max, avg, brk]: PrecalcEntry): BenchCacheEntry {
+    const plain = (rows: unknown[][]) => rows.map(([gain, id]) => ({ ...identityOf(id as string), gain: gain as number }))
+    if (brk) return { brk: plain(brk) }
     return {
         max: max.map(([gain, critRate, id]) => ({ ...identityOf(id as string), gain: gain as number, critRate: critRate as number })),
-        avg: avg.map(([gain, id]) => ({ ...identityOf(id as string), gain: gain as number })),
+        avg: plain(avg),
     }
 }
 
