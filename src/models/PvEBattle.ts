@@ -14,3 +14,11 @@ export function stageBattleType(questStageMstId: number): BattleType {
 export function waveStartUnits(meta: WaveMeta): QuestEnemyAppearance[] {
     return meta.linkHpType === 1 ? meta.appearances.slice(0, 5) : meta.appearances
 }
+
+// A wave's phases: the forms of its boss that come in at an HP threshold (ModeChangeReferee type 1 steps; Crisis
+// "phase 1/2/3"). Fewer than two: the wave has no phases.
+export function wavePhases(meta: WaveMeta | undefined): WaveMeta["modeChanges"] {
+    const forms = meta?.modeChanges ?? []
+    return forms.length >= 2 && forms.every(f => f.step === 1 || f.type === 1) ? forms : []
+}
+

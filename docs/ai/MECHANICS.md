@@ -401,6 +401,12 @@ Ultimates (SpecialAttackAct) and follow-ups: only ExecuteSkill - no TurnStart/Tu
 - Form change (QuestEnemyModeChangeMst): a hit on the current form stops HP at `(int)(threshold × MaxHP/1000)`;
   at/under it (`(float)HP/MaxHP×1000 <= threshold`) the unit is replaced by the next form: same id/position,
   **raw HP** and TurnGauge object kept, fresh states/controller, TurnNum 1, battle-start passives run. [C]
+- Wave change: `WaveReferee.ShiftNextWave` (0x15E1C30) only advances while a transition is open; the game runs
+  BeginTransition -> WaveTransition -> result reset -> EndTransition (SoloGameDirectorBase.RunBattleToEnd 0x14B5C50,
+  BattleEnd 0x14B51A0 opens it). Form change entry: ModeChangeReferee.CanModeChange (0x14AFD30) -> CheckModeChange
+  (0x14B5440) queues a ModeChangeAct -> ActExecutor.ExecuteModeChange (0x190B160) -> ModeChangeEnemyBattleUnit
+  (0x14A59C0). A form's battle-start ADDITIONAL_SKILL_ACT rows queue AdditionalSkillActs (e.g. Graffiti Witch form 2
+  passive 714000511 -> skill 2006038 SUMMON summonId 1 x2 while fewer than 3 allies besides her). [C]
 - Judge: RoundLimit 100 (loss); victoryRound > 0 -> win when the next act's round exceeds it. [C]
 - Score formulas (Score Attack / PvP points / Solo Raid) are **not** in the battle core (client UI + server). [C]
 

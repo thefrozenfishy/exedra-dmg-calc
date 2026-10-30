@@ -28,21 +28,26 @@
 // Random draws: crits forced on / off (avg = the per-enemy blend with the engine's own crit chance), every effect lands,
 // random targets go to the main target. Enemy HP is set out of reach so nothing dies mid-skill.
 import { E } from "./engineBundle"
+import { skillDetailsByMstId } from "../utils/helpers"
 import { EngineBattle, type EngineBattleSetup } from "./EngineBattle"
 import { giveAilmentStates, giveFieldState } from "./EngineBench"
 import { collectTeamEffects, isEffectValueType, isSlipDamageType, kitHasEffect, type MaxDmgEffect, type MaxDmgOptions, type MaxDmgResult, type MaxDmgTrace, type MemberDamage, type SkillDamage } from "../models/MaxDamage"
 import { enemyStats, traceDamage, unitStats } from "./EngineDamageTrace"
 import { actorSkillTypeRestriction, ailmentConditionsMet, unitCountConditionsMet } from "../models/BattleConditionParser"
 import { conditionCsvsExclusive } from "../models/ConditionTiers"
-import { enemyName, isMultiRaidStage, isSoloRaidStage, type QuestEnemyAppearance } from "../models/PvE"
-import type { PvPKioku } from "../models/PvPKioku"
+import { appearanceById, enemyName, isMultiRaidStage, isSoloRaidStage, type QuestEnemyAppearance } from "../models/PvE"
+import { PvPKioku as PvPKiokuClass, type PvPKioku } from "../models/PvPKioku"
+import type { KiokuArgs } from "../types/KiokuTypes"
+import { LuxMagica } from "../types/enums"
 import { TargetType, targetRange, type SkillDetail } from "../types/KiokuTypes"
 
 const ORIGIN_ACTIVE = 1, ORIGIN_PASSIVE = 2
 const OUT_OF_REACH_HP = 2_000_000_000
 const MAX_COMBOS = 32
 
-export interface EngineMaxDmgStage { stageId: number, waveIdx: number }
+// phase: the step of the wave boss's form change (QuestEnemyModeChangeMst) to evaluate against, 1 (default) = its first
+// form; `enemies` then carries that form's appearance in the boss's place (models/PvE.phaseWave).
+export interface EngineMaxDmgStage { stageId: number, waveIdx: number, phase?: number }
 
 /** RandomHook for one evaluation: crits as asked, every effect lands, random targets = the main target. */
 class MaxDamageRandom {
@@ -183,6 +188,7 @@ interface Built { d: any, dic: Map<number, any>, allies: any[], enemies: (any | 
 interface Ctx {
     setup: EngineBattleSetup
     waveIdx: number
+    phase: number
     enemyApps: QuestEnemyAppearance[]
     opts: MaxDmgOptions
     mainIdx: number
@@ -203,7 +209,7 @@ function followTypes(effects: MaxDmgEffect[]): Set<string> {
 /** The stage's battle at the wave's start with the team's own effects removed. */
 function buildBattle(ctx: Ctx, dealerPos: number, rnd: MaxDamageRandom): Built {
     const d = EngineBattle.createDirector(ctx.setup)
-    for (let w = 0; w < ctx.waveIdx; w++) d.WaveTransition()
+    enterWave(d, ctx.waveIdx, ctx.phase)
     const bundle = d.battleUnitBundle
     const dic: Map<number, any> = bundle.dic
     const allies = [...bundle.allyList].sort((a: any, b: any) => a._PositionId - b._PositionId)
@@ -242,6 +248,87 @@ function buildBattle(ctx: Ctx, dealerPos: number, rnd: MaxDamageRandom): Built {
     setDealerHp(b)
     return b
 }
+
+/** The wave boss into its next form, as a fight gets there: its HP down to the next form's threshold, then the game's
+ *  own form change. [CONFIRMED 3.19] ModeChangeReferee.CanModeChange (0x14AFD30): a type 1 step is due once
+ *  `HP/MaxHP*1000 <= threshold` (float); SoloGameDirectorBase.CheckModeChange (0x14B5440) queues a ModeChangeAct that
+ *  ActExecutor.ExecuteModeChange (0x190B160, via Execute 0x190C4F0) runs: step +1,
+ *  EnemyAppearanceGameDirectorBase.ModeChangeEnemyBattleUnit (0x14A59C0) puts the next form's unit in the boss's place
+ *  (HP and turn gauge kept) and runs its battle-start passives. A Link HP type 2 wave's HP is the shared pool
+ *  (LinkHpReferee.SetCurrentLinkHp 0x14AF6E0 syncs every enemy to it). False when there is no next type 1 form.
+ *  [APPROXIMATION] Of the follow-ups those passives queue (AdditionalSkillAct, the next acts in battle), the ones that
+ *  summon run here, so the phase starts with the units the form brings in; the others (e.g. a 2-turn DMG dealt down on
+ *  the team) are left out, as Max Damage leaves out the wave's battle-start follow-ups. */
+function enterNextForm(d: any): boolean {
+    const mc = d.modeChangeReferee
+    const next = mc?.modeChangeInfoList.find((i: any) => i.Step === mc.currentModeChangeStep + 1)
+    const boss = d.battleUnitBundle.enemyList.find((u: any) => u.IsMainTargetEnemy())
+    if (!next || next.Type !== 1 || !boss) return false
+    const hp = Math.trunc((next.ThresholdValue * boss.MaxHP) / 1000)
+    if (d.linkHpReferee?.linkHpType === 2) d.linkHpReferee.SetCurrentLinkHp(hp, d.battleUnitBundle.enemyList)
+    else boss.SetHP(hp)
+    const [due] = mc.CanModeChange(d.battleUnitBundle.enemyList)
+    if (!due) return false
+    const actList: any[] = d.turnActSystem.actReferee.actList
+    const queued = new Set(actList)
+    E.ActExecutor.ExecuteModeChange(d, boss._Id)
+    for (const act of [...actList]) {
+        if (queued.has(act) || !(act instanceof E.AdditionalSkillAct) || act.actUnitId !== boss._Id) continue
+        if (!(skillDetailsByMstId.get(act.skillMstId) ?? []).some(x => x.abilityEffectType === "SUMMON")) continue
+        actList.splice(actList.indexOf(act), 1)
+        act.SetIsExecuted()
+        E.ActExecutor.Execute(act, d)
+    }
+    return true
+}
+
+/** The enemies on the field when phase `phase` of wave `waveIdx` starts, as the Max Damage battle builds them: their
+ *  appearance ids in position order (a phase's summons included). For the pages' enemy lists (models/PvEBattle.phaseWave). */
+export function phaseFieldAppearanceIds(stageId: number, waveIdx: number, phase: number): number[] {
+    // one ally: a follow-up aimed at the team (a summon's act target) needs a unit to aim at
+    filler ??= new PvPKiokuClass({ name: LuxMagica, kiokuLvl: 1, magicLvl: 1, heartphialLvl: 0, specialLvl: 1, ascension: 0, crysIDs: [], subCrysIDs: [] } as unknown as KiokuArgs)
+    const d = new MaxDamageRandom(false, 0).run(() => {
+        const d = EngineBattle.createDirector(setupOf([filler!], stageId))
+        enterWave(d, waveIdx, phase)
+        return d
+    })
+    return [...d.battleUnitBundle.enemyList].sort((a: any, b: any) => a._PositionId - b._PositionId)
+        .map((u: any) => u._BattleParameter?._QuestEnemyAppearanceMstId).filter(Boolean)
+}
+
+let filler: PvPKioku | undefined
+const fieldCache = new Map<string, QuestEnemyAppearance[]>()
+
+/** The pages' enemy list for a wave's phase (phase 1 / no phases: the wave's start units, models/PvEBattle.waveStartUnits;
+ *  a later phase: what phaseFieldAppearanceIds finds on the field, summons included). */
+export function phaseWave(stageId: number, waveIdx: number, phase: number, start: QuestEnemyAppearance[]): QuestEnemyAppearance[] {
+    if (phase <= 1) return start
+    const key = `${stageId}:${waveIdx}:${phase}`
+    let out = fieldCache.get(key)
+    if (!out) {
+        try { out = phaseFieldAppearanceIds(stageId, waveIdx, phase).map(appearanceById).filter((a): a is QuestEnemyAppearance => !!a) }
+        catch (e) { console.warn("Phase setup failed", e); out = start }
+        fieldCache.set(key, out)
+    }
+    return out
+}
+
+function enterWave(d: any, waveIdx: number, phase: number): void {
+    // [CONFIRMED 3.19] SoloGameDirectorBase.RunBattleToEnd (0x14B5C50): a won wave moves on as BeginTransition ->
+    // WaveTransition -> result reset -> EndTransition. WaveReferee.ShiftNextWave (0x15E1C30) only advances during a
+    // transition, so WaveTransition alone stays on wave 1 (Max Damage on a later wave hit wave 1's enemies).
+    for (let w = 0; w < waveIdx; w++) {
+        d.waveReferee.BeginTransition()
+        d.WaveTransition()
+        d.judgeResultReferee.result = 0
+        d.waveReferee.EndTransition()
+    }
+    for (let step = 2; step <= phase; step++) if (!enterNextForm(d)) break
+}
+
+const setupOf = (allies: PvPKioku[], stageId: number): EngineBattleSetup => isMultiRaidStage(stageId)
+    ? { kind: "multiRaid", allies, stageId, noRoundLimit: true }
+    : isSoloRaidStage(stageId) ? { kind: "soloRaid", allies, stageId, noRoundLimit: true } : { kind: "quest", allies, stageId }
 
 /** Buff strength the caster applies to `effect`'s state (StateAbilityEffect.ChangeGiveUnitState), 1 = none. */
 function effectValueRate(caster: any, effect: any): number {
@@ -562,11 +649,9 @@ function skillDamage(ev: Eval & { rungs?: string[] }, type: TargetType, label: s
 
 /** Max Damage on the 1:1 engine; `enemies` = the page's wave list (index order of the result). */
 export function computeMaxDamageEngine(allies: PvPKioku[], stage: EngineMaxDmgStage, enemies: QuestEnemyAppearance[], attackerPos: number, opts: MaxDmgOptions = {}): MaxDmgResult {
-    const setup: EngineBattleSetup = isMultiRaidStage(stage.stageId) ? { kind: "multiRaid", allies, stageId: stage.stageId, noRoundLimit: true } : isSoloRaidStage(stage.stageId)
-        ? { kind: "soloRaid", allies, stageId: stage.stageId, noRoundLimit: true }
-        : { kind: "quest", allies, stageId: stage.stageId }
+    const setup = setupOf(allies, stage.stageId)
     const mainIdx = Math.min(Math.max(0, opts.mainTargetIdx ?? 0), Math.max(0, enemies.length - 1))
-    const ctx: Ctx = { setup, waveIdx: stage.waveIdx, enemyApps: enemies, opts, mainIdx, allyCount: allies.length }
+    const ctx: Ctx = { setup, waveIdx: stage.waveIdx, phase: Math.max(1, stage.phase ?? 1), enemyApps: enemies, opts, mainIdx, allyCount: allies.length }
     const effects = collectTeamEffects(allies, attackerPos, { slipDamage: true })
     ctx.follow = followTypes(effects)
     const members: MemberDamage[] = []

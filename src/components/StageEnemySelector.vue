@@ -14,6 +14,14 @@
             <a v-if="wikiUrl" class="wiki-link" :href="wikiUrl" target="_blank" rel="noopener"
                 title="This stage's battle page on exedra.wiki">details →</a>
         </div>
+        <div v-if="phases.length" class="wave-row">
+            <span class="filters-heading">Phase</span>
+            <button v-for="f in phases" :key="f.step" type="button" class="chip" :class="{ active: phasePos === f.step }"
+                :title="phaseTitle(f)" @click="phase = f.step">{{ f.step }} <span class="chip-count">{{
+                    f.step === 1 ? 'start' : `from ${f.threshold / 10}% HP` }} · ATK {{ fmt(f.appearance.atk) }}</span></button>
+            <span class="row-hint">The boss changes form at these HP thresholds. Teams are scored against the selected
+                form, with the enemies on the field when it comes in.</span>
+        </div>
 
         <div v-if="enemyInfo.length" class="derived-row">
             <span class="filters-heading">Weak elements</span>
@@ -91,7 +99,8 @@
 import { computed, ref, watch } from 'vue'
 import StagePicker from './StagePicker.vue'
 import { stageWaveMeta, wavePositionIds, enemyName, breakMstOf, ELEMENT_KEYS, type QuestEnemyAppearance, type ModeChangeInfo } from '../models/PvE'
-import { waveStartUnits } from '../models/PvEBattle'
+import { wavePhases, waveStartUnits } from '../models/PvEBattle'
+import { phaseWave } from '../battle/EngineMaxDamage'
 import { Ailment, elementMap, type KiokuElement } from '../types/enums'
 import { useSetting } from '../store/settingsStore'
 import { wikiBattleUrl } from '../utils/wikiBattlePage'
@@ -109,12 +118,19 @@ const waveMetas = computed(() => stageId.value ? stageWaveMeta(stageId.value) : 
 const waves = computed(() => waveMetas.value.map(m => m.appearances))
 const wavePos = computed(() => Math.max(0, Math.min(waveIdx.value, waveMetas.value.length - 1)))
 const waveMeta = computed(() => waveMetas.value[wavePos.value])
-const wave = computed(() => waveMeta.value ? waveStartUnits(waveMeta.value) : [])
+// A wave whose boss changes form at HP thresholds has phases (Crisis "phase 1/2/3"): teams are scored against one form
+// (as on the PvE Simulator).
+const phase = useSetting<number>(`${props.settingPrefix}Phase`, 1)
+const phases = computed(() => wavePhases(waveMeta.value))
+const phasePos = computed(() => phases.value.some(f => f.step === phase.value) ? phase.value : 1)
+const phaseTitle = (f: ModeChangeInfo) => `${enemyName(f.appearance)}: HP ${fmt(f.appearance.hp)} · ATK ${fmt(f.appearance.atk)} · DEF ${fmt(f.appearance.def)} · SPD ${f.appearance.speed}`
+const wave = computed(() => waveMeta.value ? phaseWave(stageId.value, wavePos.value, phasePos.value, waveStartUnits(waveMeta.value)) : [])
 const mainTargetIdx = ref(0)
 const broken = ref<boolean[]>([])
 const breakRate = ref<(number | undefined)[]>([])
 
 watch(stageId, (id, old) => { if (old !== undefined && id !== old) waveIdx.value = 0 })
+watch([stageId, waveIdx], ([id, w], [oldId, oldW]) => { if (oldId !== undefined && (id !== oldId || w !== oldW)) phase.value = 1 })
 watch(wave, w => {
     const main = w.findIndex(a => a.isMainTargetEnemy)
     mainTargetIdx.value = main >= 0 ? main : 0
@@ -129,6 +145,7 @@ const setBreakRate = (i: number, v: number, max: number) => {
 
 const formLabel = (m: ModeChangeInfo) => `Form ${m.step} · ${m.step === 1 ? 'from the start' : `from ${m.threshold / 10}% HP`}`
 function formTag(a: QuestEnemyAppearance): string {
+    if (a.conditionType === 3) return 'Summoned'
     const own = (waveMeta.value?.modeChanges ?? []).find(m => m.appearance.questEnemyAppearanceMstId === a.questEnemyAppearanceMstId)
     return own ? formLabel(own) : ''
 }
@@ -165,6 +182,7 @@ const ailmentLabel = (a: Ailment) => a === Ailment.WOUND ? 'Bleed' : a.charAt(0)
 const selection = computed(() => stageId.value && wave.value.length ? {
     stageId: stageId.value,
     waveIdx: wavePos.value,
+    phase: phasePos.value,
     wave: JSON.parse(JSON.stringify(wave.value)) as QuestEnemyAppearance[],
     mainTargetIdx: mainTargetIdx.value,
     broken: [...broken.value],

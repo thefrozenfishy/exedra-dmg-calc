@@ -28,7 +28,8 @@ import { stageBattleType } from "../models/PvEBattle"
 export interface TeamScoreStage {
     stageId: number
     waveIdx: number
-    wave: QuestEnemyAppearance[]   // the enemies on the field when the wave starts
+    phase?: number                 // the wave boss's form step (EngineMaxDmgStage.phase), 1 = first
+    wave: QuestEnemyAppearance[]   // the enemies on the field when the wave (phase) starts
     mainTargetIdx: number
     broken: boolean[]
     breakRate: (number | undefined)[]
@@ -83,7 +84,7 @@ const critRateOf = (p: number) => Math.round(Math.min(100, Math.max(0, p)) * 10)
 /** Against a real stage's wave (its enemies, passives, break tables and battle type as in the game): every hit crits
  *  for "max", the engine's crit chance for "avg". */
 function scoreOnStage(allies: PvPKioku[], sc: TeamScoreScenario, st: TeamScoreStage, maxOnly: boolean): TeamScore {
-    const result = computeMaxDamageEngine(allies, { stageId: st.stageId, waveIdx: st.waveIdx }, st.wave, 0, {
+    const result = computeMaxDamageEngine(allies, { stageId: st.stageId, waveIdx: st.waveIdx, phase: st.phase }, st.wave, 0, {
         battleType: stageBattleType(st.stageId),
         broken: st.broken,
         breakRate: st.breakRate,

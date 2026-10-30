@@ -274,6 +274,10 @@
   notices (CompareContent 301-304, e.g. passives 2010015, 7001036). Audit: `~/ehaudit.py` lists functions with a
   try block but no foreach/using (only this one and BackupAgent.RestoreGameDirector in 3.19.0). Port catches with
   `isGameException(e)` so NotPortedError still propagates.
+- **`WaveTransition()` alone does not change the wave (2026-10-30).** ShiftNextWave needs an open transition
+  (`waveReferee.BeginTransition()` first, EndTransition after, as RunBattleToEnd). Max Damage / team scores on any wave
+  after the first silently re-built wave 1 (Crisis wave 2 showed 0: no page enemy matched). battle/EngineMaxDamage
+  `enterWave`; check `scripts/sim/checkWavePhases.ts`.
 - **ClientDriver, not RunBattleToEnd, for Solo Raid / endless waves.** Endless enemy supply and the season buff
   activation only happen in SoloGameDirectorBase.Request(TimeForwardRequest); RunBattleToEnd (battle skip) calls
   Forward directly and runs AdditionalSkillActs aimed at id 0 after a wave is wiped (KeyNotFound). Drive battles
