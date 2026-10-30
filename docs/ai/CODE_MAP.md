@@ -37,6 +37,7 @@ Find any symbol with `python3 scripts/ai/xq.py ts <name>`.
 | `BattleMath.ts` | `CsDecimal` exact decimal (.NET Core DecCalc), `seededRng`; also used by `src/engine/runtime.ts`. |
 | `LuxBench.ts`, `EngineBestTeam.ts`, `EngineTeamPool.ts` | Kioku Grid bench; Best SA Team search and its worker pool. |
 | `EngineAttackerLoadout.ts` | PvE page "find best attacker loadout": candidates (`loadoutSearch`), coordinate ascent (`findBestAttackerLoadoutEngine`), worker pool `EngineLoadoutPool` (`maxDamageWorker.ts` "loadout"). |
+| `EngineDamageDiagnosis.ts` | PvE page "Got less in game?" above Max Damage: in-game damage -> which counted buffs / debuffs were missing. Each candidate (card off / fewer stacks) run alone, subsets ranked by an estimate (same effect type adds, types multiply), best 10 re-run together; worker pool `EngineVariantPool` (`maxDamageWorker.ts` "variant", `MaxDmgOptions.onlyColumn`). Probe: `scripts/sim/probeDiagnosis.ts`. |
 | `ScoreAttackTeam.ts`, `ScoreAttackKioku.ts`, `BestTeamCalculator.ts` | The first-generation closed-form Score Attack model (Old Single Hit Calc, Old Best SA Team Calculator). `ScoreAttackKioku` is also the stats / effect-list object of Kioku Setup, Kioku Grid and Best SA. |
 | `HeartphialExp.ts`, `PowerValue.ts`, `AccountSimilarityScore.ts` | Page helpers. |
 
@@ -50,7 +51,7 @@ Data access: `src/utils/helpers.ts` (`kiokuData`, `skillDetails`, `skillDetailsB
 | Route | Page | Engine use |
 |---|---|---|
 | `/pvp-simulator` "PvP Simulator" | `src/pages/PvpTeamPage.vue` | `EngineBattle` (pvp / gvg); RNG modes (`RngControls.vue`), export/import (`src/utils/pvpExport.ts`), `BattleTimeline.vue` |
-| `/pve-simulator` "PvE Simulator" | `src/pages/PvESimulatorPage.vue` | `EngineBattle` (quest / soloRaid / multiRaid), stage picker (`StagePicker.vue`), Auto/Manual control, Solo Raid attempts, Max Damage (`maxDamageWorker.ts` -> `computeMaxDamageEngine`), attacker loadout search (`models/EngineAttackerLoadout.ts`, anvil buttons `components/AttackerOptimizer.vue`), Stats for nerds (setting `pveStatsForNerds`) |
+| `/pve-simulator` "PvE Simulator" | `src/pages/PvESimulatorPage.vue` | `EngineBattle` (quest / soloRaid / multiRaid), stage picker (`StagePicker.vue`), Auto/Manual control, Solo Raid attempts, Max Damage (`maxDamageWorker.ts` -> `computeMaxDamageEngine`), attacker loadout search (`models/EngineAttackerLoadout.ts`, anvil buttons `components/AttackerOptimizer.vue`), "Got less in game?" missing-effect finder (`models/EngineDamageDiagnosis.ts`), Stats for nerds (setting `pveStatsForNerds`) |
 | `/sa-simulator-multiple` "Best SA Team Calculator" | `BestTeamPage.vue` | `models/EngineBestTeam.ts` + `battle/EngineTeamScore.ts`, worker pool `models/EngineTeamPool.ts` (`maxDamageWorker.ts` "teams") |
 | `/kioku-grid` "Kioku Grid" | `KiokuGridPage.vue` | Bench charts via `LuxBench.ts` in one worker per chart (`luxBenchWorker.ts`); archetype icons from `models/KiokuArchetypes.ts` (kit master rows, A2 + EX crystalis) |
 | `/sa-simulator-single` "Old Single Hit Calc" | `SingleTeamPage.vue` | First-generation `ScoreAttackTeam` formula |

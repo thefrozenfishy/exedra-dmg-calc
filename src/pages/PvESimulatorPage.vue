@@ -272,6 +272,81 @@
 
             <p v-if="!teamKiokus.length" class="empty-hint">Add team members to calculate damage.</p>
             <template v-else-if="maxDmg">
+                <!-- What was missing: the damage seen in game -> which buffs / debuffs taken away give it -->
+                <div v-if="diagColumns.length" class="diag-block">
+                    <div class="diag-head">
+                        <span class="diag-title">Got less in game?</span>
+                        <span class="diag-sub">Enter the damage you saw and find which buffs / debuffs were probably
+                            missing.</span>
+                    </div>
+                    <div class="diag-fields">
+                        <label class="field"><span class="field-label">In-game damage</span>
+                            <input v-model.number="diagObserved" class="num diag-input" type="number" min="0" step="1"
+                                placeholder="e.g. 1234567" @keydown.enter="runDiagnosis" /></label>
+                        <div class="field"><span class="field-label">Skill</span>
+                            <div class="diag-chips">
+                                <button v-for="c in diagColumns" :key="c.id" type="button" class="chip"
+                                    :class="{ active: diagColumnId === c.id }" @click="diagColumnId = c.id">{{ c.text }}</button>
+                            </div>
+                        </div>
+                        <div class="field"><span class="field-label">Hit</span>
+                            <SegmentedToggle v-model="diagHit" :options="DIAG_HIT_OPTIONS" />
+                        </div>
+                        <div v-if="maxDmg.enemies.length > 1" class="field"><span class="field-label">Damage on</span>
+                            <div class="diag-chips">
+                                <button type="button" class="chip" :class="{ active: diagEnemy === 'all' }"
+                                    title="Summed over every enemy the skill hits" @click="diagEnemy = 'all'">All enemies</button>
+                                <button v-for="(en, i) in maxDmg.enemies" :key="i" type="button" class="chip"
+                                    :class="{ active: diagEnemy === i }" @click="diagEnemy = i">{{ i + 1 }}. {{ en.name }}</button>
+                            </div>
+                        </div>
+                        <div class="diag-actions">
+                            <button v-if="!diagBusy" type="button" class="btn btn-accent"
+                                :disabled="!(diagObserved > 0) || maxDmgBusy" @click="runDiagnosis">Find what was missing</button>
+                            <template v-else>
+                                <span class="diag-progress">Testing · {{ diagProgress.done }} / {{ diagProgress.total }}</span>
+                                <button type="button" class="link-btn" @click="cancelDiagnosis">Cancel</button>
+                            </template>
+                        </div>
+                    </div>
+                    <div v-if="diagResult" class="diag-results" :class="{ stale: diagStale }">
+                        <p v-if="diagStale" class="diag-note diag-stale">These results are for the setup before your last
+                            change. Click "Find what was missing" again to update them.</p>
+                        <p v-if="diagResult.aboveMax" class="diag-note">{{ fmt(diagResult.observed) }} is more than this
+                            page's Max Damage ({{ diagBaseText }}): nothing missing explains it. Check the levels, crystalis,
+                            portraits and supports in the team, the stage and the wave, or whether it was a crit.</p>
+                        <p v-else-if="diagResult.atMax" class="diag-note">{{ fmt(diagResult.observed) }} is this page's
+                            Max Damage ({{ diagBaseText }}): nothing looks missing.</p>
+                        <p v-else-if="!diagResult.rows.length" class="diag-note">No combination of up to 4 missing
+                            buffs / debuffs gives {{ fmt(diagResult.observed) }} (Max Damage: {{ diagBaseText }}).</p>
+                        <template v-else>
+                            <p class="diag-note">Max Damage: {{ diagBaseText }}. Closest matches, best first (each
+                                row run in the game's battle code with those effects taken away):</p>
+                            <div v-for="(r, i) in diagRows" :key="i" class="diag-row"
+                                :class="{ exact: Math.abs(r.diff) < 0.002 }">
+                                <div class="diag-missing">
+                                    <span v-for="(c, k) in r.missing" :key="c.id" class="diag-effect"
+                                        :class="c.side === 'ally' ? 'diag-buff' : 'diag-debuff'"
+                                        :title="r.alternatives[k].length ? 'Changes the damage exactly as much as: ' + r.alternatives[k].map(a => a.label).join(', ') : undefined">{{
+                                            c.label }}<span v-if="r.alternatives[k].length" class="diag-alt"> or {{
+                                            r.alternatives[k].map(a => a.label).join(' or ') }}</span></span>
+                                </div>
+                                <div class="diag-numbers">
+                                    <span class="diag-dmg">{{ fmt(r.damage) }}</span>
+                                    <span class="diag-hit">{{ r.hit === 'crit' ? 'crit' : 'no crit' }}</span>
+                                    <span class="diag-diff" :title="'Compared with ' + fmt(diagResult.observed)">{{
+                                        Math.abs(r.diff) < 0.002 ? 'match' : signedPct(r.diff * 100) }}</span>
+                                    <button type="button" class="link-btn" title="Turn these off in Buffs & Debuffs below"
+                                        @click="applyDiagnosis(r)">Apply</button>
+                                </div>
+                            </div>
+                            <p class="diag-foot">Only buffs and debuffs Max Damage counts are tested (off, or at fewer
+                                stacks). A close match is a likely answer, not a certain one: different effects can
+                                add up to the same number.</p>
+                        </template>
+                    </div>
+                </div>
+
                 <div v-if="dealer?.best" class="result-block">
                     <div class="result-label">{{ dealer.name }} · {{ skillLabel(dealer.best) }}</div>
                     <div class="result-value">{{ fmt(dealer.best.total.crit) }} <span class="result-unit">if it
@@ -673,7 +748,8 @@ import type { PvPKioku } from '../models/PvPKioku'
 import AttackerOptimizer from '../components/AttackerOptimizer.vue'
 import { useCharacterStore } from '../store/characterStore'
 import { EngineLoadoutPool, findBestAttackerLoadoutEngine, loadoutSearch, mainWithLoadout, slotsWithLoadout, type AttackerLoadoutRow, type LoadoutMode } from '../models/EngineAttackerLoadout'
-import type { LoadoutContext } from '../workers/maxDamageWorker'
+import type { LoadoutContext, VariantContext } from '../workers/maxDamageWorker'
+import { diagnoseDamage, EngineVariantPool, mergeChanges, type DiagnosisCandidate, type DiagnosisResult, type DiagnosisRow, type HitKind } from '../models/EngineDamageDiagnosis'
 import type { TeamSlot } from '../types/BestTeamTypes'
 import type { MaxDmgOptions } from '../models/MaxDamage'
 import type { HitTrace } from '../battle/EngineDamageTrace'
@@ -993,6 +1069,116 @@ async function optimizeAttackerLoadout(mode: LoadoutMode) {
         if (loadoutPool === pool) loadoutPool = null
         loadoutBusy.value = false
     }
+}
+
+// ---- what was missing (models/EngineDamageDiagnosis): the damage seen in game for one of the dealer's skills -> which
+// of the effects Max Damage counts (cards 'used' / 'partial' below) taken away give it, on the page's other choices
+type DiagCandidate = DiagnosisCandidate & { side: 'ally' | 'enemy' }
+const DIAG_HIT_OPTIONS = [
+    { value: 'crit', label: 'Crit' }, { value: 'normal', label: 'No crit' },
+    { value: 'either', label: 'Not sure', title: 'Try both: crit and no crit' },
+] as const
+const diagObserved = ref<number>(NaN)
+const diagHit = ref<HitKind | 'either'>('crit')
+const diagEnemy = ref<number | 'all'>('all')
+const diagColumnId = ref('')
+const diagBusy = ref(false)
+const diagProgress = reactive({ done: 0, total: 0 })
+const diagResult = shallowRef<(DiagnosisResult<DiagCandidate> & { observed: number, hit: HitKind | 'either' }) | undefined>()
+let diagPool: EngineVariantPool | null = null
+let diagCancelled = false
+// The dealer's columns that can be checked (skills + switch skill; a follow-up comes on top of an action)
+const diagColumns = computed(() => {
+    const d = dealer.value
+    if (!d) return []
+    return [...d.skills, ...(d.switchSkill ? [d.switchSkill] : [])].filter(s => s.total.crit > 0)
+        .map(s => ({ id: `${s.label}|${s.name ?? ''}`, text: skillLabel(s), label: s.label, name: s.name }))
+})
+watch(diagColumns, cols => {
+    if (!cols.some(c => c.id === diagColumnId.value)) {
+        const best = dealer.value?.best
+        diagColumnId.value = cols.find(c => best && c.id === `${best.label}|${best.name ?? ''}`)?.id ?? cols[0]?.id ?? ''
+    }
+}, { immediate: true })
+watch(() => maxDmg.value?.enemies.length ?? 0, n => { if (diagEnemy.value !== 'all' && diagEnemy.value >= n) diagEnemy.value = 'all' })
+// Results are for the setup they were run on: a new Max Damage (team, wave, toggles, "Apply") marks them as older
+const diagStale = ref(false)
+watch(maxDmg, () => { if (!diagBusy.value && diagResult.value) diagStale.value = true })
+// The closest rows only: within 1% of the in-game number, or twice as far off as the best row (at most 6)
+const diagRows = computed(() => {
+    const rows = diagResult.value?.rows ?? []
+    const limit = Math.max(0.01, 2 * Math.abs(rows[0]?.diff ?? 0))
+    return rows.filter(r => Math.abs(r.diff) <= limit).slice(0, 6)
+})
+const diagBaseText = computed(() => {
+    const b = diagResult.value?.base
+    if (!b) return ''
+    return [b.crit !== undefined ? `${fmt(b.crit)} crit` : '', b.normal !== undefined ? `${fmt(b.normal)} no crit` : ''].filter(Boolean).join(' / ')
+})
+
+// Taking a card away: every effect of it off (a vortex on chosen enemies: off on all of them); a stackable one also at
+// fewer stacks (1, and half).
+function diagCandidates(): DiagCandidate[] {
+    const out: DiagCandidate[] = []
+    for (const e of effectViews.value) {
+        if (e.status !== 'used' && e.status !== 'partial') continue
+        const who = `${e.casterName} ${e.source}`
+        const what = `${e.name}${e.value ? ' ' + e.value : ''}`
+        const vortexOff: Record<string, number[]> = {}
+        const off: string[] = []
+        for (const k of e.keys) { if (vortexEnemies[k]) vortexOff[k] = []; else off.push(k) }
+        const bucket = `${e.type}|${e.side}`
+        out.push({ id: `${e.key}:off`, group: e.key, side: e.side, bucket, label: `${what} (${who})${e.tierGroup ? ', lower tier' : ''}`, change: { excluded: off, vortexEnemies: vortexOff } })
+        if (e.maxStacks > 1 && e.stacks > 1) {
+            for (const n of [...new Set([1, Math.floor(e.stacks / 2)])].filter(n => n >= 1 && n < e.stacks)) {
+                out.push({
+                    id: `${e.key}:${n}`, group: e.key, side: e.side, bucket, label: `${e.name} at ${n}/${e.maxStacks} stacks (${who})`,
+                    change: { stacks: e.keys.map((k, i) => [k, i ? 0 : n] as [string, number]) },
+                })
+            }
+        }
+    }
+    return out
+}
+
+const cancelDiagnosis = () => { diagCancelled = true; diagPool?.close() }
+async function runDiagnosis() {
+    const col = diagColumns.value.find(c => c.id === diagColumnId.value)
+    const observed = diagObserved.value
+    if (diagBusy.value || !col || !(observed > 0) || !wave.value.length) return
+    const hit = diagHit.value
+    const context: VariantContext = {
+        slots: plain(filledSlots.value.map(([s]) => s)) as TeamSlot[], stageId: stageId.value, waveIdx: currentWaveIdx(),
+        wave: plain(wave.value), dealerPos: dealerPos.value, opts: { ...maxDmgOpts(), onlyColumn: col.label },
+    }
+    const pool = diagPool = new EngineVariantPool(context, undefined, err => console.warn('Damage check failed', err))
+    diagBusy.value = true
+    diagCancelled = false
+    diagProgress.done = 0
+    diagProgress.total = 0
+    diagResult.value = undefined
+    try {
+        const r = await diagnoseDamage(diagCandidates(), { column: { label: col.label, name: col.name }, enemy: diagEnemy.value, hit, observed },
+            c => pool.score(c), (done, total) => { diagProgress.done = done; diagProgress.total = total }, () => diagCancelled)
+        if (diagCancelled) return
+        if (!r) { toast.error("Couldn't evaluate this skill", { position: toast.POSITION.TOP_RIGHT, icon: false }); return }
+        diagResult.value = { ...r, observed, hit }
+        diagStale.value = false
+    } finally {
+        pool.close()
+        if (diagPool === pool) diagPool = null
+        diagBusy.value = false
+    }
+}
+onBeforeUnmount(() => diagPool?.close())
+
+// "Apply": the row's effects off (or at its stacks) in Buffs & Debuffs, so Max Damage shows that case
+function applyDiagnosis(r: DiagnosisRow<DiagCandidate>) {
+    const c = mergeChanges(r.missing.map(m => m.change))
+    for (const k of c.excluded ?? []) { excluded.add(k); included.delete(k) }
+    for (const [k, v] of Object.entries(c.vortexEnemies ?? {})) vortexEnemies[k] = v
+    for (const [k, n] of c.stacks ?? []) stacks.set(k, n)
+    toast.info(`Turned off: ${r.missing.map(m => m.label).join(', ')}`, { position: toast.POSITION.TOP_RIGHT, icon: false })
 }
 
 // ---- stats for nerds: what the engine computed for the dealer's best skill (MaxDmgResult.trace)
@@ -2438,6 +2624,161 @@ const saved = useSavedTeams({
     background: rgba(255, 209, 110, 0.18);
     border-color: rgba(255, 209, 110, 0.75);
     color: var(--accent);
+}
+
+/* ── What was missing (damage seen in game) ── */
+.diag-block {
+    text-align: left;
+    margin: 0 0 1rem;
+    padding: 0.75rem 0.9rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--bg-soft);
+}
+
+.diag-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.5rem;
+    margin-bottom: 0.6rem;
+}
+
+.diag-title {
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--accent);
+    font-weight: 600;
+}
+
+.diag-sub {
+    font-size: 0.8rem;
+    color: var(--muted);
+}
+
+.diag-fields {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 0.75rem 1.25rem;
+}
+
+.diag-fields .field input.diag-input {
+    width: 9rem;
+    font-size: 0.9rem;
+    padding: 0.3rem 0.45rem;
+}
+
+.diag-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+}
+
+.diag-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.diag-progress {
+    font-size: 0.8rem;
+    color: var(--muted);
+}
+
+.diag-results {
+    margin-top: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.diag-results.stale .diag-row {
+    opacity: 0.6;
+}
+
+.diag-note,
+.diag-foot {
+    margin: 0;
+    font-size: 0.8rem;
+    color: var(--muted);
+}
+
+.diag-stale {
+    color: var(--warning);
+}
+
+.diag-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.4rem 1rem;
+    padding: 0.45rem 0.6rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+}
+
+.diag-row.exact {
+    border-color: var(--success);
+}
+
+.diag-missing {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+    min-width: 0;
+}
+
+.diag-effect {
+    font-size: 0.78rem;
+    padding: 0.15rem 0.5rem;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+}
+
+.diag-buff {
+    color: var(--success-soft);
+    border-color: rgba(121, 213, 170, 0.4);
+}
+
+.diag-debuff {
+    color: var(--danger-soft);
+    border-color: rgba(255, 155, 143, 0.4);
+}
+
+.diag-alt {
+    color: var(--muted);
+}
+
+.diag-numbers {
+    margin-left: auto;
+    display: flex;
+    align-items: baseline;
+    gap: 0.6rem;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+}
+
+.diag-dmg {
+    font-weight: 700;
+    color: var(--accent);
+}
+
+.diag-hit {
+    font-size: 0.75rem;
+    color: var(--muted);
+}
+
+.diag-diff {
+    font-size: 0.8rem;
+    color: var(--muted);
+}
+
+.diag-row.exact .diag-diff {
+    color: var(--success);
+    font-weight: 600;
 }
 
 /* ── Max damage ── */

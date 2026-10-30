@@ -90,6 +90,9 @@ export interface MaxDmgOptions {
     // App tools (Best SA Team estimates): only the every-hit-crits run per column; `normal`, `avg` and `critChance`
     // come back NaN. The crit totals are the same as without it (the ladder choices only compare crit totals).
     critOnly?: boolean
+    // PvE page's "what was missing?" (models/EngineDamageDiagnosis): evaluate only this column of the dealer ("Ultimate",
+    // "Battle Skill", "Basic Attack" or "Switch Skill").
+    onlyColumn?: string
     // PvE page's "Stats for nerds": record the engine's damage steps for the dealer's best skill (MaxDmgResult.trace).
     trace?: boolean
 }
