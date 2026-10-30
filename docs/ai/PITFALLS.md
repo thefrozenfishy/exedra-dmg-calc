@@ -342,3 +342,7 @@
   getter or a trivial ctor is not a code change. Confirm with `decdiff.py --ignore-offsets --loose` before porting.
 - `fields_check.py` reports GONE FIELD for classes whose base is a generic (`ListComparer<ICollection<int>, int>`):
   parser artefact, compare the dump lines.
+- `verdiff.py mst`'s engine-coverage column (MISSING / LISTED ONLY / prefix, and condition contents "engine: MISSING")
+  reads the old src/models code (BattleConditionParser, effect lists), not src/engine. On 2026-10-30 it flagged
+  contents 208/210/211/304/313 and COUNTDOWN_*/SUMMON/LOSE_EP_RATIO as missing; all were already in src/engine
+  (CompareContent.ts, the factories). Check `grep -rlw <TYPE> src/engine` before porting.

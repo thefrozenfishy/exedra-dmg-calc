@@ -1,0 +1,141 @@
+<title>Exedra Halloween Dispatch</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: single reading column like the 3.22.0 dispatch; pumpkin accent on a violet-tinted neutral for the Halloween data drop, green = live now, amber = coming later. */
+:root {
+  --bg: #f6f4f8; --surface: #ffffff; --fg: #1d1a22; --muted: #5d5868; --line: #e1dce8;
+  --accent: #b4510f; --accent-soft: #fbe9dc; --ok: #2f7d55; --ok-soft: #e1f2e8; --warn: #7a4fb0; --warn-soft: #eee6f8;
+  --display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #141118; --surface: #1d1922; --fg: #ece8f1; --muted: #aaa3b6; --line: #332d3b;
+  --accent: #f2994a; --accent-soft: #3a2616; --ok: #6fcf9b; --ok-soft: #1c3127; --warn: #c3a3f0; --warn-soft: #2c2240; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #141118; --surface: #1d1922; --fg: #ece8f1; --muted: #aaa3b6; --line: #332d3b;
+  --accent: #f2994a; --accent-soft: #3a2616; --ok: #6fcf9b; --ok-soft: #1c3127; --warn: #c3a3f0; --warn-soft: #2c2240; color-scheme: dark }
+body { background: var(--bg); color: var(--fg); font: 15px/1.6 var(--body); }
+.wrap { max-width: 720px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 40px 72px; display: flex; flex-direction: column; gap: 36px; }
+h1, h2, h3 { font-family: var(--display); text-wrap: balance; margin: 0; line-height: 1.15; }
+h1 { font-size: clamp(30px, 6vw, 44px); font-weight: 700; letter-spacing: -0.01em; }
+h2 { font-size: 24px; font-weight: 700; }
+h3 { font-size: 18px; font-weight: 700; }
+p { margin: 0; }
+section { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+.eyebrow { font: 500 12px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--accent); }
+.lede { font-size: 17px; color: var(--muted); max-width: 62ch; }
+.tldr { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 16px 18px; display: flex; flex-direction: column; gap: 8px; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 18px 20px; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.head { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: baseline; }
+.sub { font: 500 13px var(--mono); color: var(--muted); }
+.chip { font: 500 12px var(--mono); background: var(--accent-soft); color: var(--accent); border-radius: 4px; padding: 1px 7px; white-space: nowrap; }
+.chip.live { background: var(--ok-soft); color: var(--ok); }
+.chip.soon { background: var(--warn-soft); color: var(--warn); }
+.tip { border-left: 3px solid var(--accent); padding: 2px 0 2px 12px; color: var(--muted); font-size: 14px; }
+ul { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 6px; }
+.item { border-top: 1px solid var(--line); padding-top: 12px; display: flex; flex-direction: column; gap: 4px; }
+.note { color: var(--muted); font-size: 14px; }
+.tbl { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: 14px; font-variant-numeric: tabular-nums; }
+th, td { text-align: left; padding: 7px 10px 7px 0; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font: 500 12px var(--mono); color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
+footer { color: var(--muted); font-size: 13px; border-top: 1px solid var(--line); padding-top: 16px; }
+</style>
+
+<div class="wrap">
+  <header style="display:flex;flex-direction:column;gap:14px">
+    <div class="eyebrow">Madoka Exedra · new game data · 30 Oct 2026</div>
+    <h1>Forever Halloween Night: Karin's pumpkin, Felicia's Doppel and a Kyoko healer</h1>
+    <p class="lede">No client update today (still version 3.22.0), but the game data that arrived at 12:00 JST is the big Halloween drop: three new kioku, two Halloween story parts, Felicia's Doppel story, Crisis 8, a new Score Attack and a Link Raid.</p>
+  </header>
+
+  <div class="tldr">
+    <h3>In short</h3>
+    <ul>
+      <li><b>New kioku</b>: Pumpkin Death Squall (Karin, Flame Debuffer) and Doppel of Agitation (Felicia, Dark Breaker) from 30 Oct; All Souls' Repose (Kyoko, Dark Healer) from 6 Nov.</li>
+      <li><b>Events</b>: Forever Halloween Night: A Town of Farewells Part I and II, and Felicia Mitsuki: A Doppel Tale (15 stages each).</li>
+      <li><b>Crisis 8</b>: Graffiti Witch, 1 to 8 Nov. <b>Score Attack</b>: Uwasa of the Anonymous AI, 5 Nov to 5 Dec. <b>Link Raid</b>: Kumanoko no Yume, 5 to 19 Nov.</li>
+      <li><b>Balance</b>: three enemy skill fixes, nothing on player kioku.</li>
+    </ul>
+  </div>
+
+  <section id="kioku">
+    <div class="eyebrow">New kioku</div>
+
+    <div class="card">
+      <div class="head"><h2>Pumpkin Death Squall</h2><span class="sub">Karin Misono · 5★ Flame Debuffer</span><span class="chip live">from 30 Oct</span></div>
+      <ul>
+        <li><b>Magic 0/15.</b> Every time she or an ally hits an enemy with a basic attack, battle skill or special she gains 2 Magic, plus 1 more if that hit was flame.</li>
+        <li><b>Battle skill, Cross Death Scythe</b>: 50% flame ×3 to all enemies, +20% chance to be crit (2 turns) and applies <b>Flame Chain</b>. At 15 Magic it costs <b>0 SP</b>, spends the 15 Magic and fires her follow-up attack.</li>
+        <li><b>Follow-up</b> (also on any enemy defeat): 15% flame ×4 to all, applies Pumpkin Panic and Flame Chain, +5 MP. The two triggers each fire their own follow-up.</li>
+        <li><b>Flame Chain</b> (levels 1 to 5): each flame attack on the target adds 10% chain damage (max 25%) and −2% flame RES (max −10%). While any enemy carries her Flame Chain she has +15% SPD and takes 10% less damage.</li>
+        <li><b>Special</b>: 75% flame ×4 to all, +15% flame damage taken (2 turns) and <b>Pumpkin Panic</b> (−15% DEF, +5% crit damage taken). If an enemy already has Pumpkin Panic: a further +15% crit damage taken and −5% SPD.</li>
+      </ul>
+      <p class="tip">She wants a flame team that hits often: allies' hits fill her Magic, and flame hits fill it faster. EX crys "I'm Taking Halloween Back!" starts her at 10 Magic, so the first free Cross Death Scythe comes very early.</p>
+    </div>
+
+    <div class="card">
+      <div class="head"><h2>Doppel of Agitation</h2><span class="sub">Felicia Mitsuki · 5★ Dark Breaker</span><span class="chip live">from 30 Oct</span></div>
+      <ul>
+        <li><b>Magic 0/4</b>, filled by her allies: +2 when an ally other than her hits with a battle skill, +1 for a basic attack. At 4 she spends it on a follow-up: 60% dark to one enemy, +5 MP.</li>
+        <li><b>Murk of Obsession</b> (self, up to 10 stacks; one per follow-up and per special): +60% break effect, more break-gauge damage on follow-ups and specials, and +15% break bonus per stack (max 150%).</li>
+        <li><b>Battle skill</b>: 195% dark to one enemy, −10% damage taken for 1 turn. <b>Special</b>: 360% dark, −15% DEF on the target (2 turns), a free follow-up that doesn't use Magic, and a Murk stack.</li>
+      </ul>
+      <p class="tip">A Breaker that scales over the fight: pair her with allies who use battle skills a lot so her follow-ups come every round. EX crys "Power is Power!" adds +5% damage taken on all enemies whenever one breaks.</p>
+    </div>
+
+    <div class="card">
+      <div class="head"><h2>All Souls' Repose</h2><span class="sub">Kyoko Sakura · 5★ Dark Healer</span><span class="chip soon">from 6 Nov</span></div>
+      <ul>
+        <li><b>Battle skill, Jadefire Rite</b>: 135% dark to all enemies, 100% chance to curse (40%, 2 turns), applies <b>Spirit-Sealing Hairpin</b> and heals all allies for 12% of her ATK +400.</li>
+        <li><b>Spirit-Sealing Hairpin</b> (up to 20 per enemy): −5% ATK, +1% damage taken per stack. Once the total across all enemies reaches 20, they also lose 5% SPD.</li>
+        <li><b>Passive</b>: at battle start +25% ailment hit and a 70% action advance. When she or an ally hits a cursed enemy that carries a Hairpin: heal all allies for 5% of her ATK and add 1 Hairpin. While a cursed enemy is around she has +10% ATK and SPD, and the whole team deals +30% ongoing (DoT) damage. +5 MP whenever an enemy takes ongoing damage or dies.</li>
+        <li><b>Special</b>: 280% dark to all, curse, heals all allies for 45% of her ATK +1,200, cleanses 1 debuff, and −10% dark RES on enemies at 20 Hairpins.</li>
+      </ul>
+      <p class="tip">A healer for curse and DoT teams: every hit on a cursed enemy heals and stacks Hairpins, so multi-hit allies stack them fastest.</p>
+    </div>
+  </section>
+
+  <section id="events">
+    <div class="eyebrow">Events and raids</div>
+    <div class="card">
+      <div class="tbl"><table>
+        <thead><tr><th>Event</th><th>When (JST)</th><th>What</th></tr></thead>
+        <tbody>
+          <tr><td><b>Forever Halloween Night: A Town of Farewells</b> Part I and II</td><td>in today's data</td><td>Story event, 15 battles per part</td></tr>
+          <tr><td><b>Felicia Mitsuki: A Doppel Tale</b></td><td>in today's data</td><td>Story, 15 battles</td></tr>
+          <tr><td><b>Crisis 8: Graffiti Witch</b></td><td>1 Nov 12:00 to 8 Nov 23:59</td><td>6 difficulties from Easy (5 rounds) to Extra (3 rounds); new Apex Form and Apex Overdrive Form bosses</td></tr>
+          <tr><td><b>Score Attack: Uwasa of the Anonymous AI</b></td><td>5 Nov to 5 Dec</td><td>The boss gains ATK and SPD every turn; its DEF drops once its break bonus is maxed</td></tr>
+          <tr><td><b>Link Raid: Kumanoko no Yume</b></td><td>5 Nov to 19 Nov</td><td>New EX level</td></tr>
+          <tr><td><b>[Redux] The Case Files of the Coordinator 4</b> Score Attack</td><td>rerun</td><td>51 ranks</td></tr>
+        </tbody>
+      </table></div>
+      <p class="tip">For the Score Attack the game's own hint says to push break bonus: the boss gets softer once its break bonus is capped. Doppel of Agitation's +break bonus stacks fit that well.</p>
+    </div>
+    <div class="card">
+      <div class="head"><h3>New enemy tricks</h3></div>
+      <ul>
+        <li><b>Countdown to Calamity</b>: a boss starts a counter; when it hits 0 it deals XL flame damage to your whole team and heavily lowers ATK, DEF and damage dealt for 3 turns. Some skills lower or cancel the count.</li>
+        <li>Other new enemy skills summon 2 minions, drain your team's MP, or hit random targets 3 times.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="more">
+    <div class="eyebrow">Also new</div>
+    <div class="item"><h3>Crys</h3><p><b>Ruler of Halloween</b>: +12.5% flame damage, Debuffer also +3% MP recovery. <b>Right By Your Side</b>: +3% MP recovery, Healer also +15% healing. <b>My Words Can't Get Through</b>: +12.5% follow-up and counter damage, Breaker also +10% SPD.</p></div>
+    <div class="item"><h3>EX crys</h3><p>One for each new kioku. All Souls' Repose's "I Do What a Gatekeeper Must": +20% ATK, and +10% SPD once enemies carry 10 Hairpins in total.</p></div>
+    <div class="item"><h3>Balance</h3><p>Only enemy skills changed: one light hit now actually deals light damage, one now needs its "while afflicted" condition, and one description now says its ATK down has a 50% chance.</p></div>
+  </section>
+
+  <section id="calc">
+    <div class="eyebrow">exedra-dmg-calc</div>
+    <h2>Simulator status</h2>
+    <p>The three new kioku and all new stages are in the simulator and run without errors. The new rules they use (Hairpin totals across the enemy team, debuff counts, total damage taken, how many allies were hit) were already part of the battle engine.</p>
+  </section>
+
+  <footer>Read from the game data downloaded on 30 Oct 2026 (client 3.22.0).</footer>
+</div>
