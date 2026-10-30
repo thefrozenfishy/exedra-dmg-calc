@@ -42,12 +42,15 @@ function arg(name: string): string | undefined {
     const i = process.argv.indexOf(`--${name}`)
     return i >= 0 ? process.argv[i + 1] : undefined
 }
-const list = (v: string | undefined, def: readonly number[]): number[] => {
+// "5,15,100", "0-5", or "5 15 100" (PowerShell passes an unquoted 5,15,100 as one argument "5 15 100")
+const list = (v: string | undefined, def: readonly number[], name = "list"): number[] => {
     if (!v) return [...def]
-    return v.split(",").flatMap(p => {
+    const out = v.split(/[\s,]+/).filter(Boolean).flatMap(p => {
         const [a, b] = p.split("-").map(Number)
         return b === undefined ? [a] : Array.from({ length: b - a + 1 }, (_, i) => a + i)
     })
+    if (!out.length || out.some(n => !Number.isInteger(n) || n < 0)) throw new Error(`--${name} "${v}": expected numbers like 5,15,100 or 0-5`)
+    return out
 }
 
 // ── child: computes its items, one JSON line per result on stdout
@@ -78,11 +81,12 @@ async function child(file: string) {
 
 // ── main: work list, child processes, merge into the file
 async function main() {
-    const charts = (arg("charts") ?? "support,attacker,break").split(",") as Chart[]
-    const enemies = list(arg("enemies"), BENCH_ENEMY_COUNTS)
+    const charts = (arg("charts") ?? "support,attacker,break").split(/[\s,]+/).filter(Boolean) as Chart[]
+    for (const c of charts) if (!["support", "attacker", "break"].includes(c)) throw new Error(`--charts: unknown chart "${c}" (support, attacker, break)`)
+    const enemies = list(arg("enemies"), BENCH_ENEMY_COUNTS, "enemies")
     const all = process.argv.includes("--all")
-    const turns = list(arg("turns"), all ? BENCH_TURN_OPTIONS : BENCH_TURN_OPTIONS.slice(0, 2))
-    const ascensions = list(arg("asc"), [0, 1, 2, 3, 4, 5])
+    const turns = list(arg("turns"), all ? BENCH_TURN_OPTIONS : BENCH_TURN_OPTIONS.slice(0, 2), "turns")
+    const ascensions = list(arg("asc"), [0, 1, 2, 3, 4, 5], "asc")
     const only = arg("only")?.split(",").map(s => s.trim())
     const force = process.argv.includes("--force")
     const jobs = Math.max(1, Number(arg("jobs") ?? Math.max(1, os.cpus().length - 1)))
