@@ -398,6 +398,15 @@ export const BETA_SECTIONS = [
                     { name: "Baldamente Fortissimo", ascension: 4, },
                     { name: "Thunderous Waltz", ascension: 4, },
                     {
+                        name: "Doppel of Agitation", ascension: 4,
+                        ifHave: {
+                            mode: "or",
+                            conditions: [
+                                { name: "Final Fatebloom", ascension: 4, },
+                            ],
+                        },
+                    },
+                    {
                         name: "Cherry Ballad", ascension: 4,
                         ifHave: {
                             mode: "or",
@@ -444,6 +453,16 @@ export const BETA_SECTIONS = [
                         exceptions: {
                             conditions: [
                                 { name: "Final Fatebloom", ascension: 4 },
+                            ],
+                        },
+                    },
+                    {
+                        name: "Doppel of Agitation", ascension: 4,
+                        exceptions: {
+                            mode: "or",
+                            conditions: [
+                                { name: "Falsified Phenomena", ascension: 4, },
+                                { name: "Final Fatebloom", ascension: 4, },
                             ],
                         },
                     },
