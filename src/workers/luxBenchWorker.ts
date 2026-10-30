@@ -1,5 +1,6 @@
 // Beta Kioku Grid charts measured with the battle engine (models/LuxBench.ts), off the main thread. One job is one
-// chart: each character's Max Burst (fast) and Average Damage (battle simulations), one character at a time. Each
+// chart: each character's Max Burst (fast) and Average Damage (battle simulations), one character at a time; the
+// "break" chart only has its break gauge per 100 AV (LuxBenchCharts.attackerBreak). Each
 // result is posted as soon as it is known, so the page draws the chart bar by bar while the rest is computed.
 import "../models/BestTeamCalculator"; // loads Kioku <-> BestTeamCalculator <-> ScoreAttackKioku in a working order
 import { benchKioku, LuxBenchCharts, type BenchRow } from "../models/LuxBench";
@@ -7,7 +8,7 @@ import type { PvPKioku } from "../models/PvPKioku";
 import type { Character } from "../types/KiokuTypes";
 
 export interface LuxBenchJob {
-    chart: "support" | "attacker"
+    chart: "support" | "attacker" | "break"
     lux: Character
     chars: (Character & { benchKey?: number })[]  // levels already applied; benchKey (default: id) names it in the messages
     enemies: number     // 1, 3 or 5 (the page's fight type)
@@ -17,7 +18,7 @@ export interface LuxBenchJob {
 }
 
 export type LuxBenchMessage =
-    | { type: "max" | "avg", id: number, rows: BenchRow[] }
+    | { type: "max" | "avg" | "break", id: number, rows: BenchRow[] }
     | { type: "error", id: number, error: string }
     | { type: "done" }
 
@@ -33,15 +34,16 @@ self.onmessage = (e: MessageEvent<LuxBenchJob>) => {
     const units = new Map<number, PvPKioku>()
     const failed = new Set<number>()
 
-    const run = (c: LuxBenchJob["chars"][number], type: "max" | "avg") => {
+    const run = (c: LuxBenchJob["chars"][number], type: "max" | "avg" | "break") => {
         const id = c.benchKey ?? c.id
         if (failed.has(id)) return
         try {
             let x = units.get(id)
-            if (!x) units.set(id, x = benchKioku(toInput(c), undefined, true))
-            const rows = job.chart === "support"
-                ? (type === "max" ? bench.supportMax(x, job.enemies) : bench.supportAvg(x, job.enemies))
-                : (type === "max" ? bench.attackerMax(x, job.enemies) : bench.attackerAvg(x, job.enemies))
+            if (!x) units.set(id, x = benchKioku(toInput(c), undefined, job.chart === "break" ? "break" : true))
+            const rows = type === "break" ? bench.attackerBreak(x, job.enemies)
+                : job.chart === "support"
+                    ? (type === "max" ? bench.supportMax(x, job.enemies) : bench.supportAvg(x, job.enemies))
+                    : (type === "max" ? bench.attackerMax(x, job.enemies) : bench.attackerAvg(x, job.enemies))
             post({ type, id, rows })
         } catch (err) {
             failed.add(id)
@@ -52,6 +54,7 @@ self.onmessage = (e: MessageEvent<LuxBenchJob>) => {
 
     // One character at a time, both metrics, so its bar appears complete in either view.
     for (const c of job.chars) {
+        if (job.chart === "break") { run(c, "break"); continue }
         run(c, "max")
         run(c, "avg")
     }

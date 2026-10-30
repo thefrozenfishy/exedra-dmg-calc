@@ -1,14 +1,14 @@
 // Precalculates the Kioku Grid bench charts (models/LuxBench.ts) into public/bench-precalc.json, which the site ships:
 // the page reads every character it finds there and only simulates the rest in the visitor's browser.
 //
-//   npx tsx scripts/sim/benchPrecalc.ts [--turns 5,15] [--enemies 1,3,5] [--charts support,attacker] [--asc 0-5]
+//   npx tsx scripts/sim/benchPrecalc.ts [--turns 5,15] [--enemies 1,3,5] [--charts support,attacker,break] [--asc 0-5]
 //                                       [--only "Name,Name"] [--jobs N] [--force]
 //
 // Every character (Lux aside) at every given ascension with max levels, which covers the three "Simulate using" modes
 // (All A5, My Kioku, Multiple ascensions). Resumable: entries already in the file are kept and skipped (--force redoes
 // them), and the file is rewritten as results come in. A file of another LUX_BENCH_VERSION is started over, so bump
 // the version (luxBenchCache.ts) whenever the numbers change, then run this again. Defaults: Fast and Medium lengths
-// (Slow = --turns 100 takes ~20x as long), all fight types, both charts, A0-A5, cores - 1 processes.
+// (Slow = --turns 100 takes ~20x as long), all fight types, all three charts, A0-A5, cores - 1 processes.
 import "../../src/models/BestTeamCalculator";
 import fs from "fs";
 import os from "os";
@@ -18,14 +18,14 @@ import { fileURLToPath } from "url";
 import { benchKioku, LuxBenchCharts } from "../../src/models/LuxBench";
 import { kiokuData } from "../../src/utils/helpers";
 import { KiokuConstants, withMaxLevelsForPlayerLevel } from "../../src/types/KiokuTypes";
-import { LuxMagica } from "../../src/types/enums";
+import { KiokuRole, LuxMagica } from "../../src/types/enums";
 import {
     BENCH_ENEMY_COUNTS, BENCH_INFINITE_SP, BENCH_SEEDS, BENCH_TURN_OPTIONS, LUX_BENCH_VERSION, benchCharKey, encodePrecalcEntry,
     setupKey, type BenchPrecalcFile, type BenchSetup, type BenchUnit,
 } from "../../src/utils/luxBenchCache";
 
 const OUT = path.join(path.dirname(fileURLToPath(import.meta.url)), "../../public/bench-precalc.json")
-type Chart = "support" | "attacker"
+type Chart = "support" | "attacker" | "break"
 interface Item { chart: Chart, enemies: number, turns: number, name: string, ascension: number }
 
 // A character at max levels for this ascension, as the page prepares it (KiokuGridPage maxLevelsForChart / benchUnits).
@@ -63,10 +63,11 @@ async function child(file: string) {
         const unit = unitOf(it.name, it.ascension)
         let out: string
         try {
-            const x = benchKioku({ ...unit, crysIDs: [], subCrysIDs: [] } as any, undefined, true)
-            const max = it.chart === "support" ? bench.supportMax(x, it.enemies) : bench.attackerMax(x, it.enemies)
-            const avg = it.chart === "support" ? bench.supportAvg(x, it.enemies) : bench.attackerAvg(x, it.enemies)
-            out = JSON.stringify({ setup: sk, key: benchCharKey(unit), entry: encodePrecalcEntry({ max, avg }) })
+            const x = benchKioku({ ...unit, crysIDs: [], subCrysIDs: [] } as any, undefined, it.chart === "break" ? "break" : true)
+            const entry = it.chart === "break" ? { brk: bench.attackerBreak(x, it.enemies) }
+                : it.chart === "support" ? { max: bench.supportMax(x, it.enemies), avg: bench.supportAvg(x, it.enemies) }
+                    : { max: bench.attackerMax(x, it.enemies), avg: bench.attackerAvg(x, it.enemies) }
+            out = JSON.stringify({ setup: sk, key: benchCharKey(unit), entry: encodePrecalcEntry(entry) })
         } catch (err) {
             out = JSON.stringify({ error: `${it.name} A${it.ascension} (${it.chart}, ${it.enemies} enemies, ${it.turns} turns): ${err}` })
         }
@@ -76,7 +77,7 @@ async function child(file: string) {
 
 // ── main: work list, child processes, merge into the file
 async function main() {
-    const charts = (arg("charts") ?? "support,attacker").split(",") as Chart[]
+    const charts = (arg("charts") ?? "support,attacker,break").split(",") as Chart[]
     const enemies = list(arg("enemies"), BENCH_ENEMY_COUNTS)
     const turns = list(arg("turns"), BENCH_TURN_OPTIONS.slice(0, 2))
     const ascensions = list(arg("asc"), [0, 1, 2, 3, 4, 5])
@@ -95,7 +96,8 @@ async function main() {
     const items: Item[] = []
     for (const chart of charts) for (const e of enemies) for (const t of turns) {
         const sk = setupKey(setupOf({ chart, enemies: e, turns: t }))
-        for (const name of names) for (const a of ascensions) {
+        // the break chart only has Breakers (KiokuGridPage chartCharacters)
+        for (const name of names.filter(n => chart !== "break" || kiokuData[n].role === KiokuRole.Breaker)) for (const a of ascensions) {
             if (!force && file.s[sk]?.[benchCharKey(unitOf(name, a))]) continue
             items.push({ chart, enemies: e, turns: t, name, ascension: a })
         }

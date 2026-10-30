@@ -62,8 +62,14 @@ const ELEMENT_CRYS: Record<KiokuElement, number> = {
     [KiokuElement.Flame]: 3014, [KiokuElement.Aqua]: 3015, [KiokuElement.Forest]: 3016, // Inferno++, Torrent++, Verdure++
     [KiokuElement.Light]: 3017, [KiokuElement.Dark]: 3018, [KiokuElement.Void]: 3019,   // Radiance++, Chaos++, Nullity++
 }
+// Break chart gear (user's choice): Quickstep++ and Mana Infusion++ next to the EX crystalis, the portrait Proof of
+// Friends Again (SPD +20%) and Cherry Blizzard as support (Breakers: SPD +20% at battle start, the highest
+// unconditional SPD of the Breaker supports, tied with ones that also give break +5), the same for every Breaker.
+export const BENCH_BREAK_PORTRAIT = "Proof of Friends Again"
+export const BENCH_BREAK_SUPPORT = "Cherry Blizzard"
+const QUICKSTEP = 3006, MANA_INFUSION = 3011 // SelectionAbility ids (++)
 // The support unit as BestTeamCalculator.fromKey reads it: A5, max levels, no gear of its own.
-const benchSupportKey = () => [BENCH_SUPPORT, undefined, undefined, KiokuConstants.maxAscension, KiokuConstants.maxKiokuLvl,
+const benchSupportKey = (name = BENCH_SUPPORT) => [name, undefined, undefined, KiokuConstants.maxAscension, KiokuConstants.maxKiokuLvl,
     KiokuConstants.maxMagicLvl, KiokuConstants.maxHeartphialLvl, KiokuConstants.maxSpecialLvl, [], []]
 
 /** Whether a kit's damage (basic attack, battle skill, ultimate) is mostly DEF-based (DMG_DEF rows): those wear
@@ -86,11 +92,14 @@ const gearCrys = (name: string, element: KiokuElement | undefined): number[] =>
     [dealsDefDamage(name) ? TOWERING_BULWARK : TOWERING_OFFENSE, ...(element ? [ELEMENT_CRYS[element]] : []), DOMINANT_BLOW]
 
 /** A bench unit: the kit at the given levels with its EX crystalis, whatever `args` carries. With `gear`, also the bench
- *  gear (header): crystalis for its stat and element (the identity's element when one is given), portrait and support. */
-export function benchKioku(args: Omit<KiokuArgs, "crysIDs" | "subCrysIDs"> & Partial<KiokuArgs>, as?: BenchIdentity, gear = false): PvPKioku {
+ *  gear (header): crystalis for its stat and element (the identity's element when one is given), portrait and support;
+ *  `gear: "break"` the break chart's (BENCH_BREAK_PORTRAIT above). */
+export function benchKioku(args: Omit<KiokuArgs, "crysIDs" | "subCrysIDs"> & Partial<KiokuArgs>, as?: BenchIdentity, gear: boolean | "break" = false): PvPKioku {
     const bare = { ...args, portrait: undefined, supportKey: undefined, crysIDs: exCrysIds(args.name), subCrysIDs: [] } as KiokuArgs
     const element = (as && "element" in as ? as.element : kiokuData[args.name]?.element) as KiokuElement | undefined
-    const geared = gear ? { ...bare, portrait: BENCH_PORTRAIT, supportKey: benchSupportKey(), crysIDs: [...bare.crysIDs, ...gearCrys(args.name, element)] } as KiokuArgs : bare
+    const geared = gear === "break"
+        ? { ...bare, portrait: BENCH_BREAK_PORTRAIT, supportKey: benchSupportKey(BENCH_BREAK_SUPPORT), crysIDs: [...bare.crysIDs, QUICKSTEP, MANA_INFUSION] } as KiokuArgs
+        : gear ? { ...bare, portrait: BENCH_PORTRAIT, supportKey: benchSupportKey(), crysIDs: [...bare.crysIDs, ...gearCrys(args.name, element)] } as KiokuArgs : bare
     const k = new PvPKioku(geared)
     // Lux given a role (any, Breaker included) also gets that role's stats: the average HP/ATK/DEF of its 5 stars (Lux
     // herself excluded) at her levels, so e.g. an Attacker-identity Lux hits like an average Attacker. Gear adds what the
@@ -314,18 +323,54 @@ export interface SimOptions {
     // the time of its next own turn (scaled back to `av`). Speed then counts continuously: a turn that comes 3 AV earlier
     // shows, where with the hard cut it only matters once it fits one more action in.
     perAv?: boolean
+    // [BENCH] "break": count the break gauge the dealer removes instead of its damage, on dummies whose gauge never
+    // runs out (benchStage `gauge`), so they never break
+    measure?: "damage" | "break"
+    // [BENCH] Filled with the SP the dealer's own actions cost over the run (scaled like the result with perAv): SP
+    // spent minus SP it generated (a Basic Attack +1, its SP-gain effects), see trackSp
+    sp?: { cost: number }
+}
+
+/** [BENCH] Instrumentation, not game code: every SpReferee.AddSp made while a unit runs a Basic Attack, a Battle Skill
+ *  or an SP-gain effect is reported as that unit's (NormalAttack.Execute +1, ActiveSkill.Execute -cost with step-ups,
+ *  GainSpFixedAbilityEffect.Triggering +v1; those are the only AddSp callers). The requested amount counts, before
+ *  the 0..6 clamp. Returns the undo. */
+function trackSp(onAdd: (user: any, sp: number) => void): () => void {
+    const stack: any[] = []
+    const undo: (() => void)[] = []
+    const wrap = (proto: any, name: string, userArg: number) => {
+        const orig = proto[name]
+        proto[name] = function (this: any, ...a: any[]) {
+            stack.push(a[userArg])
+            try { return orig.apply(this, a) } finally { stack.pop() }
+        }
+        undo.push(() => { proto[name] = orig })
+    }
+    wrap(E.NormalAttack.prototype, "Execute", 2)
+    wrap(E.ActiveSkill.prototype, "Execute", 2)
+    wrap(E.GainSpFixedAbilityEffect.prototype, "Triggering", 1)
+    const ref = E.SpReferee.prototype as any, add = ref.AddSp
+    ref.AddSp = function (this: any, team: any, sp: number) {
+        if (stack.length) onAdd(stack[stack.length - 1], sp)
+        return add.call(this, team, sp)
+    }
+    undo.push(() => { ref.AddSp = add })
+    return () => { for (const f of undo.reverse()) f() }
 }
 
 // How players actually run some kits, where the bench's default play (Battle Skill whenever there is SP, ally-target
 // skills on the dealer) is unrealistic.
-//   Tenebrous Arcana: her Battle Skill grants an extra action; she uses it 3 times, then a Basic Attack.
+//   Tenebrous Arcana: her Battle Skill gives 1 Magic and an extra action, her Ultimate 3 Magic, and her Basic Attack
+//   always consumes 3 Magic (boosted at 3, passive 15035): Basic Attack whenever she is at 3 Magic, Battle Skill
+//   otherwise (never a Battle Skill at 3 Magic). A streak count (3 skills, then attack) missed the Magic from her
+//   Ultimate: she then cast 3 Battle Skills at full Magic first.
 //   Thunder Torrent: always her Battle Skill, its haste on the dealer (another ally when she is the dealer), never
 //   herself.
 //   Judgement Earth: her Battle Skill (heal, MP, and at A2 "special attack DMG +20%" on whoever it heals) on the dealer.
 //   Baldamente Fortissimo: her debuff comes from her counterattack, and the dummies never attack. Her counter's
 //   elemental RES down (follow-up 650310, 5% x 3 stacks) is kept on the main target at max stacks for the whole run.
 const PLAY_PATTERNS: Record<string, {
-    action?: (streak: number) => "skill" | "attack"
+    action?: (streak: number, self: any) => "skill" | "attack"
     // ally target: the unit to put it on (undefined: the default, the dealer)
     target?: (self: any, dealer: any, allies: any[]) => any
     // skill rows whose states this unit keeps on the main target for the whole run, at max stacks
@@ -335,16 +380,18 @@ const PLAY_PATTERNS: Record<string, {
     "Baldamente Fortissimo": {
         enemyStates: () => ((skillDetailsByMstId.get(650310) ?? []) as SkillDetail[]).filter(d => d.abilityEffectType === "DWN_ELEMENT_RESIST_ACCUM_RATIO"),
     },
-    "Tenebrous Arcana": { action: streak => streak >= 3 ? "attack" : "skill" },
+    "Tenebrous Arcana": { action: (_streak, self) => self._Condition._ChargePoint >= 3 ? "attack" : "skill" },
     "Thunder Torrent": {
         action: () => "skill",
         target: (self, dealer, allies) => dealer !== self ? dealer : allies.find(k => k !== self && !k.IsDead),
     },
 }
 
-/** Average Damage: total damage dealt by the dealer slot during a bench battle of `opts.av` action value. */
+/** Average Damage: total damage dealt by the dealer slot during a bench battle of `opts.av` action value (with
+ *  `measure: "break"`, the break gauge it removes). */
 export function simulatedDealerDamage(allies: PvPKioku[], dealerPos: number, enemyCount: number, opts: SimOptions): number {
-    const { stageId } = benchStage(enemyCount, opts.immune ?? [])
+    const breakRun = opts.measure === "break"
+    const { stageId } = benchStage(enemyCount, opts.immune ?? [], breakRun)
     const nameOf = (u: any) => allies[u._PositionId - 1]?.name
     let director: any
     const allyUnits = () => [...director.battleUnitBundle.allyList].sort((a: any, b: any) => a._PositionId - b._PositionId)
@@ -356,7 +403,7 @@ export function simulatedDealerDamage(allies: PvPKioku[], dealerPos: number, ene
     const rng = new BenchRng(opts.seed, (kind, _label, options, units) => {
         if (kind === "action") {
             if (options[0] === "Continue") return 1 // between actions: fire the first ready ultimate
-            const want = PLAY_PATTERNS[nameOf(actor)]?.action?.(streak.get(actor) ?? 0)
+            const want = PLAY_PATTERNS[nameOf(actor)]?.action?.(streak.get(actor) ?? 0, actor)
             const skill = options.findIndex(o => o.startsWith("Battle Skill")), attack = options.indexOf("Basic Attack")
             const i = want === "attack" ? attack : skill >= 0 ? skill : attack
             streak.set(actor, i === skill ? (streak.get(actor) ?? 0) + 1 : 0)
@@ -403,14 +450,22 @@ export function simulatedDealerDamage(allies: PvPKioku[], dealerPos: number, ene
     const mods = E.AppMods // runtime.AppMods (APP MOD switches, not game code)
     const savedMod = mods.expectedCritDamage
     mods.expectedCritDamage = !!opts.expectedCrits
+    let spCost = 0
+    const untrack = opts.sp ? trackSp((user, sp) => { if (user === dealerUnit()) spCost -= sp }) : undefined
     try {
     // A vortex pops inside the hit that sets it off; the engine reports it with that hit (its attacker), not as its
     // owner's damage [APPROXIMATION vs the old bench, which moved it to the owner].
     const count = (events: BattleEvent[] | undefined) => {
+        // Break: an event's breakDamage is the target's gauge drop over the whole action (EngineBattle.eventsOf), so
+        // it is taken once per target.
+        const gauge = new Map<number, number>()
         for (const ev of events ?? []) {
             if (!ev.sourceIsTeam1 || ev.sourcePos !== dealerPos) continue
-            if (ev.kind === "hit" || ev.kind === "dot") total += ev.amount
+            if (breakRun) {
+                if (ev.kind === "hit" && ev.breakDamage) gauge.set(ev.targetPos ?? -1, Math.max(gauge.get(ev.targetPos ?? -1) ?? 0, ev.breakDamage))
+            } else if (ev.kind === "hit" || ev.kind === "dot") total += ev.amount
         }
+        for (const v of gauge.values()) total += v
     }
     // An action counts if it starts within the run: the one that would start after it is played (the battle only
     // knows its time once it advances to it) but not counted.
@@ -419,11 +474,17 @@ export function simulatedDealerDamage(allies: PvPKioku[], dealerPos: number, ene
     let nextTurn = 0
     while (!battle.isOver) {
         keep(director)
+        const spBefore = spCost
         const states = battle.executeNextAction()
         if (!states.length) break
-        if (battle.elapsed > opts.av) { if (states.some(isDealerTurn)) nextTurn = battle.elapsed; break }
+        if (battle.elapsed > opts.av) {
+            spCost = spBefore // the action past the run doesn't count
+            if (states.some(isDealerTurn)) nextTurn = battle.elapsed
+            break
+        }
         for (const state of states) { count(state.events); opts.onAction?.(state, battle.elapsed) }
     }
+    untrack?.()
     // Per-AV rate: play on (counting nothing) to the dealer's first own turn past the run.
     if (opts.perAv && !nextTurn) {
         while (!battle.isOver && battle.elapsed < opts.av * 3) {
@@ -436,8 +497,11 @@ export function simulatedDealerDamage(allies: PvPKioku[], dealerPos: number, ene
     // random beyond crits: a crit roll only matters with rolled crits (with expected crits it only sets the IsCritical
     // flag, which nothing in a team without crit reactions reads)
     if (opts.report) opts.report.random = rng.events.some(e => !opts.expectedCrits || e.kind !== "crit")
-    return opts.perAv && nextTurn > 0 ? total * opts.av / nextTurn : total
+    const scale = opts.perAv && nextTurn > 0 ? opts.av / nextTurn : 1
+    if (opts.sp) opts.sp.cost = spCost * scale
+    return total * scale
     } finally {
+        untrack?.()
         mods.expectedCritDamage = savedMod
     }
 }
@@ -454,7 +518,7 @@ const identityKey = (id: BenchIdentity) => `${id.element ?? "-"}/${id.role ?? "-
 export const benchImmunities = (kitAilments: Ailment[], ailment?: Ailment): Ailment[] => kitAilments.filter(a => a !== ailment)
 
 /** One bar of a chart: the gain (%) in one dealer identity. `critRate` is the dealer's Ultimate crit chance. */
-export interface BenchRow extends BenchIdentity { gain: number, critRate?: number }
+export interface BenchRow extends BenchIdentity { gain: number, critRate?: number, sp?: number }
 
 export interface BenchOptions {
     seeds: number   // rolled battles averaged for Average Damage when anything in it is random (see simTotal)
@@ -527,13 +591,23 @@ export class LuxBenchCharts {
     // in the game: the mean of `seeds` battles (seeds 0..seeds-1). Every other team uses the expected-crit APP MOD
     // (runtime.AppMods.expectedCritDamage, not game code): one battle gives the average; `seeds` battles only when
     // something else in it is random (proc chances, random targets).
-    private simTotal(team: PvPKioku[], enemies: number, ailment?: Ailment, immune: Ailment[] = []): number {
+    // `spOut`: filled with the dealer's SP cost over the run, averaged the same way.
+    private simTotal(team: PvPKioku[], enemies: number, ailment?: Ailment, immune: Ailment[] = [], measure: SimOptions["measure"] = "damage", spOut?: { cost: number }): number {
         const expectedCrits = !team.some(k => kitReactsToCrits(k))
-        const base = { av: this.opts.av, infiniteSp: this.opts.infiniteSp, expectedCrits, ailment, immune, perAv: true }
+        const base = { av: this.opts.av, infiniteSp: this.opts.infiniteSp, expectedCrits, ailment, immune, perAv: true, measure }
         const report = { random: false }
-        let total = simulatedDealerDamage(team, 0, enemies, { ...base, seed: 0, report })
-        if (!report.random) return total
-        for (let seed = 1; seed < this.opts.seeds; seed++) total += simulatedDealerDamage(team, 0, enemies, { ...base, seed })
+        const sp = { cost: 0 }
+        let total = simulatedDealerDamage(team, 0, enemies, { ...base, seed: 0, report, sp: spOut && sp })
+        let spTotal = sp.cost
+        if (!report.random) {
+            if (spOut) spOut.cost = spTotal
+            return total
+        }
+        for (let seed = 1; seed < this.opts.seeds; seed++) {
+            total += simulatedDealerDamage(team, 0, enemies, { ...base, seed, sp: spOut && sp })
+            spTotal += sp.cost
+        }
+        if (spOut) spOut.cost = spTotal / this.opts.seeds
         return total / this.opts.seeds
     }
 
@@ -625,6 +699,20 @@ export class LuxBenchCharts {
             const immune = benchImmunities(kitAilments, id.ailment)
             const base = this.cachedSim(`a:${enemies}:${id.ailment ?? "-"}`, () => this.team(this.roleReference(KiokuRole.Attacker, enemies)), enemies, id.ailment, immune)
             return { ...id, gain: pctGain(this.simTotal(this.team(x), enemies, id.ailment, immune), base) }
+        })
+    }
+
+    /** Break chart (Breakers, wearing benchKioku `gear: "break"`): the break gauge the character removes as the dealer
+     *  (same team and play as attackerAvg) per 100 AV, summed over every enemy it hits. An absolute value (`gain` holds
+     *  it), not compared to Lux. `sp`: the SP its own actions cost per 100 AV (trackSp; negative when it generates more
+     *  than it spends). */
+    attackerBreak(x: PvPKioku, enemies: number, ids = this.attackerIdentities(x)): BenchRow[] {
+        const kitAilments = kitRestrictions(x).ailments
+        return ids.map(id => {
+            const immune = benchImmunities(kitAilments, id.ailment)
+            const sp = { cost: 0 }
+            const brk = this.simTotal(this.team(x), enemies, id.ailment, immune, "break", sp)
+            return { ...id, gain: brk * 100 / this.opts.av, sp: sp.cost * 100 / this.opts.av }
         })
     }
 }

@@ -1,7 +1,35 @@
 # Status (update at the end of every session)
 
-_Last updated: 2026-10-29 (5): game 3.22.0 (battle code identical, @rva tags moved; branch claude/version-3.22.0); before: 2026-10-29 (3): Best SA Team calculator speed (~60x on a large search); before: 2026-10-29 (2): Kioku Grid "Multiple ascensions", merged equal variant bars, precalculated bench file; before: 2026-10-29: Kioku Grid bench gear + average Attacker self buffs on Lux; before: 2026-10-24 (3): second-generation engine and Fight Solver removed (branch `remove-gen2`); before: 2026-10-24 (battle-start passive order: kit -> portrait -> support -> crys; before: Kioku Grid ailment bars: 112/305/309 conditions, Max Damage enemies carry Weakness/Stun); before: 2026-10-15 (game 3.21.0: dumped + decompiled by Claude on Windows, engine re-ported to 3.21.0; branch claude/version-3.21.0); before: 2026-10-14 (Max Damage + Kioku Grid bench on the 1:1 engine); before: 2026-10-10 (1:1 port in src/engine started); before: 2026-10-03 (passive states per giver, UP_HP_FIXED max HP; earlier: duplicate active-skill states); before: 2026-10-02 (game 3.19.1: version diff + newsletter, Magic Seal, break/notice team conditions, IMM_SLIP_DMG burst; branch claude/version-3.19.1)._
+_Last updated: 2026-10-30: Kioku Grid damage dealer chart "Break" display; before: 2026-10-29 (5): game 3.22.0 (battle code identical, @rva tags moved; branch claude/version-3.22.0); before: 2026-10-29 (3): Best SA Team calculator speed (~60x on a large search); before: 2026-10-29 (2): Kioku Grid "Multiple ascensions", merged equal variant bars, precalculated bench file; before: 2026-10-29: Kioku Grid bench gear + average Attacker self buffs on Lux; before: 2026-10-24 (3): second-generation engine and Fight Solver removed (branch `remove-gen2`); before: 2026-10-24 (battle-start passive order: kit -> portrait -> support -> crys; before: Kioku Grid ailment bars: 112/305/309 conditions, Max Damage enemies carry Weakness/Stun); before: 2026-10-15 (game 3.21.0: dumped + decompiled by Claude on Windows, engine re-ported to 3.21.0; branch claude/version-3.21.0); before: 2026-10-14 (Max Damage + Kioku Grid bench on the 1:1 engine); before: 2026-10-10 (1:1 port in src/engine started); before: 2026-10-03 (passive states per giver, UP_HP_FIXED max HP; earlier: duplicate active-skill states); before: 2026-10-02 (game 3.19.1: version diff + newsletter, Magic Seal, break/notice team conditions, IMM_SLIP_DMG burst; branch claude/version-3.19.1)._
 
+
+## 2026-10-30: Kioku Grid damage dealer chart "Break" display (user's request)
+
+- The damage dealer chart's Display toggle has a third option, Break (setting `gridBenchAttackerBreak`), **Breakers
+  only** (user's choice: the other roles break about the same): the break gauge each removes as the dealer per 100 AV, over the Simulation depth (5 / 15 / 100 turns). An absolute
+  value, not compared to Lux; summed over every enemy hit. Same team and play as Average Damage
+  (`LuxBenchCharts.attackerBreak`, `simulatedDealerDamage` `measure: "break"`).
+- [BENCH] Its dummies (`benchStage(count, immune, gauge = true)`) have a 1e9 break gauge (BreakMst 990000002), so they
+  never break and every hit removes its full processed break value (BreakPoint.Decrease removes none while broken,
+  MECHANICS section 9); on-break effects never trigger there. `breakDamage` of an event is the target's gauge drop
+  over the whole act (EngineBattle.eventsOf), so it is counted once per target per act.
+- Break gear (user's choice, `benchKioku` `gear: "break"`): EX crystalis + Quickstep++ (3006) + Mana Infusion++ (3011),
+  portrait Proof of Friends Again (SPD +20%), support Cherry Blizzard for everyone (Breaker target, SPD +20% at battle
+  start: the highest unconditional Breaker-support SPD, tied with Absolute Venus / Assault Paranoia / Groundhog Daze /
+  Sacred Gift, which also give break +5; the 25% ones are conditional). Tsukasa's own Cherry Ballad supports Debuffers.
+- SP cost (`BenchRow.sp`, per 100 AV): [BENCH] `trackSp` wraps NormalAttack.Execute (+1), ActiveSkill.Execute (-cost,
+  step-ups included) and GainSpFixedAbilityEffect.Triggering (+v1), the only SpReferee.AddSp callers, and counts the
+  dealer's requested amounts (before the 0..6 clamp); the action past the run is taken back. "Break per" toggle
+  (`gridBenchBreakPerSp`): break per 100 AV or break per SP (least to most efficient; cost <= 0 = "no SP", drawn at
+  the top). On-break SP gains (Tenebrous Arcana A2) never count there: the dummies never break.
+- Tenebrous Arcana's bench play now reads her Magic (Basic Attack at 3, else Battle Skill); the old "3 skills, then
+  attack" count spent 3 Battle Skills at full Magic after every Ultimate. Her shipped precalc entries were redone
+  (support / attacker x 1/3/5 x 5/15/100, A0-A5); BROWSER_CACHE_REV 1 drops browsers' caches without a
+  LUX_BENCH_VERSION bump.
+- Own bench job / cache setup / precalc chart `"break"` (entry `brk`, precalc entry `[[], [], rows]`); damage numbers
+  unchanged, so LUX_BENCH_VERSION stays 30. Not precalculated yet (the user runs `npx tsx scripts/sim/benchPrecalc.ts
+  --charts break --turns 5,15,100`; the page simulates it meanwhile). Reference (A5, 1 enemy, 5 turns): Groundhog Daze
+  394, Tenebrous Arcana 398, Sacred Gift 255 (Weakness 337), Cherry Blizzard 218.
 
 ## 2026-10-29 (3): Best SA Team calculator speed
 
@@ -393,6 +421,8 @@ Confirmed by the user's in-game observation. Buffs from allies now tick at the h
 - Sandbox Witch (509140) rotation, to confirm TurnNum-per-turn in combo enemies.
 
 ## Session log (newest first, one line each)
+- 2026-10-30 (3): Break display: SP cost per 100 AV + "Break per" 100 AV / SP toggle; Tenebrous Arcana plays by her Magic (her precalc entries redone, BROWSER_CACHE_REV 1).
+- 2026-10-30 (2): Kioku Grid damage dealer chart: Break display, Breakers only with SPD / MP gear (break gauge per 100 AV on never-breaking dummies), not precalculated yet; fixtures 16/16, damage precalc entries unchanged, app type-check 222.
 - 2026-10-30: data drop under client 3.22.0 (scheduled run, code unchanged): base_data be3d827f (bot sync) adds Pumpkin Death Squall (Karin, Flame Debuffer), Doppel of Agitation (Felicia, Dark Breaker), All Souls' Repose (Kyoko, Dark Healer, 6 Nov), Halloween Part I/II + Felicia Doppel story, Crisis 8 Graffiti Witch, Score Attack 30, Link Raid Kumanoko no Yume EX, enemy countdown/summon skills. New conditions 208/210/211/304/313 and every new effect type were already in src/engine (verdiff's coverage column reads the old src/models parser). engineSweep new stages + WITH new kiokus: 0 exceptions; fixtures 16/16, checkEngine321 pass, engine tsc 0, app type-check 222 (docs-only commit). wikicheck OK unchanged. Report docs/versions/3.22.0/data-2026-10-30.md, newsletter-2026-10-30.html.
 - 2026-10-29 (5): game 3.22.0 (scheduled run): battle code identical, 4,138 @rva tags moved, GAME_VER 3.22.0, fixtures 16/16; newsletter + Discord client notes (queued via jobs\\post_3.22.0.req); wikicheck OK unchanged. Branch claude/version-3.22.0.
 - 2026-10-29 (4): Best SA Team: reuse of the pickers' battle, max-only estimates, neighbour moves for supports' supports, one row per distinct team (duplicate rows with obligatory Kioku).
