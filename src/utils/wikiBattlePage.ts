@@ -1,7 +1,13 @@
-// exedra.wiki battle page of a quest stage. Same page names as the wiki's generator (ma-ex-data
-// wiki/generator_battle_pages.py, generate()): one page per quest group, with its renames (Score Attack pages under
-// their event's name, Upgrade Quests, Chaos Mode, Exedra Crisis / Link Raid by season date, Tower pages in 50-stage
-// tabs with the themed towers as extra tabs). Keep the two in step when the generator's naming changes.
+// exedra.wiki battle page of a quest stage, named the way ma-ex-data puts it on the wiki, in two steps:
+//  1. wiki/generator_battle_pages.py generate(): the file name. One page per quest group, with its renames (Score
+//     Attack pages under their event's name, Upgrade Quests, Chaos Mode, Exedra Crisis / Link Raid by season date,
+//     Tower pages in 50-stage tabs with the themed towers as extra tabs), then wiki_helpers.wikify_name.
+//  2. wiki/wiki_helpers.py get_wiki_name("battle_pages", ...): the page uploader.py uploads that file to (and
+//     patch_notes.py links to): "_(Main_Quest)" / "_(Event)" on names shared with a main story / portrait page, then
+//     "/Detailed Battle Info", "/Stages" (Heartphial Quests, Link Raid, Exedra Crisis) or nothing (Score Attack,
+//     Chaos Mode, Upgrade Quests, Mirror Layers).
+// Keep this in step with both when their naming changes.
+import cardJson from "../assets/base_data/getCardMstList.json"
 import questGroupJson from "../assets/base_data/getQuestGroupMstList.json"
 import questStageJson from "../assets/base_data/getQuestStageMstList.json"
 import soloRaidJson from "../assets/base_data/getSoloRaidMstList.json"
@@ -44,8 +50,43 @@ function basePath(group: any): string {
     return path
 }
 
+/** wiki_helpers.wikify_name, minus the file-name-only escapes get_wiki_name undoes (":" "/"); "?" is kept as is. */
+function wikify(name: string): string {
+    return name.replace(/\.$/, "").replace(/ /g, "_").replace(/>/g, "≻").replace(/[[\]]/g, "")
+}
+
+// get_wiki_name's main_story_stages (wiki/story_pages/en-Latn/Main Stories): the main story quests' names
+const mainStoryNames = new Set<string>((questGroupJson as any[])
+    .filter(g => g.questCategoryMstId === 1 && !g.name.includes("_Chaos")).map(g => wikify(g.name)))
+// get_wiki_name's portrait_pages (generator_portrait_pages.py generate(), with its "_(Portrait)" renames)
+const portraitNames = new Set<string>((cardJson as any[]).map(c => {
+    const f = wikify(String(c.name).replace(/\//g, " "))
+    return f.endsWith("Witch") || f.endsWith("Witch_Minion") || f.startsWith("Uwasa_of_the") || f.startsWith("Witch_of")
+        || f === "Crépuscule_de_la_Reine" ? `${f}_(Portrait)` : f
+}))
+
+/** wiki_helpers.get_wiki_name for a battle_pages file (`name` already wikified): the page it is uploaded to. */
+function wikiName(name: string): string {
+    const cut = name.indexOf("/")
+    let root = cut < 0 ? name : name.slice(0, cut)
+    const other = cut < 0 ? "" : name.slice(cut + 1)
+    if (mainStoryNames.has(root) && !(root.includes("_Part_I") || root.includes("'s_Memory"))) root = `${root}_(Main_Quest)`
+    else if (portraitNames.has(root)) root = `${root}_(Event)`
+    if (root === "Mirror_Layers" || root.includes("Upgrade_Quests")) return name
+    const sub = other ? `/${other}` : ""
+    if (root === "Heartphial_Quests" || root.includes("Link_Raid") || root.includes("Exedra_Crisis")) return `${root}${sub}/Stages`
+    if (other.includes("Chaos_Mode") || other.includes("Score_Attack")) return `${root}/${other}`
+    return `${root}${sub}/Detailed_Battle_Info`
+}
+
 /** The wiki page (title, "/" for subpages) with the stage, or undefined when the wiki has no battle page for it. */
 export function wikiBattlePage(stageId: number): string | undefined {
+    const file = generatorPage(stageId)
+    return file === undefined ? undefined : wikiName(wikify(file))
+}
+
+/** The page generate() writes the stage's file for (before wikify_name). */
+function generatorPage(stageId: number): string | undefined {
     const stage = stageById.get(stageId)
     const group = stage ? groups.get(stage.questGroupMstId) : undefined
     if (!group) return undefined
@@ -78,5 +119,5 @@ export function wikiBattleUrl(stageId: number): string | undefined {
     const page = wikiBattlePage(stageId)
     if (!page) return undefined
     const encode = (seg: string) => encodeURIComponent(seg).replace(/%3A/g, ":").replace(/%2C/g, ",")
-    return WIKI + page.replace(/\.$/, "").replace(/ /g, "_").split("/").map(encode).join("/")
+    return WIKI + page.split("/").map(encode).join("/")
 }

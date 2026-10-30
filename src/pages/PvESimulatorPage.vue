@@ -97,6 +97,8 @@
                 <span class="row-hint">Max Damage uses the enemies on the field when the selected wave starts; the
                     battle
                     simulator plays every wave.</span>
+                <a v-if="wikiUrl" class="wiki-link" :href="wikiUrl" target="_blank" rel="noopener"
+                    title="This stage's battle page on exedra.wiki">details →</a>
             </div>
         </section>
 
@@ -754,6 +756,7 @@ import type { TeamSlot } from '../types/BestTeamTypes'
 import type { MaxDmgOptions } from '../models/MaxDamage'
 import type { HitTrace } from '../battle/EngineDamageTrace'
 import { crystalises } from '../utils/helpers'
+import { wikiBattleUrl } from '../utils/wikiBattlePage'
 
 const team = useTeamStore()
 const stageId = useSetting<number>('pveStageId', 982250)
@@ -793,6 +796,7 @@ const portraitImage = (portrait: string) => portraits[portrait] ? `/exedra-dmg-c
 
 // ---- stage / enemies ----
 const waveIdx = ref(0)
+const wikiUrl = computed(() => stageId.value ? wikiBattleUrl(stageId.value) : undefined)
 const waveMetas = computed(() => stageId.value ? stageWaveMeta(stageId.value) : [])
 const waves = computed(() => waveMetas.value.map(m => m.appearances))
 const waveMeta = computed(() => waveMetas.value[Math.min(waveIdx.value, waveMetas.value.length - 1)])
@@ -2348,6 +2352,19 @@ const saved = useSavedTeams({
 
 .wave-row .row-hint {
     margin-left: 0.4rem;
+}
+
+.wiki-link {
+    margin-left: auto;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--accent);
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.wiki-link:hover {
+    text-decoration: underline;
 }
 
 /* Same columns as .team-grid; while it shows 5 columns, each enemy sits above its position (1-5). */
