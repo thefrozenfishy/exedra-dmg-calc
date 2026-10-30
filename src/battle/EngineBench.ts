@@ -37,7 +37,8 @@ const BENCH_ENEMY_MST_ID = 990000001
 const BENCH_BREAK_MST_ID = 990000001
 const BENCH_GAUGE_BREAK_MST_ID = 990000002
 // [BENCH] The break chart's gauge: out of reach within a run (like the HP), so every hit removes its full break value
-// (BreakPoint.Decrease removes none while broken) and the dummies never break.
+// (BreakPoint.Decrease removes none while broken). The bench breaks each dummy once on purpose (LuxBench
+// simulatedDealerDamage: 1 point left at the dealer's first decision, recovered right after).
 const BENCH_BREAK_GAUGE = 1_000_000_000
 const BENCH_STAGE_BASE = 990000000
 const BENCH_STYLE_BASE = 990100000
