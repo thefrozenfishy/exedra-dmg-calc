@@ -694,12 +694,14 @@ export function computeMaxDamageEngine(allies: PvPKioku[], stage: EngineMaxDmgSt
         const remember = (s: SkillDamage, pick: SkillPick, keep: (i: number) => boolean) => { howOf.set(s, { pick, keep }); return s }
         const skills: SkillDamage[] = []
         // a team score reads the Ultimate only (MaxDmgOptions.onlyUltimate): the other columns are not evaluated
-        const columns = opts.onlyUltimate ? pickers.base.filter(p => p.type === "SpecialAttack") : pickers.base
+        // the PvE page's "what was missing?" reads one column (MaxDmgOptions.onlyColumn): only that one is evaluated
+        const columns = opts.onlyUltimate ? pickers.base.filter(p => p.type === "SpecialAttack")
+            : opts.onlyColumn ? pickers.base.filter(p => (LABEL_OF[p.type] ?? p.type) === opts.onlyColumn) : pickers.base
         columns.forEach(p => {
             const ev = run(p)
             if (ev) skills.push(remember(skillDamage(ev, TARGET_TYPE_OF[p.type], LABEL_OF[p.type] ?? p.type), p.pick, ev.keep))
         })
-        const switchSkill = opts.onlyUltimate ? undefined : strongest(pickers.switches.map(p => {
+        const switchSkill = opts.onlyUltimate || (opts.onlyColumn && opts.onlyColumn !== "Switch Skill") ? undefined : strongest(pickers.switches.map(p => {
             const ev = run(p)
             return ev ? remember(skillDamage(ev, TARGET_TYPE_OF[p.type], "Switch Skill", p.name || undefined, `replaces ${LABEL_OF[p.type] ?? p.type}`), p.pick, ev.keep) : undefined
         }))

@@ -139,9 +139,48 @@ function loadoutBatch(msg: LoadoutScoreBatch) {
     self.postMessage({ kind: "loadout", batch: msg.batch, scores } satisfies LoadoutScoreReply)
 }
 
-self.onmessage = (e: MessageEvent<MaxDamageRequest | TeamScoreBatch | LoadoutScoreBatch>) => {
+// ---- PvE Simulator "what was missing?" (models/EngineDamageDiagnosis): the page's Max Damage for the dealer with some
+// effects taken away (more excluded keys, a vortex taken off every enemy, fewer stacks), the rest as on the page.
+// Same worker file for the same reason as above.
+
+export interface VariantContext extends LoadoutContext { slots: TeamSlot[] }
+/** On top of the page's choices: these keys off, these vortexes on these enemies, these stack counts. */
+export interface VariantChange { excluded?: string[], vortexEnemies?: Record<string, number[]>, stacks?: [string, number][] }
+/** The dealer's columns (skills + switch skill, as `label` / `name`): damage per enemy, every hit a crit and none. */
+export interface VariantColumn { label: string, name?: string, perEnemy: { normal: number, crit: number }[] }
+export interface VariantBatch { kind: "variant", batch: number, context?: VariantContext, jobs: { id: number, change: VariantChange }[] }
+export type VariantReply = { kind: "variant", batch: number, scores: { id: number, columns?: VariantColumn[], error?: string }[] }
+
+let variantContext: VariantContext | undefined
+
+function scoreVariant(change: VariantChange, c: VariantContext): VariantColumn[] {
+    const excluded = new Set(c.opts.excluded ?? [])
+    for (const k of change.excluded ?? []) excluded.add(k)
+    const stacks = new Map(c.opts.stacks ?? [])
+    for (const [k, n] of change.stacks ?? []) stacks.set(k, n)
+    const opts: MaxDmgOptions = {
+        ...c.opts, excluded, stacks, vortexEnemies: { ...c.opts.vortexEnemies, ...change.vortexEnemies },
+        onlyPos: c.dealerPos, scoreOnly: true, trace: false,
+    }
+    const result = computeMaxDamageEngine(c.slots.map(loadoutKioku), { stageId: c.stageId, waveIdx: c.waveIdx }, c.wave, c.dealerPos, opts)
+    const m = result.members[c.dealerPos]
+    return [...(m?.skills ?? []), ...(m?.switchSkill ? [m.switchSkill] : [])]
+        .map(s => ({ label: s.label, name: s.name, perEnemy: s.perEnemy.map(x => ({ normal: x.normal, crit: x.crit })) }))
+}
+
+function variantBatch(msg: VariantBatch) {
+    if (msg.context) { variantContext = msg.context; loadoutKiokus.clear() }
+    const scores = msg.jobs.map(({ id, change }) => {
+        try { return { id, columns: scoreVariant(change, variantContext!) } }
+        catch (e) { return { id, error: String((e as Error)?.message ?? e) } }
+    })
+    self.postMessage({ kind: "variant", batch: msg.batch, scores } satisfies VariantReply)
+}
+
+self.onmessage = (e: MessageEvent<MaxDamageRequest | TeamScoreBatch | LoadoutScoreBatch | VariantBatch>) => {
     if ((e.data as TeamScoreBatch).kind === "teams") return scoreBatch(e.data as TeamScoreBatch)
     if ((e.data as LoadoutScoreBatch).kind === "loadout") return loadoutBatch(e.data as LoadoutScoreBatch)
+    if ((e.data as VariantBatch).kind === "variant") return variantBatch(e.data as VariantBatch)
     pending = e.data as MaxDamageRequest
     next()
 }
