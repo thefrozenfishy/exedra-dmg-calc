@@ -17,6 +17,15 @@ _Last updated: 2026-10-30: Kioku Grid damage dealer chart "Break" display; befor
   portrait Proof of Friends Again (SPD +20%), support Cherry Blizzard for everyone (Breaker target, SPD +20% at battle
   start: the highest unconditional Breaker-support SPD, tied with Absolute Venus / Assault Paranoia / Groundhog Daze /
   Sacred Gift, which also give break +5; the 25% ones are conditional). Tsukasa's own Cherry Ballad supports Debuffers.
+- SP cost (`BenchRow.sp`, per 100 AV): [BENCH] `trackSp` wraps NormalAttack.Execute (+1), ActiveSkill.Execute (-cost,
+  step-ups included) and GainSpFixedAbilityEffect.Triggering (+v1), the only SpReferee.AddSp callers, and counts the
+  dealer's requested amounts (before the 0..6 clamp); the action past the run is taken back. "Break per" toggle
+  (`gridBenchBreakPerSp`): break per 100 AV or break per SP (least to most efficient; cost <= 0 = "no SP", drawn at
+  the top). On-break SP gains (Tenebrous Arcana A2) never count there: the dummies never break.
+- Tenebrous Arcana's bench play now reads her Magic (Basic Attack at 3, else Battle Skill); the old "3 skills, then
+  attack" count spent 3 Battle Skills at full Magic after every Ultimate. Her shipped precalc entries were redone
+  (support / attacker x 1/3/5 x 5/15/100, A0-A5); BROWSER_CACHE_REV 1 drops browsers' caches without a
+  LUX_BENCH_VERSION bump.
 - Own bench job / cache setup / precalc chart `"break"` (entry `brk`, precalc entry `[[], [], rows]`); damage numbers
   unchanged, so LUX_BENCH_VERSION stays 30. Not precalculated yet (the user runs `npx tsx scripts/sim/benchPrecalc.ts
   --charts break --turns 5,15,100`; the page simulates it meanwhile). Reference (A5, 1 enemy, 5 turns): Groundhog Daze
@@ -412,6 +421,7 @@ Confirmed by the user's in-game observation. Buffs from allies now tick at the h
 - Sandbox Witch (509140) rotation, to confirm TurnNum-per-turn in combo enemies.
 
 ## Session log (newest first, one line each)
+- 2026-10-30 (3): Break display: SP cost per 100 AV + "Break per" 100 AV / SP toggle; Tenebrous Arcana plays by her Magic (her precalc entries redone, BROWSER_CACHE_REV 1).
 - 2026-10-30 (2): Kioku Grid damage dealer chart: Break display, Breakers only with SPD / MP gear (break gauge per 100 AV on never-breaking dummies), not precalculated yet; fixtures 16/16, damage precalc entries unchanged, app type-check 222.
 - 2026-10-30: data drop under client 3.22.0 (scheduled run, code unchanged): base_data be3d827f (bot sync) adds Pumpkin Death Squall (Karin, Flame Debuffer), Doppel of Agitation (Felicia, Dark Breaker), All Souls' Repose (Kyoko, Dark Healer, 6 Nov), Halloween Part I/II + Felicia Doppel story, Crisis 8 Graffiti Witch, Score Attack 30, Link Raid Kumanoko no Yume EX, enemy countdown/summon skills. New conditions 208/210/211/304/313 and every new effect type were already in src/engine (verdiff's coverage column reads the old src/models parser). engineSweep new stages + WITH new kiokus: 0 exceptions; fixtures 16/16, checkEngine321 pass, engine tsc 0, app type-check 222 (docs-only commit). wikicheck OK unchanged. Report docs/versions/3.22.0/data-2026-10-30.md, newsletter-2026-10-30.html.
 - 2026-10-29 (5): game 3.22.0 (scheduled run): battle code identical, 4,138 @rva tags moved, GAME_VER 3.22.0, fixtures 16/16; newsletter + Discord client notes (queued via jobs\\post_3.22.0.req); wikicheck OK unchanged. Branch claude/version-3.22.0.

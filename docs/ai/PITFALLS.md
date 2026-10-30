@@ -346,3 +346,8 @@
   reads the old src/models code (BattleConditionParser, effect lists), not src/engine. On 2026-10-30 it flagged
   contents 208/210/211/304/313 and COUNTDOWN_*/SUMMON/LOSE_EP_RATIO as missing; all were already in src/engine
   (CompareContent.ts, the factories). Check `grep -rlw <TYPE> src/engine` before porting.
+- A switched Basic Attack (SWITCH_SKILL, e.g. Tenebrous Arcana's 3-Magic attack 7002) shows as `lastTargetType`
+  "ActiveSkill" in BattleSnapshots (EngineBattle.targetTypeOf compares with the unswitched NormalAttack id). Read the
+  break / damage of the action or the unit's `_Condition._ChargePoint`, not the type, before concluding what was played.
+  A bench play rule should read the unit's state (Magic) rather than count actions: a count missed the 3 Magic her
+  Ultimate gives (fixed 2026-10-30).

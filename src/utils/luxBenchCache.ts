@@ -12,16 +12,21 @@ import type { BenchRow } from "../models/LuxBench"
 export const LUX_BENCH_VERSION = 30 // 8: expected-crit battles, battle length toggle; 9: Average Damage ailment immunity; 10: A0 Lux fillers; 11: element-identity dealers hit in that element; 12: Average Damage per AV; 13: EX crys, instant effects with a turn count, poison count conditions, kit special cases; 14: A0 Lux dealer in the buff chart; 15: role-identity Lux dealers get the average 5 star stats of that role; 16: Breaker included; 17: attacker chart baseline per role; 18: 1:1 engine (game-data dummies, rolled crits); 19: no filler Lux, adaptive seeds, expected-crit mod; 20: 5-unit teams again, expected crits unless a kit reacts to crits (then 10 rolled seeds); 21: Max Damage keeps who-may-hold conditions (role / element / unique buff); 22: Max Damage evaluates enemy / ally count conditions; 23: vortex always pops, one vortex per vortex user; 24: a vortex owner gets its own self buffs; 25: DoT ailments given and popped by IMM_SLIP_DMG; 26: ailment conditions 112/305/309 detected (Sacred Gift, ...), Max Damage enemies carry Weakness/Stun for real, Max Burst immunities like Average Damage, Average Damage dummies start unbroken (first hit breaks them); 27: battle-start passive order kit -> portrait -> support -> crystalis; 28: attacker chart baseline is the Attacker-stat Lux for every role; 29: forced recalc; 30: bench gear for everyone (crystalis, portrait, support) + average 5 star Attacker self buffs on the dealer / reference Lux
 
 const STORAGE_KEY = "kiokuGridBenchCache"
+// Bumped (instead of LUX_BENCH_VERSION) when only some characters' numbers changed and the shipped file was redone for
+// them: this browser's cache is dropped, the shipped file stays valid. 1: Tenebrous Arcana's play reads her Magic; break
+// rows carry their SP cost.
+const BROWSER_CACHE_REV = 1
+const STORED_VERSION = `${LUX_BENCH_VERSION}.${BROWSER_CACHE_REV}`
 const MAX_SETUPS = 24 // most recently used setups kept (chart x enemies x levels mode x battle length ...)
 
 export interface BenchCacheEntry {
     max?: BenchRow[]
     avg?: BenchRow[]
-    brk?: BenchRow[] // the "break" chart's only rows (break gauge per 100 AV)
+    brk?: BenchRow[] // the "break" chart's only rows (break gauge per 100 AV, `sp` its SP cost per 100 AV)
 }
 
 interface CacheFile {
-    version: number
+    version: string
     setups: Record<string, { used: number, chars: Record<string, BenchCacheEntry> }>
 }
 
@@ -60,9 +65,9 @@ export const setupKey = (s: BenchSetup): string =>
 function read(): CacheFile {
     try {
         const raw = JSON.parse(localStorage.getItem(STORAGE_KEY) ?? "null")
-        if (raw?.version === LUX_BENCH_VERSION && raw.setups && typeof raw.setups === "object") return raw as CacheFile
+        if (raw?.version === STORED_VERSION && raw.setups && typeof raw.setups === "object") return raw as CacheFile
     } catch { /* unreadable or blocked: start over */ }
-    return { version: LUX_BENCH_VERSION, setups: {} }
+    return { version: STORED_VERSION, setups: {} }
 }
 
 function write(file: CacheFile) {
@@ -95,8 +100,8 @@ export function clearBenchCache(setup: BenchSetup) {
 // ── Precalculated results shipped with the site
 
 /** public/bench-precalc.json: `v` = LUX_BENCH_VERSION it was made with; `s` = setupKey -> benchCharKey -> [max rows,
- *  avg rows] (the "break" chart: [[], [], break rows]). A max row is [gain, crit rate, identity], an avg / break row
- *  [gain, identity]; identity = "element/role/ailment" ("" for none). Gains keep 3 decimals. */
+ *  avg rows] (the "break" chart: [[], [], break rows]). A max row is [gain, crit rate, identity], an avg row [gain,
+ *  identity], a break row [gain, identity, SP cost]; identity = "element/role/ailment" ("" for none). Gains keep 3 decimals. */
 type PrecalcEntry = [unknown[][], unknown[][]] | [unknown[][], unknown[][], unknown[][]]
 export interface BenchPrecalcFile { v: number, s: Record<string, Record<string, PrecalcEntry>> }
 
@@ -109,13 +114,13 @@ const round = (v: number, d: number) => Math.round(v * 10 ** d) / 10 ** d
 
 export function encodePrecalcEntry(e: BenchCacheEntry): PrecalcEntry {
     const plain = (rows: BenchRow[] = []) => rows.map(r => [round(r.gain, 3), idOf(r)])
-    if (e.brk) return [[], [], plain(e.brk)]
+    if (e.brk) return [[], [], e.brk.map(r => [round(r.gain, 3), idOf(r), round(r.sp ?? 0, 3)])]
     return [(e.max ?? []).map(r => [round(r.gain, 3), round(r.critRate ?? 0, 1), idOf(r)]), plain(e.avg)]
 }
 
 function decodePrecalcEntry([max, avg, brk]: PrecalcEntry): BenchCacheEntry {
     const plain = (rows: unknown[][]) => rows.map(([gain, id]) => ({ ...identityOf(id as string), gain: gain as number }))
-    if (brk) return { brk: plain(brk) }
+    if (brk) return { brk: brk.map(([gain, id, sp]) => ({ ...identityOf(id as string), gain: gain as number, sp: sp as number })) }
     return {
         max: max.map(([gain, critRate, id]) => ({ ...identityOf(id as string), gain: gain as number, critRate: critRate as number })),
         avg: plain(avg),

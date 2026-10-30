@@ -252,6 +252,19 @@
                     </div>
                 </div>
 
+                <div v-if="bc.kind === 'break'" class="fight-mode-row">
+                    <span class="fight-mode-label">Break per</span>
+                    <div class="fight-mode-toggle" style="--count: 2" role="radiogroup" aria-label="Break per">
+                        <div class="fight-mode-highlight"
+                            :style="{ transform: `translateX(${benchBreakPerSp ? 100 : 0}%)` }"></div>
+                        <button v-for="opt in breakPerOptions" :key="opt.label" type="button" class="fight-mode-option"
+                            :class="{ active: benchBreakPerSp === opt.value }" :title="opt.title"
+                            @click="benchBreakPerSp = opt.value">
+                            {{ opt.label }}
+                        </button>
+                    </div>
+                </div>
+
                 <div v-if="bc.fightType" class="fight-mode-row">
                     <span class="fight-mode-label">Fight type</span>
                     <div class="fight-mode-toggle" role="radiogroup" aria-label="Fight type">
@@ -456,6 +469,12 @@ const benchMetricOptions = [
 const benchMetricIndex = computed(() => benchMetricOptions.findIndex(opt => opt.value === benchAverageDmg.value))
 // The damage dealer chart's third display: break gauge removed per 100 AV (its own bench job, "break").
 const benchAttackerBreak = useSetting("gridBenchAttackerBreak", false)
+// Break shown per 100 AV, or per SP the rotation costs (sorted from least to most SP efficient)
+const benchBreakPerSp = useSetting("gridBenchBreakPerSp", false)
+const breakPerOptions = [
+    { value: false, label: "100 AV", title: "Break gauge removed per 100 AV (one turn)" },
+    { value: true, label: "SP", title: "Break gauge removed per SP the rotation costs, least to most SP efficient" },
+] as const
 
 // Average Damage battle length. Each length is its own setup in the bench cache (the AV is part of its key), so
 // switching back and forth reuses the results of every length already calculated.
@@ -783,6 +802,7 @@ interface GainRow {
     maxGain: number
     avgGain: number
     critRate: string
+    sp?: number // break chart: SP the rotation costs per 100 AV
     ascension?: string // the ascension(s) the bar was calculated at, shown on the icon ("3", or "0-2" for merged bars)
 }
 
@@ -820,6 +840,7 @@ interface GainLike {
     result: { critRate: string }
     maxGain: number
     avgGain: number
+    sp?: number
 }
 
 const buildCharGainResult = (
@@ -836,6 +857,7 @@ const buildCharGainResult = (
         maxGain: g.maxGain,
         avgGain: g.avgGain,
         critRate: g.result.critRate,
+        sp: g.sp,
     })
 
     const gainByContext = new Map<string, GainLike>()
@@ -890,19 +912,24 @@ const buildBarChart = (
     { idPrefix = "", titleLabel = "dmg increase", title = makeBarTitle, format = fmt }: {
         idPrefix?: string
         titleLabel?: string
-        title?: (row: Pick<GainRow, "avgGain" | "maxGain" | "critRate">, label: string) => string
+        title?: (row: Pick<GainRow, "avgGain" | "maxGain" | "critRate" | "sp">, label: string) => string
         format?: (gain: number) => string // the bar's label (default: a signed %)
     } = {},
 ) => {
     const sorted = [...rows].sort((a, b) => a.gain - b.gain)
 
-    const gains = sorted.map(r => r.gain)
+    // An infinite value (break per SP of a rotation that costs no SP) is drawn a bit above the highest finite one.
+    const finite = sorted.map(r => r.gain).filter(Number.isFinite)
+    const top = Math.max(0, ...finite) * 1.15 || 1
+    const gains = sorted.map(r => Number.isFinite(r.gain) ? r.gain : top)
 
     const max = Math.max(0, ...gains)
     const min = Math.min(0, ...gains)
     const span = max - min || 1
 
-    const bars = sorted.map(({ ch, tags, gain, maxGain, avgGain, critRate, ascension }) => ({
+    const bars = sorted.map(({ ch, tags, gain: value, maxGain, avgGain, critRate, sp, ascension }) => {
+        const gain = Number.isFinite(value) ? value : top
+        return {
         id: `${idPrefix}${ch.id}:${tags.map(t => `${t.kind}-${t.value}`).join("|") || "none"}${ascension !== undefined ? `:A${ascension}` : ""}`,
 
         name: (tags.length
@@ -921,8 +948,8 @@ const buildBarChart = (
         gain,
         ascension,
         variant: tags.length > 0,
-        label: format(gain),
-        title: title({ avgGain, maxGain, critRate }, titleLabel),
+        label: format(value),
+        title: title({ avgGain, maxGain, critRate, sp }, titleLabel),
 
         style: gain < 0
             ? {
@@ -933,7 +960,8 @@ const buildBarChart = (
                 bottom: `${(-min / span) * 100}%`,
                 height: `${(gain / span) * 100}%`,
             },
-    }))
+        }
+    })
 
     const presentRoles = new Set(bars.map(b => b.vRole))
 
@@ -967,6 +995,7 @@ interface BenchCell {
     maxGain: number
     avgGain?: number
     critRate?: number
+    sp?: number // break chart: SP cost per 100 AV
     charId: number
     ascension: number // the character's ascension this was calculated at
 }
@@ -1029,6 +1058,7 @@ const runBench = (kind: BenchChartKind, { fresh = false } = {}) => {
         context: makeContext(r.element, r.role, r.ailment),
         maxGain: r.gain,
         critRate: r.critRate,
+        sp: r.sp,
         charId: unitOf.get(id)!.id,
         ascension: unitOf.get(id)!.ascension,
     })))
@@ -1040,7 +1070,7 @@ const runBench = (kind: BenchChartKind, { fresh = false } = {}) => {
     }
     const setBreak = (id: number, rows: BenchRow[]) => { setMax(id, rows); setAvg(id, rows) }
     // a cache / precalc entry with everything this chart shows
-    const complete = (e?: BenchCacheEntry) => kind === "break" ? !!e?.brk : !!(e?.max && e.avg)
+    const complete = (e?: BenchCacheEntry) => kind === "break" ? !!e?.brk?.every(r => r.sp !== undefined) : !!(e?.max && e.avg)
 
     // Cached characters are shown right away; only new or changed ones are simulated.
     const setup = benchSetup(kind, lux)
@@ -1167,8 +1197,12 @@ const benchBarTitle = (row: Pick<GainRow, "avgGain" | "maxGain" | "critRate">, l
     `Average Damage ${label}: ${Number.isNaN(row.avgGain) ? "calculating…" : fmt(row.avgGain)}`,
     `Ultimate crit rate: ${row.critRate}%`,
 ].join("\n")
-const fmtBreak = (v: number) => v.toFixed(1)
-const benchBreakTitle = (row: Pick<GainRow, "avgGain" | "maxGain" | "critRate">) => `Break gauge removed per 100 AV: ${fmtBreak(row.maxGain)}`
+const fmtBreak = (v: number) => Number.isFinite(v) ? v.toFixed(1) : "no SP"
+const benchBreakTitle = (row: Pick<GainRow, "avgGain" | "maxGain" | "critRate" | "sp">) => [
+    `Break gauge removed per 100 AV: ${row.maxGain.toFixed(1)}`,
+    `SP cost per 100 AV: ${row.sp?.toFixed(2) ?? "?"}`,
+    `Break per SP: ${Number.isFinite(row.avgGain) ? row.avgGain.toFixed(1) : "the rotation costs no SP"}`,
+].join("\n")
 
 // Merged tag icons (mergeEqualVariants): slices cut on a slant, top edge SLANT% further right than the bottom ("/").
 const SLANT = 18
@@ -1258,8 +1292,8 @@ const buildBenchChart = (kind: BenchChartKind) => {
     const progress = benchProgress[kind].value
     if (progress.error) return { ...emptyBarChart(), error: progress.error, notes: [] as string[] }
 
-    // the break chart's cells hold the same value in both metrics
-    const metric: Metric = kind !== "break" && benchAverageDmg.value ? "avg" : "max"
+    // the break chart: "max" = break per 100 AV, "avg" = break per SP (see the cells below)
+    const metric: Metric = kind === "break" ? (benchBreakPerSp.value ? "avg" : "max") : benchAverageDmg.value ? "avg" : "max"
     const visible = new Map(allChars.value.map(c => [c.id, c]))
     const rows: GainRow[] = []
 
@@ -1275,7 +1309,9 @@ const buildBenchChart = (kind: BenchChartKind) => {
             dealer: { context: c.context, tags: c.context.tags },
             result: { critRate: c.critRate?.toFixed(1) ?? "?" },
             maxGain: c.maxGain,
-            avgGain: c.avgGain ?? NaN,
+            // break per SP; a rotation that costs no SP (or gains SP) is infinitely efficient
+            avgGain: kind === "break" ? (c.sp! > 0 ? c.maxGain / c.sp! : Infinity) : c.avgGain ?? NaN,
+            sp: c.sp,
         }))
         const result = buildCharGainResult(ch, gains, metric)
         if (!result) continue
@@ -1358,10 +1394,11 @@ const benchCharts = computed(() => [
         battleLength: true,
         sectionClass: "bench-attacker-chart-section",
         filename: "break-per-100-av-battle-engine.png",
-        title: "Break gauge depletion per 100 AV",
+        title: benchBreakPerSp.value ? "Break gauge depletion per SP" : "Break gauge depletion per 100 AV",
         fightType: true,
         desc: [
             `Breakers only. Break gauge each Breaker removes as the damage dealer per 100 AV (one turn), over ${benchAv()} AV (${benchTurns.value} turns) of battle on the game's battle code with infinite SP (ultimates as soon as they are ready, Battle Skill every turn), supported by four ${LuxMagica}. Not compared to ${LuxMagica}: the bar is the gauge itself, added up over every enemy the character hits. Only the character's own hits count. Every Breaker wears Quickstep++, its EX crystalis and Mana Infusion++, the portrait Proof of Friends Again (SPD +20%) and Cherry Blizzard as support (SPD +20%).`,
+            `SP cost: the SP the Breaker's own actions cost per 100 AV, Battle Skills minus the SP it generates (+1 per Basic Attack, its own SP gain effects). SP gained "on enemy break" never counts, as the enemies never break. ${benchBreakPerSp.value ? "Break per SP sorts the Breakers from least to most SP efficient; a rotation that costs no SP shows as \"no SP\" at the end." : "Switch \"Break per\" to SP to see the break per SP spent."}`,
             `${levelsDescription.value} ${benchEnemyText.value} with 3000 def, weak to every element (x1.2 break) and a break gauge that never runs out, so they are never broken and every hit removes its full break value (on-break effects never trigger); single-target and proximity skills aim at the middle one. Ailment bonuses (enemies under Curse, Burn, ...) get their own bar when they change the result.`,
         ],
         chart: buildBenchChart("break"),
