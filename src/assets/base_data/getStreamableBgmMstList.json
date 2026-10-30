@@ -478,5 +478,15 @@
         "cueName": "bgm_battle_sorana_majo_01",
         "cueSheetName": "bgm_battle_sorana",
         "streamableBgmMstId": 96
+    },
+    {
+        "cueName": "bgm_battle_26halloween_teshita",
+        "cueSheetName": "bgm_battle_26halloween",
+        "streamableBgmMstId": 97
+    },
+    {
+        "cueName": "bgm_battle_26halloween_majo",
+        "cueSheetName": "bgm_battle_26halloween",
+        "streamableBgmMstId": 98
     }
 ]

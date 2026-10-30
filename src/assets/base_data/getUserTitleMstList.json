@@ -150,6 +150,12 @@
         "value1": 10050401
     },
     {
+        "title": "All Souls' Repose",
+        "titleType": 1,
+        "userTitleMstId": 10050601,
+        "value1": 10050601
+    },
+    {
         "title": "Magic Cake Dish",
         "titleType": 1,
         "userTitleMstId": 10060101,
@@ -222,6 +228,12 @@
         "value1": 10120101
     },
     {
+        "title": "Doppel of Agitation",
+        "titleType": 1,
+        "userTitleMstId": 10120201,
+        "value1": 10120201
+    },
+    {
         "title": "Assault Paranoia",
         "titleType": 1,
         "userTitleMstId": 10130101,
@@ -244,6 +256,12 @@
         "titleType": 1,
         "userTitleMstId": 10160101,
         "value1": 10160101
+    },
+    {
+        "title": "Pumpkin Death Squall",
+        "titleType": 1,
+        "userTitleMstId": 10170201,
+        "value1": 10170201
     },
     {
         "title": "Neo Genesis",
@@ -1642,6 +1660,24 @@
         "titleType": 2,
         "userTitleMstId": 60000063,
         "value1": 4200106
+    },
+    {
+        "title": "Forever Halloween Night: A Town of Farewells Part I Ace",
+        "titleType": 2,
+        "userTitleMstId": 60000064,
+        "value1": 4200107
+    },
+    {
+        "title": "Forever Halloween Night: A Town of Farewells Part II Ace",
+        "titleType": 2,
+        "userTitleMstId": 60000065,
+        "value1": 4200108
+    },
+    {
+        "title": "Felicia Mitsuki: A Doppel Tale Ace",
+        "titleType": 2,
+        "userTitleMstId": 60000066,
+        "value1": 4200109
     },
     {
         "title": "Mirrors Ranking S☆☆☆",

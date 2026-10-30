@@ -78,5 +78,29 @@
     {
         "chatStampMstId": 1020,
         "description": "See you"
+    },
+    {
+        "chatStampMstId": 1021,
+        "description": "Devilish Homura"
+    },
+    {
+        "chatStampMstId": 1022,
+        "description": "Pumpkin Orb"
+    },
+    {
+        "chatStampMstId": 1023,
+        "description": "Monster Nagisa"
+    },
+    {
+        "chatStampMstId": 1024,
+        "description": "Whiskered Coffin"
+    },
+    {
+        "chatStampMstId": 1025,
+        "description": "Name Witch"
+    },
+    {
+        "chatStampMstId": 1026,
+        "description": "Pirate Nighthawk"
     }
 ]

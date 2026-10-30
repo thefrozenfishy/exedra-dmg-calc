@@ -988,5 +988,125 @@
         "questStageMstId": 1407106,
         "stagePrefabName": "bg_3d_600_01_00_001",
         "wave": 2
+    },
+    {
+        "dioramaBackGroundMstId": 110513,
+        "enemyTipsText": "",
+        "linkHpName": "Witch Minions",
+        "linkHpType": 1,
+        "questEnemyWaveMstId": 14081011,
+        "questStageMstId": 1408101,
+        "stagePrefabName": "",
+        "wave": 1
+    },
+    {
+        "dioramaBackGroundMstId": 110519,
+        "enemyTipsText": "Wave 2 has <tooltips_id=5>.<br><br>The Graffiti Witch has different stats and skills in its <tooltips_id=3> form.<br><br>- Graffiti Witch<br>The Witch's break gauge depletion RES increases and its DMG taken decreases based on how few debuffs are applied to it.<br>Also, the DMG and effects of certain of its skills increase based on how many debuffs are applied to enemies.<br><br>- Graffiti Witch (Apex Form)<br>Increases DMG and effects of certain of its skills based on Magic value.<br>Its Magic decreases each time 5 allies take DMG.<br><br>- Graffiti Witch (Apex Overdrive Form)<br>Uses <tooltips_id=1>.<br>Increases DMG and effects of certain of its skills based on Magic value.<br>Its Magic decreases each time it takes a set amount of DMG from battle skills.",
+        "linkHpName": "",
+        "linkHpType": 2,
+        "questEnemyWaveMstId": 14081012,
+        "questStageMstId": 1408101,
+        "stagePrefabName": "bg_3d_604_00_00_001",
+        "wave": 2
+    },
+    {
+        "dioramaBackGroundMstId": 110513,
+        "enemyTipsText": "",
+        "linkHpName": "Witch Minions",
+        "linkHpType": 1,
+        "questEnemyWaveMstId": 14081021,
+        "questStageMstId": 1408102,
+        "stagePrefabName": "",
+        "wave": 1
+    },
+    {
+        "dioramaBackGroundMstId": 110519,
+        "enemyTipsText": "Wave 2 has <tooltips_id=5>.<br><br>The Graffiti Witch has different stats and skills in its <tooltips_id=3> form.<br><br>- Graffiti Witch<br>The Witch's break gauge depletion RES increases and its DMG taken decreases based on how few debuffs are applied to it.<br>Also, the DMG and effects of certain of its skills increase based on how many debuffs are applied to enemies.<br><br>- Graffiti Witch (Apex Form)<br>Increases DMG and effects of certain of its skills based on Magic value.<br>Its Magic decreases each time 5 allies take DMG.<br><br>- Graffiti Witch (Apex Overdrive Form)<br>Uses <tooltips_id=1>.<br>Increases DMG and effects of certain of its skills based on Magic value.<br>Its Magic decreases each time it takes a set amount of DMG from battle skills.",
+        "linkHpName": "",
+        "linkHpType": 2,
+        "questEnemyWaveMstId": 14081022,
+        "questStageMstId": 1408102,
+        "stagePrefabName": "bg_3d_604_00_00_001",
+        "wave": 2
+    },
+    {
+        "dioramaBackGroundMstId": 110513,
+        "enemyTipsText": "",
+        "linkHpName": "Witch Minions",
+        "linkHpType": 1,
+        "questEnemyWaveMstId": 14081031,
+        "questStageMstId": 1408103,
+        "stagePrefabName": "",
+        "wave": 1
+    },
+    {
+        "dioramaBackGroundMstId": 110519,
+        "enemyTipsText": "Wave 2 has <tooltips_id=5>.<br><br>The Graffiti Witch has different stats and skills in its <tooltips_id=3> form.<br><br>- Graffiti Witch<br>The Witch's break gauge depletion RES increases and its DMG taken decreases based on how few debuffs are applied to it.<br>Also, the DMG and effects of certain of its skills increase based on how many debuffs are applied to enemies.<br><br>- Graffiti Witch (Apex Form)<br>Increases DMG and effects of certain of its skills based on Magic value.<br>Its Magic decreases each time 5 allies take DMG.<br><br>- Graffiti Witch (Apex Overdrive Form)<br>Uses <tooltips_id=1>.<br>Increases DMG and effects of certain of its skills based on Magic value.<br>Its Magic decreases each time it takes a set amount of DMG from battle skills.",
+        "linkHpName": "",
+        "linkHpType": 2,
+        "questEnemyWaveMstId": 14081032,
+        "questStageMstId": 1408103,
+        "stagePrefabName": "bg_3d_604_00_00_001",
+        "wave": 2
+    },
+    {
+        "dioramaBackGroundMstId": 110513,
+        "enemyTipsText": "",
+        "linkHpName": "Witch Minions",
+        "linkHpType": 1,
+        "questEnemyWaveMstId": 14081041,
+        "questStageMstId": 1408104,
+        "stagePrefabName": "",
+        "wave": 1
+    },
+    {
+        "dioramaBackGroundMstId": 110519,
+        "enemyTipsText": "Wave 2 has <tooltips_id=5>.<br><br>The Graffiti Witch has different stats and skills in its <tooltips_id=3> form.<br><br>- Graffiti Witch<br>The Witch's break gauge depletion RES increases and its DMG taken decreases based on how few debuffs are applied to it.<br>Also, the DMG and effects of certain of its skills increase based on how many debuffs are applied to enemies.<br><br>- Graffiti Witch (Apex Form)<br>Increases DMG and effects of certain of its skills based on Magic value.<br>Its Magic decreases each time 5 allies take DMG.<br><br>- Graffiti Witch (Apex Overdrive Form)<br>Uses <tooltips_id=1>.<br>Increases DMG and effects of certain of its skills based on Magic value.<br>Its Magic decreases each time it takes a set amount of DMG from battle skills.",
+        "linkHpName": "",
+        "linkHpType": 2,
+        "questEnemyWaveMstId": 14081042,
+        "questStageMstId": 1408104,
+        "stagePrefabName": "bg_3d_604_00_00_001",
+        "wave": 2
+    },
+    {
+        "dioramaBackGroundMstId": 110513,
+        "enemyTipsText": "",
+        "linkHpName": "Witch Minions",
+        "linkHpType": 1,
+        "questEnemyWaveMstId": 14081051,
+        "questStageMstId": 1408105,
+        "stagePrefabName": "",
+        "wave": 1
+    },
+    {
+        "dioramaBackGroundMstId": 110519,
+        "enemyTipsText": "Wave 2 has <tooltips_id=5>.<br><br>The Graffiti Witch has different stats and skills in its <tooltips_id=3> form.<br><br>- Graffiti Witch<br>The Witch's break gauge depletion RES increases and its DMG taken decreases based on how few debuffs are applied to it.<br>Also, the DMG and effects of certain of its skills increase based on how many debuffs are applied to enemies.<br><br>- Graffiti Witch (Apex Form)<br>Increases DMG and effects of certain of its skills based on Magic value.<br>Its Magic decreases each time 5 allies take DMG.<br><br>- Graffiti Witch (Apex Overdrive Form)<br>Uses <tooltips_id=1>.<br>Increases DMG and effects of certain of its skills based on Magic value.<br>Its Magic decreases each time it takes a set amount of DMG from battle skills.",
+        "linkHpName": "",
+        "linkHpType": 2,
+        "questEnemyWaveMstId": 14081052,
+        "questStageMstId": 1408105,
+        "stagePrefabName": "bg_3d_604_00_00_001",
+        "wave": 2
+    },
+    {
+        "dioramaBackGroundMstId": 110513,
+        "enemyTipsText": "",
+        "linkHpName": "Witch Minions",
+        "linkHpType": 1,
+        "questEnemyWaveMstId": 14081061,
+        "questStageMstId": 1408106,
+        "stagePrefabName": "",
+        "wave": 1
+    },
+    {
+        "dioramaBackGroundMstId": 110519,
+        "enemyTipsText": "Wave 2 has <tooltips_id=5>.<br><br>The Graffiti Witch has different stats and skills in its <tooltips_id=3> form.<br><br>- Graffiti Witch<br>The Witch's break gauge depletion RES increases and its DMG taken decreases based on how few debuffs are applied to it.<br>Also, the DMG and effects of certain of its skills increase based on how many debuffs are applied to enemies.<br><br>- Graffiti Witch (Apex Form)<br>Increases DMG and effects of certain of its skills based on Magic value.<br>Its Magic decreases each time 5 allies take DMG.<br><br>- Graffiti Witch (Apex Overdrive Form)<br>Uses <tooltips_id=1>.<br>Increases DMG and effects of certain of its skills based on Magic value.<br>Its Magic decreases each time it takes a set amount of DMG from battle skills.",
+        "linkHpName": "",
+        "linkHpType": 2,
+        "questEnemyWaveMstId": 14081062,
+        "questStageMstId": 1408106,
+        "stagePrefabName": "bg_3d_604_00_00_001",
+        "wave": 2
     }
 ]

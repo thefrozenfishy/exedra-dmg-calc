@@ -152,6 +152,14 @@
         "styleMstId": 10050401
     },
     {
+        "description": "A girl serving as gatekeeper between the lands of the living and the dead. She used to oversee the annual \"reunion,\" but since every day became Halloween, her time is spent hunting Witches. She's not partial to Halloween, but she loves candy!",
+        "enCapsName": "KYOKO SAKURA",
+        "name": "Kyoko Sakura",
+        "releaseTime": "2026-11-06T12:00:00+09:00",
+        "schoolName": "―",
+        "styleMstId": 10050601
+    },
+    {
         "description": "A Magical Girl who races alongside Homura to save Madoka. She can glimpse into the future and \"cut film\" to erase memories. After so many takes, she's perfected latte art between scenes.",
         "enCapsName": "MABAYU AKI",
         "name": "Mabayu Aki",
@@ -190,6 +198,22 @@
         "releaseTime": "2026-08-28T22:00:00+09:00",
         "schoolName": "Kamihama University Affiliated School",
         "styleMstId": 10100201
+    },
+    {
+        "description": "A Magical Girl bound to the Doppel of Agitation. Its form is that of an eyelid. The master of this emotion falls into a deep sleep when the Doppel appears and never sees what it witnesses.",
+        "enCapsName": "FELICIA MITSUKI",
+        "name": "Felicia Mitsuki",
+        "releaseTime": "2026-10-30T12:00:00+09:00",
+        "schoolName": "Chuo Academy",
+        "styleMstId": 10120201
+    },
+    {
+        "description": "A Sorceress on a journey to reclaim Halloween. In truth, she is the future ruler of Artland and uses the magic of wishes. She cannot recall her past, but she has what Alina taught her and her love of Halloween.",
+        "enCapsName": "KARIN MISONO",
+        "name": "Karin Misono",
+        "releaseTime": "2026-10-30T12:00:00+09:00",
+        "schoolName": "―",
+        "styleMstId": 10170201
     },
     {
         "description": "As the ruler of Artland has vanished, this ghost now reigns as regent. She transforms people's hearts into art, striking fear into everyone. Although she usually moves about on two legs, she can float if she puts her mind to it. Note: Calling her a \"ghoul\" makes her angry.",

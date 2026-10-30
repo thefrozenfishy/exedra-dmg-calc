@@ -724,6 +724,18 @@
         "defaultOption": "",
         "isDefault": true,
         "isExistVoice": true,
+        "name": "Kyoko Sakura (Halloween)",
+        "releaseTime": "2026-11-06T12:00:00+09:00",
+        "resourceName": "260260",
+        "sortOrder": 100540,
+        "styleLive2dCostumeMstId": 100540,
+        "type": 1
+    },
+    {
+        "cheekParam": 0,
+        "defaultOption": "",
+        "isDefault": true,
+        "isExistVoice": true,
         "name": "Nagisa Momoe - Magical Girl",
         "releaseTime": "2026-02-06T12:00:00+09:00",
         "resourceName": "200730",
@@ -1180,6 +1192,18 @@
         "defaultOption": "",
         "isDefault": true,
         "isExistVoice": true,
+        "name": "Felicia Mitsuki - Doppel",
+        "releaseTime": "2026-10-30T12:00:00+09:00",
+        "resourceName": "100536",
+        "sortOrder": 101210,
+        "styleLive2dCostumeMstId": 101210,
+        "type": 1
+    },
+    {
+        "cheekParam": 0,
+        "defaultOption": "",
+        "isDefault": true,
+        "isExistVoice": true,
         "name": "Mifuyu Azusa - Magical Girl",
         "releaseTime": "2025-10-20T12:00:00+09:00",
         "resourceName": "100630",
@@ -1317,6 +1341,18 @@
         "resourceName": "111230",
         "sortOrder": 101702,
         "styleLive2dCostumeMstId": 101702,
+        "type": 1
+    },
+    {
+        "cheekParam": 0,
+        "defaultOption": "",
+        "isDefault": true,
+        "isExistVoice": true,
+        "name": "Karin Misono (Halloween 2)",
+        "releaseTime": "2026-10-30T12:00:00+09:00",
+        "resourceName": "111231",
+        "sortOrder": 101710,
+        "styleLive2dCostumeMstId": 101710,
         "type": 1
     },
     {

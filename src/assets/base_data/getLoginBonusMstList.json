@@ -850,5 +850,17 @@
         "sortOrder": 1031,
         "startTime": "2026-10-16T12:00:00+09:00",
         "title": "Exedra Quest Chapter 1 Part II Act II Release Celebration Login Bonus"
+    },
+    {
+        "appealDescription": "Get <color=#ecd19c>Magica Stones and Orbs</color>!",
+        "appealIconObjectId": 0,
+        "appealIconObjectReceiveType": 2,
+        "conditionDescription": "Log in",
+        "cycleType": 2,
+        "endTime": "2026-11-30T11:59:59+09:00",
+        "loginBonusMstId": 72,
+        "sortOrder": 1030,
+        "startTime": "2026-10-30T12:00:00+09:00",
+        "title": "Halloween Campaign Login Bonus"
     }
 ]

@@ -4441,6 +4441,36 @@
     },
     {
         "abilityEffectType": "",
+        "description": "At battle start, grants 10 Magic to self.<br><br>On own follow-up attack:<br>Decreases all enemies' ATK by 5% (2 turns).",
+        "name": "I'm Taking Halloween Back!",
+        "rarity": 4,
+        "resourceIconName": "battle_icon_selection_ability_ex",
+        "selectionAbilityEffectId": 163,
+        "selectionAbilityMstId": 7077,
+        "selectionAbilityType": 1,
+        "sortOrder": 0,
+        "styleMstId": 10170201,
+        "targetType": 2,
+        "value1": 1150077,
+        "value2": 0
+    },
+    {
+        "abilityEffectType": "",
+        "description": "Increases ATK by 20%.<br>When the total Spirit-Sealing Hairpin count across all enemies is 10 or higher:<br>Increases SPD by 10%.",
+        "name": "I Do What a Gatekeeper Must",
+        "rarity": 4,
+        "resourceIconName": "battle_icon_selection_ability_ex",
+        "selectionAbilityEffectId": 164,
+        "selectionAbilityMstId": 7078,
+        "selectionAbilityType": 1,
+        "sortOrder": 0,
+        "styleMstId": 10050601,
+        "targetType": 2,
+        "value1": 1150078,
+        "value2": 0
+    },
+    {
+        "abilityEffectType": "",
         "description": "Increases ATK by 10% and HP recovery amount by 10%.<br>On follow-up attack, increases SPD by 2% (Max 10 stacks).",
         "name": "Surely Joy and Dismay Balance Out",
         "rarity": 4,
@@ -4452,6 +4482,21 @@
         "styleMstId": 10040601,
         "targetType": 2,
         "value1": 1150079,
+        "value2": 0
+    },
+    {
+        "abilityEffectType": "",
+        "description": "Increases follow-up attack break gauge depletion.<br>On enemy break, increases all enemies' DMG taken by 5% (2 turns).",
+        "name": "Power is Power! Now I Can Protect Everyone!",
+        "rarity": 4,
+        "resourceIconName": "battle_icon_selection_ability_ex",
+        "selectionAbilityEffectId": 167,
+        "selectionAbilityMstId": 7080,
+        "selectionAbilityType": 1,
+        "sortOrder": 0,
+        "styleMstId": 10120201,
+        "targetType": 2,
+        "value1": 1150080,
         "value2": 0
     }
 ]

@@ -492,6 +492,16 @@
     {
         "conditionElement": 0,
         "conditionRole": 0,
+        "description": "Increases max HP by 40%, ATK by 80%, DEF by 40%, and SPD by 10%.",
+        "level": 1,
+        "name": "EX Bonus",
+        "passiveSkillMstId": 1900,
+        "skillButtonIcon": "",
+        "skillUniqueId": 1900
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
         "description": "Increases DEF by 5%.",
         "level": 1,
         "name": "Ability",
@@ -12432,6 +12442,186 @@
     {
         "conditionElement": 0,
         "conditionRole": 0,
+        "description": "Increases flame DMG dealt by 7.5%.<br>Equipped to Debuffer:<br>Also increases MP recovery rate by 1%.",
+        "level": 1,
+        "name": "Ability",
+        "passiveSkillMstId": 420001,
+        "skillButtonIcon": "",
+        "skillUniqueId": 4200
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases flame DMG dealt by 8.5%.<br>Equipped to Debuffer:<br>Also increases MP recovery rate by 1.4%.",
+        "level": 2,
+        "name": "Ability",
+        "passiveSkillMstId": 420002,
+        "skillButtonIcon": "",
+        "skillUniqueId": 4200
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases flame DMG dealt by 9.5%.<br>Equipped to Debuffer:<br>Also increases MP recovery rate by 1.8%.",
+        "level": 3,
+        "name": "Ability",
+        "passiveSkillMstId": 420003,
+        "skillButtonIcon": "",
+        "skillUniqueId": 4200
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases flame DMG dealt by 10.5%.<br>Equipped to Debuffer:<br>Also increases MP recovery rate by 2.2%.",
+        "level": 4,
+        "name": "Ability",
+        "passiveSkillMstId": 420004,
+        "skillButtonIcon": "",
+        "skillUniqueId": 4200
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases flame DMG dealt by 11.5%.<br>Equipped to Debuffer:<br>Also increases MP recovery rate by 2.6%.",
+        "level": 5,
+        "name": "Ability",
+        "passiveSkillMstId": 420005,
+        "skillButtonIcon": "",
+        "skillUniqueId": 4200
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases flame DMG dealt by 12.5%.<br>Equipped to Debuffer:<br>Also increases MP recovery rate by 3%.",
+        "level": 6,
+        "name": "Ability",
+        "passiveSkillMstId": 420006,
+        "skillButtonIcon": "",
+        "skillUniqueId": 4200
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases MP recovery rate by 1%.<br>Equipped to Healer:<br>Also increases HP recovery amount by 7.5%.",
+        "level": 1,
+        "name": "Ability",
+        "passiveSkillMstId": 420101,
+        "skillButtonIcon": "",
+        "skillUniqueId": 4201
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases MP recovery rate by 1.4%.<br>Equipped to Healer:<br>Also increases HP recovery amount by 9%.",
+        "level": 2,
+        "name": "Ability",
+        "passiveSkillMstId": 420102,
+        "skillButtonIcon": "",
+        "skillUniqueId": 4201
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases MP recovery rate by 1.8%.<br>Equipped to Healer:<br>Also increases HP recovery amount by 10.5%.",
+        "level": 3,
+        "name": "Ability",
+        "passiveSkillMstId": 420103,
+        "skillButtonIcon": "",
+        "skillUniqueId": 4201
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases MP recovery rate by 2.2%.<br>Equipped to Healer:<br>Also increases HP recovery amount by 12%.",
+        "level": 4,
+        "name": "Ability",
+        "passiveSkillMstId": 420104,
+        "skillButtonIcon": "",
+        "skillUniqueId": 4201
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases MP recovery rate by 2.6%.<br>Equipped to Healer:<br>Also increases HP recovery amount by 13.5%.",
+        "level": 5,
+        "name": "Ability",
+        "passiveSkillMstId": 420105,
+        "skillButtonIcon": "",
+        "skillUniqueId": 4201
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases MP recovery rate by 3%.<br>Equipped to Healer:<br>Also increases HP recovery amount by 15%.",
+        "level": 6,
+        "name": "Ability",
+        "passiveSkillMstId": 420106,
+        "skillButtonIcon": "",
+        "skillUniqueId": 4201
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases follow-up attack<br>and counterattack DMG dealt by 7.5%.<br>Equipped to Breaker:<br>Also increases SPD by 5%.",
+        "level": 1,
+        "name": "Ability",
+        "passiveSkillMstId": 420201,
+        "skillButtonIcon": "",
+        "skillUniqueId": 4202
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases follow-up attack<br>and counterattack DMG dealt by 8.5%.<br>Equipped to Breaker:<br>Also increases SPD by 6%.",
+        "level": 2,
+        "name": "Ability",
+        "passiveSkillMstId": 420202,
+        "skillButtonIcon": "",
+        "skillUniqueId": 4202
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases follow-up attack<br>and counterattack DMG dealt by 9.5%.<br>Equipped to Breaker:<br>Also increases SPD by 7%.",
+        "level": 3,
+        "name": "Ability",
+        "passiveSkillMstId": 420203,
+        "skillButtonIcon": "",
+        "skillUniqueId": 4202
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases follow-up attack<br>and counterattack DMG dealt by 10.5%.<br>Equipped to Breaker:<br>Also increases SPD by 8%.",
+        "level": 4,
+        "name": "Ability",
+        "passiveSkillMstId": 420204,
+        "skillButtonIcon": "",
+        "skillUniqueId": 4202
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases follow-up attack<br>and counterattack DMG dealt by 11.5%.<br>Equipped to Breaker:<br>Also increases SPD by 9%.",
+        "level": 5,
+        "name": "Ability",
+        "passiveSkillMstId": 420205,
+        "skillButtonIcon": "",
+        "skillUniqueId": 4202
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases follow-up attack<br>and counterattack DMG dealt by 12.5%.<br>Equipped to Breaker:<br>Also increases SPD by 10%.",
+        "level": 6,
+        "name": "Ability",
+        "passiveSkillMstId": 420206,
+        "skillButtonIcon": "",
+        "skillUniqueId": 4202
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
         "description": "Increases DEF by 15%.",
         "level": 1,
         "name": "Ability",
@@ -21032,12 +21222,42 @@
     {
         "conditionElement": 0,
         "conditionRole": 0,
+        "description": "At battle start, grants 10 Magic to self.<br><br>On own follow-up attack:<br>Decreases all enemies' ATK by 5% (2 turns).",
+        "level": 1,
+        "name": "I'm Taking Halloween Back!",
+        "passiveSkillMstId": 1150077,
+        "skillButtonIcon": "",
+        "skillUniqueId": 1150077
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases ATK by 20%.<br>When the total Spirit-Sealing Hairpin count across all enemies is 10 or higher:<br>Increases SPD by 10%.",
+        "level": 1,
+        "name": "I Do What a Gatekeeper Must",
+        "passiveSkillMstId": 1150078,
+        "skillButtonIcon": "",
+        "skillUniqueId": 1150078
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
         "description": "Increases ATK by 10% and HP recovery amount by 10%.<br>On follow-up attack, increases SPD by 2% (Max 10 stacks).",
         "level": 1,
         "name": "Surely Joy and Dismay Balance Out",
         "passiveSkillMstId": 1150079,
         "skillButtonIcon": "",
         "skillUniqueId": 1150079
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases follow-up attack break gauge depletion.<br>On enemy break, increases all enemies' DMG taken by 5% (2 turns).",
+        "level": 1,
+        "name": "Power is Power! Now I Can Protect Everyone!",
+        "passiveSkillMstId": 1150080,
+        "skillButtonIcon": "",
+        "skillUniqueId": 1150080
     },
     {
         "conditionElement": 0,
@@ -32542,6 +32762,206 @@
     {
         "conditionElement": 0,
         "conditionRole": 0,
+        "description": "0/15 Magic at battle start.<br><br>On DMG dealt to an enemy by self or ally, grants 2 Magic.<br>On flame DMG dealt by that attack, grants 1 further Magic to self.<br>* Only applies to basic attack / battle skill / special attack.<br><br>On battle skill use when own Magic is 15, or when an enemy is defeated, triggers a follow-up attack.<br>* Follow-up attack will trigger for each condition.<br><br>Follow-Up Attack:<br>Deals 15% flame DMG 4 times to all enemies, and applies Pumpkin Panic (2 turns) and Flame Chain (2 turns) to targets.<br>Grants 5 MP to self.<br><br>When at least 1 enemy with own Flame Chain applied is present:<br>Increases own SPD by 5%, and decreases DMG taken by 10%.",
+        "level": 1,
+        "name": "Defense Haste",
+        "passiveSkillMstId": 1507801,
+        "skillButtonIcon": "battle_icon_passive_buff",
+        "skillUniqueId": 15078
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "0/15 Magic at battle start.<br><br>On DMG dealt to an enemy by self or ally, grants 2 Magic.<br>On flame DMG dealt by that attack, grants 1 further Magic to self.<br>* Only applies to basic attack / battle skill / special attack.<br><br>On battle skill use when own Magic is 15, or when an enemy is defeated, triggers a follow-up attack.<br>* Follow-up attack will trigger for each condition.<br><br>Follow-Up Attack:<br>Deals 15% flame DMG 4 times to all enemies, and applies Pumpkin Panic (2 turns) and Flame Chain (2 turns) to targets.<br>Grants 5 MP to self.<br><br>When at least 1 enemy with own Flame Chain applied is present:<br>Increases own SPD by 6%, and decreases DMG taken by 10%.",
+        "level": 2,
+        "name": "Defense Haste",
+        "passiveSkillMstId": 1507802,
+        "skillButtonIcon": "battle_icon_passive_buff",
+        "skillUniqueId": 15078
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "0/15 Magic at battle start.<br><br>On DMG dealt to an enemy by self or ally, grants 2 Magic.<br>On flame DMG dealt by that attack, grants 1 further Magic to self.<br>* Only applies to basic attack / battle skill / special attack.<br><br>On battle skill use when own Magic is 15, or when an enemy is defeated, triggers a follow-up attack.<br>* Follow-up attack will trigger for each condition.<br><br>Follow-Up Attack:<br>Deals 15% flame DMG 4 times to all enemies, and applies Pumpkin Panic (2 turns) and Flame Chain (2 turns) to targets.<br>Grants 5 MP to self.<br><br>When at least 1 enemy with own Flame Chain applied is present:<br>Increases own SPD by 7%, and decreases DMG taken by 10%.",
+        "level": 3,
+        "name": "Defense Haste",
+        "passiveSkillMstId": 1507803,
+        "skillButtonIcon": "battle_icon_passive_buff",
+        "skillUniqueId": 15078
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "0/15 Magic at battle start.<br><br>On DMG dealt to an enemy by self or ally, grants 2 Magic.<br>On flame DMG dealt by that attack, grants 1 further Magic to self.<br>* Only applies to basic attack / battle skill / special attack.<br><br>On battle skill use when own Magic is 15, or when an enemy is defeated, triggers a follow-up attack.<br>* Follow-up attack will trigger for each condition.<br><br>Follow-Up Attack:<br>Deals 15% flame DMG 4 times to all enemies, and applies Pumpkin Panic (2 turns) and Flame Chain (2 turns) to targets.<br>Grants 5 MP to self.<br><br>When at least 1 enemy with own Flame Chain applied is present:<br>Increases own SPD by 8%, and decreases DMG taken by 10%.",
+        "level": 4,
+        "name": "Defense Haste",
+        "passiveSkillMstId": 1507804,
+        "skillButtonIcon": "battle_icon_passive_buff",
+        "skillUniqueId": 15078
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "0/15 Magic at battle start.<br><br>On DMG dealt to an enemy by self or ally, grants 2 Magic.<br>On flame DMG dealt by that attack, grants 1 further Magic to self.<br>* Only applies to basic attack / battle skill / special attack.<br><br>On battle skill use when own Magic is 15, or when an enemy is defeated, triggers a follow-up attack.<br>* Follow-up attack will trigger for each condition.<br><br>Follow-Up Attack:<br>Deals 15% flame DMG 4 times to all enemies, and applies Pumpkin Panic (2 turns) and Flame Chain (2 turns) to targets.<br>Grants 5 MP to self.<br><br>When at least 1 enemy with own Flame Chain applied is present:<br>Increases own SPD by 9%, and decreases DMG taken by 10%.",
+        "level": 5,
+        "name": "Defense Haste",
+        "passiveSkillMstId": 1507805,
+        "skillButtonIcon": "battle_icon_passive_buff",
+        "skillUniqueId": 15078
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "0/15 Magic at battle start.<br><br>On DMG dealt to an enemy by self or ally, grants 2 Magic.<br>On flame DMG dealt by that attack, grants 1 further Magic to self.<br>* Only applies to basic attack / battle skill / special attack.<br><br>On battle skill use when own Magic is 15, or when an enemy is defeated, triggers a follow-up attack.<br>* Follow-up attack will trigger for each condition.<br><br>Follow-Up Attack:<br>Deals 15% flame DMG 4 times to all enemies, and applies Pumpkin Panic (2 turns) and Flame Chain (2 turns) to targets.<br>Grants 5 MP to self.<br><br>When at least 1 enemy with own Flame Chain applied is present:<br>Increases own SPD by 10%, and decreases DMG taken by 10%.",
+        "level": 6,
+        "name": "Defense Haste",
+        "passiveSkillMstId": 1507806,
+        "skillButtonIcon": "battle_icon_passive_buff",
+        "skillUniqueId": 15078
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "0/15 Magic at battle start.<br><br>On DMG dealt to an enemy by self or ally, grants 2 Magic.<br>On flame DMG dealt by that attack, grants 1 further Magic to self.<br>* Only applies to basic attack / battle skill / special attack.<br><br>On battle skill use when own Magic is 15, or when an enemy is defeated, triggers a follow-up attack.<br>* Follow-up attack will trigger for each condition.<br><br>Follow-Up Attack:<br>Deals 15% flame DMG 4 times to all enemies, and applies Pumpkin Panic (2 turns) and Flame Chain (2 turns) to targets.<br>Grants 5 MP to self.<br><br>When at least 1 enemy with own Flame Chain applied is present:<br>Increases own SPD by 11%, and decreases DMG taken by 10%.",
+        "level": 7,
+        "name": "Defense Haste",
+        "passiveSkillMstId": 1507807,
+        "skillButtonIcon": "battle_icon_passive_buff",
+        "skillUniqueId": 15078
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "0/15 Magic at battle start.<br><br>On DMG dealt to an enemy by self or ally, grants 2 Magic.<br>On flame DMG dealt by that attack, grants 1 further Magic to self.<br>* Only applies to basic attack / battle skill / special attack.<br><br>On battle skill use when own Magic is 15, or when an enemy is defeated, triggers a follow-up attack.<br>* Follow-up attack will trigger for each condition.<br><br>Follow-Up Attack:<br>Deals 15% flame DMG 4 times to all enemies, and applies Pumpkin Panic (2 turns) and Flame Chain (2 turns) to targets.<br>Grants 5 MP to self.<br><br>When at least 1 enemy with own Flame Chain applied is present:<br>Increases own SPD by 12%, and decreases DMG taken by 10%.",
+        "level": 8,
+        "name": "Defense Haste",
+        "passiveSkillMstId": 1507808,
+        "skillButtonIcon": "battle_icon_passive_buff",
+        "skillUniqueId": 15078
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "0/15 Magic at battle start.<br><br>On DMG dealt to an enemy by self or ally, grants 2 Magic.<br>On flame DMG dealt by that attack, grants 1 further Magic to self.<br>* Only applies to basic attack / battle skill / special attack.<br><br>On battle skill use when own Magic is 15, or when an enemy is defeated, triggers a follow-up attack.<br>* Follow-up attack will trigger for each condition.<br><br>Follow-Up Attack:<br>Deals 15% flame DMG 4 times to all enemies, and applies Pumpkin Panic (2 turns) and Flame Chain (2 turns) to targets.<br>Grants 5 MP to self.<br><br>When at least 1 enemy with own Flame Chain applied is present:<br>Increases own SPD by 13%, and decreases DMG taken by 10%.",
+        "level": 9,
+        "name": "Defense Haste",
+        "passiveSkillMstId": 1507809,
+        "skillButtonIcon": "battle_icon_passive_buff",
+        "skillUniqueId": 15078
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "0/15 Magic at battle start.<br><br>On DMG dealt to an enemy by self or ally, grants 2 Magic.<br>On flame DMG dealt by that attack, grants 1 further Magic to self.<br>* Only applies to basic attack / battle skill / special attack.<br><br>On battle skill use when own Magic is 15, or when an enemy is defeated, triggers a follow-up attack.<br>* Follow-up attack will trigger for each condition.<br><br>Follow-Up Attack:<br>Deals 15% flame DMG 4 times to all enemies, and applies Pumpkin Panic (2 turns) and Flame Chain (2 turns) to targets.<br>Grants 5 MP to self.<br><br>When at least 1 enemy with own Flame Chain applied is present:<br>Increases own SPD by 15%, and decreases DMG taken by 10%.",
+        "level": 10,
+        "name": "Defense Haste",
+        "passiveSkillMstId": 1507810,
+        "skillButtonIcon": "battle_icon_passive_buff",
+        "skillUniqueId": 15078
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "At battle start, increases own ailment hit rate by 10%, and advances action order 70%.<br><br>On DMG dealt to a cursed enemy by self or ally:<br>Restores all allies' HP by 5% of user's ATK.<br>Increases target's Spirit-Sealing Hairpin stacks by 1.<br>* This effect only activates when the Spirit-Sealing Hairpin is applied.<br><br>When a cursed enemy is present:<br>Increases own ATK by 10% and SPD by 10%.<br>Increases all allies' ongoing DMG dealt by 30%.<br><br>When an enemy takes ongoing DMG or is defeated:<br>Grants 5 MP to self.<br>* Triggers for each condition.",
+        "level": 1,
+        "name": "Assault Haste",
+        "passiveSkillMstId": 1507901,
+        "skillButtonIcon": "battle_icon_passive_buff",
+        "skillUniqueId": 15079
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "At battle start, increases own ailment hit rate by 11%, and advances action order 70%.<br><br>On DMG dealt to a cursed enemy by self or ally:<br>Restores all allies' HP by 5% of user's ATK.<br>Increases target's Spirit-Sealing Hairpin stacks by 1.<br>* This effect only activates when the Spirit-Sealing Hairpin is applied.<br><br>When a cursed enemy is present:<br>Increases own ATK by 10% and SPD by 10%.<br>Increases all allies' ongoing DMG dealt by 30%.<br><br>When an enemy takes ongoing DMG or is defeated:<br>Grants 5 MP to self.<br>* Triggers for each condition.",
+        "level": 2,
+        "name": "Assault Haste",
+        "passiveSkillMstId": 1507902,
+        "skillButtonIcon": "battle_icon_passive_buff",
+        "skillUniqueId": 15079
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "At battle start, increases own ailment hit rate by 12%, and advances action order 70%.<br><br>On DMG dealt to a cursed enemy by self or ally:<br>Restores all allies' HP by 5% of user's ATK.<br>Increases target's Spirit-Sealing Hairpin stacks by 1.<br>* This effect only activates when the Spirit-Sealing Hairpin is applied.<br><br>When a cursed enemy is present:<br>Increases own ATK by 10% and SPD by 10%.<br>Increases all allies' ongoing DMG dealt by 30%.<br><br>When an enemy takes ongoing DMG or is defeated:<br>Grants 5 MP to self.<br>* Triggers for each condition.",
+        "level": 3,
+        "name": "Assault Haste",
+        "passiveSkillMstId": 1507903,
+        "skillButtonIcon": "battle_icon_passive_buff",
+        "skillUniqueId": 15079
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "At battle start, increases own ailment hit rate by 14%, and advances action order 70%.<br><br>On DMG dealt to a cursed enemy by self or ally:<br>Restores all allies' HP by 5% of user's ATK.<br>Increases target's Spirit-Sealing Hairpin stacks by 1.<br>* This effect only activates when the Spirit-Sealing Hairpin is applied.<br><br>When a cursed enemy is present:<br>Increases own ATK by 10% and SPD by 10%.<br>Increases all allies' ongoing DMG dealt by 30%.<br><br>When an enemy takes ongoing DMG or is defeated:<br>Grants 5 MP to self.<br>* Triggers for each condition.",
+        "level": 4,
+        "name": "Assault Haste",
+        "passiveSkillMstId": 1507904,
+        "skillButtonIcon": "battle_icon_passive_buff",
+        "skillUniqueId": 15079
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "At battle start, increases own ailment hit rate by 16%, and advances action order 70%.<br><br>On DMG dealt to a cursed enemy by self or ally:<br>Restores all allies' HP by 5% of user's ATK.<br>Increases target's Spirit-Sealing Hairpin stacks by 1.<br>* This effect only activates when the Spirit-Sealing Hairpin is applied.<br><br>When a cursed enemy is present:<br>Increases own ATK by 10% and SPD by 10%.<br>Increases all allies' ongoing DMG dealt by 30%.<br><br>When an enemy takes ongoing DMG or is defeated:<br>Grants 5 MP to self.<br>* Triggers for each condition.",
+        "level": 5,
+        "name": "Assault Haste",
+        "passiveSkillMstId": 1507905,
+        "skillButtonIcon": "battle_icon_passive_buff",
+        "skillUniqueId": 15079
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "At battle start, increases own ailment hit rate by 17%, and advances action order 70%.<br><br>On DMG dealt to a cursed enemy by self or ally:<br>Restores all allies' HP by 5% of user's ATK.<br>Increases target's Spirit-Sealing Hairpin stacks by 1.<br>* This effect only activates when the Spirit-Sealing Hairpin is applied.<br><br>When a cursed enemy is present:<br>Increases own ATK by 10% and SPD by 10%.<br>Increases all allies' ongoing DMG dealt by 30%.<br><br>When an enemy takes ongoing DMG or is defeated:<br>Grants 5 MP to self.<br>* Triggers for each condition.",
+        "level": 6,
+        "name": "Assault Haste",
+        "passiveSkillMstId": 1507906,
+        "skillButtonIcon": "battle_icon_passive_buff",
+        "skillUniqueId": 15079
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "At battle start, increases own ailment hit rate by 19%, and advances action order 70%.<br><br>On DMG dealt to a cursed enemy by self or ally:<br>Restores all allies' HP by 5% of user's ATK.<br>Increases target's Spirit-Sealing Hairpin stacks by 1.<br>* This effect only activates when the Spirit-Sealing Hairpin is applied.<br><br>When a cursed enemy is present:<br>Increases own ATK by 10% and SPD by 10%.<br>Increases all allies' ongoing DMG dealt by 30%.<br><br>When an enemy takes ongoing DMG or is defeated:<br>Grants 5 MP to self.<br>* Triggers for each condition.",
+        "level": 7,
+        "name": "Assault Haste",
+        "passiveSkillMstId": 1507907,
+        "skillButtonIcon": "battle_icon_passive_buff",
+        "skillUniqueId": 15079
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "At battle start, increases own ailment hit rate by 21%, and advances action order 70%.<br><br>On DMG dealt to a cursed enemy by self or ally:<br>Restores all allies' HP by 5% of user's ATK.<br>Increases target's Spirit-Sealing Hairpin stacks by 1.<br>* This effect only activates when the Spirit-Sealing Hairpin is applied.<br><br>When a cursed enemy is present:<br>Increases own ATK by 10% and SPD by 10%.<br>Increases all allies' ongoing DMG dealt by 30%.<br><br>When an enemy takes ongoing DMG or is defeated:<br>Grants 5 MP to self.<br>* Triggers for each condition.",
+        "level": 8,
+        "name": "Assault Haste",
+        "passiveSkillMstId": 1507908,
+        "skillButtonIcon": "battle_icon_passive_buff",
+        "skillUniqueId": 15079
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "At battle start, increases own ailment hit rate by 23%, and advances action order 70%.<br><br>On DMG dealt to a cursed enemy by self or ally:<br>Restores all allies' HP by 5% of user's ATK.<br>Increases target's Spirit-Sealing Hairpin stacks by 1.<br>* This effect only activates when the Spirit-Sealing Hairpin is applied.<br><br>When a cursed enemy is present:<br>Increases own ATK by 10% and SPD by 10%.<br>Increases all allies' ongoing DMG dealt by 30%.<br><br>When an enemy takes ongoing DMG or is defeated:<br>Grants 5 MP to self.<br>* Triggers for each condition.",
+        "level": 9,
+        "name": "Assault Haste",
+        "passiveSkillMstId": 1507909,
+        "skillButtonIcon": "battle_icon_passive_buff",
+        "skillUniqueId": 15079
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "At battle start, increases own ailment hit rate by 25%, and advances action order 70%.<br><br>On DMG dealt to a cursed enemy by self or ally:<br>Restores all allies' HP by 5% of user's ATK.<br>Increases target's Spirit-Sealing Hairpin stacks by 1.<br>* This effect only activates when the Spirit-Sealing Hairpin is applied.<br><br>When a cursed enemy is present:<br>Increases own ATK by 10% and SPD by 10%.<br>Increases all allies' ongoing DMG dealt by 30%.<br><br>When an enemy takes ongoing DMG or is defeated:<br>Grants 5 MP to self.<br>* Triggers for each condition.",
+        "level": 10,
+        "name": "Assault Haste",
+        "passiveSkillMstId": 1507910,
+        "skillButtonIcon": "battle_icon_passive_buff",
+        "skillUniqueId": 15079
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
         "description": "On void DMG dealt to an enemy by self or ally, increases own DMG dealt by 3% (Max 10 stacks) and grants 5 MP.<br>On own HP consumption, increases ATK by 2% (Max 10 stacks) and increases SPD by 2% (Max 10 stacks).<br>* Only applies to basic attack / battle skill / special attack.<br>Decreases DMG taken by 10% as own HP decreases (Max 40%).<br><br>When own void field inactive:<br>On own battle skill use, activates void field (Stock Gained: 3).<br><br>Void Field:<br>Increases all allies' void DMG dealt by 30% and void critical rate by 30%.<br>Max Stock: 3; on user's battle skill use, grants 2 stock, and on user's basic attack, consumes 1 stock.",
         "level": 1,
         "name": "Assault Haste",
@@ -32638,6 +33058,106 @@
         "passiveSkillMstId": 1508010,
         "skillButtonIcon": "battle_icon_passive_buff",
         "skillUniqueId": 15080
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "0/4 own Magic at battle start.<br><br>On DMG dealt to an enemy by allies other than self using battle skill, grants 2 Magic.<br>On DMG dealt to an enemy by allies other than self using basic attack, grants 1 Magic.<br>When own Magic reaches 4, triggers a follow-up attack, and consumes 4 Magic.<br><br>Follow-Up Attack:<br>Deals 40% dark DMG to a single enemy.<br>Applies 1 Murk of Obsession to self (Max 10 stacks), and grants 5 MP.<br><br>Murk of Obsession:<br>Increases break effect by 60%.<br>Increases follow-up attack and special attack break gauge depletion (Effect increases with each additional stack), and increases break bonus by 15% (Effect increases with each additional stack / Max 150%).",
+        "level": 1,
+        "name": "Accele Chase",
+        "passiveSkillMstId": 1508101,
+        "skillButtonIcon": "battle_icon_passive_buff",
+        "skillUniqueId": 15081
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "0/4 own Magic at battle start.<br><br>On DMG dealt to an enemy by allies other than self using battle skill, grants 2 Magic.<br>On DMG dealt to an enemy by allies other than self using basic attack, grants 1 Magic.<br>When own Magic reaches 4, triggers a follow-up attack, and consumes 4 Magic.<br><br>Follow-Up Attack:<br>Deals 41% dark DMG to a single enemy.<br>Applies 1 Murk of Obsession to self (Max 10 stacks), and grants 5 MP.<br><br>Murk of Obsession:<br>Increases break effect by 60%.<br>Increases follow-up attack and special attack break gauge depletion (Effect increases with each additional stack), and increases break bonus by 15% (Effect increases with each additional stack / Max 150%).",
+        "level": 2,
+        "name": "Accele Chase",
+        "passiveSkillMstId": 1508102,
+        "skillButtonIcon": "battle_icon_passive_buff",
+        "skillUniqueId": 15081
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "0/4 own Magic at battle start.<br><br>On DMG dealt to an enemy by allies other than self using battle skill, grants 2 Magic.<br>On DMG dealt to an enemy by allies other than self using basic attack, grants 1 Magic.<br>When own Magic reaches 4, triggers a follow-up attack, and consumes 4 Magic.<br><br>Follow-Up Attack:<br>Deals 43% dark DMG to a single enemy.<br>Applies 1 Murk of Obsession to self (Max 10 stacks), and grants 5 MP.<br><br>Murk of Obsession:<br>Increases break effect by 60%.<br>Increases follow-up attack and special attack break gauge depletion (Effect increases with each additional stack), and increases break bonus by 15% (Effect increases with each additional stack / Max 150%).",
+        "level": 3,
+        "name": "Accele Chase",
+        "passiveSkillMstId": 1508103,
+        "skillButtonIcon": "battle_icon_passive_buff",
+        "skillUniqueId": 15081
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "0/4 own Magic at battle start.<br><br>On DMG dealt to an enemy by allies other than self using battle skill, grants 2 Magic.<br>On DMG dealt to an enemy by allies other than self using basic attack, grants 1 Magic.<br>When own Magic reaches 4, triggers a follow-up attack, and consumes 4 Magic.<br><br>Follow-Up Attack:<br>Deals 45% dark DMG to a single enemy.<br>Applies 1 Murk of Obsession to self (Max 10 stacks), and grants 5 MP.<br><br>Murk of Obsession:<br>Increases break effect by 60%.<br>Increases follow-up attack and special attack break gauge depletion (Effect increases with each additional stack), and increases break bonus by 15% (Effect increases with each additional stack / Max 150%).",
+        "level": 4,
+        "name": "Accele Chase",
+        "passiveSkillMstId": 1508104,
+        "skillButtonIcon": "battle_icon_passive_buff",
+        "skillUniqueId": 15081
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "0/4 own Magic at battle start.<br><br>On DMG dealt to an enemy by allies other than self using battle skill, grants 2 Magic.<br>On DMG dealt to an enemy by allies other than self using basic attack, grants 1 Magic.<br>When own Magic reaches 4, triggers a follow-up attack, and consumes 4 Magic.<br><br>Follow-Up Attack:<br>Deals 47% dark DMG to a single enemy.<br>Applies 1 Murk of Obsession to self (Max 10 stacks), and grants 5 MP.<br><br>Murk of Obsession:<br>Increases break effect by 60%.<br>Increases follow-up attack and special attack break gauge depletion (Effect increases with each additional stack), and increases break bonus by 15% (Effect increases with each additional stack / Max 150%).",
+        "level": 5,
+        "name": "Accele Chase",
+        "passiveSkillMstId": 1508105,
+        "skillButtonIcon": "battle_icon_passive_buff",
+        "skillUniqueId": 15081
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "0/4 own Magic at battle start.<br><br>On DMG dealt to an enemy by allies other than self using battle skill, grants 2 Magic.<br>On DMG dealt to an enemy by allies other than self using basic attack, grants 1 Magic.<br>When own Magic reaches 4, triggers a follow-up attack, and consumes 4 Magic.<br><br>Follow-Up Attack:<br>Deals 50% dark DMG to a single enemy.<br>Applies 1 Murk of Obsession to self (Max 10 stacks), and grants 5 MP.<br><br>Murk of Obsession:<br>Increases break effect by 60%.<br>Increases follow-up attack and special attack break gauge depletion (Effect increases with each additional stack), and increases break bonus by 15% (Effect increases with each additional stack / Max 150%).",
+        "level": 6,
+        "name": "Accele Chase",
+        "passiveSkillMstId": 1508106,
+        "skillButtonIcon": "battle_icon_passive_buff",
+        "skillUniqueId": 15081
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "0/4 own Magic at battle start.<br><br>On DMG dealt to an enemy by allies other than self using battle skill, grants 2 Magic.<br>On DMG dealt to an enemy by allies other than self using basic attack, grants 1 Magic.<br>When own Magic reaches 4, triggers a follow-up attack, and consumes 4 Magic.<br><br>Follow-Up Attack:<br>Deals 52% dark DMG to a single enemy.<br>Applies 1 Murk of Obsession to self (Max 10 stacks), and grants 5 MP.<br><br>Murk of Obsession:<br>Increases break effect by 60%.<br>Increases follow-up attack and special attack break gauge depletion (Effect increases with each additional stack), and increases break bonus by 15% (Effect increases with each additional stack / Max 150%).",
+        "level": 7,
+        "name": "Accele Chase",
+        "passiveSkillMstId": 1508107,
+        "skillButtonIcon": "battle_icon_passive_buff",
+        "skillUniqueId": 15081
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "0/4 own Magic at battle start.<br><br>On DMG dealt to an enemy by allies other than self using battle skill, grants 2 Magic.<br>On DMG dealt to an enemy by allies other than self using basic attack, grants 1 Magic.<br>When own Magic reaches 4, triggers a follow-up attack, and consumes 4 Magic.<br><br>Follow-Up Attack:<br>Deals 54% dark DMG to a single enemy.<br>Applies 1 Murk of Obsession to self (Max 10 stacks), and grants 5 MP.<br><br>Murk of Obsession:<br>Increases break effect by 60%.<br>Increases follow-up attack and special attack break gauge depletion (Effect increases with each additional stack), and increases break bonus by 15% (Effect increases with each additional stack / Max 150%).",
+        "level": 8,
+        "name": "Accele Chase",
+        "passiveSkillMstId": 1508108,
+        "skillButtonIcon": "battle_icon_passive_buff",
+        "skillUniqueId": 15081
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "0/4 own Magic at battle start.<br><br>On DMG dealt to an enemy by allies other than self using battle skill, grants 2 Magic.<br>On DMG dealt to an enemy by allies other than self using basic attack, grants 1 Magic.<br>When own Magic reaches 4, triggers a follow-up attack, and consumes 4 Magic.<br><br>Follow-Up Attack:<br>Deals 57% dark DMG to a single enemy.<br>Applies 1 Murk of Obsession to self (Max 10 stacks), and grants 5 MP.<br><br>Murk of Obsession:<br>Increases break effect by 60%.<br>Increases follow-up attack and special attack break gauge depletion (Effect increases with each additional stack), and increases break bonus by 15% (Effect increases with each additional stack / Max 150%).",
+        "level": 9,
+        "name": "Accele Chase",
+        "passiveSkillMstId": 1508109,
+        "skillButtonIcon": "battle_icon_passive_buff",
+        "skillUniqueId": 15081
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "0/4 own Magic at battle start.<br><br>On DMG dealt to an enemy by allies other than self using battle skill, grants 2 Magic.<br>On DMG dealt to an enemy by allies other than self using basic attack, grants 1 Magic.<br>When own Magic reaches 4, triggers a follow-up attack, and consumes 4 Magic.<br><br>Follow-Up Attack:<br>Deals 60% dark DMG to a single enemy.<br>Applies 1 Murk of Obsession to self (Max 10 stacks), and grants 5 MP.<br><br>Murk of Obsession:<br>Increases break effect by 60%.<br>Increases follow-up attack and special attack break gauge depletion (Effect increases with each additional stack), and increases break bonus by 15% (Effect increases with each additional stack / Max 150%).",
+        "level": 10,
+        "name": "Accele Chase",
+        "passiveSkillMstId": 1508110,
+        "skillButtonIcon": "battle_icon_passive_buff",
+        "skillUniqueId": 15081
     },
     {
         "conditionElement": 0,
@@ -33038,6 +33558,56 @@
         "passiveSkillMstId": 1600039,
         "skillButtonIcon": "battle_icon_season_skill",
         "skillUniqueId": 1600039
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "On DMG dealt, grants 5 Vanguard points.",
+        "level": 1,
+        "name": "Vanguard Points",
+        "passiveSkillMstId": 1600040,
+        "skillButtonIcon": "battle_icon_season_skill",
+        "skillUniqueId": 1600040
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases ATK based on number of times HP has decreased (Max 100%).",
+        "level": 1,
+        "name": "Vanguard Execution Phase",
+        "passiveSkillMstId": 1600041,
+        "skillButtonIcon": "",
+        "skillUniqueId": 1600041
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases ATK by 50%.<br>Increases basic attack / battle skill / follow-up attack / counterattack / special DMG dealt by 50%.<br>On basic attack, grants 1 SP.<br>On shift to Vanguard Activation Phase, increases SPD by 100% / 1 turn.<br>Attacker: Increases DMG dealt when targeting elemental weakness by 30%.<br>Breaker: Increases break gauge depletion by 40%.<br>Healer: Increases SPD by 50%.",
+        "level": 1,
+        "name": "Vanguard Activation Phase",
+        "passiveSkillMstId": 1600042,
+        "skillButtonIcon": "",
+        "skillUniqueId": 1600042
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "On receiving recovery effect, increases critical DMG by 30% (2 turns).<br>On receiving recovery effect, increases SPD by 5% (Stacks 6 times / 2 turns).",
+        "level": 1,
+        "name": "Recovery Effects",
+        "passiveSkillMstId": 1600043,
+        "skillButtonIcon": "battle_icon_choice_hp_heal",
+        "skillUniqueId": 1600043
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "On recovery effect activation, grants 3 Vanguard points (Scales with the number of targets; max 15).",
+        "level": 1,
+        "name": "Vanguard Points",
+        "passiveSkillMstId": 1600044,
+        "skillButtonIcon": "battle_icon_season_skill",
+        "skillUniqueId": 1600044
     },
     {
         "conditionElement": 0,
@@ -38322,6 +38892,16 @@
     {
         "conditionElement": 0,
         "conditionRole": 0,
+        "description": "Grants 2 actions.<br>Increases ATK and SPD with each passing turn.<br>If break bonus is 500% or higher, decreases DEF.<br><br>When an enemy not aligned with the user's elemental weakness takes an action, advances all allies' action order.",
+        "level": 1,
+        "name": "Ability IV",
+        "passiveSkillMstId": 5001272,
+        "skillButtonIcon": "",
+        "skillUniqueId": 5001272
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
         "description": "If attack target is cursed, grants 1 extra action.",
         "level": 1,
         "name": "Ability IV",
@@ -39728,6 +40308,196 @@
         "passiveSkillMstId": 7120015,
         "skillButtonIcon": "",
         "skillUniqueId": 7120015
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Grants 2 actions.<br>At battle start, decreases all enemies' DMG dealt for 2 turns.<br>Increases the DMG of certain skills based on how many debuffs are applied to enemies.<br>Also decreases DMG taken and increases break gauge depletion RES.<br><br>When an enemy not aligned with the user's elemental weakness takes an action, activates assist.<br><br>Assist:<br>Decreases all enemies' MP.",
+        "level": 1,
+        "name": "Ability I",
+        "passiveSkillMstId": 7140001,
+        "skillButtonIcon": "",
+        "skillUniqueId": 7140001
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases SPD based on how many debuffs are applied to enemies.",
+        "level": 1,
+        "name": "Ability I",
+        "passiveSkillMstId": 7140002,
+        "skillButtonIcon": "",
+        "skillUniqueId": 7140002
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases ATK based on how many debuffs are applied to enemies.",
+        "level": 1,
+        "name": "Ability I",
+        "passiveSkillMstId": 7140003,
+        "skillButtonIcon": "",
+        "skillUniqueId": 7140003
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Grants 2 actions.<br>At battle start, decreases all enemies' DMG dealt for 2 turns.<br>Increases DMG and effects of certain skills based on how many debuffs are applied to enemies.<br>Decreases DMG taken and increases break gauge depletion RES based on how few debuffs are applied to self.<br><br>When an enemy not aligned with the user's elemental weakness takes an action, activates assist.<br><br>Assist:<br>Decreases all enemies' MP.",
+        "level": 1,
+        "name": "Ability I",
+        "passiveSkillMstId": 7140004,
+        "skillButtonIcon": "",
+        "skillUniqueId": 7140004
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Grants 2 actions.<br>Increases DMG of certain skills and break gauge depletion RES based on own Magic value.<br>When 5 allies are attacked simultaneously, consumes 1 Magic.<br>Grants 3 Magic with each passing turn.<br><br>When attacked by an enemy with less than 50% HP, greatly decreases DMG taken.<br>When an enemy not aligned with the user's elemental weakness takes an action, activates assist.<br><br>Assist:<br>Decreases all enemies' MP.",
+        "level": 1,
+        "name": "Ability I",
+        "passiveSkillMstId": 7140005,
+        "skillButtonIcon": "",
+        "skillUniqueId": 7140005
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Grants 2 actions.<br>Increases ATK, certain skills DMG, and break gauge depletion RES based on own Magic value.<br>On allies taking 30,000 / 50,000 / 90,000 or more DMG from a battle skill, consumes 1 / 2 / 3 Magic.<br>Grants 2 Magic with each passing turn.",
+        "level": 1,
+        "name": "Ability I",
+        "passiveSkillMstId": 7140006,
+        "skillButtonIcon": "",
+        "skillUniqueId": 7140006
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "At battle start, decreases all enemies' DMG dealt for 2 turns.",
+        "level": 1,
+        "name": "Ability I",
+        "passiveSkillMstId": 7140007,
+        "skillButtonIcon": "",
+        "skillUniqueId": 7140007
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Grants 2 actions.<br>Increases ATK, certain skills DMG, and break gauge depletion RES based on own Magic value.<br>On allies taking 30,000 / 50,000 / 60,000 or more DMG from a battle skill, consumes 1 / 2 / 3 Magic.<br>Grants 2 Magic with each passing turn.",
+        "level": 1,
+        "name": "Ability I",
+        "passiveSkillMstId": 7140008,
+        "skillButtonIcon": "",
+        "skillUniqueId": 7140008
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Grants 2 actions.<br>At battle start, decreases all enemies' DMG dealt for 2 turns.<br>Decreases DMG taken and increases break gauge depletion RES based on how many debuffs are applied to enemies.<br><br>When an enemy not aligned with the user's elemental weakness takes an action, activates assist.<br><br>Assist:<br>Decreases all enemies' MP.",
+        "level": 1,
+        "name": "Ability I",
+        "passiveSkillMstId": 7140009,
+        "skillButtonIcon": "",
+        "skillUniqueId": 7140009
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Grants 2 actions.<br>Decreases DMG taken and increases break gauge depletion RES based on how many debuffs are applied to enemies.<br><br>When an enemy not aligned with the user's elemental weakness takes an action, activates assist.<br><br>Assist:<br>Slightly decreases all enemies' MP.",
+        "level": 1,
+        "name": "Ability I",
+        "passiveSkillMstId": 7140010,
+        "skillButtonIcon": "",
+        "skillUniqueId": 7140010
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases SPD based on how many debuffs are applied to enemies.",
+        "level": 1,
+        "name": "Ability I",
+        "passiveSkillMstId": 7140011,
+        "skillButtonIcon": "",
+        "skillUniqueId": 7140011
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases SPD based on how many debuffs are applied to enemies.",
+        "level": 1,
+        "name": "Ability I",
+        "passiveSkillMstId": 7140012,
+        "skillButtonIcon": "",
+        "skillUniqueId": 7140012
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases ATK based on how many debuffs are applied to enemies.",
+        "level": 1,
+        "name": "Ability I",
+        "passiveSkillMstId": 7140013,
+        "skillButtonIcon": "",
+        "skillUniqueId": 7140013
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases ATK based on how many debuffs are applied to enemies.",
+        "level": 1,
+        "name": "Ability I",
+        "passiveSkillMstId": 7140014,
+        "skillButtonIcon": "",
+        "skillUniqueId": 7140014
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Grants 2 actions.<br>At battle start, decreases all enemies' DMG dealt for 2 turns.<br>Increases DMG and effects of certain skills based on how many debuffs are applied to enemies.<br>Decreases DMG taken and increases break gauge depletion RES based on how few debuffs are applied to self.<br><br>When an enemy not aligned with the user's elemental weakness takes an action, activates assist.<br><br>Assist:<br>Decreases all enemies' MP.",
+        "level": 1,
+        "name": "Ability I",
+        "passiveSkillMstId": 7140015,
+        "skillButtonIcon": "",
+        "skillUniqueId": 7140015
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Grants 2 actions.<br><br>Increases DMG and effects of certain skills based on how many debuffs are applied to enemies.<br>Decreases DMG taken and increases break gauge depletion RES based on how few debuffs are applied to self.<br><br>When an enemy not aligned with the user's elemental weakness takes an action, activates assist.<br><br>Assist:<br>Slightly decreases all enemies' MP.",
+        "level": 1,
+        "name": "Ability I",
+        "passiveSkillMstId": 7140016,
+        "skillButtonIcon": "",
+        "skillUniqueId": 7140016
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Grants 2 actions.<br>Increases DMG of certain skills and break gauge depletion RES based on own Magic value.<br>When 5 allies are attacked simultaneously, consumes 1 Magic.<br>Grants 3 Magic with each passing turn.<br><br>When attacked by an enemy with less than 50% HP, greatly decreases DMG taken.<br>When an enemy not aligned with the user's elemental weakness takes an action, activates assist.<br><br>Assist:<br>Decreases all enemies' MP.",
+        "level": 1,
+        "name": "Ability I",
+        "passiveSkillMstId": 7140017,
+        "skillButtonIcon": "",
+        "skillUniqueId": 7140017
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Grants 2 actions.<br>Increases DMG of certain skills and break gauge depletion RES based on own Magic value.<br>When 5 allies are attacked simultaneously, consumes 1 Magic.<br>Grants 2 Magic with each passing turn.<br><br>When attacked by an enemy with less than 30% HP, greatly decreases DMG taken.<br>When an enemy not aligned with the user's elemental weakness takes an action, activates assist.<br><br>Assist:<br>Slightly decreases all enemies' MP.",
+        "level": 1,
+        "name": "Ability I",
+        "passiveSkillMstId": 7140018,
+        "skillButtonIcon": "",
+        "skillUniqueId": 7140018
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Grants 2 actions.<br>Increases ATK, certain skills DMG, and break gauge depletion RES based on own Magic value.<br>On allies taking 1,000 / 3,000 / 6,000 or more DMG from a battle skill, consumes 1 / 2 / 3 Magic.",
+        "level": 1,
+        "name": "Ability I",
+        "passiveSkillMstId": 7140019,
+        "skillButtonIcon": "",
+        "skillUniqueId": 7140019
     },
     {
         "conditionElement": 0,
@@ -41392,6 +42162,26 @@
     {
         "conditionElement": 0,
         "conditionRole": 0,
+        "description": "On own follow-up attack, adds 1 turn to the duration of debuff effects applied to target (Extension: Up to 3 turns max).<br><br>When enemy with Pumpkin Panic applied is present:<br>Decreases all enemies' all elemental RES by 10%.",
+        "level": 1,
+        "name": "Ascension Effects",
+        "passiveSkillMstId": 8510001,
+        "skillButtonIcon": "",
+        "skillUniqueId": 85100
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Removes 1 extra debuff effect from all allies on special attack.<br><br>On ongoing DMG dealt to an enemy:<br>Restores all allies' HP by 5% of user's ATK.",
+        "level": 1,
+        "name": "Ascension Effects",
+        "passiveSkillMstId": 8510101,
+        "skillButtonIcon": "",
+        "skillUniqueId": 85101
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
         "description": "At battle start, increases MP by 50%.<br>On special attack, triggers a follow-up attack.<br>* This follow-up attack does not remove Cadence Echo.<br>* Follow-up attack will trigger for each condition.<br><br>While own void field active:<br>Increases own special attack DMG dealt by 30%, and on taking at least 1 DMG from an enemy attack, advances action order by 5%.",
         "level": 1,
         "name": "Ascension Effects",
@@ -41408,6 +42198,16 @@
         "passiveSkillMstId": 8510301,
         "skillButtonIcon": "",
         "skillUniqueId": 85103
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "On own follow-up attack, grants 5 MP.<br><br>While Murk of Obsession is applied:<br>At own turn start, applies 1 Murk of Obsession (Max 10 stacks).",
+        "level": 1,
+        "name": "Ascension Effects",
+        "passiveSkillMstId": 8510401,
+        "skillButtonIcon": "",
+        "skillUniqueId": 85104
     },
     {
         "conditionElement": 0,
@@ -52921,6 +53721,206 @@
     },
     {
         "conditionElement": 0,
+        "conditionRole": 5,
+        "description": "Equipped to Debuffer:<br>Increases SPD by 5% and critical rate by 3.5%.<br>On own critical hit, increases own DMG dealt by 3% (Max 5 stacks).",
+        "level": 1,
+        "name": "Blast Haste",
+        "passiveSkillMstId": 9507701,
+        "skillButtonIcon": "battle_icon_supportpassive_buff",
+        "skillUniqueId": 95077
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 5,
+        "description": "Equipped to Debuffer:<br>Increases SPD by 5% and critical rate by 4.2%.<br>On own critical hit, increases own DMG dealt by 3% (Max 5 stacks).",
+        "level": 2,
+        "name": "Blast Haste",
+        "passiveSkillMstId": 9507702,
+        "skillButtonIcon": "battle_icon_supportpassive_buff",
+        "skillUniqueId": 95077
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 5,
+        "description": "Equipped to Debuffer:<br>Increases SPD by 5% and critical rate by 4.9%.<br>On own critical hit, increases own DMG dealt by 3% (Max 5 stacks).",
+        "level": 3,
+        "name": "Blast Haste",
+        "passiveSkillMstId": 9507703,
+        "skillButtonIcon": "battle_icon_supportpassive_buff",
+        "skillUniqueId": 95077
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 5,
+        "description": "Equipped to Debuffer:<br>Increases SPD by 5% and critical rate by 5.7%.<br>On own critical hit, increases own DMG dealt by 3% (Max 5 stacks).",
+        "level": 4,
+        "name": "Blast Haste",
+        "passiveSkillMstId": 9507704,
+        "skillButtonIcon": "battle_icon_supportpassive_buff",
+        "skillUniqueId": 95077
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 5,
+        "description": "Equipped to Debuffer:<br>Increases SPD by 5% and critical rate by 6.4%.<br>On own critical hit, increases own DMG dealt by 3% (Max 5 stacks).",
+        "level": 5,
+        "name": "Blast Haste",
+        "passiveSkillMstId": 9507705,
+        "skillButtonIcon": "battle_icon_supportpassive_buff",
+        "skillUniqueId": 95077
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 5,
+        "description": "Equipped to Debuffer:<br>Increases SPD by 5% and critical rate by 7.1%.<br>On own critical hit, increases own DMG dealt by 3% (Max 5 stacks).",
+        "level": 6,
+        "name": "Blast Haste",
+        "passiveSkillMstId": 9507706,
+        "skillButtonIcon": "battle_icon_supportpassive_buff",
+        "skillUniqueId": 95077
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 5,
+        "description": "Equipped to Debuffer:<br>Increases SPD by 5% and critical rate by 7.8%.<br>On own critical hit, increases own DMG dealt by 3% (Max 5 stacks).",
+        "level": 7,
+        "name": "Blast Haste",
+        "passiveSkillMstId": 9507707,
+        "skillButtonIcon": "battle_icon_supportpassive_buff",
+        "skillUniqueId": 95077
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 5,
+        "description": "Equipped to Debuffer:<br>Increases SPD by 5% and critical rate by 8.6%.<br>On own critical hit, increases own DMG dealt by 3% (Max 5 stacks).",
+        "level": 8,
+        "name": "Blast Haste",
+        "passiveSkillMstId": 9507708,
+        "skillButtonIcon": "battle_icon_supportpassive_buff",
+        "skillUniqueId": 95077
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 5,
+        "description": "Equipped to Debuffer:<br>Increases SPD by 5% and critical rate by 9.3%.<br>On own critical hit, increases own DMG dealt by 3% (Max 5 stacks).",
+        "level": 9,
+        "name": "Blast Haste",
+        "passiveSkillMstId": 9507709,
+        "skillButtonIcon": "battle_icon_supportpassive_buff",
+        "skillUniqueId": 95077
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 5,
+        "description": "Equipped to Debuffer:<br>Increases SPD by 5% and critical rate by 10%.<br>On own critical hit, increases own DMG dealt by 3% (Max 5 stacks).",
+        "level": 10,
+        "name": "Blast Haste",
+        "passiveSkillMstId": 9507710,
+        "skillButtonIcon": "battle_icon_supportpassive_buff",
+        "skillUniqueId": 95077
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 3,
+        "description": "Equipped to Healer:<br>Increases max HP by 5% and SPD by 5%.<br>On basic attack, advances action order by 5%.",
+        "level": 1,
+        "name": "Haste Toughness",
+        "passiveSkillMstId": 9507801,
+        "skillButtonIcon": "battle_icon_supportpassive_buff",
+        "skillUniqueId": 95078
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 3,
+        "description": "Equipped to Healer:<br>Increases max HP by 6% and SPD by 5%.<br>On basic attack, advances action order by 5%.",
+        "level": 2,
+        "name": "Haste Toughness",
+        "passiveSkillMstId": 9507802,
+        "skillButtonIcon": "battle_icon_supportpassive_buff",
+        "skillUniqueId": 95078
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 3,
+        "description": "Equipped to Healer:<br>Increases max HP by 6% and SPD by 7%.<br>On basic attack, advances action order by 6%.",
+        "level": 3,
+        "name": "Haste Toughness",
+        "passiveSkillMstId": 9507803,
+        "skillButtonIcon": "battle_icon_supportpassive_buff",
+        "skillUniqueId": 95078
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 3,
+        "description": "Equipped to Healer:<br>Increases max HP by 6% and SPD by 7%.<br>On basic attack, advances action order by 7%.",
+        "level": 4,
+        "name": "Haste Toughness",
+        "passiveSkillMstId": 9507804,
+        "skillButtonIcon": "battle_icon_supportpassive_buff",
+        "skillUniqueId": 95078
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 3,
+        "description": "Equipped to Healer:<br>Increases max HP by 7% and SPD by 7%.<br>On basic attack, advances action order by 7%.",
+        "level": 5,
+        "name": "Haste Toughness",
+        "passiveSkillMstId": 9507805,
+        "skillButtonIcon": "battle_icon_supportpassive_buff",
+        "skillUniqueId": 95078
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 3,
+        "description": "Equipped to Healer:<br>Increases max HP by 7% and SPD by 8%.<br>On basic attack, advances action order by 7%.",
+        "level": 6,
+        "name": "Haste Toughness",
+        "passiveSkillMstId": 9507806,
+        "skillButtonIcon": "battle_icon_supportpassive_buff",
+        "skillUniqueId": 95078
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 3,
+        "description": "Equipped to Healer:<br>Increases max HP by 7% and SPD by 8%.<br>On basic attack, advances action order by 8%.",
+        "level": 7,
+        "name": "Haste Toughness",
+        "passiveSkillMstId": 9507807,
+        "skillButtonIcon": "battle_icon_supportpassive_buff",
+        "skillUniqueId": 95078
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 3,
+        "description": "Equipped to Healer:<br>Increases max HP by 8% and SPD by 9%.<br>On basic attack, advances action order by 8%.",
+        "level": 8,
+        "name": "Haste Toughness",
+        "passiveSkillMstId": 9507808,
+        "skillButtonIcon": "battle_icon_supportpassive_buff",
+        "skillUniqueId": 95078
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 3,
+        "description": "Equipped to Healer:<br>Increases max HP by 9% and SPD by 10%.<br>On basic attack, advances action order by 9%.",
+        "level": 9,
+        "name": "Haste Toughness",
+        "passiveSkillMstId": 9507809,
+        "skillButtonIcon": "battle_icon_supportpassive_buff",
+        "skillUniqueId": 95078
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 3,
+        "description": "Equipped to Healer:<br>Increases max HP by 10% and SPD by 12%.<br>On basic attack, advances action order by 10%.",
+        "level": 10,
+        "name": "Haste Toughness",
+        "passiveSkillMstId": 9507810,
+        "skillButtonIcon": "battle_icon_supportpassive_buff",
+        "skillUniqueId": 95078
+    },
+    {
+        "conditionElement": 0,
         "conditionRole": 1,
         "description": "Equipped to Attacker:<br>Decreases DMG taken by 5% and increases SPD by 5%.<br>On special attack, increases battle skill DMG dealt by 25% (2 turns).",
         "level": 1,
@@ -53018,5 +54018,105 @@
         "passiveSkillMstId": 9507910,
         "skillButtonIcon": "battle_icon_supportpassive_buff",
         "skillUniqueId": 95079
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 2,
+        "description": "Equipped to Breaker:<br>Increases break gauge depletion, and increases break bonus by 10%.<br>On own special attack, increases own SPD by 10% (2 turns).",
+        "level": 1,
+        "name": "Haste Technique",
+        "passiveSkillMstId": 9508001,
+        "skillButtonIcon": "battle_icon_supportpassive_buff",
+        "skillUniqueId": 95080
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 2,
+        "description": "Equipped to Breaker:<br>Increases break gauge depletion, and increases break bonus by 11%.<br>On own special attack, increases own SPD by 11% (2 turns).",
+        "level": 2,
+        "name": "Haste Technique",
+        "passiveSkillMstId": 9508002,
+        "skillButtonIcon": "battle_icon_supportpassive_buff",
+        "skillUniqueId": 95080
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 2,
+        "description": "Equipped to Breaker:<br>Increases break gauge depletion, and increases break bonus by 12%.<br>On own special attack, increases own SPD by 12% (2 turns).",
+        "level": 3,
+        "name": "Haste Technique",
+        "passiveSkillMstId": 9508003,
+        "skillButtonIcon": "battle_icon_supportpassive_buff",
+        "skillUniqueId": 95080
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 2,
+        "description": "Equipped to Breaker:<br>Increases break gauge depletion, and increases break bonus by 13%.<br>On own special attack, increases own SPD by 13% (2 turns).",
+        "level": 4,
+        "name": "Haste Technique",
+        "passiveSkillMstId": 9508004,
+        "skillButtonIcon": "battle_icon_supportpassive_buff",
+        "skillUniqueId": 95080
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 2,
+        "description": "Equipped to Breaker:<br>Increases break gauge depletion, and increases break bonus by 14%.<br>On own special attack, increases own SPD by 14% (2 turns).",
+        "level": 5,
+        "name": "Haste Technique",
+        "passiveSkillMstId": 9508005,
+        "skillButtonIcon": "battle_icon_supportpassive_buff",
+        "skillUniqueId": 95080
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 2,
+        "description": "Equipped to Breaker:<br>Increases break gauge depletion, and increases break bonus by 15%.<br>On own special attack, increases own SPD by 15% (2 turns).",
+        "level": 6,
+        "name": "Haste Technique",
+        "passiveSkillMstId": 9508006,
+        "skillButtonIcon": "battle_icon_supportpassive_buff",
+        "skillUniqueId": 95080
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 2,
+        "description": "Equipped to Breaker:<br>Increases break gauge depletion, and increases break bonus by 16%.<br>On own special attack, increases own SPD by 16% (2 turns).",
+        "level": 7,
+        "name": "Haste Technique",
+        "passiveSkillMstId": 9508007,
+        "skillButtonIcon": "battle_icon_supportpassive_buff",
+        "skillUniqueId": 95080
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 2,
+        "description": "Equipped to Breaker:<br>Increases break gauge depletion, and increases break bonus by 17%.<br>On own special attack, increases own SPD by 17% (2 turns).",
+        "level": 8,
+        "name": "Haste Technique",
+        "passiveSkillMstId": 9508008,
+        "skillButtonIcon": "battle_icon_supportpassive_buff",
+        "skillUniqueId": 95080
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 2,
+        "description": "Equipped to Breaker:<br>Increases break gauge depletion, and increases break bonus by 18%.<br>On own special attack, increases own SPD by 18% (2 turns).",
+        "level": 9,
+        "name": "Haste Technique",
+        "passiveSkillMstId": 9508009,
+        "skillButtonIcon": "battle_icon_supportpassive_buff",
+        "skillUniqueId": 95080
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 2,
+        "description": "Equipped to Breaker:<br>Increases break gauge depletion, and increases break bonus by 20%.<br>On own special attack, increases own SPD by 20% (2 turns).",
+        "level": 10,
+        "name": "Haste Technique",
+        "passiveSkillMstId": 9508010,
+        "skillButtonIcon": "battle_icon_supportpassive_buff",
+        "skillUniqueId": 95080
     }
 ]

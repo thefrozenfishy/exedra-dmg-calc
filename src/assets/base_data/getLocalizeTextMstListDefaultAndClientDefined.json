@@ -1276,6 +1276,10 @@
         "textMstId": "113844442d6ea4f9f24b2a5d46d281b81"
     },
     {
+        "text": "* Your high score will not be updated when a battle results in a loss.",
+        "textMstId": "1139ae74f659da39a5cbb527aa34ad171"
+    },
+    {
         "text": "No results from search.",
         "textMstId": "1147e0f0ae9f1c7667424223bc686ed71"
     },
@@ -9052,6 +9056,10 @@
         "textMstId": "724e2a8683b90fc9af9ecf4ab7cc04e81"
     },
     {
+        "text": "{0} - {1}",
+        "textMstId": "725d95d52c1e422e795f73b0c43defa21"
+    },
+    {
         "text": "Last Attack",
         "textMstId": "726afb1498b1115bd0208f7bc895149a1"
     },
@@ -15846,6 +15854,10 @@
     {
         "text": "Failed to link account.\nPlease complete the transfer settings on the original device.",
         "textMstId": "c6d0927c68eb9eaf63a672b91a4b4b0c1"
+    },
+    {
+        "text": "Medals",
+        "textMstId": "c6d5a0ac1c77d358e621153bfe2f093d1"
     },
     {
         "text": "0 / 9",

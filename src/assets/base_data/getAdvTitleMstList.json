@@ -1093,5 +1093,20 @@
         "advTitleMstId": 224,
         "isViewCollection": true,
         "title": "Anything for Who I Care About!"
+    },
+    {
+        "advTitleMstId": 225,
+        "isViewCollection": true,
+        "title": "Forever Halloween Night:\nA Town of Farewells Part I"
+    },
+    {
+        "advTitleMstId": 226,
+        "isViewCollection": true,
+        "title": "Forever Halloween Night:\nA Town of Farewells Part II"
+    },
+    {
+        "advTitleMstId": 227,
+        "isViewCollection": true,
+        "title": "Felicia Mitsuki:\nA Doppel Tale"
     }
 ]

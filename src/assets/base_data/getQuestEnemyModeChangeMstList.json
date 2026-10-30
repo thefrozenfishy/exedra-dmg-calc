@@ -894,5 +894,131 @@
         "step": 3,
         "thresholdValue": 350,
         "type": 1
+    },
+    {
+        "questEnemyAppearanceMstId": 140810107,
+        "questEnemyModeChangeMstId": 140810101,
+        "step": 1,
+        "thresholdValue": 1000,
+        "type": 1
+    },
+    {
+        "questEnemyAppearanceMstId": 140810108,
+        "questEnemyModeChangeMstId": 140810102,
+        "step": 2,
+        "thresholdValue": 700,
+        "type": 1
+    },
+    {
+        "questEnemyAppearanceMstId": 140810109,
+        "questEnemyModeChangeMstId": 140810103,
+        "step": 3,
+        "thresholdValue": 350,
+        "type": 1
+    },
+    {
+        "questEnemyAppearanceMstId": 140810207,
+        "questEnemyModeChangeMstId": 140810201,
+        "step": 1,
+        "thresholdValue": 1000,
+        "type": 1
+    },
+    {
+        "questEnemyAppearanceMstId": 140810208,
+        "questEnemyModeChangeMstId": 140810202,
+        "step": 2,
+        "thresholdValue": 700,
+        "type": 1
+    },
+    {
+        "questEnemyAppearanceMstId": 140810209,
+        "questEnemyModeChangeMstId": 140810203,
+        "step": 3,
+        "thresholdValue": 350,
+        "type": 1
+    },
+    {
+        "questEnemyAppearanceMstId": 140810307,
+        "questEnemyModeChangeMstId": 140810301,
+        "step": 1,
+        "thresholdValue": 1000,
+        "type": 1
+    },
+    {
+        "questEnemyAppearanceMstId": 140810308,
+        "questEnemyModeChangeMstId": 140810302,
+        "step": 2,
+        "thresholdValue": 700,
+        "type": 1
+    },
+    {
+        "questEnemyAppearanceMstId": 140810309,
+        "questEnemyModeChangeMstId": 140810303,
+        "step": 3,
+        "thresholdValue": 350,
+        "type": 1
+    },
+    {
+        "questEnemyAppearanceMstId": 140810407,
+        "questEnemyModeChangeMstId": 140810401,
+        "step": 1,
+        "thresholdValue": 1000,
+        "type": 1
+    },
+    {
+        "questEnemyAppearanceMstId": 140810408,
+        "questEnemyModeChangeMstId": 140810402,
+        "step": 2,
+        "thresholdValue": 700,
+        "type": 1
+    },
+    {
+        "questEnemyAppearanceMstId": 140810409,
+        "questEnemyModeChangeMstId": 140810403,
+        "step": 3,
+        "thresholdValue": 350,
+        "type": 1
+    },
+    {
+        "questEnemyAppearanceMstId": 140810507,
+        "questEnemyModeChangeMstId": 140810501,
+        "step": 1,
+        "thresholdValue": 1000,
+        "type": 1
+    },
+    {
+        "questEnemyAppearanceMstId": 140810508,
+        "questEnemyModeChangeMstId": 140810502,
+        "step": 2,
+        "thresholdValue": 700,
+        "type": 1
+    },
+    {
+        "questEnemyAppearanceMstId": 140810509,
+        "questEnemyModeChangeMstId": 140810503,
+        "step": 3,
+        "thresholdValue": 350,
+        "type": 1
+    },
+    {
+        "questEnemyAppearanceMstId": 140810607,
+        "questEnemyModeChangeMstId": 140810601,
+        "step": 1,
+        "thresholdValue": 1000,
+        "type": 1
+    },
+    {
+        "questEnemyAppearanceMstId": 140810608,
+        "questEnemyModeChangeMstId": 140810602,
+        "step": 2,
+        "thresholdValue": 700,
+        "type": 1
+    },
+    {
+        "questEnemyAppearanceMstId": 140810609,
+        "questEnemyModeChangeMstId": 140810603,
+        "step": 3,
+        "thresholdValue": 350,
+        "type": 1
     }
 ]

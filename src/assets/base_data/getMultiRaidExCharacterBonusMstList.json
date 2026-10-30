@@ -1,1 +1,52 @@
-[]
+[
+    {
+        "characterMstId": 1002,
+        "groupId": 1,
+        "multiRaidExCharacterBonusMstId": 100101
+    },
+    {
+        "characterMstId": 1005,
+        "groupId": 1,
+        "multiRaidExCharacterBonusMstId": 100102
+    },
+    {
+        "characterMstId": 1010,
+        "groupId": 1,
+        "multiRaidExCharacterBonusMstId": 100103
+    },
+    {
+        "characterMstId": 1014,
+        "groupId": 1,
+        "multiRaidExCharacterBonusMstId": 100104
+    },
+    {
+        "characterMstId": 1017,
+        "groupId": 1,
+        "multiRaidExCharacterBonusMstId": 100105
+    },
+    {
+        "characterMstId": 1019,
+        "groupId": 1,
+        "multiRaidExCharacterBonusMstId": 100106
+    },
+    {
+        "characterMstId": 1021,
+        "groupId": 1,
+        "multiRaidExCharacterBonusMstId": 100107
+    },
+    {
+        "characterMstId": 1062,
+        "groupId": 1,
+        "multiRaidExCharacterBonusMstId": 100108
+    },
+    {
+        "characterMstId": 1086,
+        "groupId": 1,
+        "multiRaidExCharacterBonusMstId": 100109
+    },
+    {
+        "characterMstId": 1151,
+        "groupId": 1,
+        "multiRaidExCharacterBonusMstId": 100110
+    }
+]

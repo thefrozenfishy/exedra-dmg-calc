@@ -14,6 +14,11 @@
         "obtain": "Exclusive",
         "permaDate": ""
     },
+    "All Souls' Repose": {
+        "heartphial": "",
+        "obtain": "Permanent",
+        "permaDate": ""
+    },
     "Aqua Tempest": {
         "heartphial": "",
         "obtain": "Free",
@@ -103,6 +108,11 @@
         "heartphial": "",
         "obtain": "Permanent",
         "permaDate": "2025-03-27"
+    },
+    "Doppel of Agitation": {
+        "heartphial": "",
+        "obtain": "Permanent",
+        "permaDate": ""
     },
     "Doppel of Invitations": {
         "heartphial": "",
@@ -397,6 +407,11 @@
     "Pluvia☆Neujahr": {
         "heartphial": "",
         "obtain": "Exclusive",
+        "permaDate": ""
+    },
+    "Pumpkin Death Squall": {
+        "heartphial": "",
+        "obtain": "Permanent",
         "permaDate": ""
     },
     "Purple Will-o'-Wisp": {

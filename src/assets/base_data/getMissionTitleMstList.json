@@ -2,7 +2,7 @@
     {
         "completeAppealDescription": "",
         "featuredRewardResourceName": "",
-        "isRewardGuideTarget": false,
+        "isRewardGuideTarget": true,
         "missionCampaignGroupMstId": 0,
         "missionTitleMstId": 1,
         "prevMissionTitleMstId": 0,
@@ -62,9 +62,19 @@
     {
         "completeAppealDescription": "",
         "featuredRewardResourceName": "",
-        "isRewardGuideTarget": false,
+        "isRewardGuideTarget": true,
         "missionCampaignGroupMstId": 0,
         "missionTitleMstId": 1031,
+        "prevMissionTitleMstId": 0,
+        "priority": 1,
+        "title": "Link Raid Season Missions"
+    },
+    {
+        "completeAppealDescription": "",
+        "featuredRewardResourceName": "",
+        "isRewardGuideTarget": true,
+        "missionCampaignGroupMstId": 0,
+        "missionTitleMstId": 1032,
         "prevMissionTitleMstId": 0,
         "priority": 1,
         "title": "Link Raid Season Missions"
@@ -232,7 +242,7 @@
     {
         "completeAppealDescription": "Obtain 5★ Kioku [Aqua Tempest] Sorana Nagiboshi: x1",
         "featuredRewardResourceName": "",
-        "isRewardGuideTarget": false,
+        "isRewardGuideTarget": true,
         "missionCampaignGroupMstId": 0,
         "missionTitleMstId": 2024,
         "prevMissionTitleMstId": 0,
@@ -242,7 +252,7 @@
     {
         "completeAppealDescription": "Obtain 5★ Kioku [Aqua Tempest] Sorana Nagiboshi: x1",
         "featuredRewardResourceName": "",
-        "isRewardGuideTarget": false,
+        "isRewardGuideTarget": true,
         "missionCampaignGroupMstId": 0,
         "missionTitleMstId": 2025,
         "prevMissionTitleMstId": 2024,
@@ -252,7 +262,7 @@
     {
         "completeAppealDescription": "Obtain 5★ Kioku [Aqua Tempest] Sorana Nagiboshi: x1",
         "featuredRewardResourceName": "",
-        "isRewardGuideTarget": false,
+        "isRewardGuideTarget": true,
         "missionCampaignGroupMstId": 0,
         "missionTitleMstId": 2026,
         "prevMissionTitleMstId": 2025,
@@ -262,7 +272,7 @@
     {
         "completeAppealDescription": "Get Magica Stone x1,000!",
         "featuredRewardResourceName": "",
-        "isRewardGuideTarget": false,
+        "isRewardGuideTarget": true,
         "missionCampaignGroupMstId": 0,
         "missionTitleMstId": 2027,
         "prevMissionTitleMstId": 0,
@@ -272,7 +282,7 @@
     {
         "completeAppealDescription": "Get Magica Stone x1,000!",
         "featuredRewardResourceName": "",
-        "isRewardGuideTarget": false,
+        "isRewardGuideTarget": true,
         "missionCampaignGroupMstId": 0,
         "missionTitleMstId": 2028,
         "prevMissionTitleMstId": 2027,
@@ -282,12 +292,112 @@
     {
         "completeAppealDescription": "Get Magica Stone x1,000!",
         "featuredRewardResourceName": "",
-        "isRewardGuideTarget": false,
+        "isRewardGuideTarget": true,
         "missionCampaignGroupMstId": 0,
         "missionTitleMstId": 2029,
         "prevMissionTitleMstId": 2028,
         "priority": 90,
         "title": "Exedra Quest Chapter 1 Part II Act II Release Celebration Bingo Missions"
+    },
+    {
+        "completeAppealDescription": "Get Magica Stone x500!",
+        "featuredRewardResourceName": "",
+        "isRewardGuideTarget": true,
+        "missionCampaignGroupMstId": 0,
+        "missionTitleMstId": 2030,
+        "prevMissionTitleMstId": 0,
+        "priority": 170,
+        "title": "Halloween Campaign Bingo Missions Part 1"
+    },
+    {
+        "completeAppealDescription": "Get Magica Stone x500!",
+        "featuredRewardResourceName": "",
+        "isRewardGuideTarget": true,
+        "missionCampaignGroupMstId": 0,
+        "missionTitleMstId": 2031,
+        "prevMissionTitleMstId": 2030,
+        "priority": 170,
+        "title": "Halloween Campaign Bingo Missions Part 1"
+    },
+    {
+        "completeAppealDescription": "Get 3 Prism Cores!",
+        "featuredRewardResourceName": "",
+        "isRewardGuideTarget": false,
+        "missionCampaignGroupMstId": 0,
+        "missionTitleMstId": 2032,
+        "prevMissionTitleMstId": 2031,
+        "priority": 170,
+        "title": "Halloween Campaign Bingo Missions Part 1"
+    },
+    {
+        "completeAppealDescription": "Get Magica Stone x500!",
+        "featuredRewardResourceName": "",
+        "isRewardGuideTarget": true,
+        "missionCampaignGroupMstId": 0,
+        "missionTitleMstId": 2033,
+        "prevMissionTitleMstId": 0,
+        "priority": 180,
+        "title": "Halloween Campaign Bingo Missions Part 2"
+    },
+    {
+        "completeAppealDescription": "Get Magica Stone x500!",
+        "featuredRewardResourceName": "",
+        "isRewardGuideTarget": true,
+        "missionCampaignGroupMstId": 0,
+        "missionTitleMstId": 2034,
+        "prevMissionTitleMstId": 2033,
+        "priority": 180,
+        "title": "Halloween Campaign Bingo Missions Part 2"
+    },
+    {
+        "completeAppealDescription": "Get Magia Grimoire x10!",
+        "featuredRewardResourceName": "",
+        "isRewardGuideTarget": false,
+        "missionCampaignGroupMstId": 0,
+        "missionTitleMstId": 2035,
+        "prevMissionTitleMstId": 2034,
+        "priority": 180,
+        "title": "Halloween Campaign Bingo Missions Part 2"
+    },
+    {
+        "completeAppealDescription": "Get 5 Prism Orbs!",
+        "featuredRewardResourceName": "",
+        "isRewardGuideTarget": false,
+        "missionCampaignGroupMstId": 0,
+        "missionTitleMstId": 2036,
+        "prevMissionTitleMstId": 0,
+        "priority": 160,
+        "title": "Weekly Bingo Missions Week 1"
+    },
+    {
+        "completeAppealDescription": "Get 40 Crystalis Quest Skip Tickets!",
+        "featuredRewardResourceName": "",
+        "isRewardGuideTarget": false,
+        "missionCampaignGroupMstId": 0,
+        "missionTitleMstId": 2037,
+        "prevMissionTitleMstId": 2036,
+        "priority": 160,
+        "title": "Weekly Bingo Missions Week 1"
+    },
+    {
+        "completeAppealDescription": "Get 2,000,000 A-Q Chips!",
+        "featuredRewardResourceName": "",
+        "isRewardGuideTarget": false,
+        "missionCampaignGroupMstId": 0,
+        "missionTitleMstId": 2038,
+        "prevMissionTitleMstId": 0,
+        "priority": 160,
+        "title": "Weekly Bingo Missions Week 2"
+    },
+    {
+        "completeAppealDescription": "Get Magia Grimoire x30!",
+        "featuredRewardResourceName": "",
+        "isRewardGuideTarget": false,
+        "missionCampaignGroupMstId": 0,
+        "missionTitleMstId": 2039,
+        "prevMissionTitleMstId": 2038,
+        "priority": 160,
+        "title": "Weekly Bingo Missions Week 2"
     },
     {
         "completeAppealDescription": "",
@@ -458,5 +568,75 @@
         "prevMissionTitleMstId": 0,
         "priority": 98,
         "title": "Score Attack Missions"
+    },
+    {
+        "completeAppealDescription": "",
+        "featuredRewardResourceName": "",
+        "isRewardGuideTarget": false,
+        "missionCampaignGroupMstId": 0,
+        "missionTitleMstId": 5169,
+        "prevMissionTitleMstId": 0,
+        "priority": 103,
+        "title": "Forever Halloween Night: A Town of Farewells Part I Event Missions"
+    },
+    {
+        "completeAppealDescription": "",
+        "featuredRewardResourceName": "",
+        "isRewardGuideTarget": false,
+        "missionCampaignGroupMstId": 0,
+        "missionTitleMstId": 5170,
+        "prevMissionTitleMstId": 0,
+        "priority": 104,
+        "title": "Forever Halloween Night: A Town of Farewells Part I Event Memorial Medal Missions"
+    },
+    {
+        "completeAppealDescription": "",
+        "featuredRewardResourceName": "",
+        "isRewardGuideTarget": false,
+        "missionCampaignGroupMstId": 0,
+        "missionTitleMstId": 5171,
+        "prevMissionTitleMstId": 0,
+        "priority": 105,
+        "title": "Forever Halloween Night: A Town of Farewells Part II Event Missions"
+    },
+    {
+        "completeAppealDescription": "",
+        "featuredRewardResourceName": "",
+        "isRewardGuideTarget": false,
+        "missionCampaignGroupMstId": 0,
+        "missionTitleMstId": 5172,
+        "prevMissionTitleMstId": 0,
+        "priority": 106,
+        "title": "Forever Halloween Night: A Town of Farewells Part II Event Memorial Medal Missions"
+    },
+    {
+        "completeAppealDescription": "",
+        "featuredRewardResourceName": "",
+        "isRewardGuideTarget": false,
+        "missionCampaignGroupMstId": 0,
+        "missionTitleMstId": 5173,
+        "prevMissionTitleMstId": 0,
+        "priority": 101,
+        "title": "Felicia Mitsuki: A Doppel Tale Event Missions"
+    },
+    {
+        "completeAppealDescription": "",
+        "featuredRewardResourceName": "",
+        "isRewardGuideTarget": false,
+        "missionCampaignGroupMstId": 0,
+        "missionTitleMstId": 5174,
+        "prevMissionTitleMstId": 0,
+        "priority": 102,
+        "title": "Felicia Mitsuki: A Doppel Tale Event Memorial Medal Missions"
+    },
+    {
+        "completeAppealDescription": "",
+        "featuredRewardResourceName": "",
+        "isRewardGuideTarget": false,
+        "missionCampaignGroupMstId": 0,
+        "missionTitleMstId": 5175,
+        "prevMissionTitleMstId": 0,
+        "priority": 10008,
+        "title": "Exedra Crisis Play Missions"
     }
 ]

@@ -192,10 +192,28 @@
         "uniqueStatePatternMstId": 32
     },
     {
+        "iconName": "battle_icon_unique_038",
+        "name": "Pumpkin Panic",
+        "stateFlipName": "Pumpkin Panic",
+        "uniqueStatePatternMstId": 33
+    },
+    {
+        "iconName": "battle_icon_unique_037",
+        "name": "Spirit-Sealing Hairpin",
+        "stateFlipName": "Spirit-Sealing Hairpin",
+        "uniqueStatePatternMstId": 34
+    },
+    {
         "iconName": "battle_icon_unique_040",
         "name": "Cadence Echo",
         "stateFlipName": "Cadence Echo",
         "uniqueStatePatternMstId": 35
+    },
+    {
+        "iconName": "battle_icon_unique_042",
+        "name": "Murk of Obsession",
+        "stateFlipName": "Murk of Obsession",
+        "uniqueStatePatternMstId": 37
     },
     {
         "iconName": "battle_icon_unique_013",
@@ -232,5 +250,11 @@
         "name": "Bound by Grace",
         "stateFlipName": "Bound by Grace",
         "uniqueStatePatternMstId": 20001
+    },
+    {
+        "iconName": "battle_icon_element_damage_fire",
+        "name": "Flame Chain",
+        "stateFlipName": "Flame Chain",
+        "uniqueStatePatternMstId": 20002
     }
 ]

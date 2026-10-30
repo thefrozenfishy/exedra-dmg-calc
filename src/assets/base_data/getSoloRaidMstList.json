@@ -89,5 +89,18 @@
         "startTime": "2026-10-01T12:00:00+09:00",
         "superiorItemMstId": 201138,
         "totalScoreRewardGroupId": 7
+    },
+    {
+        "announceMstId": 2390,
+        "battleEndTime": "2026-11-08T23:59:59+09:00",
+        "endTime": "2026-11-11T04:59:59+09:00",
+        "inferiorItemMstId": 201150,
+        "rankingRewardGroupId": 8,
+        "soloRaidMstId": 8,
+        "soloRaidPartyBuffGroupId": 8,
+        "soloRaidSeasonBuffGroupId": 8,
+        "startTime": "2026-11-01T12:00:00+09:00",
+        "superiorItemMstId": 201149,
+        "totalScoreRewardGroupId": 8
     }
 ]

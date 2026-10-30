@@ -1878,5 +1878,45 @@
         "osType": 0,
         "sortOrder": 415,
         "startTime": "2026-10-19T12:00:00+09:00"
+    },
+    {
+        "bannerMstId": 466,
+        "endTime": "2026-11-06T11:59:59+09:00",
+        "homeBannerMstId": 296,
+        "osType": 0,
+        "sortOrder": 424,
+        "startTime": "2026-10-30T12:00:00+09:00"
+    },
+    {
+        "bannerMstId": 474,
+        "endTime": "2026-11-16T11:59:59+09:00",
+        "homeBannerMstId": 297,
+        "osType": 0,
+        "sortOrder": 424,
+        "startTime": "2026-11-06T12:00:00+09:00"
+    },
+    {
+        "bannerMstId": 479,
+        "endTime": "2026-11-06T11:59:59+09:00",
+        "homeBannerMstId": 298,
+        "osType": 0,
+        "sortOrder": 418,
+        "startTime": "2026-10-30T12:00:00+09:00"
+    },
+    {
+        "bannerMstId": 481,
+        "endTime": "2026-11-06T11:59:59+09:00",
+        "homeBannerMstId": 299,
+        "osType": 0,
+        "sortOrder": 417,
+        "startTime": "2026-10-30T12:00:00+09:00"
+    },
+    {
+        "bannerMstId": 480,
+        "endTime": "2026-11-16T11:59:59+09:00",
+        "homeBannerMstId": 300,
+        "osType": 0,
+        "sortOrder": 418,
+        "startTime": "2026-11-06T12:00:00+09:00"
     }
 ]

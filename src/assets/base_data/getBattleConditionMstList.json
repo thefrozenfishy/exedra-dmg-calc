@@ -16784,6 +16784,14 @@
         "description": "そらな専用バフが付与されているとき"
     },
     {
+        "battleConditionMstId": 2117,
+        "compareContent": 26,
+        "compareOperator": 7,
+        "compareTarget": 1,
+        "compareValue": "33",
+        "description": "ハロウィンかりん専用デバフが付与されているとき"
+    },
+    {
         "battleConditionMstId": 2118,
         "compareContent": 205,
         "compareOperator": 5,
@@ -17376,6 +17384,46 @@
         "description": "そらな専用バフが付与されているとき"
     },
     {
+        "battleConditionMstId": 2192,
+        "compareContent": 31,
+        "compareOperator": 1,
+        "compareTarget": 1,
+        "compareValue": "20002,1",
+        "description": "フレイムチェインLv1のとき"
+    },
+    {
+        "battleConditionMstId": 2193,
+        "compareContent": 31,
+        "compareOperator": 1,
+        "compareTarget": 1,
+        "compareValue": "20002,2",
+        "description": "フレイムチェインLv2のとき"
+    },
+    {
+        "battleConditionMstId": 2194,
+        "compareContent": 31,
+        "compareOperator": 1,
+        "compareTarget": 1,
+        "compareValue": "20002,3",
+        "description": "フレイムチェインLv3のとき"
+    },
+    {
+        "battleConditionMstId": 2195,
+        "compareContent": 31,
+        "compareOperator": 1,
+        "compareTarget": 1,
+        "compareValue": "20002,4",
+        "description": "フレイムチェインLv4のとき"
+    },
+    {
+        "battleConditionMstId": 2196,
+        "compareContent": 31,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "20002,5",
+        "description": "フレイムチェインLv5のとき"
+    },
+    {
         "battleConditionMstId": 2197,
         "compareContent": 202,
         "compareOperator": 4,
@@ -17864,6 +17912,22 @@
         "description": "敵軍のブレイク回数合計が50回以上"
     },
     {
+        "battleConditionMstId": 2258,
+        "compareContent": 210,
+        "compareOperator": 4,
+        "compareTarget": 5,
+        "compareValue": "33,1",
+        "description": "パッシブON/OFF条件、敵目線ハロかり専デバフが付与された味方が1以上存在"
+    },
+    {
+        "battleConditionMstId": 2259,
+        "compareContent": 210,
+        "compareOperator": 4,
+        "compareTarget": 6,
+        "compareValue": "33,1",
+        "description": "アクティブ発生条件、敵目線ハロかり専デバフが付与された味方が1以上存在"
+    },
+    {
         "battleConditionMstId": 2260,
         "compareContent": 403,
         "compareOperator": 1,
@@ -17880,12 +17944,212 @@
         "description": "自分が1以上のダメージ未満"
     },
     {
+        "battleConditionMstId": 2264,
+        "compareContent": 211,
+        "compareOperator": 4,
+        "compareTarget": 5,
+        "compareValue": "34,20",
+        "description": "HW杏子の専用デバフの合計数(自軍参照)"
+    },
+    {
+        "battleConditionMstId": 2265,
+        "compareContent": 26,
+        "compareOperator": 7,
+        "compareTarget": 1,
+        "compareValue": "34",
+        "description": "ハロウィン杏子の専用デバフが付与されているとき"
+    },
+    {
+        "battleConditionMstId": 2266,
+        "compareContent": 27,
+        "compareOperator": 1,
+        "compareTarget": 1,
+        "compareValue": "34,1",
+        "description": "ハロウィン杏子の専用デバフが付与されている累積数1"
+    },
+    {
+        "battleConditionMstId": 2267,
+        "compareContent": 27,
+        "compareOperator": 1,
+        "compareTarget": 1,
+        "compareValue": "34,2",
+        "description": "ハロウィン杏子の専用デバフが付与されている累積数2"
+    },
+    {
+        "battleConditionMstId": 2268,
+        "compareContent": 27,
+        "compareOperator": 1,
+        "compareTarget": 1,
+        "compareValue": "34,3",
+        "description": "ハロウィン杏子の専用デバフが付与されている累積数3"
+    },
+    {
+        "battleConditionMstId": 2269,
+        "compareContent": 27,
+        "compareOperator": 1,
+        "compareTarget": 1,
+        "compareValue": "34,4",
+        "description": "ハロウィン杏子の専用デバフが付与されている累積数4"
+    },
+    {
+        "battleConditionMstId": 2270,
+        "compareContent": 27,
+        "compareOperator": 1,
+        "compareTarget": 1,
+        "compareValue": "34,5",
+        "description": "ハロウィン杏子の専用デバフが付与されている累積数5"
+    },
+    {
+        "battleConditionMstId": 2271,
+        "compareContent": 27,
+        "compareOperator": 1,
+        "compareTarget": 1,
+        "compareValue": "34,6",
+        "description": "ハロウィン杏子の専用デバフが付与されている累積数6"
+    },
+    {
+        "battleConditionMstId": 2272,
+        "compareContent": 27,
+        "compareOperator": 1,
+        "compareTarget": 1,
+        "compareValue": "34,7",
+        "description": "ハロウィン杏子の専用デバフが付与されている累積数7"
+    },
+    {
+        "battleConditionMstId": 2273,
+        "compareContent": 27,
+        "compareOperator": 1,
+        "compareTarget": 1,
+        "compareValue": "34,8",
+        "description": "ハロウィン杏子の専用デバフが付与されている累積数8"
+    },
+    {
+        "battleConditionMstId": 2274,
+        "compareContent": 27,
+        "compareOperator": 1,
+        "compareTarget": 1,
+        "compareValue": "34,9",
+        "description": "ハロウィン杏子の専用デバフが付与されている累積数9"
+    },
+    {
+        "battleConditionMstId": 2275,
+        "compareContent": 27,
+        "compareOperator": 1,
+        "compareTarget": 1,
+        "compareValue": "34,10",
+        "description": "ハロウィン杏子の専用デバフが付与されている累積数10"
+    },
+    {
+        "battleConditionMstId": 2276,
+        "compareContent": 27,
+        "compareOperator": 1,
+        "compareTarget": 1,
+        "compareValue": "34,11",
+        "description": "ハロウィン杏子の専用デバフが付与されている累積数11"
+    },
+    {
+        "battleConditionMstId": 2277,
+        "compareContent": 27,
+        "compareOperator": 1,
+        "compareTarget": 1,
+        "compareValue": "34,12",
+        "description": "ハロウィン杏子の専用デバフが付与されている累積数12"
+    },
+    {
+        "battleConditionMstId": 2278,
+        "compareContent": 27,
+        "compareOperator": 1,
+        "compareTarget": 1,
+        "compareValue": "34,13",
+        "description": "ハロウィン杏子の専用デバフが付与されている累積数13"
+    },
+    {
+        "battleConditionMstId": 2279,
+        "compareContent": 27,
+        "compareOperator": 1,
+        "compareTarget": 1,
+        "compareValue": "34,14",
+        "description": "ハロウィン杏子の専用デバフが付与されている累積数14"
+    },
+    {
+        "battleConditionMstId": 2280,
+        "compareContent": 27,
+        "compareOperator": 1,
+        "compareTarget": 1,
+        "compareValue": "34,15",
+        "description": "ハロウィン杏子の専用デバフが付与されている累積数15"
+    },
+    {
+        "battleConditionMstId": 2281,
+        "compareContent": 27,
+        "compareOperator": 1,
+        "compareTarget": 1,
+        "compareValue": "34,16",
+        "description": "ハロウィン杏子の専用デバフが付与されている累積数16"
+    },
+    {
+        "battleConditionMstId": 2282,
+        "compareContent": 27,
+        "compareOperator": 1,
+        "compareTarget": 1,
+        "compareValue": "34,17",
+        "description": "ハロウィン杏子の専用デバフが付与されている累積数17"
+    },
+    {
+        "battleConditionMstId": 2283,
+        "compareContent": 27,
+        "compareOperator": 1,
+        "compareTarget": 1,
+        "compareValue": "34,18",
+        "description": "ハロウィン杏子の専用デバフが付与されている累積数18"
+    },
+    {
+        "battleConditionMstId": 2284,
+        "compareContent": 27,
+        "compareOperator": 1,
+        "compareTarget": 1,
+        "compareValue": "34,19",
+        "description": "ハロウィン杏子の専用デバフが付与されている累積数19"
+    },
+    {
+        "battleConditionMstId": 2285,
+        "compareContent": 27,
+        "compareOperator": 1,
+        "compareTarget": 1,
+        "compareValue": "34,20",
+        "description": "ハロウィン杏子の専用デバフが付与されている累積数20"
+    },
+    {
         "battleConditionMstId": 2286,
         "compareContent": 14,
         "compareOperator": 1,
         "compareTarget": 1,
         "compareValue": "1154",
         "description": "自分のキャラクターが「凪星そらな」"
+    },
+    {
+        "battleConditionMstId": 2287,
+        "compareContent": 26,
+        "compareOperator": 7,
+        "compareTarget": 8,
+        "compareValue": "34",
+        "description": "ハロウィン杏子の専用デバフが付与されているとき（個別）"
+    },
+    {
+        "battleConditionMstId": 2288,
+        "compareContent": 27,
+        "compareOperator": 1,
+        "compareTarget": 8,
+        "compareValue": "34,20",
+        "description": "ハロウィン杏子専用デバフが付与されている敵に攻撃したとき"
+    },
+    {
+        "battleConditionMstId": 2289,
+        "compareContent": 305,
+        "compareOperator": 4,
+        "compareTarget": 6,
+        "compareValue": "CURSE,1",
+        "description": "敵全体で呪い状態の敵に1以上のダメージを与えたとき"
     },
     {
         "battleConditionMstId": 2290,
@@ -18000,6 +18264,102 @@
         "description": "自身のHPが70%以上のとき"
     },
     {
+        "battleConditionMstId": 2304,
+        "compareContent": 210,
+        "compareOperator": 4,
+        "compareTarget": 6,
+        "compareValue": "20002,1",
+        "description": "敵軍にハロカリチェインが1体以上"
+    },
+    {
+        "battleConditionMstId": 2305,
+        "compareContent": 26,
+        "compareOperator": 7,
+        "compareTarget": 1,
+        "compareValue": "37",
+        "description": "ドッペルフェリシア専用バフが付与されているとき"
+    },
+    {
+        "battleConditionMstId": 2306,
+        "compareContent": 27,
+        "compareOperator": 1,
+        "compareTarget": 1,
+        "compareValue": "37,1",
+        "description": "ドッペルフェリシア専用バフの累積数1"
+    },
+    {
+        "battleConditionMstId": 2307,
+        "compareContent": 27,
+        "compareOperator": 1,
+        "compareTarget": 1,
+        "compareValue": "37,2",
+        "description": "ドッペルフェリシア専用バフの累積数2"
+    },
+    {
+        "battleConditionMstId": 2308,
+        "compareContent": 27,
+        "compareOperator": 1,
+        "compareTarget": 1,
+        "compareValue": "37,3",
+        "description": "ドッペルフェリシア専用バフの累積数3"
+    },
+    {
+        "battleConditionMstId": 2309,
+        "compareContent": 27,
+        "compareOperator": 1,
+        "compareTarget": 1,
+        "compareValue": "37,4",
+        "description": "ドッペルフェリシア専用バフの累積数4"
+    },
+    {
+        "battleConditionMstId": 2310,
+        "compareContent": 27,
+        "compareOperator": 1,
+        "compareTarget": 1,
+        "compareValue": "37,5",
+        "description": "ドッペルフェリシア専用バフの累積数5"
+    },
+    {
+        "battleConditionMstId": 2311,
+        "compareContent": 27,
+        "compareOperator": 1,
+        "compareTarget": 1,
+        "compareValue": "37,6",
+        "description": "ドッペルフェリシア専用バフの累積数6"
+    },
+    {
+        "battleConditionMstId": 2312,
+        "compareContent": 27,
+        "compareOperator": 1,
+        "compareTarget": 1,
+        "compareValue": "37,7",
+        "description": "ドッペルフェリシア専用バフの累積数7"
+    },
+    {
+        "battleConditionMstId": 2313,
+        "compareContent": 27,
+        "compareOperator": 1,
+        "compareTarget": 1,
+        "compareValue": "37,8",
+        "description": "ドッペルフェリシア専用バフの累積数8"
+    },
+    {
+        "battleConditionMstId": 2314,
+        "compareContent": 27,
+        "compareOperator": 1,
+        "compareTarget": 1,
+        "compareValue": "37,9",
+        "description": "ドッペルフェリシア専用バフの累積数9"
+    },
+    {
+        "battleConditionMstId": 2315,
+        "compareContent": 27,
+        "compareOperator": 1,
+        "compareTarget": 1,
+        "compareValue": "37,10",
+        "description": "ドッペルフェリシア専用バフの累積数10"
+    },
+    {
         "battleConditionMstId": 2316,
         "compareContent": 21,
         "compareOperator": 5,
@@ -18086,5 +18446,173 @@
         "compareTarget": 5,
         "compareValue": "BURN,5",
         "description": "味方全体で火傷が付与されている敵が5体以上"
+    },
+    {
+        "battleConditionMstId": 2327,
+        "compareContent": 208,
+        "compareOperator": 4,
+        "compareTarget": 6,
+        "compareValue": "10",
+        "description": "敵全体のデバフ数が10以上"
+    },
+    {
+        "battleConditionMstId": 2329,
+        "compareContent": 211,
+        "compareOperator": 4,
+        "compareTarget": 6,
+        "compareValue": "34,10",
+        "description": "HW杏子の専用デバフの合計数10以上(敵軍参照)"
+    },
+    {
+        "battleConditionMstId": 2330,
+        "compareContent": 208,
+        "compareOperator": 5,
+        "compareTarget": 6,
+        "compareValue": "1",
+        "description": "敵全体のデバフ数が1未満"
+    },
+    {
+        "battleConditionMstId": 2331,
+        "compareContent": 17,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "15",
+        "description": "トークンが15以上のとき"
+    },
+    {
+        "battleConditionMstId": 2332,
+        "compareContent": 313,
+        "compareOperator": 4,
+        "compareTarget": 5,
+        "compareValue": "5",
+        "description": "同時に攻撃を受けた味方の数が5以上"
+    },
+    {
+        "battleConditionMstId": 2333,
+        "compareContent": 304,
+        "compareOperator": 4,
+        "compareTarget": 5,
+        "compareValue": "30000",
+        "description": "自軍が30000以上のダメージを受けた"
+    },
+    {
+        "battleConditionMstId": 2334,
+        "compareContent": 208,
+        "compareOperator": 4,
+        "compareTarget": 6,
+        "compareValue": "20",
+        "description": "敵全体のデバフ数が20以上"
+    },
+    {
+        "battleConditionMstId": 2335,
+        "compareContent": 304,
+        "compareOperator": 4,
+        "compareTarget": 5,
+        "compareValue": "90000",
+        "description": "自軍が90000以上のダメージを受けた"
+    },
+    {
+        "battleConditionMstId": 2336,
+        "compareContent": 208,
+        "compareOperator": 4,
+        "compareTarget": 6,
+        "compareValue": "30",
+        "description": "敵全体のデバフ数が30以上"
+    },
+    {
+        "battleConditionMstId": 2337,
+        "compareContent": 208,
+        "compareOperator": 5,
+        "compareTarget": 6,
+        "compareValue": "5",
+        "description": "敵全体のデバフ数が5未満"
+    },
+    {
+        "battleConditionMstId": 2338,
+        "compareContent": 208,
+        "compareOperator": 5,
+        "compareTarget": 6,
+        "compareValue": "10",
+        "description": "敵全体のデバフ数が10未満"
+    },
+    {
+        "battleConditionMstId": 2339,
+        "compareContent": 208,
+        "compareOperator": 5,
+        "compareTarget": 6,
+        "compareValue": "15",
+        "description": "敵全体のデバフ数が15未満"
+    },
+    {
+        "battleConditionMstId": 2340,
+        "compareContent": 208,
+        "compareOperator": 5,
+        "compareTarget": 6,
+        "compareValue": "20",
+        "description": "敵全体のデバフ数が20未満"
+    },
+    {
+        "battleConditionMstId": 2341,
+        "compareContent": 208,
+        "compareOperator": 5,
+        "compareTarget": 6,
+        "compareValue": "30",
+        "description": "敵全体のデバフ数が30未満"
+    },
+    {
+        "battleConditionMstId": 2343,
+        "compareContent": 304,
+        "compareOperator": 4,
+        "compareTarget": 5,
+        "compareValue": "50000",
+        "description": "自軍が50000以上のダメージを受けた"
+    },
+    {
+        "battleConditionMstId": 2344,
+        "compareContent": 304,
+        "compareOperator": 4,
+        "compareTarget": 5,
+        "compareValue": "60000",
+        "description": "自軍が60000以上のダメージを受けた"
+    },
+    {
+        "battleConditionMstId": 2345,
+        "compareContent": 304,
+        "compareOperator": 4,
+        "compareTarget": 5,
+        "compareValue": "10000",
+        "description": "自軍が10000以上のダメージを受けた"
+    },
+    {
+        "battleConditionMstId": 2346,
+        "compareContent": 304,
+        "compareOperator": 4,
+        "compareTarget": 5,
+        "compareValue": "40000",
+        "description": "自軍が40000以上のダメージを受けた"
+    },
+    {
+        "battleConditionMstId": 2347,
+        "compareContent": 304,
+        "compareOperator": 4,
+        "compareTarget": 5,
+        "compareValue": "1000",
+        "description": "自軍が1000以上のダメージを受けた"
+    },
+    {
+        "battleConditionMstId": 2348,
+        "compareContent": 304,
+        "compareOperator": 4,
+        "compareTarget": 5,
+        "compareValue": "6000",
+        "description": "自軍が6000以上のダメージを受けた"
+    },
+    {
+        "battleConditionMstId": 2349,
+        "compareContent": 304,
+        "compareOperator": 4,
+        "compareTarget": 5,
+        "compareValue": "3000",
+        "description": "自軍が3000以上のダメージを受けた"
     }
 ]

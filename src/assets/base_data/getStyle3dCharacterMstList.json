@@ -280,6 +280,16 @@
         "type": 1
     },
     {
+        "homeMotionResourceName": "chara_10050601_home",
+        "isDefault": true,
+        "isExistVoice": true,
+        "name": "Kyoko Sakura (Halloween)",
+        "resourceName": "chara_100506_battle_unit",
+        "sortOrder": 100505,
+        "style3dCharacterMstId": 100505,
+        "type": 1
+    },
+    {
         "homeMotionResourceName": "chara_10060101_home",
         "isDefault": true,
         "isExistVoice": true,
@@ -400,6 +410,16 @@
         "type": 1
     },
     {
+        "homeMotionResourceName": "chara_10120201_home",
+        "isDefault": true,
+        "isExistVoice": true,
+        "name": "Felicia Mitsuki - Doppel",
+        "resourceName": "chara_101202_battle_unit",
+        "sortOrder": 101202,
+        "style3dCharacterMstId": 101202,
+        "type": 1
+    },
+    {
         "homeMotionResourceName": "chara_10130101_home",
         "isDefault": true,
         "isExistVoice": true,
@@ -447,6 +467,16 @@
         "resourceName": "chara_101701_battle_unit",
         "sortOrder": 101701,
         "style3dCharacterMstId": 101701,
+        "type": 1
+    },
+    {
+        "homeMotionResourceName": "chara_10170201_home",
+        "isDefault": true,
+        "isExistVoice": true,
+        "name": "Karin Misono (Halloween 2)",
+        "resourceName": "chara_101702_battle_unit",
+        "sortOrder": 101702,
+        "style3dCharacterMstId": 101702,
         "type": 1
     },
     {

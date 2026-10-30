@@ -1329,6 +1329,54 @@
     },
     {
         "level": 120,
+        "maxAtk": 1748,
+        "maxDef": 1728,
+        "maxHp": 6642,
+        "styleLevelUpMstId": 10050601120,
+        "styleMstId": 10050601
+    },
+    {
+        "level": 140,
+        "maxAtk": 1942,
+        "maxDef": 1920,
+        "maxHp": 7134,
+        "styleLevelUpMstId": 10050601140,
+        "styleMstId": 10050601
+    },
+    {
+        "level": 160,
+        "maxAtk": 2136,
+        "maxDef": 2112,
+        "maxHp": 7626,
+        "styleLevelUpMstId": 10050601160,
+        "styleMstId": 10050601
+    },
+    {
+        "level": 180,
+        "maxAtk": 2330,
+        "maxDef": 2304,
+        "maxHp": 8118,
+        "styleLevelUpMstId": 10050601180,
+        "styleMstId": 10050601
+    },
+    {
+        "level": 200,
+        "maxAtk": 2525,
+        "maxDef": 2496,
+        "maxHp": 8610,
+        "styleLevelUpMstId": 10050601200,
+        "styleMstId": 10050601
+    },
+    {
+        "level": 300,
+        "maxAtk": 3496,
+        "maxDef": 3456,
+        "maxHp": 11070,
+        "styleLevelUpMstId": 10050601300,
+        "styleMstId": 10050601
+    },
+    {
+        "level": 120,
         "maxAtk": 1323,
         "maxDef": 1746,
         "maxHp": 7322,
@@ -1905,6 +1953,54 @@
     },
     {
         "level": 120,
+        "maxAtk": 1658,
+        "maxDef": 1922,
+        "maxHp": 5778,
+        "styleLevelUpMstId": 10120201120,
+        "styleMstId": 10120201
+    },
+    {
+        "level": 140,
+        "maxAtk": 1842,
+        "maxDef": 2136,
+        "maxHp": 6206,
+        "styleLevelUpMstId": 10120201140,
+        "styleMstId": 10120201
+    },
+    {
+        "level": 160,
+        "maxAtk": 2026,
+        "maxDef": 2350,
+        "maxHp": 6634,
+        "styleLevelUpMstId": 10120201160,
+        "styleMstId": 10120201
+    },
+    {
+        "level": 180,
+        "maxAtk": 2210,
+        "maxDef": 2563,
+        "maxHp": 7062,
+        "styleLevelUpMstId": 10120201180,
+        "styleMstId": 10120201
+    },
+    {
+        "level": 200,
+        "maxAtk": 2395,
+        "maxDef": 2777,
+        "maxHp": 7490,
+        "styleLevelUpMstId": 10120201200,
+        "styleMstId": 10120201
+    },
+    {
+        "level": 300,
+        "maxAtk": 3316,
+        "maxDef": 3845,
+        "maxHp": 9630,
+        "styleLevelUpMstId": 10120201300,
+        "styleMstId": 10120201
+    },
+    {
+        "level": 120,
         "maxAtk": 1744,
         "maxDef": 1930,
         "maxHp": 5778,
@@ -2190,6 +2286,54 @@
         "maxHp": 8643,
         "styleLevelUpMstId": 10170102300,
         "styleMstId": 10170102
+    },
+    {
+        "level": 120,
+        "maxAtk": 2178,
+        "maxDef": 1656,
+        "maxHp": 5562,
+        "styleLevelUpMstId": 10170201120,
+        "styleMstId": 10170201
+    },
+    {
+        "level": 140,
+        "maxAtk": 2420,
+        "maxDef": 1840,
+        "maxHp": 5974,
+        "styleLevelUpMstId": 10170201140,
+        "styleMstId": 10170201
+    },
+    {
+        "level": 160,
+        "maxAtk": 2662,
+        "maxDef": 2024,
+        "maxHp": 6386,
+        "styleLevelUpMstId": 10170201160,
+        "styleMstId": 10170201
+    },
+    {
+        "level": 180,
+        "maxAtk": 2904,
+        "maxDef": 2208,
+        "maxHp": 6798,
+        "styleLevelUpMstId": 10170201180,
+        "styleMstId": 10170201
+    },
+    {
+        "level": 200,
+        "maxAtk": 3146,
+        "maxDef": 2392,
+        "maxHp": 7210,
+        "styleLevelUpMstId": 10170201200,
+        "styleMstId": 10170201
+    },
+    {
+        "level": 300,
+        "maxAtk": 4356,
+        "maxDef": 3312,
+        "maxHp": 9270,
+        "styleLevelUpMstId": 10170201300,
+        "styleMstId": 10170201
     },
     {
         "level": 120,

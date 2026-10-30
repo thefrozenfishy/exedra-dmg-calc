@@ -346,5 +346,17 @@
         "scoreAttackMstId": 29,
         "startTime": "2026-10-16T12:00:00+09:00",
         "totalScoreRewardGroupId": 28
+    },
+    {
+        "comment": "The boss's ATK and SPD increase each turn.<br>Its DEF decreases once it reaches the max break bonus, so going for break bonus increases can work to your advantage.",
+        "dioramaBackgroundMstId": 210319,
+        "endTime": "2026-12-05T11:59:59+09:00",
+        "highScoreRewardGroupId": 30,
+        "name": "Uwasa of the Anonymous AI",
+        "rankingRewardGroupId": 0,
+        "reprintNum": 0,
+        "scoreAttackMstId": 30,
+        "startTime": "2026-11-05T12:00:00+09:00",
+        "totalScoreRewardGroupId": 27
     }
 ]

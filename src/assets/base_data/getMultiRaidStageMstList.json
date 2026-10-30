@@ -1680,6 +1680,20 @@
         "useStaminaForRescue": 6
     },
     {
+        "comment": "The boss's DMG taken DOWN effect and break gauge depletion RES are removed once its Minions are defeated, so focus on defeating them first.<br>The boss's ATK, DEF, and SPD also increase each time it takes an action.<br>This effect can be decreased by dealing damage through follow-up attacks, counterattacks, and special DMG, so it's best to add Kioku capable of these abilities to your party.<br><br>Each time a Minion is defeated, their DMG taken decreases, making them harder to defeat.<br>However, they grow stronger from each attack and passing turn, so they should be defeated as quickly as possible.<br><br>EX bonuses and season buffs are key to this battle.<br>Be sure to check the targets and activation conditions for buffs to make use of as many as possible during battle.<br><br>Taking on this battle solo is extremely difficult, so be sure to call on your union!",
+        "difficulty": 21,
+        "dioramaBackgroundMstId": 910111,
+        "limitRoundCount": 3,
+        "loseRewardGroupId": 109,
+        "multiRaidStageMstId": 621,
+        "questRewardGroupId": 51040,
+        "questStageMstId": 1306121,
+        "scoreRewardGroupId": 112,
+        "seasonId": 6,
+        "useStaminaForPlay": 12,
+        "useStaminaForRescue": 6
+    },
+    {
         "comment": "The boss has no elemental weakness and uses <tooltips_id=2>, so choose your party wisely before battle.<br><br>The high max break bonus allows you to deal massive damage when in break, so actively aim for the break.<br><br>Assign Attackers and Breakers who can take major advantage of the season buff bonuses to have an edge in battle.",
         "difficulty": 1,
         "dioramaBackgroundMstId": 111314,

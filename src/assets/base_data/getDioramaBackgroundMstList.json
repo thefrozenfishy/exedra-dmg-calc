@@ -1469,6 +1469,58 @@
         "unlockType": 8
     },
     {
+        "backgroundResourceName": "bg_3d_609_17_01_001",
+        "dioramaBackgroundMstId": 411211,
+        "enemyType": 1,
+        "fieldSeriesMstId": 99999,
+        "releaseTime": "2026-10-30T12:00:00+09:00",
+        "seriesId": 4,
+        "sortOrder": 101,
+        "stageName": "Artist Witch - Floor 1 (Halloween)",
+        "stageThumbnailName": "bg_3d_609_17_01_001",
+        "unlockId": 0,
+        "unlockType": 8
+    },
+    {
+        "backgroundResourceName": "bg_3d_609_17_00_001",
+        "dioramaBackgroundMstId": 411212,
+        "enemyType": 2,
+        "fieldSeriesMstId": 99999,
+        "releaseTime": "2026-11-06T12:00:00+09:00",
+        "seriesId": 4,
+        "sortOrder": 102,
+        "stageName": "Artist Witch - Boss Floor (Halloween)",
+        "stageThumbnailName": "bg_3d_609_17_00_001",
+        "unlockId": 0,
+        "unlockType": 8
+    },
+    {
+        "backgroundResourceName": "bg_3d_604_14_00_001",
+        "dioramaBackgroundMstId": 411311,
+        "enemyType": 2,
+        "fieldSeriesMstId": 99999,
+        "releaseTime": "2026-11-01T12:00:00+09:00",
+        "seriesId": 4,
+        "sortOrder": 1071,
+        "stageName": "Graffiti Witch (Apex Form) - - Boss Floor",
+        "stageThumbnailName": "bg_3d_604_14_00_001",
+        "unlockId": 0,
+        "unlockType": 8
+    },
+    {
+        "backgroundResourceName": "bg_3d_604_15_00_001",
+        "dioramaBackgroundMstId": 411312,
+        "enemyType": 2,
+        "fieldSeriesMstId": 99999,
+        "releaseTime": "2026-11-01T12:00:00+09:00",
+        "seriesId": 4,
+        "sortOrder": 1072,
+        "stageName": "Graffiti Witch (Apex Overdrive Form) - Boss Floor",
+        "stageThumbnailName": "bg_3d_604_15_00_001",
+        "unlockId": 0,
+        "unlockType": 8
+    },
+    {
         "backgroundResourceName": "bg_3d_641_00_01_001",
         "dioramaBackgroundMstId": 710111,
         "enemyType": 7,

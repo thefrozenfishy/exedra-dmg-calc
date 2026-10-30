@@ -1754,11 +1754,14 @@
         "shopConfig": {
             "bulkBuyMaxCount": 200,
             "bulkBuyReleaseTime": "2026-10-16T12:00:00+09:00",
+            "monthlyResetSkipSeriesMstIdList": [
+                1008
+            ],
             "timeSaleLimitHours": 72
         },
         "soloRaidConfig": {
             "aroundMyselfRankingViewNumber": 50,
-            "battleTimeLimitSec": 3600,
+            "battleTimeLimitSec": 86400,
             "commonBuffPointChargePassiveSkillMstId": 1600000,
             "maxPlayCountPerDay": 3,
             "menuReleaseTime": "2026-03-27T22:00:00+09:00",

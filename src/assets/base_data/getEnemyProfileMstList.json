@@ -462,6 +462,34 @@
         "unlockType": 1
     },
     {
+        "description": "Nature: Narcissism.<br>There is no doubt in this Witch's mind that it is one of the chosen elites, and so it has become consumed by sweet dreams of Halloween. Desperate to show its Halloween spirit to others, it's proactive in meddling with humans. Inside its Labyrinth, however, every treat it lays out is utterly devoid of flavor. Should you wish to defeat this Witch, you must counter it with a love of Halloween that rivals its own.",
+        "enemyMstId": 609027,
+        "enemyProfileMstId": 609027,
+        "enemyUniqueId": 609027,
+        "isCollectionDisp": true,
+        "name": "Artist Witch",
+        "releaseTime": "2026-11-06T12:00:00+09:00",
+        "runesName": "Isabel",
+        "seriesId": 4,
+        "sortOrder": 990050101,
+        "unlockId": 0,
+        "unlockType": 8
+    },
+    {
+        "description": "Artist Witch Minion. Role: Artwork.<br>Minions born to embellish the sweet dreams of a Witch obsessed with Halloween. Steals the love of Halloween from their Witch's victims and incorporates it into themselves.",
+        "enemyMstId": 609028,
+        "enemyProfileMstId": 609028,
+        "enemyUniqueId": 609028,
+        "isCollectionDisp": true,
+        "name": "Artist Witch Minion",
+        "releaseTime": "2026-10-30T12:00:00+09:00",
+        "runesName": "Michaela",
+        "seriesId": 4,
+        "sortOrder": 990050201,
+        "unlockId": 0,
+        "unlockType": 8
+    },
+    {
         "description": "Nature: Bystander.<br>This Witch spins spider-like threads to create its own special school inside its Labyrinth, where she repeats endless school days together with her Familiars. If she hears the school bell announcing the end of the day, she may head home, wherever that may be. When humans wander into her Labyrinth, they fall endlessly and eventually melt into the sky, feeding her.<br>She does not attack anyone directly unless they are a scary intruder who disturbs her daily routine.",
         "enemyMstId": 610001,
         "enemyProfileMstId": 610001,

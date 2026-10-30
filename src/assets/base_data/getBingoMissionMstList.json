@@ -23,5 +23,25 @@
         "bingoMissionMstId": 9,
         "firstMissionTitleMstId": 2027,
         "sortOrder": 100
+    },
+    {
+        "bingoMissionMstId": 10,
+        "firstMissionTitleMstId": 2030,
+        "sortOrder": 100
+    },
+    {
+        "bingoMissionMstId": 11,
+        "firstMissionTitleMstId": 2033,
+        "sortOrder": 100
+    },
+    {
+        "bingoMissionMstId": 12,
+        "firstMissionTitleMstId": 2036,
+        "sortOrder": 100
+    },
+    {
+        "bingoMissionMstId": 13,
+        "firstMissionTitleMstId": 2038,
+        "sortOrder": 100
     }
 ]

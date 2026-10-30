@@ -1190,6 +1190,26 @@
         "sortOrder": 20901
     },
     {
+        "dollhouse2dBackgroundMstId": 20911,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Shinsei Ward - Residential Area (Noon)",
+        "releaseTime": "2026-10-30T12:00:00+09:00",
+        "resourceName": "bg_adv_01_90002_01",
+        "seriesId": 2,
+        "sortOrder": 20911
+    },
+    {
+        "dollhouse2dBackgroundMstId": 20921,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Rooftop Witch - Deepest Layer",
+        "releaseTime": "2026-10-30T12:00:00+09:00",
+        "resourceName": "bg_adv_01_90444_01",
+        "seriesId": 2,
+        "sortOrder": 20921
+    },
+    {
         "dollhouse2dBackgroundMstId": 30011,
         "isDefault": false,
         "lightingType": 0,
@@ -2868,5 +2888,45 @@
         "resourceName": "bg_adv_99_10066_01",
         "seriesId": 999,
         "sortOrder": 990791
+    },
+    {
+        "dollhouse2dBackgroundMstId": 990803,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Boundary Between the Living and the Dead - Gate Open",
+        "releaseTime": "2026-10-30T12:00:00+09:00",
+        "resourceName": "bg_adv_99_10163_01",
+        "seriesId": 999,
+        "sortOrder": 990803
+    },
+    {
+        "dollhouse2dBackgroundMstId": 990813,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Boundary Between the Living and the Dead - Gate Closed",
+        "releaseTime": "2026-11-06T12:00:00+09:00",
+        "resourceName": "bg_adv_99_10163_02",
+        "seriesId": 999,
+        "sortOrder": 990813
+    },
+    {
+        "dollhouse2dBackgroundMstId": 990823,
+        "isDefault": false,
+        "lightingType": 2,
+        "name": "Border Town (Night)",
+        "releaseTime": "2026-10-30T12:00:00+09:00",
+        "resourceName": "bg_adv_99_10164_01",
+        "seriesId": 999,
+        "sortOrder": 990823
+    },
+    {
+        "dollhouse2dBackgroundMstId": 990831,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Single House - Dining Room (Evening)",
+        "releaseTime": "2026-11-06T12:00:00+09:00",
+        "resourceName": "bg_adv_99_10021_01",
+        "seriesId": 999,
+        "sortOrder": 990831
     }
 ]

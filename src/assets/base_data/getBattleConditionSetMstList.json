@@ -18130,9 +18130,24 @@
         "description": "魔力4+自身+必殺技を発動+そらなの専用バフが付与されている(個別)"
     },
     {
+        "battleConditionMstIdCsv": "2117",
+        "battleConditionSetMstId": 3672,
+        "description": "ハロウィンかりん専用デバフが付与されているとき"
+    },
+    {
+        "battleConditionMstIdCsv": "617,3,6",
+        "battleConditionSetMstId": 3673,
+        "description": "トークンが15 / 行動者自身 / 行動タイプ戦闘スキル"
+    },
+    {
         "battleConditionMstIdCsv": "2118,2124",
         "battleConditionSetMstId": 3674,
         "description": "味方全体で毒が付与されている敵が1体未満 and 火傷が付与されている敵が1体未満"
+    },
+    {
+        "battleConditionMstIdCsv": "3,6,617",
+        "battleConditionSetMstId": 3675,
+        "description": "自身の魔力10以上+戦闘スキル発動"
     },
     {
         "battleConditionMstIdCsv": "2130",
@@ -18438,6 +18453,31 @@
         "battleConditionMstIdCsv": "89,275",
         "battleConditionSetMstId": 3736,
         "description": "自分が8ターンごとに（ターン8から） AND 連続行動の3回目"
+    },
+    {
+        "battleConditionMstIdCsv": "2192",
+        "battleConditionSetMstId": 3737,
+        "description": "フレイムチェインLv1のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "2193",
+        "battleConditionSetMstId": 3738,
+        "description": "フレイムチェインLv2のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "2194",
+        "battleConditionSetMstId": 3739,
+        "description": "フレイムチェインLv3のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "2195",
+        "battleConditionSetMstId": 3740,
+        "description": "フレイムチェインLv4のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "2196",
+        "battleConditionSetMstId": 3741,
+        "description": "フレイムチェインLv5のとき"
     },
     {
         "battleConditionMstIdCsv": "2197",
@@ -18750,6 +18790,16 @@
         "description": "敵軍のブレイク回数合計が50回以上"
     },
     {
+        "battleConditionMstIdCsv": "2258",
+        "battleConditionSetMstId": 3804,
+        "description": "パッシブON/OFF条件、敵目線ハロかり専デバフが付与された味方が1以上存在"
+    },
+    {
+        "battleConditionMstIdCsv": "2259",
+        "battleConditionSetMstId": 3805,
+        "description": "アクティブ発生条件、敵目線ハロかり専デバフが付与された味方が1以上存在"
+    },
+    {
         "battleConditionMstIdCsv": "2,25",
         "battleConditionSetMstId": 3806,
         "description": "行動者は敵 AND 自分が1以上のダメージを受けた"
@@ -18758,6 +18808,21 @@
         "battleConditionMstIdCsv": "2,2102,1388",
         "battleConditionSetMstId": 3807,
         "description": "行動者は敵  AND 攻撃を受けた味方が1体以上のとき、自分が攻撃を受けなかった"
+    },
+    {
+        "battleConditionMstIdCsv": "971,1,655,5",
+        "battleConditionSetMstId": 3808,
+        "description": "行動者は火属性+行動者は味方+ダメージ1以上+行動タイプは通常攻撃"
+    },
+    {
+        "battleConditionMstIdCsv": "971,1,655,6",
+        "battleConditionSetMstId": 3809,
+        "description": "行動者は火属性+行動者は味方+ダメージ1以上+行動タイプは戦闘スキル"
+    },
+    {
+        "battleConditionMstIdCsv": "971,1,655,7",
+        "battleConditionSetMstId": 3810,
+        "description": "行動者は火属性+行動者は味方+ダメージ1以上+行動タイプは必殺技"
     },
     {
         "battleConditionMstIdCsv": "285,985",
@@ -18985,9 +19050,139 @@
         "description": "火傷が付与されている敵が1体未満"
     },
     {
+        "battleConditionMstIdCsv": "439",
+        "battleConditionSetMstId": 3857,
+        "description": "呪い状態の敵がいる場合"
+    },
+    {
+        "battleConditionMstIdCsv": "2264,2265",
+        "battleConditionSetMstId": 3858,
+        "description": "ハロウィン杏子の専用デバフが付与されている + 敵全体のハロウィン杏子専用デバフの累積数が20以上"
+    },
+    {
+        "battleConditionMstIdCsv": "2265",
+        "battleConditionSetMstId": 3859,
+        "description": "ハロウィン杏子の専用デバフが付与されている"
+    },
+    {
+        "battleConditionMstIdCsv": "2266",
+        "battleConditionSetMstId": 3860,
+        "description": "ハロウィン杏子の専用デバフが付与されている累積数1"
+    },
+    {
+        "battleConditionMstIdCsv": "2267",
+        "battleConditionSetMstId": 3861,
+        "description": "ハロウィン杏子の専用デバフが付与されている累積数2"
+    },
+    {
+        "battleConditionMstIdCsv": "2268",
+        "battleConditionSetMstId": 3862,
+        "description": "ハロウィン杏子の専用デバフが付与されている累積数3"
+    },
+    {
+        "battleConditionMstIdCsv": "2269",
+        "battleConditionSetMstId": 3863,
+        "description": "ハロウィン杏子の専用デバフが付与されている累積数4"
+    },
+    {
+        "battleConditionMstIdCsv": "2270",
+        "battleConditionSetMstId": 3864,
+        "description": "ハロウィン杏子の専用デバフが付与されている累積数5"
+    },
+    {
+        "battleConditionMstIdCsv": "2271",
+        "battleConditionSetMstId": 3865,
+        "description": "ハロウィン杏子の専用デバフが付与されている累積数6"
+    },
+    {
+        "battleConditionMstIdCsv": "2272",
+        "battleConditionSetMstId": 3866,
+        "description": "ハロウィン杏子の専用デバフが付与されている累積数7"
+    },
+    {
+        "battleConditionMstIdCsv": "2273",
+        "battleConditionSetMstId": 3867,
+        "description": "ハロウィン杏子の専用デバフが付与されている累積数8"
+    },
+    {
+        "battleConditionMstIdCsv": "2274",
+        "battleConditionSetMstId": 3868,
+        "description": "ハロウィン杏子の専用デバフが付与されている累積数9"
+    },
+    {
+        "battleConditionMstIdCsv": "2275",
+        "battleConditionSetMstId": 3869,
+        "description": "ハロウィン杏子の専用デバフが付与されている累積数10"
+    },
+    {
+        "battleConditionMstIdCsv": "2276",
+        "battleConditionSetMstId": 3870,
+        "description": "ハロウィン杏子の専用デバフが付与されている累積数11"
+    },
+    {
+        "battleConditionMstIdCsv": "2277",
+        "battleConditionSetMstId": 3871,
+        "description": "ハロウィン杏子の専用デバフが付与されている累積数12"
+    },
+    {
+        "battleConditionMstIdCsv": "2278",
+        "battleConditionSetMstId": 3872,
+        "description": "ハロウィン杏子の専用デバフが付与されている累積数13"
+    },
+    {
+        "battleConditionMstIdCsv": "2279",
+        "battleConditionSetMstId": 3873,
+        "description": "ハロウィン杏子の専用デバフが付与されている累積数14"
+    },
+    {
+        "battleConditionMstIdCsv": "2280",
+        "battleConditionSetMstId": 3874,
+        "description": "ハロウィン杏子の専用デバフが付与されている累積数15"
+    },
+    {
+        "battleConditionMstIdCsv": "2281",
+        "battleConditionSetMstId": 3875,
+        "description": "ハロウィン杏子の専用デバフが付与されている累積数16"
+    },
+    {
+        "battleConditionMstIdCsv": "2282",
+        "battleConditionSetMstId": 3876,
+        "description": "ハロウィン杏子の専用デバフが付与されている累積数17"
+    },
+    {
+        "battleConditionMstIdCsv": "2283",
+        "battleConditionSetMstId": 3877,
+        "description": "ハロウィン杏子の専用デバフが付与されている累積数18"
+    },
+    {
+        "battleConditionMstIdCsv": "2284",
+        "battleConditionSetMstId": 3878,
+        "description": "ハロウィン杏子の専用デバフが付与されている累積数19"
+    },
+    {
+        "battleConditionMstIdCsv": "2285",
+        "battleConditionSetMstId": 3879,
+        "description": "ハロウィン杏子の専用デバフが付与されている累積数20"
+    },
+    {
         "battleConditionMstIdCsv": "2286",
         "battleConditionSetMstId": 3880,
         "description": "自分のキャラクターが「凪星そらな」"
+    },
+    {
+        "battleConditionMstIdCsv": "2289,1",
+        "battleConditionSetMstId": 3881,
+        "description": "敵全体で呪い状態の敵に1以上のダメージを与えたとき"
+    },
+    {
+        "battleConditionMstIdCsv": "2289,474,2287,1",
+        "battleConditionSetMstId": 3882,
+        "description": "対象が呪い+敵軍のダメージ1以上+ハロウィン杏子の専用デバフが付与されている"
+    },
+    {
+        "battleConditionMstIdCsv": "2288",
+        "battleConditionSetMstId": 3883,
+        "description": "ハロウィン杏子の専用デバフが付与されている累積数20（個別）"
     },
     {
         "battleConditionMstIdCsv": "2290",
@@ -19033,6 +19228,66 @@
         "battleConditionMstIdCsv": "2290,3,7",
         "battleConditionSetMstId": 3892,
         "description": "自身にアノマリアさやか専用バフがあるとき+必殺技を発動"
+    },
+    {
+        "battleConditionMstIdCsv": "1,522,6,655",
+        "battleConditionSetMstId": 3893,
+        "description": "自分以外の味方が行動者+必殺技"
+    },
+    {
+        "battleConditionMstIdCsv": "407,393,306",
+        "battleConditionSetMstId": 3894,
+        "description": "自身にシールドが張られているとき魔力が1+追撃を発動"
+    },
+    {
+        "battleConditionMstIdCsv": "407,394,306",
+        "battleConditionSetMstId": 3895,
+        "description": "自身にシールドが張られているとき魔力が2+追撃を発動"
+    },
+    {
+        "battleConditionMstIdCsv": "407,395,306",
+        "battleConditionSetMstId": 3896,
+        "description": "自身にシールドが張られているとき魔力が3+追撃を発動"
+    },
+    {
+        "battleConditionMstIdCsv": "407,396,306",
+        "battleConditionSetMstId": 3897,
+        "description": "自身にシールドが張られているとき魔力が4+追撃を発動"
+    },
+    {
+        "battleConditionMstIdCsv": "407,285,306",
+        "battleConditionSetMstId": 3898,
+        "description": "自身にシールドが張られているとき魔力が5+追撃を発動"
+    },
+    {
+        "battleConditionMstIdCsv": "407,397,306",
+        "battleConditionSetMstId": 3899,
+        "description": "自身にシールドが張られているとき魔力が6+追撃を発動"
+    },
+    {
+        "battleConditionMstIdCsv": "407,398,306",
+        "battleConditionSetMstId": 3900,
+        "description": "自身にシールドが張られているとき魔力が7+追撃を発動"
+    },
+    {
+        "battleConditionMstIdCsv": "407,399,306",
+        "battleConditionSetMstId": 3901,
+        "description": "自身にシールドが張られているとき魔力が8+追撃を発動"
+    },
+    {
+        "battleConditionMstIdCsv": "407,400,306",
+        "battleConditionSetMstId": 3902,
+        "description": "自身にシールドが張られているとき魔力が9+追撃を発動"
+    },
+    {
+        "battleConditionMstIdCsv": "407,401,306",
+        "battleConditionSetMstId": 3903,
+        "description": "自身にシールドが張られているとき魔力が10+追撃を発動"
+    },
+    {
+        "battleConditionMstIdCsv": "407,401,306",
+        "battleConditionSetMstId": 3904,
+        "description": "魔力が10+シールドがない"
     },
     {
         "battleConditionMstIdCsv": "306,3,2290",
@@ -19150,9 +19405,69 @@
         "description": "自分のHPが70%以上"
     },
     {
+        "battleConditionMstIdCsv": "2304",
+        "battleConditionSetMstId": 3928,
+        "description": "敵軍にチェインが1体以上(ハロウィンかりん用"
+    },
+    {
         "battleConditionMstIdCsv": "2293,7,3",
         "battleConditionSetMstId": 3929,
         "description": "アノマリアさやかフィールドが発動しているとき＋必殺技発動したとき"
+    },
+    {
+        "battleConditionMstIdCsv": "2305",
+        "battleConditionSetMstId": 3930,
+        "description": "ドッペルフェリシア専用バフが付与されているとき"
+    },
+    {
+        "battleConditionMstIdCsv": "2306,306,3",
+        "battleConditionSetMstId": 3931,
+        "description": "ドッペルフェリシア専用バフの累積数1+行動タイプが追撃+行動者は自身"
+    },
+    {
+        "battleConditionMstIdCsv": "2307,306,3",
+        "battleConditionSetMstId": 3932,
+        "description": "ドッペルフェリシア専用バフの累積数2+行動タイプが追撃+行動者は自身"
+    },
+    {
+        "battleConditionMstIdCsv": "2308,306,3",
+        "battleConditionSetMstId": 3933,
+        "description": "ドッペルフェリシア専用バフの累積数3+行動タイプが追撃+行動者は自身"
+    },
+    {
+        "battleConditionMstIdCsv": "2309,306,3",
+        "battleConditionSetMstId": 3934,
+        "description": "ドッペルフェリシア専用バフの累積数4+行動タイプが追撃+行動者は自身"
+    },
+    {
+        "battleConditionMstIdCsv": "2310,306,3",
+        "battleConditionSetMstId": 3935,
+        "description": "ドッペルフェリシア専用バフの累積数5+行動タイプが追撃+行動者は自身"
+    },
+    {
+        "battleConditionMstIdCsv": "2306,7,3",
+        "battleConditionSetMstId": 3936,
+        "description": "ドッペルフェリシア専用バフの累積数1+行動タイプが必殺技+行動者は自身"
+    },
+    {
+        "battleConditionMstIdCsv": "2307,7,3",
+        "battleConditionSetMstId": 3937,
+        "description": "ドッペルフェリシア専用バフの累積数2+行動タイプが必殺技+行動者は自身"
+    },
+    {
+        "battleConditionMstIdCsv": "2308,7,3",
+        "battleConditionSetMstId": 3938,
+        "description": "ドッペルフェリシア専用バフの累積数3+行動タイプが必殺技+行動者は自身"
+    },
+    {
+        "battleConditionMstIdCsv": "2309,7,3",
+        "battleConditionSetMstId": 3939,
+        "description": "ドッペルフェリシア専用バフの累積数4+行動タイプが必殺技+行動者は自身"
+    },
+    {
+        "battleConditionMstIdCsv": "2310,7,3",
+        "battleConditionSetMstId": 3940,
+        "description": "ドッペルフェリシア専用バフの累積数5+行動タイプが必殺技+行動者は自身"
     },
     {
         "battleConditionMstIdCsv": "138,60",
@@ -19220,6 +19535,16 @@
         "description": "自分の体力ゲージ数が3のときAND 自分が2ターンごとに（ターン2から）"
     },
     {
+        "battleConditionMstIdCsv": "395,1",
+        "battleConditionSetMstId": 3954,
+        "description": "味方のターン中に魔力が3個のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "395,2",
+        "battleConditionSetMstId": 3955,
+        "description": "敵のターン中に魔力が3個のとき"
+    },
+    {
         "battleConditionMstIdCsv": "2316",
         "battleConditionSetMstId": 3956,
         "description": "自分のブレイク補正倍率は600%未満"
@@ -19253,6 +19578,11 @@
         "battleConditionMstIdCsv": "2,7,1388",
         "battleConditionSetMstId": 3962,
         "description": "行動者は敵 AND 行動タイプが必殺技 AND 自軍が1以上のダメージを受けた"
+    },
+    {
+        "battleConditionMstIdCsv": "2310,306,3",
+        "battleConditionSetMstId": 3963,
+        "description": "ドッペルフェリシア専用バフの累積数5AND 行動タイプが追撃AND 自分は行動者"
     },
     {
         "battleConditionMstIdCsv": "2293,25",
@@ -19290,6 +19620,16 @@
         "description": "6ターンごと（6ターン目から） AND 連続行動の1回目 AND 味方が誰もいない"
     },
     {
+        "battleConditionMstIdCsv": "655,962,1,5",
+        "battleConditionSetMstId": 3971,
+        "description": "自身以外の味方が通常攻撃でダメージを与えたとき"
+    },
+    {
+        "battleConditionMstIdCsv": "2310",
+        "battleConditionSetMstId": 3972,
+        "description": "ドッペルフェリシア専用バフの累積数5"
+    },
+    {
         "battleConditionMstIdCsv": "972,892",
         "battleConditionSetMstId": 3973,
         "description": "行動者は水属性&攻撃された時"
@@ -19303,6 +19643,11 @@
         "battleConditionMstIdCsv": "976,892",
         "battleConditionSetMstId": 3975,
         "description": "行動者は無属性&攻撃された時"
+    },
+    {
+        "battleConditionMstIdCsv": "3,328",
+        "battleConditionSetMstId": 3976,
+        "description": "自分は行動者AND敵が1以上のダメージを受けた"
     },
     {
         "battleConditionMstIdCsv": "2123,2322",
@@ -19355,6 +19700,76 @@
         "description": "味方全体で毒が付与されている敵が5体以上AND 味方全体で火傷が付与されている敵が1体のとき"
     },
     {
+        "battleConditionMstIdCsv": "655,962,1,6",
+        "battleConditionSetMstId": 3987,
+        "description": "自身以外の味方が戦闘スキルでダメージを与えたとき"
+    },
+    {
+        "battleConditionMstIdCsv": "2327",
+        "battleConditionSetMstId": 3988,
+        "description": "敵全体のデバフ数が10以上"
+    },
+    {
+        "battleConditionMstIdCsv": "972,2",
+        "battleConditionSetMstId": 3989,
+        "description": "行動者は水属性AND 行動者は敵"
+    },
+    {
+        "battleConditionMstIdCsv": "2311,306,3",
+        "battleConditionSetMstId": 3990,
+        "description": "ドッペルフェリシア専用バフの累積数6+行動タイプが追撃+行動者は自身"
+    },
+    {
+        "battleConditionMstIdCsv": "2311,7,3",
+        "battleConditionSetMstId": 3991,
+        "description": "ドッペルフェリシア専用バフの累積数6+行動タイプが必殺技+行動者は自身"
+    },
+    {
+        "battleConditionMstIdCsv": "2312,306,3",
+        "battleConditionSetMstId": 3992,
+        "description": "ドッペルフェリシア専用バフの累積数7+行動タイプが追撃+行動者は自身"
+    },
+    {
+        "battleConditionMstIdCsv": "2312,7,3",
+        "battleConditionSetMstId": 3993,
+        "description": "ドッペルフェリシア専用バフの累積数7+行動タイプが必殺技+行動者は自身"
+    },
+    {
+        "battleConditionMstIdCsv": "2313,306,3",
+        "battleConditionSetMstId": 3994,
+        "description": "ドッペルフェリシア専用バフの累積数8+行動タイプが追撃+行動者は自身"
+    },
+    {
+        "battleConditionMstIdCsv": "2313,7,3",
+        "battleConditionSetMstId": 3995,
+        "description": "ドッペルフェリシア専用バフの累積数8+行動タイプが必殺技+行動者は自身"
+    },
+    {
+        "battleConditionMstIdCsv": "2314,306,3",
+        "battleConditionSetMstId": 3996,
+        "description": "ドッペルフェリシア専用バフの累積数9+行動タイプが追撃+行動者は自身"
+    },
+    {
+        "battleConditionMstIdCsv": "2314,7,3",
+        "battleConditionSetMstId": 3997,
+        "description": "ドッペルフェリシア専用バフの累積数9+行動タイプが必殺技+行動者は自身"
+    },
+    {
+        "battleConditionMstIdCsv": "2315,306,3",
+        "battleConditionSetMstId": 3998,
+        "description": "ドッペルフェリシア専用バフの累積数10+行動タイプが追撃+行動者は自身"
+    },
+    {
+        "battleConditionMstIdCsv": "2315,7,3",
+        "battleConditionSetMstId": 3999,
+        "description": "ドッペルフェリシア専用バフの累積数10+行動タイプが必殺技+行動者は自身"
+    },
+    {
+        "battleConditionMstIdCsv": "2332,2,1388",
+        "battleConditionSetMstId": 4000,
+        "description": "同時に攻撃を受けた味方の数が5以上AND 行動者は敵AND 自チームが1以上のトータルダメージを受けたとき"
+    },
+    {
         "battleConditionMstIdCsv": "400,7,1686",
         "battleConditionSetMstId": 4001,
         "description": "トークンが9のとき＋行動タイプは必殺技＋味方が1体以上攻撃を受けたとき"
@@ -19378,5 +19793,155 @@
         "battleConditionMstIdCsv": "685,7,1686",
         "battleConditionSetMstId": 4005,
         "description": "トークンが49のとき＋行動タイプは必殺技＋味方が1体以上攻撃を受けたとき"
+    },
+    {
+        "battleConditionMstIdCsv": "2330",
+        "battleConditionSetMstId": 4006,
+        "description": "敵全体のデバフ数が1未満"
+    },
+    {
+        "battleConditionMstIdCsv": "811,2338",
+        "battleConditionSetMstId": 4007,
+        "description": "対象のデバフ数が5以上AND 敵全体のデバフ数が10未満"
+    },
+    {
+        "battleConditionMstIdCsv": "2327,2339",
+        "battleConditionSetMstId": 4008,
+        "description": "対象のデバフ数が10以上AND 敵全体のデバフ数が15未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1994,2340",
+        "battleConditionSetMstId": 4009,
+        "description": "敵全体のデバフ数が15以上AND 敵全体のデバフ数が20未満"
+    },
+    {
+        "battleConditionMstIdCsv": "2334,2341",
+        "battleConditionSetMstId": 4010,
+        "description": "敵全体のデバフ数が20以上AND 敵全体のデバフ数が30未満"
+    },
+    {
+        "battleConditionMstIdCsv": "2336",
+        "battleConditionSetMstId": 4011,
+        "description": "敵全体のデバフ数が30以上"
+    },
+    {
+        "battleConditionMstIdCsv": "2329",
+        "battleConditionSetMstId": 4012,
+        "description": "HW杏子の専用デバフの合計数10以上"
+    },
+    {
+        "battleConditionMstIdCsv": "2,6,2333",
+        "battleConditionSetMstId": 4013,
+        "description": "行動者は敵AND 行動タイプがスキル攻撃AND 自軍が30000以上のダメージを受けた"
+    },
+    {
+        "battleConditionMstIdCsv": "2331",
+        "battleConditionSetMstId": 4014,
+        "description": "トークンが15以上のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "878",
+        "battleConditionSetMstId": 4015,
+        "description": "トークンが20以上のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "2,6,2343",
+        "battleConditionSetMstId": 4016,
+        "description": "行動者は敵AND 行動タイプがスキル攻撃AND 自軍が50000以上のダメージを受けた"
+    },
+    {
+        "battleConditionMstIdCsv": "2,6,2335",
+        "battleConditionSetMstId": 4017,
+        "description": "行動者は敵AND 行動タイプがスキル攻撃AND 自軍が90000以上のダメージを受けた"
+    },
+    {
+        "battleConditionMstIdCsv": "975,2",
+        "battleConditionSetMstId": 4018,
+        "description": "行動者は水属性AND 行動者は敵"
+    },
+    {
+        "battleConditionMstIdCsv": "973,2",
+        "battleConditionSetMstId": 4019,
+        "description": "行動者は水属性AND 行動者は敵"
+    },
+    {
+        "battleConditionMstIdCsv": "2337",
+        "battleConditionSetMstId": 4020,
+        "description": "敵全体のデバフ数が5未満"
+    },
+    {
+        "battleConditionMstIdCsv": "2292,1513",
+        "battleConditionSetMstId": 4021,
+        "description": "自身にHP消費効果が発動したときAND 自身がプレイヤー側のユニットのとき"
+    },
+    {
+        "battleConditionMstIdCsv": "25,1513",
+        "battleConditionSetMstId": 4022,
+        "description": "自分が1以上のダメージを受けたAND 自身がプレイヤー側のユニットのとき"
+    },
+    {
+        "battleConditionMstIdCsv": "2305,3",
+        "battleConditionSetMstId": 4023,
+        "description": "行動者は自身+ドッペルフェリシア専用バフが付与されているとき"
+    },
+    {
+        "battleConditionMstIdCsv": "847",
+        "battleConditionSetMstId": 4024,
+        "description": "トークンが25以上のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "2334",
+        "battleConditionSetMstId": 4025,
+        "description": "敵全体のデバフ数が20以上"
+    },
+    {
+        "battleConditionMstIdCsv": "2,2072",
+        "battleConditionSetMstId": 4029,
+        "description": "行動者は敵 + 行動者のHPが30％未満"
+    },
+    {
+        "battleConditionMstIdCsv": "2,1549",
+        "battleConditionSetMstId": 4030,
+        "description": "行動者は敵 + 行動者のHPが50％未満"
+    },
+    {
+        "battleConditionMstIdCsv": "2,6,2344",
+        "battleConditionSetMstId": 4031,
+        "description": "行動者は敵AND 行動タイプがスキル攻撃AND 自軍が60000以上のダメージを受けた"
+    },
+    {
+        "battleConditionMstIdCsv": "2,6,2347",
+        "battleConditionSetMstId": 4032,
+        "description": "行動者は敵AND 行動タイプがスキル攻撃AND 自軍が1000以上のダメージを受けた"
+    },
+    {
+        "battleConditionMstIdCsv": "2,6,2348",
+        "battleConditionSetMstId": 4033,
+        "description": "行動者は敵AND 行動タイプがスキル攻撃AND 自軍が6000以上のダメージを受けた"
+    },
+    {
+        "battleConditionMstIdCsv": "2,6,2349",
+        "battleConditionSetMstId": 4034,
+        "description": "行動者は敵AND 行動タイプがスキル攻撃AND 自軍が3000以上のダメージを受けた"
+    },
+    {
+        "battleConditionMstIdCsv": "1513,1505,3,5",
+        "battleConditionSetMstId": 4072,
+        "description": "自身がプレイヤー側のユニットのとき、結界対策発揮フェーズのとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1513,1505,3,6",
+        "battleConditionSetMstId": 4073,
+        "description": "自身がプレイヤー側のユニットのとき、結界対策発揮フェーズのとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1513,1505,3,306",
+        "battleConditionSetMstId": 4074,
+        "description": "自身がプレイヤー側のユニットのとき、結界対策発揮フェーズのとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1513,1505,3,1462",
+        "battleConditionSetMstId": 4075,
+        "description": "自身がプレイヤー側のユニットのとき、結界対策発揮フェーズのとき"
     }
 ]

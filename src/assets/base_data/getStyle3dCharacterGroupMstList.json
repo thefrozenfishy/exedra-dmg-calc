@@ -150,6 +150,11 @@
         "styleMstId": 10050201
     },
     {
+        "style3dCharacterGroupMstId": 1005061,
+        "style3dCharacterMstId": 100505,
+        "styleMstId": 10050601
+    },
+    {
         "style3dCharacterGroupMstId": 1006011,
         "style3dCharacterMstId": 100601,
         "styleMstId": 10060101
@@ -210,6 +215,11 @@
         "styleMstId": 10120101
     },
     {
+        "style3dCharacterGroupMstId": 1012021,
+        "style3dCharacterMstId": 101202,
+        "styleMstId": 10120201
+    },
+    {
         "style3dCharacterGroupMstId": 1013011,
         "style3dCharacterMstId": 101301,
         "styleMstId": 10130101
@@ -238,6 +248,11 @@
         "style3dCharacterGroupMstId": 1017012,
         "style3dCharacterMstId": 101701,
         "styleMstId": 10170102
+    },
+    {
+        "style3dCharacterGroupMstId": 1017021,
+        "style3dCharacterMstId": 101702,
+        "styleMstId": 10170201
     },
     {
         "style3dCharacterGroupMstId": 1018011,

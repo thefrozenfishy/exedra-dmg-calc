@@ -22,5 +22,29 @@
         "groupId": 20001,
         "level": 5,
         "uniqueStateLevelMstId": 200014
+    },
+    {
+        "conditionCount": 3,
+        "groupId": 20002,
+        "level": 2,
+        "uniqueStateLevelMstId": 200021
+    },
+    {
+        "conditionCount": 8,
+        "groupId": 20002,
+        "level": 3,
+        "uniqueStateLevelMstId": 200022
+    },
+    {
+        "conditionCount": 10,
+        "groupId": 20002,
+        "level": 4,
+        "uniqueStateLevelMstId": 200023
+    },
+    {
+        "conditionCount": 20,
+        "groupId": 20002,
+        "level": 5,
+        "uniqueStateLevelMstId": 200024
     }
 ]

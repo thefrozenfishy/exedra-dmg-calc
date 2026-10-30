@@ -1180,6 +1180,42 @@
     },
     {
         "advMstId": 0,
+        "description": "To make Exedra Crisis more accessible and easier to play, we have extended the battle timer to 24 hours.<br>The limit on the number of available plays has also been removed, allowing you to take on battles as many times as you like.<br>Practice mode has also been removed following the removal of the limit on available plays.",
+        "miniTutorialMstId": 23501,
+        "miniTutorialNumber": 235,
+        "resourceName": "exedra_crisis_12",
+        "sortOrder": 1,
+        "title": "Exedra Crisis Update Details"
+    },
+    {
+        "advMstId": 0,
+        "description": "With the removal of the limit on available plays, you can now use the Skip feature up to 3 times per day without consuming any plays.",
+        "miniTutorialMstId": 23502,
+        "miniTutorialNumber": 235,
+        "resourceName": "exedra_crisis_13",
+        "sortOrder": 2,
+        "title": "Skip Feature"
+    },
+    {
+        "advMstId": 0,
+        "description": "Clear Link Raid Lvl. 20 to challenge an even tougher EX Lvl. difficulty.<br>First-clear rewards are made available again each time an EX Lvl. event returns.",
+        "miniTutorialMstId": 23601,
+        "miniTutorialNumber": 236,
+        "resourceName": "multi_raid_10",
+        "sortOrder": 1,
+        "title": "EX Mode"
+    },
+    {
+        "advMstId": 0,
+        "description": "In EX Lvl., stat bonuses are applied to certain Magical Girls.<br>The Magical Girls that receive stat bonuses will change each season.<br>Stat bonuses are not applied to Support Kioku.",
+        "miniTutorialMstId": 23602,
+        "miniTutorialNumber": 236,
+        "resourceName": "multi_raid_11",
+        "sortOrder": 2,
+        "title": "EX Bonuses"
+    },
+    {
+        "advMstId": 0,
         "description": "Under Key Bindings, you can customize the keyboard controls for various actions.\nBind frequently used actions to easily accessible keys to improve your gameplay experience.",
         "miniTutorialMstId": 31701,
         "miniTutorialNumber": 317,

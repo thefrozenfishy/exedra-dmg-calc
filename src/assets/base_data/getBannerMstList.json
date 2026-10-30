@@ -3185,6 +3185,13 @@
         "name": ""
     },
     {
+        "bannerLabelMstId": 14,
+        "bannerMstId": 462,
+        "destination": "Gacha",
+        "imageName": "banner_00415",
+        "name": ""
+    },
+    {
         "bannerLabelMstId": 5,
         "bannerMstId": 463,
         "destination": "",
@@ -3203,6 +3210,160 @@
         "bannerMstId": 465,
         "destination": "",
         "imageName": "banner_00410",
+        "name": ""
+    },
+    {
+        "bannerLabelMstId": 17,
+        "bannerMstId": 466,
+        "destination": "Gacha",
+        "imageName": "banner_00413",
+        "name": ""
+    },
+    {
+        "bannerLabelMstId": 9,
+        "bannerMstId": 467,
+        "destination": "Gacha",
+        "imageName": "banner_00413",
+        "name": ""
+    },
+    {
+        "bannerLabelMstId": 10,
+        "bannerMstId": 468,
+        "destination": "Gacha",
+        "imageName": "banner_00413",
+        "name": ""
+    },
+    {
+        "bannerLabelMstId": 8,
+        "bannerMstId": 469,
+        "destination": "Gacha",
+        "imageName": "banner_00415",
+        "name": ""
+    },
+    {
+        "bannerLabelMstId": 9,
+        "bannerMstId": 470,
+        "destination": "Gacha",
+        "imageName": "banner_00415",
+        "name": ""
+    },
+    {
+        "bannerLabelMstId": 11,
+        "bannerMstId": 471,
+        "destination": "Gacha",
+        "imageName": "banner_00415",
+        "name": ""
+    },
+    {
+        "bannerLabelMstId": 10,
+        "bannerMstId": 472,
+        "destination": "Gacha",
+        "imageName": "banner_00415",
+        "name": ""
+    },
+    {
+        "bannerLabelMstId": 14,
+        "bannerMstId": 473,
+        "destination": "Gacha",
+        "imageName": "banner_00420",
+        "name": ""
+    },
+    {
+        "bannerLabelMstId": 17,
+        "bannerMstId": 474,
+        "destination": "Gacha",
+        "imageName": "banner_00414",
+        "name": ""
+    },
+    {
+        "bannerLabelMstId": 9,
+        "bannerMstId": 475,
+        "destination": "Gacha",
+        "imageName": "banner_00414",
+        "name": ""
+    },
+    {
+        "bannerLabelMstId": 10,
+        "bannerMstId": 476,
+        "destination": "Gacha",
+        "imageName": "banner_00414",
+        "name": ""
+    },
+    {
+        "bannerLabelMstId": 21,
+        "bannerMstId": 477,
+        "destination": "Gacha",
+        "imageName": "banner_00421",
+        "name": ""
+    },
+    {
+        "bannerLabelMstId": 10,
+        "bannerMstId": 478,
+        "destination": "Gacha",
+        "imageName": "banner_00421",
+        "name": ""
+    },
+    {
+        "bannerLabelMstId": 2,
+        "bannerMstId": 479,
+        "destination": "StoryEvent",
+        "imageName": "banner_00416",
+        "name": ""
+    },
+    {
+        "bannerLabelMstId": 2,
+        "bannerMstId": 480,
+        "destination": "StoryEvent",
+        "imageName": "banner_00417",
+        "name": ""
+    },
+    {
+        "bannerLabelMstId": 2,
+        "bannerMstId": 481,
+        "destination": "StoryEvent",
+        "imageName": "banner_00418",
+        "name": ""
+    },
+    {
+        "bannerLabelMstId": 17,
+        "bannerMstId": 482,
+        "destination": "Gacha",
+        "imageName": "banner_00422",
+        "name": ""
+    },
+    {
+        "bannerLabelMstId": 17,
+        "bannerMstId": 483,
+        "destination": "Gacha",
+        "imageName": "banner_00423",
+        "name": ""
+    },
+    {
+        "bannerLabelMstId": 2,
+        "bannerMstId": 484,
+        "destination": "StoryEvent",
+        "imageName": "banner_00419",
+        "name": ""
+    },
+    {
+        "bannerLabelMstId": 5,
+        "bannerMstId": 485,
+        "destination": "",
+        "imageName": "banner_00424",
+        "name": ""
+    },
+    {
+        "bannerLabelMstId": 5,
+        "bannerMstId": 486,
+        "destination": "",
+        "imageName": "banner_00425",
+        "name": ""
+    },
+    {
+        "bannerLabelMstId": 0,
+        "bannerMstId": 487,
+        "destination": "",
+        "imageName": "banner_00426",
         "name": ""
     }
 ]

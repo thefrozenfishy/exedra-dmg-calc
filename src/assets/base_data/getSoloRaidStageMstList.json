@@ -418,5 +418,65 @@
         "questStageMstId": 1407106,
         "soloRaidMstId": 7,
         "soloRaidStageMstId": 706
+    },
+    {
+        "comment": "In Wave 1, the Witch's Minions have <tooltips_id=4>.<br><br>Some Minions' break gauge depletion RES increases and their DMG taken decreases based on how many debuffs are applied to enemies.<br>Keep removing debuffs and attacking as you defeat the other Minions.",
+        "difficulty": 1,
+        "dioramaBackgroundMstId": 110519,
+        "limitRoundCount": 5,
+        "questRewardGroupId": 60043,
+        "questStageMstId": 1408101,
+        "soloRaidMstId": 8,
+        "soloRaidStageMstId": 801
+    },
+    {
+        "comment": "In Wave 1, the Witch's Minions have <tooltips_id=4>.<br><br>Some Minions' break gauge depletion RES increases and their DMG taken decreases based on how many debuffs are applied to enemies.<br>Keep removing debuffs and attacking as you defeat the other Minions.",
+        "difficulty": 2,
+        "dioramaBackgroundMstId": 110519,
+        "limitRoundCount": 5,
+        "questRewardGroupId": 60044,
+        "questStageMstId": 1408102,
+        "soloRaidMstId": 8,
+        "soloRaidStageMstId": 802
+    },
+    {
+        "comment": "In Wave 1, the Witch's Minions have <tooltips_id=4>.<br><br>Some Minions' break gauge depletion RES increases and their DMG taken decreases based on how many debuffs are applied to enemies.<br>Keep removing debuffs and attacking as you defeat the other Minions.",
+        "difficulty": 3,
+        "dioramaBackgroundMstId": 110519,
+        "limitRoundCount": 4,
+        "questRewardGroupId": 60045,
+        "questStageMstId": 1408103,
+        "soloRaidMstId": 8,
+        "soloRaidStageMstId": 803
+    },
+    {
+        "comment": "In Wave 1, the Witch's Minions have <tooltips_id=4>.<br><br>Some Minions' break gauge depletion RES increases and their DMG taken decreases based on how many debuffs are applied to enemies.<br>Keep removing debuffs and attacking as you defeat the other Minions.",
+        "difficulty": 4,
+        "dioramaBackgroundMstId": 110519,
+        "limitRoundCount": 4,
+        "questRewardGroupId": 60046,
+        "questStageMstId": 1408104,
+        "soloRaidMstId": 8,
+        "soloRaidStageMstId": 804
+    },
+    {
+        "comment": "In Wave 1, the Witch's Minions have <tooltips_id=4>.<br><br>Some Minions' break gauge depletion RES increases and their DMG taken decreases based on how many debuffs are applied to enemies.<br>Keep removing debuffs and attacking as you defeat the other Minions.",
+        "difficulty": 5,
+        "dioramaBackgroundMstId": 110519,
+        "limitRoundCount": 3,
+        "questRewardGroupId": 60047,
+        "questStageMstId": 1408105,
+        "soloRaidMstId": 8,
+        "soloRaidStageMstId": 805
+    },
+    {
+        "comment": "In Wave 1, the Witch's Minions have <tooltips_id=4>.<br><br>Some Minions' break gauge depletion RES increases and their DMG taken decreases based on how many debuffs are applied to enemies.<br>Keep removing debuffs and attacking as you defeat the other Minions.",
+        "difficulty": 6,
+        "dioramaBackgroundMstId": 110519,
+        "limitRoundCount": 3,
+        "questRewardGroupId": 60048,
+        "questStageMstId": 1408106,
+        "soloRaidMstId": 8,
+        "soloRaidStageMstId": 806
     }
 ]
