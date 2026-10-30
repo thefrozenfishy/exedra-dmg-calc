@@ -1085,7 +1085,8 @@ const runBench = (kind: BenchChartKind, { fresh = false } = {}) => {
     }
     const setBreak = (id: number, rows: BenchRow[]) => { setMax(id, rows); setAvg(id, rows) }
     // a cache / precalc entry with everything this chart shows
-    const complete = (e?: BenchCacheEntry) => kind === "break" ? !!e?.brk?.every(r => r.sp !== undefined) : !!(e?.max && e.avg)
+    // (break: SP on every row and the 100% crit row, which entries calculated before it lack)
+    const complete = (e?: BenchCacheEntry) => kind === "break" ? !!e?.brk?.every(r => r.sp !== undefined) && !!e.brk.some(r => r.crit) : !!(e?.max && e.avg)
 
     // Cached characters are shown right away; only new or changed ones are simulated.
     const setup = benchSetup(kind, lux)
