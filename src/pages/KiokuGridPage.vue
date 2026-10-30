@@ -334,6 +334,7 @@
                                         :class="ascBadgeClass(bar.ascension)"
                                         :title="`Calculated at A${bar.ascension}`">{{ bar.ascension }}</span>
                                 </span>
+                                <span v-if="bar.spLabel" class="gain-sp" title="SP the rotation costs per 100 AV">{{ bar.spLabel }}</span>
 
                                 <div v-if="bar.tags.length" class="gain-tag-icons">
                                     <template v-for="tag in bar.tags" :key="`${tag.kind}:${tag.value}`">
@@ -707,11 +708,13 @@ const benchUnits = (kind?: BenchChartKind): BenchUnitChar[] => chartCharacters()
     }))
     : [{ ...prepareForChart(c), benchKey: c.id }])
 
-const levelsDescription = computed(() => (levelsMode.value === "max"
+// The levels part alone (the break chart has its own gear text).
+const levelsOnlyDescription = computed(() => levelsMode.value === "max"
     ? `All characters are A5 and max level. ${LuxMagica} is A0 (no follow-ups).`
     : levelsMode.value === "multi"
         ? `Every character is simulated at max level at each selected ascension (${multiAscensions.value.map(a => `A${a}`).join(", ")}), one bar per ascension; ascensions with the same result share one bar (e.g. A0-2). The number on the icon is the ascension. ${LuxMagica} is always max level, A0.`
-        : `All characters use your current ascension with max levels, unowned characters are left out. ${LuxMagica} is always max level, A0.`) + ` Everyone wears the same gear instead of your own: their EX crystalis, Towering Offense++ (Towering Bulwark++ for DEF-based damage), the crystalis of their element, Dominant Blow++, the portrait Farewell to a Future Unseen and The Universe's Edge (A5, max level) as support, which only works on Attackers. The ${LuxMagica} everyone is compared with also gets the average self buffs of the 5 star Attackers (ATK, DMG, crit, SPD, MP recovery, ...; Ultimate- and Battle Skill-only ones only for those).`)
+        : `All characters use your current ascension with max levels, unowned characters are left out. ${LuxMagica} is always max level, A0.`)
+const levelsDescription = computed(() => levelsOnlyDescription.value + ` Everyone wears the same gear instead of your own: their EX crystalis, Towering Offense++ (Towering Bulwark++ for DEF-based damage), the crystalis of their element, Dominant Blow++, the portrait Farewell to a Future Unseen and The Universe's Edge (A5, max level) as support, which only works on Attackers. The ${LuxMagica} everyone is compared with also gets the average self buffs of the 5 star Attackers (ATK, DMG, crit, SPD, MP recovery, ...; Ultimate- and Battle Skill-only ones only for those).`)
 
 type ChartTargetContext = {
     role?: KiokuRole
@@ -947,6 +950,8 @@ const buildBarChart = (
 
         gain,
         ascension,
+        // break chart: the SP cost per 100 AV under the icon
+        spLabel: sp !== undefined ? `${sp.toFixed(1)} SP` : "",
         variant: tags.length > 0,
         label: format(value),
         title: title({ avgGain, maxGain, critRate, sp }, titleLabel),
@@ -1398,8 +1403,8 @@ const benchCharts = computed(() => [
         fightType: true,
         desc: [
             `Breakers only. Break gauge each Breaker removes as the damage dealer per 100 AV (one turn), over ${benchAv()} AV (${benchTurns.value} turns) of battle on the game's battle code with infinite SP (ultimates as soon as they are ready, Battle Skill every turn), supported by four ${LuxMagica}. Not compared to ${LuxMagica}: the bar is the gauge itself, added up over every enemy the character hits. Only the character's own hits count. Every Breaker wears Quickstep++, its EX crystalis and Mana Infusion++, the portrait Proof of Friends Again (SPD +20%) and Cherry Blizzard as support (SPD +20%).`,
-            `SP cost: the SP the Breaker's own actions cost per 100 AV, Battle Skills minus the SP it generates (+1 per Basic Attack, its own SP gain effects). SP gained "on enemy break" never counts, as the enemies never break. ${benchBreakPerSp.value ? "Break per SP sorts the Breakers from least to most SP efficient; a rotation that costs no SP shows as \"no SP\" at the end." : "Switch \"Break per\" to SP to see the break per SP spent."}`,
-            `${levelsDescription.value} ${benchEnemyText.value} with 3000 def, weak to every element (x1.2 break) and a break gauge that never runs out, so they are never broken and every hit removes its full break value (on-break effects never trigger); single-target and proximity skills aim at the middle one. Ailment bonuses (enemies under Curse, Burn, ...) get their own bar when they change the result.`,
+            `SP cost (under each icon): the SP the Breaker's own actions cost per 100 AV, Battle Skills minus the SP it generates (+1 per Basic Attack, its own SP gain effects). SP gained "on enemy break" never counts, as the enemies never break. ${benchBreakPerSp.value ? "Break per SP sorts the Breakers from least to most SP efficient; a rotation that costs no SP shows as \"no SP\" at the end." : "Switch \"Break per\" to SP to see the break per SP spent."}`,
+            `${levelsOnlyDescription.value} ${benchEnemyText.value} with 3000 def, weak to every element (x1.2 break) and a break gauge that never runs out, so they are never broken and every hit removes its full break value (on-break effects never trigger); single-target and proximity skills aim at the middle one. Ailment bonuses (enemies under Curse, Burn, ...) get their own bar when they change the result.`,
         ],
         chart: buildBenchChart("break"),
         status: benchStatusText("break"),
@@ -2400,6 +2405,13 @@ watch([showBenchCharts, markedCharacters, levelsMode, multiAscensions, fightMode
 .gain-char-icon-wrap {
     position: relative;
     display: block;
+}
+
+.gain-sp {
+    font-size: 0.6rem;
+    line-height: 1;
+    color: var(--muted);
+    white-space: nowrap;
 }
 
 .gain-asc-badge {
