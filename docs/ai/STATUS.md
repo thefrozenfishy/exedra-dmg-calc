@@ -1,6 +1,6 @@
 # Status (update at the end of every session)
 
-_Last updated: 2026-10-30 (2): stage-mode buffs in Max Damage / Highest Dmg Calc, quest buffs, Link Raid EX bonus; before: 2026-10-30: Kioku Grid damage dealer chart "Break" display; before: 2026-10-29 (5): game 3.22.0 (battle code identical, @rva tags moved; branch claude/version-3.22.0); before: 2026-10-29 (3): Best SA Team calculator speed (~60x on a large search); before: 2026-10-29 (2): Kioku Grid "Multiple ascensions", merged equal variant bars, precalculated bench file; before: 2026-10-29: Kioku Grid bench gear + average Attacker self buffs on Lux; before: 2026-10-24 (3): second-generation engine and Fight Solver removed (branch `remove-gen2`); before: 2026-10-24 (battle-start passive order: kit -> portrait -> support -> crys; before: Kioku Grid ailment bars: 112/305/309 conditions, Max Damage enemies carry Weakness/Stun); before: 2026-10-15 (game 3.21.0: dumped + decompiled by Claude on Windows, engine re-ported to 3.21.0; branch claude/version-3.21.0); before: 2026-10-14 (Max Damage + Kioku Grid bench on the 1:1 engine); before: 2026-10-10 (1:1 port in src/engine started); before: 2026-10-03 (passive states per giver, UP_HP_FIXED max HP; earlier: duplicate active-skill states); before: 2026-10-02 (game 3.19.1: version diff + newsletter, Magic Seal, break/notice team conditions, IMM_SLIP_DMG burst; branch claude/version-3.19.1)._
+_Last updated: 2026-10-31: Kioku Grid break chart for every character (not only Breakers); before: 2026-10-30 (2): stage-mode buffs in Max Damage / Highest Dmg Calc, quest buffs, Link Raid EX bonus; before: 2026-10-30: Kioku Grid damage dealer chart "Break" display; before: 2026-10-29 (5): game 3.22.0 (battle code identical, @rva tags moved; branch claude/version-3.22.0); before: 2026-10-29 (3): Best SA Team calculator speed (~60x on a large search); before: 2026-10-29 (2): Kioku Grid "Multiple ascensions", merged equal variant bars, precalculated bench file; before: 2026-10-29: Kioku Grid bench gear + average Attacker self buffs on Lux; before: 2026-10-24 (3): second-generation engine and Fight Solver removed (branch `remove-gen2`); before: 2026-10-24 (battle-start passive order: kit -> portrait -> support -> crys; before: Kioku Grid ailment bars: 112/305/309 conditions, Max Damage enemies carry Weakness/Stun); before: 2026-10-15 (game 3.21.0: dumped + decompiled by Claude on Windows, engine re-ported to 3.21.0; branch claude/version-3.21.0); before: 2026-10-14 (Max Damage + Kioku Grid bench on the 1:1 engine); before: 2026-10-10 (1:1 port in src/engine started); before: 2026-10-03 (passive states per giver, UP_HP_FIXED max HP; earlier: duplicate active-skill states); before: 2026-10-02 (game 3.19.1: version diff + newsletter, Magic Seal, break/notice team conditions, IMM_SLIP_DMG burst; branch claude/version-3.19.1)._
 
 
 ## 2026-10-30 (2): stage-mode buffs everywhere; "Highest Dmg Calc" (user's request)
@@ -28,8 +28,9 @@ _Last updated: 2026-10-30 (2): stage-mode buffs in Max Damage / Highest Dmg Calc
 
 ## 2026-10-30: Kioku Grid damage dealer chart "Break" display (user's request)
 
-- The damage dealer chart's Display toggle has a third option, Break (setting `gridBenchAttackerBreak`), **Breakers
-  only** (user's choice: the other roles break about the same): the break gauge each removes as the dealer per 100 AV, over the Simulation depth (5 / 15 / 100 turns). An absolute
+- The damage dealer chart's Display toggle has a third option, Break (setting `gridBenchAttackerBreak`), for **every
+  character** (Breakers only until 2026-10-31, user's request: `benchUnits` and `benchPrecalc.ts` no longer filter by
+  role): the break gauge each removes as the dealer per 100 AV, over the Simulation depth (5 / 15 / 100 turns). An absolute
   value, not compared to Lux; summed over every enemy hit. Same team and play as Average Damage
   (`LuxBenchCharts.attackerBreak`, `simulatedDealerDamage` `measure: "break"`).
 - [BENCH] Its dummies (`benchStage(count, immune, gauge = true)`) have a 1e9 break gauge (BreakMst 990000002). Each is
@@ -44,6 +45,10 @@ _Last updated: 2026-10-30 (2): stage-mode buffs in Max Damage / Highest Dmg Calc
   portrait Proof of Friends Again (SPD +20%), support Cherry Blizzard for everyone (Breaker target, SPD +20% at battle
   start: the highest unconditional Breaker-support SPD, tied with Absolute Venus / Assault Paranoia / Groundhog Daze /
   Sacred Gift, which also give break +5; the 25% ones are conditional). Tsukasa's own Cherry Ballad supports Debuffers.
+  Non-Breakers wear the same gear, but the game drops Cherry Blizzard for them (support target = Breaker,
+  `matchSupportToIdentity` / PvPKioku), like The Universe's Edge on non-Attackers in the damage charts. Their hits also
+  use the non-Breaker rows of `BreakPoint.GetDecreaseValue` (0x14A2B70; e.g. Battle Skill single 20 vs a Breaker's 45)
+  unless the skill row has its own v3/v4.
 - SP cost (`BenchRow.sp`, per 100 AV): [BENCH] `trackSp` wraps NormalAttack.Execute (+1), ActiveSkill.Execute (-cost,
   step-ups included) and GainSpFixedAbilityEffect.Triggering (+v1), the only SpReferee.AddSp callers, and counts the
   dealer's requested amounts (before the 0..6 clamp); the action past the run is taken back. "Break per" toggle
@@ -448,6 +453,7 @@ Confirmed by the user's in-game observation. Buffs from allies now tick at the h
 - Sandbox Witch (509140) rotation, to confirm TurnNum-per-turn in combo enemies.
 
 ## Session log (newest first, one line each)
+- 2026-10-31: Kioku Grid break chart for every character, not only Breakers (user's request). Same gear (Cherry Blizzard only works on Breakers). Probe 1 enemy / 5 turns A5: Cherry Blizzard 226.7, Cherry Ballad 48.0, Baldamente Fortissimo 31.0, All Souls' Repose 30.9 (Curse 39.0), A Tale of Cherry Blossoms 23.2 (crit 34.2), Aqua Tempest 17.1. Existing Breaker entries unchanged (no cache bump); non-Breakers are not in bench-precalc.json yet (the user runs `benchPrecalc.ts --charts break` later), so the page simulates them in the browser. fixtures 16/16, app type-check 222 (unchanged).
 - 2026-10-30 (7): Break chart: every identity (main, each ailment) also gets a 100% crit version (ailment + crit bars). Assault Paranoia: Curse + crit = crit (Curse only gives crit rate +35% vs cursed enemies), so that bar folds into the crit bar.
 - 2026-10-30 (6): Break chart "100% crit" extra bar (BenchIdentity.crit, SimOptions.teamCrit: every ally's BattleParameter._CTR set to 1000 before each action; all hits crit, 337/337 in a check). Differs for Assault Paranoia, Crimson Confectioner, Strada Futuro (1 enemy, 15 turns); icon = archetypes/crit.png; BROWSER_CACHE_REV 3.
 - 2026-10-30 (5): Break chart breaks each dummy once (on-break effects trigger), counts processed break per hit (trackBreak); BROWSER_CACHE_REV 2. Tenebrous Arcana's precalc entries redone again (a merge of the user's precalc run had restored her pre-fix entries).
