@@ -18,7 +18,7 @@ Find any symbol with `python3 scripts/ai/xq.py ts <name>`.
 |---|---|
 | `EngineBattle.ts` | Runs one battle like the client (`ClientDriver.runBattleLikeClient`): setup kinds pvp / quest / soloRaid / multiRaid, `executeNextAction()` -> `BattleSnapshot`s, manual control (`BattleRng.pick`, `PendingDecision`), `RaidCarry` (Solo Raid attempt carry-over). |
 | `EngineRandom.ts` | Routes the engine's `GameRandom` hook through a `BattleRng` (page RNG modes, roll log). |
-| `EngineMaxDamage.ts` | Max Damage on the engine: `computeMaxDamageEngine` (result shape in `models/MaxDamage.ts`; `scoreOnly` = numbers only, `trace` = "Stats for nerds"). |
+| `EngineMaxDamage.ts` | Max Damage on the engine: `computeMaxDamageEngine` (result shape in `models/MaxDamage.ts`; `scoreOnly` = numbers only, `trace` = "Stats for nerds"). `EngineMaxDmgStage.phase` = the wave boss's form step (`enterWave` -> `enterNextForm`); `phaseWave` / `phaseFieldAppearanceIds` = the pages' enemy list for a phase (summons included). |
 | `EngineDamageTrace.ts` | "Stats for nerds": `traceDamage` wraps `BattleDamageCalculator`'s static steps for one run and records each hit's factors; `unitStats` / `enemyStats`. |
 | `EngineBench.ts`, `EngineTeamScore.ts` | Kioku Grid bench battles; Best SA Team scoring. |
 | `engineBundle.ts` | `E`: the bundled engine module. |

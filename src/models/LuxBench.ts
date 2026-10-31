@@ -65,7 +65,8 @@ const ELEMENT_CRYS: Record<KiokuElement, number> = {
 }
 // Break chart gear (user's choice): Quickstep++ and Mana Infusion++ next to the EX crystalis, the portrait Proof of
 // Friends Again (SPD +20%) and Cherry Blizzard as support (Breakers: SPD +20% at battle start, the highest
-// unconditional SPD of the Breaker supports, tied with ones that also give break +5), the same for every Breaker.
+// unconditional SPD of the Breaker supports, tied with ones that also give break +5), the same for every character
+// measured (the support only works on Breakers, as the game's support target rule has it: matchSupportToIdentity).
 export const BENCH_BREAK_PORTRAIT = "Proof of Friends Again"
 export const BENCH_BREAK_SUPPORT = "Cherry Blizzard"
 const QUICKSTEP = 3006, MANA_INFUSION = 3011 // SelectionAbility ids (++)
@@ -754,7 +755,7 @@ export class LuxBenchCharts {
         })
     }
 
-    /** Break chart (Breakers, wearing benchKioku `gear: "break"`): the break gauge the character removes as the dealer
+    /** Break chart (every character, wearing benchKioku `gear: "break"`): the break gauge the character removes as the dealer
      *  (same team and play as attackerAvg) per 100 AV, summed over every enemy it hits. An absolute value (`gain` holds
      *  it), not compared to Lux. Every identity (main, each ailment) also comes with `crit`, the "100% crit" bars: the
      *  whole team crits on every hit (on-crit effects, crit-consuming states), ailments as in that identity. `sp`: the SP its own actions cost per 100 AV (trackSp; negative when it generates more

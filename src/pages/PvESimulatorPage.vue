@@ -100,11 +100,19 @@
                 <a v-if="wikiUrl" class="wiki-link" :href="wikiUrl" target="_blank" rel="noopener"
                     title="This stage's battle page on exedra.wiki">details →</a>
             </div>
+            <div v-if="phases.length" class="wave-row">
+                <span class="filters-heading">Phase</span>
+                <button v-for="f in phases" :key="f.step" type="button" class="chip" :class="{ active: phase === f.step }"
+                    :title="phaseTitle(f)" @click="phase = f.step">{{ f.step }} <span class="chip-count">{{
+                        f.step === 1 ? 'start' : `from ${f.threshold / 10}% HP` }} · ATK {{ fmt(f.appearance.atk) }}</span></button>
+                <span class="row-hint">The boss changes form at these HP thresholds. Max Damage uses the selected
+                    form, with the enemies on the field when it comes in.</span>
+            </div>
         </section>
 
         <!-- Enemies, in the same 5 columns as the team below -->
         <div v-if="enemyInfo.length" class="enemies-block">
-            <h2 class="section-title page-section-title">Enemies <span class="title-sub">· wave {{ waveIdx + 1 }}</span>
+            <h2 class="section-title page-section-title">Enemies <span class="title-sub">· wave {{ waveIdx + 1 }}<template v-if="phases.length"> · phase {{ phase }}</template></span>
             </h2>
             <div class="team-grid enemy-grid">
                 <div v-for="(e, i) in enemyInfo" :key="e.id" class="enemy-card"
@@ -265,7 +273,7 @@
         <!-- Max damage -->
         <section class="card section-card">
             <h2 class="section-title">Max Damage <span v-if="maxDmgBusy" class="title-sub">· calculating…</span></h2>
-            <p class="hint-text">The best case against wave {{ waveIdx + 1 }}: every buff and debuff listed under "Buffs
+            <p class="hint-text">The best case against wave {{ waveIdx + 1 }}<template v-if="phases.length">, phase {{ phase }}</template>: every buff and debuff listed under "Buffs
                 &amp; Debuffs" below is active at the same time, at full stacks, with its conditions met. Effects that
                 can't count together count once, whichever gives the most damage: tiers that exclude each other (like
                 Light Chain Lv 1-5), and the same kind of buff from a skill
@@ -735,7 +743,8 @@ import { toast } from 'vue3-toastify'
 import { TargetType, skillDetailId, type BattleSnapshot, type SkillDetail } from '../types/KiokuTypes'
 import { elementMap } from '../types/enums'
 import { stageWaves, stageWaveMeta, summonTemplates, wavePositionIds, enemyName, breakMstOf, ELEMENT_KEYS, questStages, soloRaidInfo, isSoloRaidStage, multiRaidInfo, type QuestEnemyAppearance, type ModeChangeInfo } from '../models/PvE'
-import { stageBattleType, waveStartUnits } from '../models/PvEBattle'
+import { stageBattleType, wavePhases, waveStartUnits } from '../models/PvEBattle'
+import { phaseWave } from '../battle/EngineMaxDamage'
 import passiveMstJson from '../assets/base_data/getPassiveSkillMstList.json'
 import { getScoreAttackStage } from '../models/PvEScore'
 import { isEffectValueType, type MaxDmgEffect, type MaxDmgResult, type MemberDamage, type SkillDamage } from '../models/MaxDamage'
@@ -800,13 +809,22 @@ const wikiUrl = computed(() => stageId.value ? wikiBattleUrl(stageId.value) : un
 const waveMetas = computed(() => stageId.value ? stageWaveMeta(stageId.value) : [])
 const waves = computed(() => waveMetas.value.map(m => m.appearances))
 const waveMeta = computed(() => waveMetas.value[Math.min(waveIdx.value, waveMetas.value.length - 1)])
-// The enemies on the field when the wave starts (at most 5): Max Damage is evaluated against these only.
-const wave = computed(() => waveMeta.value ? waveStartUnits(waveMeta.value) : [])
+// A wave whose boss changes form at HP thresholds has phases (Crisis "phase 1/2/3"): Max Damage uses one form.
+const phase = ref(1)
+const phases = computed(() => wavePhases(waveMeta.value))
+const phaseTitle = (f: ModeChangeInfo) => `${enemyName(f.appearance)}: HP ${fmt(f.appearance.hp)} · ATK ${fmt(f.appearance.atk)} · DEF ${fmt(f.appearance.def)} · SPD ${f.appearance.speed}`
+const currentPhase = () => phases.value.some(f => f.step === phase.value) ? phase.value : 1
+// The enemies on the field when the wave (or the selected phase) starts (at most 5): Max Damage is evaluated against
+// these only. A later phase: the boss's form and what the game's form change brings in (battle/EngineMaxDamage).
+const wave = computed(() => waveMeta.value
+    ? phaseWave(stageId.value, Math.min(waveIdx.value, waveMetas.value.length - 1), currentPhase(), waveStartUnits(waveMeta.value))
+    : [])
 const mainTargetIdx = ref(0)
 const broken = ref<boolean[]>([])
 const breakRate = ref<(number | undefined)[]>([])
 
 watch(stageId, () => { waveIdx.value = 0 })
+watch([stageId, waveIdx], () => { phase.value = 1 })
 watch(wave, w => {
     const main = w.findIndex(a => a.isMainTargetEnemy)
     mainTargetIdx.value = main >= 0 ? main : 0
@@ -843,6 +861,7 @@ const enemyInfo = computed(() => {
 const formLabel = (m: ModeChangeInfo) => `Form ${m.step} · ${m.step === 1 ? 'from the start' : `from ${m.threshold / 10}% HP`}`
 function formTag(a: QuestEnemyAppearance): string {
     const forms = waveMeta.value?.modeChanges ?? []
+    if (a.conditionType === 3) return 'Summoned' 
     const own = forms.find(m => m.appearance.questEnemyAppearanceMstId === a.questEnemyAppearanceMstId)
     return own ? formLabel(own) : ''
 }
@@ -855,11 +874,11 @@ const extraEnemyRows = computed(() => {
         const key = `${e.enemyMstId}:${e.hp}:${e.atk}:${e.def}:${e.spd}`
         return !seen.has(key) && !!seen.add(key)
     })
-    const forms = (waveMeta.value?.modeChanges ?? []).filter(m => m.step > 1).map(m => enemyView(m.appearance, formLabel(m)))
+    const forms = (waveMeta.value?.modeChanges ?? []).filter(m => m.step !== currentPhase()).map(m => enemyView(m.appearance, formLabel(m)))
     return [
-        { title: 'Later forms', enemies: forms, hint: 'The boss above changes into these forms when its HP drops to each threshold, keeping its position. Not part of Max Damage.' },
+        { title: 'Other forms', enemies: forms, hint: 'The boss above changes form when its HP drops to each threshold, keeping its position. Pick a phase above to use another form in Max Damage.' },
         { title: 'Backups', enemies: backups, hint: 'Only 5 enemies can be on the field at once. These wait in the back and come in as the ones on the field are defeated. Not part of Max Damage.' },
-        { title: 'Summons', enemies: summons, hint: 'Enemies that can be summoned during the battle. Not part of Max Damage.' },
+        { title: 'Summons', enemies: summons, hint: 'Enemies that can be summoned during the battle. Not part of Max Damage, except the ones a boss form brings in when its phase starts (shown above when that phase is selected).' },
     ].filter(r => r.enemies.length)
 })
 
@@ -978,7 +997,7 @@ function requestMaxDamage() {
         maxDmgWorker.postMessage({
             id: ++maxDmgReq,
             slots: JSON.parse(JSON.stringify(filledSlots.value.map(([s]) => s))),
-            stageId: stageId.value, waveIdx: currentWaveIdx(),
+            stageId: stageId.value, waveIdx: currentWaveIdx(), phase: currentPhase(),
             wave: JSON.parse(JSON.stringify(wave.value)), dealerPos: dealerPos.value,
             opts: { ...maxDmgOpts(), trace: statsForNerds.value },
         } satisfies MaxDamageRequest)
@@ -1038,7 +1057,7 @@ async function optimizeAttackerLoadout(mode: LoadoutMode) {
         toast.error(String((e as Error)?.message ?? e), { position: toast.POSITION.TOP_RIGHT, icon: false })
         return
     }
-    const context: LoadoutContext = { stageId: stageId.value, waveIdx: currentWaveIdx(), wave: plain(wave.value), dealerPos: pos, opts: maxDmgOpts() }
+    const context: LoadoutContext = { stageId: stageId.value, waveIdx: currentWaveIdx(), phase: currentPhase(), wave: plain(wave.value), dealerPos: pos, opts: maxDmgOpts() }
     const pool = loadoutPool = new EngineLoadoutPool(context, undefined, err => console.warn('Loadout score failed', err))
     loadoutBusy.value = true
     loadoutCancelled = false
@@ -1155,7 +1174,7 @@ async function runDiagnosis() {
     if (diagBusy.value || !col || !(observed > 0) || !wave.value.length) return
     const hit = diagHit.value
     const context: VariantContext = {
-        slots: plain(filledSlots.value.map(([s]) => s)) as TeamSlot[], stageId: stageId.value, waveIdx: currentWaveIdx(),
+        slots: plain(filledSlots.value.map(([s]) => s)) as TeamSlot[], stageId: stageId.value, waveIdx: currentWaveIdx(), phase: currentPhase(),
         wave: plain(wave.value), dealerPos: dealerPos.value, opts: { ...maxDmgOpts(), onlyColumn: col.label },
     }
     const pool = diagPool = new EngineVariantPool(context, undefined, err => console.warn('Damage check failed', err))
@@ -1810,6 +1829,7 @@ function currentSetup(): PvESetup {
     return {
         stageId: stageId.value,
         wave: waveIdx.value,
+        phase: phase.value,
         target: mainTargetIdx.value,
         broken: [...broken.value],
         breakRate: breakRate.value.map(r => r ?? null),
@@ -1842,6 +1862,8 @@ async function applySetup(raw: unknown) {
     attackerIndex.value = s.dealer
     await nextTick()
     waveIdx.value = Math.min(s.wave, Math.max(0, waves.value.length - 1))
+    await nextTick()
+    if (phases.value.some(f => f.step === s.phase)) phase.value = s.phase!
     await nextTick()
     if (s.target < wave.value.length) mainTargetIdx.value = s.target
     if (s.broken.length === wave.value.length) broken.value = [...s.broken]

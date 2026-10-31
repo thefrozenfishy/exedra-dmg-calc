@@ -702,8 +702,8 @@ const chartCharacters = () =>
 // One bench unit to simulate: a character at the chart's levels. `benchKey` identifies it in the results and the worker
 // messages: the character id, or in "Multiple ascensions" one per ascension (id * 10 + ascension).
 type BenchUnitChar = Character & { benchKey: number }
-// The break chart only has Breakers (a subset of the other charts' characters).
-const benchUnits = (kind?: BenchChartKind): BenchUnitChar[] => chartCharacters().filter(c => kind !== "break" || c.role === KiokuRole.Breaker).flatMap(c => levelsMode.value === "multi"
+// Every chart (the break chart included) has every character.
+const benchUnits = (): BenchUnitChar[] => chartCharacters().flatMap(c => levelsMode.value === "multi"
     ? multiAscensions.value.map(a => ({
         ...withMaxLevelsForPlayerLevel({ ...c, ascension: a }, KiokuConstants.maxKiokuLvl), benchKey: c.id * 10 + a,
     }))
@@ -1094,7 +1094,7 @@ const runBench = (kind: BenchChartKind, { fresh = false } = {}) => {
     const setup = benchSetup(kind, lux)
     if (fresh) clearBenchCache(setup)
     const cache = loadBenchCache(setup)
-    const chars = benchUnits(kind)
+    const chars = benchUnits()
     // The cache key includes the ascension (benchCharKey), so a character whose ascension changed in the roster is
     // simulated again; its bar shows the ascension it was calculated at. Results are keyed by benchKey.
     const keyOf = new Map(chars.map(c => [c.benchKey, benchCharKey(c)]))
@@ -1380,7 +1380,7 @@ const damageMetrics = (onSelect?: () => void) => benchMetricOptions.map(opt => (
 
 const attackerMetrics = () => [
     ...damageMetrics(() => { benchAttackerBreak.value = false }),
-    { label: "Break", title: "Breakers only: break gauge each removes per 100 AV (one turn) as the damage dealer", select: () => { benchAttackerBreak.value = true } },
+    { label: "Break", title: "Break gauge each character removes per 100 AV (one turn) as the damage dealer", select: () => { benchAttackerBreak.value = true } },
 ]
 
 const benchCharts = computed(() => [
@@ -1418,10 +1418,10 @@ const benchCharts = computed(() => [
         title: benchBreakPerSp.value ? "Break gauge depletion per SP" : "Break gauge depletion per 100 AV",
         fightType: true,
         desc: [
-            `Breakers only. The break gauge each Breaker removes as the damage dealer per 100 AV (one turn), over ${benchAv()} AV (${benchTurns.value} turns) of battle on the game's battle code with infinite SP (topped up to 5 before every turn): ultimates as soon as they are ready and Battle Skill every turn (Tenebrous Arcana: Basic Attack at 3 Magic), the other four units being ${LuxMagica} without gear. Not compared to ${LuxMagica}: the bar is the gauge itself, added up over every enemy the Breaker hits; only its own hits count. ${RATE_TEXT(100)}`,
-            `Every Breaker wears its EX crystalis, Quickstep++ (SPD +8) and Mana Infusion++ (MP recovery +10%), the portrait Proof of Friends Again (SPD +20%) and Cherry Blizzard (A5, max level) as support: SPD +20%, and +2 MP on dealing damage while the enemies carry 2 or more debuffs.`,
-            `The number under each icon is the SP the Breaker's own actions cost per 100 AV: its Battle Skills minus the SP it generates itself (+1 per Basic Attack, its own SP gain effects). SP gained on enemy break (e.g. Tenebrous Arcana's A2) counts too: each enemy is broken once (see below). ${benchBreakPerSp.value ? "Break per SP sorts the Breakers from least to most SP efficient; a rotation that costs no SP shows as \"no SP\" at the end." : "Switch \"Break per\" to SP to see the break per SP spent."}`,
-            `${levelsOnlyDescription.value} ${benchEnemyText.value} with 3000 DEF, weak to every element (+20% break gauge depletion) and a break gauge that never runs out, with one exception: the damage dealer's first hit on each enemy breaks it, so on-break effects (Weakness, follow-ups, SPD, SP, ...) trigger once per enemy, as in the damage charts. The enemy recovers right away, the way a broken enemy recovers at its turn start, and is never broken again. Every hit counts the full break value the game computes for it, the breaking hit included, so the bars show what the Breaker removes from a gauge that never runs out, plus what its on-break effects add. They never act. Single-target and proximity skills aim at the middle enemy. ${AILMENT_TEXT}`,
+            `The break gauge each character removes as the damage dealer per 100 AV (one turn), over ${benchAv()} AV (${benchTurns.value} turns) of battle on the game's battle code with infinite SP (topped up to 5 before every turn): ultimates as soon as they are ready and Battle Skill every turn (Tenebrous Arcana: Basic Attack at 3 Magic), the other four units being ${LuxMagica} without gear. Not compared to ${LuxMagica}: the bar is the gauge itself, added up over every enemy the character hits; only its own hits count. A hit's break value is the skill's own when it has one, otherwise the game's table by skill (Basic Attack, Battle Skill, Ultimate), range and the attacker's role, where a Breaker's hit depletes about twice as much as any other role's. ${RATE_TEXT(100)}`,
+            `Every character wears its EX crystalis, Quickstep++ (SPD +8) and Mana Infusion++ (MP recovery +10%), the portrait Proof of Friends Again (SPD +20%) and Cherry Blizzard (A5, max level) as support, which only works on Breakers: SPD +20%, and +2 MP on dealing damage while the enemies carry 2 or more debuffs.`,
+            `The number under each icon is the SP the character's own actions cost per 100 AV: its Battle Skills minus the SP it generates itself (+1 per Basic Attack, its own SP gain effects). SP gained on enemy break (e.g. Tenebrous Arcana's A2) counts too: each enemy is broken once (see below). ${benchBreakPerSp.value ? "Break per SP sorts the characters from least to most SP efficient; a rotation that costs no SP shows as \"no SP\" at the end." : "Switch \"Break per\" to SP to see the break per SP spent."}`,
+            `${levelsOnlyDescription.value} ${benchEnemyText.value} with 3000 DEF, weak to every element (+20% break gauge depletion) and a break gauge that never runs out, with one exception: the damage dealer's first hit on each enemy breaks it, so on-break effects (Weakness, follow-ups, SPD, SP, ...) trigger once per enemy, as in the damage charts. The enemy recovers right away, the way a broken enemy recovers at its turn start, and is never broken again. Every hit counts the full break value the game computes for it, the breaking hit included, so the bars show what the character removes from a gauge that never runs out, plus what its on-break effects add. They never act. Single-target and proximity skills aim at the middle enemy. ${AILMENT_TEXT}`,
             `The 100% crit bars: the same battles (the main one and each ailment one) with every unit of the team critting on every hit (base crit rate set to 100%), for kits that react to crits (on-crit effects, crit-consuming buffs). Crits themselves don't change the break value. Like the other extra bars, a crit bar only shows when it changes the result, and an ailment + crit bar only when it differs from both the ailment bar and the crit bar (otherwise it is folded into the one it matches).`,
         ],
         chart: buildBenchChart("break"),

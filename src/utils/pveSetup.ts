@@ -16,6 +16,7 @@ export type PvEControl = "auto" | "manual"
 export interface PvESetup {
     stageId: number
     wave: number                     // wave shown in Max Damage (index)
+    phase?: number                   // that wave's boss form step shown in Max Damage (1 = first; models/PvEBattle.wavePhases)
     target: number                   // main target of single-target skills (index in that wave)
     broken: boolean[]                // per enemy of that wave
     breakRate: (number | null)[]     // per enemy broken DMG rate in %, null = the enemy's max
@@ -122,6 +123,7 @@ export function sanitizePvESetup(raw: unknown): PvESetup {
     return {
         stageId: int(s.stageId, 0, 1e12, 0),
         wave: int(s.wave, 0, 50, 0),
+        phase: int(s.phase, 1, 20, 1),
         target: int(s.target, 0, MAX_ENEMIES - 1, 0),
         broken: asArray(s.broken).slice(0, MAX_ENEMIES).map(b => b === true),
         breakRate: asArray(s.breakRate).slice(0, MAX_ENEMIES).map(r => typeof r === "number" && Number.isFinite(r) ? int(r, 0, 100000, 0) : null),

@@ -19,7 +19,7 @@ import { fileURLToPath } from "url";
 import { benchKioku, LuxBenchCharts } from "../../src/models/LuxBench";
 import { kiokuData } from "../../src/utils/helpers";
 import { KiokuConstants, withMaxLevelsForPlayerLevel } from "../../src/types/KiokuTypes";
-import { KiokuRole, LuxMagica } from "../../src/types/enums";
+import { LuxMagica } from "../../src/types/enums";
 import {
     BENCH_ENEMY_COUNTS, BENCH_INFINITE_SP, BENCH_SEEDS, BENCH_TURN_OPTIONS, LUX_BENCH_VERSION, benchCharKey, encodePrecalcEntry,
     setupKey, type BenchPrecalcFile, type BenchSetup, type BenchUnit,
@@ -106,8 +106,8 @@ async function main() {
         const sk = setupKey(setupOf({ chart, enemies: e, turns: t }))
         const cfg: Config = { label: configLabel(chart, e, t), total: 0, cached: 0, todo: 0, done: 0, failed: 0, failures: [] }
         configs.push(cfg)
-        // the break chart only has Breakers (KiokuGridPage chartCharacters)
-        for (const name of names.filter(n => chart !== "break" || kiokuData[n].role === KiokuRole.Breaker)) for (const a of ascensions) {
+        // every chart has every character (KiokuGridPage chartCharacters)
+        for (const name of names) for (const a of ascensions) {
             cfg.total++
             if (!force && file.s[sk]?.[benchCharKey(unitOf(name, a))]) { cfg.cached++; continue }
             cfg.todo++

@@ -17,7 +17,8 @@ export interface MaxDamageRequest {
     slots: TeamSlot[]            // filled team slots, in team order
     stageId: number
     waveIdx: number
-    wave: QuestEnemyAppearance[] // the enemies at the wave's start (the page's list, result index order)
+    phase?: number               // the wave boss's form step (battle/EngineMaxDamage EngineMaxDmgStage.phase)
+    wave: QuestEnemyAppearance[] // the enemies at the wave's (phase's) start (the page's list, result index order)
     dealerPos: number
     opts: MaxDmgOptions
 }
@@ -52,7 +53,7 @@ function next() {
     setTimeout(() => {
         try {
             if (pending && pending.id > req.id) return
-            const result = computeMaxDamageEngine(req.slots.map(kiokuOf), { stageId: req.stageId, waveIdx: req.waveIdx }, req.wave, req.dealerPos, req.opts)
+            const result = computeMaxDamageEngine(req.slots.map(kiokuOf), { stageId: req.stageId, waveIdx: req.waveIdx, phase: req.phase }, req.wave, req.dealerPos, req.opts)
             self.postMessage({ id: req.id, result } satisfies MaxDamageMessage)
         } catch (e) {
             self.postMessage({ id: req.id, error: String((e as Error)?.stack ?? e) } satisfies MaxDamageMessage)
@@ -97,6 +98,7 @@ function scoreBatch(msg: TeamScoreBatch) {
 export interface LoadoutContext {
     stageId: number
     waveIdx: number
+    phase?: number
     wave: QuestEnemyAppearance[]
     dealerPos: number
     opts: MaxDmgOptions
@@ -119,7 +121,7 @@ function loadoutKioku(slot: TeamSlot): PvPKioku {
 }
 
 function scoreLoadout(slots: TeamSlot[], c: LoadoutContext): LoadoutScore | undefined {
-    const result = computeMaxDamageEngine(slots.map(loadoutKioku), { stageId: c.stageId, waveIdx: c.waveIdx }, c.wave, c.dealerPos,
+    const result = computeMaxDamageEngine(slots.map(loadoutKioku), { stageId: c.stageId, waveIdx: c.waveIdx, phase: c.phase }, c.wave, c.dealerPos,
         { ...c.opts, onlyPos: c.dealerPos, scoreOnly: true, trace: false })
     const m = result.members[c.dealerPos]
     const cols = [...(m?.skills ?? []), ...(m?.switchSkill ? [m.switchSkill] : [])]
@@ -162,7 +164,7 @@ function scoreVariant(change: VariantChange, c: VariantContext): VariantColumn[]
         ...c.opts, excluded, stacks, vortexEnemies: { ...c.opts.vortexEnemies, ...change.vortexEnemies },
         onlyPos: c.dealerPos, scoreOnly: true, trace: false,
     }
-    const result = computeMaxDamageEngine(c.slots.map(loadoutKioku), { stageId: c.stageId, waveIdx: c.waveIdx }, c.wave, c.dealerPos, opts)
+    const result = computeMaxDamageEngine(c.slots.map(loadoutKioku), { stageId: c.stageId, waveIdx: c.waveIdx, phase: c.phase }, c.wave, c.dealerPos, opts)
     const m = result.members[c.dealerPos]
     return [...(m?.skills ?? []), ...(m?.switchSkill ? [m.switchSkill] : [])]
         .map(s => ({ label: s.label, name: s.name, perEnemy: s.perEnemy.map(x => ({ normal: x.normal, crit: x.crit })) }))

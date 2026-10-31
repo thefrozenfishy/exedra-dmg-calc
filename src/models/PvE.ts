@@ -57,6 +57,9 @@ for (const a of questEnemyAppearanceJson as QuestEnemyAppearance[]) {
     (appearancesByStage.get(a.questStageMstId) ?? appearancesByStage.set(a.questStageMstId, []).get(a.questStageMstId)!).push(a)
 }
 
+const appearancesById = new Map<number, QuestEnemyAppearance>((questEnemyAppearanceJson as QuestEnemyAppearance[]).map(a => [a.questEnemyAppearanceMstId, a]))
+export const appearanceById = (questEnemyAppearanceMstId: number) => appearancesById.get(questEnemyAppearanceMstId)
+
 export const questStages = new Map<number, QuestStage>((questStageJson as any[]).map(s => [s.questStageMstId, s]))
 
 // English labels for QuestCategoryMst (the master only has Japanese names).
