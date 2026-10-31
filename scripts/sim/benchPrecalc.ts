@@ -102,7 +102,7 @@ async function main() {
     const items: Item[] = []
     // one config = one chart x fight size x battle length, i.e. one setup in the file; tracked for the progress log
     const configs: Config[] = []
-    for (const chart of charts) for (const e of enemies) for (const t of turns) {
+    for (const chart of charts) for (const t of turns) for (const e of enemies) {
         const sk = setupKey(setupOf({ chart, enemies: e, turns: t }))
         const cfg: Config = { label: configLabel(chart, e, t), total: 0, cached: 0, todo: 0, done: 0, failed: 0, failures: [] }
         configs.push(cfg)
