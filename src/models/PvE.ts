@@ -154,6 +154,7 @@ import multiRaidJson from "../assets/base_data/getMultiRaidMstList.json";
 import multiRaidBonusJson from "../assets/base_data/getMultiRaidBattleBonusMstList.json";
 import multiRaidExCharacterBonusJson from "../assets/base_data/getMultiRaidExCharacterBonusMstList.json";
 import questBuffJson from "../assets/base_data/getQuestBuffMstList.json";
+import calculationPointPolicyJson from "../assets/base_data/getCalculationPointPolicyMstList.json";
 export interface SoloRaidSeasonBuff {
     soloRaidSeasonBuffMstId: number, groupId: number, passiveSkillMstId: number, enhancedPassiveSkillMstId: number,
     buffPointChargePassiveSkillMstId: number, maxBuffPoint: number, maxBuffPointOnEnhanced: number, enhancedSkillTurnGaugeValue: number
@@ -162,6 +163,28 @@ export interface SoloRaidPartyBuff { soloRaidPartyBuffMstId: number, groupId: nu
 export interface SoloRaidInfo { soloRaidMstId: number, difficulty: number, limitRoundCount: number, season?: SoloRaidSeasonBuff, partyBuffs: SoloRaidPartyBuff[] }
 // "Vanguard Base Points" passive (SoloRaidBuffReferee commonCharge): sent by the server, not in a master table.
 export const SOLO_RAID_COMMON_CHARGE_PASSIVE = 1600000
+// ---- Crisis (Solo Raid) score ----
+// The server computes it: SoloRaidApi.FinalizeStageForUser sends battleInfo + battleLog and gets back
+// Network.Definition.SoloRaid.ScoreInfo { score, difficultyScore, clearRoundBonus, battleCountBonus, bossRestHpBonus,
+// battleCount, bossRestHp, bossMaxHp, totalRoundCount }. The coefficients are CalculationPointPolicyMst policyType 7
+// (difficultyScore[difficulty], battleCountBonus[difficulty][battleCount 1-11], bossRestHpBonus[rest HP per mille, step 10]
+// [difficulty], clearRoundBonusDifficultyRate[difficulty]). score = the sum of the four (matches in-game result screens).
+// [UNCERTAIN] clearRoundBonus = rate * 360 - floor(rate * AV / 1000): fitted to two Easy clears (Graffiti Witch, rate 2586:
+// 140.963 AV -> 930,596, 179.756 AV -> 930,496); a per-round rule (-100 per round) fits those two as well.
+// [UNCERTAIN] AV of earlier attempts is added up; the rest HP lookup floors to the 1% row; battle counts past 11 use row 11.
+const crisisCoef = new Map<string, number>((calculationPointPolicyJson as any[])
+    .filter(r => r.policyType === 7)
+    .map(r => [`${r.coefficientName}|${r.conditionValue}|${r.conditionValue2}`, r.value]))
+export interface CrisisScore { difficultyScore: number, bossRestHpBonus: number, clearRoundBonus: number, battleCountBonus: number, total: number }
+export function crisisScore(difficulty: number, battleCount: number, av: number, bossRestPermille = 0): CrisisScore {
+    const c = (name: string, c1: number, c2 = 0) => crisisCoef.get(`${name}|${c1}|${c2}`) ?? 0
+    const rate = c('clearRoundBonusDifficultyRate', difficulty)
+    const difficultyScore = c('difficultyScore', difficulty)
+    const bossRestHpBonus = c('bossRestHpBonus', Math.min(1000, Math.max(0, Math.floor(bossRestPermille / 10) * 10)), difficulty)
+    const clearRoundBonus = Math.max(0, rate * 360 - Math.floor(rate * av / 1000))
+    const battleCountBonus = c('battleCountBonus', difficulty, Math.min(11, Math.max(1, battleCount)))
+    return { difficultyScore, bossRestHpBonus, clearRoundBonus, battleCountBonus, total: difficultyScore + bossRestHpBonus + clearRoundBonus + battleCountBonus }
+}
 export function soloRaidInfo(questStageMstId: number): SoloRaidInfo | undefined {
     const st = (soloRaidStageJson as any[]).find(s => s.questStageMstId === questStageMstId)
     if (!st) return undefined

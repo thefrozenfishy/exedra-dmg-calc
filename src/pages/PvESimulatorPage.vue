@@ -374,7 +374,11 @@
                     <p v-if="!isScoreAttack" class="sa-hint">This stage is not a Score Attack stage; the score
                         uses {{ dealer?.name ?? 'the dealer' }}'s crit damage above with the numbers below.</p>
                     <div class="sa-fields">
-                        <label class="field"
+                        <div v-if="saStageScore" class="field"
+                            title="From the master data: the stage's fixed difficulty score, else the table value for its rank; the multiplier is the rank's difficulty coefficient">
+                            <span class="field-label">Difficulty score ({{ saStageScore.isEx ? 'EX' : `rank ${saStageScore.difficulty}` }})</span>
+                            <span>{{ saStageScore.difficultyScore.toLocaleString() }} · ×{{ saStageScore.coefficient.toFixed(2) }}</span></div>
+                        <label v-else class="field"
                             title="To find: check the final score screen. This changes for each difficulty">
                             <span class="field-label">Difficulty score</span>
                             <input v-model.number="difficultyScore" type="number" /></label>
@@ -383,7 +387,7 @@
                         <label class="field"><span class="field-label">Turns</span>
                             <input v-model.number="saTurns" type="number" step="1" min="1" max="16" /></label>
                         <label class="field"
-                            title="To find: calculate (damage dealt / points from damage done) in an SA run. This changes for each SA">
+                            title="Damage per Max DMG point: (DMG shown under Max DMG) / (Max DMG points) on a result screen. Differs per Score Attack (e.g. 56, 140; Box Witch EX 9.5)">
                             <span class="field-label">Score multiplier</span>
                             <input v-model.number="scoreMultiplier" type="number" step="0.1" min="0" /></label>
                     </div>
@@ -681,7 +685,7 @@
             </div>
 
             <BattleTimeline :states="battleOutput" :show-sp="false" :rng-editable="rngMode === 'manual'"
-                @decide="onDecide" />
+                :crisis="crisisTimeline" @decide="onDecide" />
             <div v-if="pending" ref="pickPanel" class="pick-panel">
                 <div class="pick-head">{{ pending.kind === 'target' ? 'Pick a target' :
                     pending.label.startsWith('Between') ?
@@ -746,7 +750,7 @@ import { stageWaves, stageWaveMeta, summonTemplates, wavePositionIds, enemyName,
 import { stageBattleType, wavePhases, waveStartUnits } from '../models/PvEBattle'
 import { phaseWave } from '../battle/EngineMaxDamage'
 import passiveMstJson from '../assets/base_data/getPassiveSkillMstList.json'
-import { getScoreAttackStage } from '../models/PvEScore'
+import { getScoreAttackStage, scoreAttackStageScore, scoreAttackScoreParts, type ScoreAttackScoreInputs } from '../models/PvEScore'
 import { isEffectValueType, type MaxDmgEffect, type MaxDmgResult, type MemberDamage, type SkillDamage } from '../models/MaxDamage'
 import { buildSlotKioku, buildPvEExport, parsePvEExport, downloadText, exportToText, rekeyPicks, type PvEExport } from '../utils/pvpExport'
 import { describePvESetup, sanitizePvESetup, stagePath, type PvESetup } from '../utils/pveSetup'
@@ -1503,8 +1507,17 @@ function setSectionOn(effects: EffectView[], on: boolean) {
 // Score Attack score, same estimate as the previous version of this page.
 const isScoreAttack = computed(() => !!getScoreAttackStage(stageId.value))
 const saDamage = computed(() => dealer.value?.best?.total.crit ?? 0)
-const saScore = computed(() => (difficultyScore.value + Number((20 * (saDamage.value / scoreMultiplier.value + (90000 - 5000 * saTurns.value) + 15000 * hpPercentTeam.value / 100)).toFixed(0))).toLocaleString())
-const saScoreTitle = computed(() => `${difficultyScore.value} + 20 * (${saDamage.value} / ${scoreMultiplier.value} + (90000 - 5000 * ${saTurns.value}) + 15000 * ${hpPercentTeam.value / 100})`)
+const saStageScore = computed(() => scoreAttackStageScore(stageId.value))
+const saInputs = computed<ScoreAttackScoreInputs>(() => {
+    const st = saStageScore.value
+    return { difficultyScore: st ? st.difficultyScore : difficultyScore.value, scoreMultiplier: scoreMultiplier.value, turns: saTurns.value,
+        hpPercent: hpPercentTeam.value, coefficient: st?.coefficient ?? 20, roundScale: st?.roundScale ?? 1 }
+})
+const saScore = computed(() => scoreAttackScoreParts(saDamage.value, saInputs.value).final.toLocaleString())
+const saScoreTitle = computed(() => {
+    const i = saInputs.value, p = scoreAttackScoreParts(saDamage.value, i)
+    return `${i.difficultyScore.toLocaleString()} + ${i.coefficient} × (Max DMG ${p.maxDmg.toLocaleString()} + Clear Rounds ${p.clearRounds.toLocaleString()} + Remaining HP ${p.remainingHp.toLocaleString()})`
+})
 
 // ---- battle simulator ----
 // shallowRef + markRaw: keep the engine out of Vue reactivity (object identity matters, see PvP page).
@@ -1609,6 +1622,7 @@ const partyBuffChoice = computed<string>({
     set: v => { partyBuffId.value = Number(v) },
 })
 const raidAttempts = shallowRef<RaidCarry[]>([])
+const crisisTimeline = computed(() => raid.value ? { difficulty: raid.value.difficulty, battleCount: raidAttempts.value.length + 1, avBefore: raidAttempts.value.reduce((t, a) => t + (a.elapsed ?? 0), 0) } : undefined)
 const passiveNames = new Map<number, { name: string, description: string }>((passiveMstJson as any[]).map(p => [p.passiveSkillMstId, { name: p.name, description: String(p.description ?? '').replace(/<br>/g, '\n') }]))
 const passiveInfo = (id: number) => passiveNames.get(id) ?? { name: `Passive ${id}`, description: '' }
 

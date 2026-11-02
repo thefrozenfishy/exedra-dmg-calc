@@ -36,6 +36,7 @@ export interface RaidCarry {
     enemies: { appearanceId: number, positionId: number, hp: number, breakGauge: number, breakBonus: number, turnGauge: number }[]
     countdown?: { num: number, damage: number }
     seasonBuff?: { active: boolean, point: number, gauge: number }
+    elapsed?: number             // AV this attempt used (app side, for the Crisis score)
 }
 
 export interface EngineBattleOptions {
@@ -254,6 +255,7 @@ export class EngineBattle {
             enemies: (b.enemyInfoList ?? []).map((e: any) => ({ appearanceId: e.questEnemyAppearanceMstId, positionId: e.enemyIndex, hp: e.hp, breakGauge: e.breakGauge, breakBonus: e.breakBonus, turnGauge: e.turnGaugeValue })),
             countdown: b.enemyCountDownNum > 0 ? { num: b.enemyCountDownNum, damage: b.enemyCountDownDamage } : undefined,
             seasonBuff: { active: b.isSeasonBuffActive, point: b.seasonBuffPoint, gauge: b.seasonBuffTurnGaugeValue },
+            elapsed: this.elapsed,
         }
     }
 

@@ -87,11 +87,11 @@ Lower = faster but more likely to skip a team that could have closed the gap.
             <div class="sa-score-section">
                 <h4>Score Attack Score </h4>
                 <div class="sa-fields">
-                    <label class="field"
-                        title="To find: check the final score screen. This changes for each difficulty">
-                        <span class="field-label">Difficulty score</span>
-                        <input v-model.number="difficultyScore" type="number" />
-                    </label>
+                    <div v-if="saStageScore" class="field"
+                        title="From the master data: the stage's fixed difficulty score, else the table value for its rank; the multiplier is the rank's difficulty coefficient">
+                        <span class="field-label">Difficulty score ({{ saStageScore.isEx ? 'EX' : `rank ${saStageScore.difficulty}` }})</span>
+                        <span>{{ saStageScore.difficultyScore.toLocaleString() }} · ×{{ saStageScore.coefficient.toFixed(2) }}</span>
+                    </div>
                     <label class="field">
                         <span class="field-label">HP remaining (%)</span>
                         <input v-model.number="hpPercentTeam" type="number" step="1" min="0" max="100" />
@@ -342,7 +342,7 @@ import ImageActionsToolbar from '../components/ImageActionsToolbar.vue'
 import { useFriendStore } from "../store/friendStore"
 import { findBestTeamEngine, scenarioOf } from '../models/EngineBestTeam'
 import { EngineTeamPool } from '../models/EngineTeamPool'
-import { getScoreAttackStage, type ScoreAttackScoreInputs } from '../models/PvEScore'
+import { getScoreAttackStage, scoreAttackStageScore, type ScoreAttackScoreInputs } from '../models/PvEScore'
 
 const enemies = useEnemyStore()
 const store = useCharacterStore()
@@ -404,8 +404,10 @@ watch(() => stageRef.value?.selection?.stageId, (id, old) => {
 })
 const saScoreInputs = computed<ScoreAttackScoreInputs | undefined>(() =>
     runStageId.value !== undefined && getScoreAttackStage(runStageId.value)
-        ? { difficultyScore: difficultyScore.value, scoreMultiplier: scoreMultiplier.value, turns: saTurns.value, hpPercent: hpPercentTeam.value }
+        ? (st => ({ difficultyScore: st?.difficultyScore ?? difficultyScore.value, scoreMultiplier: scoreMultiplier.value, turns: saTurns.value,
+            hpPercent: hpPercentTeam.value, coefficient: st?.coefficient, roundScale: st?.roundScale }))(scoreAttackStageScore(runStageId.value))
         : undefined)
+const saStageScore = computed(() => { const id = stageRef.value?.selection?.stageId; return id !== undefined ? scoreAttackStageScore(id) : undefined })
 
 const topTeamsPerKioku = useSetting("topTeamsPerKioku", 5)
 const topTeams = useSetting("topTeams", 20)

@@ -409,6 +409,17 @@ Ultimates (SpecialAttackAct) and follow-ups: only ExecuteSkill - no TurnStart/Tu
   passive 714000511 -> skill 2006038 SUMMON summonId 1 x2 while fewer than 3 allies besides her). [C]
 - Judge: RoundLimit 100 (loss); victoryRound > 0 -> win when the next act's round exceeds it. [C]
 - Score formulas (Score Attack / PvP points / Solo Raid) are **not** in the battle core (client UI + server). [C]
+- Crisis score (server, SoloRaidApi.FinalizeStageForUser -> SoloRaid.ScoreInfo): difficultyScore + bossRestHpBonus +
+  clearRoundBonus + battleCountBonus, coefficients in CalculationPointPolicyMst policyType 7 (difficultyScore[diff],
+  battleCountBonus[diff][battles 1-11, x0.7 each], bossRestHpBonus[rest HP permille step 10][diff],
+  clearRoundBonusDifficultyRate[diff]). Sum matches in-game result screens. [C] clearRoundBonus = rate*360 -
+  floor(rate*AV/1000), fitted to 2 Easy clears (140.963 AV -> 930,596; 179.756 AV -> 930,496); -100/round also fits. [U]
+  App: models/PvE.crisisScore, shown per action in the PvE Simulator timeline.
+- Score Attack score (server, ScoreAttack.ScoreInfo; CalculationPointPolicyMst policyType 1), matches 3 result screens:
+  final = DifficultyScore + coef * (floor(dmg / divisor) + (90000 - 5000*rounds)*(EX ? 1.25 : 1) + floor(15000 * HP ratio)).
+  DifficultyScore = ScoreAttackStageMst.fixedDifficultyScore || difficultyBonus[difficulty]; coef =
+  difficultyCoefficient[difficulty]/1000 (50 -> 20, EX 51 -> 25). [C] The divisor differs per SA (56, 140, EX 9.5 =
+  divideDamageBonus/1000) and is not in client data; EX round x1.25 from one screen. [U] App: models/PvEScore.
 
 ## 12. Solo Raid (BattleType 9, SoloRaidGameDirector)
 

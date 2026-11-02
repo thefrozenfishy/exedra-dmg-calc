@@ -1,7 +1,21 @@
 # Status (update at the end of every session)
 
-_Last updated: 2026-10-31: Kioku Grid break chart for every character (not only Breakers); before: 2026-10-30 (2): stage-mode buffs in Max Damage / Highest Dmg Calc, quest buffs, Link Raid EX bonus; before: 2026-10-30: Kioku Grid damage dealer chart "Break" display; before: 2026-10-29 (5): game 3.22.0 (battle code identical, @rva tags moved; branch claude/version-3.22.0); before: 2026-10-29 (3): Best SA Team calculator speed (~60x on a large search); before: 2026-10-29 (2): Kioku Grid "Multiple ascensions", merged equal variant bars, precalculated bench file; before: 2026-10-29: Kioku Grid bench gear + average Attacker self buffs on Lux; before: 2026-10-24 (3): second-generation engine and Fight Solver removed (branch `remove-gen2`); before: 2026-10-24 (battle-start passive order: kit -> portrait -> support -> crys; before: Kioku Grid ailment bars: 112/305/309 conditions, Max Damage enemies carry Weakness/Stun); before: 2026-10-15 (game 3.21.0: dumped + decompiled by Claude on Windows, engine re-ported to 3.21.0; branch claude/version-3.21.0); before: 2026-10-14 (Max Damage + Kioku Grid bench on the 1:1 engine); before: 2026-10-10 (1:1 port in src/engine started); before: 2026-10-03 (passive states per giver, UP_HP_FIXED max HP; earlier: duplicate active-skill states); before: 2026-10-02 (game 3.19.1: version diff + newsletter, Magic Seal, break/notice team conditions, IMM_SLIP_DMG burst; branch claude/version-3.19.1)._
+_Last updated: 2026-11-02: Crisis score in the PvE Simulator timeline; before: 2026-10-31: Kioku Grid break chart for every character (not only Breakers); before: 2026-10-30 (2): stage-mode buffs in Max Damage / Highest Dmg Calc, quest buffs, Link Raid EX bonus; before: 2026-10-30: Kioku Grid damage dealer chart "Break" display; before: 2026-10-29 (5): game 3.22.0 (battle code identical, @rva tags moved; branch claude/version-3.22.0); before: 2026-10-29 (3): Best SA Team calculator speed (~60x on a large search); before: 2026-10-29 (2): Kioku Grid "Multiple ascensions", merged equal variant bars, precalculated bench file; before: 2026-10-29: Kioku Grid bench gear + average Attacker self buffs on Lux; before: 2026-10-24 (3): second-generation engine and Fight Solver removed (branch `remove-gen2`); before: 2026-10-24 (battle-start passive order: kit -> portrait -> support -> crys; before: Kioku Grid ailment bars: 112/305/309 conditions, Max Damage enemies carry Weakness/Stun); before: 2026-10-15 (game 3.21.0: dumped + decompiled by Claude on Windows, engine re-ported to 3.21.0; branch claude/version-3.21.0); before: 2026-10-14 (Max Damage + Kioku Grid bench on the 1:1 engine); before: 2026-10-10 (1:1 port in src/engine started); before: 2026-10-03 (passive states per giver, UP_HP_FIXED max HP; earlier: duplicate active-skill states); before: 2026-10-02 (game 3.19.1: version diff + newsletter, Magic Seal, break/notice team conditions, IMM_SLIP_DMG burst; branch claude/version-3.19.1)._
 
+
+## 2026-11-02: Crisis score in the PvE Simulator (user's request)
+
+- Crisis (Solo Raid) score found: server-side (SoloRaid.ScoreInfo), coefficients in CalculationPointPolicyMst policyType 7
+  (MECHANICS.md section 11). `models/PvE.crisisScore(difficulty, battleCount, AV, restPermille)`; BattleTimeline gets an
+  optional `crisis` prop and shows "Clear now: N pts" next to the AV on every entry (tooltip = the 4 parts).
+  RaidCarry.elapsed (app side) adds earlier attempts' AV [UNCERTAIN whether the server sums AV over attempts].
+- clearRoundBonus fit [UNCERTAIN]: rate*360 - floor(rate*AV/1000) reproduces both user screenshots (Graffiti Witch Easy,
+  1,251,596 at 140.963 AV / 1,251,496 at 179.756 AV, probe scripts/sim/.probe-crisis-av.ts / .probe-crisis-score.ts).
+  A slow clear (round 4, ~400 AV) separates it from a -100/round rule (929,926 vs 930,296).
+- Score Attack: formula fitted to 3 user result screens (Sayaka r50, Box Witch EX, a rank 50 event SA), see MECHANICS.md.
+  models/PvEScore.scoreAttackStageScore fills Difficulty score + multiplier (x20 / x25) from master data on SA stages
+  (PvE Simulator, Best Team Finder); the damage divisor ("Score multiplier") stays manual. Probe .probe-sa-score.ts.
+- Fixtures 16/16, app type-check 222 (none in changed files). No src/engine change.
 
 ## 2026-10-30 (2): stage-mode buffs everywhere; "Highest Dmg Calc" (user's request)
 

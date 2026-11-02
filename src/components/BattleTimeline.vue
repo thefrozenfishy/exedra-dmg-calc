@@ -54,6 +54,8 @@
                     · cancel damage {{ fmt(state.countdown.cancelTotal) }} / {{ fmt(state.countdown.cancelMax) }}</span>
                 <span v-if="state.elapsed !== undefined" title="Turn-gauge time spent so far / current turn (round)"> · <b>{{
                     state.elapsed.toFixed(1) }} AV</b> / {{ state.round }} Turn</span>
+                <span v-if="crisis && state.elapsed !== undefined" class="crisis-score" :title="crisisTitle(state.elapsed)"> · Clear now:
+                    <b>{{ fmt(crisisAt(state.elapsed).total) }}</b> pts</span>
             </div>
 
             <ul v-if="idx > 0 && state.events?.length" class="battle-log">
@@ -213,12 +215,17 @@
 // One entry per executed action (turn actions, ultimates, extra actions, combo steps, follow-ups),
 // shared by the PvP and single battle pages.
 import { type BattleSnapshot, TargetType, type TeamSnapshot } from '../types/KiokuTypes'
+import { crisisScore } from '../models/PvE'
 
 import type { RngEvent, RngKind } from '../models/BattleRng'
 
 // rngEditable: Manual RNG mode - rolls get a checkbox / dropdown and emit `decide` when changed.
 // Manual targeting picks (userPick) are always changeable.
-const props = withDefaults(defineProps<{ states: BattleSnapshot[], showSp?: boolean, rngEditable?: boolean }>(), { showSp: true, rngEditable: false })
+// crisis: Crisis (Solo Raid) stage -> each entry shows the final score if the boss died at that AV (models/PvE.crisisScore).
+const props = withDefaults(defineProps<{
+    states: BattleSnapshot[], showSp?: boolean, rngEditable?: boolean,
+    crisis?: { difficulty: number, battleCount: number, avBefore: number }
+}>(), { showSp: true, rngEditable: false })
 const emit = defineEmits<{ decide: [event: RngEvent, value: boolean | number] }>()
 
 const KIND_LABEL: Record<RngKind, string> = { crit: 'Crit', effect: 'Effect', target: 'Target', skill: 'Skill', action: 'Action' }
@@ -261,6 +268,13 @@ function actionNumber(idx: number) {
 const round = (spd: number) => spd.toFixed(2)
 const formatSpdBuffs = (buffs: [number, string, string?][]) => buffs.map(buff => `${round(buff[0])} given by "${buff[1]}" applied by ${buff[2] ?? "UNKNOWN"}`).join("\n")
 const fmt = (n: number) => Math.round(n).toLocaleString()
+const crisisAt = (elapsed: number) => crisisScore(props.crisis!.difficulty, props.crisis!.battleCount, props.crisis!.avBefore + elapsed)
+function crisisTitle(elapsed: number): string {
+    const c = props.crisis!, sc = crisisAt(elapsed)
+    return [`Crisis score if the boss is defeated at this AV (attempt ${c.battleCount}${c.avBefore ? `, ${(c.avBefore + elapsed).toFixed(1)} AV over all attempts` : ''}):`,
+        `Difficulty Score ${fmt(sc.difficultyScore)}`, `Boss Remaining HP ${fmt(sc.bossRestHpBonus)}`,
+        `Clear Rounds ${fmt(sc.clearRoundBonus)} (rate × 360 − rate × AV / 1000, fitted)`, `Raids ${fmt(sc.battleCountBonus)}`].join('\n')
+}
 const pct = (v: number, max: number) => `${max > 0 ? Math.max(0, Math.min(100, (v / max) * 100)) : 0}%`
 function hpClass(hp: number, maxHp: number) {
     const r = maxHp > 0 ? hp / maxHp : 0
