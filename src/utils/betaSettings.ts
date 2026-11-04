@@ -497,7 +497,6 @@ export const BETA_SECTIONS = [
                             ],
                         },
                     },
-                    { name: "L'Ombre", ascension: 4, },
                     { name: "Light of Reckoning", ascension: 5, },
                     {
                         name: "La Danse Macabre", ascension: 4,
@@ -567,6 +566,7 @@ export const BETA_SECTIONS = [
                     { name: "Cherry Ballad", ascension: 4, },
                     { name: "Atomo Arrabbiato", ascension: 4, },
                     { name: "La Danse Macabre", ascension: 4, },
+                    { name: "L'Ombre", ascension: 4, },
 
                     // Feli, Sana etc not on the list, never the right call to wishlist them
                 ] as WishlistEntry[],
