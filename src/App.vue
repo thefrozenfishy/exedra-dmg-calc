@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import CloudSyncWidget from './components/CloudSyncWidget.vue'
 import NewBadge from './components/NewBadge.vue'
+import TitleSelfBuffAnim from './components/TitleSelfBuffAnim.vue'
 import { isBeta } from './utils/betaSettings';
 import { useRouter } from 'vue-router'
 import { computed } from 'vue'
@@ -25,6 +26,8 @@ const titles: [string, number, number?][] = [
     ["[img:rika_bonked.webp][img:lys_bonking.webp]", 0, 1],
     ["[img:lys_bonked.webp][img:rika_bonking.webp]", 0, 1],
     ["[img:rika.webp]", 2],
+    // TODO: placeholder icon, swap for the real one
+    ["[anim:rika.webp]", 0, 100],
 ]
 
 function pickWeightedTitle(titles: [string, number, number?][]): string {
@@ -48,7 +51,7 @@ function pickWeightedTitle(titles: [string, number, number?][]): string {
 
 const title = pickWeightedTitle(titles)
 
-type TitlePart = { type: 'text'; value: string } | { type: 'img'; src: string }
+type TitlePart = { type: 'text'; value: string } | { type: 'img' | 'anim'; src: string }
 
 const IMG_BASE = '/exedra-dmg-calc/header_images/'
 
@@ -59,12 +62,12 @@ function resolveImgSrc(path: string): string {
 
 function parseTitle(raw: string): TitlePart[] {
     const parts: TitlePart[] = []
-    const re = /\[img:([^\]]+)\]/g
+    const re = /\[(img|anim):([^\]]+)\]/g
     let last = 0
     let m: RegExpExecArray | null
     while ((m = re.exec(raw)) !== null) {
         if (m.index > last) parts.push({ type: 'text', value: raw.slice(last, m.index) })
-        parts.push({ type: 'img', src: resolveImgSrc(m[1].trim()) })
+        parts.push({ type: m[1] as 'img' | 'anim', src: resolveImgSrc(m[2].trim()) })
         last = m.index + m[0].length
     }
     if (last < raw.length) parts.push({ type: 'text', value: raw.slice(last) })
@@ -146,6 +149,7 @@ function routeForPath(path: string) {
                 <h1>
                     <template v-for="(part, i) in titleParts" :key="i">
                         <img v-if="part.type === 'img'" :src="part.src" alt="" class="title-img" />
+                        <TitleSelfBuffAnim v-else-if="part.type === 'anim'" :src="part.src" />
                         <template v-else>{{ part.value }}</template>
                     </template>
                 </h1>
