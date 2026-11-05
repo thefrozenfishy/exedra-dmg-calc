@@ -8,7 +8,8 @@
             <button v-for="(w, i) in waves" :key="i" type="button" class="chip" :class="{ active: waveIdx === i }"
                 @click="waveIdx = i">{{ i + 1 }} <span class="chip-count">{{ Math.min(w.length, 5) }} enem{{
                     Math.min(w.length, 5) === 1 ? 'y' : 'ies' }}<template v-if="w.length > 5"> + {{ w.length - 5 }}
-                        backup{{ w.length - 5 === 1 ? '' : 's' }}</template></span></button>
+                        backup{{ w.length - 5 === 1 ? '' : 's' }}</template><template v-if="waveAddCounts[i]"> + {{
+                            waveAddCounts[i] }} add{{ waveAddCounts[i] === 1 ? '' : 's' }}</template></span></button>
             <span class="row-hint">Teams are scored against the enemies on the field when the selected wave
                 starts.</span>
             <a v-if="wikiUrl" class="wiki-link" :href="wikiUrl" target="_blank" rel="noopener"
@@ -21,6 +22,18 @@
                     f.step === 1 ? 'start' : `from ${f.threshold / 10}% HP` }} · ATK {{ fmt(f.appearance.atk) }}</span></button>
             <span class="row-hint">The boss changes form at these HP thresholds. Teams are scored against the selected
                 form, with the enemies on the field when it comes in.</span>
+        </div>
+
+        <div v-if="summons.length" class="wave-row">
+            <span class="filters-heading">Adds</span>
+            <label v-for="a in summons" :key="a.questEnemyAppearanceMstId" class="chip"
+                :class="{ active: !summonOff.has(a.questEnemyAppearanceMstId) }" :title="summonTitle(a)">
+                <input type="checkbox" :checked="!summonOff.has(a.questEnemyAppearanceMstId)"
+                    @change="setSummon(a.questEnemyAppearanceMstId, ($event.target as HTMLInputElement).checked)" />
+                {{ enemyName(a) }}<span v-if="!summonOff.has(a.questEnemyAppearanceMstId) && !onField(a)" class="chip-count">no room</span>
+            </label>
+            <span class="row-hint">Enemies summoned during the fight. Turned on, they count as on the field, as in a full
+                enemy team (the highest damage).</span>
         </div>
 
         <div v-if="enemyInfo.length" class="derived-row">
@@ -110,7 +123,7 @@
 // that score teams against a real stage (the Best SA Team calculator). `selection` is what battle/EngineTeamScore needs.
 import { computed, ref, watch } from 'vue'
 import StagePicker from './StagePicker.vue'
-import { stageWaveMeta, wavePositionIds, enemyName, breakMstOf, ELEMENT_KEYS, soloRaidInfo, multiRaidInfo, questCampaign, SOLO_RAID_COMMON_CHARGE_PASSIVE, type QuestEnemyAppearance, type ModeChangeInfo } from '../models/PvE'
+import { stageWaveMeta, wavePositionIds, enemyName, summonCandidates, breakMstOf, ELEMENT_KEYS, soloRaidInfo, multiRaidInfo, questCampaign, SOLO_RAID_COMMON_CHARGE_PASSIVE, type QuestEnemyAppearance, type ModeChangeInfo } from '../models/PvE'
 import passiveMstJson from '../assets/base_data/getPassiveSkillMstList.json'
 import characterMstJson from '../assets/base_data/getCharacterMstList.json'
 import { wavePhases, waveStartUnits } from '../models/PvEBattle'
@@ -138,18 +151,38 @@ const phase = useSetting<number>(`${props.settingPrefix}Phase`, 1)
 const phases = computed(() => wavePhases(waveMeta.value))
 const phasePos = computed(() => phases.value.some(f => f.step === phase.value) ? phase.value : 1)
 const phaseTitle = (f: ModeChangeInfo) => `${enemyName(f.appearance)}: HP ${fmt(f.appearance.hp)} · ATK ${fmt(f.appearance.atk)} · DEF ${fmt(f.appearance.def)} · SPD ${f.appearance.speed}`
-const wave = computed(() => waveMeta.value ? phaseWave(stageId.value, wavePos.value, phasePos.value, waveStartUnits(waveMeta.value)) : [])
+const baseWave = computed(() => waveMeta.value ? phaseWave(stageId.value, wavePos.value, phasePos.value, waveStartUnits(waveMeta.value)) : [])
+// Adds: the summons the field's units can bring in during the fight (models/PvE.summonCandidates). On by default (users
+// aim for a full enemy team, the highest damage); the ones turned on are put on the field by the game's summon
+// (battle/EngineMaxDamage.phaseWave -> GetSummonedUnitList), so they are scored like the others.
+const summons = computed(() => stageId.value && baseWave.value.length ? summonCandidates(stageId.value, baseWave.value) : [])
+const summonOff = ref<Set<number>>(new Set())
+const setSummon = (id: number, on: boolean) => { const s = new Set(summonOff.value); if (on) s.delete(id); else s.add(id); summonOff.value = s }
+const summonTitle = (a: QuestEnemyAppearance) => `${enemyName(a)}: HP ${fmt(a.hp)} · ATK ${fmt(a.atk)} · DEF ${fmt(a.def)} · SPD ${a.speed}`
+const wave = computed(() => {
+    if (!waveMeta.value) return []
+    const on = summons.value.filter(a => !summonOff.value.has(a.questEnemyAppearanceMstId))
+    return on.length ? phaseWave(stageId.value, wavePos.value, phasePos.value, baseWave.value, on) : baseWave.value
+})
+const onField = (a: QuestEnemyAppearance) => wave.value.some(w => w.questEnemyAppearanceMstId === a.questEnemyAppearanceMstId)
+const waveAddCounts = computed(() => waveMetas.value.map(m => stageId.value ? summonCandidates(stageId.value, waveStartUnits(m)).length : 0))
 const mainTargetIdx = ref(0)
 const broken = ref<boolean[]>([])
 const breakRate = ref<(number | undefined)[]>([])
 
 watch(stageId, (id, old) => { if (old !== undefined && id !== old) waveIdx.value = 0 })
 watch([stageId, waveIdx], ([id, w], [oldId, oldW]) => { if (oldId !== undefined && (id !== oldId || w !== oldW)) phase.value = 1 })
-watch(wave, w => {
-    const main = w.findIndex(a => a.isMainTargetEnemy)
+watch([stageId, waveIdx, phase], () => { summonOff.value = new Set() })
+// A new field resets the per-enemy settings; an add turned on / off keeps the others' (by appearance id).
+watch(wave, (w, old) => {
+    const keep = !!old && w.some(a => old.some(o => o.questEnemyAppearanceMstId === a.questEnemyAppearanceMstId))
+    const prev = new Map((old ?? []).map((a, i) => [a.questEnemyAppearanceMstId, { broken: broken.value[i], rate: breakRate.value[i] }]))
+    const mainId = keep ? old![mainTargetIdx.value]?.questEnemyAppearanceMstId : undefined
+    const main = mainId !== undefined && w.some(a => a.questEnemyAppearanceMstId === mainId)
+        ? w.findIndex(a => a.questEnemyAppearanceMstId === mainId) : w.findIndex(a => a.isMainTargetEnemy)
     mainTargetIdx.value = main >= 0 ? main : 0
-    broken.value = w.map(a => (breakMstOf(a)?.breakPoint ?? 0) > 0)
-    breakRate.value = w.map(() => undefined)
+    broken.value = w.map(a => keep && prev.has(a.questEnemyAppearanceMstId) ? !!prev.get(a.questEnemyAppearanceMstId)!.broken : (breakMstOf(a)?.breakPoint ?? 0) > 0)
+    breakRate.value = w.map(a => keep ? prev.get(a.questEnemyAppearanceMstId)?.rate : undefined)
 }, { immediate: true })
 
 // Buffs the stage's mode gives the player's units (battle/EngineBattle.stagePassives, models/PvE.questCampaign): shown
@@ -193,7 +226,7 @@ function formTag(a: QuestEnemyAppearance): string {
     return own ? formLabel(own) : ''
 }
 const enemyInfo = computed(() => {
-    const positions = wavePositionIds(wave.value.length)
+    const positions = wavePositionIds(wave.value.length)  // [APPROXIMATION] for a field with adds (layout only)
     return wave.value.map((a, i) => {
         const b = breakMstOf(a)
         return {

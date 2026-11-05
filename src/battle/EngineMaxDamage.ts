@@ -214,6 +214,7 @@ function followTypes(effects: MaxDmgEffect[]): Set<string> {
 function buildBattle(ctx: Ctx, dealerPos: number, rnd: MaxDamageRandom): Built {
     const d = EngineBattle.createDirector(ctx.setup)
     enterWave(d, ctx.waveIdx, ctx.phase)
+    summonInto(d, ctx.enemyApps)
     const bundle = d.battleUnitBundle
     const dic: Map<number, any> = bundle.dic
     const allies = [...bundle.allyList].sort((a: any, b: any) => a._PositionId - b._PositionId)
@@ -286,14 +287,28 @@ function enterNextForm(d: any): boolean {
     return true
 }
 
+/** The summons the fight brings in that the page lists (`apps`: summon templates, conditionType 3, not yet on the field)
+ *  join the field through the game's own summon: [CONFIRMED 3.19] EnemyAppearanceGameDirectorBase.GetSummonedUnitList
+ *  (0x14A56C0, what SummonAbilityEffect.Triggering 0x19212C0 calls): free positions in PriorityPositionIds order, each
+ *  unit added with AddEnemyBattleUnit (battle-start passives both ways). In the list's order (the pages list them in
+ *  position order, so each lands where the game puts it). [APPROXIMATION] The summon skill itself (and whatever else it
+ *  does) is not run, and the summons are there from the start: Max Damage scores the full field the fight can reach. */
+function summonInto(d: any, apps: QuestEnemyAppearance[]): void {
+    const onField = new Set(d.battleUnitBundle.enemyList.map((u: any) => u._BattleParameter?._QuestEnemyAppearanceMstId))
+    const ids = apps.filter(a => a.conditionType === 3 && a.summonId > 0 && !onField.has(a.questEnemyAppearanceMstId)).map(a => a.summonId)
+    if (ids.length && typeof d.GetSummonedUnitList === "function") d.GetSummonedUnitList(ids)
+}
+
 /** The enemies on the field when phase `phase` of wave `waveIdx` starts, as the Max Damage battle builds them: their
- *  appearance ids in position order (a phase's summons included). For the pages' enemy lists (models/PvEBattle.phaseWave). */
-export function phaseFieldAppearanceIds(stageId: number, waveIdx: number, phase: number): number[] {
+ *  appearance ids in position order (a phase's summons included, and `summons`, the summon templates the page turned
+ *  on, see summonInto). For the pages' enemy lists (models/PvEBattle.phaseWave). */
+export function phaseFieldAppearanceIds(stageId: number, waveIdx: number, phase: number, summons: QuestEnemyAppearance[] = []): number[] {
     // one ally: a follow-up aimed at the team (a summon's act target) needs a unit to aim at
     filler ??= new PvPKiokuClass({ name: LuxMagica, kiokuLvl: 1, magicLvl: 1, heartphialLvl: 0, specialLvl: 1, ascension: 0, crysIDs: [], subCrysIDs: [] } as unknown as KiokuArgs)
     const d = new MaxDamageRandom(false, 0).run(() => {
         const d = EngineBattle.createDirector(setupOf([filler!], stageId))
         enterWave(d, waveIdx, phase)
+        summonInto(d, summons)
         return d
     })
     return [...d.battleUnitBundle.enemyList].sort((a: any, b: any) => a._PositionId - b._PositionId)
@@ -304,13 +319,14 @@ let filler: PvPKioku | undefined
 const fieldCache = new Map<string, QuestEnemyAppearance[]>()
 
 /** The pages' enemy list for a wave's phase (phase 1 / no phases: the wave's start units, models/PvEBattle.waveStartUnits;
- *  a later phase: what phaseFieldAppearanceIds finds on the field, summons included). */
-export function phaseWave(stageId: number, waveIdx: number, phase: number, start: QuestEnemyAppearance[]): QuestEnemyAppearance[] {
-    if (phase <= 1) return start
-    const key = `${stageId}:${waveIdx}:${phase}`
+ *  a later phase: what phaseFieldAppearanceIds finds on the field, summons included). `summons`: summon templates the
+ *  page turned on (models/PvE.summonCandidates), added where the game's summon puts them. */
+export function phaseWave(stageId: number, waveIdx: number, phase: number, start: QuestEnemyAppearance[], summons: QuestEnemyAppearance[] = []): QuestEnemyAppearance[] {
+    if (phase <= 1 && !summons.length) return start
+    const key = `${stageId}:${waveIdx}:${phase}:${summons.map(a => a.questEnemyAppearanceMstId).join(",")}`
     let out = fieldCache.get(key)
     if (!out) {
-        try { out = phaseFieldAppearanceIds(stageId, waveIdx, phase).map(appearanceById).filter((a): a is QuestEnemyAppearance => !!a) }
+        try { out = phaseFieldAppearanceIds(stageId, waveIdx, phase, summons).map(appearanceById).filter((a): a is QuestEnemyAppearance => !!a) }
         catch (e) { console.warn("Phase setup failed", e); out = start }
         fieldCache.set(key, out)
     }

@@ -8,6 +8,10 @@ import skillMstJson from "../assets/base_data/getSkillMstList.json";
 import questEnemyWaveJson from "../assets/base_data/getQuestEnemyWaveMstList.json";
 import soloRaidStageJson from "../assets/base_data/getSoloRaidStageMstList.json";
 import modeChangeJson from "../assets/base_data/getQuestEnemyModeChangeMstList.json";
+import enemySkillSetJson from "../assets/base_data/getQuestEnemySkillSetMstList.json";
+import enemyConditionActionJson from "../assets/base_data/getEnemyConditionSetsAndActionMstList.json";
+import skillDetailJson from "../assets/base_data/getSkillDetailMstList.json";
+import passiveDetailJson from "../assets/base_data/getPassiveSkillDetailMstList.json";
 
 // ---------------------------------------------------------------------------
 // Master data
@@ -260,6 +264,62 @@ export function summonTemplates(questStageMstId: number): Map<number, QuestEnemy
         .sort((a, b) => a.questEnemyAppearanceMstId - b.questEnemyAppearanceMstId)
     for (const a of rows) if (!out.has(a.summonId)) out.set(a.summonId, a)
     return out
+}
+
+// App side (not game code): the summons the given units can bring in during the fight (the pages' "spawns during the
+// fight" toggles). Walks every skill the units can use (QuestEnemySkillSetMst, EnemyConditionSetsAndActionMst rows,
+// their passives) and every skill those reach (the skill ids in ADDITIONAL_SKILL_ACT / SWITCH_SKILL / ... details); a SUMMON detail's value1..5 are summon ids ([CONFIRMED 3.19] SummonAbilityEffect..ctor 0x1921580), whose
+// templates are walked too. In the order found (the SUMMON row's order = the game's queue order); ids without a
+// template, or whose template is already in `units`, are left out. Whether / when the AI uses the skill is not checked.
+const enemySkillSetRows = new Map<number, number[]>()
+for (const r of enemySkillSetJson as any[]) (enemySkillSetRows.get(r.enemySkillSetId) ?? enemySkillSetRows.set(r.enemySkillSetId, []).get(r.enemySkillSetId)!).push(r.skillMstId)
+const conditionActionSkills = new Map<number, number[]>()
+for (const r of enemyConditionActionJson as any[]) {
+    const ids = String(r.skillMstIdCsv ?? "").split(",").map(Number).filter(n => n > 0)
+    ;(conditionActionSkills.get(r.enemyConditionSkillSetId) ?? conditionActionSkills.set(r.enemyConditionSkillSetId, []).get(r.enemyConditionSkillSetId)!).push(...ids)
+}
+const rawSkillDetails = new Map<number, any[]>()
+for (const r of skillDetailJson as any[]) (rawSkillDetails.get(r.skillMstId) ?? rawSkillDetails.set(r.skillMstId, []).get(r.skillMstId)!).push(r)
+const rawPassiveDetails = new Map<number, any[]>()
+for (const r of passiveDetailJson as any[]) (rawPassiveDetails.get(r.passiveSkillMstId) ?? rawPassiveDetails.set(r.passiveSkillMstId, []).get(r.passiveSkillMstId)!).push(r)
+const detailValues = (d: any): number[] => [d.value1, d.value2, d.value3, d.value4, d.value5].filter((v: any) => typeof v === "number" && v !== 0)
+// detail types whose values name skills to use (only these are followed, so a damage value is never read as an id)
+const SKILL_LINK_TYPE = /SKILL|ADDITIONAL_TURN_UNIT_ACT/
+const linkedSkills = (d: any): number[] => SKILL_LINK_TYPE.test(d.abilityEffectType) ? detailValues(d).filter(v => rawSkillDetails.has(v)) : []
+
+export function summonCandidates(questStageMstId: number, units: QuestEnemyAppearance[]): QuestEnemyAppearance[] {
+    const templates = summonTemplates(questStageMstId)
+    if (!templates.size) return []
+    const present = new Set(units.map(a => a.questEnemyAppearanceMstId))
+    const seenApps = new Set<number>(), seenSkills = new Set<number>(), seenPassives = new Set<number>()
+    const found: QuestEnemyAppearance[] = []
+    const skillQueue: number[] = []
+    const visitApp = (a: QuestEnemyAppearance) => {
+        if (seenApps.has(a.questEnemyAppearanceMstId)) return
+        seenApps.add(a.questEnemyAppearanceMstId)
+        skillQueue.push(...(enemySkillSetRows.get(a.enemySkillSetId) ?? []), ...(conditionActionSkills.get(a.enemyConditionSkillSetId) ?? []))
+        if (a.passiveSkillMstId > 0 && !seenPassives.has(a.passiveSkillMstId)) {
+            seenPassives.add(a.passiveSkillMstId)
+            for (const d of rawPassiveDetails.get(a.passiveSkillMstId) ?? []) skillQueue.push(...linkedSkills(d))
+        }
+    }
+    units.forEach(visitApp)
+    while (skillQueue.length) {
+        const id = skillQueue.shift()!
+        if (seenSkills.has(id)) continue
+        seenSkills.add(id)
+        for (const d of rawSkillDetails.get(id) ?? []) {
+            if (d.abilityEffectType === "SUMMON") {
+                for (const sid of detailValues(d)) {
+                    const t = templates.get(sid)
+                    if (!t || present.has(t.questEnemyAppearanceMstId) || found.includes(t)) continue
+                    found.push(t)
+                    visitApp(t)
+                }
+            } else skillQueue.push(...linkedSkills(d))
+        }
+    }
+    return found
 }
 
 // [CONFIRMED 3.19] AdditionalEnemyReferee.GetAdditionalBattleUnitList(mstList) (0x13769c0): a wave's units get

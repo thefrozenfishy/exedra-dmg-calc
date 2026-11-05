@@ -1,7 +1,26 @@
 # Status (update at the end of every session)
 
-_Last updated: 2026-11-02: Crisis score in the PvE Simulator timeline; before: 2026-10-31: Kioku Grid break chart for every character (not only Breakers); before: 2026-10-30 (2): stage-mode buffs in Max Damage / Highest Dmg Calc, quest buffs, Link Raid EX bonus; before: 2026-10-30: Kioku Grid damage dealer chart "Break" display; before: 2026-10-29 (5): game 3.22.0 (battle code identical, @rva tags moved; branch claude/version-3.22.0); before: 2026-10-29 (3): Best SA Team calculator speed (~60x on a large search); before: 2026-10-29 (2): Kioku Grid "Multiple ascensions", merged equal variant bars, precalculated bench file; before: 2026-10-29: Kioku Grid bench gear + average Attacker self buffs on Lux; before: 2026-10-24 (3): second-generation engine and Fight Solver removed (branch `remove-gen2`); before: 2026-10-24 (battle-start passive order: kit -> portrait -> support -> crys; before: Kioku Grid ailment bars: 112/305/309 conditions, Max Damage enemies carry Weakness/Stun); before: 2026-10-15 (game 3.21.0: dumped + decompiled by Claude on Windows, engine re-ported to 3.21.0; branch claude/version-3.21.0); before: 2026-10-14 (Max Damage + Kioku Grid bench on the 1:1 engine); before: 2026-10-10 (1:1 port in src/engine started); before: 2026-10-03 (passive states per giver, UP_HP_FIXED max HP; earlier: duplicate active-skill states); before: 2026-10-02 (game 3.19.1: version diff + newsletter, Magic Seal, break/notice team conditions, IMM_SLIP_DMG burst; branch claude/version-3.19.1)._
+_Last updated: 2026-11-05: Highest Dmg Calc "Adds" (enemies summoned mid-fight) toggles; before: 2026-11-02: Crisis score in the PvE Simulator timeline; before: 2026-10-31: Kioku Grid break chart for every character (not only Breakers); before: 2026-10-30 (2): stage-mode buffs in Max Damage / Highest Dmg Calc, quest buffs, Link Raid EX bonus; before: 2026-10-30: Kioku Grid damage dealer chart "Break" display; before: 2026-10-29 (5): game 3.22.0 (battle code identical, @rva tags moved; branch claude/version-3.22.0); before: 2026-10-29 (3): Best SA Team calculator speed (~60x on a large search); before: 2026-10-29 (2): Kioku Grid "Multiple ascensions", merged equal variant bars, precalculated bench file; before: 2026-10-29: Kioku Grid bench gear + average Attacker self buffs on Lux; before: 2026-10-24 (3): second-generation engine and Fight Solver removed (branch `remove-gen2`); before: 2026-10-24 (battle-start passive order: kit -> portrait -> support -> crys; before: Kioku Grid ailment bars: 112/305/309 conditions, Max Damage enemies carry Weakness/Stun); before: 2026-10-15 (game 3.21.0: dumped + decompiled by Claude on Windows, engine re-ported to 3.21.0; branch claude/version-3.21.0); before: 2026-10-14 (Max Damage + Kioku Grid bench on the 1:1 engine); before: 2026-10-10 (1:1 port in src/engine started); before: 2026-10-03 (passive states per giver, UP_HP_FIXED max HP; earlier: duplicate active-skill states); before: 2026-10-02 (game 3.19.1: version diff + newsletter, Magic Seal, break/notice team conditions, IMM_SLIP_DMG burst; branch claude/version-3.19.1)._
 
+
+## 2026-11-05: Highest Dmg Calc "Adds" toggles (user's request)
+
+- [Redux] Coordinator 4 Score Attack (group 1114, 983301-983351): the boss (Uwasa of the Anonymous AI) summons 2 more
+  E-Mails (summonId 1, 2; skill 5003009 at its turn 3 / 6 / ...), so a full field is 5 enemies; the calc only had the 3
+  start units.
+- `models/PvE.summonCandidates(stage, units)`: summon templates the field's units can bring in (skill set, condition
+  action rows, passives, skills reached through *SKILL* / ADDITIONAL_TURN_UNIT_ACT details, summoned units' own
+  skills), in SUMMON value order. App side, not game code; whether the AI ever uses the skill is not checked.
+- StageEnemySelector "Adds" row: one chip per candidate, **on by default** (reset on stage / wave / phase change), the
+  wave chip shows "+ N adds". On = in `selection.wave` (phaseWave(..., summons) puts them where the game's summon does;
+  "no room" when the field is full). Per-enemy target / broken / rate survive an add toggle (kept by appearance id).
+- `EngineMaxDamage.summonInto`: buildBattle (and phaseFieldAppearanceIds) summons the listed templates not yet on the
+  field through `EnemyAppearanceGameDirectorBase.GetSummonedUnitList` (0x14A56C0) right after enterWave, before the
+  team's battle-start states are cleared. [APPROXIMATION] the summon skill itself is not run. Every caller that passes a
+  wave list with summon templates gets them (PvE Simulator unchanged: its lists have none at phase 1).
+- Probe `scripts/sim/.probe-sa-adds.ts` (983351: field 104,101,100,102,103 = positions 1..5; AoE Ultimates +60-80%,
+  single-target unchanged), sweep `.probe-adds-sweep.ts` (410 stages with summon templates, 381 waves with adds, 0
+  failures). Fixtures 16/16, app type-check 223 (= HEAD, none in changed files). No src/engine change.
 
 ## 2026-11-02: Crisis score in the PvE Simulator (user's request)
 
