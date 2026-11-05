@@ -12384,7 +12384,7 @@
         "conditionObjectId2OperatorType": 0,
         "conditionObjectIdCsv": "",
         "conditionType": 1701,
-        "description": "Collect Memorial Medal (Silver): x1,000",
+        "description": "Collect Memorial Medal (White): x1,000",
         "endTime": "2026-11-30T11:59:59+09:00",
         "isOverCount": false,
         "isRewardGuideTarget": false,
@@ -12400,7 +12400,7 @@
         "resetType": 0,
         "sortOrder": 8,
         "startTime": "2026-10-30T12:00:00+09:00",
-        "title": "Collect Memorial Medal (Silver): x1,000",
+        "title": "Collect Memorial Medal (White): x1,000",
         "triggerType": 36
     },
     {
@@ -12412,7 +12412,7 @@
         "conditionObjectId2OperatorType": 0,
         "conditionObjectIdCsv": "",
         "conditionType": 1701,
-        "description": "Collect Memorial Medal (Silver): x3,000",
+        "description": "Collect Memorial Medal (White): x3,000",
         "endTime": "2026-11-30T11:59:59+09:00",
         "isOverCount": false,
         "isRewardGuideTarget": false,
@@ -12428,7 +12428,7 @@
         "resetType": 0,
         "sortOrder": 9,
         "startTime": "2026-10-30T12:00:00+09:00",
-        "title": "Collect Memorial Medal (Silver): x3,000",
+        "title": "Collect Memorial Medal (White): x3,000",
         "triggerType": 36
     },
     {
@@ -12888,7 +12888,7 @@
         "conditionObjectId2OperatorType": 0,
         "conditionObjectIdCsv": "",
         "conditionType": 1701,
-        "description": "Collect Memorial Medal (Silver): x10,000",
+        "description": "Collect Memorial Medal (White): x10,000",
         "endTime": "2026-11-30T11:59:59+09:00",
         "isOverCount": false,
         "isRewardGuideTarget": false,
@@ -12904,7 +12904,7 @@
         "resetType": 0,
         "sortOrder": 8,
         "startTime": "2026-10-30T12:00:00+09:00",
-        "title": "Collect Memorial Medal (Silver): x10,000",
+        "title": "Collect Memorial Medal (White): x10,000",
         "triggerType": 36
     },
     {
@@ -12916,7 +12916,7 @@
         "conditionObjectId2OperatorType": 0,
         "conditionObjectIdCsv": "",
         "conditionType": 1701,
-        "description": "Collect Memorial Medal (Silver): x30,000",
+        "description": "Collect Memorial Medal (White): x30,000",
         "endTime": "2026-11-30T11:59:59+09:00",
         "isOverCount": false,
         "isRewardGuideTarget": false,
@@ -12932,7 +12932,7 @@
         "resetType": 0,
         "sortOrder": 9,
         "startTime": "2026-10-30T12:00:00+09:00",
-        "title": "Collect Memorial Medal (Silver): x30,000",
+        "title": "Collect Memorial Medal (White): x30,000",
         "triggerType": 36
     },
     {
@@ -13392,7 +13392,7 @@
         "conditionObjectId2OperatorType": 0,
         "conditionObjectIdCsv": "",
         "conditionType": 1701,
-        "description": "Collect Memorial Medal (Silver): x50,000",
+        "description": "Collect Memorial Medal (White): x50,000",
         "endTime": "2026-11-30T11:59:59+09:00",
         "isOverCount": false,
         "isRewardGuideTarget": false,
@@ -13408,7 +13408,7 @@
         "resetType": 0,
         "sortOrder": 8,
         "startTime": "2026-10-30T12:00:00+09:00",
-        "title": "Collect Memorial Medal (Silver): x50,000",
+        "title": "Collect Memorial Medal (White): x50,000",
         "triggerType": 36
     },
     {
@@ -13420,7 +13420,7 @@
         "conditionObjectId2OperatorType": 0,
         "conditionObjectIdCsv": "",
         "conditionType": 1701,
-        "description": "Collect Memorial Medal (Silver): x100,000",
+        "description": "Collect Memorial Medal (White): x100,000",
         "endTime": "2026-11-30T11:59:59+09:00",
         "isOverCount": false,
         "isRewardGuideTarget": false,
@@ -13436,7 +13436,7 @@
         "resetType": 0,
         "sortOrder": 9,
         "startTime": "2026-10-30T12:00:00+09:00",
-        "title": "Collect Memorial Medal (Silver): x100,000",
+        "title": "Collect Memorial Medal (White): x100,000",
         "triggerType": 36
     },
     {
@@ -15296,7 +15296,7 @@
         "conditionObjectId2OperatorType": 0,
         "conditionObjectIdCsv": "",
         "conditionType": 1701,
-        "description": "Collect Memorial Medal (Silver): x5,000",
+        "description": "Collect Memorial Medal (White): x5,000",
         "endTime": "2026-11-09T04:59:59+09:00",
         "isOverCount": false,
         "isRewardGuideTarget": false,
@@ -15312,7 +15312,7 @@
         "resetType": 0,
         "sortOrder": 4,
         "startTime": "2026-10-30T12:00:00+09:00",
-        "title": "Collect Memorial Medal (Silver): x5,000",
+        "title": "Collect Memorial Medal (White): x5,000",
         "triggerType": 36
     },
     {
@@ -15324,7 +15324,7 @@
         "conditionObjectId2OperatorType": 0,
         "conditionObjectIdCsv": "",
         "conditionType": 1701,
-        "description": "Collect Memorial Medal (Silver): x10,000",
+        "description": "Collect Memorial Medal (White): x10,000",
         "endTime": "2026-11-09T04:59:59+09:00",
         "isOverCount": false,
         "isRewardGuideTarget": false,
@@ -15340,7 +15340,7 @@
         "resetType": 0,
         "sortOrder": 5,
         "startTime": "2026-10-30T12:00:00+09:00",
-        "title": "Collect Memorial Medal (Silver): x10,000",
+        "title": "Collect Memorial Medal (White): x10,000",
         "triggerType": 36
     },
     {
@@ -15828,7 +15828,7 @@
         "conditionObjectId2OperatorType": 0,
         "conditionObjectIdCsv": "",
         "conditionType": 1701,
-        "description": "Collect Memorial Medal (Silver): x20,000",
+        "description": "Collect Memorial Medal (White): x20,000",
         "endTime": "2026-11-09T04:59:59+09:00",
         "isOverCount": false,
         "isRewardGuideTarget": false,
@@ -15844,7 +15844,7 @@
         "resetType": 0,
         "sortOrder": 5,
         "startTime": "2026-10-30T12:00:00+09:00",
-        "title": "Collect Memorial Medal (Silver): x20,000",
+        "title": "Collect Memorial Medal (White): x20,000",
         "triggerType": 36
     },
     {
