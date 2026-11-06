@@ -21,7 +21,8 @@ import { kiokuData } from "../../src/utils/helpers";
 import { KiokuConstants, withMaxLevelsForPlayerLevel } from "../../src/types/KiokuTypes";
 import { LuxMagica } from "../../src/types/enums";
 import {
-    BENCH_ENEMY_COUNTS, BENCH_INFINITE_SP, BENCH_SEEDS, BENCH_TURN_OPTIONS, LUX_BENCH_VERSION, benchCharKey, encodePrecalcEntry,
+    BENCH_ENEMY_COUNTS, BENCH_INFINITE_SP, BENCH_SEEDS, BENCH_TURN_OPTIONS, LUX_BENCH_VERSION, benchCharKey, benchEntryComplete,
+    decodePrecalcEntry, encodePrecalcEntry,
     setupKey, type BenchPrecalcFile, type BenchSetup, type BenchUnit,
 } from "../../src/utils/luxBenchCache";
 
@@ -109,7 +110,10 @@ async function main() {
         // every chart has every character (KiokuGridPage chartCharacters)
         for (const name of names) for (const a of ascensions) {
             cfg.total++
-            if (!force && file.s[sk]?.[benchCharKey(unitOf(name, a))]) { cfg.cached++; continue }
+            // only entries the page accepts count as done (an older entry missing rows, e.g. the break chart's 100% crit
+            // bar, is calculated again; the page would otherwise simulate it in the browser)
+            const old = file.s[sk]?.[benchCharKey(unitOf(name, a))]
+            if (!force && old && benchEntryComplete(chart, decodePrecalcEntry(old))) { cfg.cached++; continue }
             cfg.todo++
             items.push({ chart, enemies: e, turns: t, name, ascension: a })
         }

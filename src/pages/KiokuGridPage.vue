@@ -311,6 +311,10 @@
                         <span class="gain-legend-swatch" :style="{ background: roleColor(role) }"></span>{{
                             virtualRoleLabel(role) }}
                     </span>
+                    <span v-if="bc.chart.hasVariants" class="gain-legend-item"
+                        title="The same character tested as what the icons under its bar show (see the text above)">
+                        <span class="gain-legend-swatch striped"></span>Extra bar (icons below it)
+                    </span>
                 </div>
                 <div class="gain-scroll">
                     <div class="gain-chart">
@@ -382,7 +386,7 @@ import { useFriendStore } from "../store/friendStore"
 import { archetypeRules, archetypesForKit } from "../models/KiokuArchetypes"
 import type { LuxBenchJob, LuxBenchMessage } from "../workers/luxBenchWorker"
 import type { BenchRow } from "../models/LuxBench"
-import { BENCH_INFINITE_SP, BENCH_SEEDS, benchCharKey, clearBenchCache, loadBenchCache, loadBenchPrecalc, precalcEntry, saveBenchCache, type BenchCacheEntry, type BenchSetup } from "../utils/luxBenchCache"
+import { BENCH_INFINITE_SP, BENCH_SEEDS, benchCharKey, benchEntryComplete, clearBenchCache, loadBenchCache, loadBenchPrecalc, precalcEntry, saveBenchCache, type BenchCacheEntry, type BenchSetup } from "../utils/luxBenchCache"
 
 const store = useCharacterStore()
 
@@ -1084,11 +1088,8 @@ const runBench = (kind: BenchChartKind, { fresh = false } = {}) => {
         results.set(id, cells.map(c => ({ ...c, avgGain: avg.get(contextKey(c.context)) })))
     }
     const setBreak = (id: number, rows: BenchRow[]) => { setMax(id, rows); setAvg(id, rows) }
-    // a cache / precalc entry with everything this chart shows
-    // (break: SP on every row and a 100% crit row for every identity, which entries calculated before them lack)
-    const breakComplete = (rows: BenchRow[]) => rows.every(r => r.sp !== undefined)
-        && rows.filter(r => !r.crit).every(r => rows.some(c => c.crit && c.ailment === r.ailment && c.element === r.element && c.role === r.role))
-    const complete = (e?: BenchCacheEntry) => kind === "break" ? !!e?.brk && breakComplete(e.brk) : !!(e?.max && e.avg)
+    // a cache / precalc entry with everything this chart shows (same test as scripts/sim/benchPrecalc.ts)
+    const complete = (e?: BenchCacheEntry) => benchEntryComplete(kind, e)
 
     // Cached characters are shown right away; only new or changed ones are simulated.
     const setup = benchSetup(kind, lux)
@@ -1368,8 +1369,10 @@ const benchStatusText = (kind: BenchChartKind): string => {
     return `Simulating battles… ${p.avgDone + p.failed}/${p.total}`
 }
 
-const enemyDamageText = () => `${benchEnemyText.value} with 3000 DEF, weak to every element and broken for the whole battle (500% damage taken, x5): in Average Damage they start unbroken and the first hit breaks each of them, so on-break effects trigger once per enemy; in Max Burst they are broken from the start. They never act. Single-target and proximity skills aim at the middle enemy, so a single-target debuff covers one enemy and an AoE one all of them.`
-const AILMENT_TEXT = "Ailment bonuses (enemies under Curse, Burn, ... for the whole battle) get their own bar when they change the result; every other bar makes the enemies immune to those ailments, so a character that applies an ailment itself and reacts to it shows that only in its ailment bar."
+const enemyDamageText = () => `${benchEnemyText.value} with 3000 DEF, weak to every element and, once broken, broken for the rest of the battle (500% damage taken, x5): in Average Damage they start unbroken and the first hit breaks each of them, so on-break effects trigger once per enemy; in Max Burst they are broken from the start. They never act. Single-target and proximity skills aim at the middle enemy, so a single-target debuff covers one enemy and an AoE one all of them.`
+const AILMENT_TEXT = "Ailment bonuses get their own bar when they change the result: in it the enemies carry that ailment (Curse, Burn, ...) for the whole battle and are immune to the kit's other ailments; in every other bar they are immune to all the ailments the kit reacts to, so a character that applies an ailment itself and reacts to it shows that only in its ailment bar."
+// What the striped bars are (buildCharGainResult / mergeEqualVariants): `what` lists the extra bars the chart has.
+const VARIANT_TEXT = (what: string) => `Striped bars are extra bars of the same character, tested as the icons under the bar show: ${what}. An extra bar only shows when it differs from the character's plain bar by at least 1 (and a combination only when it also differs from each of its parts alone; otherwise it is folded into the bar it matches). Extra bars with the same value that differ only in element or role are merged into one, with a split icon (e.g. Dark/Light).`
 
 const benchEnemyText = computed(() =>
     fightMode.value === "st" ? "One enemy" : fightMode.value === "aoe" ? "Five enemies" : "Three enemies")
@@ -1394,11 +1397,12 @@ const benchCharts = computed(() => [
         title: "Relative buff strength",
         fightType: true,
         desc: [
-            `How much each character increases the damage of a ${LuxMagica} damage dealer. The dealer is ${LuxMagica} as her own Light Breaker (another element or role when the character's kit is limited to Light or Breakers), with the average HP, ATK and DEF of the 5 star units of that role. She is also simulated as each element and role the character's kit is limited to; those get their own bar when the result differs. ${levelsDescription.value}`,
+            `How much each character increases the damage of a ${LuxMagica} damage dealer. The dealer is ${LuxMagica} as her own Light Breaker (another element or role when the character's kit is limited to Light or Breakers), with the average HP, ATK and DEF of the 5 star units of that role. She is also simulated as each element and role the character's kit is limited to (striped bars, see below). Bars of +1% or less are left out. ${levelsDescription.value}`,
             benchAverageDmg.value
                 ? `Average Damage: ${benchAv()} AV (${benchTurns.value} turns) of battle on the game's battle code with infinite SP (topped up to 5 before every turn): ultimates as soon as they are ready, Battle Skill every turn, ally-target skills on the damage dealer (a few kits have their own play, e.g. Tenebrous Arcana uses her Basic Attack at 3 Magic). The character is next to the damage dealer, with three ${LuxMagica} filling the team. ${CRIT_TEXT} Only the damage dealer's own damage counts (including additional damage it deals), never the rest of the team's. ${RATE_TEXT(benchAv())}`
                 : `Max Burst: the damage dealer's Ultimate with every buff and debuff of the team at full stacks and every hit a crit.`,
             enemyDamageText(),
+            VARIANT_TEXT(`an element or role the kit is limited to (or both: e.g. a Forest Attacker), an ailment on the enemies (its icon), or an ailment together with one of those`),
             `${AILMENT_TEXT} A bonus can show in one metric only: crit rate and procs (chains, follow-ups) don't change Max Burst, and Max Burst counts every buff as already applied.`,
             benchAverageDmg.value
                 ? `Be aware: additional damage and vortex scale on the ATK of the character giving them, not on the damage dealer's, and the damage dealer is ${LuxMagica} with average stats, so they weigh more here than they would on an Attacker with higher ATK.`
@@ -1422,6 +1426,7 @@ const benchCharts = computed(() => [
             `Every character wears its EX crystalis, Quickstep++ (SPD +8) and Mana Infusion++ (MP recovery +10%), the portrait Proof of Friends Again (SPD +20%) and Cherry Blizzard (A5, max level) as support, which only works on Breakers: SPD +20%, and +2 MP on dealing damage while the enemies carry 2 or more debuffs.`,
             `The number under each icon is the SP the character's own actions cost per 100 AV: its Battle Skills minus the SP it generates itself (+1 per Basic Attack, its own SP gain effects). SP gained on enemy break (e.g. Tenebrous Arcana's A2) counts too: each enemy is broken once (see below). ${benchBreakPerSp.value ? "Break per SP sorts the characters from least to most SP efficient; a rotation that costs no SP shows as \"no SP\" at the end." : "Switch \"Break per\" to SP to see the break per SP spent."}`,
             `${levelsOnlyDescription.value} ${benchEnemyText.value} with 3000 DEF, weak to every element (+20% break gauge depletion) and a break gauge that never runs out, with one exception: the damage dealer's first hit on each enemy breaks it, so on-break effects (Weakness, follow-ups, SPD, SP, ...) trigger once per enemy, as in the damage charts. The enemy recovers right away, the way a broken enemy recovers at its turn start, and is never broken again. Every hit counts the full break value the game computes for it, the breaking hit included, so the bars show what the character removes from a gauge that never runs out, plus what its on-break effects add. They never act. Single-target and proximity skills aim at the middle enemy. ${AILMENT_TEXT}`,
+            VARIANT_TEXT("an ailment on the enemies (its icon), the 100% crit battles (the crit icon), or both"),
             `The 100% crit bars: the same battles (the main one and each ailment one) with every unit of the team critting on every hit (base crit rate set to 100%), for kits that react to crits (on-crit effects, crit-consuming buffs). Crits themselves don't change the break value. Like the other extra bars, a crit bar only shows when it changes the result, and an ailment + crit bar only when it differs from both the ailment bar and the crit bar (otherwise it is folded into the one it matches).`,
         ],
         chart: buildBenchChart("break"),
@@ -1444,6 +1449,7 @@ const benchCharts = computed(() => [
                 : `Max Burst: the Ultimate with the damage dealer's own buffs and debuffs at full stacks and every hit a crit.`,
             levelsDescription.value,
             enemyDamageText(),
+            VARIANT_TEXT("an ailment on the enemies (its icon); the character always plays as its own element and role"),
             AILMENT_TEXT,
             benchAverageDmg.value
                 ? `Be aware: DoT poppers (e.g. Marigold Dadaism) need a team of DoT appliers and scale on the whole team's DoTs, not just their own; with ${LuxMagica} as the rest of the team their damage is not well reflected here.`

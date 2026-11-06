@@ -119,13 +119,23 @@ export function encodePrecalcEntry(e: BenchCacheEntry): PrecalcEntry {
     return [(e.max ?? []).map(r => [round(r.gain, 3), round(r.critRate ?? 0, 1), idOf(r)]), plain(e.avg)]
 }
 
-function decodePrecalcEntry([max, avg, brk]: PrecalcEntry): BenchCacheEntry {
+export function decodePrecalcEntry([max, avg, brk]: PrecalcEntry): BenchCacheEntry {
     const plain = (rows: unknown[][]) => rows.map(([gain, id]) => ({ ...identityOf(id as string), gain: gain as number }))
     if (brk) return { brk: brk.map(([gain, id, sp]) => ({ ...identityOf(id as string), gain: gain as number, sp: sp as number })) }
     return {
         max: max.map(([gain, critRate, id]) => ({ ...identityOf(id as string), gain: gain as number, critRate: critRate as number })),
         avg: plain(avg),
     }
+}
+
+/** An entry with everything its chart shows (KiokuGridPage and scripts/sim/benchPrecalc.ts both use this, so an entry the
+ *  script counts as done is never simulated again by the page). Break: SP on every row and a 100% crit row for every
+ *  identity, which entries calculated before them lack. Support / attacker: both metrics. */
+export function benchEntryComplete(chart: string, e?: BenchCacheEntry): boolean {
+    if (chart !== "break") return !!(e?.max && e.avg)
+    const rows = e?.brk
+    return !!rows && rows.every(r => r.sp !== undefined)
+        && rows.filter(r => !r.crit).every(r => rows.some(c => c.crit && c.ailment === r.ailment && c.element === r.element && c.role === r.role))
 }
 
 let precalc: BenchPrecalcFile["s"] = {}
