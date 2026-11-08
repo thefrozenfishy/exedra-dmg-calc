@@ -25,8 +25,8 @@ const titles: [string, number, number?][] = [
     ["[img:nya.webp]", 1],
     ["[img:rika_bonked.webp][img:lys_bonking.webp]", 0, 1],
     ["[img:lys_bonked.webp][img:rika_bonking.webp]", 0, 1],
-    ["[img:rika.webp]", 2],
-    ["[anim:selfbuff.webp]", 100, 100],
+    ["[img:rika.webp]", 1],
+    ["[anim:selfbuff.webp]", 1],
 ]
 
 function pickWeightedTitle(titles: [string, number, number?][]): string {
