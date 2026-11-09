@@ -3,47 +3,18 @@
         <h2 class="section-title">Stage</h2>
         <StagePicker v-model="stageId" />
 
-        <div v-if="waves.length" class="wave-row">
-            <span class="filters-heading">Wave</span>
-            <button v-for="(w, i) in waves" :key="i" type="button" class="chip" :class="{ active: waveIdx === i }"
-                @click="waveIdx = i">{{ i + 1 }} <span class="chip-count">{{ Math.min(w.length, 5) }} enem{{
-                    Math.min(w.length, 5) === 1 ? 'y' : 'ies' }}<template v-if="w.length > 5"> + {{ w.length - 5 }}
-                        backup{{ w.length - 5 === 1 ? '' : 's' }}</template><template v-if="waveAddCounts[i]"> + {{
-                            waveAddCounts[i] }} add{{ waveAddCounts[i] === 1 ? '' : 's' }}</template></span></button>
-            <span class="row-hint">Teams are scored against the enemies on the field when the selected wave
-                starts.</span>
-            <a v-if="wikiUrl" class="wiki-link" :href="wikiUrl" target="_blank" rel="noopener"
-                title="This stage's battle page on exedra.wiki">details →</a>
-        </div>
-        <div v-if="phases.length" class="wave-row">
-            <span class="filters-heading">Phase</span>
-            <button v-for="f in phases" :key="f.step" type="button" class="chip" :class="{ active: phasePos === f.step }"
-                :title="phaseTitle(f)" @click="phase = f.step">{{ f.step }} <span class="chip-count">{{
-                    f.step === 1 ? 'start' : `from ${f.threshold / 10}% HP` }} · ATK {{ fmt(f.appearance.atk) }}</span></button>
-            <span class="row-hint">The boss changes form at these HP thresholds. Teams are scored against the selected
-                form, with the enemies on the field when it comes in.</span>
-        </div>
+        <StageWaveRows :s="view" :wiki-url="wikiUrl"
+            wave-hint="Teams are scored against the enemies on the field when the selected wave starts. Untick Alive on an enemy to leave it out entirely."
+            phase-hint="Teams are scored against the selected form, with the enemies on the field when it comes in." />
 
-        <div v-if="summons.length" class="wave-row">
-            <span class="filters-heading">Adds</span>
-            <label v-for="a in summons" :key="a.questEnemyAppearanceMstId" class="chip"
-                :class="{ active: !summonOff.has(a.questEnemyAppearanceMstId) }" :title="summonTitle(a)">
-                <input type="checkbox" :checked="!summonOff.has(a.questEnemyAppearanceMstId)"
-                    @change="setSummon(a.questEnemyAppearanceMstId, ($event.target as HTMLInputElement).checked)" />
-                {{ enemyName(a) }}<span v-if="!summonOff.has(a.questEnemyAppearanceMstId) && !onField(a)" class="chip-count">no room</span>
-            </label>
-            <span class="row-hint">Enemies summoned during the fight. Turned on, they count as on the field, as in a full
-                enemy team (the highest damage).</span>
-        </div>
-
-        <div v-if="enemyInfo.length" class="derived-row">
+        <div v-if="view.enemyInfo.length" class="derived-row">
             <span class="filters-heading">Weak elements</span>
-            <span v-if="!weakElements.length" class="row-hint">none</span>
-            <img v-for="w in weakElements" :key="w" :src="`/exedra-dmg-calc/elements/${w}.png`" :alt="w" :title="w"
+            <span v-if="!view.weakElements.length" class="row-hint">none</span>
+            <img v-for="w in view.weakElements" :key="w" :src="`/exedra-dmg-calc/elements/${w}.png`" :alt="w" :title="w"
                 class="elem-icon" />
             <span class="filters-heading derived-gap">Ailments that can land</span>
-            <span v-if="!ailments.length" class="row-hint">none</span>
-            <img v-for="a in ailments.map(ailmentLabel)" :key="a" :src="`/exedra-dmg-calc/aliments/${a}.png`" :alt="a" :title="a"
+            <span v-if="!view.ailments.length" class="row-hint">none</span>
+            <img v-for="a in view.ailments.map(ailmentLabel)" :key="a" :src="`/exedra-dmg-calc/aliments/${a}.png`" :alt="a" :title="a"
                 class="elem-icon" />
         </div>
 
@@ -59,131 +30,34 @@
             <span v-for="(b, i) in stageBuffs" :key="i" class="stage-buff">{{ b }}</span>
         </div>
 
-        <div v-if="enemyInfo.length" class="enemies-block">
-            <div class="team-grid enemy-grid">
-                <div v-for="(e, i) in enemyInfo" :key="e.id" class="enemy-card"
-                    :class="[`pos-${e.position}`, { main: mainTargetIdx === i }]">
-                    <div class="enemy-top">
-                        <img class="enemy-img" :src="enemyImage(e.enemyMstId)" :alt="e.name" @error="hideImg" />
-                        <div class="enemy-title">
-                            <div class="enemy-name" :title="e.name">{{ e.name }}</div>
-                            <div class="enemy-break">
-                                <template v-if="e.breakPoint > 0">Break {{ e.breakPoint }} · broken {{ e.initRate }}–{{
-                                    e.maxRate }}%</template>
-                                <template v-else>Can't be broken</template>
-                            </div>
-                        </div>
-                    </div>
-                    <div v-if="e.tag" class="enemy-tag">{{ e.tag }}</div>
-                    <div class="enemy-stat-grid">
-                        <div class="enemy-stat"><span class="enemy-stat-label">HP</span>
-                            <span class="enemy-stat-value">{{ fmt(e.hp) }}<span v-if="e.gauges > 1" class="muted"> ×{{
-                                e.gauges }}</span></span>
-                        </div>
-                        <div class="enemy-stat"><span class="enemy-stat-label">ATK</span><span
-                                class="enemy-stat-value">{{ fmt(e.atk) }}</span></div>
-                        <div class="enemy-stat"><span class="enemy-stat-label">DEF</span><span
-                                class="enemy-stat-value">{{ fmt(e.def) }}</span></div>
-                        <div class="enemy-stat"><span class="enemy-stat-label">SPD</span><span
-                                class="enemy-stat-value">{{ e.spd }}</span></div>
-                    </div>
-                    <div v-if="e.weak.length" class="enemy-elements weak" title="Weak to">Weak
-                        <img v-for="w in e.weak" :key="w" :src="`/exedra-dmg-calc/elements/${w}.png`" :alt="w"
-                            :title="w" class="elem-icon" />
-                    </div>
-                    <div v-if="e.resists.length" class="enemy-elements resist" title="Resists">Resist
-                        <img v-for="r in e.resists" :key="r.el" :src="`/exedra-dmg-calc/elements/${r.el}.png`"
-                            :alt="r.el" :title="r.el" class="elem-icon" />
-                        −{{ e.resists[0].pct }}%
-                    </div>
-                    <div class="enemy-controls">
-                        <label class="chip" :class="{ active: mainTargetIdx === i }"
-                            title="Single-target skills hit this enemy">
-                            <input type="radio" :checked="mainTargetIdx === i" @change="mainTargetIdx = i" /> Target
-                        </label>
-                        <label v-if="e.breakPoint > 0" class="chip" :class="{ active: !!broken[i] }"
-                            title="Score teams against this enemy while it's broken">
-                            <input type="checkbox" :checked="!!broken[i]"
-                                @change="setBroken(i, ($event.target as HTMLInputElement).checked)" /> Broken
-                        </label>
-                        <label v-if="e.breakPoint > 0 && broken[i]" class="rate-field" title="Broken DMG rate (%)">
-                            <input class="num" type="number" min="100" :max="e.maxRate"
-                                :value="breakRate[i] ?? e.maxRate"
-                                @change="setBreakRate(i, Number(($event.target as HTMLInputElement).value), e.maxRate)" />%
-                        </label>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <EnemyCards v-if="view.enemyInfo.length" :s="view" />
     </section>
 </template>
 
 <script setup lang="ts">
-// The PvE Simulator's stage and enemy picker (stage tree, wave, target / broken / broken rate per enemy) for pages
-// that score teams against a real stage (the Best SA Team calculator). `selection` is what battle/EngineTeamScore needs.
-import { computed, ref, watch } from 'vue'
+// The Highest Dmg Calc's stage and enemy picker: the PvE Simulator's stage tree, wave / phase / adds rows and enemy
+// cards (composables/useStageEnemies, StageWaveRows, EnemyCards), plus the stage's derived weak elements / ailments and
+// mode buffs. `selection` is what battle/EngineTeamScore needs.
+import { computed, reactive } from 'vue'
 import StagePicker from './StagePicker.vue'
-import { stageWaveMeta, wavePositionIds, enemyName, summonCandidates, breakMstOf, ELEMENT_KEYS, soloRaidInfo, multiRaidInfo, questCampaign, SOLO_RAID_COMMON_CHARGE_PASSIVE, type QuestEnemyAppearance, type ModeChangeInfo } from '../models/PvE'
+import StageWaveRows from './StageWaveRows.vue'
+import EnemyCards from './EnemyCards.vue'
+import { soloRaidInfo, multiRaidInfo, questCampaign, SOLO_RAID_COMMON_CHARGE_PASSIVE, type QuestEnemyAppearance } from '../models/PvE'
 import passiveMstJson from '../assets/base_data/getPassiveSkillMstList.json'
 import characterMstJson from '../assets/base_data/getCharacterMstList.json'
-import { wavePhases, waveStartUnits } from '../models/PvEBattle'
-import { phaseWave } from '../battle/EngineMaxDamage'
-import { Ailment, elementMap, type KiokuElement } from '../types/enums'
+import { Ailment } from '../types/enums'
 import { useSetting } from '../store/settingsStore'
 import { wikiBattleUrl } from '../utils/wikiBattlePage'
+import { useStageEnemies } from '../composables/useStageEnemies'
 
 const props = withDefaults(defineProps<{ settingPrefix?: string }>(), { settingPrefix: 'saStage' })
 
 const stageId = useSetting<number>(`${props.settingPrefix}Id`, 982250)
 const waveIdx = useSetting<number>(`${props.settingPrefix}Wave`, 0)
-const fmt = (n: number) => Math.round(n).toLocaleString()
-const hideImg = (ev: Event) => { (ev.target as HTMLImageElement).style.visibility = 'hidden' }
-const enemyImage = (enemyMstId: number) => `/exedra-dmg-calc/enemy/${enemyMstId}_thumbnail.png`
-
-const wikiUrl = computed(() => stageId.value ? wikiBattleUrl(stageId.value) : undefined)
-const waveMetas = computed(() => stageId.value ? stageWaveMeta(stageId.value) : [])
-const waves = computed(() => waveMetas.value.map(m => m.appearances))
-const wavePos = computed(() => Math.max(0, Math.min(waveIdx.value, waveMetas.value.length - 1)))
-const waveMeta = computed(() => waveMetas.value[wavePos.value])
-// A wave whose boss changes form at HP thresholds has phases (Crisis "phase 1/2/3"): teams are scored against one form
-// (as on the PvE Simulator).
 const phase = useSetting<number>(`${props.settingPrefix}Phase`, 1)
-const phases = computed(() => wavePhases(waveMeta.value))
-const phasePos = computed(() => phases.value.some(f => f.step === phase.value) ? phase.value : 1)
-const phaseTitle = (f: ModeChangeInfo) => `${enemyName(f.appearance)}: HP ${fmt(f.appearance.hp)} · ATK ${fmt(f.appearance.atk)} · DEF ${fmt(f.appearance.def)} · SPD ${f.appearance.speed}`
-const baseWave = computed(() => waveMeta.value ? phaseWave(stageId.value, wavePos.value, phasePos.value, waveStartUnits(waveMeta.value)) : [])
-// Adds: the summons the field's units can bring in during the fight (models/PvE.summonCandidates). On by default (users
-// aim for a full enemy team, the highest damage); the ones turned on are put on the field by the game's summon
-// (battle/EngineMaxDamage.phaseWave -> GetSummonedUnitList), so they are scored like the others.
-const summons = computed(() => stageId.value && baseWave.value.length ? summonCandidates(stageId.value, baseWave.value) : [])
-const summonOff = ref<Set<number>>(new Set())
-const setSummon = (id: number, on: boolean) => { const s = new Set(summonOff.value); if (on) s.delete(id); else s.add(id); summonOff.value = s }
-const summonTitle = (a: QuestEnemyAppearance) => `${enemyName(a)}: HP ${fmt(a.hp)} · ATK ${fmt(a.atk)} · DEF ${fmt(a.def)} · SPD ${a.speed}`
-const wave = computed(() => {
-    if (!waveMeta.value) return []
-    const on = summons.value.filter(a => !summonOff.value.has(a.questEnemyAppearanceMstId))
-    return on.length ? phaseWave(stageId.value, wavePos.value, phasePos.value, baseWave.value, on) : baseWave.value
-})
-const onField = (a: QuestEnemyAppearance) => wave.value.some(w => w.questEnemyAppearanceMstId === a.questEnemyAppearanceMstId)
-const waveAddCounts = computed(() => waveMetas.value.map(m => stageId.value ? summonCandidates(stageId.value, waveStartUnits(m)).length : 0))
-const mainTargetIdx = ref(0)
-const broken = ref<boolean[]>([])
-const breakRate = ref<(number | undefined)[]>([])
-
-watch(stageId, (id, old) => { if (old !== undefined && id !== old) waveIdx.value = 0 })
-watch([stageId, waveIdx], ([id, w], [oldId, oldW]) => { if (oldId !== undefined && (id !== oldId || w !== oldW)) phase.value = 1 })
-watch([stageId, waveIdx, phase], () => { summonOff.value = new Set() })
-// A new field resets the per-enemy settings; an add turned on / off keeps the others' (by appearance id).
-watch(wave, (w, old) => {
-    const keep = !!old && w.some(a => old.some(o => o.questEnemyAppearanceMstId === a.questEnemyAppearanceMstId))
-    const prev = new Map((old ?? []).map((a, i) => [a.questEnemyAppearanceMstId, { broken: broken.value[i], rate: breakRate.value[i] }]))
-    const mainId = keep ? old![mainTargetIdx.value]?.questEnemyAppearanceMstId : undefined
-    const main = mainId !== undefined && w.some(a => a.questEnemyAppearanceMstId === mainId)
-        ? w.findIndex(a => a.questEnemyAppearanceMstId === mainId) : w.findIndex(a => a.isMainTargetEnemy)
-    mainTargetIdx.value = main >= 0 ? main : 0
-    broken.value = w.map(a => keep && prev.has(a.questEnemyAppearanceMstId) ? !!prev.get(a.questEnemyAppearanceMstId)!.broken : (breakMstOf(a)?.breakPoint ?? 0) > 0)
-    breakRate.value = w.map(a => keep ? prev.get(a.questEnemyAppearanceMstId)?.rate : undefined)
-}, { immediate: true })
+const se = useStageEnemies(stageId, waveIdx, phase)
+const view = reactive(se)
+const wikiUrl = computed(() => stageId.value ? wikiBattleUrl(stageId.value) : undefined)
 
 // Buffs the stage's mode gives the player's units (battle/EngineBattle.stagePassives, models/PvE.questCampaign): shown
 // here, counted by the engine in every score. Solo Raid: the party buff is a choice (default the raid's first).
@@ -214,59 +88,27 @@ const stageBuffs = computed<string[]>(() => {
     return out
 })
 
-const setBroken = (i: number, v: boolean) => { const b = [...broken.value]; b[i] = v; broken.value = b }
-const setBreakRate = (i: number, v: number, max: number) => {
-    const r = [...breakRate.value]; r[i] = Number.isFinite(v) ? Math.max(100, Math.min(max, v)) : undefined; breakRate.value = r
-}
-
-const formLabel = (m: ModeChangeInfo) => `Form ${m.step} · ${m.step === 1 ? 'from the start' : `from ${m.threshold / 10}% HP`}`
-function formTag(a: QuestEnemyAppearance): string {
-    if (a.conditionType === 3) return 'Summoned'
-    const own = (waveMeta.value?.modeChanges ?? []).find(m => m.appearance.questEnemyAppearanceMstId === a.questEnemyAppearanceMstId)
-    return own ? formLabel(own) : ''
-}
-const enemyInfo = computed(() => {
-    const positions = wavePositionIds(wave.value.length)  // [APPROXIMATION] for a field with adds (layout only)
-    return wave.value.map((a, i) => {
-        const b = breakMstOf(a)
-        return {
-            tag: formTag(a), position: positions[i],
-            id: a.questEnemyAppearanceMstId, enemyMstId: a.enemyMstId, name: enemyName(a),
-            hp: a.hp, atk: a.atk, def: a.def, spd: a.speed,
-            gauges: a.startHpGaugeCount > 0 ? a.startHpGaugeCount : a.hpGaugeCount,
-            weak: [1, 2, 3, 4, 5, 6].map(i => (a as any)[`weakElement${i}`]).filter((x: number) => x >= 1 && x <= 6).map((x: number) => elementMap[x]),
-            resists: ELEMENT_KEYS.map((k, el) => ({ el: elementMap[el], pct: k ? ((a as any)[`${k}ResistRate`] ?? 0) / 10 : 0 })).filter(r => r.pct > 0),
-            breakPoint: b?.breakPoint ?? 0,
-            initRate: Math.trunc((b?.initialBreakedDamageReceiveRate ?? 1000) / 10),
-            maxRate: Math.trunc((b?.maxBreakedDamageReceiveRate ?? 1000) / 10),
-        }
-    })
-})
-
-// The appearance row's parry field of each ailment (1000 = immune).
-const PARRY_FIELD: Record<Ailment, string> = {
-    [Ailment.BURN]: 'burnParryRate', [Ailment.CURSE]: 'curseParryRate', [Ailment.POISON]: 'poisonParryRate',
-    [Ailment.WOUND]: 'bleedParryRate', [Ailment.STUN]: 'stunParryRate', [Ailment.VORTEX]: 'vortexParryRate',
-    [Ailment.WEAKNESS]: 'weaknessParryRate',
-}
-// Elements any enemy on the field is weak to; ailments some enemy on the field isn't fully immune to.
-const weakElements = computed<KiokuElement[]>(() => [...new Set(enemyInfo.value.flatMap(e => e.weak))] as KiokuElement[])
-const ailments = computed<Ailment[]>(() => Object.values(Ailment).filter(a => wave.value.some(e => ((e as any)[PARRY_FIELD[a]] ?? 0) < 1000)))
 const ailmentLabel = (a: Ailment) => a === Ailment.WOUND ? 'Bleed' : a.charAt(0) + a.slice(1).toLowerCase()
 
-/** The stage, wave and per-enemy settings to score against (plain data: it goes to the workers). */
-const selection = computed(() => stageId.value && wave.value.length ? {
-    stageId: stageId.value,
-    waveIdx: wavePos.value,
-    phase: phasePos.value,
-    wave: JSON.parse(JSON.stringify(wave.value)) as QuestEnemyAppearance[],
-    mainTargetIdx: mainTargetIdx.value,
-    broken: [...broken.value],
-    breakRate: [...breakRate.value],
-    weakElements: [...weakElements.value],
-    ailments: [...ailments.value],
-    partyBuffId: raid.value ? partyBuffChoice.value : undefined,
-} : undefined)
+/** The stage, wave and per-enemy settings to score against (plain data: it goes to the workers): the enemies alive in
+ *  `wave` and the per-enemy lists, the dead ones' appearance ids in `removed` (taken off the engine's field). */
+const selection = computed(() => {
+    if (!stageId.value || !se.aliveWave.value.length) return undefined
+    const o = se.maxDmgEnemyOpts()
+    return {
+        stageId: stageId.value,
+        waveIdx: se.wavePos.value,
+        phase: se.phasePos.value,
+        wave: JSON.parse(JSON.stringify(se.aliveWave.value)) as QuestEnemyAppearance[],
+        removed: o.removedEnemies!,
+        mainTargetIdx: o.mainTargetIdx!,
+        broken: o.broken!,
+        breakRate: o.breakRate!,
+        weakElements: [...se.weakElements.value],
+        ailments: [...se.ailments.value],
+        partyBuffId: raid.value ? partyBuffChoice.value : undefined,
+    }
+})
 
 defineExpose({ selection })
 </script>
@@ -301,10 +143,6 @@ defineExpose({ selection })
     color: var(--muted);
 }
 
-.muted {
-    color: var(--muted);
-}
-
 .chip {
     display: inline-flex;
     align-items: center;
@@ -331,34 +169,6 @@ defineExpose({ selection })
     color: var(--accent);
 }
 
-.chip-count {
-    opacity: 0.7;
-    font-size: 0.72rem;
-}
-
-.num {
-    width: 4.5em;
-    padding: 0.15rem 0.3rem;
-    border-radius: 8px;
-    border: 1px solid var(--border);
-    background: rgba(255, 255, 255, 0.05);
-    color: var(--text);
-    font: inherit;
-    font-size: 0.78rem;
-}
-
-.wave-row {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 0.4rem;
-    margin: 0.9rem 0 0;
-}
-
-.wave-row .row-hint {
-    margin-left: 0.4rem;
-}
-
 .derived-row {
     display: flex;
     flex-wrap: wrap;
@@ -383,165 +193,9 @@ defineExpose({ selection })
     margin-left: 1rem;
 }
 
-.wiki-link {
-    margin-left: auto;
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: var(--accent);
-    text-decoration: none;
-    white-space: nowrap;
-}
-
-.wiki-link:hover {
-    text-decoration: underline;
-}
-
-.enemies-block {
-    container-type: inline-size;
-    /* size containment in a flex column (the page's .section-card) otherwise sizes the block from a guess, not its grid */
-    width: 100%;
-}
-
-.team-grid {
-    display: grid;
-    gap: 2rem;
-}
-
-.team-grid.enemy-grid {
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    margin-top: 0.75rem;
-}
-
-@container (min-width: 1128px) {
-    .enemy-card.pos-1 { grid-column: 1; }
-    .enemy-card.pos-2 { grid-column: 2; }
-    .enemy-card.pos-3 { grid-column: 3; }
-    .enemy-card.pos-4 { grid-column: 4; }
-    .enemy-card.pos-5 { grid-column: 5; }
-}
-
-.enemy-tag {
-    align-self: flex-start;
-    font-size: 0.68rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: var(--accent);
-    border: 1px solid var(--border-strong);
-    border-radius: 999px;
-    padding: 0 0.5rem;
-}
-
-.enemy-card {
-    display: flex;
-    flex-direction: column;
-    gap: 0.55rem;
-    min-width: 0;
-    padding: 0.75rem;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 20px;
-    background: rgba(255, 255, 255, 0.02);
-    transition: border-color 0.15s, box-shadow 0.15s;
-}
-
-.enemy-card.main {
-    border-color: rgba(255, 209, 110, 0.6);
-    box-shadow: 0 0 0 1px rgba(255, 209, 110, 0.2);
-}
-
-.enemy-top {
-    display: flex;
-    gap: 0.6rem;
-    align-items: center;
-    min-width: 0;
-}
-
-.enemy-img {
-    width: 52px;
-    height: 52px;
-    border-radius: 10px;
-    flex-shrink: 0;
-    background: rgba(0, 0, 0, 0.25);
-}
-
-.enemy-title {
-    min-width: 0;
-}
-
-.enemy-name {
-    font-weight: 600;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.enemy-break {
-    font-size: 0.75rem;
-    color: var(--muted);
-}
-
-.enemy-stat-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0.3rem 0.5rem;
-}
-
-.enemy-stat {
-    display: flex;
-    flex-direction: column;
-    min-width: 0;
-}
-
-.enemy-stat-label {
-    font-size: 0.62rem;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: var(--muted);
-}
-
-.enemy-stat-value {
-    font-size: 0.82rem;
-    font-weight: 600;
-    font-variant-numeric: tabular-nums;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.enemy-elements {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 0.25rem;
-    font-size: 0.78rem;
-}
-
 .elem-icon {
     width: 16px;
     height: 16px;
     vertical-align: -3px;
-}
-
-.weak {
-    color: var(--success);
-}
-
-.resist {
-    color: var(--muted);
-}
-
-.enemy-controls {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 0.4rem;
-}
-
-.rate-field {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.25rem;
-    font-size: 0.8rem;
-    color: var(--muted);
 }
 </style>

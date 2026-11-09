@@ -20,6 +20,7 @@ export interface PvESetup {
     target: number                   // main target of single-target skills (index in that wave)
     broken: boolean[]                // per enemy of that wave
     breakRate: (number | null)[]     // per enemy broken DMG rate in %, null = the enemy's max
+    dead: number[]                   // enemies of that wave taken out of Max Damage (indexes; "Alive" unticked)
     dealer: number                   // team slot of the damage dealer
     excluded: string[]               // Max Damage effects left out (MaxDmgEffect.key)
     included?: string[]              // Max Damage effects that are off by default turned on (MaxDmgEffect.defaultOff)
@@ -127,6 +128,7 @@ export function sanitizePvESetup(raw: unknown): PvESetup {
         target: int(s.target, 0, MAX_ENEMIES - 1, 0),
         broken: asArray(s.broken).slice(0, MAX_ENEMIES).map(b => b === true),
         breakRate: asArray(s.breakRate).slice(0, MAX_ENEMIES).map(r => typeof r === "number" && Number.isFinite(r) ? int(r, 0, 100000, 0) : null),
+        dead: [...new Set(asArray(s.dead).filter((i): i is number => Number.isInteger(i) && (i as number) >= 0 && (i as number) < MAX_ENEMIES))].sort((a, b) => a - b),
         dealer: int(s.dealer, 0, 4, 0),
         excluded,
         included,

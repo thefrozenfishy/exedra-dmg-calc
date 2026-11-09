@@ -1,7 +1,33 @@
 # Status (update at the end of every session)
 
-_Last updated: 2026-11-05: Highest Dmg Calc "Adds" (enemies summoned mid-fight) toggles; before: 2026-11-02: Crisis score in the PvE Simulator timeline; before: 2026-10-31: Kioku Grid break chart for every character (not only Breakers); before: 2026-10-30 (2): stage-mode buffs in Max Damage / Highest Dmg Calc, quest buffs, Link Raid EX bonus; before: 2026-10-30: Kioku Grid damage dealer chart "Break" display; before: 2026-10-29 (5): game 3.22.0 (battle code identical, @rva tags moved; branch claude/version-3.22.0); before: 2026-10-29 (3): Best SA Team calculator speed (~60x on a large search); before: 2026-10-29 (2): Kioku Grid "Multiple ascensions", merged equal variant bars, precalculated bench file; before: 2026-10-29: Kioku Grid bench gear + average Attacker self buffs on Lux; before: 2026-10-24 (3): second-generation engine and Fight Solver removed (branch `remove-gen2`); before: 2026-10-24 (battle-start passive order: kit -> portrait -> support -> crys; before: Kioku Grid ailment bars: 112/305/309 conditions, Max Damage enemies carry Weakness/Stun); before: 2026-10-15 (game 3.21.0: dumped + decompiled by Claude on Windows, engine re-ported to 3.21.0; branch claude/version-3.21.0); before: 2026-10-14 (Max Damage + Kioku Grid bench on the 1:1 engine); before: 2026-10-10 (1:1 port in src/engine started); before: 2026-10-03 (passive states per giver, UP_HP_FIXED max HP; earlier: duplicate active-skill states); before: 2026-10-02 (game 3.19.1: version diff + newsletter, Magic Seal, break/notice team conditions, IMM_SLIP_DMG burst; branch claude/version-3.19.1)._
+_Last updated: 2026-11-09: per-enemy "Alive" (PvE Simulator + Highest Dmg Calc share the enemy picker); before: 2026-11-05: Highest Dmg Calc "Adds" (enemies summoned mid-fight) toggles; before: 2026-11-02: Crisis score in the PvE Simulator timeline; before: 2026-10-31: Kioku Grid break chart for every character (not only Breakers); before: 2026-10-30 (2): stage-mode buffs in Max Damage / Highest Dmg Calc, quest buffs, Link Raid EX bonus; before: 2026-10-30: Kioku Grid damage dealer chart "Break" display; before: 2026-10-29 (5): game 3.22.0 (battle code identical, @rva tags moved; branch claude/version-3.22.0); before: 2026-10-29 (3): Best SA Team calculator speed (~60x on a large search); before: 2026-10-29 (2): Kioku Grid "Multiple ascensions", merged equal variant bars, precalculated bench file; before: 2026-10-29: Kioku Grid bench gear + average Attacker self buffs on Lux; before: 2026-10-24 (3): second-generation engine and Fight Solver removed (branch `remove-gen2`); before: 2026-10-24 (battle-start passive order: kit -> portrait -> support -> crys; before: Kioku Grid ailment bars: 112/305/309 conditions, Max Damage enemies carry Weakness/Stun); before: 2026-10-15 (game 3.21.0: dumped + decompiled by Claude on Windows, engine re-ported to 3.21.0; branch claude/version-3.21.0); before: 2026-10-14 (Max Damage + Kioku Grid bench on the 1:1 engine); before: 2026-10-10 (1:1 port in src/engine started); before: 2026-10-03 (passive states per giver, UP_HP_FIXED max HP; earlier: duplicate active-skill states); before: 2026-10-02 (game 3.19.1: version diff + newsletter, Magic Seal, break/notice team conditions, IMM_SLIP_DMG burst; branch claude/version-3.19.1)._
 
+
+## 2026-11-09: per-enemy "Alive" on the PvE Simulator and Highest Dmg Calc (user's request)
+
+- The two pages share one stage / enemy setup now: `composables/useStageEnemies` (wave, phase, adds, per enemy alive /
+  target / broken / rate, weak elements + ailments of the enemies alive, `maxDmgEnemyOpts()`),
+  `components/StageWaveRows` (wave / phase rows) and `components/EnemyCards`. StageEnemySelector is those plus the
+  derived rows and mode buffs.
+- The "Adds" row (2026-11-05) is gone: the adds a wave can summon are always on the field as enemy cards (where the
+  game's summon puts them, while there is room), on both pages; untick Alive to leave one out.
+- Every enemy card has an "Alive" chip (on by default, kept per appearance id when an add is toggled, reset with the
+  field; the last one alive can't be unticked; unticking the target moves it to the wave's main target / the first
+  alive). A dead card is greyed out and loses Target / Broken.
+- Max Damage (both pages, loadout search and diagnosis on the PvE Simulator) runs on `aliveWave` with the per-enemy
+  options remapped; the PvE Simulator clears vortex enemy choices when an enemy dies / comes back (their indexes
+  shift). Its saved setups carry `dead` (indexes into the field, adds included). The battle simulator ignores Alive.
+- Engine side (app tool, battle/EngineMaxDamage `removeEnemies`, `MaxDmgOptions.removedEnemies`, EngineTeamScore
+  `TeamScoreStage.removed`): after the wave / phase / summons are set up, the dead units leave the field through
+  BattleUnitBundle.RemoveUnit (0x14A12F0) and the states they gave others are dropped, so they are not hit, not
+  targeted and not counted by enemy-count effects (Oracle Ray's "fewer than 5 enemies" hits). [APPROXIMATION] other
+  effects of their battle-start passives stay.
+- Layout: every per-unit grid on the PvE Simulator (team, effects, enemies, extra enemy rows, Stats for nerds, share
+  image) and EnemyCards is "at most 5 columns, at least 170px each" (`repeat(auto-fill, minmax(max(170px,
+  (100% - 4 gaps) / 5), 1fr))`); enemies sit in their position's column from 978px (5 x 170 + 4 x 2rem). Before: 200px
+  minimum, so 4 columns at the page's width.
+- Probe `scripts/sim/.probe-enemy-off.ts` (982250 wave 1, Oracle Ray team: Ultimate on the last enemy 2,480 with 3
+  alive -> 2,640 with 1 alive).
 
 ## 2026-11-05: Highest Dmg Calc "Adds" toggles (user's request)
 

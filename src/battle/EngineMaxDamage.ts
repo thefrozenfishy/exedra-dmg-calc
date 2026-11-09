@@ -215,6 +215,7 @@ function buildBattle(ctx: Ctx, dealerPos: number, rnd: MaxDamageRandom): Built {
     const d = EngineBattle.createDirector(ctx.setup)
     enterWave(d, ctx.waveIdx, ctx.phase)
     summonInto(d, ctx.enemyApps)
+    removeEnemies(d, ctx.opts.removedEnemies ?? [])
     const bundle = d.battleUnitBundle
     const dic: Map<number, any> = bundle.dic
     const allies = [...bundle.allyList].sort((a: any, b: any) => a._PositionId - b._PositionId)
@@ -297,6 +298,24 @@ function summonInto(d: any, apps: QuestEnemyAppearance[]): void {
     const onField = new Set(d.battleUnitBundle.enemyList.map((u: any) => u._BattleParameter?._QuestEnemyAppearanceMstId))
     const ids = apps.filter(a => a.conditionType === 3 && a.summonId > 0 && !onField.has(a.questEnemyAppearanceMstId)).map(a => a.summonId)
     if (ids.length && typeof d.GetSummonedUnitList === "function") d.GetSummonedUnitList(ids)
+}
+
+/** App tool (not a game step): the enemies the page turned off (`ids`: appearance ids, one unit each, in position order)
+ *  leave the field before anything is evaluated, so they are not hit, not targeted and not counted (e.g. Oracle Ray's
+ *  "fewer than 5 enemies" extra hits): BattleUnitBundle.RemoveUnit (0x14A12F0), and the states they gave other units
+ *  (their battle-start passives) go with them. [APPROXIMATION] Anything else their battle-start passives changed stays. */
+function removeEnemies(d: any, ids: number[]): void {
+    if (!ids.length) return
+    const bundle = d.battleUnitBundle
+    const gone = new Set<number>()
+    for (const id of ids) {
+        const u = [...bundle.enemyList].sort((a: any, b: any) => a._PositionId - b._PositionId)
+            .find((u: any) => u._BattleParameter?._QuestEnemyAppearanceMstId === id && !gone.has(u._Id))
+        if (!u) continue
+        bundle.RemoveUnit$BattleUnit(u)
+        gone.add(u._Id)
+    }
+    if (gone.size) for (const u of bundle.dic.values()) u._Condition._StateList = u._Condition._StateList.filter((s: any) => !gone.has(s._UserUnitId))
 }
 
 /** The enemies on the field when phase `phase` of wave `waveIdx` starts, as the Max Damage battle builds them: their

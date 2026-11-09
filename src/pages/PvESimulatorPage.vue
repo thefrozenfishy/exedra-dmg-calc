@@ -53,7 +53,7 @@
                 </div>
             </div>
             <div class="share-enemies-grid">
-                <div v-for="(e, i) in enemyInfo" :key="e.id" class="share-enemy-slot">
+                <div v-for="(e, i) in enemyInfo" v-show="alive[i]" :key="e.id" class="share-enemy-slot">
                     <img class="share-enemy-img" :src="enemyImage(e.enemyMstId)" :alt="e.name" />
                     <div class="share-enemy-name">{{ e.name }}</div>
                     <div class="share-enemy-hp">HP {{ fmt(e.hp) }}<span v-if="e.gauges > 1"> ×{{ e.gauges }}</span>
@@ -86,94 +86,16 @@
             <h2 class="section-title">Stage</h2>
             <StagePicker v-model="stageId" />
 
-            <div v-if="waves.length" class="wave-row">
-                <span class="filters-heading">Wave</span>
-                <button v-for="(w, i) in waves" :key="i" type="button" class="chip" :class="{ active: waveIdx === i }"
-                    @click="waveIdx = i">{{ i + 1 }} <span class="chip-count">{{ Math.min(w.length, 5) }} enem{{
-                        Math.min(w.length, 5)
-                        === 1 ? 'y' : 'ies' }}<template v-if="w.length > 5"> + {{ w.length - 5 }} backup{{ w.length - 5
-                            === 1 ? '' :
-                            's' }}</template></span></button>
-                <span class="row-hint">Max Damage uses the enemies on the field when the selected wave starts; the
-                    battle
-                    simulator plays every wave.</span>
-                <a v-if="wikiUrl" class="wiki-link" :href="wikiUrl" target="_blank" rel="noopener"
-                    title="This stage's battle page on exedra.wiki">details →</a>
-            </div>
-            <div v-if="phases.length" class="wave-row">
-                <span class="filters-heading">Phase</span>
-                <button v-for="f in phases" :key="f.step" type="button" class="chip" :class="{ active: phase === f.step }"
-                    :title="phaseTitle(f)" @click="phase = f.step">{{ f.step }} <span class="chip-count">{{
-                        f.step === 1 ? 'start' : `from ${f.threshold / 10}% HP` }} · ATK {{ fmt(f.appearance.atk) }}</span></button>
-                <span class="row-hint">The boss changes form at these HP thresholds. Max Damage uses the selected
-                    form, with the enemies on the field when it comes in.</span>
-            </div>
+            <StageWaveRows :s="stageView" :wiki-url="wikiUrl"
+                wave-hint="Max Damage uses the enemies on the field when the selected wave starts; the battle simulator plays every wave. Untick Alive on an enemy to leave it out of Max Damage entirely."
+                phase-hint="Max Damage uses the selected form, with the enemies on the field when it comes in." />
         </section>
 
         <!-- Enemies, in the same 5 columns as the team below -->
         <div v-if="enemyInfo.length" class="enemies-block">
             <h2 class="section-title page-section-title">Enemies <span class="title-sub">· wave {{ waveIdx + 1 }}<template v-if="phases.length"> · phase {{ phase }}</template></span>
             </h2>
-            <div class="team-grid enemy-grid">
-                <div v-for="(e, i) in enemyInfo" :key="e.id" class="enemy-card"
-                    :class="[`pos-${e.position}`, { main: mainTargetIdx === i }]">
-                    <div class="enemy-top">
-                        <img class="enemy-img" :src="enemyImage(e.enemyMstId)" :alt="e.name" @error="hideImg" />
-                        <div class="enemy-title">
-                            <div class="enemy-name" :title="e.name">{{ e.name }}</div>
-                            <div class="enemy-break">
-                                <template v-if="e.breakPoint > 0">Break {{ e.breakPoint }} · broken {{ e.initRate }}–{{
-                                    e.maxRate
-                                    }}%</template>
-                                <template v-else>Can't be broken</template>
-                            </div>
-                        </div>
-                    </div>
-                    <div v-if="e.tag" class="enemy-tag">{{ e.tag }}</div>
-                    <div class="enemy-stat-grid">
-                        <div class="enemy-stat"><span class="enemy-stat-label">HP</span>
-                            <span class="enemy-stat-value">{{ fmt(e.hp) }}<span v-if="e.gauges > 1" class="muted"> ×{{
-                                    e.gauges
-                                    }}</span></span>
-                        </div>
-                        <div class="enemy-stat"><span class="enemy-stat-label">ATK</span><span
-                                class="enemy-stat-value">{{
-                                fmt(e.atk) }}</span></div>
-                        <div class="enemy-stat"><span class="enemy-stat-label">DEF</span><span
-                                class="enemy-stat-value">{{
-                                fmt(e.def) }}</span></div>
-                        <div class="enemy-stat"><span class="enemy-stat-label">SPD</span><span
-                                class="enemy-stat-value">{{ e.spd
-                                }}</span></div>
-                    </div>
-                    <div v-if="e.weak.length" class="enemy-elements weak" title="Weak to">Weak
-                        <img v-for="w in e.weak" :key="w" :src="`/exedra-dmg-calc/elements/${w}.png`" :alt="w"
-                            :title="w" class="elem-icon" />
-                    </div>
-                    <!-- Every resisted element has the same rate, so one number covers them all. -->
-                    <div v-if="e.resists.length" class="enemy-elements resist" title="Resists">Resist
-                        <img v-for="r in e.resists" :key="r.el" :src="`/exedra-dmg-calc/elements/${r.el}.png`"
-                            :alt="r.el" :title="r.el" class="elem-icon" />
-                        −{{ e.resists[0].pct }}%
-                    </div>
-                    <div class="enemy-controls">
-                        <label class="chip" :class="{ active: mainTargetIdx === i }"
-                            title="Single-target skills hit this enemy in Max Damage">
-                            <input type="radio" :checked="mainTargetIdx === i" @change="mainTargetIdx = i" /> Target
-                        </label>
-                        <label v-if="e.breakPoint > 0" class="chip" :class="{ active: !!broken[i] }"
-                            title="Evaluate Max Damage against this enemy while it's broken">
-                            <input type="checkbox" :checked="!!broken[i]"
-                                @change="setBroken(i, ($event.target as HTMLInputElement).checked)" /> Broken
-                        </label>
-                        <label v-if="e.breakPoint > 0 && broken[i]" class="rate-field" title="Broken DMG rate (%)">
-                            <input class="num" type="number" min="100" :max="e.maxRate"
-                                :value="breakRate[i] ?? e.maxRate"
-                                @change="setBreakRate(i, Number(($event.target as HTMLInputElement).value), e.maxRate)" />%
-                        </label>
-                    </div>
-                </div>
-            </div>
+            <EnemyCards :s="stageView" />
 
             <template v-for="row in extraEnemyRows" :key="row.title">
                 <h3 class="enemy-row-title">{{ row.title }}</h3>
@@ -745,10 +667,8 @@ import { useSavedTeams } from '../store/savedTeams'
 import { PendingDecision, type RngDecision, type RngEvent, type RngMode } from '../models/BattleRng'
 import { toast } from 'vue3-toastify'
 import { TargetType, skillDetailId, type BattleSnapshot, type SkillDetail } from '../types/KiokuTypes'
-import { elementMap } from '../types/enums'
-import { stageWaves, stageWaveMeta, summonTemplates, wavePositionIds, enemyName, breakMstOf, ELEMENT_KEYS, questStages, soloRaidInfo, isSoloRaidStage, multiRaidInfo, type QuestEnemyAppearance, type ModeChangeInfo } from '../models/PvE'
-import { stageBattleType, wavePhases, waveStartUnits } from '../models/PvEBattle'
-import { phaseWave } from '../battle/EngineMaxDamage'
+import { stageWaves, summonTemplates, questStages, soloRaidInfo, isSoloRaidStage, multiRaidInfo } from '../models/PvE'
+import { stageBattleType } from '../models/PvEBattle'
 import passiveMstJson from '../assets/base_data/getPassiveSkillMstList.json'
 import { getScoreAttackStage, scoreAttackStageScore, scoreAttackScoreParts, type ScoreAttackScoreInputs } from '../models/PvEScore'
 import { isEffectValueType, type MaxDmgEffect, type MaxDmgResult, type MemberDamage, type SkillDamage } from '../models/MaxDamage'
@@ -770,6 +690,9 @@ import type { MaxDmgOptions } from '../models/MaxDamage'
 import type { HitTrace } from '../battle/EngineDamageTrace'
 import { crystalises } from '../utils/helpers'
 import { wikiBattleUrl } from '../utils/wikiBattlePage'
+import { useStageEnemies, enemyView } from '../composables/useStageEnemies'
+import StageWaveRows from '../components/StageWaveRows.vue'
+import EnemyCards from '../components/EnemyCards.vue'
 
 const team = useTeamStore()
 const stageId = useSetting<number>('pveStageId', 982250)
@@ -808,67 +731,15 @@ const enemyImage = (enemyMstId: number) => `/exedra-dmg-calc/enemy/${enemyMstId}
 const portraitImage = (portrait: string) => portraits[portrait] ? `/exedra-dmg-calc/portrait_images/${portraits[portrait].resourceName}_thumbnail.png` : ''
 
 // ---- stage / enemies ----
+// Shared with the Highest Dmg Calc (composables/useStageEnemies, StageWaveRows, EnemyCards): wave, boss phase (Crisis
+// "phase 1/2/3": Max Damage uses one form), adds summoned mid-fight (on the field), and per enemy alive / target / broken / rate.
 const waveIdx = ref(0)
-const wikiUrl = computed(() => stageId.value ? wikiBattleUrl(stageId.value) : undefined)
-const waveMetas = computed(() => stageId.value ? stageWaveMeta(stageId.value) : [])
-const waves = computed(() => waveMetas.value.map(m => m.appearances))
-const waveMeta = computed(() => waveMetas.value[Math.min(waveIdx.value, waveMetas.value.length - 1)])
-// A wave whose boss changes form at HP thresholds has phases (Crisis "phase 1/2/3"): Max Damage uses one form.
 const phase = ref(1)
-const phases = computed(() => wavePhases(waveMeta.value))
-const phaseTitle = (f: ModeChangeInfo) => `${enemyName(f.appearance)}: HP ${fmt(f.appearance.hp)} · ATK ${fmt(f.appearance.atk)} · DEF ${fmt(f.appearance.def)} · SPD ${f.appearance.speed}`
-const currentPhase = () => phases.value.some(f => f.step === phase.value) ? phase.value : 1
-// The enemies on the field when the wave (or the selected phase) starts (at most 5): Max Damage is evaluated against
-// these only. A later phase: the boss's form and what the game's form change brings in (battle/EngineMaxDamage).
-const wave = computed(() => waveMeta.value
-    ? phaseWave(stageId.value, Math.min(waveIdx.value, waveMetas.value.length - 1), currentPhase(), waveStartUnits(waveMeta.value))
-    : [])
-const mainTargetIdx = ref(0)
-const broken = ref<boolean[]>([])
-const breakRate = ref<(number | undefined)[]>([])
-
-watch(stageId, () => { waveIdx.value = 0 })
-watch([stageId, waveIdx], () => { phase.value = 1 })
-watch(wave, w => {
-    const main = w.findIndex(a => a.isMainTargetEnemy)
-    mainTargetIdx.value = main >= 0 ? main : 0
-    broken.value = w.map(a => (breakMstOf(a)?.breakPoint ?? 0) > 0)
-    breakRate.value = w.map(() => undefined)
-}, { immediate: true })
-
-const setBroken = (i: number, v: boolean) => { const b = [...broken.value]; b[i] = v; broken.value = b }
-const setBreakRate = (i: number, v: number, max: number) => {
-    const r = [...breakRate.value]; r[i] = Number.isFinite(v) ? Math.max(100, Math.min(max, v)) : undefined; breakRate.value = r
-}
-
-function enemyView(a: QuestEnemyAppearance, tag = '') {
-    const b = breakMstOf(a)
-    return {
-        tag,
-        id: a.questEnemyAppearanceMstId, enemyMstId: a.enemyMstId, name: enemyName(a),
-        hp: a.hp, atk: a.atk, def: a.def, spd: a.speed,
-        gauges: a.startHpGaugeCount > 0 ? a.startHpGaugeCount : a.hpGaugeCount,
-        weak: [1, 2, 3, 4, 5, 6].map(i => a[`weakElement${i}`]).filter((x: number) => x >= 1 && x <= 6).map((x: number) => elementMap[x]),
-        resists: ELEMENT_KEYS.map((k, el) => ({ el: elementMap[el], pct: k ? (a[`${k}ResistRate`] ?? 0) / 10 : 0 })).filter(r => r.pct > 0),
-        breakPoint: b?.breakPoint ?? 0,
-        initRate: Math.trunc((b?.initialBreakedDamageReceiveRate ?? 1000) / 10),
-        maxRate: Math.trunc((b?.maxBreakedDamageReceiveRate ?? 1000) / 10),
-    }
-}
-// Each start unit with its position (1-5, left to right), which is also its column above the team.
-const enemyInfo = computed(() => {
-    const positions = wavePositionIds(wave.value.length)
-    return wave.value.map((a, i) => ({ ...enemyView(a, formTag(a)), position: positions[i] }))
-})
-// A boss that changes form at HP thresholds (type 1: HP ratio in 1/1000; the only type in the data): every form
-// of the wave, first one included, is labelled with where it takes over.
-const formLabel = (m: ModeChangeInfo) => `Form ${m.step} · ${m.step === 1 ? 'from the start' : `from ${m.threshold / 10}% HP`}`
-function formTag(a: QuestEnemyAppearance): string {
-    const forms = waveMeta.value?.modeChanges ?? []
-    if (a.conditionType === 3) return 'Summoned' 
-    const own = forms.find(m => m.appearance.questEnemyAppearanceMstId === a.questEnemyAppearanceMstId)
-    return own ? formLabel(own) : ''
-}
+const se = useStageEnemies(stageId, waveIdx, phase)
+const stageView = reactive(se)
+const { waves, waveMeta, phases, wave, aliveWave, aliveInfo, alive, mainTargetIdx, broken, breakRate, enemyInfo, formLabel } = se
+const wikiUrl = computed(() => stageId.value ? wikiBattleUrl(stageId.value) : undefined)
+const currentPhase = () => se.phasePos.value
 // Endless waves list more than 5 enemies: only 5 can be on the field, the rest come in as those are defeated.
 // Summons are defined for the whole stage (identical templates shown once).
 const extraEnemyRows = computed(() => {
@@ -882,7 +753,7 @@ const extraEnemyRows = computed(() => {
     return [
         { title: 'Other forms', enemies: forms, hint: 'The boss above changes form when its HP drops to each threshold, keeping its position. Pick a phase above to use another form in Max Damage.' },
         { title: 'Backups', enemies: backups, hint: 'Only 5 enemies can be on the field at once. These wait in the back and come in as the ones on the field are defeated. Not part of Max Damage.' },
-        { title: 'Summons', enemies: summons, hint: 'Enemies that can be summoned during the battle. Not part of Max Damage, except the ones a boss form brings in when its phase starts (shown above when that phase is selected).' },
+        { title: 'Summons', enemies: summons, hint: 'Enemies that can be summoned during the battle. Not part of Max Damage, except the adds on the field above and the ones a boss form brings in when its phase starts (shown above when that phase is selected).' },
     ].filter(r => r.enemies.length)
 })
 
@@ -979,13 +850,13 @@ function maxDmgOpts(): MaxDmgOptions {
         excluded: new Set(excluded), included: new Set(included), stacks: new Map(stacks),
         vortexEnemies: JSON.parse(JSON.stringify(vortexEnemies)),
         allyTargets: JSON.parse(JSON.stringify(allyTargets)),
-        broken: [...broken.value], breakRate: [...breakRate.value], mainTargetIdx: mainTargetIdx.value,
+        ...se.maxDmgEnemyOpts(),
         partyBuffId: isSoloRaidStage(stageId.value) ? partyBuffId.value || undefined : undefined,
     }
 }
-const currentWaveIdx = () => Math.min(waveIdx.value, waveMetas.value.length - 1)
+const currentWaveIdx = () => se.wavePos.value
 function requestMaxDamage() {
-    if (!teamKiokus.value.length || !wave.value.length) { maxDmg.value = undefined; maxDmgBusy.value = false; return }
+    if (!teamKiokus.value.length || !aliveWave.value.length) { maxDmg.value = undefined; maxDmgBusy.value = false; return }
     try {
         if (!maxDmgWorker) {
             maxDmgWorker = newMaxDamageWorker()
@@ -1002,7 +873,7 @@ function requestMaxDamage() {
             id: ++maxDmgReq,
             slots: JSON.parse(JSON.stringify(filledSlots.value.map(([s]) => s))),
             stageId: stageId.value, waveIdx: currentWaveIdx(), phase: currentPhase(),
-            wave: JSON.parse(JSON.stringify(wave.value)), dealerPos: dealerPos.value,
+            wave: JSON.parse(JSON.stringify(aliveWave.value)), dealerPos: dealerPos.value,
             opts: { ...maxDmgOpts(), trace: statsForNerds.value },
         } satisfies MaxDamageRequest)
     } catch (e) {
@@ -1012,7 +883,9 @@ function requestMaxDamage() {
 }
 // "Stats for nerds" (collapsed by default): the engine's damage steps for the dealer's best skill, recorded only while open
 const statsForNerds = useSetting('pveStatsForNerds', false)
-watch([teamKiokus, wave, dealerPos, () => [...excluded], () => [...included], () => JSON.stringify(vortexEnemies), () => JSON.stringify(allyTargets), () => [...stacks], broken, breakRate, mainTargetIdx, partyBuffId], requestMaxDamage, { deep: true, immediate: true })
+// a vortex's chosen enemies are indexes of the enemies alive: they start over when one dies / comes back
+watch(alive, (a, old) => { if (old && a.length === old.length && a.some((x, i) => x !== old[i])) for (const k of Object.keys(vortexEnemies)) delete vortexEnemies[k] })
+watch([teamKiokus, aliveWave, dealerPos, () => [...excluded], () => [...included], () => JSON.stringify(vortexEnemies), () => JSON.stringify(allyTargets), () => [...stacks], broken, breakRate, mainTargetIdx, partyBuffId], requestMaxDamage, { deep: true, immediate: true })
 watch(statsForNerds, open => { if (open && !maxDmg.value?.trace) requestMaxDamage() })
 onBeforeUnmount(() => { maxDmgWorker?.terminate(); loadoutPool?.close() })
 const dealer = computed(() => maxDmg.value?.members[dealerPos.value])
@@ -1030,7 +903,7 @@ const dmgCols: { label: string, title?: string, get: (m: MemberDamage) => SkillD
 // Hide a column when no team member has anything in it (e.g. no Switch Skills or Follow-ups in the team)
 const visibleDmgCols = computed(() => dmgCols.filter(col => maxDmg.value?.members.some(m => col.get(m))))
 const skillLabel = (s: SkillDamage) => s.name ? `${s.label} (${s.name})` : s.label
-const perEnemyTitle = (s: SkillDamage) => s.perEnemy.map((x, i) => x.crit ? `${enemyInfo.value[i]?.name}: ${fmt(x.crit)} crit / ${fmt(x.normal)} / avg ${fmt(x.avg)}` : '').filter(Boolean).join('\n')
+const perEnemyTitle = (s: SkillDamage) => s.perEnemy.map((x, i) => x.crit ? `${aliveInfo.value[i]?.name}: ${fmt(x.crit)} crit / ${fmt(x.normal)} / avg ${fmt(x.avg)}` : '').filter(Boolean).join('\n')
 
 // ---- find best attacker loadout (models/EngineAttackerLoadout): portrait, support and crystalis of the damage dealer
 // that give the highest Max Damage above (crit total, or average total), with everything else as on the page
@@ -1046,7 +919,7 @@ const loadoutText = (r: AttackerLoadoutRow) => [r.portrait, r.support?.name ?? '
 
 async function optimizeAttackerLoadout(mode: LoadoutMode) {
     const slot = team.slots[attackerIndex.value]
-    if (loadoutBusy.value || !slot?.main || !wave.value.length) return
+    if (loadoutBusy.value || !slot?.main || !aliveWave.value.length) return
     const pos = dealerPos.value
     const slots = plain(filledSlots.value.map(([s]) => s)) as TeamSlot[]
     // what the panel shows now (the search fills empty sub crystalis with the defaults, so its start can differ)
@@ -1061,7 +934,7 @@ async function optimizeAttackerLoadout(mode: LoadoutMode) {
         toast.error(String((e as Error)?.message ?? e), { position: toast.POSITION.TOP_RIGHT, icon: false })
         return
     }
-    const context: LoadoutContext = { stageId: stageId.value, waveIdx: currentWaveIdx(), phase: currentPhase(), wave: plain(wave.value), dealerPos: pos, opts: maxDmgOpts() }
+    const context: LoadoutContext = { stageId: stageId.value, waveIdx: currentWaveIdx(), phase: currentPhase(), wave: plain(aliveWave.value), dealerPos: pos, opts: maxDmgOpts() }
     const pool = loadoutPool = new EngineLoadoutPool(context, undefined, err => console.warn('Loadout score failed', err))
     loadoutBusy.value = true
     loadoutCancelled = false
@@ -1175,11 +1048,11 @@ const cancelDiagnosis = () => { diagCancelled = true; diagPool?.close() }
 async function runDiagnosis() {
     const col = diagColumns.value.find(c => c.id === diagColumnId.value)
     const observed = diagObserved.value
-    if (diagBusy.value || !col || !(observed > 0) || !wave.value.length) return
+    if (diagBusy.value || !col || !(observed > 0) || !aliveWave.value.length) return
     const hit = diagHit.value
     const context: VariantContext = {
         slots: plain(filledSlots.value.map(([s]) => s)) as TeamSlot[], stageId: stageId.value, waveIdx: currentWaveIdx(), phase: currentPhase(),
-        wave: plain(wave.value), dealerPos: dealerPos.value, opts: { ...maxDmgOpts(), onlyColumn: col.label },
+        wave: plain(aliveWave.value), dealerPos: dealerPos.value, opts: { ...maxDmgOpts(), onlyColumn: col.label },
     }
     const pool = diagPool = new EngineVariantPool(context, undefined, err => console.warn('Damage check failed', err))
     diagBusy.value = true
@@ -1251,14 +1124,14 @@ const nerdCalc = computed(() => {
         out.push('')
         if (dealt !== traced) out.push(line('Other (final..)', dealt - traced))
         out.push(line('Result', dealt))
-        return { title: en?.name ?? enemyInfo.value[i]?.name ?? `Enemy ${i + 1}`, text: hits.length || dealt ? out.join('\n') : `${line('Skill', t.skill)}\n\nNot hit.` }
+        return { title: en?.name ?? aliveInfo.value[i]?.name ?? `Enemy ${i + 1}`, text: hits.length || dealt ? out.join('\n') : `${line('Skill', t.skill)}\n\nNot hit.` }
     })
 })
 const nerdEnemies = computed(() => {
     const t = nerdTrace.value
     if (!t) return []
     return t.enemies.map((en, i) => {
-        if (!en) return { title: enemyInfo.value[i]?.name ?? `Enemy ${i + 1}`, text: '(not on the field)' }
+        if (!en) return { title: aliveInfo.value[i]?.name ?? `Enemy ${i + 1}`, text: '(not on the field)' }
         const brk = !en.canBreak ? "can't break" : en.broken ? `broken, ${en.breakRate}% DMG (max ${en.maxBreakRate}%)` : 'not broken'
         return {
             title: en.name, text: [
@@ -1847,6 +1720,7 @@ function currentSetup(): PvESetup {
         target: mainTargetIdx.value,
         broken: [...broken.value],
         breakRate: breakRate.value.map(r => r ?? null),
+        dead: alive.value.map((a, i) => a ? -1 : i).filter(i => i >= 0),
         dealer: attackerIndex.value,
         excluded: [...excluded],
         included: [...included],
@@ -1879,6 +1753,7 @@ async function applySetup(raw: unknown) {
     await nextTick()
     if (phases.value.some(f => f.step === s.phase)) phase.value = s.phase!
     await nextTick()
+    if (s.dead.length && s.dead.length < wave.value.length && s.dead.every(i => i < wave.value.length)) alive.value = wave.value.map((_, i) => !s.dead.includes(i))
     if (s.target < wave.value.length) mainTargetIdx.value = s.target
     if (s.broken.length === wave.value.length) broken.value = [...s.broken]
     if (s.breakRate.length === wave.value.length) breakRate.value = s.breakRate.map(r => r ?? undefined)
@@ -2181,7 +2056,7 @@ const saved = useSavedTeams({
 .share-enemies-grid {
     display: grid;
     gap: 0.75rem;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(max(170px, calc((100% - 4 * 0.75rem) / 5)), 1fr));
 }
 
 .share-enemies-grid {
@@ -2403,7 +2278,7 @@ const saved = useSavedTeams({
     text-decoration: underline;
 }
 
-/* Same columns as .team-grid; while it shows 5 columns, each enemy sits above its position (1-5). */
+/* Same columns as .team-grid (components/EnemyCards: each enemy above its position 1-5 while 5 columns fit). */
 .enemies-block {
     container-type: inline-size;
 }
@@ -2415,11 +2290,11 @@ const saved = useSavedTeams({
 }
 
 .team-grid.enemy-grid {
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     margin-top: 0.75rem;
 }
 
-@container (min-width: 1128px) {
+/* 5 columns of 170px + 4 gaps of 2rem */
+@container (min-width: 978px) {
     .enemy-card.pos-1 {
         grid-column: 1;
     }
@@ -2587,10 +2462,12 @@ const saved = useSavedTeams({
 }
 
 /* ── Team ── */
+/* At most 5 columns (a full field: 5 members / 5 enemies), at least 170px each: fewer only when 5 don't fit. auto-fill
+   keeps empty columns, so the team, its effects and the enemies above line up. */
 .team-grid {
     display: grid;
     gap: 2rem;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(max(170px, calc((100% - 4 * 2rem) / 5)), 1fr));
 }
 
 .team-slot {
@@ -3090,7 +2967,6 @@ const saved = useSavedTeams({
 
 /* Same columns as .team-grid (auto-fill keeps empty slots so each cell stays under its member). */
 .team-grid.fx-grid {
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     align-items: start;
 }
 
@@ -3648,7 +3524,8 @@ const saved = useSavedTeams({
 
 .debug-section-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    /* one column per unit, at most 5 (a full field), like the team */
+    grid-template-columns: repeat(auto-fill, minmax(max(170px, calc((100% - 4 * 0px) / 5)), 1fr));
 }
 
 .debug-slot {

@@ -73,6 +73,9 @@ export interface MaxDmgOptions {
     broken?: boolean[]            // per enemy: evaluate as broken
     breakRate?: (number | undefined)[] // per enemy broken damage rate in % (default: the enemy's max)
     mainTargetIdx?: number        // single-target skills hit this enemy
+    // engine Max Damage (the stage picker's per-enemy "off"): appearance ids of enemies taken off the field before the
+    // battle is evaluated (one unit per entry); the page's enemy list (and the per-enemy options) leaves them out
+    removedEnemies?: number[]
     onlyPos?: number              // evaluate only this member as the attacker (the others get no skills)
     // Ailment states every enemy carries ("CURSE_ATK", "STUN", ...). When set, conditions about ailments are no longer
     // assumed met but checked against these (ailmentConditionsMet), for the team's effects and the damage rows alike.
