@@ -15,10 +15,14 @@ teams) is exposed. A malformed friend code returns `400`, an unknown one `404`, 
 `{code, message}` body (`EXD400` / `EXD404`).
 
 ```bash
-curl "$SUPABASE_URL/rest/v1/rpc/export_teams_v1?target_friend_id=ABCDE" -H "apikey: $SUPABASE_KEY"
+curl "https://hqutdzugcelwjooqwpst.supabase.co/rest/v1/rpc/export_teams_v1?target_friend_id=ABCDE" \
+  -H "apikey: sb_publishable_..."
 ```
 
 ```js
+const SUPABASE_URL = "https://hqutdzugcelwjooqwpst.supabase.co"
+const SUPABASE_KEY = "sb_publishable_..." // the toolbox's publishable key
+
 const get = async (fn, friendCode) => {
   const url = `${SUPABASE_URL}/rest/v1/rpc/${fn}?target_friend_id=${encodeURIComponent(friendCode)}`
   const res = await fetch(url, { headers: { apikey: SUPABASE_KEY } })
@@ -30,7 +34,7 @@ const roster = await get("export_characters_v1", "ABCDE")
 const teams = await get("export_teams_v1", "ABCDE")
 ```
 
-Ask the toolbox owner for the project URL and publishable key rather than scraping them from the web bundle.
+Ask the toolbox owner for the publishable key (`sb_publishable_...`) rather than scraping it from the web bundle.
 
 ## Reading the data with the master data
 

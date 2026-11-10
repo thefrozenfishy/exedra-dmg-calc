@@ -20,12 +20,8 @@ info:
 
     Source: `supabase/migrations/0027_external_characters_v1.sql`, `supabase/migrations/0028_external_teams_v1.sql`.
 servers:
-  - url: https://{projectRef}.supabase.co/rest/v1
-    description: The toolbox's Supabase project. Ask the toolbox owner for the project ref and publishable key.
-    variables:
-      projectRef:
-        default: your-project-ref
-        description: Supabase project ref.
+  - url: https://hqutdzugcelwjooqwpst.supabase.co/rest/v1
+    description: The toolbox's Supabase project. Ask the toolbox owner for the publishable key.
 security:
   - supabaseKey: []
 tags:
