@@ -6,26 +6,28 @@ spec: [`openapi.yaml`](openapi.yaml). Load it in any OpenAPI viewer (Swagger Edi
 
 | Endpoint | Returns |
 |---|---|
-| `POST /rest/v1/rpc/export_characters_v1` | The player's friend ID and every saved kioku with its build. |
-| `POST /rest/v1/rpc/export_teams_v1` | The player's friend ID and every PvP and PvE Simulator team, shared by link or not. |
+| `GET /rest/v1/rpc/export_characters_v1?target_friend_id=ABCDE` | The player's friend ID and every saved kioku with its build. |
+| `GET /rest/v1/rpc/export_teams_v1?target_friend_id=ABCDE` | The player's friend ID and every PvP and PvE Simulator team, shared by link or not. |
 
-Both take `{"target_friend_id": "ABCDE"}` (or `?target_friend_id=ABCDE` with `GET`) and the toolbox's public
-(publishable) Supabase key in the `apikey` header. There is no login. Anyone who knows a friend code can read
-both, so nothing else (settings, friends list, tier lists, Single Battle teams) is exposed. An unknown friend code
-returns `null`.
+Both need the toolbox's public (publishable) Supabase key in the `apikey` header and nothing else: no login.
+Anyone who knows a friend code can read both, so nothing else (settings, friends list, tier lists, Single Battle
+teams) is exposed. A malformed friend code returns `400`, an unknown one `404`, both with a JSON
+`{code, message}` body (`EXD400` / `EXD404`).
+
+```bash
+curl "$SUPABASE_URL/rest/v1/rpc/export_teams_v1?target_friend_id=ABCDE" -H "apikey: $SUPABASE_KEY"
+```
 
 ```js
-const call = async (fn, friendCode) => {
-  const res = await fetch(`${SUPABASE_URL}/rest/v1/rpc/${fn}`, {
-    method: "POST",
-    headers: { apikey: SUPABASE_KEY, "Content-Type": "application/json" },
-    body: JSON.stringify({ target_friend_id: friendCode }),
-  })
+const get = async (fn, friendCode) => {
+  const url = `${SUPABASE_URL}/rest/v1/rpc/${fn}?target_friend_id=${encodeURIComponent(friendCode)}`
+  const res = await fetch(url, { headers: { apikey: SUPABASE_KEY } })
+  if (res.status === 404) return null // no player has this friend code
   if (!res.ok) throw new Error(`${fn}: ${res.status} ${await res.text()}`)
-  return res.json() // null when the friend code doesn't exist
+  return res.json()
 }
-const roster = await call("export_characters_v1", "ABCDE")
-const teams = await call("export_teams_v1", "ABCDE")
+const roster = await get("export_characters_v1", "ABCDE")
+const teams = await get("export_teams_v1", "ABCDE")
 ```
 
 Ask the toolbox owner for the project URL and publishable key rather than scraping them from the web bundle.

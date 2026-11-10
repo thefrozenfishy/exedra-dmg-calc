@@ -10,11 +10,9 @@ info:
     Both are Supabase (PostgREST) RPCs. They need the toolbox's public (publishable) Supabase key in the `apikey`
     header and nothing else: no login, no user token. Anyone who knows a friend code can read that player's data.
 
-    Lookups are by friend code: 5 characters, case-insensitive, surrounding spaces ignored. An unknown friend code
-    returns `200` with a `null` body.
-
-    Every endpoint can be called with `POST` (JSON body) or `GET` (query parameter). Browsers can call them
-    directly; CORS is open.
+    Both are plain `GET` requests, looked up by friend code (5 letters/digits, case-insensitive, surrounding spaces
+    ignored). A malformed friend code returns `400`, an unknown one `404`, both with an `ApiError` body. Browsers can
+    call them directly; CORS is open.
 
     **Stability.** The `v1` response shapes are frozen. New fields may be added, so ignore unknown fields; nothing
     is renamed or removed. A breaking change ships as a new `_v2` function and `v1` keeps working until consumers
@@ -38,25 +36,11 @@ tags:
 
 paths:
   /rpc/export_characters_v1:
-    post:
+    get:
       tags: [characters]
       operationId: exportCharactersV1
       summary: Saved kioku of a friend code
       description: Every kioku the player has saved in the toolbox, with their build, ordered by `character_id`.
-      requestBody:
-        $ref: "#/components/requestBodies/FriendCodeBody"
-      responses:
-        "200":
-          $ref: "#/components/responses/CharactersOk"
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-    get:
-      tags: [characters]
-      operationId: exportCharactersV1Get
-      summary: Saved kioku of a friend code (GET)
-      description: Same as the `POST` form, with the friend code as a query parameter.
       parameters:
         - $ref: "#/components/parameters/FriendCodeQuery"
       responses:
@@ -66,9 +50,11 @@ paths:
           $ref: "#/components/responses/BadRequest"
         "401":
           $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
 
   /rpc/export_teams_v1:
-    post:
+    get:
       tags: [teams]
       operationId: exportTeamsV1
       summary: Saved PvP and PvE teams of a friend code
@@ -79,20 +65,6 @@ paths:
 
         `slots` and `extra` are returned as stored. The toolbox writes them sanitized, but the database only bounds
         their size, so validate them before use.
-      requestBody:
-        $ref: "#/components/requestBodies/FriendCodeBody"
-      responses:
-        "200":
-          $ref: "#/components/responses/TeamsOk"
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-    get:
-      tags: [teams]
-      operationId: exportTeamsV1Get
-      summary: Saved PvP and PvE teams of a friend code (GET)
-      description: Same as the `POST` form, with the friend code as a query parameter.
       parameters:
         - $ref: "#/components/parameters/FriendCodeQuery"
       responses:
@@ -102,6 +74,8 @@ paths:
           $ref: "#/components/responses/BadRequest"
         "401":
           $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
 
 components:
   securitySchemes:
@@ -120,30 +94,13 @@ components:
       schema:
         $ref: "#/components/schemas/FriendCode"
 
-  requestBodies:
-    FriendCodeBody:
-      required: true
-      content:
-        application/json:
-          schema:
-            type: object
-            required: [target_friend_id]
-            properties:
-              target_friend_id:
-                $ref: "#/components/schemas/FriendCode"
-            additionalProperties: false
-          example:
-            target_friend_id: ABCDE
-
   responses:
     CharactersOk:
-      description: The player's roster, or `null` when no player has this friend code.
+      description: The player's roster.
       content:
         application/json:
           schema:
-            oneOf:
-              - $ref: "#/components/schemas/CharactersExport"
-              - type: "null"
+            $ref: "#/components/schemas/CharactersExport"
           examples:
             found:
               summary: A player with two saved kioku
@@ -175,17 +132,12 @@ components:
                     crys_options:
                       "123": { enabled: true, useIndex: 1, subCrys: [4, 5] }
                     updated_at: "2026-11-10T14:21:29.075845+00:00"
-            notFound:
-              summary: Unknown friend code
-              value: null
     TeamsOk:
-      description: The player's PvP and PvE teams, or `null` when no player has this friend code.
+      description: The player's PvP and PvE teams.
       content:
         application/json:
           schema:
-            oneOf:
-              - $ref: "#/components/schemas/TeamsExport"
-              - type: "null"
+            $ref: "#/components/schemas/TeamsExport"
           examples:
             found:
               summary: One PvP team (two empty slots shown, the rest trimmed)
@@ -217,15 +169,28 @@ components:
                         - {}
                         - {}
                     extra: null
-            notFound:
-              summary: Unknown friend code
-              value: null
     BadRequest:
-      description: The request couldn't be run, e.g. `target_friend_id` is missing (PostgREST error).
+      description: "`target_friend_id` is missing or not 5 letters/digits."
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/PostgrestError"
+            $ref: "#/components/schemas/ApiError"
+          example:
+            code: EXD400
+            message: target_friend_id must be a 5-character friend code
+            details: null
+            hint: null
+    NotFound:
+      description: No player has this friend code.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ApiError"
+          example:
+            code: EXD404
+            message: No player has friend code ZZZZZ
+            details: null
+            hint: null
     Unauthorized:
       description: The `apikey` header is missing or not the toolbox's key.
       content:
@@ -240,6 +205,7 @@ components:
     FriendCode:
       type: string
       description: 5-character friend code. Matched case-insensitively; surrounding spaces are ignored.
+      pattern: "^ *[A-Za-z0-9]{5} *$"
       examples: [ABCDE]
 
     Timestamp:
@@ -542,8 +508,10 @@ components:
           type: boolean
       additionalProperties: true
 
-    PostgrestError:
+    ApiError:
       type: object
+      description: PostgREST error body. `code` is `EXD400` / `EXD404` for this API's own errors.
+      required: [code, message]
       properties:
         code:
           type: string
