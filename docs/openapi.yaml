@@ -1,0 +1,555 @@
+openapi: 3.1.0
+info:
+  title: Exedra Toolbox player data API
+  version: "1"
+  summary: Read a player's saved kioku and saved PvP/PvE teams by friend code.
+  description: |
+    Two read-only endpoints for sites that already ship the game's master data (`getStyleMstList.json`,
+    `getCardMstList.json`, ...) and only need what a player saved in the toolbox.
+
+    Both are Supabase (PostgREST) RPCs. They need the toolbox's public (publishable) Supabase key in the `apikey`
+    header and nothing else: no login, no user token. Anyone who knows a friend code can read that player's data.
+
+    Lookups are by friend code: 5 characters, case-insensitive, surrounding spaces ignored. An unknown friend code
+    returns `200` with a `null` body.
+
+    Every endpoint can be called with `POST` (JSON body) or `GET` (query parameter). Browsers can call them
+    directly; CORS is open.
+
+    **Stability.** The `v1` response shapes are frozen. New fields may be added, so ignore unknown fields; nothing
+    is renamed or removed. A breaking change ships as a new `_v2` function and `v1` keeps working until consumers
+    have moved.
+
+    Source: `supabase/migrations/0027_external_characters_v1.sql`, `supabase/migrations/0028_external_teams_v1.sql`.
+servers:
+  - url: https://{projectRef}.supabase.co/rest/v1
+    description: The toolbox's Supabase project. Ask the toolbox owner for the project ref and publishable key.
+    variables:
+      projectRef:
+        default: your-project-ref
+        description: Supabase project ref.
+security:
+  - supabaseKey: []
+tags:
+  - name: characters
+    description: A player's saved kioku roster.
+  - name: teams
+    description: A player's saved PvP and PvE Simulator teams.
+
+paths:
+  /rpc/export_characters_v1:
+    post:
+      tags: [characters]
+      operationId: exportCharactersV1
+      summary: Saved kioku of a friend code
+      description: Every kioku the player has saved in the toolbox, with their build, ordered by `character_id`.
+      requestBody:
+        $ref: "#/components/requestBodies/FriendCodeBody"
+      responses:
+        "200":
+          $ref: "#/components/responses/CharactersOk"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+    get:
+      tags: [characters]
+      operationId: exportCharactersV1Get
+      summary: Saved kioku of a friend code (GET)
+      description: Same as the `POST` form, with the friend code as a query parameter.
+      parameters:
+        - $ref: "#/components/parameters/FriendCodeQuery"
+      responses:
+        "200":
+          $ref: "#/components/responses/CharactersOk"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+
+  /rpc/export_teams_v1:
+    post:
+      tags: [teams]
+      operationId: exportTeamsV1
+      summary: Saved PvP and PvE teams of a friend code
+      description: |
+        Every PvP and PvE Simulator team the player has synced to the cloud, whether or not it is shared by link.
+        PvP teams come first, then PvE teams, each in the player's own order. Single Battle Calculator teams are
+        not included.
+
+        `slots` and `extra` are returned as stored. The toolbox writes them sanitized, but the database only bounds
+        their size, so validate them before use.
+      requestBody:
+        $ref: "#/components/requestBodies/FriendCodeBody"
+      responses:
+        "200":
+          $ref: "#/components/responses/TeamsOk"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+    get:
+      tags: [teams]
+      operationId: exportTeamsV1Get
+      summary: Saved PvP and PvE teams of a friend code (GET)
+      description: Same as the `POST` form, with the friend code as a query parameter.
+      parameters:
+        - $ref: "#/components/parameters/FriendCodeQuery"
+      responses:
+        "200":
+          $ref: "#/components/responses/TeamsOk"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+
+components:
+  securitySchemes:
+    supabaseKey:
+      type: apiKey
+      in: header
+      name: apikey
+      description: The toolbox's public (publishable) Supabase key. It is not a secret and identifies no user.
+
+  parameters:
+    FriendCodeQuery:
+      name: target_friend_id
+      in: query
+      required: true
+      description: The player's friend code (case-insensitive).
+      schema:
+        $ref: "#/components/schemas/FriendCode"
+
+  requestBodies:
+    FriendCodeBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required: [target_friend_id]
+            properties:
+              target_friend_id:
+                $ref: "#/components/schemas/FriendCode"
+            additionalProperties: false
+          example:
+            target_friend_id: ABCDE
+
+  responses:
+    CharactersOk:
+      description: The player's roster, or `null` when no player has this friend code.
+      content:
+        application/json:
+          schema:
+            oneOf:
+              - $ref: "#/components/schemas/CharactersExport"
+              - type: "null"
+          examples:
+            found:
+              summary: A player with two saved kioku
+              value:
+                version: 1
+                friend_id: ABCDE
+                updated_at: "2026-11-10T14:21:29.075845+00:00"
+                characters:
+                  - character_id: 1010101
+                    enabled: true
+                    dupes: 0
+                    ascension: 0
+                    kioku_lvl: 1
+                    magic_lvl: 1
+                    heartphial_lvl: 1
+                    special_lvl: 1
+                    portrait: null
+                    crys_options: {}
+                    updated_at: "2026-11-10T14:21:29.075845+00:00"
+                  - character_id: 1020101
+                    enabled: true
+                    dupes: 2
+                    ascension: 3
+                    kioku_lvl: 120
+                    magic_lvl: 5
+                    heartphial_lvl: 10
+                    special_lvl: 8
+                    portrait: The Savior's Apostle
+                    crys_options:
+                      "123": { enabled: true, useIndex: 1, subCrys: [4, 5] }
+                    updated_at: "2026-11-10T14:21:29.075845+00:00"
+            notFound:
+              summary: Unknown friend code
+              value: null
+    TeamsOk:
+      description: The player's PvP and PvE teams, or `null` when no player has this friend code.
+      content:
+        application/json:
+          schema:
+            oneOf:
+              - $ref: "#/components/schemas/TeamsExport"
+              - type: "null"
+          examples:
+            found:
+              summary: One PvP team (two empty slots shown, the rest trimmed)
+              value:
+                version: 1
+                friend_id: ABCDE
+                teams:
+                  - team_id: 3f0c2a9e-5b7d-4c1e-9a8f-2d6b1e4c7a90
+                    kind: pvp
+                    name: Arena main
+                    is_shared: false
+                    sort_order: 0
+                    created_at: "2026-11-01T10:00:00+00:00"
+                    updated_at: "2026-11-09T18:30:00+00:00"
+                    slots:
+                      - [{}, {}, {}, {}, {}]
+                      - - main:
+                            id: 1020101
+                            ascension: 3
+                            kiokuLvl: 120
+                            magicLvl: 5
+                            heartphialLvl: 10
+                            specialLvl: 8
+                            portrait: The Savior's Apostle
+                            crysOptions:
+                              "123": { enabled: true, useIndex: 1, subCrys: [4, 5] }
+                        - {}
+                        - {}
+                        - {}
+                        - {}
+                    extra: null
+            notFound:
+              summary: Unknown friend code
+              value: null
+    BadRequest:
+      description: The request couldn't be run, e.g. `target_friend_id` is missing (PostgREST error).
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/PostgrestError"
+    Unauthorized:
+      description: The `apikey` header is missing or not the toolbox's key.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+
+  schemas:
+    FriendCode:
+      type: string
+      description: 5-character friend code. Matched case-insensitively; surrounding spaces are ignored.
+      examples: [ABCDE]
+
+    Timestamp:
+      type: string
+      format: date-time
+
+    CharactersExport:
+      type: object
+      required: [version, friend_id, updated_at, characters]
+      properties:
+        version:
+          const: 1
+        friend_id:
+          type: string
+          description: The player's friend code, upper case.
+        updated_at:
+          description: Newest change to any character row; `null` for an empty roster. Use it to skip re-imports.
+          oneOf:
+            - $ref: "#/components/schemas/Timestamp"
+            - type: "null"
+        characters:
+          type: array
+          description: One entry per saved kioku, ordered by `character_id`.
+          items:
+            $ref: "#/components/schemas/Character"
+
+    Character:
+      type: object
+      required: [character_id, enabled, dupes, ascension, kioku_lvl, magic_lvl, heartphial_lvl, special_lvl,
+        portrait, crys_options, updated_at]
+      properties:
+        character_id:
+          type: integer
+          description: The kioku's `getStyleMstList.styleMstId`.
+        enabled:
+          type: boolean
+          description: Whether the player marked the kioku as owned in the toolbox.
+        dupes:
+          type: integer
+          description: Number of duplicates.
+        ascension:
+          type: integer
+          description: Ascension level.
+        kioku_lvl:
+          type: integer
+          description: Kioku level.
+        magic_lvl:
+          type: integer
+          description: Ability (magic) level.
+        heartphial_lvl:
+          type: integer
+          description: Heartphial level.
+        special_lvl:
+          type: integer
+          description: Ultimate (special) level.
+        portrait:
+          description: Equipped portrait by name (`getCardMstList.name`); `null` when none.
+          type: [string, "null"]
+        crys_options:
+          $ref: "#/components/schemas/CrysOptions"
+        updated_at:
+          $ref: "#/components/schemas/Timestamp"
+
+    CrysOptions:
+      type: object
+      description: The kioku's crystalis as the toolbox stores them, keyed by crystalis id.
+      additionalProperties:
+        $ref: "#/components/schemas/CrystalisSelection"
+
+    CrystalisSelection:
+      type: object
+      description: Other toolbox-only keys can appear; ignore them.
+      properties:
+        enabled:
+          type: boolean
+          description: The toolbox's own toggle for this crystalis.
+        useIndex:
+          type: integer
+          description: Greater than 0 when equipped; 0 when not equipped.
+        subCrys:
+          type: array
+          description: Chosen sub-crys ids.
+          items:
+            type: integer
+        locked:
+          type: boolean
+          description: Toolbox optimizer hint (kept as-is when searching loadouts).
+      additionalProperties: true
+
+    TeamsExport:
+      type: object
+      required: [version, friend_id, teams]
+      properties:
+        version:
+          const: 1
+        friend_id:
+          type: string
+          description: The player's friend code, upper case.
+        teams:
+          type: array
+          description: PvP teams first, then PvE teams, each in the player's own order.
+          items:
+            $ref: "#/components/schemas/Team"
+
+    Team:
+      type: object
+      required: [team_id, kind, name, is_shared, sort_order, created_at, updated_at, slots, extra]
+      properties:
+        team_id:
+          type: string
+          format: uuid
+        kind:
+          type: string
+          enum: [pvp, pve]
+          description: Which simulator the team belongs to.
+        name:
+          type: string
+          maxLength: 200
+          description: Team name; can be empty.
+        is_shared:
+          type: boolean
+          description: Whether the owner turned on link sharing in the toolbox. Returned either way.
+        sort_order:
+          type: integer
+          description: Position in the player's list for this kind (ascending).
+        created_at:
+          $ref: "#/components/schemas/Timestamp"
+        updated_at:
+          description: Last content change (reordering doesn't count).
+          $ref: "#/components/schemas/Timestamp"
+        slots:
+          type: array
+          description: |
+            `pvp`: two teams, `[enemy team, allied team]`. `pve`: one team. Each team is 5 slots in team order.
+            Returned as stored, so validate the lengths.
+          items:
+            type: array
+            items:
+              $ref: "#/components/schemas/TeamSlot"
+        extra:
+          description: "`pve`: the simulator setup saved with the team (`null` when none was saved). `pvp`: `null`."
+          oneOf:
+            - $ref: "#/components/schemas/PvESetup"
+            - type: "null"
+
+    TeamSlot:
+      type: object
+      description: One team position. Empty positions are `{}`.
+      properties:
+        main:
+          $ref: "#/components/schemas/TeamMember"
+        support:
+          $ref: "#/components/schemas/TeamMember"
+        buffMultReduction:
+          type: number
+          description: Toolbox setting for this slot.
+        debuffMultReduction:
+          type: number
+          description: Toolbox setting for this slot.
+
+    TeamMember:
+      type: object
+      description: The kioku's build as saved with the team (it can differ from the player's roster).
+      required: [id, ascension, kiokuLvl, magicLvl, heartphialLvl, specialLvl, crysOptions]
+      properties:
+        id:
+          type: integer
+          description: The kioku's `getStyleMstList.styleMstId`.
+        ascension:
+          type: integer
+        kiokuLvl:
+          type: integer
+        magicLvl:
+          type: integer
+        heartphialLvl:
+          type: integer
+        specialLvl:
+          type: integer
+        portrait:
+          type: string
+          description: Equipped portrait by name (`getCardMstList.name`); absent when none.
+        crysOptions:
+          $ref: "#/components/schemas/CrysOptions"
+
+    PvESetup:
+      type: object
+      description: |
+        PvE Simulator setup (`src/utils/pveSetup.ts`). Indexes are 0-based. Older saves can miss optional fields;
+        other keys can appear.
+      properties:
+        stageId:
+          type: integer
+          description: "`getQuestStageMstList.questStageMstId`."
+        wave:
+          type: integer
+          description: Wave shown in Max Damage (index).
+        phase:
+          type: integer
+          description: That wave's boss form step (1 = first).
+        target:
+          type: integer
+          description: Main target of single-target skills (enemy index in the wave).
+        broken:
+          type: array
+          items:
+            type: boolean
+          description: Broken state per enemy of the wave.
+        breakRate:
+          type: array
+          items:
+            type: [number, "null"]
+          description: Broken damage rate in % per enemy; `null` = the enemy's max.
+        dead:
+          type: array
+          items:
+            type: integer
+          description: Enemies taken out of Max Damage (indexes).
+        dealer:
+          type: integer
+          description: Team slot of the damage dealer.
+        excluded:
+          type: array
+          items:
+            type: string
+          description: Max Damage effect keys left out.
+        included:
+          type: array
+          items:
+            type: string
+          description: Max Damage effect keys that are off by default but turned on.
+        vortexEnemies:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: integer
+        allyTargets:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: integer
+        stacks:
+          type: object
+          additionalProperties:
+            type: number
+          description: Max Damage stack overrides by effect key.
+        control:
+          type: string
+          enum: [auto, manual]
+        rngMode:
+          type: string
+          enum: [hit, miss, weighted, seed, manual]
+        seed:
+          type: integer
+        turns:
+          type: integer
+        decisions:
+          type: array
+          description: "`[decision index, decision]` pairs: manual picks and changed rolls."
+          items:
+            type: array
+            prefixItems:
+              - type: integer
+              - $ref: "#/components/schemas/RngDecision"
+            minItems: 2
+            maxItems: 2
+        ran:
+          type: boolean
+          description: The battle had been simulated when saved.
+        raid:
+          description: Solo Raid settings; `null` outside Solo Raid.
+          oneOf:
+            - type: object
+              properties:
+                partyBuffId:
+                  type: integer
+                noRoundLimit:
+                  type: boolean
+                attempts:
+                  type: array
+                  items:
+                    type: object
+                    additionalProperties: true
+              additionalProperties: true
+            - type: "null"
+      additionalProperties: true
+
+    RngDecision:
+      type: object
+      properties:
+        kind:
+          type: string
+          enum: [crit, effect, target, skill, action]
+        label:
+          type: string
+        value:
+          type: [boolean, number]
+        pick:
+          type: boolean
+      additionalProperties: true
+
+    PostgrestError:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        details:
+          type: [string, "null"]
+        hint:
+          type: [string, "null"]

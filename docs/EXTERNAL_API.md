@@ -1,78 +1,49 @@
-# External API: a player's saved kioku roster
+# External API: a player's saved kioku and teams
 
-For other sites that already ship the game's master data (`getStyleMstList.json`, `getCardMstList.json`, ...) and only
-need the part tied to a player: their saved kioku and their friend ID.
+For other sites that already ship the game's master data (`getStyleMstList.json`, `getCardMstList.json`, ...) and
+only need what a player saved in the toolbox. The full contract (every field, examples, errors) is the OpenAPI
+spec: [`openapi.yaml`](openapi.yaml). Load it in any OpenAPI viewer (Swagger Editor, Redocly, Postman) to browse it.
 
-The data is public. Anyone who knows a friend code can read that roster, exactly like the toolbox's friend view.
-There is no login and no token, and nothing private (settings, friends list, saved teams, tier lists) is reachable.
+| Endpoint | Returns |
+|---|---|
+| `POST /rest/v1/rpc/export_characters_v1` | The player's friend ID and every saved kioku with its build. |
+| `POST /rest/v1/rpc/export_teams_v1` | The player's friend ID and every PvP and PvE Simulator team, shared by link or not. |
 
-## Call
-
-One Supabase RPC, `export_characters_v1`, with the toolbox's public (publishable) Supabase key. That key ships in
-the toolbox's web bundle; ask the toolbox owner for it and the project URL rather than scraping them.
-
-```bash
-curl -X POST "https://<project>.supabase.co/rest/v1/rpc/export_characters_v1" \
-  -H "apikey: <publishable key>" \
-  -H "Content-Type: application/json" \
-  -d '{"target_friend_id": "ABCDE"}'
-```
+Both take `{"target_friend_id": "ABCDE"}` (or `?target_friend_id=ABCDE` with `GET`) and the toolbox's public
+(publishable) Supabase key in the `apikey` header. There is no login. Anyone who knows a friend code can read
+both, so nothing else (settings, friends list, tier lists, Single Battle teams) is exposed. An unknown friend code
+returns `null`.
 
 ```js
-const res = await fetch(`${SUPABASE_URL}/rest/v1/rpc/export_characters_v1`, {
-  method: "POST",
-  headers: { apikey: SUPABASE_KEY, "Content-Type": "application/json" },
-  body: JSON.stringify({ target_friend_id: friendCode }),
-})
-const roster = await res.json() // null when the friend code doesn't exist
-```
-
-The friend code is case-insensitive and surrounding spaces are ignored. Browsers can call this directly (CORS is open).
-
-## Response
-
-`null` for an unknown friend code, otherwise:
-
-```json
-{
-  "version": 1,
-  "friend_id": "ABCDE",
-  "updated_at": "2026-11-10T14:21:29.075845+00:00",
-  "characters": [
-    {
-      "character_id": 1020101,
-      "enabled": true,
-      "dupes": 2,
-      "ascension": 0,
-      "kioku_lvl": 1,
-      "magic_lvl": 1,
-      "heartphial_lvl": 1,
-      "special_lvl": 1,
-      "portrait": "The Savior's Apostle",
-      "crys_options": { "123": { "enabled": true, "useIndex": 1, "subCrys": [4, 5] } },
-      "updated_at": "2026-11-10T14:21:29.075845+00:00"
-    }
-  ]
+const call = async (fn, friendCode) => {
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/rpc/${fn}`, {
+    method: "POST",
+    headers: { apikey: SUPABASE_KEY, "Content-Type": "application/json" },
+    body: JSON.stringify({ target_friend_id: friendCode }),
+  })
+  if (!res.ok) throw new Error(`${fn}: ${res.status} ${await res.text()}`)
+  return res.json() // null when the friend code doesn't exist
 }
+const roster = await call("export_characters_v1", "ABCDE")
+const teams = await call("export_teams_v1", "ABCDE")
 ```
 
-| field | meaning |
-|---|---|
-| `version` | Always `1` for this function. |
-| `friend_id` | The player's 5-character friend code, upper case. |
-| `updated_at` | Newest change to any character row; `null` for an empty roster. Use it to skip re-imports. |
-| `characters` | One entry per kioku the player has saved, ordered by `character_id`. |
-| `character_id` | `getStyleMstList.styleMstId`. |
-| `enabled` | Whether the player has the kioku marked as owned in the toolbox. |
-| `dupes` / `ascension` | Duplicate count and ascension level. |
-| `kioku_lvl`, `magic_lvl`, `heartphial_lvl`, `special_lvl` | Kioku level, ability (magic) level, heartphial level, ultimate (special) level. |
-| `portrait` | Equipped portrait by **name** (`getCardMstList.name`), `null` when none. |
-| `crys_options` | The player's crystalis, keyed by crystalis id, as the toolbox stores them. `useIndex` > 0 means equipped (0 = not equipped); `subCrys`: chosen sub-crys ids; `enabled`: the toolbox's own toggle. Other toolbox-only keys (e.g. `locked`) can appear; ignore them. |
+Ask the toolbox owner for the project URL and publishable key rather than scraping them from the web bundle.
+
+## Reading the data with the master data
+
+- `character_id` (roster) and `id` (team members) are `getStyleMstList.styleMstId`.
+- `portrait` is the portrait's **name** (`getCardMstList.name`), not an id.
+- `crys_options` / `crysOptions` are keyed by crystalis id; `useIndex` > 0 means equipped.
+- PvP `slots` is `[enemy team, allied team]`; PvE `slots` is `[team]`; each team is 5 slots, empty ones `{}`.
+- PvE `extra.stageId` is `getQuestStageMstList.questStageMstId`.
+- Team `slots` and `extra` are passed through as stored, so validate them.
 
 ## Stability
 
-The shape above is fixed for `export_characters_v1`. New fields may be added; nothing is renamed or removed. A
-breaking change ships as `export_characters_v2`, and v1 keeps working until consumers have moved. Don't build on
-`get_public_characters`: that one belongs to the toolbox's own pages and changes with them.
+The `v1` shapes are frozen. New fields may be added (ignore unknown ones); nothing is renamed or removed. A breaking
+change ships as `export_characters_v2` / `export_teams_v2`, and v1 keeps working until consumers have moved. Don't
+build on `get_public_characters` or `get_shared_team`: those belong to the toolbox's own pages and change with them.
 
-Source: `supabase/migrations/0027_external_characters_v1.sql`.
+Source: `supabase/migrations/0027_external_characters_v1.sql`, `supabase/migrations/0028_external_teams_v1.sql`.
+When either function changes, update `openapi.yaml` in the same commit.
