@@ -23,6 +23,8 @@ export interface SavedTeamSlot {
     support?: SavedTeamMember
     buffMultReduction?: number
     debuffMultReduction?: number
+    portraitLocked?: boolean
+    supportLocked?: boolean
 }
 
 export interface SavedTeam {

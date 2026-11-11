@@ -29,30 +29,24 @@
     </div>
 
     <div v-if="slot.main" class="stats">
-        <label>
+        <div>
             Portrait:
-            <PortraitSelector v-model="slot.main.portrait" :element="slot.main.element" />
-        </label>
+            <div class="lock-wrap">
+                <LockToggle v-if="slot.main.portrait" :locked="!!slot.portraitLocked"
+                    lock-title="Lock this portrait (kept when finding best attacker loadout)"
+                    unlock-title="Unlock this portrait" @toggle="slot.portraitLocked = !slot.portraitLocked" />
+                <PortraitSelector v-model="slot.main.portrait" :element="slot.main.element" />
+            </div>
+        </div>
 
         <div>
             Crystalis:
             <div class="crys-section">
                 <div v-for="slotIndex in 3" :key="slotIndex" class="crys-slot">
                     <div class="crys-main-wrap">
-                        <button type="button" class="crys-lock-btn" v-if="getSelectedCrys(slotIndex)"
-                            :class="{ active: isCrysLocked(slotIndex) }"
-                            :title="isCrysLocked(slotIndex) ? 'Unlock this crys' : 'Lock this crys (forced when finding best attacker loadout)'"
-                            @click="toggleCrysLock(slotIndex)">
-                            <svg viewBox="0 0 24 24" width="11" height="11" aria-hidden="true">
-                                <rect x="4" y="10" width="16" height="10" rx="2" fill="none" stroke="currentColor"
-                                    stroke-width="2" />
-                                <path v-if="isCrysLocked(slotIndex)" d="M7 10V7a5 5 0 0 1 10 0v3" fill="none"
-                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round" />
-                                <path v-else d="M7 10V7a5 5 0 0 1 9.3-2.5" fill="none" stroke="currentColor"
-                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                            </svg>
-                        </button>
+                        <LockToggle v-if="getSelectedCrys(slotIndex)" :locked="isCrysLocked(slotIndex)"
+                            lock-title="Lock this crys (forced when finding best attacker loadout)"
+                            unlock-title="Unlock this crys" @toggle="toggleCrysLock(slotIndex)" />
                         <CrysSelector :character-id="slot.main.id" :model-value="getSelectedCrys(slotIndex)"
                             placeholder="—" @update:model-value="id => setCrys(slotIndex, id)" include-low-rarity
                             :character-element="slot.main.element" />
@@ -90,8 +84,13 @@
 
     <div v-if="slot.main" class="support-section">
         <h3>Support</h3>
-        <CharacterSelector :selected="slot.support" :main="slot.main"
-            @select="(member: Character) => setSupport(index, member)" />
+        <div class="lock-wrap">
+            <LockToggle v-if="slot.support" :locked="!!slot.supportLocked"
+                lock-title="Lock this support (kept when finding best attacker loadout)"
+                unlock-title="Unlock this support" @toggle="slot.supportLocked = !slot.supportLocked" />
+            <CharacterSelector :selected="slot.support" :main="slot.main"
+                @select="(member: Character) => setSupport(index, member)" />
+        </div>
     </div>
 
     <div v-if="slot.support" class="stats">
@@ -107,6 +106,7 @@ import PortraitSelector from './PortraitSelector.vue';
 import SubCrysBar from './SubCrysBar.vue'
 import CrysSelector from './CrysSelector.vue'
 import StatInputs from './StatInputs.vue'
+import LockToggle from './LockToggle.vue'
 import { Character, TeamSnapshot, getSubCrystalises } from '../types/KiokuTypes'
 
 const round = (spd: number) => spd.toFixed(2)
@@ -254,56 +254,10 @@ function toggleCrysLock(slotIndex: number) {
     display: block;
 }
 
-.crys-main-wrap {
+.crys-main-wrap,
+.lock-wrap {
     position: relative;
     width: 100%;
-}
-
-.crys-lock-btn {
-    position: absolute !important;
-    top: -0.45rem !important;
-    left: -0.45rem !important;
-    right: auto !important;
-    bottom: auto !important;
-    z-index: 2;
-    display: inline-flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    width: 1.3rem !important;
-    height: 1.3rem !important;
-    min-width: 1.3rem !important;
-    max-width: 1.3rem !important;
-    min-height: 1.3rem !important;
-    max-height: 1.3rem !important;
-    padding: 0 !important;
-    margin: 0 !important;
-    background: var(--panel) !important;
-    border: 1px solid rgba(255, 255, 255, 0.15) !important;
-    border-radius: 50% !important;
-    color: var(--muted);
-    cursor: pointer;
-    box-sizing: border-box;
-    line-height: 1;
-    flex: none;
-    transition: background 0.15s, border-color 0.15s, transform 0.1s, color 0.15s;
-}
-
-.crys-lock-btn svg {
-    display: block;
-    width: 11px !important;
-    height: 11px !important;
-}
-
-.crys-lock-btn:hover {
-    background: rgba(255, 255, 255, 0.08) !important;
-    border-color: rgba(255, 209, 110, 0.5) !important;
-    transform: scale(1.08);
-}
-
-.crys-lock-btn.active {
-    background: rgba(255, 209, 110, 0.18) !important;
-    border-color: rgba(255, 209, 110, 0.75) !important;
-    color: var(--accent);
 }
 
 .helper {

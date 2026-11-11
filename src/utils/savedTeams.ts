@@ -79,6 +79,8 @@ function sanitizeSlot(raw: unknown): SavedTeamSlot {
     if (support) slot.support = support
     if (typeof s.buffMultReduction === "number" && Number.isFinite(s.buffMultReduction)) slot.buffMultReduction = s.buffMultReduction
     if (typeof s.debuffMultReduction === "number" && Number.isFinite(s.debuffMultReduction)) slot.debuffMultReduction = s.debuffMultReduction
+    if (s.portraitLocked === true && slot.main?.portrait) slot.portraitLocked = true
+    if (s.supportLocked === true && slot.support) slot.supportLocked = true
     return slot
 }
 
@@ -117,6 +119,8 @@ export function expandTeams(teams: SavedTeamSlot[][], catalog: Map<number, Chara
         support: expand(slot.support),
         buffMultReduction: slot.buffMultReduction,
         debuffMultReduction: slot.debuffMultReduction,
+        ...(slot.portraitLocked ? { portraitLocked: true } : {}),
+        ...(slot.supportLocked ? { supportLocked: true } : {}),
     })))
 }
 

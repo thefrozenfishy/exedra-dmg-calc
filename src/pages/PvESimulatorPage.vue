@@ -929,7 +929,8 @@ async function optimizeAttackerLoadout(mode: LoadoutMode) {
     let search: ReturnType<typeof loadoutSearch>
     try {
         search = loadoutSearch(plain(slot.main), slot.support ? plain(slot.support) : undefined,
-            slots.map(s => s.main!.name), plain(characterStore.characters.filter(c => c.enabled)), mode)
+            slots.map(s => s.main!.name), plain(characterStore.characters.filter(c => c.enabled)), mode,
+            { portrait: !!slot.portraitLocked, support: !!slot.supportLocked })
     } catch (e) {
         toast.error(String((e as Error)?.message ?? e), { position: toast.POSITION.TOP_RIGHT, icon: false })
         return

@@ -2,7 +2,8 @@
 // single hit calc (models/BestTeamCalculator.findBestAttackerLoadout, kept for the "Old Single Hit Calc" page): the
 // best portraits for the dealer's element (portraitsBestOnly), its support candidates (the highest ATK 5 star and the
 // 5 stars whose support ability targets the dealer's element or role, as getAttackerSupportCandidates) and every set of
-// 3 of its best crystalis (getBestCrystalises; locked crystalis stay), plus the loadout it has now. Each loadout is
+// 3 of its best crystalis (getBestCrystalises; locked crystalis stay), plus the loadout it has now. A locked portrait or
+// support (TeamSlot.portraitLocked / supportLocked) is the only option of its choice. Each loadout is
 // scored by the page's own Max Damage (battle/EngineMaxDamage, the game's battle code) against the page's stage, wave
 // and effect choices: the dealer's strongest column, crit total ("max") or average total ("avg").
 //
@@ -95,12 +96,22 @@ export interface LoadoutSearch {
     start: { portrait: number, support: number, crys: number }
 }
 
+export interface LoadoutLocks {
+    portrait?: boolean   // keep main.portrait (ignored when it has none)
+    support?: boolean    // keep currentSupport (ignored when there is none)
+}
+
 /** Candidates and the starting point (the current loadout). `teamNames`: every member's name (none can be the support). */
-export function loadoutSearch(main: Character, currentSupport: Character | undefined, teamNames: string[], enabled: Character[], mode: LoadoutMode): LoadoutSearch {
-    const portraits = [...new Set([main.portrait, ...portraitsBestOnly(main.element, mode === "avg")].filter(Boolean) as string[])]
+export function loadoutSearch(main: Character, currentSupport: Character | undefined, teamNames: string[], enabled: Character[], mode: LoadoutMode,
+    locks: LoadoutLocks = {}): LoadoutSearch {
+    const portraits = locks.portrait && main.portrait ? [main.portrait]
+        : [...new Set([main.portrait, ...portraitsBestOnly(main.element, mode === "avg")].filter(Boolean) as string[])]
+    if (locks.support && currentSupport && teamNames.includes(currentSupport.name))
+        throw new Error(`The locked support ${currentSupport.name} is also in the team`)
     // the current support first (none: start from none, so the start is the current loadout)
     const supports: (Character | undefined)[] = [currentSupport && !teamNames.includes(currentSupport.name) ? currentSupport : undefined]
-    for (const c of supportCandidates(main, enabled, teamNames)) if (!supports.some(s => s?.name === c.name)) supports.push(c)
+    if (!(locks.support && currentSupport))
+        for (const c of supportCandidates(main, enabled, teamNames)) if (!supports.some(s => s?.name === c.name)) supports.push(c)
     const crysSets = crysCandidates(main)
     if (!crysSets.length) throw new Error("No valid crystalis combination found for this attacker")
     return { portraits: portraits.length ? portraits : [""], supports, crysSets, start: { portrait: 0, support: 0, crys: 0 } }

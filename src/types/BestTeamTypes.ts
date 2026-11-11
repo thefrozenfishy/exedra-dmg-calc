@@ -7,6 +7,9 @@ export interface TeamSlot {
     support?: Character | undefined
     buffMultReduction?: number
     debuffMultReduction?: number
+    // PvE Simulator "find best attacker loadout": keep the slot's current portrait / support (like a locked crys)
+    portraitLocked?: boolean
+    supportLocked?: boolean
 }
 
 export interface FindBestTeamOptions {
