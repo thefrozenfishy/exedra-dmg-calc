@@ -7,8 +7,8 @@ import type { CommandType } from "./CommandType";
 
 // ---- ReDriveBattleCore.Command.CommandExecuteUnitHpGaugeRevive  (TypeDefIndex 992, public class) ----
 export class CommandExecuteUnitHpGaugeRevive extends CommandExecuteActBase {
-    /** @rva 0xEE1FE0 slot 4  public override CommandType GetCommandType() { } */
+    /** @rva 0xF0BEA0 slot 4  public override CommandType GetCommandType() { } */
     GetCommandType(): CommandType { return 21 as CommandType; /* asm: mov eax, 0x15; ret */ }
-    /** @rva 0x7305E0  public void .ctor() { } */
+    /** @rva 0x7365E0  public void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
 }

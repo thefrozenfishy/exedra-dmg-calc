@@ -61,28 +61,28 @@ export abstract class DamageAbilityEffectBase extends AbilityEffectBase {  // im
     get IsGiveBreakPointDamage(): boolean { return this.get_IsGiveBreakPointDamage(); }
     get IsConsumeRemainCountOnAttackHit(): boolean { return this.get_IsConsumeRemainCountOnAttackHit(); }
     get DamageCategory(): DamageCategory { return this.get_DamageCategory(); }
-    /** @rva 0x737C60  protected ValueTuple<int, int> get_SpecifiedVariationBreakPoint() { } */
+    /** @rva 0x73DC60  protected ValueTuple<int, int> get_SpecifiedVariationBreakPoint() { } */
     get_SpecifiedVariationBreakPoint(): any /* ValueTuple<int, int> */ { return this._SpecifiedVariationBreakPoint; /* auto-property */ }
-    /** @rva 0x902CD0  protected void set_SpecifiedVariationBreakPoint(ValueTuple<int, int> value) { } */
+    /** @rva 0x908EA0  protected void set_SpecifiedVariationBreakPoint(ValueTuple<int, int> value) { } */
     set_SpecifiedVariationBreakPoint(value: any /* ValueTuple<int, int> */): void { this._SpecifiedVariationBreakPoint = value; /* auto-property */ }
     /** @rva -1 slot 9  protected abstract DamageBaseType get_DamageBaseType(); */
     abstract get_DamageBaseType(): DamageBaseType;
-    /** @rva 0x76F830 slot 10  protected virtual bool get_IsIncreaseBreakedDamageReceiveRate() { } */
+    /** @rva 0x775830 slot 10  protected virtual bool get_IsIncreaseBreakedDamageReceiveRate() { } */
     get_IsIncreaseBreakedDamageReceiveRate(): boolean { return true; /* asm: mov al, 1; ret */ }
-    /** @rva 0x76F830 slot 11  protected virtual bool get_IsGiveBreakPointDamage() { } */
+    /** @rva 0x775830 slot 11  protected virtual bool get_IsGiveBreakPointDamage() { } */
     get_IsGiveBreakPointDamage(): boolean { return true; /* asm: mov al, 1; ret */ }
-    /** @rva 0x76F830 slot 12  protected virtual bool get_IsConsumeRemainCountOnAttackHit() { } */
+    /** @rva 0x775830 slot 12  protected virtual bool get_IsConsumeRemainCountOnAttackHit() { } */
     get_IsConsumeRemainCountOnAttackHit(): boolean { return true; /* asm: mov al, 1; ret */ }
     /** @rva -1 slot 13  public abstract DamageCategory get_DamageCategory(); */
     abstract get_DamageCategory(): DamageCategory;
-    /** @rva 0x19159B0  protected void .ctor() { } */
+    /** @rva 0x19432D0  protected void .ctor() { } */
     ctor(): this {
         this._SpecifiedVariationBreakPoint = [0, 0];
         this.attackHitConsumableStateList = [];
         super.ctor();
         return this;
     }
-    /** @rva 0x1915A70  public void .ctor(AbilityEffectInfo info) { } */
+    /** @rva 0x1943390  public void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
         this._SpecifiedVariationBreakPoint = [0, 0];
         this.attackHitConsumableStateList = [];
@@ -94,18 +94,18 @@ export abstract class DamageAbilityEffectBase extends AbilityEffectBase {  // im
         this.breakedDamageReceiveRatio = f32(f32(info._EffectValue5) / 10);
         return this;
     }
-    /** @rva 0x1914A80 slot 8  public void SetActiveSkillInfo(SkillType skillType, int skillMstId) { } */
+    /** @rva 0x1942430 slot 8  public void SetActiveSkillInfo(SkillType skillType, int skillMstId) { } */
     SetActiveSkillInfo(skillType: SkillType, skillMstId: int): void {
         this.skillType = skillType;
         this.skillMstId = skillMstId;
     }
-    /** @rva 0x1914A40 slot 4  public override void SelectTargets(BattleUnit userUnit, Dictionary<int, BattleUnit> targetUnitDic, int selectFriendUnitId, int attackTargetId = 0) { } */
+    /** @rva 0x19423F0 slot 4  public override void SelectTargets(BattleUnit userUnit, Dictionary<int, BattleUnit> targetUnitDic, int selectFriendUnitId, int attackTargetId = 0) { } */
     SelectTargets(userUnit: BattleUnit, targetUnitDic: Dictionary<int, BattleUnit>, selectFriendUnitId: int, attackTargetId?: int /* = 0 */): void {
         attackTargetId = attackTargetId ?? 0;
         super.SelectTargets(userUnit, targetUnitDic, selectFriendUnitId, attackTargetId);
         this.attackTargetId = attackTargetId;
     }
-    /** @rva 0x1914A90 slot 5  public override AffectedUnitNoticeBundle Triggering(EffectOriginType origin, BattleUnit userUnit, Dictionary<int, BattleUnit> targetUnitDic, GameDirectorBase gameDirector) { } */
+    /** @rva 0x1942440 slot 5  public override AffectedUnitNoticeBundle Triggering(EffectOriginType origin, BattleUnit userUnit, Dictionary<int, BattleUnit> targetUnitDic, GameDirectorBase gameDirector) { } */
     Triggering(origin: EffectOriginType, userUnit: BattleUnit, targetUnitDic: Dictionary<int, BattleUnit>, gameDirector: GameDirectorBase): AffectedUnitNoticeBundle {
         let affectedUnitNoticeBundle = new AffectedUnitNoticeBundle().ctor();
         const attackSkill = userUnit._SkillSet.GetSkill(this.skillMstId);
@@ -134,7 +134,7 @@ export abstract class DamageAbilityEffectBase extends AbilityEffectBase {  // im
                 this.IncreaseBreakedDamageReceiveRate(userUnit, targetUnit, notice);
             }
             if (this.get_IsGiveBreakPointDamage()) {
-                notice = AffectedUnitNotice.op_Addition(notice, targetUnit._BreakPoint.Decrease(userUnit, targetUnit, this.attackElement, breakPointValue, turnOrderPriority));
+                notice = AffectedUnitNotice.op_Addition(notice, targetUnit._BreakPoint.Decrease(userUnit, targetUnit, this.attackElement, this.skillType, breakPointValue, turnOrderPriority));
             }
             const totalDamageValue = notice.GetTotalDamageValue(false);
             notice = AffectedUnitNotice.op_Addition(notice, this.VortexProcess(targetUnit, gameDirector));
@@ -155,7 +155,7 @@ export abstract class DamageAbilityEffectBase extends AbilityEffectBase {  // im
         affectedUnitNoticeBundle.Add(new AffectedUnitNotice().ctor$int(userUnit._Id));
         return affectedUnitNoticeBundle;
     }
-    /** @rva 0x1914110  protected void IncreaseBreakedDamageReceiveRate(BattleUnit userUnit, BattleUnit targetUnit, AffectedUnitNotice notice) { } */
+    /** @rva 0x1941A70  protected void IncreaseBreakedDamageReceiveRate(BattleUnit userUnit, BattleUnit targetUnit, AffectedUnitNotice notice) { } */
     IncreaseBreakedDamageReceiveRate(userUnit: BattleUnit, targetUnit: BattleUnit, notice: AffectedUnitNotice): void {
         if (!targetUnit._BreakPoint.get_IsBreak()) return;
         if (!userUnit.isCharacter) return;
@@ -181,22 +181,22 @@ export abstract class DamageAbilityEffectBase extends AbilityEffectBase {  // im
         notice._IsBreakedDamageReceiveRateBecomeMax = result[0];
         notice._BreakedDamageReceiveRateUpValue = result[1];
     }
-    /** @rva 0x1914080 slot 14  public virtual ValueTuple<int, int> GetVariationBreakPoint(Nullable<RoleType> attackerRoleType) { } */
+    /** @rva 0x19419E0 slot 14  public virtual ValueTuple<int, int> GetVariationBreakPoint(Nullable<RoleType> attackerRoleType) { } */
     GetVariationBreakPoint(attackerRoleType: Nullable<RoleType>): any /* ValueTuple<int, int> */ {
         if (this._SpecifiedVariationBreakPoint[0] === 0 && this._SpecifiedVariationBreakPoint[1] === 0) {
             return BreakPoint.GetDecreaseValue(this.skillType, this._EffectRange, (attackerRoleType ?? 0) as RoleType /* GetValueOrDefault */, false);
         }
         return this._SpecifiedVariationBreakPoint;
     }
-    /** @rva 0x1913FC0 slot 15  protected virtual Decimal GetDamageBase(BattleUnit unit, float power) { } */
+    /** @rva 0x1941920 slot 15  protected virtual Decimal GetDamageBase(BattleUnit unit, float power) { } */
     GetDamageBase(unit: BattleUnit, power: float): Decimal {
         return BattleDamageCalculator.GetDamageBase(unit.GetInitialDamageBaseParamValue(this.get_DamageBaseType()), power);
     }
-    /** @rva 0x1913E90 slot 6  public override List<BattleUnit> GetAIFilteredTargets(BattleUnit userUnit, List<BattleUnit> targetUnitList, SkillType skillType, GameDirectorBase gameDirector) { } */
+    /** @rva 0x19417F0 slot 6  public override List<BattleUnit> GetAIFilteredTargets(BattleUnit userUnit, List<BattleUnit> targetUnitList, SkillType skillType, GameDirectorBase gameDirector) { } */
     GetAIFilteredTargets(userUnit: BattleUnit, targetUnitList: List<BattleUnit>, skillType: SkillType, gameDirector: GameDirectorBase): List<BattleUnit> {
         return targetUnitList.filter(u => !u.get_IsDead()); // <>c.b__30_0
     }
-    /** @rva 0x19146D0 slot 7  public override int SelectTargetInAIAction(BattleUnit userUnit, List<BattleUnit> targetUnitList) { } */
+    /** @rva 0x1942030 slot 7  public override int SelectTargetInAIAction(BattleUnit userUnit, List<BattleUnit> targetUnitList) { } */
     SelectTargetInAIAction(userUnit: BattleUnit, targetUnitList: List<BattleUnit>): int {
         if (this._EffectRange === 3) return 0;
         if (this._EffectRange !== 1 && this._EffectRange !== 2) {
@@ -216,7 +216,7 @@ export abstract class DamageAbilityEffectBase extends AbilityEffectBase {  // im
         if (unit != null) return unit._Id;
         return 0;
     }
-    /** @rva 0x19143F0  protected AffectedUnitNoticeBundle ReflectionProcess(BattleUnit userUnit, BattleUnit targetUnit, ActiveSkillBase attackSkill, GameDirectorBase gameDirector) { } */
+    /** @rva 0x1941D50  protected AffectedUnitNoticeBundle ReflectionProcess(BattleUnit userUnit, BattleUnit targetUnit, ActiveSkillBase attackSkill, GameDirectorBase gameDirector) { } */
     ReflectionProcess(userUnit: BattleUnit, targetUnit: BattleUnit, attackSkill: ActiveSkillBase, gameDirector: GameDirectorBase): AffectedUnitNoticeBundle {
         let affectedUnitNoticeBundle = new AffectedUnitNoticeBundle().ctor();
         if (!(0 < targetUnit._Condition._BarrierEndurance)) return affectedUnitNoticeBundle;
@@ -230,18 +230,17 @@ export abstract class DamageAbilityEffectBase extends AbilityEffectBase {  // im
         }
         return affectedUnitNoticeBundle;
     }
-    /** @rva 0x19153B0  protected void UniqueStateLvUpProcess(BattleUnit targetUnit, BattleUnit attackUnit) { } */
+    /** @rva 0x1942DB0  protected void UniqueStateLvUpProcess(BattleUnit targetUnit, BattleUnit attackUnit) { } */
     UniqueStateLvUpProcess(targetUnit: BattleUnit, attackUnit: BattleUnit): void {
-        // <>c__DisplayClass33_0: 0x10 targetUnit, 0x18 attackUnit
+        // <>c__DisplayClass33_0: 0x10 targetUnit, 0x18 attackUnit, 0x20 <>4__this (3.24.0)
         if (this.get_DamageCategory() !== 1 && this.get_DamageCategory() !== 2) return;
         if (targetUnit.get_IsDead()) return;
-        const list = (targetUnit._Condition._StateList
-            .filter(s => s.IsActive$BattleUnit(targetUnit)) /* b__0 */
-            .filter(s => isImpl(s, "ILvUp")) as unknown as ILvUp[]) /* OfType<ILvUp> */
-            .filter(x => x.TargetLvUpType === 1); // <>c.b__33_1
-        list.forEach(x => x.LvUpProcess(attackUnit, targetUnit)); // b__2
+        const list = targetUnit._Condition._StateList
+            .filter(s => isImpl(s, "ILvUp") && (s as unknown as ILvUp).TargetLvUpType === 1 && s.IsActive$BattleUnit(targetUnit)) /* b__0 (3.24.0: the AfterAttack check moved in here) */
+            .map(s => s as unknown as ILvUp); // Cast<ILvUp>().ToList()
+        list.forEach(lvUp => lvUp.LvUpProcess(attackUnit, targetUnit, this.skillMstId)); // b__1 (3.24.0: + skillMstId)
     }
-    /** @rva 0x19156A0  protected AffectedUnitNotice VortexProcess(BattleUnit unit, GameDirectorBase gameDirector) { } */
+    /** @rva 0x1942FC0  protected AffectedUnitNotice VortexProcess(BattleUnit unit, GameDirectorBase gameDirector) { } */
     VortexProcess(unit: BattleUnit, gameDirector: GameDirectorBase): AffectedUnitNotice {
         for (const state of unit._Condition._StateList) {
             if (state instanceof VortexUnitStateBase && state.IsActive$BattleUnit(unit)) {
@@ -253,7 +252,7 @@ export abstract class DamageAbilityEffectBase extends AbilityEffectBase {  // im
         if (notice == null) notice = new AffectedUnitNotice().ctor$int(unit._Id);
         return notice;
     }
-    /** @rva 0x19139D0  protected void CollectAttackHitConsumableStates(BattleUnit attackUnit) { } */
+    /** @rva 0x1941330  protected void CollectAttackHitConsumableStates(BattleUnit attackUnit) { } */
     CollectAttackHitConsumableStates(attackUnit: BattleUnit): void {
         if (!this.get_IsConsumeRemainCountOnAttackHit()) return;
         this.attackHitConsumableStateList.length = 0; // List.Clear
@@ -265,7 +264,7 @@ export abstract class DamageAbilityEffectBase extends AbilityEffectBase {  // im
             this.attackHitConsumableStateList.push(consumable);
         }
     }
-    /** @rva 0x1913BF0  protected bool ConsumeAttackHitConsumableStates(ActiveSkillBase attackSkill, List<AffectedUnitNotice> noticeList) { } */
+    /** @rva 0x1941550  protected bool ConsumeAttackHitConsumableStates(ActiveSkillBase attackSkill, List<AffectedUnitNotice> noticeList) { } */
     ConsumeAttackHitConsumableStates(attackSkill: ActiveSkillBase, noticeList: List<AffectedUnitNotice>): boolean {
         if (!this.get_IsConsumeRemainCountOnAttackHit() || !(this.attackHitConsumableStateList.length > 0)) return false;
         let count = 0;
@@ -278,15 +277,15 @@ export abstract class DamageAbilityEffectBase extends AbilityEffectBase {  // im
         this.attackHitConsumableStateList.length = 0; // List.Clear
         return 0 < count;
     }
-    /** @rva 0x1915320  private IEnumerable<BattleUnit> <SelectTargetInAIAction>g__UnitFilterMatchWeakElement|31_1(IEnumerable<BattleUnit> candidateUnits) { } */
+    /** @rva 0x1942D20  private IEnumerable<BattleUnit> <SelectTargetInAIAction>g__UnitFilterMatchWeakElement|31_1(IEnumerable<BattleUnit> candidateUnits) { } */
     $SelectTargetInAIAction$g__UnitFilterMatchWeakElement_31_1(candidateUnits: IEnumerable<BattleUnit>): IEnumerable<BattleUnit> {
         return candidateUnits.filter(unit => this.$SelectTargetInAIAction$b__31_3(unit));
     }
-    /** @rva 0x19151B0  private bool <SelectTargetInAIAction>b__31_3(BattleUnit unit) { } */
+    /** @rva 0x1942B60  private bool <SelectTargetInAIAction>b__31_3(BattleUnit unit) { } */
     $SelectTargetInAIAction$b__31_3(unit: BattleUnit): boolean {
         return CorrelationEffect.IsMatchWeakElement(this.attackElement, unit._WeakElements);
     }
-    /** @rva 0x1915220  internal static IEnumerable<BattleUnit> <SelectTargetInAIAction>g__UnitFilterByRoleAtWeightedRandomWithHate|31_2(IEnumerable<BattleUnit> candidateUnits) { } */
+    /** @rva 0x1942BD0  internal static IEnumerable<BattleUnit> <SelectTargetInAIAction>g__UnitFilterByRoleAtWeightedRandomWithHate|31_2(IEnumerable<BattleUnit> candidateUnits) { } */
     static $SelectTargetInAIAction$g__UnitFilterByRoleAtWeightedRandomWithHate_31_2(candidateUnits: IEnumerable<BattleUnit>): IEnumerable<BattleUnit> {
         const unit = AISkillTargetSelector.SelectUnitAtWeightedRandom(AISkillTargetSelector.GetUnitWeightDic(candidateUnits, true));
         if (unit == null) return []; // Enumerable.Empty<BattleUnit>()
@@ -309,17 +308,17 @@ export class DamageAbilityEffectBase_TargetInfo {
     get Hp(): int { return this.get_Hp(); }
     get RangeDamageRatio(): float { return this.get_RangeDamageRatio(); }
     set RangeDamageRatio(v: float) { this.set_RangeDamageRatio(v); }
-    /** @rva 0x7364F0  public int get_UnitId() { } */
+    /** @rva 0x73C4F0  public int get_UnitId() { } */
     get_UnitId(): int { return this._UnitId; /* auto-property */ }
-    /** @rva 0x8879D0  public float get_TotalDamageRatio() { } */
+    /** @rva 0x88D9D0  public float get_TotalDamageRatio() { } */
     get_TotalDamageRatio(): float { return this._TotalDamageRatio; /* auto-property */ }
-    /** @rva 0x763820  public int get_Hp() { } */
+    /** @rva 0x769820  public int get_Hp() { } */
     get_Hp(): int { return this._Hp; /* auto-property */ }
-    /** @rva 0x9BDB40  public float get_RangeDamageRatio() { } */
+    /** @rva 0x9DC690  public float get_RangeDamageRatio() { } */
     get_RangeDamageRatio(): float { return this._RangeDamageRatio; /* auto-property */ }
-    /** @rva 0xF1BC10  public void set_RangeDamageRatio(float value) { } */
+    /** @rva 0xF46320  public void set_RangeDamageRatio(float value) { } */
     set_RangeDamageRatio(value: float): void { this._RangeDamageRatio = value; /* auto-property */ }
-    /** @rva 0x1921750  public void .ctor(BattleUnit unit, CorrelationEffect correlationEffect) { } */
+    /** @rva 0x194D130  public void .ctor(BattleUnit unit, CorrelationEffect correlationEffect) { } */
     ctor$BattleUnit_CorrelationEffect(unit: BattleUnit, correlationEffect: CorrelationEffect): this {
         this._UnitId = unit._Id;
         this._TotalDamageRatio = correlationEffect._TotalDamageRatio;

@@ -228,6 +228,8 @@ export class AbilityEffectType {
     static readonly UpBreakedDamageReceiveRatio: string = "UP_BREAKED_DAMAGE_RECEIVE_RATIO";
     /** public const string DwnBreakedDamageReceiveRatio */
     static readonly DwnBreakedDamageReceiveRatio: string = "DWN_BREAKED_DAMAGE_RECEIVE_RATIO";
+    /** public const string OverBreakDamageReceiveRateDrive */
+    static readonly OverBreakDamageReceiveRateDrive: string = "OVER_BREAK_DAMAGE_RECEIVE_RATE_DRIVE";
     /** public const string UpGivBreakPointDmgFixed */
     static readonly UpGivBreakPointDmgFixed: string = "UP_GIV_BREAK_POINT_DMG_FIXED";
     /** public const string UpGivBreakPointDmgRatio */
@@ -238,6 +240,10 @@ export class AbilityEffectType {
     static readonly DwnGivBreakPointDmgFixed: string = "DWN_GIV_BREAK_POINT_DMG_FIXED";
     /** public const string DwnRcvBreakPointDmgRatio */
     static readonly DwnRcvBreakPointDmgRatio: string = "DWN_RCV_BREAK_POINT_DMG_RATIO";
+    /** public const string DriveUpBreakPointDmgRatio */
+    static readonly DriveUpBreakPointDmgRatio: string = "DRIVE_UP_BREAK_POINT_DMG_RATIO";
+    /** public const string DriveUpBreakPointDmgFixed */
+    static readonly DriveUpBreakPointDmgFixed: string = "DRIVE_UP_BREAK_POINT_DMG_FIXED";
     /** public const string UpWeakElementDmgRatio */
     static readonly UpWeakElementDmgRatio: string = "UP_WEAK_ELEMENT_DMG_RATIO";
     /** public const string UpWeakElementDmgAccumRatio */
@@ -374,8 +380,8 @@ export class AbilityEffectType {
     static readonly UniqueDebuffAccum: string = "UNIQUE_DEBUFF_ACCUM";
     /** public const string UniqueElementStack */
     static readonly UniqueElementStack: string = "UNIQUE_ELEMENT_STACK";
-    /** public const string UniqueElementBreak */
-    static readonly UniqueElementBreak: string = "UNIQUE_ELEMENT_BREAK";
+    /** public const string UniqueElementDrive */
+    static readonly UniqueElementDrive: string = "UNIQUE_ELEMENT_DRIVE";
     /** public const string UniqueZone */
     static readonly UniqueZone: string = "UNIQUE_ZONE";
     /** public const string ZoneExpand */

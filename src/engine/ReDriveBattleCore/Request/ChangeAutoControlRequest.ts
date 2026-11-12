@@ -10,8 +10,8 @@ import type { RequestType } from "./RequestType";
 export class ChangeAutoControlRequest extends RequestBase {
     /** 0x10 public AutoType autoType */
     autoType: AutoType = 0 as AutoType;
-    /** @rva 0x10365F0 slot 4  public override RequestType get_RequestType() { } */
+    /** @rva 0x1048350 slot 4  public override RequestType get_RequestType() { } */
     get_RequestType(): RequestType { return 7 as RequestType; /* asm: mov eax, 7; ret */ }
-    /** @rva 0x7305E0  public void .ctor() { } */
+    /** @rva 0x7365E0  public void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
 }

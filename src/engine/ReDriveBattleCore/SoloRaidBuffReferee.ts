@@ -44,19 +44,19 @@ export class SoloRaidBuffReferee {
     get ActiveMaxSeasonBuffPoint(): int { return this.get_ActiveMaxSeasonBuffPoint(); }
     get ActiveCurrentSeasonBuffTurnGaugeValue(): float { return this.get_ActiveCurrentSeasonBuffTurnGaugeValue(); }
     get ActiveMaxSeasonBuffTurnGaugeValue(): int { return this.get_ActiveMaxSeasonBuffTurnGaugeValue(); }
-    /** @rva 0x73A4E0  public bool get_IsSeasonBuffActive() { } */
+    /** @rva 0x7404E0  public bool get_IsSeasonBuffActive() { } */
     get_IsSeasonBuffActive(): boolean { return this.isSeasonBuffActive; /* asm: movzx eax, byte ptr [rcx + 0x28]; ret */ }
-    /** @rva 0x85E530  public int get_CurrentSeasonBuffPoint() { } */
+    /** @rva 0x864530  public int get_CurrentSeasonBuffPoint() { } */
     get_CurrentSeasonBuffPoint(): int { return this.currentSeasonBuffPoint; /* asm: mov eax, dword ptr [rcx + 0x2c]; ret */ }
-    /** @rva 0x75ED60  public int get_MaxSeasonBuffPoint() { } */
+    /** @rva 0x764D60  public int get_MaxSeasonBuffPoint() { } */
     get_MaxSeasonBuffPoint(): int { return this.maxSeasonBuffPoint; /* asm: mov eax, dword ptr [rcx + 0x30]; ret */ }
-    /** @rva 0x75ED50  public int get_ActiveMaxSeasonBuffPoint() { } */
+    /** @rva 0x764D50  public int get_ActiveMaxSeasonBuffPoint() { } */
     get_ActiveMaxSeasonBuffPoint(): int { return this.activeMaxSeasonBuffPoint; /* asm: mov eax, dword ptr [rcx + 0x34]; ret */ }
-    /** @rva 0xBA0A10  public float get_ActiveCurrentSeasonBuffTurnGaugeValue() { } */
+    /** @rva 0xBBDF40  public float get_ActiveCurrentSeasonBuffTurnGaugeValue() { } */
     get_ActiveCurrentSeasonBuffTurnGaugeValue(): float { return this.activeCurrentSeasonBuffTurnGaugeValue; /* asm: movss xmm0, dword ptr [rcx + 0x38]; ret */ }
-    /** @rva 0x8F3EF0  public int get_ActiveMaxSeasonBuffTurnGaugeValue() { } */
+    /** @rva 0x8F9EF0  public int get_ActiveMaxSeasonBuffTurnGaugeValue() { } */
     get_ActiveMaxSeasonBuffTurnGaugeValue(): int { return this.activeMaxSeasonBuffTurnGaugeValue; /* asm: mov eax, dword ptr [rcx + 0x3c]; ret */ }
-    /** @rva 0x15CEA80  public void Init(int commonBuffPointChargePassiveSkillMstId, int soloRaidSeasonBuffMstId, int soloRaidPartyBuffMstId, bool isSeasonBuffActive, int seasonBuffPoint, float seasonBuffTurnGaugeValue, List<BattleUnit> battleUnits) { } */
+    /** @rva 0x15FAF50  public void Init(int commonBuffPointChargePassiveSkillMstId, int soloRaidSeasonBuffMstId, int soloRaidPartyBuffMstId, bool isSeasonBuffActive, int seasonBuffPoint, float seasonBuffTurnGaugeValue, List<BattleUnit> battleUnits) { } */
     Init(commonBuffPointChargePassiveSkillMstId: int, soloRaidSeasonBuffMstId: int, soloRaidPartyBuffMstId: int, isSeasonBuffActive: boolean, seasonBuffPoint: int, seasonBuffTurnGaugeValue: float, battleUnits: List<BattleUnit>): void {
         this.commonBuffPointChargePassiveSkillMstId = commonBuffPointChargePassiveSkillMstId;
         const season = BattleMstReaderBase.get_Instance<SoloRaidSeasonBuffMstModel, SoloRaidSeasonBuffMstRecord, int>(SoloRaidSeasonBuffMstModel).GetModelByKey(soloRaidSeasonBuffMstId);
@@ -75,7 +75,7 @@ export class SoloRaidBuffReferee {
         this.activeMaxSeasonBuffTurnGaugeValue = season!.EnhancedSkillTurnGaugeValue;
         this.AddSoloRaidBuffToUnit(battleUnits); // tail call
     }
-    /** @rva 0x15CE5D0  public void AddSoloRaidBuffToUnit(List<BattleUnit> battleUnits) { } */
+    /** @rva 0x15FAAA0  public void AddSoloRaidBuffToUnit(List<BattleUnit> battleUnits) { } */
     AddSoloRaidBuffToUnit(battleUnits: List<BattleUnit>): void {
         const infos: PassiveSkillInfo[] = [];
         const add = (id: int, sourceType: int) => { const info = new PassiveSkillInfo(); info.passiveSkillMstId = id; info.abilitySourceType = sourceType; infos.push(info); };
@@ -90,11 +90,11 @@ export class SoloRaidBuffReferee {
             unit._PassiveSkills = [...unit._PassiveSkills, ...skills]; // Concat(...).ToArray()
         }
     }
-    /** @rva 0x15CE540  public void AddPoint(int addPoint) { } */
+    /** @rva 0x15FAA10  public void AddPoint(int addPoint) { } */
     AddPoint(addPoint: int): void {
         this.currentSeasonBuffPoint = clamp(this.currentSeasonBuffPoint + addPoint, 0, this.isSeasonBuffActive ? this.activeMaxSeasonBuffPoint : this.maxSeasonBuffPoint);
     }
-    /** @rva 0x15CE9B0  public bool CheckActive() { } */
+    /** @rva 0x15FAE80  public bool CheckActive() { } */
     CheckActive(): boolean {
         if (this.isSeasonBuffActive) return false;
         if (this.currentSeasonBuffPoint < this.maxSeasonBuffPoint) return false;
@@ -103,7 +103,7 @@ export class SoloRaidBuffReferee {
         this.activeCurrentSeasonBuffTurnGaugeValue = this.activeMaxSeasonBuffTurnGaugeValue;
         return true;
     }
-    /** @rva 0x15CE9E0  public bool DecreaseSeasonBuffTurnGaugeValue(float decreaseTurnGaugeValue) { } */
+    /** @rva 0x15FAEB0  public bool DecreaseSeasonBuffTurnGaugeValue(float decreaseTurnGaugeValue) { } */
     DecreaseSeasonBuffTurnGaugeValue(decreaseTurnGaugeValue: float): boolean {
         if (!this.isSeasonBuffActive) return false;
         this.activeCurrentSeasonBuffTurnGaugeValue = f32(Math.max(f32(this.activeCurrentSeasonBuffTurnGaugeValue - decreaseTurnGaugeValue), 0)); // Math.Max(float, float)
@@ -114,6 +114,6 @@ export class SoloRaidBuffReferee {
         }
         return false;
     }
-    /** @rva 0x7305E0  public void .ctor() { } */
+    /** @rva 0x7365E0  public void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
 }

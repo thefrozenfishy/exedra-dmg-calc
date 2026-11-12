@@ -9,6 +9,6 @@ import type { int } from "../../runtime";
 
 // ---- ReDriveBattleCore.Reader.QuestEnemyModeChangeMstReader  (TypeDefIndex 859, public class) ----
 export class QuestEnemyModeChangeMstReader extends BattleMstReaderBase<QuestEnemyModeChangeMstModel, QuestEnemyModeChangeMstRecord, int> {
-    /** @rva 0x16E9270  public void .ctor() { } */
+    /** @rva 0x171D8F0  public void .ctor() { } */
     ctor(): this { super.ctor(); return this; }
 }

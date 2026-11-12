@@ -120,27 +120,31 @@ export class BattleUnit {
     _BreakPoint: BreakPoint = null!;
     /** 0x80 private int <BreakedDamageReceiveRate>k__BackingField */
     _BreakedDamageReceiveRate: int = 0;
-    /** 0x84 private bool isCharacter */
+    /** 0x88 private float <MaxOverBreakBonusValue>k__BackingField */
+    _MaxOverBreakBonusValue: float = 0;
+    /** 0x84 private float <OverBreakBonusValue>k__BackingField */
+    _OverBreakBonusValue: float = 0;
+    /** 0x8C private bool isCharacter */
     isCharacter: boolean = false;
-    /** 0x85 private bool isCharacterFigure */
+    /** 0x8D private bool isCharacterFigure */
     isCharacterFigure: boolean = false;
-    /** 0x86 private bool isNoVisualDeath */
+    /** 0x8E private bool isNoVisualDeath */
     isNoVisualDeath: boolean = false;
-    /** 0x88 private int <TurnNum>k__BackingField */
+    /** 0x90 private int <TurnNum>k__BackingField */
     _TurnNum: int = 0;
-    /** 0x90 private BattleConditionUtils.ConditionCheckDataBundle activeConditionCheckDataBundle */
+    /** 0x98 private BattleConditionUtils.ConditionCheckDataBundle activeConditionCheckDataBundle */
     activeConditionCheckDataBundle: BattleConditionUtils_ConditionCheckDataBundle = null!;
-    /** 0x98 private EnemyConditionAndActionController <EnemyConditionAndActionController>k__BackingField */
+    /** 0xA0 private EnemyConditionAndActionController <EnemyConditionAndActionController>k__BackingField */
     _EnemyConditionAndActionController: EnemyConditionAndActionController = null!;
-    /** 0xA0 private int <InitialHpGaugeCount>k__BackingField */
+    /** 0xA8 private int <InitialHpGaugeCount>k__BackingField */
     _InitialHpGaugeCount: int = 0;
-    /** 0xA4 private int <CurrentHpGaugeCount>k__BackingField */
+    /** 0xAC private int <CurrentHpGaugeCount>k__BackingField */
     _CurrentHpGaugeCount: int = 0;
-    /** 0xA8 private PassiveSkillInfo[] serializedPassiveSkillInfos */
+    /** 0xB0 private PassiveSkillInfo[] serializedPassiveSkillInfos */
     serializedPassiveSkillInfos: any /* PassiveSkillInfo */[] = null!;
-    /** 0xB0 private int serializedEnemyParameterMstId */
+    /** 0xB8 private int serializedEnemyParameterMstId */
     serializedEnemyParameterMstId: int = 0;
-    /** 0xB8 private BattleParameter serializeBattleParameter */
+    /** 0xC0 private BattleParameter serializeBattleParameter */
     serializeBattleParameter: BattleParameter = null!;
     get Id(): int { return this.get_Id(); }
     set Id(v: int) { this.set_Id(v); }
@@ -191,6 +195,10 @@ export class BattleUnit {
     set BreakPoint(v: BreakPoint) { this.set_BreakPoint(v); }
     get BreakedDamageReceiveRate(): int { return this.get_BreakedDamageReceiveRate(); }
     set BreakedDamageReceiveRate(v: int) { this.set_BreakedDamageReceiveRate(v); }
+    set MaxOverBreakBonusValue(v: float) { this.set_MaxOverBreakBonusValue(v); }
+    get MaxOverBreakBonusValue(): float { return this.get_MaxOverBreakBonusValue(); }
+    set OverBreakBonusValue(v: float) { this.set_OverBreakBonusValue(v); }
+    get OverBreakBonusValue(): float { return this.get_OverBreakBonusValue(); }
     get IsCharacter(): boolean { return this.get_IsCharacter(); }
     get IsCharacterFigure(): boolean { return this.get_IsCharacterFigure(); }
     get IsNoVisualDeath(): boolean { return this.get_IsNoVisualDeath(); }
@@ -205,147 +213,155 @@ export class BattleUnit {
     get CurrentHpGaugeCount(): int { return this.get_CurrentHpGaugeCount(); }
     set CurrentHpGaugeCount(v: int) { this.set_CurrentHpGaugeCount(v); }
     get QuestEnemyAppearanceMstId(): int { return this.get_QuestEnemyAppearanceMstId(); }
-    /** @rva 0x7364F0  public int get_Id() { } */
+    /** @rva 0x73C4F0  public int get_Id() { } */
     get_Id(): int { return this._Id; /* auto-property */ }
-    /** @rva 0x739D00  public void set_Id(int value) { } */
+    /** @rva 0x73FD00  public void set_Id(int value) { } */
     set_Id(value: int): void { this._Id = value; /* auto-property */ }
-    /** @rva 0x803350  public int get_MstId() { } */
+    /** @rva 0x809350  public int get_MstId() { } */
     get_MstId(): int { return this._MstId; /* auto-property */ }
-    /** @rva 0x803540  public void set_MstId(int value) { } */
+    /** @rva 0x809540  public void set_MstId(int value) { } */
     set_MstId(value: int): void { this._MstId = value; /* auto-property */ }
-    /** @rva 0x763820  public BattleUnit.TeamType get_Team() { } */
+    /** @rva 0x769820  public BattleUnit.TeamType get_Team() { } */
     get_Team(): BattleUnit_TeamType { return this._Team; /* auto-property */ }
-    /** @rva 0x8A2240  public void set_Team(BattleUnit.TeamType value) { } */
+    /** @rva 0x8A8240  public void set_Team(BattleUnit.TeamType value) { } */
     set_Team(value: BattleUnit_TeamType): void { this._Team = value; /* auto-property */ }
-    /** @rva 0x7369E0  public BattleParameter get_BattleParameter() { } */
+    /** @rva 0x73C9E0  public BattleParameter get_BattleParameter() { } */
     get_BattleParameter(): BattleParameter { return this._BattleParameter; /* auto-property */ }
-    /** @rva 0x736A50  public void set_BattleParameter(BattleParameter value) { } */
+    /** @rva 0x73CA50  public void set_BattleParameter(BattleParameter value) { } */
     set_BattleParameter(value: BattleParameter): void { this._BattleParameter = value; /* auto-property */ }
-    /** @rva 0x7369E0  public BattleParameter get_Param() { } */
+    /** @rva 0x73C9E0  public BattleParameter get_Param() { } */
     get_Param(): BattleParameter { return this._BattleParameter; /* asm: mov rax, qword ptr [rcx + 0x20]; ret */ }
-    /** @rva 0x7637A0  public int get_MaxHP() { } */
+    /** @rva 0x7697A0  public int get_MaxHP() { } */
     get_MaxHP(): int { return this._MaxHP; /* auto-property */ }
-    /** @rva 0x8A2250  public void set_MaxHP(int value) { } */
+    /** @rva 0x8A8250  public void set_MaxHP(int value) { } */
     set_MaxHP(value: int): void { this._MaxHP = value; /* auto-property */ }
-    /** @rva 0x85E530  public int get_HP() { } */
+    /** @rva 0x864530  public int get_HP() { } */
     get_HP(): int { return this._HP; /* auto-property */ }
-    /** @rva 0x8A2260  public void set_HP(int value) { } */
+    /** @rva 0x8A8260  public void set_HP(int value) { } */
     set_HP(value: int): void { this._HP = value; /* auto-property */ }
-    /** @rva 0x75ED60  public int get_EP() { } */
+    /** @rva 0x764D60  public int get_EP() { } */
     get_EP(): int { return this._EP; /* auto-property */ }
-    /** @rva 0x8745A0  public void set_EP(int value) { } */
+    /** @rva 0x87A5A0  public void set_EP(int value) { } */
     set_EP(value: int): void { this._EP = value; /* auto-property */ }
-    /** @rva 0x75ED50  public int get_BP() { } */
+    /** @rva 0x764D50  public int get_BP() { } */
     get_BP(): int { return this._BP; /* auto-property */ }
-    /** @rva 0x8A22A0  public void set_BP(int value) { } */
+    /** @rva 0x8A82A0  public void set_BP(int value) { } */
     set_BP(value: int): void { this._BP = value; /* auto-property */ }
-    /** @rva 0x139C5E0  public int get_InitialHP() { } */
+    /** @rva 0x13C95B0  public int get_InitialHP() { } */
     get_InitialHP(): int { return this.BattleParameter.HP; }
-    /** @rva 0x75EDA0  public int get_MaxEP() { } */
+    /** @rva 0x764DA0  public int get_MaxEP() { } */
     get_MaxEP(): int { return this._MaxEP; /* auto-property */ }
-    /** @rva 0x8A22B0  public void set_MaxEP(int value) { } */
+    /** @rva 0x8A82B0  public void set_MaxEP(int value) { } */
     set_MaxEP(value: int): void { this._MaxEP = value; /* auto-property */ }
-    /** @rva 0x8F3EF0  public int get_MaxBP() { } */
+    /** @rva 0x8F9EF0  public int get_MaxBP() { } */
     get_MaxBP(): int { return this._MaxBP; /* auto-property */ }
-    /** @rva 0x901820  public void set_MaxBP(int value) { } */
+    /** @rva 0x907840  public void set_MaxBP(int value) { } */
     set_MaxBP(value: int): void { this._MaxBP = value; /* auto-property */ }
-    /** @rva 0x139C4E0  public int get_ATK() { } */
+    /** @rva 0x13C94B0  public int get_ATK() { } */
     get_ATK(): int { return this.BattleParameter.ATK; }
-    /** @rva 0x139C5C0  public int get_DEF() { } */
+    /** @rva 0x13C9590  public int get_DEF() { } */
     get_DEF(): int { return this.BattleParameter.DEF; }
-    /** @rva 0x9CE320  public int get_CTR() { } */
+    /** @rva 0x9ECE70  public int get_CTR() { } */
     get_CTR(): int { return this.BattleParameter.CTR; }
-    /** @rva 0x139C5A0  public int get_CTD() { } */
+    /** @rva 0x13C9570  public int get_CTD() { } */
     get_CTD(): int { return this.BattleParameter.CTD; }
-    /** @rva 0x139C670  public int get_Speed() { } */
+    /** @rva 0x13C9670  public int get_Speed() { } */
     get_Speed(): int { return this.BattleParameter.Speed; }
-    /** @rva 0x139C600  public bool get_IsDead() { } */
+    /** @rva 0x13C95F0  public bool get_IsDead() { } */
     get_IsDead(): boolean {
         if (0 < this.HP) return false;
         return this.CurrentHpGaugeCount < 2;
     }
-    /** @rva 0x139C620  public bool get_IsDying() { } */
+    /** @rva 0x13C9610  public bool get_IsDying() { } */
     get_IsDying(): boolean {
         if (this.HP !== 1) return false;
         return this.CurrentHpGaugeCount < 2;
     }
-    /** @rva 0x139C430  public void add_onAliveStateChanged(Action<BattleUnit> value) { } */
+    /** @rva 0x13C9400  public void add_onAliveStateChanged(Action<BattleUnit> value) { } */
     add_onAliveStateChanged(value: (a0: BattleUnit) => void): void {
         this.onAliveStateChanged = Delegate.Combine(this.onAliveStateChanged, value)!;
     }
-    /** @rva 0x139C690  public void remove_onAliveStateChanged(Action<BattleUnit> value) { } */
+    /** @rva 0x13C9690  public void remove_onAliveStateChanged(Action<BattleUnit> value) { } */
     remove_onAliveStateChanged(value: (a0: BattleUnit) => void): void {
         this.onAliveStateChanged = Delegate.Remove(this.onAliveStateChanged, value)!;
     }
-    /** @rva 0x7368F0  public BattleUnitSkillSet get_SkillSet() { } */
+    /** @rva 0x73C8F0  public BattleUnitSkillSet get_SkillSet() { } */
     get_SkillSet(): BattleUnitSkillSet { return this._SkillSet; /* auto-property */ }
-    /** @rva 0x736A00  public void set_SkillSet(BattleUnitSkillSet value) { } */
+    /** @rva 0x73CA00  public void set_SkillSet(BattleUnitSkillSet value) { } */
     set_SkillSet(value: BattleUnitSkillSet): void { this._SkillSet = value; /* auto-property */ }
-    /** @rva 0x139C500  public ActiveSkill[] get_ActiveSkills() { } */
+    /** @rva 0x13C94D0  public ActiveSkill[] get_ActiveSkills() { } */
     get_ActiveSkills(): ActiveSkill[] {
         return this.SkillSet?.ActiveSkills ?? []; // `?? new ActiveSkill[0]`
     }
-    /** @rva 0x139C660  public SpecialAttack get_SpecialAttack() { } */
+    /** @rva 0x13C9660  public SpecialAttack get_SpecialAttack() { } */
     get_SpecialAttack(): SpecialAttack { return this.SkillSet?.SpecialAttack ?? null!; }
-    /** @rva 0x139C650  public NormalAttack get_NormalAttack() { } */
+    /** @rva 0x13C9650  public NormalAttack get_NormalAttack() { } */
     get_NormalAttack(): NormalAttack { return this.SkillSet?.NormalAttack ?? null!; }
-    /** @rva 0x139C550  public AdditionalSkill[] get_AdditionalSkills() { } */
+    /** @rva 0x13C9520  public AdditionalSkill[] get_AdditionalSkills() { } */
     get_AdditionalSkills(): AdditionalSkill[] { return this.SkillSet?.AdditionalSkills ?? []; /* ?? Array.Empty<AdditionalSkill>() */ }
-    /** @rva 0x736910  public PassiveSkill[] get_PassiveSkills() { } */
+    /** @rva 0x73C910  public PassiveSkill[] get_PassiveSkills() { } */
     get_PassiveSkills(): PassiveSkill[] { return this._PassiveSkills; /* auto-property */ }
-    /** @rva 0x736A20  public void set_PassiveSkills(PassiveSkill[] value) { } */
+    /** @rva 0x73CA20  public void set_PassiveSkills(PassiveSkill[] value) { } */
     set_PassiveSkills(value: PassiveSkill[]): void { this._PassiveSkills = value; /* auto-property */ }
-    /** @rva 0x736900  public UnitCondition get_Condition() { } */
+    /** @rva 0x73C900  public UnitCondition get_Condition() { } */
     get_Condition(): UnitCondition { return this._Condition; /* auto-property */ }
-    /** @rva 0x736A10  public void set_Condition(UnitCondition value) { } */
+    /** @rva 0x73CA10  public void set_Condition(UnitCondition value) { } */
     set_Condition(value: UnitCondition): void { this._Condition = value; /* auto-property */ }
-    /** @rva 0x737A10  public UnitTurnGauge get_TurnGauge() { } */
+    /** @rva 0x73DA10  public UnitTurnGauge get_TurnGauge() { } */
     get_TurnGauge(): UnitTurnGauge { return this._TurnGauge; /* auto-property */ }
-    /** @rva 0x737A50  public void set_TurnGauge(UnitTurnGauge value) { } */
+    /** @rva 0x73DA50  public void set_TurnGauge(UnitTurnGauge value) { } */
     set_TurnGauge(value: UnitTurnGauge): void { this._TurnGauge = value; /* auto-property */ }
-    /** @rva 0x901720  public int get_PositionId() { } */
+    /** @rva 0x907790  public int get_PositionId() { } */
     get_PositionId(): int { return this._PositionId; /* auto-property */ }
-    /** @rva 0x901760  public void set_PositionId(int value) { } */
+    /** @rva 0x9077F0  public void set_PositionId(int value) { } */
     set_PositionId(value: int): void { this._PositionId = value; /* auto-property */ }
-    /** @rva 0x737A20  public ElementType[] get_WeakElements() { } */
+    /** @rva 0x73DA20  public ElementType[] get_WeakElements() { } */
     get_WeakElements(): ElementType[] { return this._WeakElements; /* auto-property */ }
-    /** @rva 0x737A60  public void set_WeakElements(ElementType[] value) { } */
+    /** @rva 0x73DA60  public void set_WeakElements(ElementType[] value) { } */
     set_WeakElements(value: ElementType[]): void { this._WeakElements = value; /* auto-property */ }
-    /** @rva 0x737C60  public BreakPoint get_BreakPoint() { } */
+    /** @rva 0x73DC60  public BreakPoint get_BreakPoint() { } */
     get_BreakPoint(): BreakPoint { return this._BreakPoint; /* auto-property */ }
-    /** @rva 0x737E10  public void set_BreakPoint(BreakPoint value) { } */
+    /** @rva 0x73DE10  public void set_BreakPoint(BreakPoint value) { } */
     set_BreakPoint(value: BreakPoint): void { this._BreakPoint = value; /* auto-property */ }
-    /** @rva 0x901E30  public int get_BreakedDamageReceiveRate() { } */
+    /** @rva 0x907D00  public int get_BreakedDamageReceiveRate() { } */
     get_BreakedDamageReceiveRate(): int { return this._BreakedDamageReceiveRate; /* auto-property */ }
-    /** @rva 0x901E40  public void set_BreakedDamageReceiveRate(int value) { } */
+    /** @rva 0x907D30  public void set_BreakedDamageReceiveRate(int value) { } */
     set_BreakedDamageReceiveRate(value: int): void { this._BreakedDamageReceiveRate = value; /* auto-property */ }
-    /** @rva 0x902600  public bool get_IsCharacter() { } */
+    /** @rva 0xC98800  private void set_MaxOverBreakBonusValue(float value) { } */
+    set_MaxOverBreakBonusValue(value: float): void { this._MaxOverBreakBonusValue = value; /* auto-property */ }
+    /** @rva 0xC987F0  public float get_MaxOverBreakBonusValue() { } */
+    get_MaxOverBreakBonusValue(): float { return this._MaxOverBreakBonusValue; /* auto-property */ }
+    /** @rva 0x813800  private void set_OverBreakBonusValue(float value) { } */
+    set_OverBreakBonusValue(value: float): void { this._OverBreakBonusValue = value; /* auto-property */ }
+    /** @rva 0x8137E0  public float get_OverBreakBonusValue() { } */
+    get_OverBreakBonusValue(): float { return this._OverBreakBonusValue; /* auto-property */ }
+    /** @rva 0x13C95E0  public bool get_IsCharacter() { } */
     get_IsCharacter(): boolean { return this.isCharacter; /* asm: movzx eax, byte ptr [rcx + 0x84]; ret */ }
-    /** @rva 0x9025D0  public bool get_IsCharacterFigure() { } */
+    /** @rva 0x13C95D0  public bool get_IsCharacterFigure() { } */
     get_IsCharacterFigure(): boolean { return this.isCharacterFigure; /* asm: movzx eax, byte ptr [rcx + 0x85]; ret */ }
-    /** @rva 0x9025F0  public bool get_IsNoVisualDeath() { } */
+    /** @rva 0x13C9640  public bool get_IsNoVisualDeath() { } */
     get_IsNoVisualDeath(): boolean { return this.isNoVisualDeath; /* asm: movzx eax, byte ptr [rcx + 0x86]; ret */ }
-    /** @rva 0x139C640  public bool get_IsEnemy() { } */
+    /** @rva 0x13C9630  public bool get_IsEnemy() { } */
     get_IsEnemy(): boolean { return !this.isCharacter; }
-    /** @rva 0x901970  public int get_TurnNum() { } */
+    /** @rva 0x907E00  public int get_TurnNum() { } */
     get_TurnNum(): int { return this._TurnNum; /* auto-property */ }
-    /** @rva 0x9019E0  public void set_TurnNum(int value) { } */
+    /** @rva 0x907E30  public void set_TurnNum(int value) { } */
     set_TurnNum(value: int): void { this._TurnNum = value; /* auto-property */ }
-    /** @rva 0x737C30  public BattleConditionUtils.ConditionCheckDataBundle get_ActiveConditionCheckDataBundle() { } */
+    /** @rva 0x73DDA0  public BattleConditionUtils.ConditionCheckDataBundle get_ActiveConditionCheckDataBundle() { } */
     get_ActiveConditionCheckDataBundle(): BattleConditionUtils_ConditionCheckDataBundle { return this.activeConditionCheckDataBundle; /* asm: mov rax, qword ptr [rcx + 0x90]; ret */ }
-    /** @rva 0x737DA0  public EnemyConditionAndActionController get_EnemyConditionAndActionController() { } */
+    /** @rva 0x8B3A10  public EnemyConditionAndActionController get_EnemyConditionAndActionController() { } */
     get_EnemyConditionAndActionController(): EnemyConditionAndActionController { return this._EnemyConditionAndActionController; /* auto-property */ }
-    /** @rva 0x737F90  public void set_EnemyConditionAndActionController(EnemyConditionAndActionController value) { } */
+    /** @rva 0x8B3A20  public void set_EnemyConditionAndActionController(EnemyConditionAndActionController value) { } */
     set_EnemyConditionAndActionController(value: EnemyConditionAndActionController): void { this._EnemyConditionAndActionController = value; /* auto-property */ }
-    /** @rva 0x754630  public int get_InitialHpGaugeCount() { } */
+    /** @rva 0x86A850  public int get_InitialHpGaugeCount() { } */
     get_InitialHpGaugeCount(): int { return this._InitialHpGaugeCount; /* auto-property */ }
-    /** @rva 0x754900  public void set_InitialHpGaugeCount(int value) { } */
+    /** @rva 0x907E70  public void set_InitialHpGaugeCount(int value) { } */
     set_InitialHpGaugeCount(value: int): void { this._InitialHpGaugeCount = value; /* auto-property */ }
-    /** @rva 0x864740  public int get_CurrentHpGaugeCount() { } */
+    /** @rva 0x907E10  public int get_CurrentHpGaugeCount() { } */
     get_CurrentHpGaugeCount(): int { return this._CurrentHpGaugeCount; /* auto-property */ }
-    /** @rva 0xA05C50  public void set_CurrentHpGaugeCount(int value) { } */
+    /** @rva 0x907E60  public void set_CurrentHpGaugeCount(int value) { } */
     set_CurrentHpGaugeCount(value: int): void { this._CurrentHpGaugeCount = value; /* auto-property */ }
-    /** @rva 0x139B190  public void .ctor() { } */
+    /** @rva 0x13C8160  public void .ctor() { } */
     ctor(): this {
         // field initializers
         this._Condition = new UnitCondition().ctor();
@@ -355,7 +371,7 @@ export class BattleUnit {
         this._TurnNum = 1;
         return this;
     }
-    /** @rva 0x139BD50  public void .ctor(int id, int mstId, BattleUnit.TeamType team, CharacterParameter parameter, int positionId, int[] activeSkillMstIds, int specialAttackMstId, int normalAttackMstId, PassiveSkillInfo[] passiveSkillInfos) { } */
+    /** @rva 0x13C8D20  public void .ctor(int id, int mstId, BattleUnit.TeamType team, CharacterParameter parameter, int positionId, int[] activeSkillMstIds, int specialAttackMstId, int normalAttackMstId, PassiveSkillInfo[] passiveSkillInfos) { } */
     ctor$int_int_TeamType_CharacterParameter_int_int_int_int_PassiveSkillInfo(id: int, mstId: int, team: BattleUnit_TeamType, parameter: CharacterParameter, positionId: int, activeSkillMstIds: int[], specialAttackMstId: int, normalAttackMstId: int, passiveSkillInfos: PassiveSkillInfo[]): this {
         this.ctor(); // field initializers
         this._Id = id;
@@ -399,7 +415,7 @@ export class BattleUnit {
         this.isCharacterFigure = true; // asm writes the word 0x101 over isCharacter + isCharacterFigure
         return this;
     }
-    /** @rva 0x139AD80  public void .ctor(int id, int mstId, BattleUnit.TeamType team, BattleParameter parameter, BattleUnitSkillSet skillSet, PassiveSkill[] passiveSkills, int positionId) { } */
+    /** @rva 0x13C7D50  public void .ctor(int id, int mstId, BattleUnit.TeamType team, BattleParameter parameter, BattleUnitSkillSet skillSet, PassiveSkill[] passiveSkills, int positionId) { } */
     ctor$int_int_TeamType_BattleParameter_BattleUnitSkillSet_PassiveSkill_int(id: int, mstId: int, team: BattleUnit_TeamType, parameter: BattleParameter, skillSet: BattleUnitSkillSet, passiveSkills: PassiveSkill[], positionId: int): this {
         this.ctor(); // field initializers
         this._BattleParameter = parameter;
@@ -426,7 +442,7 @@ export class BattleUnit {
         this.isCharacterFigure = true; // word 0x101
         return this;
     }
-    /** @rva 0x139B2A0  public void .ctor(int id, int questEnemyAppearanceMstId, int position) { } */
+    /** @rva 0x13C8270  public void .ctor(int id, int questEnemyAppearanceMstId, int position) { } */
     ctor$int_int_int(id: int, questEnemyAppearanceMstId: int, position: int): this {
         this.ctor(); // field initializers
         const mst = BattleMstReaderBase.get_Instance<QuestEnemyAppearanceMstModel, QuestEnemyAppearanceMstRecord, int>(QuestEnemyAppearanceMstModel).GetModelByKey(questEnemyAppearanceMstId); // DisplayClass135_0.mst
@@ -482,7 +498,7 @@ export class BattleUnit {
         }
         return this;
     }
-    /** @rva 0x1395AB0  public static PassiveSkill[] GetPassiveSkills(BattleUnit unit, PassiveSkillInfo[] passiveSkillInfos) { } */
+    /** @rva 0x13C2A80  public static PassiveSkill[] GetPassiveSkills(BattleUnit unit, PassiveSkillInfo[] passiveSkillInfos) { } */
     static GetPassiveSkills(unit: BattleUnit, passiveSkillInfos: PassiveSkillInfo[]): PassiveSkill[] {
         if (passiveSkillInfos == null) return []; // Array.Empty<PassiveSkill>()
         return passiveSkillInfos.map(info => { // DisplayClass136_0.<GetPassiveSkills>b__0
@@ -496,7 +512,7 @@ export class BattleUnit {
             return new PassiveSkill().ctor$PassiveSkillMstModel_ListPassiveSkillDetailMstModel_AbilitySourceType(mst, details, source); // inlined
         }).filter((ps): ps is PassiveSkill => ps != null); // <GetPassiveSkills>b__136_1
     }
-    /** @rva 0x1394E10  private static AdditionalSkill[] GetAdditionalSkills(PassiveSkill[] passiveSkills, ActiveSkillBase[] activeSkills, SpecialAttack specialAttack, NormalAttack normalAttack) { } */
+    /** @rva 0x13C1DE0  private static AdditionalSkill[] GetAdditionalSkills(PassiveSkill[] passiveSkills, ActiveSkillBase[] activeSkills, SpecialAttack specialAttack, NormalAttack normalAttack) { } */
     static GetAdditionalSkills(passiveSkills: PassiveSkill[], activeSkills: ActiveSkillBase[], specialAttack: SpecialAttack, normalAttack: NormalAttack): AdditionalSkill[] {
         const list: AdditionalSkill[] = [];
         for (const effect of passiveSkills.flatMap(ps => ps.launcher.AbilityEffectList)) { // SelectMany(<GetAdditionalSkills>b__137_1)
@@ -511,7 +527,7 @@ export class BattleUnit {
         // all.Where(<GetAdditionalSkills>b__137_0: skill != null) is built and never enumerated in 3.19.0 (no effect).
         return [...list];
     }
-    /** @rva 0x1399210  private static ActiveSkillBase[] GetSwitchableSkills(PassiveSkill[] passiveSkills, int activeSkillLevel, int normalAttackLevel) { } */
+    /** @rva 0x13C61E0  private static ActiveSkillBase[] GetSwitchableSkills(PassiveSkill[] passiveSkills, int activeSkillLevel, int normalAttackLevel) { } */
     static GetSwitchableSkills(passiveSkills: PassiveSkill[], activeSkillLevel: int, normalAttackLevel: int): ActiveSkillBase[] {
         const list: ActiveSkillBase[] = [];
         for (const effect of passiveSkills.flatMap(ps => ps.launcher.AbilityEffectList)) { // SelectMany(<GetSwitchableSkills>b__138_0)
@@ -527,69 +543,69 @@ export class BattleUnit {
         }
         return [...list];
     }
-    /** @rva 0x1398E00  private static ActiveSkillBase[] GetStepUpSkills(PassiveSkill[] passiveSkills, int activeSkillLevel) { } */
+    /** @rva 0x13C5DD0  private static ActiveSkillBase[] GetStepUpSkills(PassiveSkill[] passiveSkills, int activeSkillLevel) { } */
     static GetStepUpSkills(passiveSkills: PassiveSkill[], activeSkillLevel: int): ActiveSkillBase[] {
         const c = { seen: new Set<int>(), list: [] as ActiveSkillBase[] }; // <>c__DisplayClass139_0
         for (const effect of passiveSkills.flatMap(ps => ps.launcher.AbilityEffectList)) { // SelectMany(<>c.b__139_1)
             if (!(effect instanceof StateAbilityEffect)) continue;
             const state = effect.GiveUnitState;
             if (state == null || !(state instanceof StepUpSkillUnitState)) continue;
-            BattleUnit.$GetStepUpSkills$g__TryAppend_139_0(state.GetSkillMstId$int(activeSkillLevel), c);
+            BattleUnit.$GetStepUpSkills$g__TryAppend_147_0(state.GetSkillMstId$int(activeSkillLevel), c);
         }
         return [...c.list];
     }
-    /** @rva 0x139A2D0  public void SetActiveConditionCheckDataBundle(GameDirectorBase gameDirector) { } */
+    /** @rva 0x13C72A0  public void SetActiveConditionCheckDataBundle(GameDirectorBase gameDirector) { } */
     SetActiveConditionCheckDataBundle(gameDirector: GameDirectorBase): void {
         const bundle = new BattleConditionUtils_ConditionCheckDataBundle().ctor();
         bundle._GameDirector = gameDirector;
         bundle._SelfUnit = this;
         this.activeConditionCheckDataBundle = bundle;
     }
-    /** @rva 0x139A080  public bool IsSpecialAttackPointMax() { } */
+    /** @rva 0x13C7050  public bool IsSpecialAttackPointMax() { } */
     IsSpecialAttackPointMax(): boolean {
         if (0 < this.MaxBP) return this.MaxBP <= this.BP;
         if (this.MaxEP < 1) return false;
         return this.MaxEP <= this.EP;
     }
-    /** @rva 0x1399FF0  public bool IsMatch(TargetElementType targetElement) { } */
+    /** @rva 0x13C6FC0  public bool IsMatch(TargetElementType targetElement) { } */
     IsMatch$TargetElementType(targetElement: TargetElementType): boolean {
         if (targetElement === 0) return true;
         const p = this.BattleParameter;
         if (p instanceof CharacterParameter) return p.Element === targetElement;
         return false;
     }
-    /** @rva 0x1399F60  public bool IsMatch(TargetRoleType targetRole) { } */
+    /** @rva 0x13C6F30  public bool IsMatch(TargetRoleType targetRole) { } */
     IsMatch$TargetRoleType(targetRole: TargetRoleType): boolean {
         if (targetRole === 0) return true;
         const p = this.BattleParameter;
         if (p instanceof CharacterParameter) return p.Role === targetRole;
         return false;
     }
-    /** @rva 0x1394440  public void AddHP(int hp) { } */
+    /** @rva 0x13C1370  public void AddHP(int hp) { } */
     AddHP(hp: int): void {
         const wasDead = this.HP < 1 ? this.CurrentHpGaugeCount < 2 : false; // IsDead (inlined)
         this._HP = clamp(hp + this.HP, 0, this.MaxHP);
         const isDead = this.HP < 1 ? this.CurrentHpGaugeCount < 2 : false;
         if (wasDead !== isDead) this.onAliveStateChanged?.(this);
     }
-    /** @rva 0x139A450  public void SetHP(int hp) { } */
+    /** @rva 0x13C7420  public void SetHP(int hp) { } */
     SetHP(hp: int): void {
         const wasDead = this.HP < 1 ? this.CurrentHpGaugeCount < 2 : false;
         this._HP = clamp(hp, 0, this.MaxHP);
         const isDead = this.HP < 1 ? this.CurrentHpGaugeCount < 2 : false;
         if (wasDead !== isDead) this.onAliveStateChanged?.(this);
     }
-    /** @rva 0x13943C0  public void AddEP(int ep) { } */
+    /** @rva 0x13C12F0  public void AddEP(int ep) { } */
     AddEP(ep: int): void { this._EP = clamp(this.EP + ep, 0, this.MaxEP); }
-    /** @rva 0x139A3E0  public void SetEP(int ep) { } */
+    /** @rva 0x13C73B0  public void SetEP(int ep) { } */
     SetEP(ep: int): void { this._EP = clamp(ep, 0, this.MaxEP); }
-    /** @rva 0x1394290  public void AddBP(int bp) { } */
+    /** @rva 0x13C11C0  public void AddBP(int bp) { } */
     AddBP(bp: int): void { this._BP = clamp(this.BP + bp, 0, this.MaxBP); }
-    /** @rva 0x139A370  public void SetBP(int bp) { } */
+    /** @rva 0x13C7340  public void SetBP(int bp) { } */
     SetBP(bp: int): void { this._BP = clamp(bp, 0, this.MaxBP); }
-    /** @rva 0x1394810  public float CalculationHpRate() { } */
+    /** @rva 0x13C17D0  public float CalculationHpRate() { } */
     CalculationHpRate(): float { return f32(f32(this.HP * 100) / this.MaxHP); /* asm: (float)HP * 100f / (float)MaxHP */ }
-    /** @rva 0x1394510  public int Attack(BattleUnit target, int damage, GameDirectorBase gameDirector) { } */
+    /** @rva 0x13C14D0  public int Attack(BattleUnit target, int damage, GameDirectorBase gameDirector) { } */
     Attack(target: BattleUnit, damage: int, gameDirector: GameDirectorBase): int {
         if (!target.isCharacter) {
             if (gameDirector instanceof SoloRaidGameDirector) {
@@ -608,7 +624,7 @@ export class BattleUnit {
         target.AddHP(-damage);
         return hp - target.HP;
     }
-    /** @rva 0x139A610  private void UpdateCountdownCancelTotalDamage(BattleUnit target, int damage, GameDirectorBase gameDirector) { } */
+    /** @rva 0x13C75E0  private void UpdateCountdownCancelTotalDamage(BattleUnit target, int damage, GameDirectorBase gameDirector) { } */
     UpdateCountdownCancelTotalDamage(target: BattleUnit, damage: int, gameDirector: GameDirectorBase): void {
         if (target.isCharacter || gameDirector == null) return;
         if (!(gameDirector instanceof SoloRaidGameDirector)) return;
@@ -617,12 +633,12 @@ export class BattleUnit {
         else cancel = target.Condition.StateList.some(state => state instanceof CountdownStartUnitState); // <UpdateCountdownCancelTotalDamage>b__151_0
         if (cancel) gameDirector.AddCancelTotalDamage(damage); // tail call 0x14a6ce0 (Ghidra inlined it)
     }
-    /** @rva 0x13947E0  public int AttacksToNearDeath(BattleUnit target, int damage, GameDirectorBase gameDirector) { } */
+    /** @rva 0x13C17A0  public int AttacksToNearDeath(BattleUnit target, int damage, GameDirectorBase gameDirector) { } */
     AttacksToNearDeath(target: BattleUnit, damage: int, gameDirector: GameDirectorBase): int {
         if (target.HP <= damage) damage = target.HP - 1;
         return this.Attack(target, damage, gameDirector);
     }
-    /** @rva 0x139A810  private void UpdateParameter() { } */
+    /** @rva 0x13C77E0  private void UpdateParameter() { } */
     UpdateParameter(): void {
         let maxHp: Decimal = Decimal.fromInt(this.BattleParameter.HP);
         for (const state of this.Condition.StateList) {
@@ -646,37 +662,37 @@ export class BattleUnit {
             this.AddHP(recover);
         }
     }
-    /** @rva 0x139A290  public void Refresh() { } */
+    /** @rva 0x13C7260  public void Refresh() { } */
     Refresh(): void {
         this.Condition.Refresh(this);
         this.UpdateParameter(); // inlined
     }
-    /** @rva 0x1399EF0  public bool IsMainTargetEnemy() { } */
+    /** @rva 0x13C6EC0  public bool IsMainTargetEnemy() { } */
     IsMainTargetEnemy(): boolean {
         const p = this.BattleParameter;
         if (p instanceof QuestEnemyAppearanceParameter) return p.IsMainTargetEnemy;
         return false;
     }
-    /** @rva 0x139A240  public void PassingTurn(int turnNum) { } */
+    /** @rva 0x13C7210  public void PassingTurn(int turnNum) { } */
     PassingTurn(turnNum: int): void {
         this.Condition.PassingTurn(turnNum, this);
         this.Condition.Refresh(this);
         this.UpdateParameter();
         this._TurnNum = this.TurnNum + 1;
     }
-    /** @rva 0x139AD50  public float UpdateTurnGaugeBySpeed() { } */
+    /** @rva 0x13C7D20  public float UpdateTurnGaugeBySpeed() { } */
     UpdateTurnGaugeBySpeed(): float {
         return this.TurnGauge.SetSpeedAndUpdateGaugeValue(this.GetProcessedSpeed()); // tail call 0x15cf110 (Ghidra inlined it)
     }
-    /** @rva 0x1394830  public float GetAbnormalParryRate(UnitStateBase state) { } */
+    /** @rva 0x13C1800  public float GetAbnormalParryRate(UnitStateBase state) { } */
     GetAbnormalParryRate$UnitStateBase(state: UnitStateBase): float {
         return clamp(f32(this.GetAbnormalParryRatio$UnitStateBase(state) / 100), 0, 1); // Ratio inlined
     }
-    /** @rva 0x13949D0  public float GetAbnormalParryRate(Type stateType) { } */
+    /** @rva 0x13C19A0  public float GetAbnormalParryRate(Type stateType) { } */
     GetAbnormalParryRate$Type(stateType: Type): float {
         return clamp(f32(this.GetAbnormalParryRatio$Type(stateType) / 100), 0, 1);
     }
-    /** @rva 0x1394B70  private float GetAbnormalParryRatio(UnitStateBase state) { } */
+    /** @rva 0x13C1B40  private float GetAbnormalParryRatio(UnitStateBase state) { } */
     GetAbnormalParryRatio$UnitStateBase(state: UnitStateBase): float {
         let ratio = 0;
         const p = this.BattleParameter;
@@ -686,7 +702,7 @@ export class BattleUnit {
         }
         return ratio;
     }
-    /** @rva 0x1394CC0  private float GetAbnormalParryRatio(Type stateType) { } */
+    /** @rva 0x13C1C90  private float GetAbnormalParryRatio(Type stateType) { } */
     GetAbnormalParryRatio$Type(stateType: Type): float {
         let ratio = 0;
         const p = this.BattleParameter;
@@ -696,9 +712,9 @@ export class BattleUnit {
         }
         return ratio;
     }
-    /** @rva 0x901E40  public void SetBreakedDamageReceiveRate(int rate) { } */
+    /** @rva 0x907D30  public void SetBreakedDamageReceiveRate(int rate) { } */
     SetBreakedDamageReceiveRate(rate: int): void { this._BreakedDamageReceiveRate = rate; /* asm: mov dword ptr [rcx + 0x80], edx; ret */ }
-    /** @rva 0x1394310  public ValueTuple<bool, int> AddBreakedDamageReceiveRate(int rate) { } */
+    /** @rva 0x13C1240  public ValueTuple<bool, int> AddBreakedDamageReceiveRate(int rate) { } */
     AddBreakedDamageReceiveRate(rate: int): [boolean, int] {
         const before = this.BreakedDamageReceiveRate;
         rate = rate + before;
@@ -707,12 +723,12 @@ export class BattleUnit {
         if (max <= rate) this._BreakedDamageReceiveRate = max;
         return [max <= rate && before < max, this.BreakedDamageReceiveRate - before];
     }
-    /** @rva 0x1398D20  public List<IRequiredStateForDecide> GetStateListForDecide() { } */
+    /** @rva 0x13C5CF0  public List<IRequiredStateForDecide> GetStateListForDecide() { } */
     GetStateListForDecide(): List<IRequiredStateForDecide> {
-        return this.Condition.StateList.filter(state => this.$GetStateListForDecide$b__165_0(state))
+        return this.Condition.StateList.filter(state => this.$GetStateListForDecide$b__173_0(state))
             .filter(s => isImpl(s, "IRequiredStateForDecide")) as unknown as IRequiredStateForDecide[]; // OfType
     }
-    /** @rva 0x13959B0  public float GetInitialDamageBaseParamValue(DamageBaseType damageBaseType) { } */
+    /** @rva 0x13C2980  public float GetInitialDamageBaseParamValue(DamageBaseType damageBaseType) { } */
     GetInitialDamageBaseParamValue(damageBaseType: DamageBaseType): float {
         switch (damageBaseType) {
             case 1: return this.BattleParameter.ATK;
@@ -740,19 +756,19 @@ export class BattleUnit {
         }
         return false;
     }
-    /** @rva 0x1399E70  public int GetUniqueZoneUnitStatePatternId() { } */
+    /** @rva 0x13C6E40  public int GetUniqueZoneUnitStatePatternId() { } */
     GetUniqueZoneUnitStatePatternId(): int {
         const s = this.Condition.StateList.find(x => x instanceof UniqueZoneUnitState) as UniqueZoneUnitState | undefined;
         return s != null ? s.UniqueStatePatternMstId : 0; // field 0x90
     }
-    /** @rva 0x901960  public int get_QuestEnemyAppearanceMstId() { } */
+    /** @rva 0x7C26C0  public int get_QuestEnemyAppearanceMstId() { } */
     get_QuestEnemyAppearanceMstId(): int { return this.serializedEnemyParameterMstId; /* asm: mov eax, dword ptr [rcx + 0xb0]; ret */ }
-    /** @rva 0x139A210  public void OnSerializing(StreamingContext _) { } */
+    /** @rva 0x13C71E0  public void OnSerializing(StreamingContext _) { } */
     OnSerializing(_: any): void {
         if (this.serializedEnemyParameterMstId !== 0) return;
         this.serializeBattleParameter = this.BattleParameter;
     }
-    /** @rva 0x139A0B0  public void OnDeserialized(StreamingContext _) { } */
+    /** @rva 0x13C7080  public void OnDeserialized(StreamingContext _) { } */
     OnDeserialized(_: any): void {
         if (this.serializedEnemyParameterMstId === 0) {
             this._BattleParameter = this.serializeBattleParameter;
@@ -763,14 +779,25 @@ export class BattleUnit {
         this._BattleParameter = new QuestEnemyAppearanceParameter().ctor$QuestEnemyAppearanceMstModel_BreakMstModel(mst, breakMst);
         // (the call list also has GetPassiveSkills; Ghidra's body ends before it: re-check when deserialization is used)
     }
-    /** @rva 0x1399640  public float GetTotalEffectHitRate(UnitStateBase targetState) { } */
+    /** @rva 0x13C17F0  public void ClearOverBreak() { } */
+    ClearOverBreak(): void {
+        this._OverBreakBonusValue = 0; // one 8-byte store over 0x84/0x88
+        this._MaxOverBreakBonusValue = 0;
+    }
+    /** @rva 0xC98800  public void AddMaxOverBreakBonus(float maxValue) { } */
+    AddMaxOverBreakBonus(maxValue: float): void { this._MaxOverBreakBonusValue = maxValue; /* folded with set_MaxOverBreakBonusValue: a plain store */ }
+    /** @rva 0x13C1440  public void AddOverBreakBonus(float value) { } */
+    AddOverBreakBonus(value: float): void {
+        this._OverBreakBonusValue = Math.min(f32(this._OverBreakBonusValue + value), this._MaxOverBreakBonusValue); // Math.Min(float, float)
+    }
+    /** @rva 0x13C6610  public float GetTotalEffectHitRate(UnitStateBase targetState) { } */
     GetTotalEffectHitRate(targetState: UnitStateBase): float {
         let rate = 0;
         if (targetState.Direction === 1) rate = f32(this.GetProcessedEffectHitRate() + 0);
         if (targetState instanceof AbnormalUnitStateBase) rate = f32(rate + f32(this.GetAllAbnormalHitRate() / 100));
         return Math.max(f32(rate + 1), 0); // Math.Max(rate + 1f, 0f)
     }
-    /** @rva 0x13953B0  public float GetAllAbnormalHitRate() { } */
+    /** @rva 0x13C2380  public float GetAllAbnormalHitRate() { } */
     GetAllAbnormalHitRate(): float {
         let rate = 0;
         for (const state of this.Condition.StateList) {
@@ -787,14 +814,14 @@ export class BattleUnit {
         }
         return rate;
     }
-    /** @rva 0x1399780  public float GetTotalEffectParryRate(UnitStateBase targetState) { } */
+    /** @rva 0x13C6750  public float GetTotalEffectParryRate(UnitStateBase targetState) { } */
     GetTotalEffectParryRate(targetState: UnitStateBase): float {
         let rate = 0;
         if (targetState.Direction === 1) rate = f32(this.GetProcessedEffectParryRate() + 0);
         rate = f32(1 - rate);
         return rate < 0 ? 0 : 1 < rate ? 1 : rate;
     }
-    /** @rva 0x1399840  public float GetTotalSecondaryEffectParryRate(UnitStateBase targetState) { } */
+    /** @rva 0x13C6810  public float GetTotalSecondaryEffectParryRate(UnitStateBase targetState) { } */
     GetTotalSecondaryEffectParryRate$UnitStateBase(targetState: UnitStateBase): float {
         let rate = 0;
         if (targetState instanceof StunUnitState) rate = f32(f32(this.Condition.RepeatStunParryRate / 100) + 0);
@@ -805,7 +832,7 @@ export class BattleUnit {
         rate = f32(1 - rate);
         return 0 <= rate ? (rate <= 1 ? rate : 1) : 0;
     }
-    /** @rva 0x1399B20  public float GetTotalSecondaryEffectParryRate(Type targetStateType) { } */
+    /** @rva 0x13C6AF0  public float GetTotalSecondaryEffectParryRate(Type targetStateType) { } */
     GetTotalSecondaryEffectParryRate$Type(targetStateType: Type): float {
         let rate = 0;
         // typeof(IDebuff).IsAssignableFrom(targetStateType) is evaluated and discarded in 3.19.0 (no effect)
@@ -817,7 +844,7 @@ export class BattleUnit {
         rate = f32(1 - rate);
         return 0 <= rate ? (rate <= 1 ? rate : 1) : 0;
     }
-    /** @rva 0x13956B0  public float GetAllAbnormalParryRate() { } */
+    /** @rva 0x13C2680  public float GetAllAbnormalParryRate() { } */
     GetAllAbnormalParryRate(): float {
         let rate = 0;
         for (const state of this.Condition.StateList) {
@@ -834,9 +861,9 @@ export class BattleUnit {
         }
         return rate;
     }
-    /** @rva 0x1396140  public float GetProcessedAtk() { } */
+    /** @rva 0x13C3110  public float GetProcessedAtk() { } */
     GetProcessedAtk(): float { return this.GetProcessedAtkDecimal().toFloat(); }
-    /** @rva 0x1395CC0  public Decimal GetProcessedAtkDecimal() { } */
+    /** @rva 0x13C2C90  public Decimal GetProcessedAtkDecimal() { } */
     GetProcessedAtkDecimal(): Decimal {
         let value: Decimal = Decimal.fromInt(this.BattleParameter.ATK);
         for (const state of this.Condition.StateList) {
@@ -853,9 +880,9 @@ export class BattleUnit {
         }
         return value.lt(Decimal.Zero) ? Decimal.Zero : value;
     }
-    /** @rva 0x13970D0  public float GetProcessedDef() { } */
+    /** @rva 0x13C40A0  public float GetProcessedDef() { } */
     GetProcessedDef(): float { return this.GetProcessedDefDecimal().toFloat(); }
-    /** @rva 0x1396C50  public Decimal GetProcessedDefDecimal() { } */
+    /** @rva 0x13C3C20  public Decimal GetProcessedDefDecimal() { } */
     GetProcessedDefDecimal(): Decimal {
         let value: Decimal = Decimal.fromInt(this.BattleParameter.DEF);
         for (const state of this.Condition.StateList) {
@@ -872,7 +899,7 @@ export class BattleUnit {
         }
         return value.lt(Decimal.Zero) ? Decimal.Zero : value;
     }
-    /** @rva 0x1398890  public float GetProcessedSpeed() { } */
+    /** @rva 0x13C5860  public float GetProcessedSpeed() { } */
     GetProcessedSpeed(): float {
         let value: Decimal = Decimal.fromInt(this.BattleParameter.Speed);
         for (const state of this.Condition.StateList) {
@@ -890,7 +917,7 @@ export class BattleUnit {
         if (value.lt(Decimal.Zero)) value = Decimal.Zero;
         return value.toFloat();
     }
-    /** @rva 0x1396800  public float GetProcessedCtr() { } */
+    /** @rva 0x13C37D0  public float GetProcessedCtr() { } */
     GetProcessedCtr(): float {
         let rate = f32(this.BattleParameter.CTR / 10);
         for (const state of this.Condition.StateList) {
@@ -907,7 +934,7 @@ export class BattleUnit {
         }
         return 0 > rate ? 0 : rate;
     }
-    /** @rva 0x1398570  public float GetProcessedRcvCtr(BattleUnit attackUnit) { } */
+    /** @rva 0x13C5540  public float GetProcessedRcvCtr(BattleUnit attackUnit) { } */
     GetProcessedRcvCtr(attackUnit: BattleUnit): float {
         let rate = 0;
         for (const state of this.Condition.StateList) {
@@ -924,7 +951,7 @@ export class BattleUnit {
         }
         return 0 > rate ? 0 : rate;
     }
-    /** @rva 0x1398390  public float GetProcessedRcvCtd(BattleUnit attackUnit) { } */
+    /** @rva 0x13C5360  public float GetProcessedRcvCtd(BattleUnit attackUnit) { } */
     GetProcessedRcvCtd(attackUnit: BattleUnit): float {
         let rate = 0;
         for (const state of this.Condition.StateList) {
@@ -941,7 +968,7 @@ export class BattleUnit {
         }
         return 0 > rate ? 0 : rate;
     }
-    /** @rva 0x13964E0  public float GetProcessedCtd() { } */
+    /** @rva 0x13C34B0  public float GetProcessedCtd() { } */
     GetProcessedCtd(): float {
         let rate = f32(this.BattleParameter.CTD / 10);
         for (const state of this.Condition.StateList) {
@@ -958,7 +985,7 @@ export class BattleUnit {
         }
         return 0 > rate ? 0 : rate;
     }
-    /** @rva 0x1397140  public float GetProcessedEffectHitRate() { } */
+    /** @rva 0x13C4110  public float GetProcessedEffectHitRate() { } */
     GetProcessedEffectHitRate(): float {
         let rate = f32(this.BattleParameter.EffectHitRate / 10);
         for (const state of this.Condition.StateList) {
@@ -975,7 +1002,7 @@ export class BattleUnit {
         }
         return clamp(f32(rate / 100), 0, 1);
     }
-    /** @rva 0x1397490  public float GetProcessedEffectParryRate() { } */
+    /** @rva 0x13C4460  public float GetProcessedEffectParryRate() { } */
     GetProcessedEffectParryRate(): float {
         let rate = f32(this.BattleParameter.EffectParryRate / 10);
         for (const state of this.Condition.StateList) {
@@ -992,7 +1019,7 @@ export class BattleUnit {
         }
         return clamp(f32(rate / 100), 0, 1);
     }
-    /** @rva 0x1398090  public float GetProcessedHealRatio() { } */
+    /** @rva 0x13C5060  public float GetProcessedHealRatio() { } */
     GetProcessedHealRatio(): float {
         let rate = f32(this.BattleParameter.HealRate / 10);
         for (const state of this.Condition.StateList) {
@@ -1009,7 +1036,7 @@ export class BattleUnit {
         }
         return rate;
     }
-    /** @rva 0x13977E0  public Decimal GetProcessedElementDamageRate(TargetElementType attackElement) { } */
+    /** @rva 0x13C47B0  public Decimal GetProcessedElementDamageRate(TargetElementType attackElement) { } */
     GetProcessedElementDamageRate(attackElement: TargetElementType): Decimal {
         let value: Decimal = Decimal.fromParts(0, 0, 0, false, 1); // 0.0
         const rate = this.BattleParameter.ElementDamageRates.find(r => r.Element === attackElement) ?? null; // DisplayClass193_0 b__0
@@ -1020,7 +1047,7 @@ export class BattleUnit {
         }
         return value;
     }
-    /** @rva 0x1397B60  public Decimal GetProcessedElementResistRate(TargetElementType attackElement) { } */
+    /** @rva 0x13C4B30  public Decimal GetProcessedElementResistRate(TargetElementType attackElement) { } */
     GetProcessedElementResistRate(attackElement: TargetElementType): Decimal {
         let value: Decimal = Decimal.fromParts(0, 0, 0, false, 1); // 0.0
         const rate = this.BattleParameter.ElementResistRates.find(r => r.Element === attackElement) ?? null; // DisplayClass194_0 b__0
@@ -1031,7 +1058,7 @@ export class BattleUnit {
         }
         return Decimal.clamp(value, Decimal.fromInt(-999), Decimal.fromInt(999)); // Math.Clamp(value, -999m, 999m)
     }
-    /** @rva 0x13961B0  public float GetProcessedBreakedDamageReceiveRatio() { } */
+    /** @rva 0x13C3180  public float GetProcessedBreakedDamageReceiveRatio() { } */
     GetProcessedBreakedDamageReceiveRatio(): float {
         let rate = 100;
         for (const state of this.Condition.StateList) {
@@ -1048,7 +1075,7 @@ export class BattleUnit {
         }
         return f32(rate - 100);
     }
-    /** @rva 0x1396B20  public Decimal GetProcessedDamageBaseParamValueDecimal(DamageBaseType damageBaseType) { } */
+    /** @rva 0x13C3AF0  public Decimal GetProcessedDamageBaseParamValueDecimal(DamageBaseType damageBaseType) { } */
     GetProcessedDamageBaseParamValueDecimal(damageBaseType: DamageBaseType): Decimal {
         switch (damageBaseType as number) {
             case 1: return this.GetProcessedAtkDecimal();
@@ -1057,17 +1084,17 @@ export class BattleUnit {
             default: throw new Error(`不正な DamageBaseType です：${enumToString(DamageBaseType$, damageBaseType)}`);
         }
     }
-    /** @rva 0x139A580  internal static void <GetStepUpSkills>g__TryAppend|139_0(int skillMstId, ref BattleUnit.<>c__DisplayClass139_0 ) { } */
-    static $GetStepUpSkills$g__TryAppend_139_0(skillMstId: int, BattleUnit$c__DisplayClass139_0: any /* ref { seen: HashSet<int>, list: List<ActiveSkillBase> } */): void {
+    /** @rva 0x13C7550  internal static void <GetStepUpSkills>g__TryAppend|147_0(int skillMstId, ref BattleUnit.<>c__DisplayClass147_0 ) { } */
+    static $GetStepUpSkills$g__TryAppend_147_0(skillMstId: int, BattleUnit$c__DisplayClass147_0: any /* ref { seen: HashSet<int>, list: List<ActiveSkillBase> } */): void {
         if (!(0 < skillMstId)) return;
-        const c = BattleUnit$c__DisplayClass139_0;
+        const c = BattleUnit$c__DisplayClass147_0;
         if (c.seen.has(skillMstId)) return; // HashSet.Add returned false
         c.seen.add(skillMstId);
         const skill = ActiveSkillBaseUtility.GetActiveSkill(skillMstId);
         if (skill != null) c.list.push(skill);
     }
-    /** @rva 0x139A510  private bool <GetStateListForDecide>b__165_0(UnitStateBase state) { } */
-    $GetStateListForDecide$b__165_0(state: UnitStateBase): boolean {
+    /** @rva 0x13C74E0  private bool <GetStateListForDecide>b__173_0(UnitStateBase state) { } */
+    $GetStateListForDecide$b__173_0(state: UnitStateBase): boolean {
         if (!isImpl(state, "IRequiredStateForDecide")) return false;
         return state.IsActive$BattleUnit(this);
     }

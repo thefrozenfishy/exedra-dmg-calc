@@ -60,50 +60,50 @@ export class CommandDecideSkillContent extends CommandBase {
     get CanStepUpSkill(): boolean { return this.get_CanStepUpSkill(); }
     set HasStepUpSkill(v: boolean) { this.set_HasStepUpSkill(v); }
     get HasStepUpSkill(): boolean { return this.get_HasStepUpSkill(); }
-    /** @rva 0x17FAC80 slot 4  public override CommandType GetCommandType() { } */
+    /** @rva 0x1831970 slot 4  public override CommandType GetCommandType() { } */
     GetCommandType(): CommandType { return 17 as CommandType; /* asm: mov eax, 0x11; ret */ }
-    /** @rva 0x7F97F0  public bool get_IsSpecialAttack() { } */
+    /** @rva 0x7FF7F0  public bool get_IsSpecialAttack() { } */
     get_IsSpecialAttack(): boolean { return this._IsSpecialAttack; /* auto-property */ }
-    /** @rva 0x7F9810  public void set_IsSpecialAttack(bool value) { } */
+    /** @rva 0x7FF810  public void set_IsSpecialAttack(bool value) { } */
     set_IsSpecialAttack(value: boolean): void { this._IsSpecialAttack = value; /* auto-property */ }
-    /** @rva 0x7F9800  public int get_UnitId() { } */
+    /** @rva 0x7FF800  public int get_UnitId() { } */
     get_UnitId(): int { return this._UnitId; /* auto-property */ }
-    /** @rva 0x7F9820  public void set_UnitId(int value) { } */
+    /** @rva 0x7FF820  public void set_UnitId(int value) { } */
     set_UnitId(value: int): void { this._UnitId = value; /* auto-property */ }
-    /** @rva 0x8AC0D0  public bool get_IsAdditionalTurnAct() { } */
+    /** @rva 0x8B20D0  public bool get_IsAdditionalTurnAct() { } */
     get_IsAdditionalTurnAct(): boolean { return this._IsAdditionalTurnAct; /* auto-property */ }
-    /** @rva 0x8AC0E0  public void set_IsAdditionalTurnAct(bool value) { } */
+    /** @rva 0x8B20E0  public void set_IsAdditionalTurnAct(bool value) { } */
     set_IsAdditionalTurnAct(value: boolean): void { this._IsAdditionalTurnAct = value; /* auto-property */ }
-    /** @rva 0x8D6500  public bool get_IsReActionTurnAct() { } */
+    /** @rva 0x8DC500  public bool get_IsReActionTurnAct() { } */
     get_IsReActionTurnAct(): boolean { return this._IsReActionTurnAct; /* auto-property */ }
-    /** @rva 0x8D6530  public void set_IsReActionTurnAct(bool value) { } */
+    /** @rva 0x8DC530  public void set_IsReActionTurnAct(bool value) { } */
     set_IsReActionTurnAct(value: boolean): void { this._IsReActionTurnAct = value; /* auto-property */ }
-    /** @rva 0x736EA0  public Dictionary<int, List<IRequiredStateForDecide>> get_UnitStateListForDecideDic() { } */
+    /** @rva 0x73CEA0  public Dictionary<int, List<IRequiredStateForDecide>> get_UnitStateListForDecideDic() { } */
     get_UnitStateListForDecideDic(): Dictionary<int, List<IRequiredStateForDecide>> { return this._UnitStateListForDecideDic; /* auto-property */ }
-    /** @rva 0x736F10  public void set_UnitStateListForDecideDic(Dictionary<int, List<IRequiredStateForDecide>> value) { } */
+    /** @rva 0x73CF10  public void set_UnitStateListForDecideDic(Dictionary<int, List<IRequiredStateForDecide>> value) { } */
     set_UnitStateListForDecideDic(value: Dictionary<int, List<IRequiredStateForDecide>>): void { this._UnitStateListForDecideDic = value; /* auto-property */ }
-    /** @rva 0x736F00  public IEffectValueVariation[] get_EffectValueVariations() { } */
+    /** @rva 0x73CF00  public IEffectValueVariation[] get_EffectValueVariations() { } */
     get_EffectValueVariations(): IEffectValueVariation[] { return this._EffectValueVariations; /* auto-property */ }
-    /** @rva 0x736F30  public void set_EffectValueVariations(IEffectValueVariation[] value) { } */
+    /** @rva 0x73CF30  public void set_EffectValueVariations(IEffectValueVariation[] value) { } */
     set_EffectValueVariations(value: IEffectValueVariation[]): void { this._EffectValueVariations = value; /* auto-property */ }
-    /** @rva 0x736970  public SwitchedActiveSkillInfo get_SwitchedActiveSkillInfo() { } */
+    /** @rva 0x73C970  public SwitchedActiveSkillInfo get_SwitchedActiveSkillInfo() { } */
     get_SwitchedActiveSkillInfo(): SwitchedActiveSkillInfo { return this._SwitchedActiveSkillInfo; /* auto-property */ }
-    /** @rva 0x736A30  public void set_SwitchedActiveSkillInfo(SwitchedActiveSkillInfo value) { } */
+    /** @rva 0x73CA30  public void set_SwitchedActiveSkillInfo(SwitchedActiveSkillInfo value) { } */
     set_SwitchedActiveSkillInfo(value: SwitchedActiveSkillInfo): void { this._SwitchedActiveSkillInfo = value; /* auto-property */ }
-    /** @rva 0xA04E80  public void set_CanStepUpSkill(bool value) { } */
+    /** @rva 0xA09340  public void set_CanStepUpSkill(bool value) { } */
     set_CanStepUpSkill(value: boolean): void { this._CanStepUpSkill = value; /* auto-property */ }
-    /** @rva 0xA04E70  public bool get_CanStepUpSkill() { } */
+    /** @rva 0xA09330  public bool get_CanStepUpSkill() { } */
     get_CanStepUpSkill(): boolean { return this._CanStepUpSkill; /* auto-property */ }
-    /** @rva 0x901C30  public void set_HasStepUpSkill(bool value) { } */
+    /** @rva 0x907AC0  public void set_HasStepUpSkill(bool value) { } */
     set_HasStepUpSkill(value: boolean): void { this._HasStepUpSkill = value; /* auto-property */ }
-    /** @rva 0x901C00  public bool get_HasStepUpSkill() { } */
+    /** @rva 0x907A80  public bool get_HasStepUpSkill() { } */
     get_HasStepUpSkill(): boolean { return this._HasStepUpSkill; /* auto-property */ }
-    /** @rva 0x17FB000  public void .ctor() { } */
+    /** @rva 0x1831CF0  public void .ctor() { } */
     ctor(): this {
         this._EffectValueVariations = [];
         return this;
     }
-    /** @rva 0x17FAC90  public void .ctor(int unitId, bool isSpecialAttack, bool isAdditionalTurnAct, bool isReActionTurnAct, Dictionary<int, BattleUnit> unitDic) { } */
+    /** @rva 0x1831980  public void .ctor(int unitId, bool isSpecialAttack, bool isAdditionalTurnAct, bool isReActionTurnAct, Dictionary<int, BattleUnit> unitDic) { } */
     ctor$int_bool_bool_bool_DictionaryintBattleUnit(unitId: int, isSpecialAttack: boolean, isAdditionalTurnAct: boolean, isReActionTurnAct: boolean, unitDic: Dictionary<int, BattleUnit>): this {
         this._EffectValueVariations = [];
         this._IsReActionTurnAct = isReActionTurnAct;
@@ -113,7 +113,7 @@ export class CommandDecideSkillContent extends CommandBase {
         if (unitDic == null) return this;
         const dic = new Map<int, List<IRequiredStateForDecide>>(); // ToDictionary(<>c.b__38_0 key, <>c.b__38_1 value)
         for (const [key, unit] of unitDic) {
-            dic.set(key, unit.Condition.StateList.filter(state => unit.$GetStateListForDecide$b__165_0(state))
+            dic.set(key, unit.Condition.StateList.filter(state => unit.$GetStateListForDecide$b__173_0(state))
                 .filter(state => isImpl(state, "IRequiredStateForDecide")) as unknown as List<IRequiredStateForDecide>);
         }
         this._UnitStateListForDecideDic = dic;
@@ -125,7 +125,7 @@ export class CommandDecideSkillContent extends CommandBase {
         }
         return this;
     }
-    /** @rva 0x17FA930  public static CommandDecideSkillContent Create(ActBase currentAct, Dictionary<int, BattleUnit> unitDic, SpReferee spReferee) { } */
+    /** @rva 0x1831620  public static CommandDecideSkillContent Create(ActBase currentAct, Dictionary<int, BattleUnit> unitDic, SpReferee spReferee) { } */
     static Create(currentAct: ActBase, unitDic: Dictionary<int, BattleUnit>, spReferee: SpReferee): CommandDecideSkillContent {
         const unitId = currentAct.actUnitId;
         const command = new CommandDecideSkillContent().ctor$int_bool_bool_bool_DictionaryintBattleUnit(unitId,

@@ -14,27 +14,27 @@ import { UpCtdFixedUnitState } from "./UpCtdFixedUnitState";
 // ---- ReDriveBattleCore.UnitState.UpCtdConsumeFixedUnitState  (TypeDefIndex 765, public class) ----
 export class UpCtdConsumeFixedUnitState extends UpCtdFixedUnitState {  // implements IConsumeRemainCountOnAttack, IConsumeRemainCount
     static readonly __interfaces: readonly string[] = ['IConsumeRemainCountOnAttack', 'IConsumeRemainCount'];
-    /** @rva 0x16F6680 slot 7  public override string get_IconName() { } */
+    /** @rva 0x172B3D0 slot 7  public override string get_IconName() { } */
     get_IconName(): string {
         return "battle_icon_consume_up_ctd";
     }
-    /** @rva 0x16E2240  protected void .ctor() { } */
+    /** @rva 0x1715C30  protected void .ctor() { } */
     ctor(): this {
         this._IconName = "";
         return this;
     }
-    /** @rva 0x15CBB40  public void .ctor(AbilityEffectInfo info) { } */
+    /** @rva 0x15F8010  public void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
         super.ctor$AbilityEffectInfo(info);
         this._UpdateableEffectValue = f32(info._EffectValue1);
         return this;
     }
-    /** @rva 0x16F6470 slot 30  public override float GetCtdVariationValue(BattleUnit unit, float processingValue) { } */
+    /** @rva 0x172B1C0 slot 30  public override float GetCtdVariationValue(BattleUnit unit, float processingValue) { } */
     GetCtdVariationValue(unit: BattleUnit, processingValue: float): float {
         if (0 < this._RemainCount) return f32(this._UpdateableEffectValue / 10);
         return 0;
     }
-    /** @rva 0x16F6490 slot 31  public bool ShouldConsume(ActiveSkillBase attackSkill, List<AffectedUnitNotice> noticeList) { } */
+    /** @rva 0x172B1E0 slot 31  public bool ShouldConsume(ActiveSkillBase attackSkill, List<AffectedUnitNotice> noticeList) { } */
     ShouldConsume(attackSkill: ActiveSkillBase, noticeList: List<AffectedUnitNotice>): boolean {
         return noticeList.flatMap(notice => [...notice.Damages, ...notice.BarrierDamages]) // <>c.b__5_0 (Damages.Concat(BarrierDamages))
             .some(damage => damage._IsCritical); // b__5_1

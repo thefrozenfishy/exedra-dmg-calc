@@ -10,16 +10,16 @@ export class KnockDownAdditionalEnemyCondition extends AdditionalEnemyCondition 
     targetEnemyAppearanceMstId: int = 0;
     /** 0x14 private bool isFulfill */
     isFulfill: boolean = false;
-    /** @rva 0x852290 slot 4  public override bool get_IsFulfill() { } */
+    /** @rva 0x858290 slot 4  public override bool get_IsFulfill() { } */
     get_IsFulfill(): boolean { return this.isFulfill; /* asm: movzx eax, byte ptr [rcx + 0x14]; ret */ }
-    /** @rva 0x7305E0  protected void .ctor() { } */
+    /** @rva 0x7365E0  protected void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
-    /** @rva 0x733EE0  public void .ctor(int enemyAppearanceMstId) { } */
+    /** @rva 0x739EE0  public void .ctor(int enemyAppearanceMstId) { } */
     ctor$int(enemyAppearanceMstId: int): this {
         this.targetEnemyAppearanceMstId = enemyAppearanceMstId;
         return this;
     }
-    /** @rva 0x139D0F0  public void CheckTargetEnemy(int enemyAppearanceMstId) { } */
+    /** @rva 0x13CA0F0  public void CheckTargetEnemy(int enemyAppearanceMstId) { } */
     CheckTargetEnemy(enemyAppearanceMstId: int): void {
         if (this.targetEnemyAppearanceMstId === enemyAppearanceMstId) {
             this.isFulfill = true;

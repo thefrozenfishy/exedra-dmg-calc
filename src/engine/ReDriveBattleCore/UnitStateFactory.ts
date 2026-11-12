@@ -1,4 +1,4 @@
-// 1:1 port of ReDriveBattleCore (game 3.21.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
+// 1:1 port of ReDriveBattleCore (game 3.24.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
 import { StepUpSkillUnitState } from "./UnitState/StepUpSkillUnitState";
@@ -58,7 +58,10 @@ import { UpAbnormalHitRateRatioUnitState } from "./UnitState/UpAbnormalHitRateRa
 import { UniqueZoneUnitState } from "./UnitState/UniqueZoneUnitState";
 import { UniqueEnemy639002UnitState } from "./UnitState/UniqueEnemy639002UnitState";
 import { UniqueElementStackUnitState } from "./UnitState/UniqueElementStackUnitState";
-import { UniqueElementBreakUnitState } from "./UnitState/UniqueElementBreakUnitState";
+import { UniqueElementDriveUnitState } from "./UnitState/UniqueElementDriveUnitState";
+import { OverBreakDamageReceiveRateDriveUnitState } from "./UnitState/OverBreakDamageReceiveRateDriveUnitState";
+import { DriveUpBreakPointDmgRatioUnitState } from "./UnitState/DriveUpBreakPointDmgRatioUnitState";
+import { DriveUpBreakPointDmgFixedUnitState } from "./UnitState/DriveUpBreakPointDmgFixedUnitState";
 import { UniqueDebuffUnitState } from "./UnitState/UniqueDebuffUnitState";
 import { UniqueDebuffAccumUnitState } from "./UnitState/UniqueDebuffAccumUnitState";
 import { UniqueBuffUnitState } from "./UnitState/UniqueBuffUnitState";
@@ -153,23 +156,23 @@ export class UnitStateFactory {
     /** 0x0 private static readonly Dictionary<string, Func<AbilityEffectInfo, UnitStateBase>> createDic */
     static createDic: Dictionary<string, ((a0: AbilityEffectInfo) => UnitStateBase)> = null!;
     static get AbilityEffectTypeList(): List<string> { return UnitStateFactory.get_AbilityEffectTypeList(); }
-    /** @rva 0x15DE930  public static List<string> get_AbilityEffectTypeList() { } */
+    /** @rva 0x160B120  public static List<string> get_AbilityEffectTypeList() { } */
     static get_AbilityEffectTypeList(): List<string> {
         runCctor(UnitStateFactory);
         return [...UnitStateFactory.createDic.keys()];
     }
-    /** @rva 0x15DAAD0  public static bool CanCreate(string effectType) { } */
+    /** @rva 0x1607190  public static bool CanCreate(string effectType) { } */
     static CanCreate(effectType: string): boolean {
         runCctor(UnitStateFactory);
         return UnitStateFactory.createDic.has(effectType);
     }
-    /** @rva 0x15DAB50  public static UnitStateBase Create(AbilityEffectInfo info) { } */
+    /** @rva 0x1607210  public static UnitStateBase Create(AbilityEffectInfo info) { } */
     static Create(info: AbilityEffectInfo): UnitStateBase {
         runCctor(UnitStateFactory);
         if (!UnitStateFactory.createDic.has(info.EffectType)) return null!;
         return UnitStateFactory.createDic.get(info.EffectType)!(info);
     }
-    /** @rva 0x15DAC80  private static void .cctor() { } */
+    /** @rva 0x1607340  private static void .cctor() { } */
     static cctor(): void {
         // lazy (runCctor): the lambdas construct classes that import this module
         const dic = new Map<string, (info: AbilityEffectInfo) => UnitStateBase>();
@@ -233,96 +236,99 @@ export class UnitStateFactory {
         dic.set("DWN_BREAK_DAMAGE_RECEIVE_RATIO", info => new DwnBreakedDamageReceiveRatioUnitState().ctor$AbilityEffectInfo(info)); // b__5_57
         dic.set("UP_BREAKED_DAMAGE_RECEIVE_RATIO", info => new UpBreakedDamageReceiveRatioUnitState().ctor$AbilityEffectInfo(info)); // b__5_58
         dic.set("DWN_BREAKED_DAMAGE_RECEIVE_RATIO", info => new DwnBreakedDamageReceiveRatioUnitState().ctor$AbilityEffectInfo(info)); // b__5_59
-        dic.set("DWN_RCV_DMG_RATIO", info => new DwnRcvDmgRatioUnitState().ctor$AbilityEffectInfo(info)); // b__5_60
-        dic.set("UP_GIV_DMG_RATIO", info => new UpGivDmgRatioUnitState().ctor$AbilityEffectInfo(info)); // b__5_61
-        dic.set("UP_RCV_DMG_RATIO", info => new UpRcvDmgRatioUnitState().ctor$AbilityEffectInfo(info)); // b__5_62
-        dic.set("DWN_GIV_DMG_RATIO", info => new DwnGivDmgRatioUnitState().ctor$AbilityEffectInfo(info)); // b__5_63
-        dic.set("DWN_AIM_RCV_DMG_RATIO", info => new DwnAimRcvDmgRatioUnitState().ctor$AbilityEffectInfo(info)); // b__5_64
-        dic.set("UP_AIM_GIV_DMG_RATIO", info => new UpAimGivDmgRatioUnitState().ctor$AbilityEffectInfo(info)); // b__5_65
-        dic.set("UP_GIV_DMG_ACCUM_RATIO", info => new UpGivDmgAccumRatioUnitState().ctor$AbilityEffectInfo(info)); // b__5_66
-        dic.set("DWN_GIV_DMG_ACCUM_RATIO", info => new DwnGivDmgAccumRatioUnitState().ctor$AbilityEffectInfo(info)); // b__5_67
-        dic.set("UP_AIM_RCV_DMG_RATIO", info => new UpAimRcvDmgRatioUnitState().ctor$AbilityEffectInfo(info)); // b__5_68
-        dic.set("DWN_AIM_GIV_DMG_RATIO", info => new DwnAimGivDmgRatioUnitState().ctor$AbilityEffectInfo(info)); // b__5_69
-        dic.set("UP_GIV_DMG_CONSUME_RATIO", info => new UpGivDmgConsumeRatioUnitState().ctor$AbilityEffectInfo(info)); // b__5_70
-        dic.set("DWN_GIV_DMG_CONSUME_RATIO", info => new DwnGivDmgConsumeRatioUnitState().ctor$AbilityEffectInfo(info)); // b__5_71
-        dic.set("UP_GIV_BREAK_POINT_DMG_FIXED", info => new UpGivBreakPointDmgFixedUnitState().ctor$AbilityEffectInfo(info)); // b__5_72
-        dic.set("UP_GIV_BREAK_POINT_DMG_RATIO", info => new UpGivBreakPointDmgRatioUnitState().ctor$AbilityEffectInfo(info)); // b__5_73
-        dic.set("UP_RCV_BREAK_POINT_DMG_RATIO", info => new UpRcvBreakPointDmgRatioUnitState().ctor$AbilityEffectInfo(info)); // b__5_74
-        dic.set("DWN_GIV_BREAK_POINT_DMG_FIXED", info => new DwnGivBreakPointDmgFixedUnitState().ctor$AbilityEffectInfo(info)); // b__5_75
-        dic.set("DWN_RCV_BREAK_POINT_DMG_RATIO", info => new DwnRcvBreakPointDmgRatioUnitState().ctor$AbilityEffectInfo(info)); // b__5_76
-        dic.set("UP_WEAK_ELEMENT_DMG_RATIO", info => new UpWeakElementDmgRatioUnitState().ctor$AbilityEffectInfo(info)); // b__5_77
-        dic.set("UP_WEAK_ELEMENT_DMG_ACCUM_RATIO", info => new UpWeakElementDmgAccumRatioUnitState().ctor$AbilityEffectInfo(info)); // b__5_78
-        dic.set("UP_WEAK_ELEMENT_DMG_CONSUME_RATIO", info => new UpWeakElementDmgConsumeRatioUnitState().ctor$AbilityEffectInfo(info)); // b__5_79
-        dic.set("BURN_ATK", info => new BurnAtkUnitState().ctor$AbilityEffectInfo(info)); // b__5_80
-        dic.set("BURN_DEF", info => new BurnDefUnitState().ctor$AbilityEffectInfo(info)); // b__5_81
-        dic.set("BURN_HP", info => new BurnHpUnitState().ctor$AbilityEffectInfo(info)); // b__5_82
-        dic.set("WEAKNESS", info => new WeaknessUnitState().ctor$AbilityEffectInfo(info)); // b__5_83
-        dic.set("POISON_ATK", info => new PoisonAtkUnitState().ctor$AbilityEffectInfo(info)); // b__5_84
-        dic.set("POISON_DEF", info => new PoisonDefUnitState().ctor$AbilityEffectInfo(info)); // b__5_85
-        dic.set("POISON_HP", info => new PoisonHpUnitState().ctor$AbilityEffectInfo(info)); // b__5_86
-        dic.set("STUN", info => new StunUnitState().ctor$AbilityEffectInfo(info)); // b__5_87
-        dic.set("CURSE_ATK", info => new CurseAtkUnitState().ctor$AbilityEffectInfo(info)); // b__5_88
-        dic.set("CURSE_DEF", info => new CurseDefUnitState().ctor$AbilityEffectInfo(info)); // b__5_89
-        dic.set("CURSE_HP", info => new CurseHpUnitState().ctor$AbilityEffectInfo(info)); // b__5_90
-        dic.set("BLEED_ATK", info => new BleedAtkUnitState().ctor$AbilityEffectInfo(info)); // b__5_91
-        dic.set("BLEED_DEF", info => new BleedDefUnitState().ctor$AbilityEffectInfo(info)); // b__5_92
-        dic.set("BLEED_HP", info => new BleedHpUnitState().ctor$AbilityEffectInfo(info)); // b__5_93
-        dic.set("VORTEX_ATK", info => new VortexAtkUnitState().ctor$AbilityEffectInfo(info)); // b__5_94
-        dic.set("UP_GIV_SLIP_DMG_RATIO", info => new UpGivSlipDmgRatioUnitState().ctor$AbilityEffectInfo(info)); // b__5_95
-        dic.set("UP_GIV_BURN_DMG_RATIO", info => new UpGivBurnDmgRatioUnitState().ctor$AbilityEffectInfo(info)); // b__5_96
-        dic.set("UP_GIV_POISON_DMG_RATIO", info => new UpGivPoisonDmgRatioUnitState().ctor$AbilityEffectInfo(info)); // b__5_97
-        dic.set("UP_GIV_CURSE_DMG_RATIO", info => new UpGivCurseDmgRatioUnitState().ctor$AbilityEffectInfo(info)); // b__5_98
-        dic.set("UP_GIV_BLEED_DMG_RATIO", info => new UpGivBleedDmgRatioUnitState().ctor$AbilityEffectInfo(info)); // b__5_99
-        dic.set("UP_GIV_VORTEX_DMG_RATIO", info => new UpGivVortexDmgRatioUnitState().ctor$AbilityEffectInfo(info)); // b__5_100
-        dic.set("DWN_GIV_SLIP_DMG_RATIO", info => new DwnGivSlipDmgRatioUnitState().ctor$AbilityEffectInfo(info)); // b__5_101
-        dic.set("DWN_GIV_BURN_DMG_RATIO", info => new DwnGivBurnDmgRatioUnitState().ctor$AbilityEffectInfo(info)); // b__5_102
-        dic.set("DWN_GIV_POISON_DMG_RATIO", info => new DwnGivPoisonDmgRatioUnitState().ctor$AbilityEffectInfo(info)); // b__5_103
-        dic.set("DWN_GIV_CURSE_DMG_RATIO", info => new DwnGivCurseDmgRatioUnitState().ctor$AbilityEffectInfo(info)); // b__5_104
-        dic.set("DWN_GIV_BLEED_DMG_RATIO", info => new DwnGivBleedDmgRatioUnitState().ctor$AbilityEffectInfo(info)); // b__5_105
-        dic.set("DWN_GIV_VORTEX_DMG_RATIO", info => new DwnGivVortexDmgRatioUnitState().ctor$AbilityEffectInfo(info)); // b__5_106
-        dic.set("RCV_FINAL_DAMAGE", info => new RcvFinalDamageUnitState().ctor$AbilityEffectInfo(info)); // b__5_107
-        dic.set("UP_HATE", info => new UpHateUnitState().ctor$AbilityEffectInfo(info)); // b__5_108
-        dic.set("DWN_HATE", info => new DwnHateUnitState().ctor$AbilityEffectInfo(info)); // b__5_109
-        dic.set("SWITCH_SKILL", info => new SwitchSkillUnitState().ctor$AbilityEffectInfo(info)); // b__5_110
-        dic.set("STEP_UP_SKILL", info => new StepUpSkillUnitState().ctor$AbilityEffectInfo(info)); // 3.21.0 (lambdas renumbered from here on)
-        dic.set("REFLECTION_RATIO", info => new ReflectionRatioUnitState().ctor$AbilityEffectInfo(info)); // b__5_111
-        dic.set("COMBO", info => new ComboUnitState().ctor$AbilityEffectInfo(info)); // b__5_112
-        dic.set("CUTOUT", info => new CutoutUnitState().ctor$AbilityEffectInfo(info)); // b__5_113
-        dic.set("TSUBAME_CORE", info => new TsubameCoreUnitState().ctor$AbilityEffectInfo(info)); // b__5_114
-        dic.set("TSUBAME_LINK", info => new TsubameLinkUnitState().ctor$AbilityEffectInfo(info)); // b__5_115
-        dic.set("LOCK_TURN_ORDER", info => new LockTurnOrderUnitState().ctor$AbilityEffectInfo(info)); // b__5_116
-        dic.set("LOCK_SPECIAL_ATTACK", info => new LockSpecialAttackUnitState().ctor$AbilityEffectInfo(info)); // b__5_117
-        dic.set("SHIELD", info => new ShieldUnitState().ctor$AbilityEffectInfo(info)); // b__5_118
-        dic.set("BARRIER", info => new BarrierUnitState().ctor$AbilityEffectInfo(info)); // b__5_119
-        dic.set("GVE_UP_SPECIAL_ATTACK_FINAL_GIV_DMG_RATIO", info => new GveUpSpecialAttackFinalGiveDamageRatioUnitState().ctor$AbilityEffectInfo(info)); // b__5_120
-        dic.set("GVE_UP_FINAL_GAIN_EP_RATIO", info => new GveUpFinalGainEpRatioUnitState().ctor$AbilityEffectInfo(info)); // b__5_121
-        dic.set("CPN_UP_GIV_DMG_RATIO", info => new CpnUpGivDmgRatioUnitState().ctor$AbilityEffectInfo(info)); // b__5_122
-        dic.set("CPN_UP_GIV_BREAK_POINT_DMG_RATIO", info => new CpnUpGivBreakPointDmgRatioUnitState().ctor$AbilityEffectInfo(info)); // b__5_123
-        dic.set("PREVENT_ABNORMAL", info => new PreventAbnormalUnitState().ctor$AbilityEffectInfo(info)); // b__5_124
-        dic.set("ADD_BUFF_TURN", info => new AddBuffTurnUnitState().ctor$AbilityEffectInfo(info)); // b__5_125
-        dic.set("ADD_DEBUFF_TURN", info => new AddDebuffTurnUnitState().ctor$AbilityEffectInfo(info)); // b__5_126
-        dic.set("UP_BUFF_EFFECT_VALUE", info => new UpBuffEffectValueUnitState().ctor$AbilityEffectInfo(info)); // b__5_127
-        dic.set("UP_DEBUFF_EFFECT_VALUE", info => new UpDebuffEffectValueUnitState().ctor$AbilityEffectInfo(info)); // b__5_128
-        dic.set("DWN_BUFF_EFFECT_VALUE", info => new DwnBuffEffectValueUnitState().ctor$AbilityEffectInfo(info)); // b__5_129
-        dic.set("DWN_DEBUFF_EFFECT_VALUE", info => new DwnDebuffEffectValueUnitState().ctor$AbilityEffectInfo(info)); // b__5_130
-        dic.set("DWN_BARRIER_VALUE", info => new DwnBarrierValueUnitState().ctor$AbilityEffectInfo(info)); // b__5_131
-        dic.set("CONTINUOUS_RECOVERY", info => new ContinuousRecoveryUnitState().ctor$AbilityEffectInfo(info)); // b__5_132
-        dic.set("REGAIN_HP", info => new RegainHpUnitState().ctor$AbilityEffectInfo(info)); // b__5_133
-        dic.set("REGAIN_ATK", info => new RegainAtkUnitState().ctor$AbilityEffectInfo(info)); // b__5_134
-        dic.set("REGAIN_DEF", info => new RegainDefUnitState().ctor$AbilityEffectInfo(info)); // b__5_135
-        dic.set("COUNT", info => new CountUnitState().ctor$AbilityEffectInfo(info)); // b__5_136
-        dic.set("COUNTDOWN_START", info => new CountdownStartUnitState().ctor$AbilityEffectInfo(info)); // b__5_137
-        dic.set("ADDITIONAL_DAMAGE", info => new AdditionalDamageUnitState().ctor$AbilityEffectInfo(info)); // b__5_138
-        dic.set("UNIQUE_10030301", info => new Unique10030301UnitState().ctor$AbilityEffectInfo(info)); // b__5_139
-        dic.set("UNIQUE_10070201", info => new Unique10070201UnitState().ctor$AbilityEffectInfo(info)); // b__5_140
-        dic.set("UNIQUE_BUFF", info => new UniqueBuffUnitState().ctor$AbilityEffectInfo(info)); // b__5_141
-        dic.set("UNIQUE_DEBUFF", info => new UniqueDebuffUnitState().ctor$AbilityEffectInfo(info)); // b__5_142
-        dic.set("UNIQUE_BUFF_ACCUM", info => new UniqueBuffAccumUnitState().ctor$AbilityEffectInfo(info)); // b__5_143
-        dic.set("UNIQUE_DEBUFF_ACCUM", info => new UniqueDebuffAccumUnitState().ctor$AbilityEffectInfo(info)); // b__5_144
-        dic.set("UNIQUE_ELEMENT_STACK", info => new UniqueElementStackUnitState().ctor$AbilityEffectInfo(info)); // b__5_145
-        dic.set("UNIQUE_ELEMENT_BREAK", info => new UniqueElementBreakUnitState().ctor$AbilityEffectInfo(info)); // b__5_146
-        dic.set("UNIQUE_ZONE", info => new UniqueZoneUnitState().ctor$AbilityEffectInfo(info)); // b__5_147
-        dic.set("UNIQUE_ENEMY_639002", info => new UniqueEnemy639002UnitState().ctor$AbilityEffectInfo(info)); // b__5_148
+        dic.set("OVER_BREAK_DAMAGE_RECEIVE_RATE_DRIVE", info => new OverBreakDamageReceiveRateDriveUnitState().ctor$AbilityEffectInfo(info)); // b__5_60
+        dic.set("DWN_RCV_DMG_RATIO", info => new DwnRcvDmgRatioUnitState().ctor$AbilityEffectInfo(info)); // b__5_61
+        dic.set("UP_GIV_DMG_RATIO", info => new UpGivDmgRatioUnitState().ctor$AbilityEffectInfo(info)); // b__5_62
+        dic.set("UP_RCV_DMG_RATIO", info => new UpRcvDmgRatioUnitState().ctor$AbilityEffectInfo(info)); // b__5_63
+        dic.set("DWN_GIV_DMG_RATIO", info => new DwnGivDmgRatioUnitState().ctor$AbilityEffectInfo(info)); // b__5_64
+        dic.set("DWN_AIM_RCV_DMG_RATIO", info => new DwnAimRcvDmgRatioUnitState().ctor$AbilityEffectInfo(info)); // b__5_65
+        dic.set("UP_AIM_GIV_DMG_RATIO", info => new UpAimGivDmgRatioUnitState().ctor$AbilityEffectInfo(info)); // b__5_66
+        dic.set("UP_GIV_DMG_ACCUM_RATIO", info => new UpGivDmgAccumRatioUnitState().ctor$AbilityEffectInfo(info)); // b__5_67
+        dic.set("DWN_GIV_DMG_ACCUM_RATIO", info => new DwnGivDmgAccumRatioUnitState().ctor$AbilityEffectInfo(info)); // b__5_68
+        dic.set("UP_AIM_RCV_DMG_RATIO", info => new UpAimRcvDmgRatioUnitState().ctor$AbilityEffectInfo(info)); // b__5_69
+        dic.set("DWN_AIM_GIV_DMG_RATIO", info => new DwnAimGivDmgRatioUnitState().ctor$AbilityEffectInfo(info)); // b__5_70
+        dic.set("UP_GIV_DMG_CONSUME_RATIO", info => new UpGivDmgConsumeRatioUnitState().ctor$AbilityEffectInfo(info)); // b__5_71
+        dic.set("DWN_GIV_DMG_CONSUME_RATIO", info => new DwnGivDmgConsumeRatioUnitState().ctor$AbilityEffectInfo(info)); // b__5_72
+        dic.set("UP_GIV_BREAK_POINT_DMG_FIXED", info => new UpGivBreakPointDmgFixedUnitState().ctor$AbilityEffectInfo(info)); // b__5_73
+        dic.set("UP_GIV_BREAK_POINT_DMG_RATIO", info => new UpGivBreakPointDmgRatioUnitState().ctor$AbilityEffectInfo(info)); // b__5_74
+        dic.set("UP_RCV_BREAK_POINT_DMG_RATIO", info => new UpRcvBreakPointDmgRatioUnitState().ctor$AbilityEffectInfo(info)); // b__5_75
+        dic.set("DWN_GIV_BREAK_POINT_DMG_FIXED", info => new DwnGivBreakPointDmgFixedUnitState().ctor$AbilityEffectInfo(info)); // b__5_76
+        dic.set("DWN_RCV_BREAK_POINT_DMG_RATIO", info => new DwnRcvBreakPointDmgRatioUnitState().ctor$AbilityEffectInfo(info)); // b__5_77
+        dic.set("DRIVE_UP_BREAK_POINT_DMG_RATIO", info => new DriveUpBreakPointDmgRatioUnitState().ctor$AbilityEffectInfo(info)); // b__5_78
+        dic.set("DRIVE_UP_BREAK_POINT_DMG_FIXED", info => new DriveUpBreakPointDmgFixedUnitState().ctor$AbilityEffectInfo(info)); // b__5_79
+        dic.set("UP_WEAK_ELEMENT_DMG_RATIO", info => new UpWeakElementDmgRatioUnitState().ctor$AbilityEffectInfo(info)); // b__5_80
+        dic.set("UP_WEAK_ELEMENT_DMG_ACCUM_RATIO", info => new UpWeakElementDmgAccumRatioUnitState().ctor$AbilityEffectInfo(info)); // b__5_81
+        dic.set("UP_WEAK_ELEMENT_DMG_CONSUME_RATIO", info => new UpWeakElementDmgConsumeRatioUnitState().ctor$AbilityEffectInfo(info)); // b__5_82
+        dic.set("BURN_ATK", info => new BurnAtkUnitState().ctor$AbilityEffectInfo(info)); // b__5_83
+        dic.set("BURN_DEF", info => new BurnDefUnitState().ctor$AbilityEffectInfo(info)); // b__5_84
+        dic.set("BURN_HP", info => new BurnHpUnitState().ctor$AbilityEffectInfo(info)); // b__5_85
+        dic.set("WEAKNESS", info => new WeaknessUnitState().ctor$AbilityEffectInfo(info)); // b__5_86
+        dic.set("POISON_ATK", info => new PoisonAtkUnitState().ctor$AbilityEffectInfo(info)); // b__5_87
+        dic.set("POISON_DEF", info => new PoisonDefUnitState().ctor$AbilityEffectInfo(info)); // b__5_88
+        dic.set("POISON_HP", info => new PoisonHpUnitState().ctor$AbilityEffectInfo(info)); // b__5_89
+        dic.set("STUN", info => new StunUnitState().ctor$AbilityEffectInfo(info)); // b__5_90
+        dic.set("CURSE_ATK", info => new CurseAtkUnitState().ctor$AbilityEffectInfo(info)); // b__5_91
+        dic.set("CURSE_DEF", info => new CurseDefUnitState().ctor$AbilityEffectInfo(info)); // b__5_92
+        dic.set("CURSE_HP", info => new CurseHpUnitState().ctor$AbilityEffectInfo(info)); // b__5_93
+        dic.set("BLEED_ATK", info => new BleedAtkUnitState().ctor$AbilityEffectInfo(info)); // b__5_94
+        dic.set("BLEED_DEF", info => new BleedDefUnitState().ctor$AbilityEffectInfo(info)); // b__5_95
+        dic.set("BLEED_HP", info => new BleedHpUnitState().ctor$AbilityEffectInfo(info)); // b__5_96
+        dic.set("VORTEX_ATK", info => new VortexAtkUnitState().ctor$AbilityEffectInfo(info)); // b__5_97
+        dic.set("UP_GIV_SLIP_DMG_RATIO", info => new UpGivSlipDmgRatioUnitState().ctor$AbilityEffectInfo(info)); // b__5_98
+        dic.set("UP_GIV_BURN_DMG_RATIO", info => new UpGivBurnDmgRatioUnitState().ctor$AbilityEffectInfo(info)); // b__5_99
+        dic.set("UP_GIV_POISON_DMG_RATIO", info => new UpGivPoisonDmgRatioUnitState().ctor$AbilityEffectInfo(info)); // b__5_100
+        dic.set("UP_GIV_CURSE_DMG_RATIO", info => new UpGivCurseDmgRatioUnitState().ctor$AbilityEffectInfo(info)); // b__5_101
+        dic.set("UP_GIV_BLEED_DMG_RATIO", info => new UpGivBleedDmgRatioUnitState().ctor$AbilityEffectInfo(info)); // b__5_102
+        dic.set("UP_GIV_VORTEX_DMG_RATIO", info => new UpGivVortexDmgRatioUnitState().ctor$AbilityEffectInfo(info)); // b__5_103
+        dic.set("DWN_GIV_SLIP_DMG_RATIO", info => new DwnGivSlipDmgRatioUnitState().ctor$AbilityEffectInfo(info)); // b__5_104
+        dic.set("DWN_GIV_BURN_DMG_RATIO", info => new DwnGivBurnDmgRatioUnitState().ctor$AbilityEffectInfo(info)); // b__5_105
+        dic.set("DWN_GIV_POISON_DMG_RATIO", info => new DwnGivPoisonDmgRatioUnitState().ctor$AbilityEffectInfo(info)); // b__5_106
+        dic.set("DWN_GIV_CURSE_DMG_RATIO", info => new DwnGivCurseDmgRatioUnitState().ctor$AbilityEffectInfo(info)); // b__5_107
+        dic.set("DWN_GIV_BLEED_DMG_RATIO", info => new DwnGivBleedDmgRatioUnitState().ctor$AbilityEffectInfo(info)); // b__5_108
+        dic.set("DWN_GIV_VORTEX_DMG_RATIO", info => new DwnGivVortexDmgRatioUnitState().ctor$AbilityEffectInfo(info)); // b__5_109
+        dic.set("RCV_FINAL_DAMAGE", info => new RcvFinalDamageUnitState().ctor$AbilityEffectInfo(info)); // b__5_110
+        dic.set("UP_HATE", info => new UpHateUnitState().ctor$AbilityEffectInfo(info)); // b__5_111
+        dic.set("DWN_HATE", info => new DwnHateUnitState().ctor$AbilityEffectInfo(info)); // b__5_112
+        dic.set("SWITCH_SKILL", info => new SwitchSkillUnitState().ctor$AbilityEffectInfo(info)); // b__5_113
+        dic.set("STEP_UP_SKILL", info => new StepUpSkillUnitState().ctor$AbilityEffectInfo(info)); // b__5_114
+        dic.set("REFLECTION_RATIO", info => new ReflectionRatioUnitState().ctor$AbilityEffectInfo(info)); // b__5_115
+        dic.set("COMBO", info => new ComboUnitState().ctor$AbilityEffectInfo(info)); // b__5_116
+        dic.set("CUTOUT", info => new CutoutUnitState().ctor$AbilityEffectInfo(info)); // b__5_117
+        dic.set("TSUBAME_CORE", info => new TsubameCoreUnitState().ctor$AbilityEffectInfo(info)); // b__5_118
+        dic.set("TSUBAME_LINK", info => new TsubameLinkUnitState().ctor$AbilityEffectInfo(info)); // b__5_119
+        dic.set("LOCK_TURN_ORDER", info => new LockTurnOrderUnitState().ctor$AbilityEffectInfo(info)); // b__5_120
+        dic.set("LOCK_SPECIAL_ATTACK", info => new LockSpecialAttackUnitState().ctor$AbilityEffectInfo(info)); // b__5_121
+        dic.set("SHIELD", info => new ShieldUnitState().ctor$AbilityEffectInfo(info)); // b__5_122
+        dic.set("BARRIER", info => new BarrierUnitState().ctor$AbilityEffectInfo(info)); // b__5_123
+        dic.set("GVE_UP_SPECIAL_ATTACK_FINAL_GIV_DMG_RATIO", info => new GveUpSpecialAttackFinalGiveDamageRatioUnitState().ctor$AbilityEffectInfo(info)); // b__5_124
+        dic.set("GVE_UP_FINAL_GAIN_EP_RATIO", info => new GveUpFinalGainEpRatioUnitState().ctor$AbilityEffectInfo(info)); // b__5_125
+        dic.set("CPN_UP_GIV_DMG_RATIO", info => new CpnUpGivDmgRatioUnitState().ctor$AbilityEffectInfo(info)); // b__5_126
+        dic.set("CPN_UP_GIV_BREAK_POINT_DMG_RATIO", info => new CpnUpGivBreakPointDmgRatioUnitState().ctor$AbilityEffectInfo(info)); // b__5_127
+        dic.set("PREVENT_ABNORMAL", info => new PreventAbnormalUnitState().ctor$AbilityEffectInfo(info)); // b__5_128
+        dic.set("ADD_BUFF_TURN", info => new AddBuffTurnUnitState().ctor$AbilityEffectInfo(info)); // b__5_129
+        dic.set("ADD_DEBUFF_TURN", info => new AddDebuffTurnUnitState().ctor$AbilityEffectInfo(info)); // b__5_130
+        dic.set("UP_BUFF_EFFECT_VALUE", info => new UpBuffEffectValueUnitState().ctor$AbilityEffectInfo(info)); // b__5_131
+        dic.set("UP_DEBUFF_EFFECT_VALUE", info => new UpDebuffEffectValueUnitState().ctor$AbilityEffectInfo(info)); // b__5_132
+        dic.set("DWN_BUFF_EFFECT_VALUE", info => new DwnBuffEffectValueUnitState().ctor$AbilityEffectInfo(info)); // b__5_133
+        dic.set("DWN_DEBUFF_EFFECT_VALUE", info => new DwnDebuffEffectValueUnitState().ctor$AbilityEffectInfo(info)); // b__5_134
+        dic.set("DWN_BARRIER_VALUE", info => new DwnBarrierValueUnitState().ctor$AbilityEffectInfo(info)); // b__5_135
+        dic.set("CONTINUOUS_RECOVERY", info => new ContinuousRecoveryUnitState().ctor$AbilityEffectInfo(info)); // b__5_136
+        dic.set("REGAIN_HP", info => new RegainHpUnitState().ctor$AbilityEffectInfo(info)); // b__5_137
+        dic.set("REGAIN_ATK", info => new RegainAtkUnitState().ctor$AbilityEffectInfo(info)); // b__5_138
+        dic.set("REGAIN_DEF", info => new RegainDefUnitState().ctor$AbilityEffectInfo(info)); // b__5_139
+        dic.set("COUNT", info => new CountUnitState().ctor$AbilityEffectInfo(info)); // b__5_140
+        dic.set("COUNTDOWN_START", info => new CountdownStartUnitState().ctor$AbilityEffectInfo(info)); // b__5_141
+        dic.set("ADDITIONAL_DAMAGE", info => new AdditionalDamageUnitState().ctor$AbilityEffectInfo(info)); // b__5_142
+        dic.set("UNIQUE_10030301", info => new Unique10030301UnitState().ctor$AbilityEffectInfo(info)); // b__5_143
+        dic.set("UNIQUE_10070201", info => new Unique10070201UnitState().ctor$AbilityEffectInfo(info)); // b__5_144
+        dic.set("UNIQUE_BUFF", info => new UniqueBuffUnitState().ctor$AbilityEffectInfo(info)); // b__5_145
+        dic.set("UNIQUE_DEBUFF", info => new UniqueDebuffUnitState().ctor$AbilityEffectInfo(info)); // b__5_146
+        dic.set("UNIQUE_BUFF_ACCUM", info => new UniqueBuffAccumUnitState().ctor$AbilityEffectInfo(info)); // b__5_147
+        dic.set("UNIQUE_DEBUFF_ACCUM", info => new UniqueDebuffAccumUnitState().ctor$AbilityEffectInfo(info)); // b__5_148
+        dic.set("UNIQUE_ELEMENT_STACK", info => new UniqueElementStackUnitState().ctor$AbilityEffectInfo(info)); // b__5_149
+        dic.set("UNIQUE_ELEMENT_DRIVE", info => new UniqueElementDriveUnitState().ctor$AbilityEffectInfo(info)); // b__5_150
+        dic.set("UNIQUE_ZONE", info => new UniqueZoneUnitState().ctor$AbilityEffectInfo(info)); // b__5_151
+        dic.set("UNIQUE_ENEMY_639002", info => new UniqueEnemy639002UnitState().ctor$AbilityEffectInfo(info)); // b__5_152
         UnitStateFactory.createDic = dic;
     }
 }

@@ -13,21 +13,21 @@ export class BpCharger {
     static ActiveSkillChargePoint: int = 0;
     /** 0x8 private static readonly int EpAbilityEffectChargePoint */
     static EpAbilityEffectChargePoint: int = 0;
-    /** @rva 0x14A16B0  public static void ChargeByNormalAttack(BattleUnit attacker) { } */
+    /** @rva 0x14D0E10  public static void ChargeByNormalAttack(BattleUnit attacker) { } */
     static ChargeByNormalAttack(attacker: BattleUnit): void {
         attacker.AddBP(BpCharger.NormalAttackChargePoint); // tail call
     }
-    /** @rva 0x14A15D0  public static void ChargeByActiveSkill(BattleUnit attacker) { } */
+    /** @rva 0x14D0D30  public static void ChargeByActiveSkill(BattleUnit attacker) { } */
     static ChargeByActiveSkill(attacker: BattleUnit): void {
         attacker.AddBP(BpCharger.ActiveSkillChargePoint); // tail call
     }
-    /** @rva 0x14A1640  public static void ChargeByEpAbilityEffect(BattleUnit targetUnit) { } */
+    /** @rva 0x14D0DA0  public static void ChargeByEpAbilityEffect(BattleUnit targetUnit) { } */
     static ChargeByEpAbilityEffect(targetUnit: BattleUnit): void {
         targetUnit.AddBP(BpCharger.EpAbilityEffectChargePoint); // tail call
     }
-    /** @rva 0x7305E0  public void .ctor() { } */
+    /** @rva 0x7365E0  public void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
-    /** @rva 0x14A1720  private static void .cctor() { } */
+    /** @rva 0x14D0E80  private static void .cctor() { } */
     static cctor(): void {
         BpCharger.NormalAttackChargePoint = 1;
         BpCharger.ActiveSkillChargePoint = 2;

@@ -16,17 +16,17 @@ export class CommandMultiRaidSyncTotalDamage extends CommandBase {
     set TotalDamage(v: int) { this.set_TotalDamage(v); }
     get IsInitialize(): boolean { return this.get_IsInitialize(); }
     set IsInitialize(v: boolean) { this.set_IsInitialize(v); }
-    /** @rva 0xEDB7A0 slot 4  public override CommandType GetCommandType() { } */
+    /** @rva 0xF06A40 slot 4  public override CommandType GetCommandType() { } */
     GetCommandType(): CommandType { return 25 as CommandType; /* asm: mov eax, 0x19; ret */ }
-    /** @rva 0x763820  public int get_TotalDamage() { } */
+    /** @rva 0x769820  public int get_TotalDamage() { } */
     get_TotalDamage(): int { return this._TotalDamage; /* auto-property */ }
-    /** @rva 0x8A2240  public void set_TotalDamage(int value) { } */
+    /** @rva 0x8A8240  public void set_TotalDamage(int value) { } */
     set_TotalDamage(value: int): void { this._TotalDamage = value; /* auto-property */ }
-    /** @rva 0x901900  public bool get_IsInitialize() { } */
+    /** @rva 0x907D90  public bool get_IsInitialize() { } */
     get_IsInitialize(): boolean { return this._IsInitialize; /* auto-property */ }
-    /** @rva 0x901910  public void set_IsInitialize(bool value) { } */
+    /** @rva 0x907DA0  public void set_IsInitialize(bool value) { } */
     set_IsInitialize(value: boolean): void { this._IsInitialize = value; /* auto-property */ }
-    /** @rva 0x17FB510  public void .ctor(int totalDamage, bool isInitialize) { } */
+    /** @rva 0x1832200  public void .ctor(int totalDamage, bool isInitialize) { } */
     ctor$int_bool(totalDamage: int, isInitialize: boolean): this {
         this._TotalDamage = totalDamage;
         this._IsInitialize = isInitialize;

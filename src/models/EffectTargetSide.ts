@@ -34,6 +34,9 @@ export const EFFECT_TARGET_SIDE: Record<string, TargetSide> = {
     DWN_ATK_RATIO: "Opponent", // DwnAtkRatioUnitState Direction=Negative
     DWN_BARRIER_VALUE: "Opponent", // DwnBarrierValueUnitState Direction=Negative
     DWN_BREAKED_DAMAGE_RECEIVE_RATIO: "Opponent", // DwnBreakedDamageReceiveRatioUnitState Direction=Negative
+    DRIVE_UP_BREAK_POINT_DMG_FIXED: "Friend", // DriveUpBreakPointDmgFixedUnitState Direction=Positive (3.24.0)
+    DRIVE_UP_BREAK_POINT_DMG_RATIO: "Friend", // DriveUpBreakPointDmgRatioUnitState Direction=Positive (3.24.0)
+    OVER_BREAK_DAMAGE_RECEIVE_RATE_DRIVE: "Opponent", // OverBreakDamageReceiveRateDriveUnitState Direction=Negative (3.24.0)
     DWN_BREAK_DAMAGE_RECEIVE_RATIO: "Opponent", // DwnBreakedDamageReceiveRatioUnitState Direction=Negative
     DWN_BUFF_EFFECT_VALUE: "Opponent", // DwnBuffEffectValueUnitState Direction=Negative
     DWN_CTD_ACCUM_RATIO: "Opponent", // DwnCtdAccumRatioUnitState Direction=Negative
@@ -93,7 +96,7 @@ export const EFFECT_TARGET_SIDE: Record<string, TargetSide> = {
     UNIQUE_BUFF_ACCUM: "Friend", // UniqueBuffAccumUnitState Direction=Positive
     UNIQUE_DEBUFF: "Opponent", // UniqueDebuffUnitState Direction=Negative
     UNIQUE_DEBUFF_ACCUM: "Opponent", // UniqueDebuffAccumUnitState Direction=Negative
-    UNIQUE_ELEMENT_BREAK: "Opponent", // UniqueElementBreakUnitState Direction=Negative
+    UNIQUE_ELEMENT_DRIVE: "Opponent", // UniqueElementDriveUnitState Direction=Neutral, INeutralState.TargetSide=1 (3.24.0, replaces UNIQUE_ELEMENT_BREAK)
     UNIQUE_ELEMENT_STACK: "Opponent", // UniqueElementStackUnitState Direction=Negative
     UNIQUE_ENEMY_639002: "Friend", // UniqueEnemy639002UnitState Direction=Positive
     UNIQUE_ZONE: "Opponent", // UniqueZoneUnitState Direction=Neutral
@@ -259,6 +262,7 @@ export const NEGATIVE_STATE_TYPES: ReadonlySet<string> = new Set([
     "DWN_SPD_FIXED",
     "DWN_SPD_RATIO",
     "LOCK_TURN_ORDER",
+    "OVER_BREAK_DAMAGE_RECEIVE_RATE_DRIVE",
     "POISON_ATK",
     "POISON_DEF",
     "POISON_HP",
@@ -266,7 +270,6 @@ export const NEGATIVE_STATE_TYPES: ReadonlySet<string> = new Set([
     "STUN",
     "UNIQUE_DEBUFF",
     "UNIQUE_DEBUFF_ACCUM",
-    "UNIQUE_ELEMENT_BREAK",
     "UNIQUE_ELEMENT_STACK",
     "UP_AIM_RCV_DMG_RATIO",
     "UP_RCV_BREAK_POINT_DMG_RATIO",

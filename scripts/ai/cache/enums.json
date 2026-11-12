@@ -19,6 +19,10 @@
 "7": "Additional",
 "8": "FinalDamage"
 },
+"BreakPointDecreaseType": {
+"0": "Normal",
+"1": "OnDrive"
+},
 "AutoType": {
 "0": "Manual",
 "1": "SemiAuto",
@@ -27,6 +31,11 @@
 "BattleSpeedType": {
 "0": "Normal",
 "1": "Fast"
+},
+"UniqueLvStateKind": {
+"0": "None",
+"1": "Chain",
+"2": "Drive"
 },
 "CorrelationDamageType": {
 "0": "None",
@@ -946,6 +955,8 @@
 "195": "StorySoranaNightmareUnlockEffected",
 "196": "SoranaNormalUnLocked",
 "197": "SoranaNormalUnLockedEffected",
+"198": "SoranaNormalPart2UnLocked",
+"199": "SoranaNormalPart2UnLockedEffected",
 "200": "SubStyleSlot1Unlocked",
 "201": "SubStyleSlot2Unlocked",
 "202": "SubStyleSlot3Unlocked",
@@ -1030,10 +1041,12 @@
 "416": "LoginCheckForTarutoNormalPart2UnLocked",
 "417": "LoginCheckForStorySoranaUnlock",
 "418": "LoginCheckForSoranaNormalUnLocked",
+"419": "LoginCheckForSoranaNormalPart2UnLocked",
 "490": "ConvertDollhouseCollectionCreatedTime",
 "491": "ConvertMainStoryTutorialUnlock",
 "492": "CharacterHeartObjectRewardChanges",
 "493": "ConvertSelectionAbilitySwapSystem",
+"495": "ConvertItemPeriodForMaintenance",
 "500": "UserExpStoredMessageByLevel100",
 "501": "UserExpStoredMessageByLevel120",
 "502": "UserExpStoredMessageByLevel140",

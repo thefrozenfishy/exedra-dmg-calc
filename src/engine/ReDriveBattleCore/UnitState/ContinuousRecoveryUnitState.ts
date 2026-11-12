@@ -27,51 +27,51 @@ export class ContinuousRecoveryUnitState extends UnitStateBase {  // implements 
     recoveryFixedValue: float = 0;
     get RecoveryRatio(): float { return this.get_RecoveryRatio(); }
     get RecoveryFixedValue(): float { return this.get_RecoveryFixedValue(); }
-    /** @rva 0x7431D0 slot 6  public override UnitStateBase.DirectionType get_Direction() { } */
+    /** @rva 0x7491D0 slot 6  public override UnitStateBase.DirectionType get_Direction() { } */
     get_Direction(): UnitStateBase_DirectionType { return 0 as UnitStateBase_DirectionType; /* asm: xor eax, eax; ret */ }
-    /** @rva 0xC6F3E0  public float get_RecoveryRatio() { } */
+    /** @rva 0xC987F0  public float get_RecoveryRatio() { } */
     get_RecoveryRatio(): float { return this.recoveryRatio; /* asm: movss xmm0, dword ptr [rcx + 0x88]; ret */ }
-    /** @rva 0x893710  public float get_RecoveryFixedValue() { } */
+    /** @rva 0x899710  public float get_RecoveryFixedValue() { } */
     get_RecoveryFixedValue(): float { return this.recoveryFixedValue; /* asm: movss xmm0, dword ptr [rcx + 0x8c]; ret */ }
-    /** @rva 0x15C7580 slot 7  public override string get_IconName() { } */
+    /** @rva 0x15F3A50 slot 7  public override string get_IconName() { } */
     get_IconName(): string {
         return "battle_icon_continuous_recovery";
     }
-    /** @rva 0x15C7550 slot 13  public override string get_GiveVisualEffectName() { } */
+    /** @rva 0x15F3A20 slot 13  public override string get_GiveVisualEffectName() { } */
     get_GiveVisualEffectName(): string {
         return "eff_cmn_act_buff_appear_001";
     }
-    /** @rva 0x15C4400  public void .ctor() { } */
+    /** @rva 0x15F08D0  public void .ctor() { } */
     ctor(): this {
         super.ctor();
         return this;
     }
-    /** @rva 0x15C74F0  public void .ctor(AbilityEffectInfo info) { } */
+    /** @rva 0x15F39C0  public void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
         super.ctor$AbilityEffectInfo(info);
         this.recoveryRatio = f32(f32(info._EffectValue1) / 10);
         this.recoveryFixedValue = f32(info._EffectValue2);
         return this;
     }
-    /** @rva 0x15C72E0 slot 24  public override AISkillTargetSelector.UnitFilterFuncOrder GetUnitFilterFuncOrder(BattleUnit userUnit, IEnumerable<BattleUnit> candidateUnits) { } */
+    /** @rva 0x15F37B0 slot 24  public override AISkillTargetSelector.UnitFilterFuncOrder GetUnitFilterFuncOrder(BattleUnit userUnit, IEnumerable<BattleUnit> candidateUnits) { } */
     GetUnitFilterFuncOrder(userUnit: BattleUnit, candidateUnits: IEnumerable<BattleUnit>): AISkillTargetSelector_UnitFilterFuncOrder {
         const list: List<(a0: IEnumerable<BattleUnit>) => IEnumerable<BattleUnit>> = [];
         list.push(AISkillTargetSelector.UnitFilterByMainTarget);
         list.push(AISkillTargetSelector.UnitFilterWithMinHpRate);
         return new AISkillTargetSelector_UnitFilterFuncOrder().ctor$ListFuncIEnumerableBattleUnitIEnumerableBattleUnit(list);
     }
-    /** @rva 0x15C6F10 slot 23  public override List<BattleUnit> GetAIFilteredTargets(BattleUnit userUnit, List<BattleUnit> targetUnitList, SkillType skillType, RangeType effectRange, GameDirectorBase gameDirector) { } */
+    /** @rva 0x15F33E0 slot 23  public override List<BattleUnit> GetAIFilteredTargets(BattleUnit userUnit, List<BattleUnit> targetUnitList, SkillType skillType, RangeType effectRange, GameDirectorBase gameDirector) { } */
     GetAIFilteredTargets(userUnit: BattleUnit, targetUnitList: List<BattleUnit>, skillType: SkillType, effectRange: RangeType, gameDirector: GameDirectorBase): List<BattleUnit> {
         let list = targetUnitList.filter(x => !x.get_IsDead()); // <>c.b__16_0
         if (list.length > 0) list = list.filter(unit => unit.CalculationHpRate() < ContinuousRecoveryUnitState.MaxHpRateToUse); // b__16_1
         return list;
     }
-    /** @rva 0x15C7140  public Decimal GetRecoveryValue(BattleUnit userUnit) { } */
+    /** @rva 0x15F3610  public Decimal GetRecoveryValue(BattleUnit userUnit) { } */
     GetRecoveryValue(userUnit: BattleUnit): Decimal {
         const value = Decimal.fromInt(userUnit._MaxHP).mul(Decimal.fromFloat(this.recoveryRatio).div(Decimal.fromInt(100))).add(Decimal.fromFloat(this.recoveryFixedValue));
         return HpRecoveryCalculator.GetProcessedRecoveryValue(userUnit, userUnit, value, false);
     }
-    /** @rva 0x15C74B0  private static void .cctor() { } */
+    /** @rva 0x15F3980  private static void .cctor() { } */
     static cctor(): void {
         ContinuousRecoveryUnitState.MaxHpRateToUse = 80; // 0x42a00000
     }

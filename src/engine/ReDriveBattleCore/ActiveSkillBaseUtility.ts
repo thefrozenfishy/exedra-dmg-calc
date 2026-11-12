@@ -8,7 +8,7 @@ import { BattleMstReaderBase } from "./Reader/BattleMstReaderBase";
 import { AdditionalSkill } from "./AdditionalSkill";
 import { NormalAttack } from "./NormalAttack";
 import { ActiveSkill } from "./ActiveSkill";
-import { isImpl, notPorted } from "../runtime";
+import { ifaceProp, isImpl, notPorted } from "../runtime";
 import type { Dictionary, Nullable, Type, int } from "../runtime";
 import type { SkillType } from "../Network/Definition/Battle/SkillType";
 
@@ -19,13 +19,13 @@ import type { BattleUnit } from "./BattleUnit";
 
 // ---- ReDriveBattleCore.ActiveSkillBaseUtility  (TypeDefIndex 296, public static class) ----
 export class ActiveSkillBaseUtility {
-    /** @rva 0x1386160  public static Nullable<SkillType> GetSkillTypeForSwitchSkill(Type type) { } */
+    /** @rva 0x13B2F30  public static Nullable<SkillType> GetSkillTypeForSwitchSkill(Type type) { } */
     static GetSkillTypeForSwitchSkill(type_: Type): Nullable<SkillType> {
         if (type_ === ActiveSkill) return 1 as SkillType;
         if (type_ === NormalAttack) return 3 as SkillType;
         return null;
     }
-    /** @rva 0x1385FA0  public static AdditionalSkill GetAdditionalSkill(int skillMstId) { } */
+    /** @rva 0x13B2D70  public static AdditionalSkill GetAdditionalSkill(int skillMstId) { } */
     static GetAdditionalSkill(skillMstId: int): AdditionalSkill {
         const skillMst = BattleMstReaderBase.get_Instance<SkillMstModel, SkillMstRecord, int>(SkillMstModel).GetModelByKey(skillMstId);
         if (skillMst == null) return null!;
@@ -35,13 +35,13 @@ export class ActiveSkillBaseUtility {
         skill.skillType = skillMst.Type;
         return skill;
     }
-    /** @rva 0x1385EC0  public static ActiveSkill GetActiveSkill(int skillMstId) { } */
+    /** @rva 0x13B2C90  public static ActiveSkill GetActiveSkill(int skillMstId) { } */
     static GetActiveSkill(skillMstId: int): ActiveSkill {
         const skillMst = BattleMstReaderBase.get_Instance<SkillMstModel, SkillMstRecord, int>(SkillMstModel).GetModelByKey(skillMstId);
         if (skillMst == null || skillMst.Type !== 1) return null!;
         return new ActiveSkill().ctor$SkillMstModel_ListSkillDetailMstModel_int_int(skillMst, SkillDetailMstReader.GetDetailModelsByMstId(skillMstId), 0); // ctor inlined (weight 0)
     }
-    /** @rva 0x1386080  public static NormalAttack GetNormalAttack(int skillMstId) { } */
+    /** @rva 0x13B2E50  public static NormalAttack GetNormalAttack(int skillMstId) { } */
     static GetNormalAttack(skillMstId: int): NormalAttack {
         const skillMst = BattleMstReaderBase.get_Instance<SkillMstModel, SkillMstRecord, int>(SkillMstModel).GetModelByKey(skillMstId);
         if (skillMst == null || skillMst.Type !== 3) return null!;
@@ -60,9 +60,13 @@ export class ActiveSkillBaseUtility {
         if (skillType === 3) return new NormalAttack().ctor$SkillMstModel_ListSkillDetailMstModel(mst, details);
         return null!;
     }
-    /** @rva 0x1386260  public static void RemoveByUserUnitDeath(BattleUnit userUnit, Dictionary<int, BattleUnit> battleUnitDic) { } */
+    /** @rva 0x13B3030  public static void RemoveByUserUnitDeath(BattleUnit userUnit, Dictionary<int, BattleUnit> battleUnitDic) { } */
     static RemoveByUserUnitDeath(userUnit: BattleUnit, battleUnitDic: Dictionary<int, BattleUnit>): void {
-        const predicate = (state: UnitStateBase) => isImpl(state, "IRemoveByUserUnitDeath") && state.UserUnitId === userUnit.Id; // DisplayClass5_0 b__0 (cached)
+        const predicate = (state: UnitStateBase) => { // DisplayClass5_0 b__0 (cached)
+            if (!isImpl(state, "IRemoveByUserUnitDeath")) return false;
+            if (isImpl(state, "INeutralState") && ifaceProp(state, "INeutralState", "DontRemoveOnUserUnitDeath") === true) return false; // 3.24.0 (interface slot 2, default false)
+            return state.UserUnitId === userUnit.Id;
+        };
         for (const unit of battleUnitDic.values()) unit.Condition.RemoveUnitState$BattleUnit_FuncUnitStateBasebool(unit, predicate);
     }
 }

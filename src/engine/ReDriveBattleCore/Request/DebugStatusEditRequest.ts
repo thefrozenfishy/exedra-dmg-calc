@@ -24,8 +24,8 @@ export class DebugStatusEditRequest extends RequestBase {
     Speed: int = 0;
     /** 0x2C public int Def */
     Def: int = 0;
-    /** @rva 0x16E2710 slot 4  public override RequestType get_RequestType() { } */
+    /** @rva 0x1716100 slot 4  public override RequestType get_RequestType() { } */
     get_RequestType(): RequestType { return 1001 as RequestType; /* asm: mov eax, 0x3e9; ret */ }
-    /** @rva 0x7305E0  public void .ctor() { } */
+    /** @rva 0x7365E0  public void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
 }

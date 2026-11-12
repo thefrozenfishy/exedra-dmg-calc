@@ -9,16 +9,16 @@ import type { DamageCategory } from "../DamageCategory";
 
 // ---- ReDriveBattleCore.AbilityEffect.DmgDefAbilityEffect  (TypeDefIndex 1176, public class) ----
 export class DmgDefAbilityEffect extends DamageAbilityEffectBase {
-    /** @rva 0x7E1AD0 slot 9  protected override DamageBaseType get_DamageBaseType() { } */
+    /** @rva 0x7E7AD0 slot 9  protected override DamageBaseType get_DamageBaseType() { } */
     get_DamageBaseType(): DamageBaseType { return 2 as DamageBaseType; /* asm: mov eax, 2; ret */ }
-    /** @rva 0x759B30 slot 13  public override DamageCategory get_DamageCategory() { } */
+    /** @rva 0x75FB30 slot 13  public override DamageCategory get_DamageCategory() { } */
     get_DamageCategory(): DamageCategory { return 1 as DamageCategory; /* asm: mov eax, 1; ret */ }
-    /** @rva 0x1915D20  protected void .ctor() { } */
+    /** @rva 0x1943640  protected void .ctor() { } */
     ctor(): this {
         super.ctor();
         return this;
     }
-    /** @rva 0x1915D10  public void .ctor(AbilityEffectInfo info) { } */
+    /** @rva 0x1943630  public void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
         super.ctor$AbilityEffectInfo(info);
         return this;

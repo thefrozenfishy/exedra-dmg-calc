@@ -24,25 +24,25 @@ export class EnemyConditionAndActionController {
     set CachedSkillMstIds(v: any /* Queue<int> */) { this.set_CachedSkillMstIds(v); }
     get EnemyStartConditionTimingActionList(): List<EnemyConditionAndActionController_StartConditionTimingAction> { return this.get_EnemyStartConditionTimingActionList(); }
     set EnemyStartConditionTimingActionList(v: List<EnemyConditionAndActionController_StartConditionTimingAction>) { this.set_EnemyStartConditionTimingActionList(v); }
-    /** @rva 0x730C50  public List<EnemyConditionAndActionController.ConditionSetsAndAction> get_conditionAndActionList() { } */
+    /** @rva 0x736C50  public List<EnemyConditionAndActionController.ConditionSetsAndAction> get_conditionAndActionList() { } */
     get_conditionAndActionList(): List<EnemyConditionAndActionController_ConditionSetsAndAction> { return this._conditionAndActionList; /* auto-property */ }
-    /** @rva 0x730C60  public void set_conditionAndActionList(List<EnemyConditionAndActionController.ConditionSetsAndAction> value) { } */
+    /** @rva 0x736C60  public void set_conditionAndActionList(List<EnemyConditionAndActionController.ConditionSetsAndAction> value) { } */
     set_conditionAndActionList(value: List<EnemyConditionAndActionController_ConditionSetsAndAction>): void { this._conditionAndActionList = value; /* auto-property */ }
-    /** @rva 0x733E90  public Queue<int> get_CachedSkillMstIds() { } */
+    /** @rva 0x739E90  public Queue<int> get_CachedSkillMstIds() { } */
     get_CachedSkillMstIds(): any /* Queue<int> */ { return this._CachedSkillMstIds; /* auto-property */ }
-    /** @rva 0x736AB0  public void set_CachedSkillMstIds(Queue<int> value) { } */
+    /** @rva 0x73CAB0  public void set_CachedSkillMstIds(Queue<int> value) { } */
     set_CachedSkillMstIds(value: any /* Queue<int> */): void { this._CachedSkillMstIds = value; /* auto-property */ }
-    /** @rva 0x7369E0  public List<EnemyConditionAndActionController.StartConditionTimingAction> get_EnemyStartConditionTimingActionList() { } */
+    /** @rva 0x73C9E0  public List<EnemyConditionAndActionController.StartConditionTimingAction> get_EnemyStartConditionTimingActionList() { } */
     get_EnemyStartConditionTimingActionList(): List<EnemyConditionAndActionController_StartConditionTimingAction> { return this._EnemyStartConditionTimingActionList; /* auto-property */ }
-    /** @rva 0x736A50  public void set_EnemyStartConditionTimingActionList(List<EnemyConditionAndActionController.StartConditionTimingAction> value) { } */
+    /** @rva 0x73CA50  public void set_EnemyStartConditionTimingActionList(List<EnemyConditionAndActionController.StartConditionTimingAction> value) { } */
     set_EnemyStartConditionTimingActionList(value: List<EnemyConditionAndActionController_StartConditionTimingAction>): void { this._EnemyStartConditionTimingActionList = value; /* auto-property */ }
-    /** @rva 0x14A7120  protected void .ctor() { } */
+    /** @rva 0x14D6B20  protected void .ctor() { } */
     ctor(): this {
         this._CachedSkillMstIds = [];
         this._EnemyStartConditionTimingActionList = [];
         return this;
     }
-    /** @rva 0x14A71E0  public void .ctor(int enemyConditionSkillSetId) { } */
+    /** @rva 0x14D6BE0  public void .ctor(int enemyConditionSkillSetId) { } */
     ctor$int(enemyConditionSkillSetId: int): this {
         this._CachedSkillMstIds = [];
         this._EnemyStartConditionTimingActionList = [];
@@ -55,7 +55,7 @@ export class EnemyConditionAndActionController {
         this.LoadStartTimingConditionAction();
         return this;
     }
-    /** @rva 0x14A6270  public Nullable<int> GetAction(BattleConditionUtils.ConditionCheckDataBundle conditionCheckDataBundle, int actionCount = 1) { } */
+    /** @rva 0x14D5C70  public Nullable<int> GetAction(BattleConditionUtils.ConditionCheckDataBundle conditionCheckDataBundle, int actionCount = 1) { } */
     GetAction(conditionCheckDataBundle: BattleConditionUtils_ConditionCheckDataBundle, actionCount?: int /* = 1 */): Nullable<int> {
         actionCount = actionCount ?? 1;
         if (actionCount === 1 && 0 < this._CachedSkillMstIds.length) {
@@ -77,7 +77,7 @@ export class EnemyConditionAndActionController {
         }
         return null;
     }
-    /** @rva 0x14A67C0  private void LoadStartTimingConditionAction() { } */
+    /** @rva 0x14D61C0  private void LoadStartTimingConditionAction() { } */
     LoadStartTimingConditionAction(): void {
         for (const conditionSetsAndAction of this._conditionAndActionList) {
             const conditionSetList = BattleConditionUtils.GetConditionSetListByIdCsv(conditionSetsAndAction.get_ConditionSetsAndActionMstModel().get_ConditionSetMstIdCsv());
@@ -96,7 +96,7 @@ export class EnemyConditionAndActionController {
             }
         }
     }
-    /** @rva 0x14A6EB0  public void SetEnabledActiveStartConditionTimingAction(EnemyConditionAndActionController.EnemyStartConditionTimingType timingType) { } */
+    /** @rva 0x14D68B0  public void SetEnabledActiveStartConditionTimingAction(EnemyConditionAndActionController.EnemyStartConditionTimingType timingType) { } */
     SetEnabledActiveStartConditionTimingAction(timingType: EnemyConditionAndActionController_EnemyStartConditionTimingType): void {
         for (const action of this._EnemyStartConditionTimingActionList) {
             if (action._StartConditionTimingType === timingType && !action._CanActivate) {
@@ -104,7 +104,7 @@ export class EnemyConditionAndActionController {
             }
         }
     }
-    /** @rva 0x14A6D90  public void RegisterStartConditionTimingAction(int timingTypeValue, int skillMstId) { } */
+    /** @rva 0x14D6790  public void RegisterStartConditionTimingAction(int timingTypeValue, int skillMstId) { } */
     RegisterStartConditionTimingAction(timingTypeValue: int, skillMstId: int): void {
         for (const action of this._EnemyStartConditionTimingActionList) {
             if (action._StartConditionTimingType === timingTypeValue && action._SkillMstId === skillMstId) {
@@ -112,20 +112,20 @@ export class EnemyConditionAndActionController {
             }
         }
     }
-    /** @rva 0x14A66A0  public bool HasAnyCanActivateStartConditionTimingAction() { } */
+    /** @rva 0x14D60A0  public bool HasAnyCanActivateStartConditionTimingAction() { } */
     HasAnyCanActivateStartConditionTimingAction(): boolean {
         return this._EnemyStartConditionTimingActionList.some(x => x._CanActivate && !x._IsRegistered); // <>c.b__20_0
     }
-    /** @rva 0x14A65C0  public List<EnemyConditionAndActionController.StartConditionTimingAction> GetCanActivateStartConditionTimingActionList(EnemyConditionAndActionController.EnemyStartConditionTimingType timingType) { } */
+    /** @rva 0x14D5FC0  public List<EnemyConditionAndActionController.StartConditionTimingAction> GetCanActivateStartConditionTimingActionList(EnemyConditionAndActionController.EnemyStartConditionTimingType timingType) { } */
     GetCanActivateStartConditionTimingActionList(timingType: EnemyConditionAndActionController_EnemyStartConditionTimingType): List<EnemyConditionAndActionController_StartConditionTimingAction> {
         // <>c__DisplayClass21_0.b__0
         return this._EnemyStartConditionTimingActionList.filter(x => x._StartConditionTimingType === timingType && x._CanActivate && !x._IsRegistered);
     }
-    /** @rva 0x14A6FD0  private void <GetAction>b__15_0(int x) { } */
+    /** @rva 0x14D69D0  private void <GetAction>b__15_0(int x) { } */
     $GetAction$b__15_0(x: int): void {
         this._CachedSkillMstIds.push(x); // Enqueue
     }
-    /** @rva 0x14A7030  private void <LoadStartTimingConditionAction>g__AddAction|17_0(int skillMstId, int timingTypeValue) { } */
+    /** @rva 0x14D6A30  private void <LoadStartTimingConditionAction>g__AddAction|17_0(int skillMstId, int timingTypeValue) { } */
     $LoadStartTimingConditionAction$g__AddAction_17_0(skillMstId: int, timingTypeValue: int): void {
         const action = new EnemyConditionAndActionController_StartConditionTimingAction().ctor();
         action._SkillMstId = skillMstId;
@@ -160,23 +160,23 @@ export class EnemyConditionAndActionController_StartConditionTimingAction {
     set CanActivate(v: boolean) { this.set_CanActivate(v); }
     get IsRegistered(): boolean { return this.get_IsRegistered(); }
     set IsRegistered(v: boolean) { this.set_IsRegistered(v); }
-    /** @rva 0x7364F0  public int get_SkillMstId() { } */
+    /** @rva 0x73C4F0  public int get_SkillMstId() { } */
     get_SkillMstId(): int { return this._SkillMstId; /* auto-property */ }
-    /** @rva 0x739D00  public void set_SkillMstId(int value) { } */
+    /** @rva 0x73FD00  public void set_SkillMstId(int value) { } */
     set_SkillMstId(value: int): void { this._SkillMstId = value; /* auto-property */ }
-    /** @rva 0x803350  public int get_StartConditionTimingType() { } */
+    /** @rva 0x809350  public int get_StartConditionTimingType() { } */
     get_StartConditionTimingType(): int { return this._StartConditionTimingType; /* auto-property */ }
-    /** @rva 0x803540  public void set_StartConditionTimingType(int value) { } */
+    /** @rva 0x809540  public void set_StartConditionTimingType(int value) { } */
     set_StartConditionTimingType(value: int): void { this._StartConditionTimingType = value; /* auto-property */ }
-    /** @rva 0x7F97F0  public bool get_CanActivate() { } */
+    /** @rva 0x7FF7F0  public bool get_CanActivate() { } */
     get_CanActivate(): boolean { return this._CanActivate; /* auto-property */ }
-    /** @rva 0x7F9810  public void set_CanActivate(bool value) { } */
+    /** @rva 0x7FF810  public void set_CanActivate(bool value) { } */
     set_CanActivate(value: boolean): void { this._CanActivate = value; /* auto-property */ }
-    /** @rva 0x9805A0  public bool get_IsRegistered() { } */
+    /** @rva 0x99EE10  public bool get_IsRegistered() { } */
     get_IsRegistered(): boolean { return this._IsRegistered; /* auto-property */ }
-    /** @rva 0x120B170  public void set_IsRegistered(bool value) { } */
+    /** @rva 0x1220300  public void set_IsRegistered(bool value) { } */
     set_IsRegistered(value: boolean): void { this._IsRegistered = value; /* auto-property */ }
-    /** @rva 0x7305E0  public void .ctor() { } */
+    /** @rva 0x7365E0  public void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
 }
 
@@ -196,11 +196,11 @@ export class EnemyConditionAndActionController_ConditionSetsAndAction {
     get Priority(): int { return this.get_Priority(); }
     get IsAvailable(): boolean { return this.get_IsAvailable(); }
     get IsSkillBundle(): boolean { return this.get_IsSkillBundle(); }
-    /** @rva 0x7364F0  public int get_EnemyConditionSetsAndActionMstId() { } */
+    /** @rva 0x73C4F0  public int get_EnemyConditionSetsAndActionMstId() { } */
     get_EnemyConditionSetsAndActionMstId(): int { return this._EnemyConditionSetsAndActionMstId; /* auto-property */ }
-    /** @rva 0x739D00  public void set_EnemyConditionSetsAndActionMstId(int value) { } */
+    /** @rva 0x73FD00  public void set_EnemyConditionSetsAndActionMstId(int value) { } */
     set_EnemyConditionSetsAndActionMstId(value: int): void { this._EnemyConditionSetsAndActionMstId = value; /* auto-property */ }
-    /** @rva 0x14A3F30  public EnemyConditionSetsAndActionMstModel get_ConditionSetsAndActionMstModel() { } */
+    /** @rva 0x14D3930  public EnemyConditionSetsAndActionMstModel get_ConditionSetsAndActionMstModel() { } */
     get_ConditionSetsAndActionMstModel(): EnemyConditionSetsAndActionMstModel {
         if (this.enemyConditionSetsAndActionMstModel == null) {
             this.enemyConditionSetsAndActionMstModel = BattleMstReaderBase.get_Instance<EnemyConditionSetsAndActionMstModel, EnemyConditionSetsAndActionMstRecord, int>(EnemyConditionSetsAndActionMstModel)
@@ -208,25 +208,25 @@ export class EnemyConditionAndActionController_ConditionSetsAndAction {
         }
         return this.enemyConditionSetsAndActionMstModel;
     }
-    /** @rva 0x7369E0  public EnemyConditionAndActionController.ActionBase get_Action() { } */
+    /** @rva 0x73C9E0  public EnemyConditionAndActionController.ActionBase get_Action() { } */
     get_Action(): EnemyConditionAndActionController_ActionBase { return this._Action; /* auto-property */ }
-    /** @rva 0x736A50  public void set_Action(EnemyConditionAndActionController.ActionBase value) { } */
+    /** @rva 0x73CA50  public void set_Action(EnemyConditionAndActionController.ActionBase value) { } */
     set_Action(value: EnemyConditionAndActionController_ActionBase): void { this._Action = value; /* auto-property */ }
-    /** @rva 0x14A4080  public int get_Priority() { } */
+    /** @rva 0x14D3A80  public int get_Priority() { } */
     get_Priority(): int {
         return this.get_ConditionSetsAndActionMstModel().get_Priority();
     }
-    /** @rva 0x14A4030  public bool get_IsAvailable() { } */
+    /** @rva 0x14D3A30  public bool get_IsAvailable() { } */
     get_IsAvailable(): boolean {
         return this._Action._IsAvailable;
     }
-    /** @rva 0x14A4050  public bool get_IsSkillBundle() { } */
+    /** @rva 0x14D3A50  public bool get_IsSkillBundle() { } */
     get_IsSkillBundle(): boolean {
         return this.get_ConditionSetsAndActionMstModel().get_IsSkillBundle();
     }
-    /** @rva 0x7305E0  protected void .ctor() { } */
+    /** @rva 0x7365E0  protected void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
-    /** @rva 0x14A3C00  public void .ctor(int ConditionSetsAndActionMstId) { } */
+    /** @rva 0x14D3600  public void .ctor(int ConditionSetsAndActionMstId) { } */
     ctor$int(ConditionSetsAndActionMstId: int): this {
         this._EnemyConditionSetsAndActionMstId = ConditionSetsAndActionMstId;
         const skillMstIds = this.get_ConditionSetsAndActionMstModel().get_SkillMstIdCsv().split(",")
@@ -239,7 +239,7 @@ export class EnemyConditionAndActionController_ConditionSetsAndAction {
         }
         return this;
     }
-    /** @rva 0x14A3B80  public bool CheckCondition(BattleConditionUtils.ConditionCheckDataBundle conditionCheckDataBundle) { } */
+    /** @rva 0x14D3580  public bool CheckCondition(BattleConditionUtils.ConditionCheckDataBundle conditionCheckDataBundle) { } */
     CheckCondition(conditionCheckDataBundle: BattleConditionUtils_ConditionCheckDataBundle): boolean {
         const csv = this.get_ConditionSetsAndActionMstModel().get_ConditionSetMstIdCsv();
         if (isNullOrEmpty(csv)) return true;
@@ -261,21 +261,21 @@ export abstract class EnemyConditionAndActionController_ActionBase {
     set IsSkillResuable(v: boolean) { this.set_IsSkillResuable(v); }
     get IsAvailable(): boolean { return this.get_IsAvailable(); }
     set IsAvailable(v: boolean) { this.set_IsAvailable(v); }
-    /** @rva 0x730C50  public List<int> get_SkillMstIds() { } */
+    /** @rva 0x736C50  public List<int> get_SkillMstIds() { } */
     get_SkillMstIds(): List<int> { return this._SkillMstIds; /* auto-property */ }
-    /** @rva 0x730C60  public void set_SkillMstIds(List<int> value) { } */
+    /** @rva 0x736C60  public void set_SkillMstIds(List<int> value) { } */
     set_SkillMstIds(value: List<int>): void { this._SkillMstIds = value; /* auto-property */ }
-    /** @rva 0x7F97F0  public bool get_IsSkillResuable() { } */
+    /** @rva 0x7FF7F0  public bool get_IsSkillResuable() { } */
     get_IsSkillResuable(): boolean { return this._IsSkillResuable; /* auto-property */ }
-    /** @rva 0x7F9810  public void set_IsSkillResuable(bool value) { } */
+    /** @rva 0x7FF810  public void set_IsSkillResuable(bool value) { } */
     set_IsSkillResuable(value: boolean): void { this._IsSkillResuable = value; /* auto-property */ }
-    /** @rva 0x9805A0  public bool get_IsAvailable() { } */
+    /** @rva 0x99EE10  public bool get_IsAvailable() { } */
     get_IsAvailable(): boolean { return this._IsAvailable; /* auto-property */ }
-    /** @rva 0x120B170  public void set_IsAvailable(bool value) { } */
+    /** @rva 0x1220300  public void set_IsAvailable(bool value) { } */
     set_IsAvailable(value: boolean): void { this._IsAvailable = value; /* auto-property */ }
-    /** @rva 0x7305E0  protected void .ctor() { } */
+    /** @rva 0x7365E0  protected void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
-    /** @rva 0x14A0710  public void .ctor(List<int> skillMstIds, bool isSkillResuable) { } */
+    /** @rva 0x14CFE70  public void .ctor(List<int> skillMstIds, bool isSkillResuable) { } */
     ctor$Listint_bool(skillMstIds: List<int>, isSkillResuable: boolean): this {
         this._SkillMstIds = skillMstIds;
         this._IsSkillResuable = isSkillResuable;
@@ -286,16 +286,16 @@ export abstract class EnemyConditionAndActionController_ActionBase {
 
 // ---- ReDriveBattleCore.EnemyConditionAndActionController.BundleAction  (TypeDefIndex 384, public class) ----
 export class EnemyConditionAndActionController_BundleAction extends EnemyConditionAndActionController_ActionBase {
-    /** @rva 0x7305E0  protected void .ctor() { } */
+    /** @rva 0x7365E0  protected void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
-    /** @rva 0x14A0710  public void .ctor(List<int> skillMstIds, bool isSkillResuable) { } */
+    /** @rva 0x14CFE70  public void .ctor(List<int> skillMstIds, bool isSkillResuable) { } */
     ctor$Listint_bool(skillMstIds: List<int>, isSkillResuable: boolean): this {
         this._SkillMstIds = skillMstIds;
         this._IsSkillResuable = isSkillResuable;
         this._IsAvailable = true;
         return this;
     }
-    /** @rva 0x14A3430  public List<int> GetActions(int actionCount) { } */
+    /** @rva 0x14D2E30  public List<int> GetActions(int actionCount) { } */
     GetActions(actionCount: int): List<int> {
         if (this._SkillMstIds.length < actionCount) actionCount = this._SkillMstIds.length;
         const result = this._SkillMstIds.slice(0, actionCount); // GetRange(0, actionCount)
@@ -306,16 +306,16 @@ export class EnemyConditionAndActionController_BundleAction extends EnemyConditi
 
 // ---- ReDriveBattleCore.EnemyConditionAndActionController.SingleAction  (TypeDefIndex 386, public class) ----
 export class EnemyConditionAndActionController_SingleAction extends EnemyConditionAndActionController_ActionBase {
-    /** @rva 0x7305E0  protected void .ctor() { } */
+    /** @rva 0x7365E0  protected void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
-    /** @rva 0x14A0710  public void .ctor(List<int> skillMstIds, bool isSkillResuable) { } */
+    /** @rva 0x14CFE70  public void .ctor(List<int> skillMstIds, bool isSkillResuable) { } */
     ctor$Listint_bool(skillMstIds: List<int>, isSkillResuable: boolean): this {
         this._SkillMstIds = skillMstIds;
         this._IsSkillResuable = isSkillResuable;
         this._IsAvailable = true;
         return this;
     }
-    /** @rva 0x14B5060  public int GetAction() { } */
+    /** @rva 0x14E4B70  public int GetAction() { } */
     GetAction(): int {
         if (!this._IsSkillResuable) this._IsAvailable = false;
         return orderByNewGuid(this._SkillMstIds, "skill", [this])[0] ?? 0; // OrderBy(_ => Guid.NewGuid()).FirstOrDefault() <>c.b__2_0
