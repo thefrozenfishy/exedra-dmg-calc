@@ -18,7 +18,9 @@ wait (up to 60 min) while the game is in front; then skip that step and notify.
 ## Windows watcher (no computer use)
 
 Since 2026-10-29 nothing in this runbook clicks on the user's desktop. `E:\unpackedExedra\exedra_watch.ps1` runs every
-3 h from Task Scheduler ("Exedra client watcher", registered by the user) and does every Windows-only step:
+3 h from Task Scheduler ("Exedra client watcher", registered by the user with `E:\unpackedExedra\register_watcher.bat`;
+the action is `wscript.exe exedra_watch_hidden.vbs`, which starts PowerShell hidden so no window steals focus from a
+fullscreen game) and does every Windows-only step:
 - unpacks a new Steam client with Senbei into `E:\unpackedExedra\<ver>` (same rules as unpack_version.sh, plus
   `steam_stamp.txt`),
 - newest version without `version_report\DONE`: Il2CppDumper (`run_dump.bat <ver>` -> `dump\EXIT.txt`), then
