@@ -1,0 +1,125 @@
+<title>Exedra 3.24.0 Dispatch</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: single reading column like the earlier dispatches; violet accent for the "Drive" break patch, amber for "no units yet". */
+:root {
+  --bg: #f6f5f9; --surface: #ffffff; --fg: #1c1a24; --muted: #5d5a6c; --line: #e0dde9;
+  --accent: #5b3fb0; --accent-soft: #ece6fb; --ok: #2f7d55; --ok-soft: #e1f2e8; --warn: #9a5b06; --warn-soft: #fbefd9;
+  --display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #13121a; --surface: #1c1b25; --fg: #ebe9f3; --muted: #a8a4bb; --line: #302d3d;
+  --accent: #b7a2ff; --accent-soft: #2a2442; --ok: #6fcf9b; --ok-soft: #1c3127; --warn: #f0b45c; --warn-soft: #3a2c16; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #13121a; --surface: #1c1b25; --fg: #ebe9f3; --muted: #a8a4bb; --line: #302d3d;
+  --accent: #b7a2ff; --accent-soft: #2a2442; --ok: #6fcf9b; --ok-soft: #1c3127; --warn: #f0b45c; --warn-soft: #3a2c16; color-scheme: dark }
+body { background: var(--bg); color: var(--fg); font: 15px/1.6 var(--body); }
+.wrap { max-width: 720px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 40px 72px; display: flex; flex-direction: column; gap: 36px; }
+h1, h2, h3 { font-family: var(--display); text-wrap: balance; margin: 0; line-height: 1.15; }
+h1 { font-size: clamp(30px, 6vw, 44px); font-weight: 700; letter-spacing: -0.01em; }
+h2 { font-size: 24px; font-weight: 700; }
+h3 { font-size: 18px; font-weight: 700; }
+p { margin: 0; }
+section { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+.eyebrow { font: 500 12px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--accent); }
+.lede { font-size: 17px; color: var(--muted); max-width: 62ch; }
+.tldr { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 16px 18px; display: flex; flex-direction: column; gap: 8px; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 18px 20px; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.head { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: baseline; }
+.chip { font: 500 12px var(--mono); background: var(--accent-soft); color: var(--accent); border-radius: 4px; padding: 1px 7px; white-space: nowrap; }
+.chip.warn { background: var(--warn-soft); color: var(--warn); }
+.tip { border-left: 3px solid var(--accent); padding: 2px 0 2px 12px; color: var(--muted); font-size: 14px; }
+ul, ol { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 6px; }
+.steps { counter-reset: s; list-style: none; padding: 0; gap: 10px; }
+.steps li { display: grid; grid-template-columns: 28px 1fr; gap: 10px; align-items: start; }
+.steps li::before { counter-increment: s; content: counter(s); font: 600 13px/26px var(--mono); text-align: center; background: var(--accent-soft); color: var(--accent); border-radius: 50%; width: 26px; height: 26px; }
+.item { border-top: 1px solid var(--line); padding-top: 12px; display: flex; flex-direction: column; gap: 4px; }
+.note { color: var(--muted); font-size: 14px; }
+footer { color: var(--muted); font-size: 13px; border-top: 1px solid var(--line); padding-top: 16px; }
+</style>
+
+<div class="wrap">
+  <header style="display:flex;flex-direction:column;gap:14px">
+    <div class="eyebrow">Madoka Exedra · patch notes from the files · 12 Nov 2026</div>
+    <h1>Version 3.24.0: Element Drive and Over Break arrive in the battle code</h1>
+    <p class="lede">3.24.0 adds a new break system built around a levelled mark called Element Drive. When it is maxed and the enemy's break bonus is already at its cap, Special Attacks can push the bonus past the cap. No kioku uses it yet: the new data was not out when these notes were written.</p>
+  </header>
+
+  <div class="tldr">
+    <h3>In short</h3>
+    <ul>
+      <li><b>Element Drive</b>: a mark on an enemy that only its owner's Special Attacks level up.</li>
+      <li><b>Drive break boosts</b>: buffs that deal extra break gauge damage to an enemy whose Drive is at a set level.</li>
+      <li><b>Over Break</b>: Special Attacks push a broken enemy's damage bonus above the normal cap.</li>
+      <li><b>Outside battle</b>: Google Play Games on PC support, new key bindings, story spoiler warnings, tower season handling.</li>
+    </ul>
+  </div>
+
+  <section id="drive">
+    <div class="eyebrow">New mechanic</div>
+    <h2>Element Drive</h2>
+    <div class="card">
+      <div class="head"><h3>A levelled mark on the enemy</h3><span class="chip warn">no units yet</span></div>
+      <ul>
+        <li>Element Drive goes on an enemy and has levels, like the older element stack marks. It replaces an older "element break" mark that no unit used.</li>
+        <li><b>Only Special Attacks level it up</b>, and only the ones from the unit that put it there, when that unit has the mark's element.</li>
+        <li>If the attacker also has the mark's role, one Special Attack can add several levels at once. Any other role adds one level.</li>
+        <li>An enemy carries one Drive owner at a time. Another unit can't put its own Drive on top while the first one is active.</li>
+        <li>The mark stays on the enemy when its owner dies or leaves the battle.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="head"><h3>Drive break boosts</h3><span class="chip warn">no units yet</span></div>
+      <ul>
+        <li>New buffs raise the break gauge damage you deal, as a percentage or a flat amount.</li>
+        <li>They only work against an enemy that carries <b>your own</b> Drive at <b>exactly</b> the level the buff names. One buff can cover a single Drive level, so a kit may come with one boost per level.</li>
+        <li>A boost can be limited to one attack type (Battle Skill, Special Attack or Basic Attack) or work with all three.</li>
+        <li>The break gauge shows a Drive effect when a hit was boosted this way.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="overbreak">
+    <div class="eyebrow">New mechanic</div>
+    <h2>Over Break</h2>
+    <div class="card">
+      <div class="head"><h3>Going past the break bonus cap</h3><span class="chip warn">no units yet</span></div>
+      <p>Normally a broken enemy's damage bonus grows with every hit until it reaches its cap. Over Break is a debuff that lets the bonus go further. A Special Attack hit adds to it when all of these are true:</p>
+      <ol class="steps">
+        <li><span>The enemy is broken and its break damage bonus is already at the cap.</span></li>
+        <li><span>The enemy's Element Drive is at max level, and the Drive came from the same unit as the Over Break debuff.</span></li>
+        <li><span>The attacker has the Drive's element, and the hit is a Special Attack. The hit that raises the bonus to its cap does not count yet.</span></li>
+      </ol>
+      <ul>
+        <li>The first qualifying Special Attack only <b>opens</b> Over Break. The game plays a new effect and sets the extra cap. Later Special Attacks add to the bonus until that cap is reached.</li>
+        <li>How much each hit adds depends on the attacker's role: units with the debuff's role add more than everyone else.</li>
+        <li>The extra bonus is added on top of the capped break bonus for all damage against that enemy while it stays broken.</li>
+        <li>It ends when the break ends (the enemy recovers or uses an HP gauge revive) or when no active Drive is left on the enemy.</li>
+      </ul>
+      <p class="tip">Teambuilding: the Drive owner, its Drive break boosts and Over Break all point at one unit's Special Attack. Expect a carry that builds Drive with Special Attacks, partners of the same element to finish the levels, and Special Attack spam once the enemy is broken.</p>
+    </div>
+  </section>
+
+  <section id="other">
+    <div class="eyebrow">Outside battle</div>
+    <h2>Menus and modes</h2>
+    <div class="card">
+      <div class="item"><b>Google Play Games on PC</b><p class="note">The client now supports the PC version of Google Play Games. Play Games rewards go to your present box (they can take a while). The camera feature is not available there.</p></div>
+      <div class="item"><b>Achievements</b><p class="note">Achievement tracking now runs for both Steam and Google Play Games. It counts things like story chapters read, PvP and Link Raid results, enhance quests and player level.</p></div>
+      <div class="item"><b>Key bindings</b><p class="note">New keys can move the character forward and back, and increase or decrease a number in quantity pickers. Mouse right click and wheel can be turned on.</p></div>
+      <div class="item"><b>Story</b><p class="note">Some stories now show a spoiler warning first, and the end of a chapter can tell you that the story continues. The gallery's story list for characters and kioku has section headings.</p></div>
+      <div class="item"><b>Towers</b><p class="note">If a time-limited tower ends while you are in it, a pop-up sends you back to Home. The permanent tower can start new seasons and can cap how high you can climb in a season.</p></div>
+    </div>
+  </section>
+
+  <section id="sim">
+    <div class="eyebrow">Simulator</div>
+    <p>exedra-dmg-calc runs on 3.24.0 and already does Element Drive levels, Drive break boosts and Over Break the way the game does. Kits that use them show up once the new game data is out.</p>
+  </section>
+
+  <footer>Read from the 3.24.0 client files. Only mechanics seen in the game's code are listed. Numbers for kits will come with the data update.</footer>
+</div>

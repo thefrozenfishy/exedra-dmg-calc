@@ -1,7 +1,28 @@
 # Status (update at the end of every session)
 
-_Last updated: 2026-11-09: per-enemy "Alive" (PvE Simulator + Highest Dmg Calc share the enemy picker); before: 2026-11-05: Highest Dmg Calc "Adds" (enemies summoned mid-fight) toggles; before: 2026-11-02: Crisis score in the PvE Simulator timeline; before: 2026-10-31: Kioku Grid break chart for every character (not only Breakers); before: 2026-10-30 (2): stage-mode buffs in Max Damage / Highest Dmg Calc, quest buffs, Link Raid EX bonus; before: 2026-10-30: Kioku Grid damage dealer chart "Break" display; before: 2026-10-29 (5): game 3.22.0 (battle code identical, @rva tags moved; branch claude/version-3.22.0); before: 2026-10-29 (3): Best SA Team calculator speed (~60x on a large search); before: 2026-10-29 (2): Kioku Grid "Multiple ascensions", merged equal variant bars, precalculated bench file; before: 2026-10-29: Kioku Grid bench gear + average Attacker self buffs on Lux; before: 2026-10-24 (3): second-generation engine and Fight Solver removed (branch `remove-gen2`); before: 2026-10-24 (battle-start passive order: kit -> portrait -> support -> crys; before: Kioku Grid ailment bars: 112/305/309 conditions, Max Damage enemies carry Weakness/Stun); before: 2026-10-15 (game 3.21.0: dumped + decompiled by Claude on Windows, engine re-ported to 3.21.0; branch claude/version-3.21.0); before: 2026-10-14 (Max Damage + Kioku Grid bench on the 1:1 engine); before: 2026-10-10 (1:1 port in src/engine started); before: 2026-10-03 (passive states per giver, UP_HP_FIXED max HP; earlier: duplicate active-skill states); before: 2026-10-02 (game 3.19.1: version diff + newsletter, Magic Seal, break/notice team conditions, IMM_SLIP_DMG burst; branch claude/version-3.19.1)._
+_Last updated: 2026-11-12: game 3.24.0 (Element Drive, Drive break bonuses, Over Break ported; scheduled run on main); before: 2026-11-09: per-enemy "Alive" (PvE Simulator + Highest Dmg Calc share the enemy picker); before: 2026-11-05: Highest Dmg Calc "Adds" (enemies summoned mid-fight) toggles; before: 2026-11-02: Crisis score in the PvE Simulator timeline; before: 2026-10-31: Kioku Grid break chart for every character (not only Breakers); before: 2026-10-30 (2): stage-mode buffs in Max Damage / Highest Dmg Calc, quest buffs, Link Raid EX bonus; before: 2026-10-30: Kioku Grid damage dealer chart "Break" display; before: 2026-10-29 (5): game 3.22.0 (battle code identical, @rva tags moved; branch claude/version-3.22.0); before: 2026-10-29 (3): Best SA Team calculator speed (~60x on a large search); before: 2026-10-29 (2): Kioku Grid "Multiple ascensions", merged equal variant bars, precalculated bench file; before: 2026-10-29: Kioku Grid bench gear + average Attacker self buffs on Lux; before: 2026-10-24 (3): second-generation engine and Fight Solver removed (branch `remove-gen2`); before: 2026-10-24 (battle-start passive order: kit -> portrait -> support -> crys; before: Kioku Grid ailment bars: 112/305/309 conditions, Max Damage enemies carry Weakness/Stun); before: 2026-10-15 (game 3.21.0: dumped + decompiled by Claude on Windows, engine re-ported to 3.21.0; branch claude/version-3.21.0); before: 2026-10-14 (Max Damage + Kioku Grid bench on the 1:1 engine); before: 2026-10-10 (1:1 port in src/engine started); before: 2026-10-03 (passive states per giver, UP_HP_FIXED max HP; earlier: duplicate active-skill states); before: 2026-10-02 (game 3.19.1: version diff + newsletter, Magic Seal, break/notice team conditions, IMM_SLIP_DMG burst; branch claude/version-3.19.1)._
 
+
+## 2026-11-12: game 3.24.0 (scheduled version check, on main)
+
+- Client 3.24.0 (Steam files 2026-11-12 17:02 UTC, GameAssembly PE 2026-11-06). Code changed: verdiff funcs over
+  ReDriveBattleCore 2035 identical / 3309 moved / 154 changed / 207 added / 127 removed; decdiff --loose left 33
+  real bodies. New battle mechanic: **Element Drive** (UNIQUE_ELEMENT_DRIVE, replaces UNIQUE_ELEMENT_BREAK),
+  **Drive break-gauge bonuses** (DRIVE_UP_BREAK_POINT_DMG_RATIO / _FIXED) and **Over Break**
+  (OVER_BREAK_DAMAGE_RECEIVE_RATE_DRIVE). MECHANICS.md section 13 "Element Drive and Over Break".
+- src/engine: 4,125 @rva tags + 41 field offsets moved, 4 new state classes + 2 enums + marker interface
+  IDontRemoveOnPassiveSkillUserLeaveBattle, UnitStateFactory rebuilt in the game's order (153 entries), ported:
+  BreakPoint.Decrease / CalculateProcessedBreakPointDamage / HasDriveBreakPointUp, BattleUnit Over Break members,
+  GetAppliedDamageOfBreakSituation, AbilityEffectLauncher.Triggering (Over Break + after-skill level-ups),
+  DamageAbilityEffectBase.UniqueStateLvUpProcess (skillMstId), UniqueLvUnitStateBase.IsMaxLv, UnitCondition.Refresh,
+  ActExecutor break resets, PassiveSkill / RemoveByUserUnitDeath predicates, notice op_Addition, situation data
+  (UI). The rest of the changed bodies are inlining / AI LinkedList refactors with the same behaviour.
+  `GAME_VER` = 3.24.0. Engine tsc 0; checkEngine324 (11 checks) + checkEngine321 + checkFixturesEngine 16/16 +
+  checkWavePhases pass; engineSweep 40 stages x 2 seeds 720/720 ok; app type-check error set = HEAD (223).
+- Master data: nothing new yet (the 12:05 JST ma-ex-data run was still waiting on a full-screen app; base_data
+  last synced 2026-11-06). No unit uses the new types yet. src/models/EffectTargetSide.ts got the 4 types.
+- Wiki: wiki_helpers._formatValue labels for the 4 types (ma-ex-data, uncommitted for the user); wikicheck OK.
+- Docs: docs/versions/3.24.0 (report, newsletter, Discord client notes, idents).
 
 ## 2026-11-09: per-enemy "Alive" on the PvE Simulator and Highest Dmg Calc (user's request)
 

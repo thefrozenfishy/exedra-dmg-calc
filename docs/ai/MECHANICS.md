@@ -350,6 +350,14 @@ Ultimates (SpecialAttackAct) and follow-ups: only ExecuteSkill - no TurnStart/Tu
   every unit at 100 until 2026-10-02 (harmless for damage, wrong for conditions 21/206/207/22). [C]
 - PvP characters: gauge = 100 × rarity × role factors (policy 3), slow 250, rate 100 %/max 200 %. **Outside
   PvP/GvG characters have no break gauge.** Enemies: BreakMst. [C]
+- 3.24.0: `BreakPoint.Decrease(attack, defence, element, **skillType**, value, priority)` 0x14D1FB0. The defender
+  states given to the processed break damage now also include Element Drive (UniqueElementDriveUnitState); the
+  attacker's IGiveBreakPointDamageVariation states are called through interface slot 2
+  `GetDamageVariationValue(damage, processing, defenceStates, skillType)` (default 0x1719EB0 = the 2-argument slot 1).
+  After the gauge part, `HasDriveBreakPointUp` 0x14D25A0 marks the notice `BreakPointDecreaseType = OnDrive` (UI
+  only). Over Break: `GetAppliedDamageOfBreakSituation` 0x13BAB60 adds `(decimal)OverBreakBonusValue / 100` to the
+  broken rate. Every break reset (TurnBegin, HP gauge revive) also clears the Over Break; HP gauge revive now also
+  sets the rate to 0 (it did not before). See section 13 "Element Drive and Over Break". [C]
 
 ## 10. Heal, barrier, EP, SP
 
@@ -516,6 +524,29 @@ Ultimates (SpecialAttackAct) and follow-ups: only ExecuteSkill - no TurnStart/Tu
   BattleUnit.Attack 0x13aa010 returns 0 under linked HP for every EnemyAppearance director (was Solo only).
 - Magic Seal AI (LockSpecialAttackUnitState.GetAIFilteredTargets 0x16fc950) now only targets units it can land on
   (IsTarget = CanAddTo).
+
+### Element Drive and Over Break (game 3.24.0, ported 2026-11-12; no unit uses them yet)
+- UNIQUE_ELEMENT_DRIVE = UniqueElementDriveUnitState (replaces UNIQUE_ELEMENT_BREAK; UniqueLvUnitStateBase, Neutral,
+  INeutralState.TargetSide 1 = enemies): v1 pattern, v2 level group, v3 roleBonusExp. CanAddTo 0x1726B50: free, or
+  the active Drive already there is from the same giver. Level-up type 2 = AfterActiveSkill: AbilityEffectLauncher
+  .Triggering (origin ActiveSkill) calls LvUpProcess(user, target, skillMstId) for every hit target after the final
+  damage; UniqueElementDriveUnitState.LvUpProcess 0x1726ED0 only reacts to **Special Attacks** (SkillMst type 2) of
+  a unit matching the state's element: TryCountUp roleBonusExp times on a role match (nothing if < 1), else once.
+  It is not removed when its giver leaves or dies (DontRemoveOn* = true, also IDontRemoveOnPassiveSkillUserLeaveBattle).
+- DRIVE_UP_BREAK_POINT_DMG_RATIO / _FIXED (DriveUpBreakPointDamageUnitStateBase, Positive, Addition Up): v1 = target
+  Drive level, v3 = TargetAttackType (0 Selectable = skill / SA / normal, 1 skill, 2 SA, 3 normal), Ratio v2/10 %
+  of the base break damage, Fixed +v2. Applies only when the defender has a Drive from the **same giver** at exactly
+  level v1 (IsTargetUnit 0x1716E20).
+- OVER_BREAK_DAMAGE_RECEIVE_RATE_DRIVE (OverBreakDamageReceiveRateDriveUnitState, Negative): v1/10 = cap, v2/10 per
+  hit for an attacker of the state's role, v3/10 for others (percentage points of BreakedDamageReceiveRate).
+  ApplyOverBreakAddition 0x171B070, per hit target of a Special Attack (notice IsReceivedAttack and not
+  IsBreakedDamageReceiveRateBecomeMax): needs the target's first Drive from the same giver at max level, the broken
+  rate at its cap (`MaxBreakedDamageReceiveRate/10`), the attacker matching the Drive's element. Then
+  `AddOverBreakBonus` (Min(bonus + add, max)); if no cap yet, `AddMaxOverBreakBonus(v1/10)` and the hit "enters"
+  Over Break (so the first qualifying SA only opens the cap; later ones grow the bonus). Notice flags
+  IsOverBreakEnterWhenHit / IsOverBreakMaxWhenHit (UI). UnitCondition.Refresh clears it (bonus and cap 0) once the
+  unit is not broken or has no active Drive left.
+- Checks: `scripts/sim/checkEngine324.ts`.
 
 ## 14. PvP specifics
 

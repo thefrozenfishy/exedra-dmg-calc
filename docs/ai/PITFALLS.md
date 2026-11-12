@@ -362,3 +362,13 @@
   `stagePassives`, not into `createDirector` alone, or the PvE battle has it and Max Damage / Highest Dmg Calc don't.
 - **Style id -> characterMstId is / 10000** (10020101 -> 1002 Homura). `NetworkUnits` battleUnitMstId (/ 100) is not
   the character id.
+- 3.24.0: `IGiveBreakPointDamageVariation` got a default interface method (slot 2, 4 arguments) next to the abstract
+  2-argument one. Call it through `IGiveBreakPointDamageVariation$GetDamageVariationValue$4` (uses the class's
+  `GetDamageVariationValue$4` when it has one, else slot 1), never `v.GetDamageVariationValue(...)` directly.
+- Interface members with a default body (INeutralState.DontRemoveOnPassiveSkillUserLeaveBattle / DontRemoveOnUserUnitDeath)
+  are implemented explicitly by some classes (`INeutralState$X` getters): read them with `ifaceProp(state,
+  "INeutralState", "X") === true`, a plain property read gives undefined on the explicit ones.
+- UnitStateFactory entries: new types are inserted in the middle and renumber every later `<.cctor>b__5_N`. Rebuild the
+  dic.set list in the game's order from the decompiled .cctor (pairs of `b__5_N` + `_StringLiteral_X`), as 3.24.0 did.
+- Cloud bundle build: the tarball must not contain the repo's package.json in the build dir (npm ERESOLVE on
+  `npm i typescript`); install typescript@5.8.3 in a separate dir and symlink its node_modules.
