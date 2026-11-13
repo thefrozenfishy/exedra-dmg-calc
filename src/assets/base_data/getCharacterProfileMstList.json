@@ -988,5 +988,20 @@
         "teamId2": 0,
         "weakPoint": "0",
         "weapon": "0"
+    },
+    {
+        "age": "0",
+        "characterMstId": 1155,
+        "characterVoice": "Ayasa Ito",
+        "description": "A Magical Girl of space colony KawaiiTopia on the Main Belt. A popular streamer with fans across the solar system, she's known for her boundless positivity, bringing joy to many. With her genome sequenced by AI, she is also a fully engineered child.",
+        "gift": "0",
+        "regionId": 1,
+        "schoolName": "―",
+        "seriesId": 11,
+        "sortOrder": 0,
+        "teamId1": 0,
+        "teamId2": 0,
+        "weakPoint": "0",
+        "weapon": "0"
     }
 ]

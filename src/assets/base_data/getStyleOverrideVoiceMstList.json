@@ -1,65 +1,101 @@
 [
     {
+        "isBossBattle": false,
         "overrideCueSheetName": "cv_eq_100301_battle",
+        "questCategoryMstId": 0,
         "questStageMstId": 1309102,
         "styleMstId": 10030101,
         "styleOverrideVoiceMstId": 1,
         "targetCueSheetName": "cv_100301_battle"
     },
     {
+        "isBossBattle": false,
         "overrideCueSheetName": "se_eq_battle_100301_skill_multi_A",
+        "questCategoryMstId": 0,
         "questStageMstId": 1309102,
         "styleMstId": 10030101,
         "styleOverrideVoiceMstId": 2,
         "targetCueSheetName": "se_battle_100301_skill_multi_A"
     },
     {
+        "isBossBattle": false,
         "overrideCueSheetName": "se_eq_battle_100301_special_A",
+        "questCategoryMstId": 0,
         "questStageMstId": 1309102,
         "styleMstId": 10030101,
         "styleOverrideVoiceMstId": 3,
         "targetCueSheetName": "se_battle_100301_special_A"
     },
     {
+        "isBossBattle": false,
         "overrideCueSheetName": "cv_eq_101201_battle",
+        "questCategoryMstId": 0,
         "questStageMstId": 1309102,
         "styleMstId": 10120101,
         "styleOverrideVoiceMstId": 4,
         "targetCueSheetName": "cv_101201_battle"
     },
     {
+        "isBossBattle": false,
         "overrideCueSheetName": "se_eq_battle_101201_skill_single_A",
+        "questCategoryMstId": 0,
         "questStageMstId": 1309102,
         "styleMstId": 10120101,
         "styleOverrideVoiceMstId": 5,
         "targetCueSheetName": "se_battle_101201_skill_single_A"
     },
     {
+        "isBossBattle": false,
         "overrideCueSheetName": "se_eq_battle_101201_special_A",
+        "questCategoryMstId": 0,
         "questStageMstId": 1309102,
         "styleMstId": 10120101,
         "styleOverrideVoiceMstId": 6,
         "targetCueSheetName": "se_battle_101201_special_A"
     },
     {
+        "isBossBattle": false,
         "overrideCueSheetName": "cv_eq_100501_battle",
+        "questCategoryMstId": 0,
         "questStageMstId": 1309102,
         "styleMstId": 10050101,
         "styleOverrideVoiceMstId": 7,
         "targetCueSheetName": "cv_100501_battle"
     },
     {
+        "isBossBattle": false,
         "overrideCueSheetName": "se_eq_battle_100501_skill_single_A",
+        "questCategoryMstId": 0,
         "questStageMstId": 1309102,
         "styleMstId": 10050101,
         "styleOverrideVoiceMstId": 8,
         "targetCueSheetName": "se_battle_100501_skill_single_A"
     },
     {
+        "isBossBattle": false,
         "overrideCueSheetName": "se_eq_battle_100501_special_A",
+        "questCategoryMstId": 0,
         "questStageMstId": 1309102,
         "styleMstId": 10050101,
         "styleOverrideVoiceMstId": 9,
         "targetCueSheetName": "se_battle_100501_special_A"
+    },
+    {
+        "isBossBattle": true,
+        "overrideCueSheetName": "se_vsboss_battle_115501_special_A",
+        "questCategoryMstId": 1,
+        "questStageMstId": 0,
+        "styleMstId": 11550101,
+        "styleOverrideVoiceMstId": 10,
+        "targetCueSheetName": "se_battle_115501_special_A"
+    },
+    {
+        "isBossBattle": true,
+        "overrideCueSheetName": "se_vsboss_battle_115501_special_A",
+        "questCategoryMstId": 13,
+        "questStageMstId": 0,
+        "styleMstId": 11550101,
+        "styleOverrideVoiceMstId": 11,
+        "targetCueSheetName": "se_battle_115501_special_A"
     }
 ]

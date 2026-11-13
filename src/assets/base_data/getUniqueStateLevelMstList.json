@@ -46,5 +46,17 @@
         "groupId": 20002,
         "level": 5,
         "uniqueStateLevelMstId": 200024
+    },
+    {
+        "conditionCount": 3,
+        "groupId": 30001,
+        "level": 2,
+        "uniqueStateLevelMstId": 300011
+    },
+    {
+        "conditionCount": 5,
+        "groupId": 30001,
+        "level": 3,
+        "uniqueStateLevelMstId": 300012
     }
 ]

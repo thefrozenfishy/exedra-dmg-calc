@@ -210,6 +210,12 @@
         "uniqueStatePatternMstId": 35
     },
     {
+        "iconName": "battle_icon_unique_041",
+        "name": "Poppin' Candy",
+        "stateFlipName": "Poppin' Candy",
+        "uniqueStatePatternMstId": 36
+    },
+    {
         "iconName": "battle_icon_unique_042",
         "name": "Murk of Obsession",
         "stateFlipName": "Murk of Obsession",
@@ -256,5 +262,11 @@
         "name": "Flame Chain",
         "stateFlipName": "Flame Chain",
         "uniqueStatePatternMstId": 20002
+    },
+    {
+        "iconName": "battle_icon_element_drive_neutral",
+        "name": "Void Drive",
+        "stateFlipName": "Void Drive",
+        "uniqueStatePatternMstId": 30001
     }
 ]

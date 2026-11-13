@@ -480,6 +480,12 @@
         "value1": 11540101
     },
     {
+        "title": "Overdrive Impulse",
+        "titleType": 1,
+        "userTitleMstId": 11550101,
+        "value1": 11550101
+    },
+    {
         "title": "Nameless Girl",
         "titleType": 0,
         "userTitleMstId": 20000000,
@@ -1158,15 +1164,33 @@
         "value1": 0
     },
     {
+        "title": "Sorana Magica: Sorana Nagiboshi's Memory - Luna (Standard) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20901002,
+        "value1": 0
+    },
+    {
         "title": "Sorana Magica: Sorana Nagiboshi's Memory - Earth (Battler) Ace",
         "titleType": 0,
         "userTitleMstId": 20902001,
         "value1": 0
     },
     {
+        "title": "Sorana Magica: Sorana Nagiboshi's Memory - Luna (Battler) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20902002,
+        "value1": 0
+    },
+    {
         "title": "Sorana Magica: Sorana Nagiboshi's Memory - Earth (Nightmare) Ace",
         "titleType": 0,
         "userTitleMstId": 20903001,
+        "value1": 0
+    },
+    {
+        "title": "Sorana Magica: Sorana Nagiboshi's Memory - Luna (Nightmare) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20903002,
         "value1": 0
     },
     {
@@ -1678,6 +1702,12 @@
         "titleType": 2,
         "userTitleMstId": 60000066,
         "value1": 4200109
+    },
+    {
+        "title": "Stellar Photo Op Hunt Ace",
+        "titleType": 2,
+        "userTitleMstId": 60000067,
+        "value1": 4200110
     },
     {
         "title": "Mirrors Ranking S☆☆☆",

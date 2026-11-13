@@ -592,5 +592,14 @@
         "enCapsName": "SORANA NAGIBOSHI",
         "iconResourceName": "1154",
         "name": "Sorana Nagiboshi"
+    },
+    {
+        "awakeItemMstId": 0,
+        "canSelectProfileFavorite": true,
+        "characterMstId": 1155,
+        "colorCode": "#FE5BB5",
+        "enCapsName": "LILLY CANDY",
+        "iconResourceName": "1155",
+        "name": "Lilly Candy"
     }
 ]

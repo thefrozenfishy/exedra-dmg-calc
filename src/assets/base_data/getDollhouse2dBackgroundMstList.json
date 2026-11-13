@@ -2190,6 +2190,96 @@
         "sortOrder": 110061
     },
     {
+        "dollhouse2dBackgroundMstId": 110071,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Spaceship - Cockpit",
+        "releaseTime": "2026-11-13T12:00:00+09:00",
+        "resourceName": "bg_adv_10_10106_01",
+        "seriesId": 11,
+        "sortOrder": 110071
+    },
+    {
+        "dollhouse2dBackgroundMstId": 110081,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Space Elevator",
+        "releaseTime": "2026-11-13T12:00:00+09:00",
+        "resourceName": "bg_adv_10_10100_01",
+        "seriesId": 11,
+        "sortOrder": 110081
+    },
+    {
+        "dollhouse2dBackgroundMstId": 110091,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Stratospheric Platform",
+        "releaseTime": "2026-11-13T12:00:00+09:00",
+        "resourceName": "bg_adv_10_10113_01",
+        "seriesId": 11,
+        "sortOrder": 110091
+    },
+    {
+        "dollhouse2dBackgroundMstId": 110101,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Stratospheric Platform - Damaged",
+        "releaseTime": "2026-11-13T12:00:00+09:00",
+        "resourceName": "bg_adv_10_10113_02",
+        "seriesId": 11,
+        "sortOrder": 110101
+    },
+    {
+        "dollhouse2dBackgroundMstId": 110111,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Orbiting Earth - 300 km",
+        "releaseTime": "2026-11-13T12:00:00+09:00",
+        "resourceName": "bg_adv_10_10114_01",
+        "seriesId": 11,
+        "sortOrder": 110111
+    },
+    {
+        "dollhouse2dBackgroundMstId": 110121,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Orbiting Earth - 23,000 km",
+        "releaseTime": "2026-11-13T12:00:00+09:00",
+        "resourceName": "bg_adv_10_10114_02",
+        "seriesId": 11,
+        "sortOrder": 110121
+    },
+    {
+        "dollhouse2dBackgroundMstId": 110131,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Shackleton Crater",
+        "releaseTime": "2026-11-13T12:00:00+09:00",
+        "resourceName": "bg_adv_10_10098_01",
+        "seriesId": 11,
+        "sortOrder": 110131
+    },
+    {
+        "dollhouse2dBackgroundMstId": 110141,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Inside Lunar City",
+        "releaseTime": "2026-11-13T12:00:00+09:00",
+        "resourceName": "bg_adv_10_10099_01",
+        "seriesId": 11,
+        "sortOrder": 110141
+    },
+    {
+        "dollhouse2dBackgroundMstId": 110151,
+        "isDefault": false,
+        "lightingType": 2,
+        "name": "Lunar City - Helium Mining Tunnel",
+        "releaseTime": "2026-11-13T12:00:00+09:00",
+        "resourceName": "bg_adv_10_10105_01",
+        "seriesId": 11,
+        "sortOrder": 110151
+    },
+    {
         "dollhouse2dBackgroundMstId": 990011,
         "isDefault": false,
         "lightingType": 0,

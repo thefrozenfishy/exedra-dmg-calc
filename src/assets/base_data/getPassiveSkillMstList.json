@@ -12622,6 +12622,246 @@
     {
         "conditionElement": 0,
         "conditionRole": 0,
+        "description": "Increases break effect by 10%.",
+        "level": 1,
+        "name": "Ability",
+        "passiveSkillMstId": 420301,
+        "skillButtonIcon": "",
+        "skillUniqueId": 4203
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases break effect by 12%.",
+        "level": 2,
+        "name": "Ability",
+        "passiveSkillMstId": 420302,
+        "skillButtonIcon": "",
+        "skillUniqueId": 4203
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases break effect by 14%.",
+        "level": 3,
+        "name": "Ability",
+        "passiveSkillMstId": 420303,
+        "skillButtonIcon": "",
+        "skillUniqueId": 4203
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases break effect by 16%.",
+        "level": 4,
+        "name": "Ability",
+        "passiveSkillMstId": 420304,
+        "skillButtonIcon": "",
+        "skillUniqueId": 4203
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases break effect by 18%.",
+        "level": 5,
+        "name": "Ability",
+        "passiveSkillMstId": 420305,
+        "skillButtonIcon": "",
+        "skillUniqueId": 4203
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases break effect by 20%.",
+        "level": 6,
+        "name": "Ability",
+        "passiveSkillMstId": 420306,
+        "skillButtonIcon": "",
+        "skillUniqueId": 4203
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases ailment RES by 5%.",
+        "level": 1,
+        "name": "Ability",
+        "passiveSkillMstId": 420401,
+        "skillButtonIcon": "",
+        "skillUniqueId": 4204
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases ailment RES by 6%.",
+        "level": 2,
+        "name": "Ability",
+        "passiveSkillMstId": 420402,
+        "skillButtonIcon": "",
+        "skillUniqueId": 4204
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases ailment RES by 7%.",
+        "level": 3,
+        "name": "Ability",
+        "passiveSkillMstId": 420403,
+        "skillButtonIcon": "",
+        "skillUniqueId": 4204
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases ailment RES by 8%.",
+        "level": 4,
+        "name": "Ability",
+        "passiveSkillMstId": 420404,
+        "skillButtonIcon": "",
+        "skillUniqueId": 4204
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases ailment RES by 9%.",
+        "level": 5,
+        "name": "Ability",
+        "passiveSkillMstId": 420405,
+        "skillButtonIcon": "",
+        "skillUniqueId": 4204
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases ailment RES by 10%.",
+        "level": 6,
+        "name": "Ability",
+        "passiveSkillMstId": 420406,
+        "skillButtonIcon": "",
+        "skillUniqueId": 4204
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases void DMG dealt by 7.5%.<br>Equipped to Breaker:<br>Also increases SPD by 5%.",
+        "level": 1,
+        "name": "Ability",
+        "passiveSkillMstId": 420501,
+        "skillButtonIcon": "",
+        "skillUniqueId": 4205
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases void DMG dealt by 8.5%.<br>Equipped to Breaker:<br>Also increases SPD by 6%.",
+        "level": 2,
+        "name": "Ability",
+        "passiveSkillMstId": 420502,
+        "skillButtonIcon": "",
+        "skillUniqueId": 4205
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases void DMG dealt by 9.5%.<br>Equipped to Breaker:<br>Also increases SPD by 7%.",
+        "level": 3,
+        "name": "Ability",
+        "passiveSkillMstId": 420503,
+        "skillButtonIcon": "",
+        "skillUniqueId": 4205
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases void DMG dealt by 10.5%.<br>Equipped to Breaker:<br>Also increases SPD by 8%.",
+        "level": 4,
+        "name": "Ability",
+        "passiveSkillMstId": 420504,
+        "skillButtonIcon": "",
+        "skillUniqueId": 4205
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases void DMG dealt by 11.5%.<br>Equipped to Breaker:<br>Also increases SPD by 9%.",
+        "level": 5,
+        "name": "Ability",
+        "passiveSkillMstId": 420505,
+        "skillButtonIcon": "",
+        "skillUniqueId": 4205
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases void DMG dealt by 12.5%.<br>Equipped to Breaker:<br>Also increases SPD by 10%.",
+        "level": 6,
+        "name": "Ability",
+        "passiveSkillMstId": 420506,
+        "skillButtonIcon": "",
+        "skillUniqueId": 4205
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases void DMG dealt by 5%.<br>Equipped to Lilly Candy:<br>Also increases MP recovery rate by 1%.",
+        "level": 1,
+        "name": "Ability",
+        "passiveSkillMstId": 420601,
+        "skillButtonIcon": "",
+        "skillUniqueId": 4206
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases void DMG dealt by 6%.<br>Equipped to Lilly Candy:<br>Also increases MP recovery rate by 1.8%.",
+        "level": 2,
+        "name": "Ability",
+        "passiveSkillMstId": 420602,
+        "skillButtonIcon": "",
+        "skillUniqueId": 4206
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases void DMG dealt by 7%.<br>Equipped to Lilly Candy:<br>Also increases MP recovery rate by 2.6%.",
+        "level": 3,
+        "name": "Ability",
+        "passiveSkillMstId": 420603,
+        "skillButtonIcon": "",
+        "skillUniqueId": 4206
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases void DMG dealt by 8%.<br>Equipped to Lilly Candy:<br>Also increases MP recovery rate by 3.4%.",
+        "level": 4,
+        "name": "Ability",
+        "passiveSkillMstId": 420604,
+        "skillButtonIcon": "",
+        "skillUniqueId": 4206
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases void DMG dealt by 9%.<br>Equipped to Lilly Candy:<br>Also increases MP recovery rate by 4.2%.",
+        "level": 5,
+        "name": "Ability",
+        "passiveSkillMstId": 420605,
+        "skillButtonIcon": "",
+        "skillUniqueId": 4206
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases void DMG dealt by 10%.<br>Equipped to Lilly Candy:<br>Also increases MP recovery rate by 5%.",
+        "level": 6,
+        "name": "Ability",
+        "passiveSkillMstId": 420606,
+        "skillButtonIcon": "",
+        "skillUniqueId": 4206
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
         "description": "Increases DEF by 15%.",
         "level": 1,
         "name": "Ability",
@@ -17902,6 +18142,186 @@
     {
         "conditionElement": 0,
         "conditionRole": 0,
+        "description": "Increases debuff hit rate by 20%.",
+        "level": 1,
+        "name": "Ability",
+        "passiveSkillMstId": 508901,
+        "skillButtonIcon": "",
+        "skillUniqueId": 5089
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases debuff hit rate by 22%.",
+        "level": 2,
+        "name": "Ability",
+        "passiveSkillMstId": 508902,
+        "skillButtonIcon": "",
+        "skillUniqueId": 5089
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases debuff hit rate by 24%.",
+        "level": 3,
+        "name": "Ability",
+        "passiveSkillMstId": 508903,
+        "skillButtonIcon": "",
+        "skillUniqueId": 5089
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases debuff hit rate by 26%.",
+        "level": 4,
+        "name": "Ability",
+        "passiveSkillMstId": 508904,
+        "skillButtonIcon": "",
+        "skillUniqueId": 5089
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases debuff hit rate by 28%.",
+        "level": 5,
+        "name": "Ability",
+        "passiveSkillMstId": 508905,
+        "skillButtonIcon": "",
+        "skillUniqueId": 5089
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases debuff hit rate by 30%.",
+        "level": 6,
+        "name": "Ability",
+        "passiveSkillMstId": 508906,
+        "skillButtonIcon": "",
+        "skillUniqueId": 5089
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases critical rate by 5%.",
+        "level": 1,
+        "name": "Ability",
+        "passiveSkillMstId": 509001,
+        "skillButtonIcon": "",
+        "skillUniqueId": 5090
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases critical rate by 6%.",
+        "level": 2,
+        "name": "Ability",
+        "passiveSkillMstId": 509002,
+        "skillButtonIcon": "",
+        "skillUniqueId": 5090
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases critical rate by 7%.",
+        "level": 3,
+        "name": "Ability",
+        "passiveSkillMstId": 509003,
+        "skillButtonIcon": "",
+        "skillUniqueId": 5090
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases critical rate by 8%.",
+        "level": 4,
+        "name": "Ability",
+        "passiveSkillMstId": 509004,
+        "skillButtonIcon": "",
+        "skillUniqueId": 5090
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases critical rate by 9%.",
+        "level": 5,
+        "name": "Ability",
+        "passiveSkillMstId": 509005,
+        "skillButtonIcon": "",
+        "skillUniqueId": 5090
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases critical rate by 10%.",
+        "level": 6,
+        "name": "Ability",
+        "passiveSkillMstId": 509006,
+        "skillButtonIcon": "",
+        "skillUniqueId": 5090
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases max HP by 5%.",
+        "level": 1,
+        "name": "Ability",
+        "passiveSkillMstId": 509101,
+        "skillButtonIcon": "",
+        "skillUniqueId": 5091
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases max HP by 6%.",
+        "level": 2,
+        "name": "Ability",
+        "passiveSkillMstId": 509102,
+        "skillButtonIcon": "",
+        "skillUniqueId": 5091
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases max HP by 7%.",
+        "level": 3,
+        "name": "Ability",
+        "passiveSkillMstId": 509103,
+        "skillButtonIcon": "",
+        "skillUniqueId": 5091
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases max HP by 8%.",
+        "level": 4,
+        "name": "Ability",
+        "passiveSkillMstId": 509104,
+        "skillButtonIcon": "",
+        "skillUniqueId": 5091
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases max HP by 9%.",
+        "level": 5,
+        "name": "Ability",
+        "passiveSkillMstId": 509105,
+        "skillButtonIcon": "",
+        "skillUniqueId": 5091
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases max HP by 10%.",
+        "level": 6,
+        "name": "Ability",
+        "passiveSkillMstId": 509106,
+        "skillButtonIcon": "",
+        "skillUniqueId": 5091
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
         "description": "Increases max HP by 0.5% and DEF by 2.5%.",
         "level": 1,
         "name": "Ability",
@@ -21258,6 +21678,16 @@
         "passiveSkillMstId": 1150080,
         "skillButtonIcon": "",
         "skillUniqueId": 1150080
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "At battle start, grants 1 Web Cluster.<br><br>On enemy break:<br>Increases SPD by 10% (1 turn).",
+        "level": 1,
+        "name": "A Sweet Moment from Me to You!",
+        "passiveSkillMstId": 1150081,
+        "skillButtonIcon": "",
+        "skillUniqueId": 1150081
     },
     {
         "conditionElement": 0,
@@ -33162,6 +33592,106 @@
     {
         "conditionElement": 0,
         "conditionRole": 0,
+        "description": "At battle start, sets Hydro Clusters to 0 (Max 4), increases break gauge depletion, and increases break bonus by 90%.<br>On void DMG dealt to an enemy by self or ally, grants 3 MP.<br>* Only applies to basic attack / battle skill / special attack.<br><br>On receiving buff effect, grants 1 Web Cluster.<br>* Only buffs applied on battle skill activation have an effect.<br><br>When at 4 Web Clusters, triggers a follow-up attack.<br>When an enemy is defeated, triggers a follow-up attack (This follow-up attack does not consume Web Clusters).<br>* Follow-up attack will trigger for each condition.<br><br>Follow-up Attack:<br>Deals 50% void DMG to all enemies, and applies Void Drive to targets (2 turns).<br>Increases all allies' ATK by 5% (2 turns / Max 4 stacks).<br>Consumes 4 Web Clusters.<br><br>On maxed enemy break bonus:<br>Grants 15 MP to self.",
+        "level": 1,
+        "name": "Assault Chase",
+        "passiveSkillMstId": 1508201,
+        "skillButtonIcon": "battle_icon_passive_buff",
+        "skillUniqueId": 15082
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "At battle start, sets Hydro Clusters to 0 (Max 4), increases break gauge depletion, and increases break bonus by 94%.<br>On void DMG dealt to an enemy by self or ally, grants 3 MP.<br>* Only applies to basic attack / battle skill / special attack.<br><br>On receiving buff effect, grants 1 Web Cluster.<br>* Only buffs applied on battle skill activation have an effect.<br><br>When at 4 Web Clusters, triggers a follow-up attack.<br>When an enemy is defeated, triggers a follow-up attack (This follow-up attack does not consume Web Clusters).<br>* Follow-up attack will trigger for each condition.<br><br>Follow-up Attack:<br>Deals 52% void DMG to all enemies, and applies Void Drive to targets (2 turns).<br>Increases all allies' ATK by 5% (2 turns / Max 4 stacks).<br>Consumes 4 Web Clusters.<br><br>On maxed enemy break bonus:<br>Grants 15 MP to self.",
+        "level": 2,
+        "name": "Assault Chase",
+        "passiveSkillMstId": 1508202,
+        "skillButtonIcon": "battle_icon_passive_buff",
+        "skillUniqueId": 15082
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "At battle start, sets Hydro Clusters to 0 (Max 4), increases break gauge depletion, and increases break bonus by 100%.<br>On void DMG dealt to an enemy by self or ally, grants 3 MP.<br>* Only applies to basic attack / battle skill / special attack.<br><br>On receiving buff effect, grants 1 Web Cluster.<br>* Only buffs applied on battle skill activation have an effect.<br><br>When at 4 Web Clusters, triggers a follow-up attack.<br>When an enemy is defeated, triggers a follow-up attack (This follow-up attack does not consume Web Clusters).<br>* Follow-up attack will trigger for each condition.<br><br>Follow-up Attack:<br>Deals 54% void DMG to all enemies, and applies Void Drive to targets (2 turns).<br>Increases all allies' ATK by 5% (2 turns / Max 4 stacks).<br>Consumes 4 Web Clusters.<br><br>On maxed enemy break bonus:<br>Grants 15 MP to self.",
+        "level": 3,
+        "name": "Assault Chase",
+        "passiveSkillMstId": 1508203,
+        "skillButtonIcon": "battle_icon_passive_buff",
+        "skillUniqueId": 15082
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "At battle start, sets Hydro Clusters to 0 (Max 4), increases break gauge depletion, and increases break bonus by 106%.<br>On void DMG dealt to an enemy by self or ally, grants 3 MP.<br>* Only applies to basic attack / battle skill / special attack.<br><br>On receiving buff effect, grants 1 Web Cluster.<br>* Only buffs applied on battle skill activation have an effect.<br><br>When at 4 Web Clusters, triggers a follow-up attack.<br>When an enemy is defeated, triggers a follow-up attack (This follow-up attack does not consume Web Clusters).<br>* Follow-up attack will trigger for each condition.<br><br>Follow-up Attack:<br>Deals 57% void DMG to all enemies, and applies Void Drive to targets (2 turns).<br>Increases all allies' ATK by 5% (2 turns / Max 4 stacks).<br>Consumes 4 Web Clusters.<br><br>On maxed enemy break bonus:<br>Grants 15 MP to self.",
+        "level": 4,
+        "name": "Assault Chase",
+        "passiveSkillMstId": 1508204,
+        "skillButtonIcon": "battle_icon_passive_buff",
+        "skillUniqueId": 15082
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "At battle start, sets Hydro Clusters to 0 (Max 4), increases break gauge depletion, and increases break bonus by 112%.<br>On void DMG dealt to an enemy by self or ally, grants 3 MP.<br>* Only applies to basic attack / battle skill / special attack.<br><br>On receiving buff effect, grants 1 Web Cluster.<br>* Only buffs applied on battle skill activation have an effect.<br><br>When at 4 Web Clusters, triggers a follow-up attack.<br>When an enemy is defeated, triggers a follow-up attack (This follow-up attack does not consume Web Clusters).<br>* Follow-up attack will trigger for each condition.<br><br>Follow-up Attack:<br>Deals 59% void DMG to all enemies, and applies Void Drive to targets (2 turns).<br>Increases all allies' ATK by 5% (2 turns / Max 4 stacks).<br>Consumes 4 Web Clusters.<br><br>On maxed enemy break bonus:<br>Grants 15 MP to self.",
+        "level": 5,
+        "name": "Assault Chase",
+        "passiveSkillMstId": 1508205,
+        "skillButtonIcon": "battle_icon_passive_buff",
+        "skillUniqueId": 15082
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "At battle start, sets Hydro Clusters to 0 (Max 4), increases break gauge depletion, and increases break bonus by 119%.<br>On void DMG dealt to an enemy by self or ally, grants 3 MP.<br>* Only applies to basic attack / battle skill / special attack.<br><br>On receiving buff effect, grants 1 Web Cluster.<br>* Only buffs applied on battle skill activation have an effect.<br><br>When at 4 Web Clusters, triggers a follow-up attack.<br>When an enemy is defeated, triggers a follow-up attack (This follow-up attack does not consume Web Clusters).<br>* Follow-up attack will trigger for each condition.<br><br>Follow-up Attack:<br>Deals 62% void DMG to all enemies, and applies Void Drive to targets (2 turns).<br>Increases all allies' ATK by 5% (2 turns / Max 4 stacks).<br>Consumes 4 Web Clusters.<br><br>On maxed enemy break bonus:<br>Grants 15 MP to self.",
+        "level": 6,
+        "name": "Assault Chase",
+        "passiveSkillMstId": 1508206,
+        "skillButtonIcon": "battle_icon_passive_buff",
+        "skillUniqueId": 15082
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "At battle start, sets Hydro Clusters to 0 (Max 4), increases break gauge depletion, and increases break bonus by 126%.<br>On void DMG dealt to an enemy by self or ally, grants 3 MP.<br>* Only applies to basic attack / battle skill / special attack.<br><br>On receiving buff effect, grants 1 Web Cluster.<br>* Only buffs applied on battle skill activation have an effect.<br><br>When at 4 Web Clusters, triggers a follow-up attack.<br>When an enemy is defeated, triggers a follow-up attack (This follow-up attack does not consume Web Clusters).<br>* Follow-up attack will trigger for each condition.<br><br>Follow-up Attack:<br>Deals 65% void DMG to all enemies, and applies Void Drive to targets (2 turns).<br>Increases all allies' ATK by 5% (2 turns / Max 4 stacks).<br>Consumes 4 Web Clusters.<br><br>On maxed enemy break bonus:<br>Grants 15 MP to self.",
+        "level": 7,
+        "name": "Assault Chase",
+        "passiveSkillMstId": 1508207,
+        "skillButtonIcon": "battle_icon_passive_buff",
+        "skillUniqueId": 15082
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "At battle start, sets Hydro Clusters to 0 (Max 4), increases break gauge depletion, and increases break bonus by 133%.<br>On void DMG dealt to an enemy by self or ally, grants 3 MP.<br>* Only applies to basic attack / battle skill / special attack.<br><br>On receiving buff effect, grants 1 Web Cluster.<br>* Only buffs applied on battle skill activation have an effect.<br><br>When at 4 Web Clusters, triggers a follow-up attack.<br>When an enemy is defeated, triggers a follow-up attack (This follow-up attack does not consume Web Clusters).<br>* Follow-up attack will trigger for each condition.<br><br>Follow-up Attack:<br>Deals 68% void DMG to all enemies, and applies Void Drive to targets (2 turns).<br>Increases all allies' ATK by 5% (2 turns / Max 4 stacks).<br>Consumes 4 Web Clusters.<br><br>On maxed enemy break bonus:<br>Grants 15 MP to self.",
+        "level": 8,
+        "name": "Assault Chase",
+        "passiveSkillMstId": 1508208,
+        "skillButtonIcon": "battle_icon_passive_buff",
+        "skillUniqueId": 15082
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "At battle start, sets Hydro Clusters to 0 (Max 4), increases break gauge depletion, and increases break bonus by 141%.<br>On void DMG dealt to an enemy by self or ally, grants 3 MP.<br>* Only applies to basic attack / battle skill / special attack.<br><br>On receiving buff effect, grants 1 Web Cluster.<br>* Only buffs applied on battle skill activation have an effect.<br><br>When at 4 Web Clusters, triggers a follow-up attack.<br>When an enemy is defeated, triggers a follow-up attack (This follow-up attack does not consume Web Clusters).<br>* Follow-up attack will trigger for each condition.<br><br>Follow-up Attack:<br>Deals 71% void DMG to all enemies, and applies Void Drive to targets (2 turns).<br>Increases all allies' ATK by 5% (2 turns / Max 4 stacks).<br>Consumes 4 Web Clusters.<br><br>On maxed enemy break bonus:<br>Grants 15 MP to self.",
+        "level": 9,
+        "name": "Assault Chase",
+        "passiveSkillMstId": 1508209,
+        "skillButtonIcon": "battle_icon_passive_buff",
+        "skillUniqueId": 15082
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "At battle start, sets Hydro Clusters to 0 (Max 4), increases break gauge depletion, and increases break bonus by 150%.<br>On void DMG dealt to an enemy by self or ally, grants 3 MP.<br>* Only applies to basic attack / battle skill / special attack.<br><br>On receiving buff effect, grants 1 Web Cluster.<br>* Only buffs applied on battle skill activation have an effect.<br><br>When at 4 Web Clusters, triggers a follow-up attack.<br>When an enemy is defeated, triggers a follow-up attack (This follow-up attack does not consume Web Clusters).<br>* Follow-up attack will trigger for each condition.<br><br>Follow-up Attack:<br>Deals 75% void DMG to all enemies, and applies Void Drive to targets (2 turns).<br>Increases all allies' ATK by 5% (2 turns / Max 4 stacks).<br>Consumes 4 Web Clusters.<br><br>On maxed enemy break bonus:<br>Grants 15 MP to self.",
+        "level": 10,
+        "name": "Assault Chase",
+        "passiveSkillMstId": 1508210,
+        "skillButtonIcon": "battle_icon_passive_buff",
+        "skillUniqueId": 15082
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
         "description": "On defeating an enemy, grants 5 Vanguard points.<br>On breaking an enemy, grants 3 Vanguard points.",
         "level": 1,
         "name": "Vanguard Base Points",
@@ -40122,6 +40652,126 @@
     {
         "conditionElement": 0,
         "conditionRole": 0,
+        "description": "Each time DMG is taken, consumes 1 Magic.<br>Increases DMG taken as own Magic decreases, and decreases break gauge depletion RES.",
+        "level": 1,
+        "name": "Ability VI",
+        "passiveSkillMstId": 7010001,
+        "skillButtonIcon": "",
+        "skillUniqueId": 7010001
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Each time DMG is taken, consumes 1 Magic.<br>Increases DMG taken as own Magic decreases, and decreases break gauge depletion RES.",
+        "level": 1,
+        "name": "Ability VI",
+        "passiveSkillMstId": 7010002,
+        "skillButtonIcon": "",
+        "skillUniqueId": 7010002
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Guaranteed to stop all enemies.<br>Grants 2 actions.<br>Greatly decreases incoming break gauge depletion from non-Breakers.<br><br>Decreases own DMG taken and increases break gauge depletion RES based on Magic value.<br>On ally break, consumes a small amount of own HP and consumes 1 Magic.<br><br>Increases SPD with each passing turn.<br>When an enemy not aligned with the user's elemental weakness takes an action, delays all enemies' action order.",
+        "level": 1,
+        "name": "Ability VI",
+        "passiveSkillMstId": 7050001,
+        "skillButtonIcon": "",
+        "skillUniqueId": 7050001
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Extremely high HP makes it difficult to defeat.<br>Greatly decreases incoming break gauge depletion from non-Breakers.<br>Greatly decreases incoming break gauge depletion from enemies not aligned with the user's elemental weakness.",
+        "level": 1,
+        "name": "Ability III",
+        "passiveSkillMstId": 7050002,
+        "skillButtonIcon": "",
+        "skillUniqueId": 7050002
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Extremely high HP makes it difficult to defeat.<br>Greatly decreases incoming break gauge depletion from non-Breakers.<br>Greatly decreases incoming break gauge depletion from enemies not aligned with the user's elemental weakness.",
+        "level": 1,
+        "name": "Ability III",
+        "passiveSkillMstId": 7050003,
+        "skillButtonIcon": "",
+        "skillUniqueId": 7050003
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Extremely high HP makes it difficult to defeat.<br>Greatly decreases incoming break gauge depletion from non-Breakers.<br>Greatly decreases incoming break gauge depletion from enemies not aligned with the user's elemental weakness.",
+        "level": 1,
+        "name": "Ability III",
+        "passiveSkillMstId": 7050004,
+        "skillButtonIcon": "",
+        "skillUniqueId": 7050004
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Extremely high HP makes it difficult to defeat.<br>Greatly decreases incoming break gauge depletion from non-Breakers.<br>Greatly decreases incoming break gauge depletion from enemies not aligned with the user's elemental weakness.",
+        "level": 1,
+        "name": "Ability III",
+        "passiveSkillMstId": 7050005,
+        "skillButtonIcon": "",
+        "skillUniqueId": 7050005
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "On ally break, consumes a small amount of own HP.<br><br>Greatly decreases incoming break gauge depletion from non-Breakers.<br>Significantly decreases incoming break gauge depletion from enemies not aligned with the user's elemental weakness.",
+        "level": 1,
+        "name": "Ability III",
+        "passiveSkillMstId": 7050006,
+        "skillButtonIcon": "",
+        "skillUniqueId": 7050006
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "On ally break, consumes a small amount of own HP.<br><br>Greatly decreases incoming break gauge depletion from non-Breakers.<br>Significantly decreases incoming break gauge depletion from enemies not aligned with the user's elemental weakness.",
+        "level": 1,
+        "name": "Ability III",
+        "passiveSkillMstId": 7050007,
+        "skillButtonIcon": "",
+        "skillUniqueId": 7050007
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "On ally break, consumes a small amount of own HP.<br><br>Greatly decreases incoming break gauge depletion from non-Breakers.<br>Significantly decreases incoming break gauge depletion from enemies not aligned with the user's elemental weakness.",
+        "level": 1,
+        "name": "Ability III",
+        "passiveSkillMstId": 7050008,
+        "skillButtonIcon": "",
+        "skillUniqueId": 7050008
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "On ally break, consumes a small amount of own HP.<br><br>Greatly decreases incoming break gauge depletion from non-Breakers.<br>Significantly decreases incoming break gauge depletion from enemies not aligned with the user's elemental weakness.",
+        "level": 1,
+        "name": "Ability III",
+        "passiveSkillMstId": 7050009,
+        "skillButtonIcon": "",
+        "skillUniqueId": 7050009
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "On ally break, consumes a small amount of own HP.<br><br>Greatly decreases incoming break gauge depletion from non-Breakers.<br>Significantly decreases incoming break gauge depletion from enemies not aligned with the user's elemental weakness.",
+        "level": 1,
+        "name": "Ability III",
+        "passiveSkillMstId": 7050010,
+        "skillButtonIcon": "",
+        "skillUniqueId": 7050010
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
         "description": "Grants 2 actions.<br>Grants 3 actions on odd-numbered turns.<br><br>At battle start, significantly advances own action order, and delays all enemies' action order.<br><br>Each time own Magic reaches max, advances own action order, and slightly increases ATK.<br>When own HP decreases, grants 1 Magic.<br>When attacked by enemies not aligned with the user's elemental weakness, grants 1 Magic.<br><br>If own break bonus is under 600%, significantly decreases DMG taken.",
         "level": 1,
         "name": "Ability VI",
@@ -40158,6 +40808,66 @@
         "passiveSkillMstId": 7090004,
         "skillButtonIcon": "",
         "skillUniqueId": 7090004
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Grants 2 actions<br>If break bonus is under 300%, significantly decreases DMG taken.<br>When not in break, slightly increases DEF and SPD each time attacked with an enemy basic attack, battle skill, or special attack.<br><br>Each time attacked with a special attack by enemies not aligned with the user's elemental weakness, activates assist.<br><br>Assist:<br>Guaranteed to greatly decrease all enemies' MP recovery rate for 5 turns.<br>Effect increases for enemies not aligned with the user's elemental weakness.<br>Greatly advances own action order.",
+        "level": 1,
+        "name": "Ability VI",
+        "passiveSkillMstId": 7090005,
+        "skillButtonIcon": "",
+        "skillUniqueId": 7090005
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Grants 2 actions<br>If break bonus is under 300%, significantly decreases DMG taken.<br>When not in break, slightly increases DEF and SPD each time attacked with an enemy basic attack, battle skill, or special attack.<br><br>Each time attacked with a special attack by enemies not aligned with the user's elemental weakness, activates assist.<br><br>Assist:<br>Guaranteed to decrease all enemies' MP recovery rate for 5 turns.<br>Effect increases for enemies not aligned with the user's elemental weakness.<br>Greatly advances own action order.",
+        "level": 1,
+        "name": "Ability V",
+        "passiveSkillMstId": 7090006,
+        "skillButtonIcon": "",
+        "skillUniqueId": 7090006
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Grants 2 actions<br>If break bonus is under 300%, significantly decreases DMG taken.<br>When not in break, slightly increases DEF each time attacked with an enemy basic attack, battle skill, or special attack.<br><br>Each time attacked with a special attack by enemies not aligned with the user's elemental weakness, activates assist.<br><br>Assist:<br>Guaranteed to decrease all enemies' MP recovery rate for 5 turns.<br>Effect increases for enemies not aligned with the user's elemental weakness.<br>Advances own action order.",
+        "level": 1,
+        "name": "Ability IV",
+        "passiveSkillMstId": 7090007,
+        "skillButtonIcon": "",
+        "skillUniqueId": 7090007
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Grants 2 actions.<br>If break bonus is under 300%, greatly decreases DMG taken.<br>When not in break, slightly increases DEF each time attacked with an enemy basic attack, battle skill, or special attack.",
+        "level": 1,
+        "name": "Ability III",
+        "passiveSkillMstId": 7090008,
+        "skillButtonIcon": "",
+        "skillUniqueId": 7090008
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Grants 2 actions.<br>Increases own ATK with each passing turn.<br>Each time DMG is taken, consumes 1 Magic.<br>Increases DMG taken as own Magic decreases, and decreases break gauge depletion RES.",
+        "level": 1,
+        "name": "Ability VI",
+        "passiveSkillMstId": 7110001,
+        "skillButtonIcon": "",
+        "skillUniqueId": 7110001
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Grants 2 actions.<br>Increases own ATK with each passing turn.<br>Each time DMG is taken, consumes 1 Magic.<br>Increases DMG taken as own Magic decreases, and decreases break gauge depletion RES.",
+        "level": 1,
+        "name": "Ability VI",
+        "passiveSkillMstId": 7110002,
+        "skillButtonIcon": "",
+        "skillUniqueId": 7110002
     },
     {
         "conditionElement": 0,
@@ -40308,6 +41018,16 @@
         "passiveSkillMstId": 7120015,
         "skillButtonIcon": "",
         "skillUniqueId": 7120015
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Grants 2 actions.<br>Increases ailment RES based on how many allies are present.<br><br>Significantly increases SPD and break gauge depletion RES, and if in break, advances action order each time DMG is taken.<br>This effect decreases based on how many ailments are applied to self, and is removed when 6 ailments are applied.<br><br>Guaranteed to significantly decrease SPD of enemies not aligned with the user's elemental weakness.",
+        "level": 1,
+        "name": "Ability IV",
+        "passiveSkillMstId": 7120016,
+        "skillButtonIcon": "",
+        "skillUniqueId": 7120016
     },
     {
         "conditionElement": 0,
@@ -42208,6 +42928,16 @@
         "passiveSkillMstId": 8510401,
         "skillButtonIcon": "",
         "skillUniqueId": 85104
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "At battle start, grants 2 Web Cluster.<br><br>On enemy in break attacked by self:<br>Increases all allies' battle skill DMG dealt by 30% (1 turn).",
+        "level": 1,
+        "name": "Ascension Effects",
+        "passiveSkillMstId": 8510501,
+        "skillButtonIcon": "",
+        "skillUniqueId": 85105
     },
     {
         "conditionElement": 0,
@@ -54118,5 +54848,105 @@
         "passiveSkillMstId": 9508010,
         "skillButtonIcon": "battle_icon_supportpassive_buff",
         "skillUniqueId": 95080
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 2,
+        "description": "Equipped to Breaker:<br>Increases SPD by 10% and break bonus by 10%.<br>On own battle skill use, increases break gauge depletion (2 turns).",
+        "level": 1,
+        "name": "Haste Technique",
+        "passiveSkillMstId": 9508101,
+        "skillButtonIcon": "battle_icon_supportpassive_buff",
+        "skillUniqueId": 95081
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 2,
+        "description": "Equipped to Breaker:<br>Increases SPD by 11% and break bonus by 11%.<br>On own battle skill use, increases break gauge depletion (2 turns).",
+        "level": 2,
+        "name": "Haste Technique",
+        "passiveSkillMstId": 9508102,
+        "skillButtonIcon": "battle_icon_supportpassive_buff",
+        "skillUniqueId": 95081
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 2,
+        "description": "Equipped to Breaker:<br>Increases SPD by 12% and break bonus by 12%.<br>On own battle skill use, increases break gauge depletion (2 turns).",
+        "level": 3,
+        "name": "Haste Technique",
+        "passiveSkillMstId": 9508103,
+        "skillButtonIcon": "battle_icon_supportpassive_buff",
+        "skillUniqueId": 95081
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 2,
+        "description": "Equipped to Breaker:<br>Increases SPD by 13% and break bonus by 14%.<br>On own battle skill use, increases break gauge depletion (2 turns).",
+        "level": 4,
+        "name": "Haste Technique",
+        "passiveSkillMstId": 9508104,
+        "skillButtonIcon": "battle_icon_supportpassive_buff",
+        "skillUniqueId": 95081
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 2,
+        "description": "Equipped to Breaker:<br>Increases SPD by 14% and break bonus by 16%.<br>On own battle skill use, increases break gauge depletion (2 turns).",
+        "level": 5,
+        "name": "Haste Technique",
+        "passiveSkillMstId": 9508105,
+        "skillButtonIcon": "battle_icon_supportpassive_buff",
+        "skillUniqueId": 95081
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 2,
+        "description": "Equipped to Breaker:<br>Increases SPD by 15% and break bonus by 17%.<br>On own battle skill use, increases break gauge depletion (2 turns).",
+        "level": 6,
+        "name": "Haste Technique",
+        "passiveSkillMstId": 9508106,
+        "skillButtonIcon": "battle_icon_supportpassive_buff",
+        "skillUniqueId": 95081
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 2,
+        "description": "Equipped to Breaker:<br>Increases SPD by 16% and break bonus by 19%.<br>On own battle skill use, increases break gauge depletion (2 turns).",
+        "level": 7,
+        "name": "Haste Technique",
+        "passiveSkillMstId": 9508107,
+        "skillButtonIcon": "battle_icon_supportpassive_buff",
+        "skillUniqueId": 95081
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 2,
+        "description": "Equipped to Breaker:<br>Increases SPD by 17% and break bonus by 21%.<br>On own battle skill use, increases break gauge depletion (2 turns).",
+        "level": 8,
+        "name": "Haste Technique",
+        "passiveSkillMstId": 9508108,
+        "skillButtonIcon": "battle_icon_supportpassive_buff",
+        "skillUniqueId": 95081
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 2,
+        "description": "Equipped to Breaker:<br>Increases SPD by 18% and break bonus by 23%.<br>On own battle skill use, increases break gauge depletion (2 turns).",
+        "level": 9,
+        "name": "Haste Technique",
+        "passiveSkillMstId": 9508109,
+        "skillButtonIcon": "battle_icon_supportpassive_buff",
+        "skillUniqueId": 95081
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 2,
+        "description": "Equipped to Breaker:<br>Increases SPD by 20% and break bonus by 25%.<br>On own battle skill use, increases break gauge depletion (2 turns).",
+        "level": 10,
+        "name": "Haste Technique",
+        "passiveSkillMstId": 9508110,
+        "skillButtonIcon": "battle_icon_supportpassive_buff",
+        "skillUniqueId": 95081
     }
 ]

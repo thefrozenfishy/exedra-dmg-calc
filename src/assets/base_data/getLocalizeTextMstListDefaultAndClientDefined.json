@@ -780,6 +780,10 @@
         "textMstId": "0a80e88c6f654b8b2dc02a752fdf8e9a1"
     },
     {
+        "text": "Increase Selection",
+        "textMstId": "0a92579bf1ea5c82cf9f139b7b9b8bba1"
+    },
+    {
         "text": "Wraith",
         "textMstId": "0a9414639566235943d942da759a8fc51"
     },
@@ -1814,6 +1818,10 @@
     {
         "text": "Clear Time",
         "textMstId": "1844ea47c8dce33d32586de0e01421791"
+    },
+    {
+        "text": "{0}\n\n{1}",
+        "textMstId": "184595ddfbda92664bf4ab0e58bd577d1"
     },
     {
         "text": "The season has now ended.",
@@ -3338,6 +3346,10 @@
     {
         "text": "Rika Ayano",
         "textMstId": "2bc8c8548753ef275f25a34c026973fa1"
+    },
+    {
+        "text": "There are Google Play Games rewards available.\n* It may take time for rewards to be reflected in your account.\n* Rewards will be sent to your Gift Box.",
+        "textMstId": "2bd5509ba1ae00201e6453e454eba0d01"
     },
     {
         "text": "Heartphial Lvl.",
@@ -7200,6 +7212,10 @@
         "textMstId": "5a0f27b85dd5365fa174abf2072be06c1"
     },
     {
+        "text": "The next part of the story is available.",
+        "textMstId": "5a1b79c9976086ca1f538068b79a9f4a1"
+    },
+    {
         "text": "Sample Text Sample\nSample Text Sample",
         "textMstId": "5a35bb2d702ae7853657e98d37128f2c1"
     },
@@ -8790,6 +8806,10 @@
     {
         "text": "Konomi",
         "textMstId": "6e464cda6d8905dac75127a5515759a61"
+    },
+    {
+        "text": "Move Character Forward",
+        "textMstId": "6e4b6f13a399eacea875c2defc6d5f881"
     },
     {
         "text": "No support Kioku to equip.",
@@ -12494,6 +12514,10 @@
     {
         "text": "Remove Permalock Confirmation",
         "textMstId": "9cdacee8f522c1f75d293b6bcf2d7dae1"
+    },
+    {
+        "text": "Decrease Selection",
+        "textMstId": "9ceec48aa06c796a76810422cc019df31"
     },
     {
         "text": "Purchase Failed",
@@ -16476,6 +16500,10 @@
         "textMstId": "ce16fe736e8afd836f0f598eeee3f5df1"
     },
     {
+        "text": "Move Character Backward",
+        "textMstId": "ce59cc6141bb07532db5d2e74086ee211"
+    },
+    {
         "text": "Enemy Survivors",
         "textMstId": "ce68041f39506ff4744e950ef57c85811"
     },
@@ -16614,6 +16642,10 @@
     {
         "text": "Battles",
         "textMstId": "d01596dcc2ce6ada6a9ee3cc3a348ee51"
+    },
+    {
+        "text": "Google Play Games Rewards",
+        "textMstId": "d01960d8eb0bcedfab6f95d595e06e4e1"
     },
     {
         "text": "16:9",
@@ -17066,6 +17098,10 @@
     {
         "text": "Permanent",
         "textMstId": "d6d1f22d04588ec27a4e78ce5035afd31"
+    },
+    {
+        "text": "The Tower event has now ended.\nReturning to the Home screen.",
+        "textMstId": "d6e8b4f19963d6dfab97e5c9f35ae4911"
     },
     {
         "text": "Unlock Requirements:",
@@ -20378,6 +20414,10 @@
     {
         "text": "Completion Reward",
         "textMstId": "fe88c3da01144403d8a6a2fb9c4df6f71"
+    },
+    {
+        "text": "You cannot use the camera feature in the Google Play Games version for PC.",
+        "textMstId": "fe92bc3e701e2b9d0bc6d8c613ba221d1"
     },
     {
         "text": "5s",

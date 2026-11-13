@@ -1922,5 +1922,31 @@
         "stageThumbnailName": "bg_3d_639_00_00_002",
         "unlockId": 0,
         "unlockType": 1
+    },
+    {
+        "backgroundResourceName": "bg_3d_662_00_01_001",
+        "dioramaBackgroundMstId": 1110211,
+        "enemyType": 1,
+        "fieldSeriesMstId": 66301,
+        "releaseTime": "2026-11-13T12:00:00+09:00",
+        "seriesId": 11,
+        "sortOrder": 1,
+        "stageName": "Lunar Excavator Witch - Floor 1",
+        "stageThumbnailName": "bg_3d_662_00_01_001",
+        "unlockId": 0,
+        "unlockType": 1
+    },
+    {
+        "backgroundResourceName": "bg_3d_662_00_00_001",
+        "dioramaBackgroundMstId": 1110219,
+        "enemyType": 2,
+        "fieldSeriesMstId": 66301,
+        "releaseTime": "2026-11-13T12:00:00+09:00",
+        "seriesId": 11,
+        "sortOrder": 2,
+        "stageName": "Lunar Excavator Witch - Boss Floor",
+        "stageThumbnailName": "bg_3d_662_00_00_001",
+        "unlockId": 0,
+        "unlockType": 1
     }
 ]

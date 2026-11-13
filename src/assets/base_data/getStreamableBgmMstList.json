@@ -488,5 +488,20 @@
         "cueName": "bgm_battle_26halloween_majo",
         "cueSheetName": "bgm_battle_26halloween",
         "streamableBgmMstId": 98
+    },
+    {
+        "cueName": "bgm_sorana_115501_theme",
+        "cueSheetName": "bgm_sorana",
+        "streamableBgmMstId": 99
+    },
+    {
+        "cueName": "bgm_battle_sorana_majo_03",
+        "cueSheetName": "bgm_battle_sorana",
+        "streamableBgmMstId": 100
+    },
+    {
+        "cueName": "bgm_sorana_115601_theme",
+        "cueSheetName": "bgm_sorana",
+        "streamableBgmMstId": 101
     }
 ]

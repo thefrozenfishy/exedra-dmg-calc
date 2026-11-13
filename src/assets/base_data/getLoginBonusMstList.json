@@ -862,5 +862,29 @@
         "sortOrder": 1030,
         "startTime": "2026-10-30T12:00:00+09:00",
         "title": "Halloween Campaign Login Bonus"
+    },
+    {
+        "appealDescription": "to get <color=#ecd19c>Prism Orbs and Elemental Orbs</color>!",
+        "appealIconObjectId": 121003,
+        "appealIconObjectReceiveType": 5,
+        "conditionDescription": "Log in",
+        "cycleType": 2,
+        "endTime": "2026-12-18T11:59:59+09:00",
+        "loginBonusMstId": 73,
+        "sortOrder": 1033,
+        "startTime": "2026-11-13T12:00:00+09:00",
+        "title": "Sorana Magica Chapter 2 Release Celebration Login Bonus"
+    },
+    {
+        "appealDescription": "Get a <color=#ecd19c>total of 1,500 Magica Stones</color>!",
+        "appealIconObjectId": 0,
+        "appealIconObjectReceiveType": 2,
+        "conditionDescription": "Log in for 6 days",
+        "cycleType": 2,
+        "endTime": "2026-12-03T04:59:59+09:00",
+        "loginBonusMstId": 74,
+        "sortOrder": 1034,
+        "startTime": "2026-11-24T05:00:00+09:00",
+        "title": "Christmas Season of Thanks Countdown Login Bonus"
     }
 ]

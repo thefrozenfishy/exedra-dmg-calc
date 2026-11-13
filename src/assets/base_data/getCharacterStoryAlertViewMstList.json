@@ -6,5 +6,9 @@
     {
         "alertText": "We recommend you play the story above to the end before playing this,\nas it contains partial spoilers for \"Sorana Magica: Sorana Nagiboshi's Memory - Earth.\"\nWould you like to proceed?",
         "characterStoryAlertViewMstId": 2
+    },
+    {
+        "alertText": "We recommend you play the story above to the end before playing this,\nas it contains partial spoilers for \"Sorana Magica: Sorana Nagiboshi's Memory - Luna.\"\nWould you like to proceed?",
+        "characterStoryAlertViewMstId": 3
     }
 ]

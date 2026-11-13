@@ -4163,5 +4163,40 @@
         "styleLimitBreakEffectMstId2": 1002,
         "styleLimitBreakMstId": 1154010105,
         "styleMstId": 11540101
+    },
+    {
+        "limitBreakCount": 1,
+        "styleLimitBreakEffectMstId1": 1001,
+        "styleLimitBreakEffectMstId2": 5003,
+        "styleLimitBreakMstId": 1155010101,
+        "styleMstId": 11550101
+    },
+    {
+        "limitBreakCount": 2,
+        "styleLimitBreakEffectMstId1": 1001,
+        "styleLimitBreakEffectMstId2": 5103,
+        "styleLimitBreakMstId": 1155010102,
+        "styleMstId": 11550101
+    },
+    {
+        "limitBreakCount": 3,
+        "styleLimitBreakEffectMstId1": 1001,
+        "styleLimitBreakEffectMstId2": 1002,
+        "styleLimitBreakMstId": 1155010103,
+        "styleMstId": 11550101
+    },
+    {
+        "limitBreakCount": 4,
+        "styleLimitBreakEffectMstId1": 1001,
+        "styleLimitBreakEffectMstId2": 5004,
+        "styleLimitBreakMstId": 1155010104,
+        "styleMstId": 11550101
+    },
+    {
+        "limitBreakCount": 5,
+        "styleLimitBreakEffectMstId1": 1001,
+        "styleLimitBreakEffectMstId2": 1002,
+        "styleLimitBreakMstId": 1155010105,
+        "styleMstId": 11550101
     }
 ]

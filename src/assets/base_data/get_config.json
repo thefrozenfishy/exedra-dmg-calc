@@ -3766,6 +3766,7 @@
             ],
             "maxSkipNumForItemRecoveryInADay": 3,
             "maxTowerSkipNumForItem": 99,
+            "renewalSeasonStartTime": "2026-11-19T12:00:00+09:00",
             "resetTowerSkipNum": 3,
             "saveFloor": [
                 10,
@@ -4059,6 +4060,14 @@
                     "releaseStageName": "Crépuscule de la Reine",
                     "releaseTalkFlag": 189,
                     "talkId": 70000323
+                },
+                {
+                    "fieldStageMstId": 663011,
+                    "isForceIndividualDisplay": false,
+                    "releaseFlag": 198,
+                    "releaseStageName": "Sorana Nagiboshi's Memory - Luna",
+                    "releaseTalkFlag": 199,
+                    "talkId": 70000350
                 }
             ],
             "tutorialBattleFixedAllyInfoList": [

@@ -5838,5 +5838,53 @@
         "maxHp": 9720,
         "styleLevelUpMstId": 11540101300,
         "styleMstId": 11540101
+    },
+    {
+        "level": 120,
+        "maxAtk": 1667,
+        "maxDef": 2002,
+        "maxHp": 6059,
+        "styleLevelUpMstId": 11550101120,
+        "styleMstId": 11550101
+    },
+    {
+        "level": 140,
+        "maxAtk": 1852,
+        "maxDef": 2224,
+        "maxHp": 6508,
+        "styleLevelUpMstId": 11550101140,
+        "styleMstId": 11550101
+    },
+    {
+        "level": 160,
+        "maxAtk": 2037,
+        "maxDef": 2446,
+        "maxHp": 6956,
+        "styleLevelUpMstId": 11550101160,
+        "styleMstId": 11550101
+    },
+    {
+        "level": 180,
+        "maxAtk": 2222,
+        "maxDef": 2669,
+        "maxHp": 7405,
+        "styleLevelUpMstId": 11550101180,
+        "styleMstId": 11550101
+    },
+    {
+        "level": 200,
+        "maxAtk": 2408,
+        "maxDef": 2891,
+        "maxHp": 7854,
+        "styleLevelUpMstId": 11550101200,
+        "styleMstId": 11550101
+    },
+    {
+        "level": 300,
+        "maxAtk": 3334,
+        "maxDef": 4003,
+        "maxHp": 10098,
+        "styleLevelUpMstId": 11550101300,
+        "styleMstId": 11550101
     }
 ]

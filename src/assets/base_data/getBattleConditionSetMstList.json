@@ -16740,6 +16740,11 @@
         "description": "自身の魔力10以上+水着やちよ専用バフが付与されているとき"
     },
     {
+        "battleConditionMstIdCsv": "2050",
+        "battleConditionSetMstId": 3381,
+        "description": "行動者がブレイカー以外のとき"
+    },
+    {
         "battleConditionMstIdCsv": "401,1507",
         "battleConditionSetMstId": 3383,
         "description": "トークンが10のとき AND 自身がカウントダウン発動中のとき"
@@ -19895,6 +19900,21 @@
         "description": "敵全体のデバフ数が20以上"
     },
     {
+        "battleConditionMstIdCsv": "2342",
+        "battleConditionSetMstId": 4026,
+        "description": "リリー専用バフが付与されているとき"
+    },
+    {
+        "battleConditionMstIdCsv": "3,6,396",
+        "battleConditionSetMstId": 4027,
+        "description": "魔力4+自身+戦闘スキルを発動"
+    },
+    {
+        "battleConditionMstIdCsv": "3,7,2342",
+        "battleConditionSetMstId": 4028,
+        "description": "自身+必殺技を発動+リリー専用バフが付与されているとき"
+    },
+    {
         "battleConditionMstIdCsv": "2,2072",
         "battleConditionSetMstId": 4029,
         "description": "行動者は敵 + 行動者のHPが30％未満"
@@ -19925,6 +19945,96 @@
         "description": "行動者は敵AND 行動タイプがスキル攻撃AND 自軍が3000以上のダメージを受けた"
     },
     {
+        "battleConditionMstIdCsv": "3,64",
+        "battleConditionSetMstId": 4035,
+        "description": "行動者は自分AND 5ターンごとに（ターン1から）"
+    },
+    {
+        "battleConditionMstIdCsv": "3,57",
+        "battleConditionSetMstId": 4036,
+        "description": "行動者は自分AND 3ターンごとに（ターン1から）"
+    },
+    {
+        "battleConditionMstIdCsv": "976,1,655,5",
+        "battleConditionSetMstId": 4037,
+        "description": "無属性の仲間がダメージを与えたとき(通常攻撃発動したとき)"
+    },
+    {
+        "battleConditionMstIdCsv": "976,1,655,6",
+        "battleConditionSetMstId": 4038,
+        "description": "無属性の仲間がダメージを与えたとき(戦闘スキル発動したとき)"
+    },
+    {
+        "battleConditionMstIdCsv": "976,1,655,7",
+        "battleConditionSetMstId": 4039,
+        "description": "無属性の仲間がダメージを与えたとき(必殺技発動したとき)"
+    },
+    {
+        "battleConditionMstIdCsv": "2342,3,1603",
+        "battleConditionSetMstId": 4040,
+        "description": "リリー専用バフが付与されているとき+行動者は自分+1以上のダメージを与えたとき"
+    },
+    {
+        "battleConditionMstIdCsv": "556,2352",
+        "battleConditionSetMstId": 4049,
+        "description": "行動者は敵+行動者が回復した"
+    },
+    {
+        "battleConditionMstIdCsv": "871,847",
+        "battleConditionSetMstId": 4050,
+        "description": "トークンが25以上30未満のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1,6,2353",
+        "battleConditionSetMstId": 4052,
+        "description": "行動者は味方+戦闘スキルを発動+自分にバフ効果が付与されたとき"
+    },
+    {
+        "battleConditionMstIdCsv": "420,1807",
+        "battleConditionSetMstId": 4053,
+        "description": "自身がブレイク状態ではない+自身のブレイク回数が0回のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "420,1808",
+        "battleConditionSetMstId": 4054,
+        "description": "自身がブレイク状態ではない+自身のブレイク回数が1回のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "420,1809",
+        "battleConditionSetMstId": 4055,
+        "description": "自身がブレイク状態ではない+自身のブレイク回数が2回のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "420,1810",
+        "battleConditionSetMstId": 4056,
+        "description": "自身がブレイク状態ではない+自身のブレイク回数が3回のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "420,1811",
+        "battleConditionSetMstId": 4057,
+        "description": "自身がブレイク状態ではない+自身のブレイク回数が4回のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "420,2094",
+        "battleConditionSetMstId": 4058,
+        "description": "自身がブレイク状態ではない+自身のブレイク回数が5回以上のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "420,286,350",
+        "battleConditionSetMstId": 4059,
+        "description": "自身がブレイク状態ではなく、行動可能な状態で、味方が4体未満の場合（自分を除く）"
+    },
+    {
+        "battleConditionMstIdCsv": "870,877",
+        "battleConditionSetMstId": 4061,
+        "description": "トークンが10以上20未満のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "871,878",
+        "battleConditionSetMstId": 4062,
+        "description": "トークンが20以上30未満のとき"
+    },
+    {
         "battleConditionMstIdCsv": "1513,1505,3,5",
         "battleConditionSetMstId": 4072,
         "description": "自身がプレイヤー側のユニットのとき、結界対策発揮フェーズのとき"
@@ -19943,5 +20053,55 @@
         "battleConditionMstIdCsv": "1513,1505,3,1462",
         "battleConditionSetMstId": 4075,
         "description": "自身がプレイヤー側のユニットのとき、結界対策発揮フェーズのとき"
+    },
+    {
+        "battleConditionMstIdCsv": "2358",
+        "battleConditionSetMstId": 4076,
+        "description": "自分のブレイク補正倍率は300%未満"
+    },
+    {
+        "battleConditionMstIdCsv": "2,5,420",
+        "battleConditionSetMstId": 4077,
+        "description": "行動者は敵、行動タイプは通常攻撃、自身がブレイク状態ではない場合"
+    },
+    {
+        "battleConditionMstIdCsv": "2,6,420",
+        "battleConditionSetMstId": 4078,
+        "description": "行動者は敵、行動タイプはスキル攻撃、自身がブレイク状態ではない場合"
+    },
+    {
+        "battleConditionMstIdCsv": "1107,2165",
+        "battleConditionSetMstId": 4085,
+        "description": "トークンが30以上40未満のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "973,7,420",
+        "battleConditionSetMstId": 4087,
+        "description": "行動者は木属性、行動タイプは必殺技、自身がブレイク状態ではない場合"
+    },
+    {
+        "battleConditionMstIdCsv": "974,7,420",
+        "battleConditionSetMstId": 4088,
+        "description": "行動者は光属性、行動タイプは必殺技、自身がブレイク状態ではない場合"
+    },
+    {
+        "battleConditionMstIdCsv": "975,7,420",
+        "battleConditionSetMstId": 4089,
+        "description": "行動者は闇属性、行動タイプは必殺技、自身がブレイク状態ではない場合"
+    },
+    {
+        "battleConditionMstIdCsv": "306,2342",
+        "battleConditionSetMstId": 4090,
+        "description": "行動タイプが追撃AND リリー専用バフが付与されているとき"
+    },
+    {
+        "battleConditionMstIdCsv": "2360",
+        "battleConditionSetMstId": 4098,
+        "description": "自分のキャラクターが「リリー・キャンディー」"
+    },
+    {
+        "battleConditionMstIdCsv": "3,1774",
+        "battleConditionSetMstId": 4099,
+        "description": "自分は行動者+ブレイク中、且つ攻撃を受けたユニットが1体以上のとき"
     }
 ]

@@ -1068,5 +1068,15 @@
         "sortOrder": 115401,
         "style3dCharacterMstId": 115401,
         "type": 1
+    },
+    {
+        "homeMotionResourceName": "chara_11550101_home",
+        "isDefault": true,
+        "isExistVoice": true,
+        "name": "Lilly Candy - Magical Girl",
+        "resourceName": "chara_115501_battle_unit",
+        "sortOrder": 115501,
+        "style3dCharacterMstId": 115501,
+        "type": 1
     }
 ]

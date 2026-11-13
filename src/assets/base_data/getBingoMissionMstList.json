@@ -25,13 +25,28 @@
         "sortOrder": 100
     },
     {
-        "bingoMissionMstId": 12,
-        "firstMissionTitleMstId": 2036,
-        "sortOrder": 100
-    },
-    {
         "bingoMissionMstId": 13,
         "firstMissionTitleMstId": 2038,
         "sortOrder": 100
+    },
+    {
+        "bingoMissionMstId": 14,
+        "firstMissionTitleMstId": 2040,
+        "sortOrder": 100
+    },
+    {
+        "bingoMissionMstId": 15,
+        "firstMissionTitleMstId": 2042,
+        "sortOrder": 100
+    },
+    {
+        "bingoMissionMstId": 16,
+        "firstMissionTitleMstId": 2044,
+        "sortOrder": 110
+    },
+    {
+        "bingoMissionMstId": 17,
+        "firstMissionTitleMstId": 2046,
+        "sortOrder": 110
     }
 ]

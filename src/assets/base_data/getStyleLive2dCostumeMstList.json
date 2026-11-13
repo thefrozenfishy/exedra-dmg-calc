@@ -2842,5 +2842,53 @@
         "sortOrder": 115403,
         "styleLive2dCostumeMstId": 115403,
         "type": 1
+    },
+    {
+        "cheekParam": 0,
+        "defaultOption": "",
+        "isDefault": false,
+        "isExistVoice": true,
+        "name": "Sorana Nagiboshi - Spacesuit",
+        "releaseTime": "2026-11-13T12:00:00+09:00",
+        "resourceName": "413031",
+        "sortOrder": 115404,
+        "styleLive2dCostumeMstId": 115404,
+        "type": 1
+    },
+    {
+        "cheekParam": 0,
+        "defaultOption": "",
+        "isDefault": true,
+        "isExistVoice": true,
+        "name": "Lilly Candy - Magical Girl",
+        "releaseTime": "2026-11-16T12:00:00+09:00",
+        "resourceName": "413130",
+        "sortOrder": 115501,
+        "styleLive2dCostumeMstId": 115501,
+        "type": 1
+    },
+    {
+        "cheekParam": 0,
+        "defaultOption": "",
+        "isDefault": false,
+        "isExistVoice": true,
+        "name": "Lilly Candy - Casual",
+        "releaseTime": "2026-11-16T12:00:00+09:00",
+        "resourceName": "413131",
+        "sortOrder": 115502,
+        "styleLive2dCostumeMstId": 115502,
+        "type": 1
+    },
+    {
+        "cheekParam": 0,
+        "defaultOption": "",
+        "isDefault": false,
+        "isExistVoice": true,
+        "name": "Lilly Candy - Spacesuit",
+        "releaseTime": "2026-11-16T12:00:00+09:00",
+        "resourceName": "413132",
+        "sortOrder": 115503,
+        "styleLive2dCostumeMstId": 115503,
+        "type": 1
     }
 ]

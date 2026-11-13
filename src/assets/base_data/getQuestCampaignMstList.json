@@ -727,5 +727,32 @@
         "questCampaignMstId": 1021,
         "questMapMstId": 43,
         "startTime": "2026-09-28T05:00:00+09:00"
+    },
+    {
+        "campaignType": 1,
+        "campaignValue": 50,
+        "description": "Half QP!",
+        "endTime": "2026-12-18T11:59:59+09:00",
+        "questCampaignMstId": 1022,
+        "questMapMstId": 41,
+        "startTime": "2026-11-20T05:00:00+09:00"
+    },
+    {
+        "campaignType": 1,
+        "campaignValue": 50,
+        "description": "Half QP!",
+        "endTime": "2026-12-18T11:59:59+09:00",
+        "questCampaignMstId": 1023,
+        "questMapMstId": 42,
+        "startTime": "2026-11-20T05:00:00+09:00"
+    },
+    {
+        "campaignType": 1,
+        "campaignValue": 50,
+        "description": "Half QP!",
+        "endTime": "2026-12-18T11:59:59+09:00",
+        "questCampaignMstId": 1024,
+        "questMapMstId": 43,
+        "startTime": "2026-11-20T05:00:00+09:00"
     }
 ]

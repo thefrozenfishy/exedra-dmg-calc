@@ -7542,5 +7542,125 @@
         "filmNo": 0,
         "prevScenarioMstId": 0,
         "questStageMstId": 983215
+    },
+    {
+        "consumedItemMstId": 0,
+        "consumedNum": 0,
+        "eventItemNum": 100,
+        "filmNo": 0,
+        "prevScenarioMstId": 0,
+        "questStageMstId": 983401
+    },
+    {
+        "consumedItemMstId": 0,
+        "consumedNum": 0,
+        "eventItemNum": 100,
+        "filmNo": 0,
+        "prevScenarioMstId": 0,
+        "questStageMstId": 983402
+    },
+    {
+        "consumedItemMstId": 0,
+        "consumedNum": 0,
+        "eventItemNum": 100,
+        "filmNo": 0,
+        "prevScenarioMstId": 0,
+        "questStageMstId": 983403
+    },
+    {
+        "consumedItemMstId": 0,
+        "consumedNum": 0,
+        "eventItemNum": 100,
+        "filmNo": 0,
+        "prevScenarioMstId": 0,
+        "questStageMstId": 983404
+    },
+    {
+        "consumedItemMstId": 0,
+        "consumedNum": 0,
+        "eventItemNum": 200,
+        "filmNo": 0,
+        "prevScenarioMstId": 0,
+        "questStageMstId": 983405
+    },
+    {
+        "consumedItemMstId": 0,
+        "consumedNum": 0,
+        "eventItemNum": 200,
+        "filmNo": 0,
+        "prevScenarioMstId": 0,
+        "questStageMstId": 983406
+    },
+    {
+        "consumedItemMstId": 0,
+        "consumedNum": 0,
+        "eventItemNum": 200,
+        "filmNo": 0,
+        "prevScenarioMstId": 0,
+        "questStageMstId": 983407
+    },
+    {
+        "consumedItemMstId": 0,
+        "consumedNum": 0,
+        "eventItemNum": 300,
+        "filmNo": 0,
+        "prevScenarioMstId": 0,
+        "questStageMstId": 983408
+    },
+    {
+        "consumedItemMstId": 0,
+        "consumedNum": 0,
+        "eventItemNum": 400,
+        "filmNo": 0,
+        "prevScenarioMstId": 0,
+        "questStageMstId": 983409
+    },
+    {
+        "consumedItemMstId": 0,
+        "consumedNum": 0,
+        "eventItemNum": 500,
+        "filmNo": 0,
+        "prevScenarioMstId": 0,
+        "questStageMstId": 983410
+    },
+    {
+        "consumedItemMstId": 0,
+        "consumedNum": 0,
+        "eventItemNum": 600,
+        "filmNo": 0,
+        "prevScenarioMstId": 0,
+        "questStageMstId": 983411
+    },
+    {
+        "consumedItemMstId": 0,
+        "consumedNum": 0,
+        "eventItemNum": 700,
+        "filmNo": 0,
+        "prevScenarioMstId": 0,
+        "questStageMstId": 983412
+    },
+    {
+        "consumedItemMstId": 0,
+        "consumedNum": 0,
+        "eventItemNum": 800,
+        "filmNo": 0,
+        "prevScenarioMstId": 0,
+        "questStageMstId": 983413
+    },
+    {
+        "consumedItemMstId": 0,
+        "consumedNum": 0,
+        "eventItemNum": 900,
+        "filmNo": 0,
+        "prevScenarioMstId": 0,
+        "questStageMstId": 983414
+    },
+    {
+        "consumedItemMstId": 0,
+        "consumedNum": 0,
+        "eventItemNum": 1000,
+        "filmNo": 0,
+        "prevScenarioMstId": 0,
+        "questStageMstId": 983415
     }
 ]

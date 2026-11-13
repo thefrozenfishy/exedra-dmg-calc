@@ -822,5 +822,13 @@
         "sortOrder": 0,
         "styleFigureMstId": 115401,
         "voiceCueSheetName": "cv_115401_{0}"
+    },
+    {
+        "characterMstId": 1155,
+        "iconName": "115501",
+        "modelName": "chara_115501_battle_unit",
+        "sortOrder": 0,
+        "styleFigureMstId": 115501,
+        "voiceCueSheetName": "cv_115501_{0}"
     }
 ]

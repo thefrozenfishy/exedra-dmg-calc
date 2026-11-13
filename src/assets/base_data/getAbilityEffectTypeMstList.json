@@ -2992,6 +2992,50 @@
         "targetParams": ""
     },
     {
+        "abilityEffectTypeMstId": 277,
+        "category": 3,
+        "displayType": 2,
+        "effectType": "UNIQUE_ELEMENT_DRIVE",
+        "iconName": "",
+        "name": "Drive",
+        "paramEffectType": 0,
+        "stateFlipName": "Drive",
+        "targetParams": ""
+    },
+    {
+        "abilityEffectTypeMstId": 278,
+        "category": 2,
+        "displayType": 0,
+        "effectType": "DRIVE_UP_BREAK_POINT_DMG_RATIO",
+        "iconName": "",
+        "name": "",
+        "paramEffectType": 0,
+        "stateFlipName": "",
+        "targetParams": ""
+    },
+    {
+        "abilityEffectTypeMstId": 279,
+        "category": 2,
+        "displayType": 0,
+        "effectType": "DRIVE_UP_BREAK_POINT_DMG_FIXED",
+        "iconName": "",
+        "name": "",
+        "paramEffectType": 0,
+        "stateFlipName": "",
+        "targetParams": ""
+    },
+    {
+        "abilityEffectTypeMstId": 280,
+        "category": 3,
+        "displayType": 0,
+        "effectType": "OVER_BREAK_DAMAGE_RECEIVE_RATE_DRIVE",
+        "iconName": "",
+        "name": "",
+        "paramEffectType": 0,
+        "stateFlipName": "",
+        "targetParams": ""
+    },
+    {
         "abilityEffectTypeMstId": 1001,
         "category": 2,
         "displayType": 1,

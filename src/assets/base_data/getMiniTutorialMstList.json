@@ -181,7 +181,7 @@
     },
     {
         "advMstId": 0,
-        "description": "The Tower is a limited-time event where you progress through Mirror Layers. Clear each layer to gain rewards, which get better the further you advance.",
+        "description": "The Tower is a mode where you progress through Mirror Layers.",
         "miniTutorialMstId": 2701,
         "miniTutorialNumber": 27,
         "resourceName": "tower_01",
@@ -190,21 +190,21 @@
     },
     {
         "advMstId": 0,
-        "description": "You'll start from Mirror Layer 1 for each event, allowing you to earn first-clear rewards again upon clearing. Boost the power of your Kioku to clear more layers next time around!",
+        "description": "Clear each layer to gain rewards, which get better the further you advance.",
         "miniTutorialMstId": 2702,
         "miniTutorialNumber": 27,
-        "resourceName": "tower_03",
+        "resourceName": "tower_01",
         "sortOrder": 2,
         "title": "Witch Tower"
     },
     {
         "advMstId": 0,
-        "description": "Depending on your clear progress from last time, you can start ascending the Tower with certain mirror layers already cleared.\n",
+        "description": "First-clear rewards can be earned again when a new event is held.\nBoost the power of your Kioku to clear more layers next time around!",
         "miniTutorialMstId": 2703,
         "miniTutorialNumber": 27,
-        "resourceName": "tower_01",
+        "resourceName": "tower_03",
         "sortOrder": 3,
-        "title": "Quick Start"
+        "title": "Witch Tower"
     },
     {
         "advMstId": 0,

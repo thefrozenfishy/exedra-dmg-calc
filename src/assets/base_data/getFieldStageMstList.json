@@ -1,6 +1,7 @@
 [
     {
         "backgroundCardMstId": 4100001,
+        "clearFieldPointMstId": 0,
         "difficulty": 1,
         "fieldSeriesMstId": 60000,
         "fieldStageMstId": 600001,
@@ -13,6 +14,7 @@
     },
     {
         "backgroundCardMstId": 4100001,
+        "clearFieldPointMstId": 0,
         "difficulty": 2,
         "fieldSeriesMstId": 60000,
         "fieldStageMstId": 600002,
@@ -25,6 +27,7 @@
     },
     {
         "backgroundCardMstId": 5100001,
+        "clearFieldPointMstId": 0,
         "difficulty": 3,
         "fieldSeriesMstId": 60000,
         "fieldStageMstId": 600003,
@@ -37,6 +40,7 @@
     },
     {
         "backgroundCardMstId": 4100002,
+        "clearFieldPointMstId": 0,
         "difficulty": 1,
         "fieldSeriesMstId": 60001,
         "fieldStageMstId": 600011,
@@ -49,6 +53,7 @@
     },
     {
         "backgroundCardMstId": 4100002,
+        "clearFieldPointMstId": 0,
         "difficulty": 2,
         "fieldSeriesMstId": 60001,
         "fieldStageMstId": 600012,
@@ -61,6 +66,7 @@
     },
     {
         "backgroundCardMstId": 5100002,
+        "clearFieldPointMstId": 0,
         "difficulty": 3,
         "fieldSeriesMstId": 60001,
         "fieldStageMstId": 600013,
@@ -73,6 +79,7 @@
     },
     {
         "backgroundCardMstId": 4100003,
+        "clearFieldPointMstId": 0,
         "difficulty": 1,
         "fieldSeriesMstId": 60100,
         "fieldStageMstId": 601001,
@@ -85,6 +92,7 @@
     },
     {
         "backgroundCardMstId": 4100003,
+        "clearFieldPointMstId": 0,
         "difficulty": 2,
         "fieldSeriesMstId": 60100,
         "fieldStageMstId": 601002,
@@ -97,6 +105,7 @@
     },
     {
         "backgroundCardMstId": 5100003,
+        "clearFieldPointMstId": 0,
         "difficulty": 3,
         "fieldSeriesMstId": 60100,
         "fieldStageMstId": 601003,
@@ -109,6 +118,7 @@
     },
     {
         "backgroundCardMstId": 4100004,
+        "clearFieldPointMstId": 0,
         "difficulty": 1,
         "fieldSeriesMstId": 60200,
         "fieldStageMstId": 602001,
@@ -121,6 +131,7 @@
     },
     {
         "backgroundCardMstId": 4100004,
+        "clearFieldPointMstId": 0,
         "difficulty": 2,
         "fieldSeriesMstId": 60200,
         "fieldStageMstId": 602002,
@@ -133,6 +144,7 @@
     },
     {
         "backgroundCardMstId": 5100004,
+        "clearFieldPointMstId": 0,
         "difficulty": 3,
         "fieldSeriesMstId": 60200,
         "fieldStageMstId": 602003,
@@ -145,6 +157,7 @@
     },
     {
         "backgroundCardMstId": 4100005,
+        "clearFieldPointMstId": 0,
         "difficulty": 1,
         "fieldSeriesMstId": 60300,
         "fieldStageMstId": 603001,
@@ -157,6 +170,7 @@
     },
     {
         "backgroundCardMstId": 4100005,
+        "clearFieldPointMstId": 0,
         "difficulty": 2,
         "fieldSeriesMstId": 60300,
         "fieldStageMstId": 603002,
@@ -169,6 +183,7 @@
     },
     {
         "backgroundCardMstId": 5100012,
+        "clearFieldPointMstId": 0,
         "difficulty": 3,
         "fieldSeriesMstId": 60300,
         "fieldStageMstId": 603003,
@@ -181,6 +196,7 @@
     },
     {
         "backgroundCardMstId": 4100006,
+        "clearFieldPointMstId": 0,
         "difficulty": 1,
         "fieldSeriesMstId": 60400,
         "fieldStageMstId": 604001,
@@ -193,6 +209,7 @@
     },
     {
         "backgroundCardMstId": 4100006,
+        "clearFieldPointMstId": 0,
         "difficulty": 2,
         "fieldSeriesMstId": 60400,
         "fieldStageMstId": 604002,
@@ -205,6 +222,7 @@
     },
     {
         "backgroundCardMstId": 5100013,
+        "clearFieldPointMstId": 0,
         "difficulty": 3,
         "fieldSeriesMstId": 60400,
         "fieldStageMstId": 604003,
@@ -217,6 +235,7 @@
     },
     {
         "backgroundCardMstId": 4100007,
+        "clearFieldPointMstId": 0,
         "difficulty": 1,
         "fieldSeriesMstId": 60500,
         "fieldStageMstId": 605001,
@@ -229,6 +248,7 @@
     },
     {
         "backgroundCardMstId": 4100007,
+        "clearFieldPointMstId": 0,
         "difficulty": 2,
         "fieldSeriesMstId": 60500,
         "fieldStageMstId": 605002,
@@ -241,6 +261,7 @@
     },
     {
         "backgroundCardMstId": 5100014,
+        "clearFieldPointMstId": 0,
         "difficulty": 3,
         "fieldSeriesMstId": 60500,
         "fieldStageMstId": 605003,
@@ -253,6 +274,7 @@
     },
     {
         "backgroundCardMstId": 4100008,
+        "clearFieldPointMstId": 0,
         "difficulty": 1,
         "fieldSeriesMstId": 60600,
         "fieldStageMstId": 606001,
@@ -265,6 +287,7 @@
     },
     {
         "backgroundCardMstId": 4100008,
+        "clearFieldPointMstId": 0,
         "difficulty": 2,
         "fieldSeriesMstId": 60600,
         "fieldStageMstId": 606002,
@@ -277,6 +300,7 @@
     },
     {
         "backgroundCardMstId": 5100015,
+        "clearFieldPointMstId": 0,
         "difficulty": 3,
         "fieldSeriesMstId": 60600,
         "fieldStageMstId": 606003,
@@ -289,6 +313,7 @@
     },
     {
         "backgroundCardMstId": 4100009,
+        "clearFieldPointMstId": 0,
         "difficulty": 1,
         "fieldSeriesMstId": 60700,
         "fieldStageMstId": 607001,
@@ -301,6 +326,7 @@
     },
     {
         "backgroundCardMstId": 4100009,
+        "clearFieldPointMstId": 0,
         "difficulty": 2,
         "fieldSeriesMstId": 60700,
         "fieldStageMstId": 607002,
@@ -313,6 +339,7 @@
     },
     {
         "backgroundCardMstId": 5100016,
+        "clearFieldPointMstId": 0,
         "difficulty": 3,
         "fieldSeriesMstId": 60700,
         "fieldStageMstId": 607003,
@@ -325,6 +352,7 @@
     },
     {
         "backgroundCardMstId": 4100010,
+        "clearFieldPointMstId": 0,
         "difficulty": 1,
         "fieldSeriesMstId": 60800,
         "fieldStageMstId": 608001,
@@ -337,6 +365,7 @@
     },
     {
         "backgroundCardMstId": 4100010,
+        "clearFieldPointMstId": 0,
         "difficulty": 2,
         "fieldSeriesMstId": 60800,
         "fieldStageMstId": 608002,
@@ -349,6 +378,7 @@
     },
     {
         "backgroundCardMstId": 5100017,
+        "clearFieldPointMstId": 0,
         "difficulty": 3,
         "fieldSeriesMstId": 60800,
         "fieldStageMstId": 608003,
@@ -361,6 +391,7 @@
     },
     {
         "backgroundCardMstId": 4100011,
+        "clearFieldPointMstId": 0,
         "difficulty": 1,
         "fieldSeriesMstId": 60900,
         "fieldStageMstId": 609001,
@@ -373,6 +404,7 @@
     },
     {
         "backgroundCardMstId": 4100011,
+        "clearFieldPointMstId": 0,
         "difficulty": 2,
         "fieldSeriesMstId": 60900,
         "fieldStageMstId": 609002,
@@ -385,6 +417,7 @@
     },
     {
         "backgroundCardMstId": 5100018,
+        "clearFieldPointMstId": 0,
         "difficulty": 3,
         "fieldSeriesMstId": 60900,
         "fieldStageMstId": 609003,
@@ -397,6 +430,7 @@
     },
     {
         "backgroundCardMstId": 4100012,
+        "clearFieldPointMstId": 0,
         "difficulty": 1,
         "fieldSeriesMstId": 61000,
         "fieldStageMstId": 610001,
@@ -409,6 +443,7 @@
     },
     {
         "backgroundCardMstId": 4100012,
+        "clearFieldPointMstId": 0,
         "difficulty": 2,
         "fieldSeriesMstId": 61000,
         "fieldStageMstId": 610002,
@@ -421,6 +456,7 @@
     },
     {
         "backgroundCardMstId": 5100019,
+        "clearFieldPointMstId": 0,
         "difficulty": 3,
         "fieldSeriesMstId": 61000,
         "fieldStageMstId": 610003,
@@ -433,6 +469,7 @@
     },
     {
         "backgroundCardMstId": 4100013,
+        "clearFieldPointMstId": 0,
         "difficulty": 1,
         "fieldSeriesMstId": 61100,
         "fieldStageMstId": 611001,
@@ -445,6 +482,7 @@
     },
     {
         "backgroundCardMstId": 4100013,
+        "clearFieldPointMstId": 0,
         "difficulty": 2,
         "fieldSeriesMstId": 61100,
         "fieldStageMstId": 611002,
@@ -457,6 +495,7 @@
     },
     {
         "backgroundCardMstId": 5100020,
+        "clearFieldPointMstId": 0,
         "difficulty": 3,
         "fieldSeriesMstId": 61100,
         "fieldStageMstId": 611003,
@@ -469,6 +508,7 @@
     },
     {
         "backgroundCardMstId": 4100014,
+        "clearFieldPointMstId": 0,
         "difficulty": 1,
         "fieldSeriesMstId": 61200,
         "fieldStageMstId": 612001,
@@ -481,6 +521,7 @@
     },
     {
         "backgroundCardMstId": 4100014,
+        "clearFieldPointMstId": 0,
         "difficulty": 2,
         "fieldSeriesMstId": 61200,
         "fieldStageMstId": 612002,
@@ -493,6 +534,7 @@
     },
     {
         "backgroundCardMstId": 5100024,
+        "clearFieldPointMstId": 0,
         "difficulty": 3,
         "fieldSeriesMstId": 61200,
         "fieldStageMstId": 612003,
@@ -505,6 +547,7 @@
     },
     {
         "backgroundCardMstId": 4100017,
+        "clearFieldPointMstId": 0,
         "difficulty": 1,
         "fieldSeriesMstId": 61500,
         "fieldStageMstId": 615001,
@@ -517,6 +560,7 @@
     },
     {
         "backgroundCardMstId": 4100017,
+        "clearFieldPointMstId": 0,
         "difficulty": 2,
         "fieldSeriesMstId": 61500,
         "fieldStageMstId": 615002,
@@ -529,6 +573,7 @@
     },
     {
         "backgroundCardMstId": 5100005,
+        "clearFieldPointMstId": 0,
         "difficulty": 3,
         "fieldSeriesMstId": 61500,
         "fieldStageMstId": 615003,
@@ -541,6 +586,7 @@
     },
     {
         "backgroundCardMstId": 4100015,
+        "clearFieldPointMstId": 0,
         "difficulty": 1,
         "fieldSeriesMstId": 61700,
         "fieldStageMstId": 617001,
@@ -553,6 +599,7 @@
     },
     {
         "backgroundCardMstId": 4100015,
+        "clearFieldPointMstId": 0,
         "difficulty": 2,
         "fieldSeriesMstId": 61700,
         "fieldStageMstId": 617002,
@@ -565,6 +612,7 @@
     },
     {
         "backgroundCardMstId": 5100021,
+        "clearFieldPointMstId": 0,
         "difficulty": 3,
         "fieldSeriesMstId": 61700,
         "fieldStageMstId": 617003,
@@ -577,6 +625,7 @@
     },
     {
         "backgroundCardMstId": 4100016,
+        "clearFieldPointMstId": 0,
         "difficulty": 1,
         "fieldSeriesMstId": 61800,
         "fieldStageMstId": 618001,
@@ -589,6 +638,7 @@
     },
     {
         "backgroundCardMstId": 4100016,
+        "clearFieldPointMstId": 0,
         "difficulty": 2,
         "fieldSeriesMstId": 61800,
         "fieldStageMstId": 618002,
@@ -601,6 +651,7 @@
     },
     {
         "backgroundCardMstId": 5100022,
+        "clearFieldPointMstId": 0,
         "difficulty": 3,
         "fieldSeriesMstId": 61800,
         "fieldStageMstId": 618003,
@@ -613,6 +664,7 @@
     },
     {
         "backgroundCardMstId": 4100018,
+        "clearFieldPointMstId": 0,
         "difficulty": 1,
         "fieldSeriesMstId": 61900,
         "fieldStageMstId": 619001,
@@ -625,6 +677,7 @@
     },
     {
         "backgroundCardMstId": 4100018,
+        "clearFieldPointMstId": 0,
         "difficulty": 2,
         "fieldSeriesMstId": 61900,
         "fieldStageMstId": 619002,
@@ -637,6 +690,7 @@
     },
     {
         "backgroundCardMstId": 5100028,
+        "clearFieldPointMstId": 0,
         "difficulty": 3,
         "fieldSeriesMstId": 61900,
         "fieldStageMstId": 619003,
@@ -649,6 +703,7 @@
     },
     {
         "backgroundCardMstId": 4100019,
+        "clearFieldPointMstId": 0,
         "difficulty": 1,
         "fieldSeriesMstId": 62000,
         "fieldStageMstId": 620001,
@@ -661,6 +716,7 @@
     },
     {
         "backgroundCardMstId": 4100019,
+        "clearFieldPointMstId": 0,
         "difficulty": 2,
         "fieldSeriesMstId": 62000,
         "fieldStageMstId": 620002,
@@ -673,6 +729,7 @@
     },
     {
         "backgroundCardMstId": 5100029,
+        "clearFieldPointMstId": 0,
         "difficulty": 3,
         "fieldSeriesMstId": 62000,
         "fieldStageMstId": 620003,
@@ -685,6 +742,7 @@
     },
     {
         "backgroundCardMstId": 4100021,
+        "clearFieldPointMstId": 0,
         "difficulty": 1,
         "fieldSeriesMstId": 62100,
         "fieldStageMstId": 621001,
@@ -697,6 +755,7 @@
     },
     {
         "backgroundCardMstId": 4100021,
+        "clearFieldPointMstId": 0,
         "difficulty": 2,
         "fieldSeriesMstId": 62100,
         "fieldStageMstId": 621002,
@@ -709,6 +768,7 @@
     },
     {
         "backgroundCardMstId": 5100032,
+        "clearFieldPointMstId": 0,
         "difficulty": 3,
         "fieldSeriesMstId": 62100,
         "fieldStageMstId": 621003,
@@ -721,6 +781,7 @@
     },
     {
         "backgroundCardMstId": 4100022,
+        "clearFieldPointMstId": 0,
         "difficulty": 1,
         "fieldSeriesMstId": 62101,
         "fieldStageMstId": 621011,
@@ -733,6 +794,7 @@
     },
     {
         "backgroundCardMstId": 4100022,
+        "clearFieldPointMstId": 0,
         "difficulty": 2,
         "fieldSeriesMstId": 62101,
         "fieldStageMstId": 621012,
@@ -745,6 +807,7 @@
     },
     {
         "backgroundCardMstId": 5100033,
+        "clearFieldPointMstId": 0,
         "difficulty": 3,
         "fieldSeriesMstId": 62101,
         "fieldStageMstId": 621013,
@@ -757,6 +820,7 @@
     },
     {
         "backgroundCardMstId": 4100026,
+        "clearFieldPointMstId": 0,
         "difficulty": 1,
         "fieldSeriesMstId": 62500,
         "fieldStageMstId": 625001,
@@ -769,6 +833,7 @@
     },
     {
         "backgroundCardMstId": 4100026,
+        "clearFieldPointMstId": 0,
         "difficulty": 2,
         "fieldSeriesMstId": 62500,
         "fieldStageMstId": 625002,
@@ -781,6 +846,7 @@
     },
     {
         "backgroundCardMstId": 5100040,
+        "clearFieldPointMstId": 0,
         "difficulty": 3,
         "fieldSeriesMstId": 62500,
         "fieldStageMstId": 625003,
@@ -793,6 +859,7 @@
     },
     {
         "backgroundCardMstId": 4100031,
+        "clearFieldPointMstId": 0,
         "difficulty": 1,
         "fieldSeriesMstId": 63700,
         "fieldStageMstId": 637001,
@@ -805,6 +872,7 @@
     },
     {
         "backgroundCardMstId": 4100031,
+        "clearFieldPointMstId": 0,
         "difficulty": 2,
         "fieldSeriesMstId": 63700,
         "fieldStageMstId": 637002,
@@ -817,6 +885,7 @@
     },
     {
         "backgroundCardMstId": 5100050,
+        "clearFieldPointMstId": 0,
         "difficulty": 3,
         "fieldSeriesMstId": 63700,
         "fieldStageMstId": 637003,
@@ -829,6 +898,7 @@
     },
     {
         "backgroundCardMstId": 4100033,
+        "clearFieldPointMstId": 0,
         "difficulty": 1,
         "fieldSeriesMstId": 63900,
         "fieldStageMstId": 639001,
@@ -841,6 +911,7 @@
     },
     {
         "backgroundCardMstId": 4100033,
+        "clearFieldPointMstId": 0,
         "difficulty": 2,
         "fieldSeriesMstId": 63900,
         "fieldStageMstId": 639002,
@@ -853,6 +924,7 @@
     },
     {
         "backgroundCardMstId": 5100053,
+        "clearFieldPointMstId": 0,
         "difficulty": 3,
         "fieldSeriesMstId": 63900,
         "fieldStageMstId": 639003,
@@ -865,6 +937,7 @@
     },
     {
         "backgroundCardMstId": 4100025,
+        "clearFieldPointMstId": 0,
         "difficulty": 1,
         "fieldSeriesMstId": 64100,
         "fieldStageMstId": 641001,
@@ -877,6 +950,7 @@
     },
     {
         "backgroundCardMstId": 4100025,
+        "clearFieldPointMstId": 0,
         "difficulty": 2,
         "fieldSeriesMstId": 64100,
         "fieldStageMstId": 641002,
@@ -889,6 +963,7 @@
     },
     {
         "backgroundCardMstId": 5100036,
+        "clearFieldPointMstId": 0,
         "difficulty": 3,
         "fieldSeriesMstId": 64100,
         "fieldStageMstId": 641003,
@@ -901,6 +976,7 @@
     },
     {
         "backgroundCardMstId": 4100029,
+        "clearFieldPointMstId": 0,
         "difficulty": 1,
         "fieldSeriesMstId": 65000,
         "fieldStageMstId": 650001,
@@ -913,6 +989,7 @@
     },
     {
         "backgroundCardMstId": 4100029,
+        "clearFieldPointMstId": 0,
         "difficulty": 2,
         "fieldSeriesMstId": 65000,
         "fieldStageMstId": 650002,
@@ -925,6 +1002,7 @@
     },
     {
         "backgroundCardMstId": 5100046,
+        "clearFieldPointMstId": 0,
         "difficulty": 3,
         "fieldSeriesMstId": 65000,
         "fieldStageMstId": 650003,
@@ -937,6 +1015,7 @@
     },
     {
         "backgroundCardMstId": 4100030,
+        "clearFieldPointMstId": 0,
         "difficulty": 1,
         "fieldSeriesMstId": 65200,
         "fieldStageMstId": 652001,
@@ -949,6 +1028,7 @@
     },
     {
         "backgroundCardMstId": 4100030,
+        "clearFieldPointMstId": 0,
         "difficulty": 2,
         "fieldSeriesMstId": 65200,
         "fieldStageMstId": 652002,
@@ -961,6 +1041,7 @@
     },
     {
         "backgroundCardMstId": 5100048,
+        "clearFieldPointMstId": 0,
         "difficulty": 3,
         "fieldSeriesMstId": 65200,
         "fieldStageMstId": 652003,
@@ -973,6 +1054,7 @@
     },
     {
         "backgroundCardMstId": 4100020,
+        "clearFieldPointMstId": 0,
         "difficulty": 1,
         "fieldSeriesMstId": 65500,
         "fieldStageMstId": 655001,
@@ -985,6 +1067,7 @@
     },
     {
         "backgroundCardMstId": 4100020,
+        "clearFieldPointMstId": 0,
         "difficulty": 2,
         "fieldSeriesMstId": 65500,
         "fieldStageMstId": 655002,
@@ -997,6 +1080,7 @@
     },
     {
         "backgroundCardMstId": 5100030,
+        "clearFieldPointMstId": 0,
         "difficulty": 3,
         "fieldSeriesMstId": 65500,
         "fieldStageMstId": 655003,
@@ -1009,6 +1093,7 @@
     },
     {
         "backgroundCardMstId": 4100024,
+        "clearFieldPointMstId": 0,
         "difficulty": 1,
         "fieldSeriesMstId": 65501,
         "fieldStageMstId": 655011,
@@ -1021,6 +1106,7 @@
     },
     {
         "backgroundCardMstId": 4100024,
+        "clearFieldPointMstId": 0,
         "difficulty": 2,
         "fieldSeriesMstId": 65501,
         "fieldStageMstId": 655012,
@@ -1033,6 +1119,7 @@
     },
     {
         "backgroundCardMstId": 5100035,
+        "clearFieldPointMstId": 0,
         "difficulty": 3,
         "fieldSeriesMstId": 65501,
         "fieldStageMstId": 655013,
@@ -1045,6 +1132,7 @@
     },
     {
         "backgroundCardMstId": 4100027,
+        "clearFieldPointMstId": 0,
         "difficulty": 1,
         "fieldSeriesMstId": 65502,
         "fieldStageMstId": 655021,
@@ -1057,6 +1145,7 @@
     },
     {
         "backgroundCardMstId": 4100027,
+        "clearFieldPointMstId": 0,
         "difficulty": 2,
         "fieldSeriesMstId": 65502,
         "fieldStageMstId": 655022,
@@ -1069,6 +1158,7 @@
     },
     {
         "backgroundCardMstId": 5100042,
+        "clearFieldPointMstId": 0,
         "difficulty": 3,
         "fieldSeriesMstId": 65502,
         "fieldStageMstId": 655023,
@@ -1081,6 +1171,7 @@
     },
     {
         "backgroundCardMstId": 4100028,
+        "clearFieldPointMstId": 0,
         "difficulty": 1,
         "fieldSeriesMstId": 65600,
         "fieldStageMstId": 656001,
@@ -1093,6 +1184,7 @@
     },
     {
         "backgroundCardMstId": 4100028,
+        "clearFieldPointMstId": 0,
         "difficulty": 2,
         "fieldSeriesMstId": 65600,
         "fieldStageMstId": 656002,
@@ -1105,6 +1197,7 @@
     },
     {
         "backgroundCardMstId": 5100043,
+        "clearFieldPointMstId": 0,
         "difficulty": 3,
         "fieldSeriesMstId": 65600,
         "fieldStageMstId": 656003,
@@ -1117,6 +1210,7 @@
     },
     {
         "backgroundCardMstId": 4100032,
+        "clearFieldPointMstId": 0,
         "difficulty": 1,
         "fieldSeriesMstId": 65601,
         "fieldStageMstId": 656011,
@@ -1129,6 +1223,7 @@
     },
     {
         "backgroundCardMstId": 4100032,
+        "clearFieldPointMstId": 0,
         "difficulty": 2,
         "fieldSeriesMstId": 65601,
         "fieldStageMstId": 656012,
@@ -1141,6 +1236,7 @@
     },
     {
         "backgroundCardMstId": 5100052,
+        "clearFieldPointMstId": 0,
         "difficulty": 3,
         "fieldSeriesMstId": 65601,
         "fieldStageMstId": 656013,
@@ -1153,6 +1249,7 @@
     },
     {
         "backgroundCardMstId": 4100034,
+        "clearFieldPointMstId": 0,
         "difficulty": 1,
         "fieldSeriesMstId": 66300,
         "fieldStageMstId": 663001,
@@ -1165,6 +1262,7 @@
     },
     {
         "backgroundCardMstId": 4100034,
+        "clearFieldPointMstId": 0,
         "difficulty": 2,
         "fieldSeriesMstId": 66300,
         "fieldStageMstId": 663002,
@@ -1177,6 +1275,7 @@
     },
     {
         "backgroundCardMstId": 5100054,
+        "clearFieldPointMstId": 0,
         "difficulty": 3,
         "fieldSeriesMstId": 66300,
         "fieldStageMstId": 663003,
@@ -1188,7 +1287,47 @@
         "subTitle": "Chapter 1"
     },
     {
+        "backgroundCardMstId": 4100036,
+        "clearFieldPointMstId": 371022,
+        "difficulty": 1,
+        "fieldSeriesMstId": 66301,
+        "fieldStageMstId": 663011,
+        "firstClearRewardGroupId": 102,
+        "name": "Sorana Nagiboshi's Memory - Luna",
+        "prevFieldStageMstId": 663001,
+        "prevFieldStageMstId2": 0,
+        "stageAssetbundleName": "",
+        "subTitle": "Chapter 2"
+    },
+    {
+        "backgroundCardMstId": 4100036,
+        "clearFieldPointMstId": 0,
+        "difficulty": 2,
+        "fieldSeriesMstId": 66301,
+        "fieldStageMstId": 663012,
+        "firstClearRewardGroupId": 102,
+        "name": "Sorana Nagiboshi's Memory - Luna",
+        "prevFieldStageMstId": 663011,
+        "prevFieldStageMstId2": 663002,
+        "stageAssetbundleName": "",
+        "subTitle": "Chapter 2"
+    },
+    {
+        "backgroundCardMstId": 5100056,
+        "clearFieldPointMstId": 0,
+        "difficulty": 3,
+        "fieldSeriesMstId": 66301,
+        "fieldStageMstId": 663013,
+        "firstClearRewardGroupId": 102,
+        "name": "Sorana Nagiboshi's Memory - Luna",
+        "prevFieldStageMstId": 663011,
+        "prevFieldStageMstId2": 663003,
+        "stageAssetbundleName": "",
+        "subTitle": "Chapter 2"
+    },
+    {
         "backgroundCardMstId": 0,
+        "clearFieldPointMstId": 0,
         "difficulty": 4,
         "fieldSeriesMstId": 70000,
         "fieldStageMstId": 700004,
@@ -1201,6 +1340,7 @@
     },
     {
         "backgroundCardMstId": 0,
+        "clearFieldPointMstId": 0,
         "difficulty": 4,
         "fieldSeriesMstId": 70100,
         "fieldStageMstId": 701004,
@@ -1213,6 +1353,7 @@
     },
     {
         "backgroundCardMstId": 0,
+        "clearFieldPointMstId": 0,
         "difficulty": 4,
         "fieldSeriesMstId": 70200,
         "fieldStageMstId": 702004,
@@ -1225,6 +1366,7 @@
     },
     {
         "backgroundCardMstId": 0,
+        "clearFieldPointMstId": 0,
         "difficulty": 4,
         "fieldSeriesMstId": 70300,
         "fieldStageMstId": 703004,
@@ -1237,6 +1379,7 @@
     },
     {
         "backgroundCardMstId": 0,
+        "clearFieldPointMstId": 0,
         "difficulty": 4,
         "fieldSeriesMstId": 70400,
         "fieldStageMstId": 704004,
@@ -1249,6 +1392,7 @@
     },
     {
         "backgroundCardMstId": 0,
+        "clearFieldPointMstId": 0,
         "difficulty": 4,
         "fieldSeriesMstId": 70500,
         "fieldStageMstId": 705004,
@@ -1261,6 +1405,7 @@
     },
     {
         "backgroundCardMstId": 0,
+        "clearFieldPointMstId": 0,
         "difficulty": 4,
         "fieldSeriesMstId": 70600,
         "fieldStageMstId": 706004,
@@ -1273,6 +1418,7 @@
     },
     {
         "backgroundCardMstId": 0,
+        "clearFieldPointMstId": 0,
         "difficulty": 4,
         "fieldSeriesMstId": 70700,
         "fieldStageMstId": 707004,
@@ -1285,6 +1431,7 @@
     },
     {
         "backgroundCardMstId": 0,
+        "clearFieldPointMstId": 0,
         "difficulty": 4,
         "fieldSeriesMstId": 70800,
         "fieldStageMstId": 708004,
@@ -1297,6 +1444,7 @@
     },
     {
         "backgroundCardMstId": 0,
+        "clearFieldPointMstId": 0,
         "difficulty": 4,
         "fieldSeriesMstId": 70900,
         "fieldStageMstId": 709004,
@@ -1309,6 +1457,7 @@
     },
     {
         "backgroundCardMstId": 0,
+        "clearFieldPointMstId": 0,
         "difficulty": 4,
         "fieldSeriesMstId": 71000,
         "fieldStageMstId": 710004,
@@ -1321,6 +1470,7 @@
     },
     {
         "backgroundCardMstId": 0,
+        "clearFieldPointMstId": 0,
         "difficulty": 4,
         "fieldSeriesMstId": 71700,
         "fieldStageMstId": 717004,
@@ -1333,6 +1483,7 @@
     },
     {
         "backgroundCardMstId": 0,
+        "clearFieldPointMstId": 0,
         "difficulty": 4,
         "fieldSeriesMstId": 71800,
         "fieldStageMstId": 718004,
@@ -1345,6 +1496,7 @@
     },
     {
         "backgroundCardMstId": 0,
+        "clearFieldPointMstId": 0,
         "difficulty": 4,
         "fieldSeriesMstId": 71900,
         "fieldStageMstId": 719004,
@@ -1357,6 +1509,7 @@
     },
     {
         "backgroundCardMstId": 0,
+        "clearFieldPointMstId": 0,
         "difficulty": 4,
         "fieldSeriesMstId": 72000,
         "fieldStageMstId": 720004,

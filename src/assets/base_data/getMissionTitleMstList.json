@@ -64,7 +64,7 @@
         "featuredRewardResourceName": "",
         "isRewardGuideTarget": true,
         "missionCampaignGroupMstId": 0,
-        "missionTitleMstId": 1031,
+        "missionTitleMstId": 1032,
         "prevMissionTitleMstId": 0,
         "priority": 1,
         "title": "Link Raid Season Missions"
@@ -74,7 +74,7 @@
         "featuredRewardResourceName": "",
         "isRewardGuideTarget": true,
         "missionCampaignGroupMstId": 0,
-        "missionTitleMstId": 1032,
+        "missionTitleMstId": 1033,
         "prevMissionTitleMstId": 0,
         "priority": 1,
         "title": "Link Raid Season Missions"
@@ -300,26 +300,6 @@
         "title": "Halloween Campaign Bingo Missions Part 2"
     },
     {
-        "completeAppealDescription": "Get 5 Prism Orbs!",
-        "featuredRewardResourceName": "",
-        "isRewardGuideTarget": false,
-        "missionCampaignGroupMstId": 0,
-        "missionTitleMstId": 2036,
-        "prevMissionTitleMstId": 0,
-        "priority": 160,
-        "title": "Weekly Bingo Missions Week 1"
-    },
-    {
-        "completeAppealDescription": "Get 40 Crystalis Quest Skip Tickets!",
-        "featuredRewardResourceName": "",
-        "isRewardGuideTarget": false,
-        "missionCampaignGroupMstId": 0,
-        "missionTitleMstId": 2037,
-        "prevMissionTitleMstId": 2036,
-        "priority": 160,
-        "title": "Weekly Bingo Missions Week 1"
-    },
-    {
         "completeAppealDescription": "Get 2,000,000 A-Q Chips!",
         "featuredRewardResourceName": "",
         "isRewardGuideTarget": false,
@@ -338,6 +318,86 @@
         "prevMissionTitleMstId": 2038,
         "priority": 160,
         "title": "Weekly Bingo Missions Week 2"
+    },
+    {
+        "completeAppealDescription": "Get Player EXP Quest Rank 2 Play Ticket x3!",
+        "featuredRewardResourceName": "",
+        "isRewardGuideTarget": false,
+        "missionCampaignGroupMstId": 0,
+        "missionTitleMstId": 2040,
+        "prevMissionTitleMstId": 0,
+        "priority": 160,
+        "title": "Weekly Bingo Missions Week 3"
+    },
+    {
+        "completeAppealDescription": "Get Prism Core x2!",
+        "featuredRewardResourceName": "",
+        "isRewardGuideTarget": false,
+        "missionCampaignGroupMstId": 0,
+        "missionTitleMstId": 2041,
+        "prevMissionTitleMstId": 2040,
+        "priority": 160,
+        "title": "Weekly Bingo Missions Week 3"
+    },
+    {
+        "completeAppealDescription": "Get 5 Prism Orbs!",
+        "featuredRewardResourceName": "",
+        "isRewardGuideTarget": false,
+        "missionCampaignGroupMstId": 0,
+        "missionTitleMstId": 2042,
+        "prevMissionTitleMstId": 0,
+        "priority": 160,
+        "title": "Weekly Bingo Missions Week 4"
+    },
+    {
+        "completeAppealDescription": "Get Crystule (Guaranteed EX) x1!",
+        "featuredRewardResourceName": "",
+        "isRewardGuideTarget": false,
+        "missionCampaignGroupMstId": 0,
+        "missionTitleMstId": 2043,
+        "prevMissionTitleMstId": 2042,
+        "priority": 160,
+        "title": "Weekly Bingo Missions Week 4"
+    },
+    {
+        "completeAppealDescription": "Get Magica Stone x500!",
+        "featuredRewardResourceName": "",
+        "isRewardGuideTarget": true,
+        "missionCampaignGroupMstId": 0,
+        "missionTitleMstId": 2044,
+        "prevMissionTitleMstId": 0,
+        "priority": 200,
+        "title": "Sorana Magica Chapter 2 Release Celebration Bingo Missions Part 1"
+    },
+    {
+        "completeAppealDescription": "Get Magica Stone x500!",
+        "featuredRewardResourceName": "",
+        "isRewardGuideTarget": true,
+        "missionCampaignGroupMstId": 0,
+        "missionTitleMstId": 2045,
+        "prevMissionTitleMstId": 2044,
+        "priority": 200,
+        "title": "Sorana Magica Chapter 2 Release Celebration Bingo Missions Part 1"
+    },
+    {
+        "completeAppealDescription": "Get Magica Stone x500!",
+        "featuredRewardResourceName": "",
+        "isRewardGuideTarget": true,
+        "missionCampaignGroupMstId": 0,
+        "missionTitleMstId": 2046,
+        "prevMissionTitleMstId": 0,
+        "priority": 200,
+        "title": "Sorana Magica Chapter 2 Release Celebration Bingo Missions Part 2"
+    },
+    {
+        "completeAppealDescription": "Get Magica Stone x500!",
+        "featuredRewardResourceName": "",
+        "isRewardGuideTarget": true,
+        "missionCampaignGroupMstId": 0,
+        "missionTitleMstId": 2047,
+        "prevMissionTitleMstId": 2046,
+        "priority": 200,
+        "title": "Sorana Magica Chapter 2 Release Celebration Bingo Missions Part 2"
     },
     {
         "completeAppealDescription": "",
@@ -514,9 +574,19 @@
         "featuredRewardResourceName": "",
         "isRewardGuideTarget": false,
         "missionCampaignGroupMstId": 0,
-        "missionTitleMstId": 5175,
+        "missionTitleMstId": 5176,
         "prevMissionTitleMstId": 0,
-        "priority": 10008,
-        "title": "Exedra Crisis Play Missions"
+        "priority": 107,
+        "title": "Stellar Photo Op Hunt Event Missions"
+    },
+    {
+        "completeAppealDescription": "",
+        "featuredRewardResourceName": "",
+        "isRewardGuideTarget": false,
+        "missionCampaignGroupMstId": 0,
+        "missionTitleMstId": 5177,
+        "prevMissionTitleMstId": 0,
+        "priority": 108,
+        "title": "Stellar Photo Op Hunt Event Memorial Medal Missions"
     }
 ]

@@ -1232,6 +1232,20 @@
         "unlockType": 1
     },
     {
+        "description": "Nature: Peeling.<br>A Witch fixated on stripping surfaces to expose tender innards. With the prized blades of its digging buckets, it cuts through sand, bedrock, structures, and even the skin and appearance of any person lost in its Labyrinth. But more than anything it wants to slice off its own skin. Insects constantly swarm all over it, sucking bodily fluids and inducing ceaseless agony. Tragically, its blades cannot reach them.",
+        "enemyMstId": 662001,
+        "enemyProfileMstId": 662001,
+        "enemyUniqueId": 662001,
+        "isCollectionDisp": true,
+        "name": "Lunar Excavator Witch",
+        "releaseTime": "2026-11-13T12:00:00+09:00",
+        "runesName": "Brontomek",
+        "seriesId": 11,
+        "sortOrder": 80010201,
+        "unlockId": 0,
+        "unlockType": 1
+    },
+    {
         "description": "",
         "enemyMstId": 664004,
         "enemyProfileMstId": 664004,

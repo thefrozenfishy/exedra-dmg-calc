@@ -212,6 +212,20 @@
     {
         "category": 2,
         "description": "",
+        "endTime": "2026-12-19T11:59:59+09:00",
+        "isRecommendExcluded": false,
+        "payId": 231079,
+        "payType": 3,
+        "resourceName": "",
+        "shopGroupId1": 2913,
+        "shopGroupId2": 0,
+        "shopSeriesMstId": 2913,
+        "startTime": "2026-11-16T12:00:00+09:00",
+        "title": "Lilly Candy Featured Fate Weave Trader"
+    },
+    {
+        "category": 2,
+        "description": "",
         "endTime": "2026-12-01T11:59:59+09:00",
         "isRecommendExcluded": false,
         "payId": 231078,
@@ -1356,6 +1370,34 @@
         "shopSeriesMstId": 2999,
         "startTime": "2025-01-30T12:00:00+09:00",
         "title": "Magia Fate Weave Trader"
+    },
+    {
+        "category": 3,
+        "description": "",
+        "endTime": "2026-12-19T11:59:59+09:00",
+        "isRecommendExcluded": false,
+        "payId": 201143,
+        "payType": 3,
+        "resourceName": "",
+        "shopGroupId1": 3871,
+        "shopGroupId2": 0,
+        "shopSeriesMstId": 3871,
+        "startTime": "2026-11-16T12:00:00+09:00",
+        "title": "Bio-Bite Trader"
+    },
+    {
+        "category": 3,
+        "description": "",
+        "endTime": "2026-12-19T11:59:59+09:00",
+        "isRecommendExcluded": false,
+        "payId": 201085,
+        "payType": 3,
+        "resourceName": "",
+        "shopGroupId1": 3872,
+        "shopGroupId2": 3934,
+        "shopSeriesMstId": 3872,
+        "startTime": "2026-11-16T12:00:00+09:00",
+        "title": "Stellar Photo Op Hunt Event Trader"
     },
     {
         "category": 3,

@@ -3290,6 +3290,36 @@
         "type": 1
     },
     {
+        "animation": "HomeWait01",
+        "cameraPoseMstId": 11155011,
+        "face": "Smile",
+        "name": "Pose 1",
+        "objectMstId": 115501,
+        "reactionResourceName": "",
+        "sortOrder": 11155011,
+        "type": 1
+    },
+    {
+        "animation": "HomeWait02",
+        "cameraPoseMstId": 11155012,
+        "face": "Surprised",
+        "name": "Pose 2",
+        "objectMstId": 115501,
+        "reactionResourceName": "",
+        "sortOrder": 11155012,
+        "type": 1
+    },
+    {
+        "animation": "HomeUnique01",
+        "cameraPoseMstId": 11155013,
+        "face": "Smiling",
+        "name": "Pose 3",
+        "objectMstId": 115501,
+        "reactionResourceName": "",
+        "sortOrder": 11155013,
+        "type": 1
+    },
+    {
         "animation": "motion_000",
         "cameraPoseMstId": 21001001,
         "face": "10",
@@ -15137,6 +15167,206 @@
         "objectMstId": 115403,
         "reactionResourceName": "",
         "sortOrder": 21154035,
+        "type": 2
+    },
+    {
+        "animation": "motion_000",
+        "cameraPoseMstId": 21154041,
+        "face": "10",
+        "name": "Pose 1",
+        "objectMstId": 115404,
+        "reactionResourceName": "",
+        "sortOrder": 21154041,
+        "type": 2
+    },
+    {
+        "animation": "motion_100",
+        "cameraPoseMstId": 21154042,
+        "face": "11",
+        "name": "Pose 2",
+        "objectMstId": 115404,
+        "reactionResourceName": "",
+        "sortOrder": 21154042,
+        "type": 2
+    },
+    {
+        "animation": "motion_200",
+        "cameraPoseMstId": 21154043,
+        "face": "20",
+        "name": "Pose 3",
+        "objectMstId": 115404,
+        "reactionResourceName": "",
+        "sortOrder": 21154043,
+        "type": 2
+    },
+    {
+        "animation": "motion_300",
+        "cameraPoseMstId": 21154044,
+        "face": "30",
+        "name": "Pose 4",
+        "objectMstId": 115404,
+        "reactionResourceName": "",
+        "sortOrder": 21154044,
+        "type": 2
+    },
+    {
+        "animation": "motion_400",
+        "cameraPoseMstId": 21154045,
+        "face": "50",
+        "name": "Pose 5",
+        "objectMstId": 115404,
+        "reactionResourceName": "",
+        "sortOrder": 21154045,
+        "type": 2
+    },
+    {
+        "animation": "motion_000",
+        "cameraPoseMstId": 21155011,
+        "face": "10",
+        "name": "Pose 1",
+        "objectMstId": 115501,
+        "reactionResourceName": "",
+        "sortOrder": 21155011,
+        "type": 2
+    },
+    {
+        "animation": "motion_100",
+        "cameraPoseMstId": 21155012,
+        "face": "11",
+        "name": "Pose 2",
+        "objectMstId": 115501,
+        "reactionResourceName": "",
+        "sortOrder": 21155012,
+        "type": 2
+    },
+    {
+        "animation": "motion_200",
+        "cameraPoseMstId": 21155013,
+        "face": "20",
+        "name": "Pose 3",
+        "objectMstId": 115501,
+        "reactionResourceName": "",
+        "sortOrder": 21155013,
+        "type": 2
+    },
+    {
+        "animation": "motion_300",
+        "cameraPoseMstId": 21155014,
+        "face": "30",
+        "name": "Pose 4",
+        "objectMstId": 115501,
+        "reactionResourceName": "",
+        "sortOrder": 21155014,
+        "type": 2
+    },
+    {
+        "animation": "motion_400",
+        "cameraPoseMstId": 21155015,
+        "face": "50",
+        "name": "Pose 5",
+        "objectMstId": 115501,
+        "reactionResourceName": "",
+        "sortOrder": 21155015,
+        "type": 2
+    },
+    {
+        "animation": "motion_000",
+        "cameraPoseMstId": 21155021,
+        "face": "10",
+        "name": "Pose 1",
+        "objectMstId": 115502,
+        "reactionResourceName": "",
+        "sortOrder": 21155021,
+        "type": 2
+    },
+    {
+        "animation": "motion_100",
+        "cameraPoseMstId": 21155022,
+        "face": "11",
+        "name": "Pose 2",
+        "objectMstId": 115502,
+        "reactionResourceName": "",
+        "sortOrder": 21155022,
+        "type": 2
+    },
+    {
+        "animation": "motion_200",
+        "cameraPoseMstId": 21155023,
+        "face": "20",
+        "name": "Pose 3",
+        "objectMstId": 115502,
+        "reactionResourceName": "",
+        "sortOrder": 21155023,
+        "type": 2
+    },
+    {
+        "animation": "motion_300",
+        "cameraPoseMstId": 21155024,
+        "face": "30",
+        "name": "Pose 4",
+        "objectMstId": 115502,
+        "reactionResourceName": "",
+        "sortOrder": 21155024,
+        "type": 2
+    },
+    {
+        "animation": "motion_400",
+        "cameraPoseMstId": 21155025,
+        "face": "50",
+        "name": "Pose 5",
+        "objectMstId": 115502,
+        "reactionResourceName": "",
+        "sortOrder": 21155025,
+        "type": 2
+    },
+    {
+        "animation": "motion_000",
+        "cameraPoseMstId": 21155031,
+        "face": "10",
+        "name": "Pose 1",
+        "objectMstId": 115503,
+        "reactionResourceName": "",
+        "sortOrder": 21155031,
+        "type": 2
+    },
+    {
+        "animation": "motion_100",
+        "cameraPoseMstId": 21155032,
+        "face": "11",
+        "name": "Pose 2",
+        "objectMstId": 115503,
+        "reactionResourceName": "",
+        "sortOrder": 21155032,
+        "type": 2
+    },
+    {
+        "animation": "motion_200",
+        "cameraPoseMstId": 21155033,
+        "face": "20",
+        "name": "Pose 3",
+        "objectMstId": 115503,
+        "reactionResourceName": "",
+        "sortOrder": 21155033,
+        "type": 2
+    },
+    {
+        "animation": "motion_300",
+        "cameraPoseMstId": 21155034,
+        "face": "30",
+        "name": "Pose 4",
+        "objectMstId": 115503,
+        "reactionResourceName": "",
+        "sortOrder": 21155034,
+        "type": 2
+    },
+    {
+        "animation": "motion_400",
+        "cameraPoseMstId": 21155035,
+        "face": "50",
+        "name": "Pose 5",
+        "objectMstId": 115503,
+        "reactionResourceName": "",
+        "sortOrder": 21155035,
         "type": 2
     }
 ]

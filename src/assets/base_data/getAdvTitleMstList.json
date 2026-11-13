@@ -1087,7 +1087,7 @@
     {
         "advTitleMstId": 223,
         "isViewCollection": true,
-        "title": "Magical Girl Story"
+        "title": "Anything for Who I Care About!"
     },
     {
         "advTitleMstId": 224,
@@ -1108,5 +1108,35 @@
         "advTitleMstId": 227,
         "isViewCollection": true,
         "title": "Felicia Mitsuki:\nA Doppel Tale"
+    },
+    {
+        "advTitleMstId": 228,
+        "isViewCollection": true,
+        "title": "Chapter 2: Future"
+    },
+    {
+        "advTitleMstId": 229,
+        "isViewCollection": true,
+        "title": "Lunar Bungee Adventure"
+    },
+    {
+        "advTitleMstId": 230,
+        "isViewCollection": true,
+        "title": "Stellar Photo Op Hunt"
+    },
+    {
+        "advTitleMstId": 231,
+        "isViewCollection": true,
+        "title": "Stellar Photo Op Hunt"
+    },
+    {
+        "advTitleMstId": 232,
+        "isViewCollection": true,
+        "title": "Sorana x Lilly ASMR Attack!"
+    },
+    {
+        "advTitleMstId": 233,
+        "isViewCollection": true,
+        "title": "Fave at First Sight"
     }
 ]

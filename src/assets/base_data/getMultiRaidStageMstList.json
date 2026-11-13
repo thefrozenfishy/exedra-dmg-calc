@@ -1120,6 +1120,20 @@
         "useStaminaForRescue": 6
     },
     {
+        "comment": "When the boss is afflicted with fewer ailments, its SPD greatly increases and its break gauge is extremely harder to deplete.<br>Plus, its action order advances when taking damage while in break, so keep an eye on its applied ailment status throughout battle.<br>Some Kioku have attack effects that can remove ailments, so keep this in mind when attacking.<br><br>Minions have increased firepower when not afflicted with ailments, which may open your team up to taking major damage.<br>Applying ailments to them and defeating them first is a sound strategy for taking on the boss.<br><br>EX bonuses and season buffs are key to this battle.<br>Be sure to check the targets and activation conditions for buffs to make use of as many as possible during battle.<br><br>Taking on this battle solo is extremely difficult, so be sure to call on your union!",
+        "difficulty": 21,
+        "dioramaBackgroundMstId": 210419,
+        "limitRoundCount": 3,
+        "loseRewardGroupId": 109,
+        "multiRaidStageMstId": 421,
+        "questRewardGroupId": 51040,
+        "questStageMstId": 1204121,
+        "scoreRewardGroupId": 112,
+        "seasonId": 4,
+        "useStaminaForPlay": 12,
+        "useStaminaForRescue": 6
+    },
+    {
         "comment": "The boss's break gauge is hard to deplete with fewer of its allies in break, so be cautious.<br>Targets other than the boss have extremely high HP and are difficult to defeat, so there's no need to focus on damaging them.<br><br>Use elemental weaknesses and season bonuses to your advantage in battle.",
         "difficulty": 1,
         "dioramaBackgroundMstId": 210319,

@@ -1388,5 +1388,25 @@
         "styleLive2dCostumeGroupMstId": 1154031,
         "styleLive2dCostumeMstId": 115403,
         "styleMstId": 11540101
+    },
+    {
+        "styleLive2dCostumeGroupMstId": 1154041,
+        "styleLive2dCostumeMstId": 115404,
+        "styleMstId": 11540101
+    },
+    {
+        "styleLive2dCostumeGroupMstId": 1155011,
+        "styleLive2dCostumeMstId": 115501,
+        "styleMstId": 11550101
+    },
+    {
+        "styleLive2dCostumeGroupMstId": 1155021,
+        "styleLive2dCostumeMstId": 115502,
+        "styleMstId": 11550101
+    },
+    {
+        "styleLive2dCostumeGroupMstId": 1155031,
+        "styleLive2dCostumeMstId": 115503,
+        "styleMstId": 11550101
     }
 ]
