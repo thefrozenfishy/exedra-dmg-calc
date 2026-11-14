@@ -372,3 +372,9 @@
   dic.set list in the game's order from the decompiled .cctor (pairs of `b__5_N` + `_StringLiteral_X`), as 3.24.0 did.
 - Cloud bundle build: the tarball must not contain the repo's package.json in the build dir (npm ERESOLVE on
   `npm i typescript`); install typescript@5.8.3 in a separate dir and symlink its node_modules.
+- wikicheck VALUE UNITS on `DRIVE_UP_BREAK_POINT_DMG_FIXED` value2 (15/30/50) is a false positive: the passive text
+  never states the Drive bonus, the "pct" matches are the kit's "3 MP" / "5%" numbers. The game reads v2 as a raw
+  break-gauge amount (DriveUpBreakPointDmgFixedUnitState.GetUpValue 0x17171F0), which is what the wiki shows.
+- `scripts/sim/checkMechanics.ts` is gone (the old engine's checks went with gen2): the runbook's "checkMechanics"
+  means checkEngine<ver>.ts now. A STAGES= sweep over a stage id with no enemies throws "Sequence contains no
+  elements" in maxBy: take the stage list from getQuestEnemyAppearanceMstList, not from guessed id ranges.

@@ -3,6 +3,25 @@
 _Last updated: 2026-11-12: game 3.24.0 (Element Drive, Drive break bonuses, Over Break ported; scheduled run on main); before: 2026-11-09: per-enemy "Alive" (PvE Simulator + Highest Dmg Calc share the enemy picker); before: 2026-11-05: Highest Dmg Calc "Adds" (enemies summoned mid-fight) toggles; before: 2026-11-02: Crisis score in the PvE Simulator timeline; before: 2026-10-31: Kioku Grid break chart for every character (not only Breakers); before: 2026-10-30 (2): stage-mode buffs in Max Damage / Highest Dmg Calc, quest buffs, Link Raid EX bonus; before: 2026-10-30: Kioku Grid damage dealer chart "Break" display; before: 2026-10-29 (5): game 3.22.0 (battle code identical, @rva tags moved; branch claude/version-3.22.0); before: 2026-10-29 (3): Best SA Team calculator speed (~60x on a large search); before: 2026-10-29 (2): Kioku Grid "Multiple ascensions", merged equal variant bars, precalculated bench file; before: 2026-10-29: Kioku Grid bench gear + average Attacker self buffs on Lux; before: 2026-10-24 (3): second-generation engine and Fight Solver removed (branch `remove-gen2`); before: 2026-10-24 (battle-start passive order: kit -> portrait -> support -> crys; before: Kioku Grid ailment bars: 112/305/309 conditions, Max Damage enemies carry Weakness/Stun); before: 2026-10-15 (game 3.21.0: dumped + decompiled by Claude on Windows, engine re-ported to 3.21.0; branch claude/version-3.21.0); before: 2026-10-14 (Max Damage + Kioku Grid bench on the 1:1 engine); before: 2026-10-10 (1:1 port in src/engine started); before: 2026-10-03 (passive states per giver, UP_HP_FIXED max HP; earlier: duplicate active-skill states); before: 2026-10-02 (game 3.19.1: version diff + newsletter, Magic Seal, break/notice team conditions, IMM_SLIP_DMG burst; branch claude/version-3.19.1)._
 
 
+## 2026-11-14: data drop on 3.24.0 (scheduled version check, on main)
+- SAME 3.24.0 (no client update). ma-ex-data's download (12:15 local) had the 16 Nov content: Overdrive Impulse
+  (Lilly Candy, new character 1155, 5* Void Breaker, first Element Drive kit: Void Drive pattern 30001, Poppin' Candy 36,
+  Web Clusters), Stellar Photo Op Hunt (story event 89, groups 1115/1116, Score Attack 31 Lunar Excavator Witch),
+  Sorana story ch. 2 (group 66301), Mirror Layers 121-125, Link Raid Ferris Wheel EX, Multi Raid 33.
+- base_data: the github-actions bot synced it (ec7501f3, 7410ded0). My own organize_data.py sync was identical
+  (bot adds kioku_data.json + images) and was dropped; main was rebuilt on origin/main. Existing rows unchanged
+  except SkillDetail 108400301/108500301, two enemy ATK UP rows.
+- New conditions 104/14/115 are all evaluated by src/engine; the static src/models parser lacked 115
+  (AddRemovableBuffCount) and printed "Unknown CompareContent": f1fa8eef adds the enum entry.
+- Smoke: engineSweep over all 124 new stages x fixture teams x 2 seeds: 2232/2232 OK; WITH="Overdrive Impulse" on
+  15 of them: 270/270 OK. The first try's 18 "Sequence contains no elements" came from stage 134151, which does not
+  exist (no enemies): not a bug.
+- Checks: checkFixturesEngine 16/16, checkEngine324 and checkEngine321 pass, checkWavePhases OK, engine tsc 0,
+  app type-check 223 = baseline set (7a553ac0). checkMechanics.ts no longer exists in scripts/sim.
+- wikicheck: one VALUE UNITS line, DRIVE_UP_BREAK_POINT_DMG_FIXED value2, a false positive (see PITFALLS); no wiki change.
+- Newsletter docs/versions/3.24.0/newsletter-2026-11-14.html, notes data-2026-11-14.md. No Discord client notes
+  (code unchanged).
+
 ## 2026-11-12: game 3.24.0 (scheduled version check, on main)
 
 - Client 3.24.0 (Steam files 2026-11-12 17:02 UTC, GameAssembly PE 2026-11-06). Code changed: verdiff funcs over

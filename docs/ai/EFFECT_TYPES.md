@@ -1,6 +1,6 @@
 # Effect types: data usage vs engine coverage (GENERATED - do not edit)
 
-Built from `main @ 69cdad25 2026-11-11` + uncommitted src/models changes. Regenerate after switching branches or changing the engine: `python3 scripts/ai/xq.py build`. Details for one type: `python3 scripts/ai/xq.py effect <TYPE>`.
+Built from `main @ 20449e33 2026-11-14`. Regenerate after switching branches or changing the engine: `python3 scripts/ai/xq.py build`. Details for one type: `python3 scripts/ai/xq.py effect <TYPE>`.
 
 - **kiokus** = collectable kiokus (getStyleMstList) whose kit uses it (all levels, id*100+lvl keys, follow-ups followed).
 - **stages** = quest stages whose enemies use it (skill sets + enemy passives).
@@ -11,7 +11,7 @@ Built from `main @ 69cdad25 2026-11-11` + uncommitted src/models changes. Regene
 | ADDITIONAL_COUNTDOWN_CANCEL_SKILL_ACT | AdditionalCountdownCancelSkillActAbilityEffect | 0 | 48 | prefix/template? | KiokuArchetypes.ts |  |
 | ADDITIONAL_COUNTDOWN_ZERO_SKILL_ACT | AdditionalCountdownZeroSkillActAbilityEffect | 0 | 48 | prefix/template? | KiokuArchetypes.ts |  |
 | ADDITIONAL_DAMAGE | AdditionalDamageUnitState | 4 | 0 | yes | EffectSide.ts, KiokuArchetypes.ts, effectText.ts | Aqua Tempest, Luminous Tenet, Pluvia☆Neujahr |
-| ADDITIONAL_SKILL_ACT | AdditionalSkillActAbilityEffect | 35 | 629 | yes | KiokuArchetypes.ts, LuxBench.ts | A Tale of Cherry Blossoms, Absolute Venus, Aqua Tempest |
+| ADDITIONAL_SKILL_ACT | AdditionalSkillActAbilityEffect | 36 | 645 | yes | KiokuArchetypes.ts, LuxBench.ts | A Tale of Cherry Blossoms, Absolute Venus, Aqua Tempest |
 | ADDITIONAL_TURN_UNIT_ACT | AdditionalTurnUnitActAbilityEffect | 17 | 99 | yes | EffectSide.ts, KiokuArchetypes.ts, PvE.ts | A Tale of Cherry Blossoms, Absolute Rain, Concentrated Missile Fire |
 | ADD_BUFF_TURN | AddBuffTurnUnitState | 24 | 0 | yes | EffectSide.ts, KiokuArchetypes.ts, effectText.ts | Aqua Tempest, Baldamente Fortissimo, Buon Natale Grazioso |
 | ADD_BUFF_TURN_IMM | AddBuffTurnImmAbilityEffect | 2 | 16 | yes | EffectSide.ts, KiokuArchetypes.ts | Absolute Venus, Scorchin' Summer Spike |
@@ -53,7 +53,7 @@ Built from `main @ 69cdad25 2026-11-11` + uncommitted src/models changes. Regene
 | ADD_DMG_HP_STUN_ALL |  | 0 | 0 | prefix/template? | KiokuArchetypes.ts |  |
 | ADD_DMG_HP_WEAKNESS |  | 0 | 0 | prefix/template? | KiokuArchetypes.ts |  |
 | ADD_DMG_HP_WEAKNESS_ALL |  | 0 | 0 | prefix/template? | KiokuArchetypes.ts |  |
-| BARRIER | BarrierUnitState | 9 | 281 | yes | EffectSide.ts, effectText.ts | Baldamente Fortissimo, Folter Gefängnis, La Lumière |
+| BARRIER | BarrierUnitState | 9 | 287 | yes | EffectSide.ts, effectText.ts | Baldamente Fortissimo, Folter Gefängnis, La Lumière |
 | BLEED_ATK | BleedAtkUnitState | 1 | 276 | **LISTED ONLY** |  | Soul Salvation |
 | BLEED_BREAK |  | 0 | 0 | - |  |  |
 | BLEED_DEF | BleedDefUnitState | 0 | 60 | **LISTED ONLY** |  |  |
@@ -63,11 +63,11 @@ Built from `main @ 69cdad25 2026-11-11` + uncommitted src/models changes. Regene
 | BURN_DEF | BurnDefUnitState | 0 | 20 | **LISTED ONLY** |  |  |
 | BURN_HP | BurnHpUnitState | 0 | 0 | listed |  |  |
 | CHANGE_SKILL |  | 0 | 0 | - |  |  |
-| CHARGE | ChargeAbilityEffect | 43 | 1323 | yes | EffectSide.ts, helpers.ts | A Tale of Cherry Blossoms, Absolute Venus, Aqua Tempest |
-| COMBO | ComboUnitState | 0 | 2265 | yes | EffectSide.ts |  |
-| CONSUME_CHARGE_POINT | ConsumeChargePointAbilityEffect | 37 | 1013 | yes | EffectSide.ts | A Tale of Cherry Blossoms, Absolute Venus, Assault Paranoia |
+| CHARGE | ChargeAbilityEffect | 44 | 1329 | yes | EffectSide.ts, helpers.ts | A Tale of Cherry Blossoms, Absolute Venus, Aqua Tempest |
+| COMBO | ComboUnitState | 0 | 2339 | yes | EffectSide.ts |  |
+| CONSUME_CHARGE_POINT | ConsumeChargePointAbilityEffect | 38 | 1019 | yes | EffectSide.ts | A Tale of Cherry Blossoms, Absolute Venus, Assault Paranoia |
 | CONSUME_COUNT_POINT | ConsumeCountPointAbilityEffect | 1 | 0 | **LISTED ONLY** |  | Dark Art Dominion |
-| CONSUME_SELF_HP | ConsumeSelfHpAbilityEffect | 1 | 50 | **MISSING** |  | Venusta Dissonanza |
+| CONSUME_SELF_HP | ConsumeSelfHpAbilityEffect | 1 | 55 | **MISSING** |  | Venusta Dissonanza |
 | CONSUME_ZONE_STACK | ConsumeZoneStackAbilityEffect | 5 | 0 | **LISTED ONLY** |  | Evoluzione Presente, Falsified Phenomena, Floral Ironspike |
 | CONTINUOUS_RECOVERY | ContinuousRecoveryUnitState | 2 | 0 | yes | EffectSide.ts, effectText.ts | Doppel of Silence, Magic Cake Dish |
 | COUNT | CountUnitState | 1 | 0 | yes | effectText.ts | Dark Art Dominion |
@@ -83,16 +83,16 @@ Built from `main @ 69cdad25 2026-11-11` + uncommitted src/models changes. Regene
 | CUTOUT | CutoutUnitState | 1 | 0 | yes | EffectSide.ts, KiokuArchetypes.ts, effectText.ts | Hollow Woman |
 | DEC_BUFF_TURN_IMM | DecBuffTurnImmAbilityEffect | 0 | 8 | **MISSING** |  |  |
 | DEC_DEBUFF_TURN_IMM | DecDebuffTurnImmAbilityEffect | 0 | 6 | **MISSING** |  |  |
-| DMG_ATK | DmgAtkAbilityEffect | 116 | 4637 | yes | EffectSide.ts | A Tale of Cherry Blossoms, Absolute Rain, Absolute Venus |
+| DMG_ATK | DmgAtkAbilityEffect | 117 | 4761 | yes | EffectSide.ts | A Tale of Cherry Blossoms, Absolute Rain, Absolute Venus |
 | DMG_DEF | DmgDefAbilityEffect | 3 | 215 | yes | EffectSide.ts, LuxBench.ts | Baldamente Fortissimo, Soaring Storyteller, Vampire Fang |
 | DMG_HP | DmgHpAbilityEffect | 0 | 0 | yes | EffectSide.ts |  |
 | DMG_MAGIC |  | 0 | 0 | - |  |  |
 | DMG_NMAGIC |  | 0 | 0 | - |  |  |
-| DMG_RANDOM | DmgRandomAbilityEffect | 4 | 620 | **LISTED ONLY** |  | Falsified Phenomena, Metallicized Projectile, Tiro Finale Liberation |
+| DMG_RANDOM | DmgRandomAbilityEffect | 4 | 634 | **LISTED ONLY** |  | Falsified Phenomena, Metallicized Projectile, Tiro Finale Liberation |
 | DMG_RATIO | DmgRatioAbilityEffect | 0 | 489 | yes | BattleConditionParser.ts |  |
 | DMG_SMAGIC |  | 0 | 0 | - |  |  |
 | DRAIN |  | 0 | 0 | - |  |  |
-| DRIVE_UP_BREAK_POINT_DMG_FIXED | DriveUpBreakPointDmgFixedUnitState | 0 | 0 | - |  |  |
+| DRIVE_UP_BREAK_POINT_DMG_FIXED | DriveUpBreakPointDmgFixedUnitState | 1 | 0 | **MISSING** |  | Overdrive Impulse |
 | DRIVE_UP_BREAK_POINT_DMG_RATIO | DriveUpBreakPointDmgRatioUnitState | 0 | 0 | - |  |  |
 | DWN_AIM_GIV_DMG_FIXED |  | 0 | 0 | - |  |  |
 | DWN_AIM_GIV_DMG_RATIO | DwnAimGivDmgRatioUnitState | 0 | 0 | - |  |  |
@@ -115,12 +115,12 @@ Built from `main @ 69cdad25 2026-11-11` + uncommitted src/models changes. Regene
 | DWN_CTR_FIXED | DwnCtrFixedUnitState | 0 | 0 | - |  |  |
 | DWN_CTR_RATIO | DwnCtrFixedUnitState | 0 | 287 | **MISSING** |  |  |
 | DWN_DEBUFF_EFFECT_VALUE | DwnDebuffEffectValueUnitState | 0 | 68 | yes | EffectSide.ts, PvPKioku.ts |  |
-| DWN_DEF_ACCUM_RATIO | DwnDefAccumRatioUnitState | 5 | 258 | yes | effectText.ts | Désintégration, La Danse Macabre, Soul Salvation |
+| DWN_DEF_ACCUM_RATIO | DwnDefAccumRatioUnitState | 5 | 313 | yes | effectText.ts | Désintégration, La Danse Macabre, Soul Salvation |
 | DWN_DEF_FIXED |  | 0 | 0 | - |  |  |
-| DWN_DEF_RATIO | DwnDefRatioUnitState | 17 | 682 | yes | EffectSide.ts, effectText.ts | Atomo Arrabbiato, Bebe-O'-Lantern, Cherry Ballad |
+| DWN_DEF_RATIO | DwnDefRatioUnitState | 17 | 721 | yes | EffectSide.ts, effectText.ts | Atomo Arrabbiato, Bebe-O'-Lantern, Cherry Ballad |
 | DWN_ELEMENT_DMG_RATE_RATIO | DwnElementDmgRateRatioUnitState | 0 | 0 | - |  |  |
 | DWN_ELEMENT_RESIST_ACCUM_RATIO | DwnElementResistRatioAccumUnitState | 12 | 730 | yes | EffectSide.ts, LuxBench.ts, effectText.ts | Absolute Venus, All Souls' Repose, Atomo Arrabbiato |
-| DWN_EP_RECOVER_RATE_RATIO | DwnRecoveryEpRateRatioRatioUnitState | 0 | 651 | **MISSING** |  |  |
+| DWN_EP_RECOVER_RATE_RATIO | DwnRecoveryEpRateRatioRatioUnitState | 0 | 666 | **MISSING** |  |  |
 | DWN_GIV_BLEED_DMG_RATIO | DwnGivBleedDmgRatioUnitState | 0 | 0 | - |  |  |
 | DWN_GIV_BREAK_POINT_DMG_FIXED | DwnGivBreakPointDmgFixedUnitState | 0 | 0 | - |  |  |
 | DWN_GIV_BURN_DMG_RATIO | DwnGivBurnDmgRatioUnitState | 0 | 0 | - |  |  |
@@ -143,9 +143,9 @@ Built from `main @ 69cdad25 2026-11-11` + uncommitted src/models changes. Regene
 | DWN_NMATK_RATIO |  | 0 | 0 | - |  |  |
 | DWN_NMDEF_FIXED |  | 0 | 0 | - |  |  |
 | DWN_NMDEF_RATIO |  | 0 | 0 | - |  |  |
-| DWN_RCV_BREAK_POINT_DMG_RATIO | DwnRcvBreakPointDmgRatioUnitState | 0 | 1065 | **MISSING** |  |  |
+| DWN_RCV_BREAK_POINT_DMG_RATIO | DwnRcvBreakPointDmgRatioUnitState | 0 | 1132 | **MISSING** |  |  |
 | DWN_RCV_DMG_FIXED |  | 0 | 0 | - |  |  |
-| DWN_RCV_DMG_RATIO | DwnRcvDmgRatioUnitState | 44 | 1644 | yes | EffectSide.ts, effectText.ts | Absolute Venus, Aqua Tempest, Baldamente Fortissimo |
+| DWN_RCV_DMG_RATIO | DwnRcvDmgRatioUnitState | 44 | 1700 | yes | EffectSide.ts, effectText.ts | Absolute Venus, Aqua Tempest, Baldamente Fortissimo |
 | DWN_RCV_NMDMG_FIXED |  | 0 | 0 | - |  |  |
 | DWN_RCV_NMDMG_RATIO |  | 0 | 0 | - |  |  |
 | DWN_RCV_RECOVERY_FIXED |  | 0 | 0 | - |  |  |
@@ -159,77 +159,77 @@ Built from `main @ 69cdad25 2026-11-11` + uncommitted src/models changes. Regene
 | DWN_SMDEF_RATIO |  | 0 | 0 | - |  |  |
 | DWN_SPD_ACCUM_RATIO | DwnSpdAccumRatioUnitState | 1 | 171 | yes | effectText.ts | Bebe-O'-Lantern |
 | DWN_SPD_FIXED | DwnSpdFixedUnitState | 0 | 0 | - |  |  |
-| DWN_SPD_RATIO | DwnSpdRatioUnitState | 6 | 1011 | yes | EffectSide.ts, effectText.ts | All Souls' Repose, La Danse Macabre, Pumpkin Death Squall |
+| DWN_SPD_RATIO | DwnSpdRatioUnitState | 6 | 1063 | yes | EffectSide.ts, effectText.ts | All Souls' Repose, La Danse Macabre, Pumpkin Death Squall |
 | GAIN_BP_FIXED | GainBpFixedAbilityEffect | 2 | 0 | **MISSING** |  | Metallicized Projectile, Vinctio☆Magica |
-| GAIN_CHARGE_POINT | GainChargePointAbilityEffect | 43 | 1033 | yes | EffectSide.ts | A Tale of Cherry Blossoms, Absolute Venus, Aqua Tempest |
+| GAIN_CHARGE_POINT | GainChargePointAbilityEffect | 44 | 1033 | yes | EffectSide.ts | A Tale of Cherry Blossoms, Absolute Venus, Aqua Tempest |
 | GAIN_COUNT_POINT | GainCountPointAbilityEffect | 1 | 0 | **LISTED ONLY** |  | Dark Art Dominion |
-| GAIN_EP_FIXED | GainEpFixedAbilityEffect | 67 | 0 | yes | EffectSide.ts, KiokuArchetypes.ts | A Tale of Cherry Blossoms, Absolute Rain, Absolute Venus |
+| GAIN_EP_FIXED | GainEpFixedAbilityEffect | 68 | 0 | yes | EffectSide.ts, KiokuArchetypes.ts | A Tale of Cherry Blossoms, Absolute Rain, Absolute Venus |
 | GAIN_EP_RATIO | GainEpRatioAbilityEffect | 30 | 0 | yes | EffectSide.ts, KiokuArchetypes.ts | A Tale of Cherry Blossoms, Absolute Rain, Brilliant Beam |
 | GAIN_SOLO_RAID_BUFF_POINT | GainSoloRaidBuffPointAbilityEffect | 0 | 0 | - |  |  |
 | GAIN_SP_FIXED | GainSpFixedAbilityEffect | 30 | 0 | yes | EffectSide.ts, KiokuArchetypes.ts | All Souls' Repose, Aqua Tempest, Buon Natale Grazioso |
 | GAIN_ZONE_STACK | GainZoneStackAbilityEffect | 2 | 0 | **LISTED ONLY** |  | Evoluzione Presente, Venusta Dissonanza |
 | GVE_UP_FINAL_GAIN_EP_RATIO | GveUpFinalGainEpRatioUnitState | 0 | 0 | - |  |  |
 | GVE_UP_SPECIAL_ATTACK_FINAL_GIV_DMG_RATIO | GveUpSpecialAttackFinalGiveDamageRatioUnitState | 0 | 0 | - |  |  |
-| HASTE | HasteAbilityEffect | 85 | 1069 | yes | EffectSide.ts, KiokuArchetypes.ts | Absolute Venus, All Souls' Repose, Aqua Tempest |
+| HASTE | HasteAbilityEffect | 86 | 1085 | yes | EffectSide.ts, KiokuArchetypes.ts | Absolute Venus, All Souls' Repose, Aqua Tempest |
 | IMM_SLIP_DMG | ImmSlipDmgAbilityEffect | 3 | 36 | yes | BestTeamCalculator.ts, EffectSide.ts, EngineBestTeam.ts, luxBenchCache.ts | Marigold Dadaism, My Creations, Nightmare Stinger |
 | LOCK_SPECIAL_ATTACK | LockSpecialAttackUnitState | 0 | 4 | **MISSING** |  |  |
-| LOCK_TURN_ORDER | LockTurnOrderUnitState | 0 | 45 | **MISSING** |  |  |
+| LOCK_TURN_ORDER | LockTurnOrderUnitState | 0 | 46 | **MISSING** |  |  |
 | LOSE_BP_FIXED | LoseBpFixedAbilityEffect | 0 | 0 | - |  |  |
 | LOSE_EP_FIXED | LoseEpFixedAbilityEffect | 0 | 11 | **MISSING** |  |  |
 | LOSE_EP_RATIO | LoseEpRatioAbilityEffect | 0 | 454 | **MISSING** |  |  |
-| OVER_BREAK_DAMAGE_RECEIVE_RATE_DRIVE | OverBreakDamageReceiveRateDriveUnitState | 0 | 0 | - |  |  |
+| OVER_BREAK_DAMAGE_RECEIVE_RATE_DRIVE | OverBreakDamageReceiveRateDriveUnitState | 1 | 0 | **MISSING** |  | Overdrive Impulse |
 | POISON_ATK | PoisonAtkUnitState | 2 | 201 | **LISTED ONLY** |  | Atomo Arrabbiato, My Creations |
 | POISON_BREAK |  | 0 | 0 | - |  |  |
 | POISON_DEF | PoisonDefUnitState | 0 | 1 | **LISTED ONLY** |  |  |
 | POISON_HP | PoisonHpUnitState | 0 | 0 | listed |  |  |
-| PREVENT_ABNORMAL | PreventAbnormalUnitState | 0 | 183 | **MISSING** |  |  |
+| PREVENT_ABNORMAL | PreventAbnormalUnitState | 0 | 184 | **MISSING** |  |  |
 | RCV_FINAL_DAMAGE | RcvFinalDamageUnitState | 2 | 0 | yes | effectText.ts | Pumpkin Death Squall, Vinctio☆Magica |
-| RECOVERY_HP | RecoveryHpAbilityEffect | 20 | 1520 | yes | EffectSide.ts | Baldamente Fortissimo, Circle Of Fire, Folter Gefängnis |
+| RECOVERY_HP | RecoveryHpAbilityEffect | 20 | 1556 | yes | EffectSide.ts | Baldamente Fortissimo, Circle Of Fire, Folter Gefängnis |
 | RECOVERY_HP_ATK | RecoveryHpAtkAbilityEffect | 5 | 0 | yes | EffectSide.ts | All Souls' Repose, Doppel of Silence, Grandioso Sinfonia |
 | REFLECTION_RATIO | ReflectionRatioUnitState | 1 | 0 | yes | EffectSide.ts, effectText.ts | Vampire Fang |
 | REGAIN_ATK | RegainAtkUnitState | 2 | 0 | yes | effectText.ts | Grandioso Sinfonia, Panna Vorticosa |
 | REGAIN_DEF | RegainDefUnitState | 0 | 0 | - |  |  |
 | REGAIN_HP | RegainHpUnitState | 0 | 0 | - |  |  |
-| REMOVE_ALL_ABNORMAL | RemoveAllAbnormalAbilityEffect | 5 | 476 | yes | EffectSide.ts, KiokuArchetypes.ts | Circle Of Fire, Glitterjoy Snow Globe, Grandioso Sinfonia |
-| REMOVE_ALL_BUFF | RemoveAllBuffAbilityEffect | 9 | 470 | yes | EffectSide.ts, KiokuArchetypes.ts | Atomo Arrabbiato, Cherry Ballad, Dark Art Dominion |
-| REMOVE_ALL_DEBUFF | RemoveAllDebuffAbilityEffect | 7 | 462 | yes | EffectSide.ts, KiokuArchetypes.ts | All Souls' Repose, Aqua Tempest, My Gigantic Heart |
+| REMOVE_ALL_ABNORMAL | RemoveAllAbnormalAbilityEffect | 5 | 477 | yes | EffectSide.ts, KiokuArchetypes.ts | Circle Of Fire, Glitterjoy Snow Globe, Grandioso Sinfonia |
+| REMOVE_ALL_BUFF | RemoveAllBuffAbilityEffect | 9 | 475 | yes | EffectSide.ts, KiokuArchetypes.ts | Atomo Arrabbiato, Cherry Ballad, Dark Art Dominion |
+| REMOVE_ALL_DEBUFF | RemoveAllDebuffAbilityEffect | 7 | 498 | yes | EffectSide.ts, KiokuArchetypes.ts | All Souls' Repose, Aqua Tempest, My Gigantic Heart |
 | REMOVE_ALL_UNABLE_ACTION | RemoveAllUnableActionAbilityEffect | 0 | 50 | yes | EffectSide.ts |  |
 | RESET_UNIQUE_BUFF | ResetUniqueBuffAbilityEffect | 3 | 0 | yes | EffectSide.ts | Désintégration, Metallicized Projectile, Venusta Dissonanza |
 | RESET_UNIQUE_DEBUFF | ResetUniqueDebuffAbilityEffect | 0 | 0 | listed |  |  |
 | REVIVAL_RATIO | RevivalRatioAbilityEffect | 0 | 0 | yes | EffectSide.ts |  |
 | RE_ACTION_TURN_UNIT_ACT | ReActionTurnUnitActAbilityEffect | 6 | 0 | yes | EffectSide.ts | Dark Art Dominion, Falsified Phenomena, Final Fatebloom |
 | SHIELD | ShieldUnitState | 13 | 559 | yes | EffectSide.ts, effectText.ts | Baldamente Fortissimo, Fiore Finale, Folter Gefängnis |
-| SLOW | SlowAbilityEffect | 6 | 905 | yes | EffectSide.ts | Infinite Poseidon, Meteor Punch, Nightmare Stinger |
+| SLOW | SlowAbilityEffect | 6 | 906 | yes | EffectSide.ts | Infinite Poseidon, Meteor Punch, Nightmare Stinger |
 | STEP_UP_SKILL | StepUpSkillUnitState | 1 | 0 | yes | KiokuArchetypes.ts | Venusta Dissonanza |
 | STUN | StunUnitState | 1 | 403 | yes | EffectSide.ts | Ultra Great Big Hammer |
-| SUMMON | SummonAbilityEffect | 0 | 411 | yes | PvE.ts |  |
+| SUMMON | SummonAbilityEffect | 0 | 412 | yes | PvE.ts |  |
 | SWITCH_SKILL | SwitchSkillUnitState | 10 | 0 | yes | KiokuArchetypes.ts | Absolute Venus, Falsified Phenomena, Final Fatebloom |
 | TRIG_COUNTER_ATTACK |  | 0 | 0 | - |  |  |
 | TSUBAME_CORE | TsubameCoreUnitState | 1 | 0 | yes | effectText.ts | Luce della Speranza |
 | TSUBAME_LINK | TsubameLinkUnitState | 1 | 0 | yes | KiokuArchetypes.ts, effectText.ts | Luce della Speranza |
 | UNIQUE_10030301 | Unique10030301UnitState | 1 | 0 | prefix/template? | effectText.ts | Fiore Finale |
 | UNIQUE_10070201 | Unique10070201UnitState | 1 | 0 | prefix/template? | effectText.ts | Groundhog Daze |
-| UNIQUE_BUFF | UniqueBuffUnitState | 24 | 0 | prefix/template? | effectText.ts | Absolute Venus, Aqua Tempest, Buon Natale Grazioso |
+| UNIQUE_BUFF | UniqueBuffUnitState | 25 | 0 | prefix/template? | effectText.ts | Absolute Venus, Aqua Tempest, Buon Natale Grazioso |
 | UNIQUE_BUFF_ACCUM | UniqueBuffAccumUnitState | 4 | 0 | prefix/template? | effectText.ts | Doppel of Agitation, Falsified Phenomena, Luminous Tenet |
 | UNIQUE_DEBUFF | UniqueDebuffUnitState | 4 | 0 | prefix/template? | effectText.ts | Bebe-O'-Lantern, Pumpkin Death Squall, Splashin' Kyubey Blast |
 | UNIQUE_DEBUFF_ACCUM | UniqueDebuffAccumUnitState | 3 | 0 | prefix/template? | effectText.ts | All Souls' Repose, Luminous Tenet, Yuletide Gift |
-| UNIQUE_ELEMENT_DRIVE | UniqueElementDriveUnitState | 0 | 0 | prefix/template? | effectText.ts |  |
+| UNIQUE_ELEMENT_DRIVE | UniqueElementDriveUnitState | 1 | 0 | prefix/template? | effectText.ts | Overdrive Impulse |
 | UNIQUE_ELEMENT_STACK | UniqueElementStackUnitState | 2 | 0 | yes | effectText.ts | Pumpkin Death Squall, Vinctio☆Magica |
 | UNIQUE_ENEMY_639002 | UniqueEnemy639002UnitState | 0 | 1 | prefix/template? | effectText.ts |  |
 | UNIQUE_ZONE | UniqueZoneUnitState | 5 | 0 | yes | effectText.ts | Evoluzione Presente, Falsified Phenomena, Floral Ironspike |
 | UP_ABNORMAL_HIT_RATE_RATIO | UpAbnormalHitRateRatioUnitState | 9 | 274 | yes | EffectSide.ts, effectText.ts | All Souls' Repose, Atomo Arrabbiato, Marigold Dadaism |
-| UP_ABNORMAL_PARRY_RATE_RATIO | UpAbnormalParryRateRatioUnitState | 0 | 164 | yes | EffectSide.ts |  |
+| UP_ABNORMAL_PARRY_RATE_RATIO | UpAbnormalParryRateRatioUnitState | 0 | 165 | yes | EffectSide.ts |  |
 | UP_AIM_GIV_DMG_FIXED |  | 0 | 0 | - |  |  |
 | UP_AIM_GIV_DMG_RATIO | UpAimGivDmgRatioUnitState | 0 | 358 | **MISSING** |  |  |
 | UP_AIM_RCV_DMG_FIXED |  | 0 | 0 | - |  |  |
 | UP_AIM_RCV_DMG_RATIO | UpAimRcvDmgRatioUnitState | 11 | 0 | yes | effectText.ts | Absolute Venus, Cherry Ballad, Cherry Blizzard |
-| UP_ATK_ACCUM_RATIO | UpAtkAccumRatioUnitState | 22 | 1352 | yes | effectText.ts | Bebe-O'-Lantern, Buon Natale Grazioso, Evoluzione Presente |
+| UP_ATK_ACCUM_RATIO | UpAtkAccumRatioUnitState | 23 | 1405 | yes | effectText.ts | Bebe-O'-Lantern, Buon Natale Grazioso, Evoluzione Presente |
 | UP_ATK_CONSUME_FIXED | UpAtkConsumeFixedUnitState | 0 | 0 | - |  |  |
 | UP_ATK_CONSUME_RATIO | UpAtkConsumeRatioUnitState | 2 | 0 | yes | effectText.ts | L'Ombre, Pluvia☆Neujahr |
 | UP_ATK_FIXED | UpAtkFixedUnitState | 0 | 0 | yes | effectText.ts |  |
-| UP_ATK_RATIO | UpAtkRatioUnitState | 61 | 1613 | yes | EffectSide.ts, KiokuArchetypes.ts, effectText.ts | A Tale of Cherry Blossoms, Absolute Rain, All Souls' Repose |
+| UP_ATK_RATIO | UpAtkRatioUnitState | 61 | 1678 | yes | EffectSide.ts, KiokuArchetypes.ts, effectText.ts | A Tale of Cherry Blossoms, Absolute Rain, All Souls' Repose |
 | UP_BREAKED_DAMAGE_RECEIVE_RATIO | UpBreakedDamageReceiveRatioUnitState | 0 | 0 | - |  |  |
-| UP_BREAK_DAMAGE_RECEIVE_RATIO | UpBreakedDamageReceiveRatioUnitState | 18 | 0 | yes | EffectSide.ts, effectText.ts | Absolute Venus, Assault Paranoia, Cherry Blizzard |
+| UP_BREAK_DAMAGE_RECEIVE_RATIO | UpBreakedDamageReceiveRatioUnitState | 19 | 0 | yes | EffectSide.ts, effectText.ts | Absolute Venus, Assault Paranoia, Cherry Blizzard |
 | UP_BREAK_EFFECT | UpBreakEffectRatioUnitState | 15 | 0 | yes | effectText.ts | Cherry Blizzard, Diamond Splash, Doppel of Agitation |
 | UP_BUFF_EFFECT_VALUE | UpBuffEffectValueUnitState | 14 | 251 | yes | EffectSide.ts, PvPKioku.ts, effectText.ts | Aqua Tempest, Brilliant Beam, Buon Natale Grazioso |
 | UP_COUNTER_ATTACK_RATIO |  | 0 | 0 | - |  |  |
@@ -242,9 +242,9 @@ Built from `main @ 69cdad25 2026-11-11` + uncommitted src/models changes. Regene
 | UP_CTR_FIXED | UpCtrFixedUnitState | 31 | 0 | yes | effectText.ts | Absolute Rain, Absolute Venus, Ayame's Kioku |
 | UP_CTR_RATIO | UpCtrFixedUnitState | 5 | 0 | yes | effectText.ts | A Tale of Cherry Blossoms, Assault Paranoia, Crimson Confectioner |
 | UP_DEBUFF_EFFECT_VALUE | UpDebuffEffectValueUnitState | 18 | 230 | yes | EffectSide.ts, PvPKioku.ts, effectText.ts | Atomo Arrabbiato, Bebe-O'-Lantern, Cherry Ballad |
-| UP_DEF_ACCUM_RATIO | UpDefAccumRatioUnitState | 5 | 655 | yes | effectText.ts | Baldamente Fortissimo, Folter Gefängnis, Kokoro's Kioku |
+| UP_DEF_ACCUM_RATIO | UpDefAccumRatioUnitState | 5 | 705 | yes | effectText.ts | Baldamente Fortissimo, Folter Gefängnis, Kokoro's Kioku |
 | UP_DEF_FIXED | UpDefFixedUnitState | 0 | 0 | - |  |  |
-| UP_DEF_RATIO | UpDefRatioUnitState | 21 | 1151 | yes | effectText.ts | Baldamente Fortissimo, Evoluzione Presente, Folter Gefängnis |
+| UP_DEF_RATIO | UpDefRatioUnitState | 21 | 1157 | yes | effectText.ts | Baldamente Fortissimo, Evoluzione Presente, Folter Gefängnis |
 | UP_EFFECT_HIT_RATE_RATIO | UpEffectHitRateRatioUnitState | 4 | 1 | yes | EffectSide.ts, effectText.ts | Désintégration, Hazuki's Kioku, Mito's Kioku |
 | UP_EFFECT_PARRY_RATE_RATIO | UpEffectParryRateRatioUnitState | 0 | 112 | yes | EffectSide.ts |  |
 | UP_ELEMENT_DMG_RATE_RATIO | UpElementDmgRateRatioUnitState | 8 | 130 | yes | EffectSide.ts, LuxBench.ts, effectText.ts | Evoluzione Presente, Falsified Phenomena, Fiore Finale |
@@ -252,14 +252,14 @@ Built from `main @ 69cdad25 2026-11-11` + uncommitted src/models changes. Regene
 | UP_ELEMENT_RESIST_RATIO | UpElementResistRatioUnitState | 0 | 173 | **MISSING** |  |  |
 | UP_EP_RECOVER_RATE_RATIO | UpRecoveryEpRateRatioRatioUnitState | 28 | 0 | yes | EffectSide.ts, KiokuArchetypes.ts, LuxBench.ts, effectText.ts | All Souls' Repose, Brilliant Beam, Circle Of Fire |
 | UP_GIV_BLEED_DMG_RATIO | UpGivBleedDmgRatioUnitState | 0 | 0 | - |  |  |
-| UP_GIV_BREAK_POINT_DMG_FIXED | UpGivBreakPointDmgFixedUnitState | 26 | 0 | yes | EffectSide.ts, effectText.ts, helpers.ts | Absolute Venus, Assault Paranoia, Baldamente Fortissimo |
+| UP_GIV_BREAK_POINT_DMG_FIXED | UpGivBreakPointDmgFixedUnitState | 27 | 0 | yes | EffectSide.ts, effectText.ts, helpers.ts | Absolute Venus, Assault Paranoia, Baldamente Fortissimo |
 | UP_GIV_BREAK_POINT_DMG_RATIO | UpGivBreakPointDmgRatioUnitState | 0 | 0 | - |  |  |
 | UP_GIV_BURN_DMG_RATIO | UpGivBurnDmgRatioUnitState | 0 | 0 | - |  |  |
 | UP_GIV_CURSE_DMG_RATIO | UpGivCurseDmgRatioUnitState | 0 | 0 | - |  |  |
-| UP_GIV_DMG_ACCUM_RATIO | UpGivDmgAccumRatioUnitState | 6 | 0 | yes | EffectSide.ts, effectText.ts | Kiss-shot, Light of Reckoning, Metallicized Projectile |
+| UP_GIV_DMG_ACCUM_RATIO | UpGivDmgAccumRatioUnitState | 7 | 0 | yes | EffectSide.ts, effectText.ts | Kiss-shot, Light of Reckoning, Metallicized Projectile |
 | UP_GIV_DMG_CONSUME_RATIO | UpGivDmgConsumeRatioUnitState | 0 | 0 | - |  |  |
 | UP_GIV_DMG_FIXED |  | 0 | 0 | - |  |  |
-| UP_GIV_DMG_RATIO | UpGivDmgRatioUnitState | 69 | 1258 | yes | EffectSide.ts, effectText.ts | A Tale of Cherry Blossoms, Absolute Rain, Absolute Venus |
+| UP_GIV_DMG_RATIO | UpGivDmgRatioUnitState | 70 | 1260 | yes | EffectSide.ts, effectText.ts | A Tale of Cherry Blossoms, Absolute Rain, Absolute Venus |
 | UP_GIV_NMDMG_FIXED |  | 0 | 0 | - |  |  |
 | UP_GIV_NMDMG_RATIO |  | 0 | 0 | - |  |  |
 | UP_GIV_POISON_DMG_RATIO | UpGivPoisonDmgRatioUnitState | 0 | 0 | - |  |  |
@@ -280,7 +280,7 @@ Built from `main @ 69cdad25 2026-11-11` + uncommitted src/models changes. Regene
 | UP_RCV_CTD_RATIO | UpRcvCtdRatioUnitState | 1 | 0 | **MISSING** |  | Pumpkin Death Squall |
 | UP_RCV_CTR_RATIO | UpRcvCtrRatioUnitState | 8 | 0 | yes | effectText.ts | Assault Paranoia, Atomo Arrabbiato, Final Fatebloom |
 | UP_RCV_DMG_FIXED |  | 0 | 0 | - |  |  |
-| UP_RCV_DMG_RATIO | UpRcvDmgRatioUnitState | 19 | 511 | yes | EffectSide.ts, effectText.ts | All Souls' Repose, Atomo Arrabbiato, Bebe-O'-Lantern |
+| UP_RCV_DMG_RATIO | UpRcvDmgRatioUnitState | 19 | 517 | yes | EffectSide.ts, effectText.ts | All Souls' Repose, Atomo Arrabbiato, Bebe-O'-Lantern |
 | UP_RCV_NMDMG_FIXED |  | 0 | 0 | - |  |  |
 | UP_RCV_NMDMG_RATIO |  | 0 | 0 | - |  |  |
 | UP_RCV_SMDMG_FIXED |  | 0 | 0 | - |  |  |
@@ -290,16 +290,16 @@ Built from `main @ 69cdad25 2026-11-11` + uncommitted src/models changes. Regene
 | UP_SMATK_RATIO |  | 0 | 0 | - |  |  |
 | UP_SMDEF_FIXED |  | 0 | 0 | - |  |  |
 | UP_SMDEF_RATIO |  | 0 | 0 | - |  |  |
-| UP_SPD_ACCUM_RATIO | UpSpdAccumRatioUnitState | 20 | 815 | yes | effectText.ts | Ayame's Kioku, Doppel of Invitations, Floral Ironspike |
+| UP_SPD_ACCUM_RATIO | UpSpdAccumRatioUnitState | 21 | 826 | yes | effectText.ts | Ayame's Kioku, Doppel of Invitations, Floral Ironspike |
 | UP_SPD_FIXED | UpSpdFixedUnitState | 31 | 0 | yes | EffectSide.ts, effectText.ts | Ashley's Kioku, Asuka's Kioku, Ayame's Kioku |
-| UP_SPD_RATIO | UpSpdRatioUnitState | 89 | 1482 | yes | EffectSide.ts, KiokuArchetypes.ts, effectText.ts | Absolute Rain, Absolute Venus, All Souls' Repose |
+| UP_SPD_RATIO | UpSpdRatioUnitState | 90 | 1511 | yes | EffectSide.ts, KiokuArchetypes.ts, effectText.ts | Absolute Rain, Absolute Venus, All Souls' Repose |
 | UP_WEAK_ELEMENT_DMG_ACCUM_RATIO | UpWeakElementDmgAccumRatioUnitState | 1 | 0 | yes | effectText.ts | Evoluzione Presente |
 | UP_WEAK_ELEMENT_DMG_CONSUME_RATIO | UpWeakElementDmgConsumeRatioUnitState | 0 | 0 | - |  |  |
-| UP_WEAK_ELEMENT_DMG_RATIO | UpWeakElementDmgRatioUnitState | 34 | 0 | yes | EffectSide.ts, effectText.ts | A Tale of Cherry Blossoms, Aqua Tempest, Buon Natale Grazioso |
+| UP_WEAK_ELEMENT_DMG_RATIO | UpWeakElementDmgRatioUnitState | 35 | 0 | yes | EffectSide.ts, effectText.ts | A Tale of Cherry Blossoms, Aqua Tempest, Buon Natale Grazioso |
 | VORTEX_ATK | VortexAtkUnitState | 1 | 0 | yes | EffectSide.ts, EngineBestTeam.ts, effectText.ts | Melodia Appassionata |
 | WEAKNESS | WeaknessUnitState | 2 | 515 | yes | EffectSide.ts, effectText.ts | Nine Phases, Sacred Gift |
 | ZONE_EXPAND | ZoneExpandAbilityEffect | 5 | 0 | **LISTED ONLY** |  | Evoluzione Presente, Falsified Phenomena, Floral Ironspike |
 | ZONE_RELEASE | ZoneReleaseAbilityEffect | 0 | 0 | - |  |  |
 | ZONE_STACK | ZoneStackAbilityEffect | 5 | 0 | **LISTED ONLY** |  | Evoluzione Presente, Falsified Phenomena, Floral Ironspike |
 
-293 types; 41 are used by data but have no logic reference in the engine: BLEED_ATK, BLEED_DEF, BURN_ATK, BURN_DEF, CONSUME_COUNT_POINT, CONSUME_SELF_HP, CONSUME_ZONE_STACK, COUNTDOWN_CANCEL, COUNTDOWN_DECREASE, COUNTDOWN_START, CURSE_ATK, DEC_BUFF_TURN_IMM, DEC_DEBUFF_TURN_IMM, DMG_RANDOM, DWN_ATK_ACCUM_RATIO, DWN_BARRIER_VALUE, DWN_CTD_ACCUM_RATIO, DWN_CTD_RATIO, DWN_CTR_ACCUM_RATIO, DWN_CTR_RATIO, DWN_EP_RECOVER_RATE_RATIO, DWN_GIV_DMG_RATIO, DWN_HEAL_RATE_RATIO, DWN_RCV_BREAK_POINT_DMG_RATIO, DWN_RCV_RECOVERY_RATIO, GAIN_BP_FIXED, GAIN_COUNT_POINT, GAIN_ZONE_STACK, LOCK_SPECIAL_ATTACK, LOCK_TURN_ORDER, LOSE_EP_FIXED, LOSE_EP_RATIO, POISON_ATK, POISON_DEF, PREVENT_ABNORMAL, UP_AIM_GIV_DMG_RATIO, UP_ELEMENT_RESIST_ACCUM_RATIO, UP_ELEMENT_RESIST_RATIO, UP_RCV_CTD_RATIO, ZONE_EXPAND, ZONE_STACK
+293 types; 43 are used by data but have no logic reference in the engine: BLEED_ATK, BLEED_DEF, BURN_ATK, BURN_DEF, CONSUME_COUNT_POINT, CONSUME_SELF_HP, CONSUME_ZONE_STACK, COUNTDOWN_CANCEL, COUNTDOWN_DECREASE, COUNTDOWN_START, CURSE_ATK, DEC_BUFF_TURN_IMM, DEC_DEBUFF_TURN_IMM, DMG_RANDOM, DRIVE_UP_BREAK_POINT_DMG_FIXED, DWN_ATK_ACCUM_RATIO, DWN_BARRIER_VALUE, DWN_CTD_ACCUM_RATIO, DWN_CTD_RATIO, DWN_CTR_ACCUM_RATIO, DWN_CTR_RATIO, DWN_EP_RECOVER_RATE_RATIO, DWN_GIV_DMG_RATIO, DWN_HEAL_RATE_RATIO, DWN_RCV_BREAK_POINT_DMG_RATIO, DWN_RCV_RECOVERY_RATIO, GAIN_BP_FIXED, GAIN_COUNT_POINT, GAIN_ZONE_STACK, LOCK_SPECIAL_ATTACK, LOCK_TURN_ORDER, LOSE_EP_FIXED, LOSE_EP_RATIO, OVER_BREAK_DAMAGE_RECEIVE_RATE_DRIVE, POISON_ATK, POISON_DEF, PREVENT_ABNORMAL, UP_AIM_GIV_DMG_RATIO, UP_ELEMENT_RESIST_ACCUM_RATIO, UP_ELEMENT_RESIST_RATIO, UP_RCV_CTD_RATIO, ZONE_EXPAND, ZONE_STACK

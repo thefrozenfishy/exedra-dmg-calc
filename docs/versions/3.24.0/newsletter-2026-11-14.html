@@ -1,0 +1,144 @@
+<title>Exedra Candy Channel Dispatch</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: the single reading column of the earlier dispatches; Lilly Candy's pink on a cool violet neutral, green = live now, violet = coming later. */
+:root {
+  --bg: #f6f4f9; --surface: #ffffff; --fg: #1c1a24; --muted: #5c5869; --line: #e2dde9;
+  --accent: #c1267e; --accent-soft: #fbe3f0; --ok: #2f7d55; --ok-soft: #e1f2e8; --warn: #5a4bb5; --warn-soft: #e9e6fa;
+  --display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #13111a; --surface: #1c1924; --fg: #ece9f2; --muted: #a9a3b8; --line: #322d3d;
+  --accent: #ff7cc0; --accent-soft: #3d1a2e; --ok: #6fcf9b; --ok-soft: #1c3127; --warn: #b2a8f5; --warn-soft: #272243; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #13111a; --surface: #1c1924; --fg: #ece9f2; --muted: #a9a3b8; --line: #322d3d;
+  --accent: #ff7cc0; --accent-soft: #3d1a2e; --ok: #6fcf9b; --ok-soft: #1c3127; --warn: #b2a8f5; --warn-soft: #272243; color-scheme: dark }
+body { background: var(--bg); color: var(--fg); font: 15px/1.6 var(--body); }
+.wrap { max-width: 720px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 40px 72px; display: flex; flex-direction: column; gap: 36px; }
+h1, h2, h3 { font-family: var(--display); text-wrap: balance; margin: 0; line-height: 1.15; }
+h1 { font-size: clamp(30px, 6vw, 44px); font-weight: 700; letter-spacing: -0.01em; }
+h2 { font-size: 24px; font-weight: 700; }
+h3 { font-size: 18px; font-weight: 700; }
+p { margin: 0; }
+section { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+.eyebrow { font: 500 12px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--accent); }
+.lede { font-size: 17px; color: var(--muted); max-width: 62ch; }
+.tldr { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 16px 18px; display: flex; flex-direction: column; gap: 8px; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 18px 20px; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.head { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: baseline; }
+.sub { font: 500 13px var(--mono); color: var(--muted); }
+.chip { font: 500 12px var(--mono); background: var(--accent-soft); color: var(--accent); border-radius: 4px; padding: 1px 7px; white-space: nowrap; }
+.chip.live { background: var(--ok-soft); color: var(--ok); }
+.chip.soon { background: var(--warn-soft); color: var(--warn); }
+.tip { border-left: 3px solid var(--accent); padding: 2px 0 2px 12px; color: var(--muted); font-size: 14px; }
+ul { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 6px; }
+.item { border-top: 1px solid var(--line); padding-top: 12px; display: flex; flex-direction: column; gap: 4px; }
+.note { color: var(--muted); font-size: 14px; }
+.tbl { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: 14px; font-variant-numeric: tabular-nums; }
+th, td { text-align: left; padding: 7px 10px 7px 0; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font: 500 12px var(--mono); color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
+footer { color: var(--muted); font-size: 13px; border-top: 1px solid var(--line); padding-top: 16px; }
+</style>
+
+<div class="wrap">
+  <header style="display:flex;flex-direction:column;gap:14px">
+    <div class="eyebrow">Madoka Exedra · new game data · 14 Nov 2026</div>
+    <h1>Lilly Candy arrives, and Element Drive finally gets a unit</h1>
+    <p class="lede">No client update today (still version 3.24.0). The new game data brings a new character, Lilly Candy, with the first kit built around Element Drive. It also brings the Stellar Photo Op Hunt event with its Score Attack, chapter 2 of Sorana's story, and a new Link Raid season.</p>
+  </header>
+
+  <div class="tldr">
+    <h3>In short</h3>
+    <ul>
+      <li><b>New kioku</b>: Overdrive Impulse (Lilly Candy, 5★ Void Breaker), from 16 Nov. She uses Web Clusters, Poppin' Candy and Void Drive.</li>
+      <li><b>Element Drive is live</b>: the break mechanic added in 3.24.0 now has its first user, so you'll see Void Drive levels and Over Break on enemies.</li>
+      <li><b>Events</b>: Stellar Photo Op Hunt, 16 Nov to 18 Dec. Its Score Attack (Lunar Excavator Witch) runs 16 to 30 Nov. Link Raid season 33 runs 19 Nov to 3 Dec.</li>
+      <li><b>Stages</b>: Sorana Nagiboshi's Memory, Luna (chapter 2, from 13 Nov), Mirror Layers 121 to 125, a new Ferris Wheel Link Raid EX level, and Lunar Excavator Witch Heartphial quests.</li>
+    </ul>
+  </div>
+
+  <section>
+    <div class="eyebrow">New kioku</div>
+    <div class="card">
+      <div class="head"><h2>Overdrive Impulse</h2><span class="sub">Lilly Candy · 5★ Void Breaker</span><span class="chip soon">from 16 Nov</span></div>
+      <p>Lilly Candy is a new character. Her kit runs on three resources: <b>Web Clusters</b> (max 4), the self-buff <b>Poppin' Candy</b>, and the enemy mark <b>Void Drive</b>.</p>
+      <div class="item"><h3>Basic attack</h3><p>100% void DMG to one enemy, and +1 Web Cluster.</p></div>
+      <div class="item"><h3>Battle skill: Spinfluence</h3><p>135% void DMG to all enemies, and applies Void Drive to them (2 turns). Also gives her Poppin' Candy (2 turns) and +1 Web Cluster. While Poppin' Candy is up, her break gauge depletion is higher and her follow-up attack's break bonus is +150%. Each hit also gives all allies +5% special attack DMG and gives her +5% SPD, each stacking up to 4 times.</p></div>
+      <div class="item"><h3>Special attack: Overdrive Impulse</h3><p>Up to 280% void DMG to all enemies (Lv 10). All allies deal +20% DMG against elemental weakness for 2 turns, and void allies get a further +5%. With Poppin' Candy active she also gains up to +30% SPD (2 turns) and +1 Web Cluster.</p></div>
+      <div class="item"><h3>Passive: Assault Chase</h3>
+        <ul>
+          <li>She starts the battle at 0 Web Clusters, with more break gauge depletion and up to +150% break bonus (Lv 10).</li>
+          <li>Each time she or an ally deals void DMG with a basic attack, battle skill or special attack, she gets 3 MP.</li>
+          <li>Each buff she receives from a battle skill gives her +1 Web Cluster.</li>
+          <li>At 4 Web Clusters she makes a follow-up attack. She also makes one each time an enemy is defeated, and that one is free. It deals 75% void DMG to all enemies, applies Void Drive (2 turns) and gives all allies +5% ATK (2 turns, up to 4 stacks).</li>
+          <li>When an enemy's break bonus hits its cap, she gets 15 MP.</li>
+        </ul>
+      </div>
+      <div class="item"><h3>Sub passive: Haste Technique</h3><p>On a Breaker: +20% SPD and +25% break bonus, and her battle skill raises her break gauge depletion for 2 turns.</p></div>
+      <div class="item"><h3>EX crys: A Sweet Moment from Me to You!</h3><p>She starts the battle with 1 Web Cluster. When an enemy is broken, she gets +10% SPD for 1 turn.</p></div>
+      <p class="tip">Teambuilding: she charges Web Clusters through buffs from battle skills, so pair her with supports whose battle skills buff her. Her special attack boosts damage against elemental weakness for the whole team, and void attackers get the most from her.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="eyebrow">Mechanic</div>
+    <h2>Void Drive and Over Break in play</h2>
+    <p>3.24.0 added Element Drive, but until now no unit used it. Lilly Candy applies <b>Void Drive</b> with her battle skill and her follow-up attack.</p>
+    <ul>
+      <li><b>Levels</b>: Void Drive starts at Lv 1 and goes up to Lv 3. Only the special attacks of the unit that applied it level it up. A role match raises it by up to 3 levels at once, so one special attack from Lilly Candy can take it straight to Lv 3.</li>
+      <li><b>Break</b>: allied void Breakers' special attacks deplete more break gauge on an enemy with Void Drive, and the bonus grows with the Drive's level.</li>
+      <li><b>Over Break</b>: once the enemy's break bonus is at its cap and its Void Drive is at max level, special attacks push the break bonus beyond the cap, by up to a further 100%. It is lost when the break ends or the Drive runs out.</li>
+    </ul>
+    <p class="tip">Void Drive lasts 2 turns. Apply it with her battle skill, level it with her special attack, then use your void Breakers' special attacks while the enemy is broken.</p>
+  </section>
+
+  <section>
+    <div class="eyebrow">Events and stages</div>
+    <div class="card">
+      <div class="head"><h3>Stellar Photo Op Hunt</h3><span class="chip soon">16 Nov to 18 Dec</span></div>
+      <p>A story event with 15 battle stages.</p>
+      <div class="item"><div class="head"><h3>Score Attack 31: Lunar Excavator Witch</h3><span class="chip soon">16 to 30 Nov</span></div>
+        <p>50 ranks. The boss gains DEF each time it takes a basic attack, battle skill or special attack while not broken, and on some difficulties it also gains SPD. It also takes less DMG while its break bonus is under 300%. Break it in as few hits as you can, and push its break bonus up before you go for damage.</p></div>
+      <div class="item"><div class="head"><h3>Link Raid season 33</h3><span class="chip soon">19 Nov to 3 Dec</span></div></div>
+      <div class="item"><div class="head"><h3>Sorana Nagiboshi's Memory: Luna</h3><span class="chip live">from 13 Nov</span></div><p>Chapter 2 of Sorana's story, 51 stages.</p></div>
+      <div class="item"><h3>Also new</h3><ul>
+        <li>Mirror Layers 121 to 125.</li>
+        <li>Link Raid: Uwasa of the Chelation Land Ferris Wheel, new EX level.</li>
+        <li>Heartphial quests: Lunar Excavator Witch (two stages).</li>
+      </ul></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="eyebrow">New crys and portraits</div>
+    <div class="tbl"><table>
+      <thead><tr><th>Name</th><th>Rarity</th><th>Effect</th></tr></thead>
+      <tbody>
+        <tr><td>Candy Channel streaming now!</td><td>5★</td><td>+12.5% void DMG dealt. On a Breaker: also +10% SPD.</td></tr>
+        <tr><td>Lunar Bungee Adventure</td><td>5★</td><td>+30% debuff hit rate.</td></tr>
+        <tr><td>Elevator Girl Witch</td><td>5★</td><td>+10% critical rate.</td></tr>
+        <tr><td>Lunar Excavator Witch</td><td>5★</td><td>+10% max HP.</td></tr>
+        <tr><td>Hot Snapshot Spot</td><td>4★</td><td>+10% void DMG dealt. On Lilly Candy: also +5% MP recovery rate.</td></tr>
+        <tr><td>Finishing Move! Ion Beam!</td><td>4★</td><td>+20% break effect.</td></tr>
+        <tr><td>Stratospheric Tempest</td><td>4★</td><td>+10% ailment RES.</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section>
+    <div class="eyebrow">Balance</div>
+    <p>Two enemy ATK UP skills were fixed: one now works for every element, and the other now targets correctly. No player kioku changed.</p>
+  </section>
+
+  <section>
+    <div class="eyebrow">Simulator</div>
+    <p>The damage calc and battle simulator have the new data, including Overdrive Impulse, Void Drive and Over Break. All the new stages run in the simulator.</p>
+  </section>
+
+  <footer>Made from the game data of 14 Nov 2026 (client 3.24.0). Times are JST.</footer>
+</div>
