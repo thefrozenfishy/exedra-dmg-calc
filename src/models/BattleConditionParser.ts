@@ -79,6 +79,7 @@ enum CompareContent {
     HAS_ALIMENT = 112,
     FIELD_START = 113,
     FIELD_END = 114,
+    ADD_REMOVABLE_BUFF_COUNT = 115, // 3.24.0 data (Overdrive Impulse): AddRemovableBuffCount, evaluated by src/engine (BattleUnitConditionChecker.Check case 115)
     HAS_DEBUFF_EFFECT_VALUE = 116, // 3.19 dump.cs: AddRemovableDebuffCount
     IS_CONSUME_HP = 117, // 3.21.0 IsConsumeHp: evaluated by src/engine only (the old engine has no HP cost, false here)
 
