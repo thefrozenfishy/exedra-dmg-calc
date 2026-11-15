@@ -121,6 +121,29 @@ export const useCharacterStore = defineStore('characterStore', () => {
     const hydrated = ref(false)
 
     let applyingCloudData = false
+    const syncHeartphialGroups = (): boolean => {
+        const groups = new Map<string, Character[]>()
+        characters.value.forEach(c => {
+            if (!c.heartphial) return
+            const g = groups.get(c.heartphial)
+            if (g) g.push(c)
+            else groups.set(c.heartphial, [c])
+        })
+
+        let changed = false
+        groups.forEach(members => {
+            const enabled = members.filter(c => c.enabled)
+            if (!enabled.length) return
+            const lvl = Math.max(...enabled.map(c => c.heartphialLvl ?? KiokuConstants.minHeartphialLvl))
+            members.forEach(c => {
+                if (c.heartphialLvl !== lvl) {
+                    c.heartphialLvl = lvl
+                    changed = true
+                }
+            })
+        })
+        return changed
+    }
 
     const precomputeSimilarities = async () => {
         const userId = getUserId()
@@ -277,6 +300,10 @@ export const useCharacterStore = defineStore('characterStore', () => {
 
             if (staleRows.length) {
                 applyCloudCharacters(staleRows)
+                if (syncHeartphialGroups()) {
+                    markPending(true)
+                    debouncedCloudSave()
+                }
             }
         } catch (err) {
             console.error("Failed to refresh characters from cloud:", err)
@@ -318,6 +345,11 @@ export const useCharacterStore = defineStore('characterStore', () => {
         applyCloudCharacters(rows)
         markPending(false)
         hydrated.value = true
+
+        if (syncHeartphialGroups()) {
+            markPending(true)
+            debouncedCloudSave()
+        }
     }
 
     const initializeCloud = async () => {
@@ -339,6 +371,7 @@ export const useCharacterStore = defineStore('characterStore', () => {
 
             if (rows.length > 0) {
                 applyCloudCharacters(rows)
+                if (syncHeartphialGroups()) markPending(true)
             }
         } catch (err) {
             console.error("Failed to initialize cloud characters:", err)
@@ -360,19 +393,25 @@ export const useCharacterStore = defineStore('characterStore', () => {
     const toggleCharacter = (id: number) => {
         const char = characters.value.find(c => c.id === id)
         if (char) char.enabled = !char.enabled
+        syncHeartphialGroups()
     }
 
     const charInfoById = new Map(Object.values(charInfo).map(info => [info.id, info]))
 
     const updateChar = (char: Character) => {
         const info = charInfoById.get(char.id)
-        characters.value[characters.value.findIndex(c => c.id === char.id)] = correctCharacterParams(info ? { ...char, ...info } : char);
+        const idx = characters.value.findIndex(c => c.id === char.id)
+        const heartphialChanged = idx === -1 || characters.value[idx].heartphialLvl !== char.heartphialLvl
+        characters.value[idx] = correctCharacterParams(info ? { ...char, ...info } : char);
 
-        characters.value.forEach(c => {
-            if (c.heartphial === char.heartphial) {
-                c.heartphialLvl = char.heartphialLvl
-            }
-        })
+        if (heartphialChanged) {
+            characters.value.forEach(c => {
+                if (c.heartphial === char.heartphial) {
+                    c.heartphialLvl = char.heartphialLvl
+                }
+            })
+        }
+        syncHeartphialGroups()
     }
 
     const setCharacters = (chars: Character[]) => {
@@ -422,6 +461,9 @@ export const useCharacterStore = defineStore('characterStore', () => {
             })
         }
     });
+    // Newly-released kioku come in at min heartphial; give them the level
+    // already reached by an owned kioku of the same character.
+    syncHeartphialGroups()
 
     const mergeChars = (rows: Character[]) => rows.map(c => {
         const chInfo = Object.values(charInfo).find(ch => ch.id === c.id);
