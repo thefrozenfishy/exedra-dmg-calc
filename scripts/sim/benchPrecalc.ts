@@ -10,10 +10,13 @@
 // them), and the file is rewritten as results come in. A file of another LUX_BENCH_VERSION is started over, so bump
 // the version (luxBenchCache.ts) whenever the numbers change, then run this again. Defaults: Fast and Medium lengths
 // (Slow = --turns 100 takes ~20x as long), all fight types, all three charts, A0-A5, cores - 1 processes.
+// Runs shortest battles first (all Fast, then all Medium, then Slow) from one shared queue, and saves as soon as a
+// config finishes, so the Fast and Medium charts can be uploaded while Slow is still running.
 import "../../src/models/BestTeamCalculator";
 import fs from "fs";
 import os from "os";
 import path from "path";
+import readline from "readline";
 import { spawn } from "child_process";
 import { fileURLToPath } from "url";
 import { benchKioku, LuxBenchCharts } from "../../src/models/LuxBench";
@@ -54,12 +57,15 @@ const list = (v: string | undefined, def: readonly number[], name = "list"): num
     return out
 }
 
-// ── child: computes its items, one JSON line per result on stdout
-async function child(file: string) {
+// ── child: takes items one JSON line at a time on stdin (sent by main as it finishes the previous one), answers one JSON
+// line per item on stdout, and exits when main closes stdin
+async function child() {
     console.debug = () => {}; console.warn = () => {}; console.log = () => {}
-    const items: Item[] = JSON.parse(fs.readFileSync(file, "utf8"))
     const benches = new Map<string, LuxBenchCharts>()
-    for (const it of items) {
+    const lines = readline.createInterface({ input: process.stdin, crlfDelay: Infinity })
+    for await (const line of lines) {
+        if (!line.trim()) continue
+        const it: Item = JSON.parse(line)
         const setup = setupOf(it)
         const sk = setupKey(setup)
         let bench = benches.get(sk)
@@ -103,9 +109,11 @@ async function main() {
     const items: Item[] = []
     // one config = one chart x fight size x battle length, i.e. one setup in the file; tracked for the progress log
     const configs: Config[] = []
-    for (const chart of charts) for (const t of turns) for (const e of enemies) {
+    // shortest battles first: every Fast config is complete (and in the file) before Medium starts, Medium before Slow
+    const turnOrder = [...turns].sort((a, b) => a - b)
+    for (const t of turnOrder) for (const chart of charts) for (const e of enemies) {
         const sk = setupKey(setupOf({ chart, enemies: e, turns: t }))
-        const cfg: Config = { label: configLabel(chart, e, t), total: 0, cached: 0, todo: 0, done: 0, failed: 0, failures: [] }
+        const cfg: Config = { label: configLabel(chart, e, t), turns: t, total: 0, cached: 0, todo: 0, done: 0, failed: 0, failures: [] }
         configs.push(cfg)
         // every chart has every character (KiokuGridPage chartCharacters)
         for (const name of names) for (const a of ascensions) {
@@ -131,37 +139,62 @@ async function main() {
 
     let done = 0, failed = 0, lastSave = Date.now(), lastReport = Date.now()
     const save = () => { fs.writeFileSync(OUT, JSON.stringify(file)); lastSave = Date.now() }
-    const tmp = fs.mkdtempSync(path.join(os.tmpdir(), "bench-precalc-"))
     const started = Date.now()
     const self = fileURLToPath(import.meta.url)
-    // items of one setup stay together per process (Lux's baselines are computed once per process and setup)
-    const shards: Item[][] = Array.from({ length: Math.min(jobs, items.length) }, () => [])
-    items.forEach((it, i) => shards[i % shards.length].push(it))
-    // a child answers its items in order, so position k of a shard is the item it is working on now
-    const position = shards.map(() => 0)
+    // One shared queue in config order (Fast, then Medium, then Slow): a free process takes the next item, so the workers
+    // finish one config together before moving on, a slow character doesn't hold a fixed shard back, and no process
+    // sits idle while others still have work. Each process keeps its Lux baselines per setup, so consecutive items of
+    // one config reuse them.
+    let next = 0
+    const workerCount = Math.min(jobs, items.length)
+    const current: (Item | undefined)[] = Array(workerCount).fill(undefined)
 
+    // remaining time: each config's own ms per item once it has results, else the average of measured configs of the
+    // same length, else the longest measured length scaled by battle length (cost is about proportional to turns)
+    const msPerItem = (c: Config): number | undefined => {
+        const n = c.done + c.failed
+        if (c.ms && n) return c.ms / n
+        const same = configs.filter(o => o.turns === c.turns && o.ms && o.done + o.failed)
+        if (same.length) return same.reduce((s, o) => s + o.ms! / (o.done + o.failed), 0) / same.length
+        const measured = configs.filter(o => o.ms && o.done + o.failed).sort((a, b) => b.turns - a.turns)[0]
+        return measured ? measured.ms! / (measured.done + measured.failed) * c.turns / measured.turns : undefined
+    }
     const report = () => {
         lastReport = Date.now()
         const finished = done + failed, elapsed = Date.now() - started
-        const eta = finished ? fmtDuration(elapsed / finished * (items.length - finished)) : "?"
+        let left = 0, known = true
+        for (const c of configs) {
+            const rest = c.todo - c.done - c.failed
+            if (!rest) continue
+            const ms = msPerItem(c)
+            if (ms === undefined) known = false
+            else left += ms * rest
+        }
+        const eta = known && finished ? fmtDuration(left / workerCount) : "?"
         console.log(`\n── ${new Date().toLocaleTimeString()}  ${bar(finished / items.length, 30)} ${pct(finished / items.length)}  ${finished}/${items.length}`
             + `${failed ? ` (${failed} failed)` : ""}  elapsed ${fmtDuration(elapsed)}, ~${eta} left`)
         const workers = new Map<Config, number>()
-        shards.forEach((s, i) => { if (position[i] < s.length) { const c = configFor(s[position[i]]); workers.set(c, (workers.get(c) ?? 0) + 1) } })
+        for (const it of current) if (it) { const c = configFor(it); workers.set(c, (workers.get(c) ?? 0) + 1) }
         for (const c of configs) {
             if (!c.todo) continue
             const n = c.done + c.failed, w = workers.get(c) ?? 0
             const state = n === c.todo ? "done" : w ? `${w} worker${w > 1 ? "s" : ""}` : n ? "paused" : "queued"
+            const ms = msPerItem(c)
             console.log(`   ${c.label.padEnd(LABEL_W)} ${bar(n / c.todo, 20)} ${pct(n / c.todo)} ${`${n}/${c.todo}`.padStart(9)}`
-                + `${c.failed ? ` ${c.failed} failed` : ""}  ${state}${c.ms && n < c.todo ? `, ~${fmtDuration(c.ms / n * (c.todo - n) / Math.max(1, w))} left` : ""}`)
+                + `${c.failed ? ` ${c.failed} failed` : ""}  ${state}${ms && n < c.todo && w ? `, ~${fmtDuration(ms * (c.todo - n) / w)} left` : ""}`)
         }
     }
 
-    await Promise.all(shards.map((shard, i) => new Promise<void>((resolve) => {
-        const f = path.join(tmp, `shard${i}.json`)
-        fs.writeFileSync(f, JSON.stringify(shard))
-        const p = spawn(process.execPath, [...process.execArgv, self, "--child", f], { stdio: ["ignore", "pipe", "inherit"] })
+    await Promise.all(current.map((_, i) => new Promise<void>((resolve) => {
+        const p = spawn(process.execPath, [...process.execArgv, self, "--child"], { stdio: ["pipe", "pipe", "inherit"] })
         let buf = "", itemStart = Date.now()
+        const feed = () => {
+            if (next < items.length) {
+                current[i] = items[next++]
+                itemStart = Date.now()
+                p.stdin.write(JSON.stringify(current[i]) + "\n")
+            } else { current[i] = undefined; p.stdin.end() }
+        }
         p.stdout.on("data", (d: Buffer) => {
             buf += d.toString()
             let nl: number
@@ -169,20 +202,31 @@ async function main() {
                 const line = buf.slice(0, nl); buf = buf.slice(nl + 1)
                 if (!line.startsWith("{")) continue
                 const r = JSON.parse(line)
-                const cfg = configFor(shard[position[i]++])
-                cfg.ms = (cfg.ms ?? 0) + Date.now() - itemStart; itemStart = Date.now()
+                const cfg = configFor(current[i]!)
+                cfg.ms = (cfg.ms ?? 0) + Date.now() - itemStart
+                feed()
                 if (r.error) { failed++; cfg.failed++; cfg.failures.push(r.error); console.error(`failed: ${r.error}`) }
                 else { (file.s[r.setup] ??= {})[r.key] = r.entry; done++; cfg.done++ }
-                if (cfg.done + cfg.failed === cfg.todo)
-                    console.log(`✓ ${cfg.label.trim()} finished: ${cfg.done} calculated${cfg.failed ? `, ${cfg.failed} failed` : ""}`)
+                if (cfg.done + cfg.failed === cfg.todo) {
+                    save() // a finished config is in the file right away, ready to upload
+                    console.log(`✓ ${cfg.label.trim()} finished: ${cfg.done} calculated${cfg.failed ? `, ${cfg.failed} failed` : ""} (saved)`)
+                }
                 if (Date.now() - lastSave > 10_000) save()
                 if (Date.now() - lastReport > REPORT_EVERY) report()
             }
         })
-        p.on("close", () => resolve())
+        p.on("close", (code) => {
+            if (current[i]) {
+                // the process died mid-item: count it as failed so the run still ends (running again retries it)
+                const cfg = configFor(current[i]!)
+                failed++; cfg.failed++; cfg.failures.push(`${current[i]!.name} A${current[i]!.ascension}: worker exited (${code})`)
+                current[i] = undefined
+            }
+            resolve()
+        })
+        feed()
     })))
     save()
-    fs.rmSync(tmp, { recursive: true, force: true })
     report()
     console.log(`\ndone in ${fmtDuration(Date.now() - started)}: ${done} calculated, ${failed} failed -> ${OUT} (${Math.round(fs.statSync(OUT).size / 1024)} KB)`)
     const broken = configs.filter(c => c.failed)
@@ -193,7 +237,7 @@ async function main() {
 }
 
 // ── progress log helpers
-interface Config { label: string, total: number, cached: number, todo: number, done: number, failed: number, failures: string[], ms?: number }
+interface Config { label: string, turns: number, total: number, cached: number, todo: number, done: number, failed: number, failures: string[], ms?: number }
 const REPORT_EVERY = 30_000
 const LABEL_W = 30
 const lengthName: Record<number, string> = { 5: "Fast", 15: "Medium", 100: "Slow" }
@@ -207,5 +251,5 @@ function fmtDuration(ms: number): string {
 }
 
 const childFile = process.argv.indexOf("--child")
-if (childFile >= 0) child(process.argv[childFile + 1])
+if (childFile >= 0) child()
 else main()
