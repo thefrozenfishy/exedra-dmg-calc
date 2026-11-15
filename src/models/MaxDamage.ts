@@ -208,6 +208,10 @@ const isState = (d: SkillDetail, withSlipDamage = false) => UNIT_STATE_TYPES.has
     // has it, e.g. Hollow Woman's ascension 2)
     && (withSlipDamage || (!isSlipDamageType(d.abilityEffectType) && d.abilityEffectType !== "CUTOUT"))
 
+/** Whether Max Damage / the bench's Max Burst applies an effect at all (collectTeamEffects with `slipDamage`, as
+ *  LuxBench.ultimateDamage calls it). Other rows (MP gains, follow-up triggers, Element Drive...) only act in battles. */
+export const isMaxDamageState = (d: SkillDetail) => isState(d, true)
+
 /** Whether any of the kit's skills, switch skills, follow-ups or passives has an effect of `type` (e.g. IMM_SLIP_DMG). */
 export function kitHasEffect(k: PvPKioku, type: string): boolean {
     const switches = switchSkillsOf(k)
@@ -217,7 +221,7 @@ export function kitHasEffect(k: PvPKioku, type: string): boolean {
 
 // Which part of a kit a passive effect comes from. PvPKioku merges them into one `effects` list, so this reads
 // the passive id back: crystalis are stored as full passive ids, the rest as id * 100 + level. UI grouping only.
-function passiveOrigin(k: PvPKioku, d: SkillDetail): string {
+export function passiveOrigin(k: PvPKioku, d: SkillDetail): string {
     const id = (d as any).passiveSkillMstId as number
     const kit = k as any
     if (kit.crys?.includes(id)) return "Crystalis"

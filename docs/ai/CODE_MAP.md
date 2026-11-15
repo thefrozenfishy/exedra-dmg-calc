@@ -36,6 +36,7 @@ Find any symbol with `python3 scripts/ai/xq.py ts <name>`.
 | `BattleRng.ts` | Every random decision of a simulated battle: modes seed/hit/miss/weighted/manual, `chance`, `choose`, `pickTarget`, `PendingDecision`, recorded `RngEvent`s. |
 | `BattleMath.ts` | `CsDecimal` exact decimal (.NET Core DecCalc), `seededRng`; also used by `src/engine/runtime.ts`. |
 | `LuxBench.ts`, `EngineBestTeam.ts`, `EngineTeamPool.ts` | Kioku Grid bench; Best SA Team search and its worker pool. |
+| `KitLimits.ts` | Per-effect element / role / ailment limits of a kit (bench extra bars, Kioku Grid bar tooltips); no engine import. |
 | `EngineAttackerLoadout.ts` | PvE page "find best attacker loadout": candidates (`loadoutSearch`), coordinate ascent (`findBestAttackerLoadoutEngine`), worker pool `EngineLoadoutPool` (`maxDamageWorker.ts` "loadout"). |
 | `EngineDamageDiagnosis.ts` | PvE page "Got less in game?" above Max Damage: in-game damage -> which counted buffs / debuffs were missing. Each candidate (card off / fewer stacks) run alone, subsets ranked by an estimate (same effect type adds, types multiply), best 10 re-run together; worker pool `EngineVariantPool` (`maxDamageWorker.ts` "variant", `MaxDmgOptions.onlyColumn`). Probe: `scripts/sim/probeDiagnosis.ts`. |
 | `ScoreAttackTeam.ts`, `ScoreAttackKioku.ts`, `BestTeamCalculator.ts` | The first-generation closed-form Score Attack model (Old Single Hit Calc, Old Best SA Team Calculator). `ScoreAttackKioku` is also the stats / effect-list object of Kioku Setup, Kioku Grid and Best SA. |

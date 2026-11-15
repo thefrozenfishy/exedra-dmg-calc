@@ -73,6 +73,11 @@ const NAMES: Record<string, string> = {
     COUNT: "Sigils",
     UNIQUE_ZONE: "Zone",
     UNIQUE_ELEMENT_STACK: "Element stacks",
+    UNIQUE_ELEMENT_DRIVE: "Element Drive",
+    DRIVE_UP_BREAK_POINT_DMG_FIXED: "Break gauge depletion up at a Drive level",
+    DRIVE_UP_BREAK_POINT_DMG_RATIO: "Break gauge depletion up at a Drive level",
+    OVER_BREAK_DAMAGE_RECEIVE_RATE_DRIVE: "Over Break (break bonus past its cap)",
+    GAIN_EP_FIXED: "MP gain",
 }
 
 const WORDS: Record<string, string> = {
@@ -90,7 +95,9 @@ export function effectName(type: string): string {
 }
 
 // Types whose value1 isn't the effect's size (an id, a count or a formula input): show the description only.
-const NO_VALUE = /^(UNIQUE|TSUBAME|COUNT|SHIELD|BARRIER|VORTEX|REFLECTION|ADD_BUFF_TURN|ADD_DEBUFF_TURN|UP_HATE|CONTINUOUS_RECOVERY|REGAIN|WEAKNESS)/
+// Flat amounts the description can't tell apart from tenths of a percent (it has none).
+const FLAT = /^(GAIN_EP_FIXED|GAIN_CHARGE_POINT)$/
+const NO_VALUE = /^(SWITCH_SKILL|UNIQUE|DRIVE_|OVER_BREAK|TSUBAME|COUNT|SHIELD|BARRIER|VORTEX|REFLECTION|ADD_BUFF_TURN|ADD_DEBUFF_TURN|UP_HATE|CONTINUOUS_RECOVERY|REGAIN|WEAKNESS)/
 
 /**
  * The size of one application. Percent effects store tenths of a percent: every *_RATIO / *_EFFECT_VALUE type,
@@ -102,8 +109,8 @@ export function effectValue(detail: SkillDetail, stacks = 1): string | null {
     const type = detail.abilityEffectType
     if (NO_VALUE.test(type) || !detail.value1) return null
     const pct = (v: number) => `${Math.round((v / 10 + Number.EPSILON) * 100) / 100}%`
-    const isPercent = /_RATIO$|_EFFECT_VALUE$|^ADDITIONAL_DAMAGE$/.test(type) || detail.description.includes("%")
-    const one = (v: number) => isPercent ? pct(v)
+    const isPercent = /_RATIO$|_EFFECT_VALUE$|^ADDITIONAL_DAMAGE$|^RCV_FINAL_DAMAGE$/.test(type) // RCV_FINAL_DAMAGE: v1/1000 (RcvFinalDamageUnitState ctor) || detail.description.includes("%")
+    const one = (v: number) => FLAT.test(type) ? v.toLocaleString() : isPercent ? pct(v)
         : detail.description === "" ? `${v.toLocaleString()} or ${pct(v)}` : v.toLocaleString()
     if (stacks <= 1) return one(detail.value1)
     return `${one(detail.value1)} × ${stacks} = ${one(detail.value1 * stacks)}`

@@ -379,7 +379,9 @@ import { Character, KiokuConstants, withMaxLevelsForPlayerLevel } from "../types
 import { Ailment, KiokuElement, KiokuObtain, KiokuRole, LuxMagica, obtainBorderClass } from '../types/enums'
 import { useSetting } from "../store/settingsStore"
 import { ScoreAttackKioku } from "../models/ScoreAttackKioku"
-import { skillDetails } from "../utils/helpers"
+import { kiokuData, skillDetails } from "../utils/helpers"
+import { PvPKioku } from "../models/PvPKioku"
+import { exCrysIds, kitLimitedEffects, kitLimits, neutralIdentity } from "../models/KitLimits"
 import ImageActionsToolbar from "../components/ImageActionsToolbar.vue"
 import type { ImageExportOptions } from "../utils/image"
 import { useFriendStore } from "../store/friendStore"
@@ -719,7 +721,7 @@ const levelsOnlyDescription = computed(() => levelsMode.value === "max"
     : levelsMode.value === "multi"
         ? `Every character is simulated at max level at each selected ascension (${multiAscensions.value.map(a => `A${a}`).join(", ")}), one bar per ascension; ascensions with the same result share one bar (e.g. A0-2). The number on the icon is the ascension. ${LuxMagica} is always max level, A0.`
         : `All characters use your current ascension with max levels, unowned characters are left out. ${LuxMagica} is always max level, A0.`)
-const levelsDescription = computed(() => levelsOnlyDescription.value + ` Every character measured and the ${LuxMagica} damage dealer wear the same gear instead of your own: their EX crystalis, Towering Offense++ (Towering Bulwark++ for DEF-based damage), the crystalis of their element, Dominant Blow++, the portrait Farewell to a Future Unseen (crit rate +15%) and The Universe's Edge (A5, max level) as support, which only works on Attackers. The ${LuxMagica} damage dealer also gets the average self buffs of the 5 star Attackers (ATK, DMG, crit, SPD, MP recovery, ...; Ultimate- and Battle Skill-only ones only for those). The other ${LuxMagica} in the team have no gear.`)
+const levelsDescription = computed(() => levelsOnlyDescription.value + ` Every character measured and the ${LuxMagica} damage dealer wear the same gear instead of your own: their EX crystalis, Towering Offense++ (Towering Bulwark++ for DEF-based damage), the crystalis of their element, Dominant Blow++, the portrait Farewell to a Future Unseen (crit rate +15%) and The Universe's Edge (A5, max level) as support, of which only the stats count: its passive works only on Attackers in game, so nobody gets it here and every role wears the same. The ${LuxMagica} damage dealer also gets the average self buffs of the 5 star Attackers (ATK, DMG, crit, SPD, MP recovery, ...; Ultimate- and Battle Skill-only ones only for those). The other ${LuxMagica} in the team have no gear.`)
 
 type ChartTargetContext = {
     role?: KiokuRole
@@ -819,6 +821,7 @@ interface GainRow {
     critRate: string
     sp?: number // break chart: SP the rotation costs per 100 AV
     ascension?: string // the ascension(s) the bar was calculated at, shown on the icon ("3", or "0-2" for merged bars)
+    plain?: Pick<GainRow, "maxGain" | "avgGain"> // extra bars: the character's plain bar (for the tooltip's difference)
 }
 
 interface CharGainResult {
@@ -913,7 +916,7 @@ const buildCharGainResult = (
         const existing = variantMap.get(tagKey)
 
         if (!existing || gainOf(g) > existing.gain) {
-            variantMap.set(tagKey, toRow(g, meaningfulTags))
+            variantMap.set(tagKey, { ...toRow(g, meaningfulTags), plain: { maxGain: noneGain.maxGain, avgGain: noneGain.avgGain } })
         }
     }
 
@@ -924,11 +927,12 @@ const buildCharGainResult = (
 // Negative gains are drawn below the zero line.
 const buildBarChart = (
     rows: GainRow[],
-    { idPrefix = "", titleLabel = "dmg increase", title = makeBarTitle, format = fmt }: {
+    { idPrefix = "", titleLabel = "dmg increase", title = makeBarTitle, format = fmt, note }: {
         idPrefix?: string
         titleLabel?: string
         title?: (row: Pick<GainRow, "avgGain" | "maxGain" | "critRate" | "sp">, label: string) => string
         format?: (gain: number) => string // the bar's label (default: a signed %)
+        note?: (row: GainRow) => string // more tooltip text after `title` (bench extra bars: variantNote)
     } = {},
 ) => {
     const sorted = [...rows].sort((a, b) => a.gain - b.gain)
@@ -942,7 +946,8 @@ const buildBarChart = (
     const min = Math.min(0, ...gains)
     const span = max - min || 1
 
-    const bars = sorted.map(({ ch, tags, gain: value, maxGain, avgGain, critRate, sp, ascension }) => {
+    const bars = sorted.map(row => {
+        const { ch, tags, gain: value, maxGain, avgGain, critRate, sp, ascension } = row
         const gain = Number.isFinite(value) ? value : top
         return {
         id: `${idPrefix}${ch.id}:${tags.map(t => `${t.kind}-${t.value}`).join("|") || "none"}${ascension !== undefined ? `:A${ascension}` : ""}`,
@@ -966,7 +971,7 @@ const buildBarChart = (
         spLabel: sp !== undefined ? sp.toFixed(2) : "",
         variant: tags.length > 0,
         label: format(value),
-        title: title({ avgGain, maxGain, critRate, sp }, titleLabel),
+        title: [title({ avgGain, maxGain, critRate, sp }, titleLabel), note?.(row)].filter(Boolean).join("\n\n"),
 
         style: gain < 0
             ? {
@@ -1307,6 +1312,65 @@ const mergeAscensionBars = (list: { ascension: number, rows: GainRow[] }[]): Gai
     return out
 }
 
+// Extra bars' tooltips: the character's effects that only apply in what the bar tests (KitLimits, the same rule that
+// makes the bench test that bar), and what else changes against the plain bar. The kit is built without the bench gear
+// (everyone wears the same), at max levels and the bar's ascension; cached per character and ascension.
+const variantKits = new Map<string, PvPKioku>()
+const variantKit = (name: string, ascension: number): PvPKioku => {
+    const key = `${name}:${ascension}`
+    let k = variantKits.get(key)
+    if (!k) variantKits.set(key, k = new PvPKioku({
+        name, ascension, kiokuLvl: KiokuConstants.maxKiokuLvl, magicLvl: KiokuConstants.maxMagicLvl,
+        heartphialLvl: KiokuConstants.maxHeartphialLvl, specialLvl: KiokuConstants.maxSpecialLvl,
+        crysIDs: exCrysIds(name), subCrysIDs: [],
+    } as any))
+    return k
+}
+const points = (v: number) => `${v > 0 ? "+" : ""}${v.toFixed(1)}`
+const variantNote = (kind: BenchChartKind, row: GainRow): string => {
+    const tags = row.tags.filter(t => t.kind === "element" || t.kind === "role" || t.kind === "ailment")
+    if (!tags.length) return ""
+    let k: PvPKioku
+    try {
+        k = variantKit(row.ch.name, Number((row.ascension ?? `${KiokuConstants.maxAscension}`).split("-")[0]))
+    } catch (e) {
+        console.warn(`Kioku Grid: no kit for ${row.ch.name}'s extra bar tooltip:`, e)
+        return ""
+    }
+    const element = tags.find(t => t.kind === "element")?.value
+    const role = tags.find(t => t.kind === "role")?.value as KiokuRole | undefined
+    const ailment = tags.find(t => t.kind === "ailment")?.value
+    const ailmentName = ailment?.split("/").map(capitalize).join("/")
+    const dealer = [element, role].filter(Boolean).join(" ")
+    const lines: string[] = []
+
+    if (row.plain && kind !== "break") {
+        lines.push(`vs plain bar: Max Burst ${points(row.maxGain - row.plain.maxGain)}, Average ${Number.isNaN(row.avgGain) ? "…" : points(row.avgGain - row.plain.avgGain)}`)
+    }
+
+    // The dealer on this bar and on the plain bar: the support chart's Lux takes the tested element / role (the rest
+    // neutral, LuxBenchCharts.resolve); the attacker chart's dealer is the character itself, only the ailment changes.
+    const lux = kiokuData[LuxMagica]
+    const plainDealer = kind === "support"
+        ? neutralIdentity(kitLimits(k), { element: lux.element as KiokuElement, role: lux.role as KiokuRole })
+        : { element: k.data.element as KiokuElement, role: k.data.role as KiokuRole }
+    // a merged tag ("Dark/Light") stands for bars of equal value: the effects of each
+    const seen = new Set<string>()
+    const effects = (element?.split("/") ?? [plainDealer.element]).flatMap(el => kitLimitedEffects(k,
+        { element: el, role: role ?? plainDealer.role, ailment: ailment?.split("/")[0] }, plainDealer))
+        .filter(e => !seen.has(`${e.source}|${e.text}`) && !!seen.add(`${e.source}|${e.text}`))
+    const what = [dealer && (kind === "support" ? `a ${dealer} dealer` : dealer), ailmentName && `${ailmentName} on enemies`].filter(Boolean).join(" + ")
+    // which tested value each effect needs, only when the bar tests more than one
+    const several = new Set(effects.flatMap(e => e.limitedTo)).size > 1
+    lines.push(effects.length ? `Only with ${what}:` : `No effects limited to ${what}.`)
+    for (const e of effects) {
+        const needs = several ? ` [${e.limitedTo.map(v => Object.values(Ailment).includes(v as Ailment) ? capitalize(v) : v).join(", ")}]` : ""
+        lines.push(`• ${e.source}: ${e.text}${needs}${kind !== "break" && !e.maxBurst ? " (battles only)" : ""}`)
+    }
+    if (kind === "support" && role && role !== plainDealer.role) lines.push(`Dealer has ${role} stats.`)
+    return lines.join("\n")
+}
+
 const buildBenchChart = (kind: BenchChartKind) => {
     const progress = benchProgress[kind].value
     if (progress.error) return { ...emptyBarChart(), error: progress.error, notes: [] as string[] }
@@ -1351,11 +1415,12 @@ const buildBenchChart = (kind: BenchChartKind) => {
 
     return {
         ...buildBarChart(shown, kind === "break"
-            ? { idPrefix: `bench-${kind}:`, title: benchBreakTitle, format: fmtBreak }
+            ? { idPrefix: `bench-${kind}:`, title: benchBreakTitle, format: fmtBreak, note: row => variantNote(kind, row) }
             : {
                 idPrefix: `bench-${kind}:`,
                 titleLabel: kind === "support" ? "dmg increase" : "dmg vs Lux",
                 title: benchBarTitle,
+                note: row => variantNote(kind, row),
             }),
         error: "",
         notes: progress.failed ? [`${progress.failed} character(s) could not be simulated (see console).`] : [],
@@ -1442,7 +1507,7 @@ const benchCharts = computed(() => [
         title: `Damage dealer strength compared to ${LuxMagica}`,
         fightType: true,
         desc: [
-            `Damage each character deals as the damage dealer, compared to ${LuxMagica} in the same spot as an Attacker: ${LuxMagica} has the average HP, ATK and DEF of the 5 star Attackers (and, as an Attacker, gets The Universe's Edge), the same for every role.`,
+            `Damage each character deals as the damage dealer, compared to ${LuxMagica} in the same spot as an Attacker: ${LuxMagica} has the average HP, ATK and DEF of the 5 star Attackers, the same for every role.`,
             `${LuxMagica} is the 0% line; 100% means double of her damage.`,
             benchAverageDmg.value
                 ? `Average Damage: ${benchAv()} AV (${benchTurns.value} turns) of battle on the game's battle code with infinite SP (topped up to 5 before every turn): ultimates as soon as they are ready and Battle Skill every turn (a few kits have their own play, e.g. Tenebrous Arcana uses her Basic Attack at 3 Magic), the other four units being ${LuxMagica} without gear. ${CRIT_TEXT} Only the damage dealer's own damage counts. ${RATE_TEXT(benchAv())}`
@@ -1479,7 +1544,7 @@ const toggleBarTip = (bar: { id: string; title: string }, e: MouseEvent) => {
         return
     }
 
-    const halfWidth = 110 // half the tooltip's max width, keeps it fully on screen
+    const halfWidth = Math.min(150, window.innerWidth / 2 - 8) // half the tooltip's max width, keeps it fully on screen
     activeBarTip.value = {
         id: bar.id,
         text: bar.title,
@@ -2337,7 +2402,7 @@ watch([showBenchCharts, markedCharacters, levelsMode, multiAscensions, fightMode
     position: fixed;
     z-index: 1000;
     width: max-content;
-    max-width: 220px;
+    max-width: min(300px, calc(100vw - 16px));
     padding: 0.4rem 0.6rem;
     transform: translate(-50%, calc(-100% - 12px));
     background: var(--panel);

@@ -378,3 +378,9 @@
 - `scripts/sim/checkMechanics.ts` is gone (the old engine's checks went with gen2): the runbook's "checkMechanics"
   means checkEngine<ver>.ts now. A STAGES= sweep over a stage id with no enemies throws "Sequence contains no
   elements" in maxBy: take the stage list from getQuestEnemyAppearanceMstList, not from guessed id ranges.
+- `xq effect <TYPE>` says "NOT IMPLEMENTED in the engine" when its index is older than the port (OVER_BREAK_* after the
+  3.24.0 port, 2026-11-15): run `xq build`, or check `src/engine` directly, before believing it.
+- Bench gear must be the same for every role: a support passive that works on one role only (The Universe's Edge:
+  Attackers) made every buff weigh more on non-Attacker dealers (Lilly Candy's fake Breaker bar). The damage gear
+  gives the support's stats only (`supportStatsOnly`); the engine adapter adds a support's passive from `k.support`
+  on its own, so taking it out of `effects` is not enough. Role bars still differ by the role's average stats.

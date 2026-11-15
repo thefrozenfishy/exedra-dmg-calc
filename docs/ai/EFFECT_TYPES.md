@@ -1,6 +1,6 @@
 # Effect types: data usage vs engine coverage (GENERATED - do not edit)
 
-Built from `main @ 20449e33 2026-11-14`. Regenerate after switching branches or changing the engine: `python3 scripts/ai/xq.py build`. Details for one type: `python3 scripts/ai/xq.py effect <TYPE>`.
+Built from `main @ b36b2b11 2026-11-14` + uncommitted src/models changes. Regenerate after switching branches or changing the engine: `python3 scripts/ai/xq.py build`. Details for one type: `python3 scripts/ai/xq.py effect <TYPE>`.
 
 - **kiokus** = collectable kiokus (getStyleMstList) whose kit uses it (all levels, id*100+lvl keys, follow-ups followed).
 - **stages** = quest stages whose enemies use it (skill sets + enemy passives).
@@ -11,7 +11,7 @@ Built from `main @ 20449e33 2026-11-14`. Regenerate after switching branches or 
 | ADDITIONAL_COUNTDOWN_CANCEL_SKILL_ACT | AdditionalCountdownCancelSkillActAbilityEffect | 0 | 48 | prefix/template? | KiokuArchetypes.ts |  |
 | ADDITIONAL_COUNTDOWN_ZERO_SKILL_ACT | AdditionalCountdownZeroSkillActAbilityEffect | 0 | 48 | prefix/template? | KiokuArchetypes.ts |  |
 | ADDITIONAL_DAMAGE | AdditionalDamageUnitState | 4 | 0 | yes | EffectSide.ts, KiokuArchetypes.ts, effectText.ts | Aqua Tempest, Luminous Tenet, Pluvia☆Neujahr |
-| ADDITIONAL_SKILL_ACT | AdditionalSkillActAbilityEffect | 36 | 645 | yes | KiokuArchetypes.ts, LuxBench.ts | A Tale of Cherry Blossoms, Absolute Venus, Aqua Tempest |
+| ADDITIONAL_SKILL_ACT | AdditionalSkillActAbilityEffect | 36 | 645 | yes | KiokuArchetypes.ts, KitLimits.ts | A Tale of Cherry Blossoms, Absolute Venus, Aqua Tempest |
 | ADDITIONAL_TURN_UNIT_ACT | AdditionalTurnUnitActAbilityEffect | 17 | 99 | yes | EffectSide.ts, KiokuArchetypes.ts, PvE.ts | A Tale of Cherry Blossoms, Absolute Rain, Concentrated Missile Fire |
 | ADD_BUFF_TURN | AddBuffTurnUnitState | 24 | 0 | yes | EffectSide.ts, KiokuArchetypes.ts, effectText.ts | Aqua Tempest, Baldamente Fortissimo, Buon Natale Grazioso |
 | ADD_BUFF_TURN_IMM | AddBuffTurnImmAbilityEffect | 2 | 16 | yes | EffectSide.ts, KiokuArchetypes.ts | Absolute Venus, Scorchin' Summer Spike |
@@ -92,8 +92,8 @@ Built from `main @ 20449e33 2026-11-14`. Regenerate after switching branches or 
 | DMG_RATIO | DmgRatioAbilityEffect | 0 | 489 | yes | BattleConditionParser.ts |  |
 | DMG_SMAGIC |  | 0 | 0 | - |  |  |
 | DRAIN |  | 0 | 0 | - |  |  |
-| DRIVE_UP_BREAK_POINT_DMG_FIXED | DriveUpBreakPointDmgFixedUnitState | 1 | 0 | **MISSING** |  | Overdrive Impulse |
-| DRIVE_UP_BREAK_POINT_DMG_RATIO | DriveUpBreakPointDmgRatioUnitState | 0 | 0 | - |  |  |
+| DRIVE_UP_BREAK_POINT_DMG_FIXED | DriveUpBreakPointDmgFixedUnitState | 1 | 0 | yes | effectText.ts | Overdrive Impulse |
+| DRIVE_UP_BREAK_POINT_DMG_RATIO | DriveUpBreakPointDmgRatioUnitState | 0 | 0 | yes | effectText.ts |  |
 | DWN_AIM_GIV_DMG_FIXED |  | 0 | 0 | - |  |  |
 | DWN_AIM_GIV_DMG_RATIO | DwnAimGivDmgRatioUnitState | 0 | 0 | - |  |  |
 | DWN_AIM_RCV_DMG_FIXED |  | 0 | 0 | - |  |  |
@@ -161,9 +161,9 @@ Built from `main @ 20449e33 2026-11-14`. Regenerate after switching branches or 
 | DWN_SPD_FIXED | DwnSpdFixedUnitState | 0 | 0 | - |  |  |
 | DWN_SPD_RATIO | DwnSpdRatioUnitState | 6 | 1063 | yes | EffectSide.ts, effectText.ts | All Souls' Repose, La Danse Macabre, Pumpkin Death Squall |
 | GAIN_BP_FIXED | GainBpFixedAbilityEffect | 2 | 0 | **MISSING** |  | Metallicized Projectile, Vinctio☆Magica |
-| GAIN_CHARGE_POINT | GainChargePointAbilityEffect | 44 | 1033 | yes | EffectSide.ts | A Tale of Cherry Blossoms, Absolute Venus, Aqua Tempest |
+| GAIN_CHARGE_POINT | GainChargePointAbilityEffect | 44 | 1033 | yes | EffectSide.ts, effectText.ts | A Tale of Cherry Blossoms, Absolute Venus, Aqua Tempest |
 | GAIN_COUNT_POINT | GainCountPointAbilityEffect | 1 | 0 | **LISTED ONLY** |  | Dark Art Dominion |
-| GAIN_EP_FIXED | GainEpFixedAbilityEffect | 68 | 0 | yes | EffectSide.ts, KiokuArchetypes.ts | A Tale of Cherry Blossoms, Absolute Rain, Absolute Venus |
+| GAIN_EP_FIXED | GainEpFixedAbilityEffect | 68 | 0 | yes | EffectSide.ts, KiokuArchetypes.ts, effectText.ts | A Tale of Cherry Blossoms, Absolute Rain, Absolute Venus |
 | GAIN_EP_RATIO | GainEpRatioAbilityEffect | 30 | 0 | yes | EffectSide.ts, KiokuArchetypes.ts | A Tale of Cherry Blossoms, Absolute Rain, Brilliant Beam |
 | GAIN_SOLO_RAID_BUFF_POINT | GainSoloRaidBuffPointAbilityEffect | 0 | 0 | - |  |  |
 | GAIN_SP_FIXED | GainSpFixedAbilityEffect | 30 | 0 | yes | EffectSide.ts, KiokuArchetypes.ts | All Souls' Repose, Aqua Tempest, Buon Natale Grazioso |
@@ -177,7 +177,7 @@ Built from `main @ 20449e33 2026-11-14`. Regenerate after switching branches or 
 | LOSE_BP_FIXED | LoseBpFixedAbilityEffect | 0 | 0 | - |  |  |
 | LOSE_EP_FIXED | LoseEpFixedAbilityEffect | 0 | 11 | **MISSING** |  |  |
 | LOSE_EP_RATIO | LoseEpRatioAbilityEffect | 0 | 454 | **MISSING** |  |  |
-| OVER_BREAK_DAMAGE_RECEIVE_RATE_DRIVE | OverBreakDamageReceiveRateDriveUnitState | 1 | 0 | **MISSING** |  | Overdrive Impulse |
+| OVER_BREAK_DAMAGE_RECEIVE_RATE_DRIVE | OverBreakDamageReceiveRateDriveUnitState | 1 | 0 | yes | effectText.ts | Overdrive Impulse |
 | POISON_ATK | PoisonAtkUnitState | 2 | 201 | **LISTED ONLY** |  | Atomo Arrabbiato, My Creations |
 | POISON_BREAK |  | 0 | 0 | - |  |  |
 | POISON_DEF | PoisonDefUnitState | 0 | 1 | **LISTED ONLY** |  |  |
@@ -213,7 +213,7 @@ Built from `main @ 20449e33 2026-11-14`. Regenerate after switching branches or 
 | UNIQUE_BUFF_ACCUM | UniqueBuffAccumUnitState | 4 | 0 | prefix/template? | effectText.ts | Doppel of Agitation, Falsified Phenomena, Luminous Tenet |
 | UNIQUE_DEBUFF | UniqueDebuffUnitState | 4 | 0 | prefix/template? | effectText.ts | Bebe-O'-Lantern, Pumpkin Death Squall, Splashin' Kyubey Blast |
 | UNIQUE_DEBUFF_ACCUM | UniqueDebuffAccumUnitState | 3 | 0 | prefix/template? | effectText.ts | All Souls' Repose, Luminous Tenet, Yuletide Gift |
-| UNIQUE_ELEMENT_DRIVE | UniqueElementDriveUnitState | 1 | 0 | prefix/template? | effectText.ts | Overdrive Impulse |
+| UNIQUE_ELEMENT_DRIVE | UniqueElementDriveUnitState | 1 | 0 | yes | effectText.ts | Overdrive Impulse |
 | UNIQUE_ELEMENT_STACK | UniqueElementStackUnitState | 2 | 0 | yes | effectText.ts | Pumpkin Death Squall, Vinctio☆Magica |
 | UNIQUE_ENEMY_639002 | UniqueEnemy639002UnitState | 0 | 1 | prefix/template? | effectText.ts |  |
 | UNIQUE_ZONE | UniqueZoneUnitState | 5 | 0 | yes | effectText.ts | Evoluzione Presente, Falsified Phenomena, Floral Ironspike |
@@ -297,9 +297,9 @@ Built from `main @ 20449e33 2026-11-14`. Regenerate after switching branches or 
 | UP_WEAK_ELEMENT_DMG_CONSUME_RATIO | UpWeakElementDmgConsumeRatioUnitState | 0 | 0 | - |  |  |
 | UP_WEAK_ELEMENT_DMG_RATIO | UpWeakElementDmgRatioUnitState | 35 | 0 | yes | EffectSide.ts, effectText.ts | A Tale of Cherry Blossoms, Aqua Tempest, Buon Natale Grazioso |
 | VORTEX_ATK | VortexAtkUnitState | 1 | 0 | yes | EffectSide.ts, EngineBestTeam.ts, effectText.ts | Melodia Appassionata |
-| WEAKNESS | WeaknessUnitState | 2 | 515 | yes | EffectSide.ts, effectText.ts | Nine Phases, Sacred Gift |
+| WEAKNESS | WeaknessUnitState | 2 | 515 | yes | EffectSide.ts, KitLimits.ts, effectText.ts | Nine Phases, Sacred Gift |
 | ZONE_EXPAND | ZoneExpandAbilityEffect | 5 | 0 | **LISTED ONLY** |  | Evoluzione Presente, Falsified Phenomena, Floral Ironspike |
 | ZONE_RELEASE | ZoneReleaseAbilityEffect | 0 | 0 | - |  |  |
 | ZONE_STACK | ZoneStackAbilityEffect | 5 | 0 | **LISTED ONLY** |  | Evoluzione Presente, Falsified Phenomena, Floral Ironspike |
 
-293 types; 43 are used by data but have no logic reference in the engine: BLEED_ATK, BLEED_DEF, BURN_ATK, BURN_DEF, CONSUME_COUNT_POINT, CONSUME_SELF_HP, CONSUME_ZONE_STACK, COUNTDOWN_CANCEL, COUNTDOWN_DECREASE, COUNTDOWN_START, CURSE_ATK, DEC_BUFF_TURN_IMM, DEC_DEBUFF_TURN_IMM, DMG_RANDOM, DRIVE_UP_BREAK_POINT_DMG_FIXED, DWN_ATK_ACCUM_RATIO, DWN_BARRIER_VALUE, DWN_CTD_ACCUM_RATIO, DWN_CTD_RATIO, DWN_CTR_ACCUM_RATIO, DWN_CTR_RATIO, DWN_EP_RECOVER_RATE_RATIO, DWN_GIV_DMG_RATIO, DWN_HEAL_RATE_RATIO, DWN_RCV_BREAK_POINT_DMG_RATIO, DWN_RCV_RECOVERY_RATIO, GAIN_BP_FIXED, GAIN_COUNT_POINT, GAIN_ZONE_STACK, LOCK_SPECIAL_ATTACK, LOCK_TURN_ORDER, LOSE_EP_FIXED, LOSE_EP_RATIO, OVER_BREAK_DAMAGE_RECEIVE_RATE_DRIVE, POISON_ATK, POISON_DEF, PREVENT_ABNORMAL, UP_AIM_GIV_DMG_RATIO, UP_ELEMENT_RESIST_ACCUM_RATIO, UP_ELEMENT_RESIST_RATIO, UP_RCV_CTD_RATIO, ZONE_EXPAND, ZONE_STACK
+293 types; 41 are used by data but have no logic reference in the engine: BLEED_ATK, BLEED_DEF, BURN_ATK, BURN_DEF, CONSUME_COUNT_POINT, CONSUME_SELF_HP, CONSUME_ZONE_STACK, COUNTDOWN_CANCEL, COUNTDOWN_DECREASE, COUNTDOWN_START, CURSE_ATK, DEC_BUFF_TURN_IMM, DEC_DEBUFF_TURN_IMM, DMG_RANDOM, DWN_ATK_ACCUM_RATIO, DWN_BARRIER_VALUE, DWN_CTD_ACCUM_RATIO, DWN_CTD_RATIO, DWN_CTR_ACCUM_RATIO, DWN_CTR_RATIO, DWN_EP_RECOVER_RATE_RATIO, DWN_GIV_DMG_RATIO, DWN_HEAL_RATE_RATIO, DWN_RCV_BREAK_POINT_DMG_RATIO, DWN_RCV_RECOVERY_RATIO, GAIN_BP_FIXED, GAIN_COUNT_POINT, GAIN_ZONE_STACK, LOCK_SPECIAL_ATTACK, LOCK_TURN_ORDER, LOSE_EP_FIXED, LOSE_EP_RATIO, POISON_ATK, POISON_DEF, PREVENT_ABNORMAL, UP_AIM_GIV_DMG_RATIO, UP_ELEMENT_RESIST_ACCUM_RATIO, UP_ELEMENT_RESIST_RATIO, UP_RCV_CTD_RATIO, ZONE_EXPAND, ZONE_STACK

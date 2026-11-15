@@ -11,8 +11,9 @@
 //     damage is ignored, so a support that also hits hard doesn't count, only what it changes about the dealer.
 // Gear (benchKioku `gear`): the dealer Lux, the reference Lux and every character measured wear the same build: Towering
 // Offense++ (Towering Bulwark++ for kits that deal DEF-based damage), the crystalis of their element, Dominant Blow++,
-// the portrait Farewell to a Future Unseen and The Universe's Edge (A5, max level) as support, which the game only
-// applies to Attackers. The dealer / reference Lux also gets the average self buffs of the 5 star Attackers
+// the portrait Farewell to a Future Unseen and The Universe's Edge (A5, max level) as support, of which only the stats
+// count (its passive only works on Attackers in game; the bench gives nobody it, so every role wears the same gear,
+// user's choice 2026-11-15: supportStatsOnly). The dealer / reference Lux also gets the average self buffs of the 5 star Attackers
 // (averageAttackerSelfBuffs). The filler Lux stay bare: their gear only acts on themselves.
 // The dummies have SPD 1, so they never get a turn within the run: they don't attack, and (broken units only
 // recover at their own turn start) they stay broken once broken. In Average Damage they start unbroken with a 1-point
@@ -22,15 +23,16 @@ import { PvPKioku } from "./PvPKioku";
 import { Kioku } from "./Kioku";
 import { BattleType } from "../types/enums"
 import type { RngMode } from "./BattleRng";
-import { actorSkillTypeRestriction, ailmentConditionValues, critConditionUsed, unitCountConditionsMet, unitTypeConditionValues } from "./BattleConditionParser";
+import { actorSkillTypeRestriction, critConditionUsed, unitCountConditionsMet } from "./BattleConditionParser";
 import type { QuestEnemyAppearance } from "./PvE";
-import { crystalisesByStyle, kiokuData, passiveDetails, skillDetailsByMstId } from "../utils/helpers";
-import { KiokuConstants, TargetType, TargetTypeLookup, targetTypeToLvl, type BattleEvent, type BattleSnapshot, type KiokuArgs, type SkillDetail } from "../types/KiokuTypes";
-import { Ailment, elementMap, roleMap, KiokuElement, KiokuRole, LuxMagica } from "../types/enums";
+import { kiokuData, passiveDetails, skillDetailsByMstId } from "../utils/helpers";
+import { KiokuConstants, TargetType, type BattleEvent, type BattleSnapshot, type KiokuArgs, type SkillDetail } from "../types/KiokuTypes";
+import { Ailment, elementMap, KiokuElement, KiokuRole, LuxMagica } from "../types/enums";
 import { computeMaxDamageEngine } from "../battle/EngineMaxDamage";
 import { E } from "../battle/engineBundle";
 import { AILMENT_STATE, BENCH_BROKEN_RATE, BENCH_DEF, BenchRng, benchBattle, benchPassive, benchSkills, benchStage, benchStyle, keepAilment, keepStates, middleEnemy, type BenchPassiveRow } from "../battle/EngineBench";
 import { collectTeamEffects } from "./MaxDamage";
+import { exCrysIds, kitDetails, kitLimits, neutralIdentity } from "./KitLimits";
 
 export { BENCH_BROKEN_RATE, BENCH_DEF }
 // "Infinite" SP: topped up to this whenever time moves forward. Truly endless SP never ends a chain of battle skills
@@ -51,9 +53,7 @@ export interface BenchIdentity { element?: KiokuElement, role?: KiokuRole, ailme
 
 const enemyStatesOf = (ailment?: Ailment): string[] => ailment ? [AILMENT_STATE[ailment]] : []
 
-/** The character's own EX crystalis (SelectionAbility rows with its styleMstId; one per character). */
-export const exCrysIds = (name: string): number[] =>
-    (crystalisesByStyle[kiokuData[name]?.id ?? -1] ?? []).map(c => c.selectionAbilityMstId)
+export { exCrysIds }
 
 // ── Bench gear (the same build for everyone measured, see the header)
 export const BENCH_PORTRAIT = "Farewell to a Future Unseen"
@@ -103,6 +103,7 @@ export function benchKioku(args: Omit<KiokuArgs, "crysIDs" | "subCrysIDs"> & Par
         ? { ...bare, portrait: BENCH_BREAK_PORTRAIT, supportKey: benchSupportKey(BENCH_BREAK_SUPPORT), crysIDs: [...bare.crysIDs, QUICKSTEP, MANA_INFUSION] } as KiokuArgs
         : gear ? { ...bare, portrait: BENCH_PORTRAIT, supportKey: benchSupportKey(), crysIDs: [...bare.crysIDs, ...gearCrys(args.name, element)] } as KiokuArgs : bare
     const k = new PvPKioku(geared)
+    if (gear === true) supportStatsOnly(k)
     // Lux given a role (any, Breaker included) also gets that role's stats: the average HP/ATK/DEF of its 5 stars (Lux
     // herself excluded) at her levels, so e.g. an Attacker-identity Lux hits like an average Attacker. Gear adds what the
     // portrait and support add to her own stats (support stats x 0.16, portrait stats, as in Kioku.getBase*).
@@ -149,6 +150,22 @@ function averageRoleStats(role: KiokuRole, levels: Pick<KiokuArgs, "ascension" |
     const stats = units.length ? { hp: avg(k => k.getBaseHp()), atk: avg(k => k.getBaseAtk()), def: avg(k => k.getBaseDef()) } : undefined
     roleStatCache.set(key, stats)
     return stats
+}
+
+// [BENCH] Damage gear: the support's stats (x 0.16, Kioku.getBase*) without its passive, for every role. The stats are
+// fixed as they are now and the support is taken off, so neither PvPKioku's effect list nor the engine adapter
+// (adapter/NetworkUnits, which adds a support's passive by its target) gives the passive.
+function supportStatsOnly(k: PvPKioku) {
+    const kk = k as any, sup = kk.support
+    if (!sup) return
+    const hp = k.getBaseHp(), atk = k.getBaseAtk(), def = k.getBaseDef()
+    k.getBaseHp = () => hp
+    k.getBaseAtk = () => atk
+    k.getBaseDef = () => def
+    const id = sup.data.support_id * 100 + sup.supportLvl
+    k.effects = k.effects.filter(e => (e as any).passiveSkillMstId !== id)
+    k.triggerOrderEffects = k.triggerOrderEffects.filter(e => (e as any).passiveSkillMstId !== id)
+    kk.support = undefined
 }
 
 // A support works only on a unit of its target role / element. PvPKioku checked the unit's own (Lux: Breaker, Light);
@@ -240,23 +257,6 @@ function giveSelfBuffs(k: PvPKioku, buffs: AverageSelfBuff[]) {
     k.triggerOrderEffects.push(...p.details)
 }
 
-const DAMAGE_TYPES = new Set(["DMG_ATK", "DMG_DEF", "DMG_HP", "DMG_RANDOM"])
-
-/** Every skill / passive row of a kit: basic attack, battle skill, ultimate, passives, and the follow-ups they grant. */
-function kitDetails(k: PvPKioku): SkillDetail[] {
-    const details: SkillDetail[] = []
-    for (const type of [TargetType.attackId, TargetType.skillId, TargetType.specialId]) {
-        const id = (k.data as any)[TargetTypeLookup[type as keyof typeof TargetTypeLookup]]
-        const lvl = (k as any)[targetTypeToLvl[type as keyof typeof targetTypeToLvl]] ?? 1
-        details.push(...(skillDetailsByMstId.get(id * 100 + lvl) ?? []) as SkillDetail[])
-    }
-    details.push(...k.effects)
-    for (const d of [...details]) {
-        if (d.abilityEffectType === "ADDITIONAL_SKILL_ACT") details.push(...(skillDetailsByMstId.get(d.value1) ?? []) as SkillDetail[])
-    }
-    return details
-}
-
 /** Kits whose effects react to crits: a "critical hit happened" condition (CTDUnitCount 303, e.g. Absolute Rain's
  *  "on critical hit, ATK +10%") or a state used up by a crit (UP/DWN_CTD_CONSUME_FIXED). For those the expected-crit
  *  shortcut would miss the procs, so their battles roll crits as in the game. */
@@ -268,19 +268,7 @@ export function kitReactsToCrits(k: PvPKioku): boolean {
  *  aside, where `element` is the attack element) and the IS_ELEMENT_TYPE / IS_ROLE_TYPE conditions they use.
  *  Covers the basic attack, battle skill, ultimate, every passive and the follow-up skills they grant. */
 export function kitRestrictions(k: PvPKioku): { elements: KiokuElement[], roles: KiokuRole[], ailments: Ailment[] } {
-    const details = kitDetails(k)
-    const elements = new Set<KiokuElement>(), roles = new Set<KiokuRole>(), ailments = new Set<Ailment>()
-    for (const d of details) {
-        ailmentConditionValues([d.startConditionSetIdCsv, d.activeConditionSetIdCsv]).forEach(a => ailments.add(a))
-        if (!DAMAGE_TYPES.has(d.abilityEffectType)) {
-            if (d.element && elementMap[d.element]) elements.add(elementMap[d.element])
-            if ((d as any).role && roleMap[(d as any).role]) roles.add(roleMap[(d as any).role])
-        }
-        const cond = unitTypeConditionValues([d.startConditionSetIdCsv, d.activeConditionSetIdCsv])
-        cond.elements.forEach(e => elements.add(e as KiokuElement))
-        cond.roles.forEach(r => roles.add(r as KiokuRole))
-    }
-    return { elements: [...elements], roles: [...roles], ailments: [...ailments] }
+    return kitLimits(k) // KitLimits (shared with the Kioku Grid bar tooltips)
 }
 
 /** The ailment an effect type gives (WEAKNESS, CURSE_ATK -> CURSE, BLEED_ATK -> BLEED, ...), if any. */
@@ -701,12 +689,7 @@ export class LuxBenchCharts {
     // (ADDITIONAL_DAMAGE, TSUBAME_LINK) is dealt in the attacker's own element (without one it misses the dummies'
     // weakness), and some ally targeting prefers roles (Thunder Torrent's haste picks an Attacker/Breaker ally).
     private neutral(x: PvPKioku): { element: KiokuElement, role: KiokuRole } {
-        const { elements, roles } = kitRestrictions(x)
-        const pick = <T,>(own: T, all: T[], limited: T[]) => !limited.includes(own) ? own : all.find(v => !limited.includes(v)) ?? own
-        return {
-            element: pick(this.reference.data.element as KiokuElement, Object.values(KiokuElement), elements),
-            role: pick(this.reference.data.role as KiokuRole, Object.values(KiokuRole), roles),
-        }
+        return neutralIdentity(kitRestrictions(x), { element: this.reference.data.element as KiokuElement, role: this.reference.data.role as KiokuRole })
     }
 
     // A tested identity as the dealer actually is: untested parts replaced by the neutral ones.

@@ -525,7 +525,7 @@ Ultimates (SpecialAttackAct) and follow-ups: only ExecuteSkill - no TurnStart/Tu
 - Magic Seal AI (LockSpecialAttackUnitState.GetAIFilteredTargets 0x16fc950) now only targets units it can land on
   (IsTarget = CanAddTo).
 
-### Element Drive and Over Break (game 3.24.0, ported 2026-11-12; no unit uses them yet)
+### Element Drive and Over Break (game 3.24.0, ported 2026-11-12; first kit: Overdrive Impulse / Lilly Candy)
 - UNIQUE_ELEMENT_DRIVE = UniqueElementDriveUnitState (replaces UNIQUE_ELEMENT_BREAK; UniqueLvUnitStateBase, Neutral,
   INeutralState.TargetSide 1 = enemies): v1 pattern, v2 level group, v3 roleBonusExp. CanAddTo 0x1726B50: free, or
   the active Drive already there is from the same giver. Level-up type 2 = AfterActiveSkill: AbilityEffectLauncher
@@ -547,6 +547,11 @@ Ultimates (SpecialAttackAct) and follow-ups: only ExecuteSkill - no TurnStart/Tu
   IsOverBreakEnterWhenHit / IsOverBreakMaxWhenHit (UI). UnitCondition.Refresh clears it (bonus and cap 0) once the
   unit is not broken or has no active Drive left.
 - Checks: `scripts/sim/checkEngine324.ts`.
+- Overdrive Impulse (2026-11-15): Spinfluence gives Void Drive (v3 roleBonusExp 3: one Void Breaker SA = max level);
+  Assault Chase holds DRIVE_UP_BREAK_POINT_DMG_FIXED (Drive lv 1/2/3: +15/30/50 gauge on SAs) and
+  OVER_BREAK_DAMAGE_RECEIVE_RATE_DRIVE 1000/1000/1000 (cap +100, +100 per qualifying SA hit for any role). In a bench
+  battle the first qualifying SA opens the cap and the next one fills it (bonus 100 = broken rate 500 -> 600). Max
+  Damage / Max Burst do not apply these (not unit states). [C]
 
 ## 14. PvP specifics
 
