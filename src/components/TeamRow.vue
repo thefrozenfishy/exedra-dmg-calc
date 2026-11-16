@@ -133,6 +133,7 @@ const props = defineProps<{
     // Set by the engine Best SA Team page (the stage it ran against): the button then opens the PvE Simulator on that
     // stage instead of the old single hit calc.
     pveStageId?: number,
+    pveSetup?: Record<string, unknown>,
     // Set when the run was on a Score Attack stage: the rightmost column shows the estimated SA score of each row
     saScoreInputs?: ScoreAttackScoreInputs
 }>()
@@ -140,6 +141,8 @@ const teamStore = useTeamStore()
 const router = useRouter()
 const pveStageSetting = useSetting<number>('pveStageId', 982250)
 const pveAttackerIndex = useSetting('pveAttackerIndex', 2)
+// picked up once by the PvE Simulator tab this opens (PvESimulatorPage openPendingStage)
+const pvePendingStage = useSetting<(Record<string, unknown> & { at: number }) | null>('pvePendingStage', null)
 
 // A support with the crystalis the search scored it with (team.suppNcrys, engine search only): exactly those equipped,
 // no sub crystalis (the search scores supports without them). Without that list the support keeps its own setup.
@@ -206,6 +209,8 @@ function saveToStore(idx: number) {
     if (toPvE) {
         pveStageSetting.value = props.pveStageId!
         pveAttackerIndex.value = 2 // the attacker goes in slot 2 above
+        // the run's wave, phase, per-enemy settings and enemy buffs, so the PvE Simulator scores the same field
+        pvePendingStage.value = props.pveSetup ? { ...props.pveSetup, dealer: 2, at: Date.now() } : null
     }
     const route = router.resolve(toPvE ? '/pve-simulator' : '/sa-simulator-single')
     window.open(route.href, '_blank')

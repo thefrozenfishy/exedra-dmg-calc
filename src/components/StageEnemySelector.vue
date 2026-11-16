@@ -110,6 +110,15 @@ const selection = computed(() => {
         weakElements: [...se.weakElements.value],
         ailments: [...se.ailments.value],
         partyBuffId: raid.value ? partyBuffChoice.value : undefined,
+        // the whole selection as the PvE Simulator's setup (utils/pveSetup PvESetup, stage part; field indexes), for
+        // "Open team in PvE Simulator" (components/TeamRow): same wave, phase, target, broken, alive and enemy buffs
+        pveSetup: {
+            stageId: stageId.value, wave: se.wavePos.value, phase: se.phasePos.value, target: se.mainTargetIdx.value,
+            broken: se.broken.value.map(Boolean), breakRate: se.breakRate.value.map(r => r ?? null),
+            dead: se.alive.value.map((a, i) => a ? -1 : i).filter(i => i >= 0),
+            enemyBuffs: JSON.parse(JSON.stringify(se.enemyBuffs.value)),
+            raid: raid.value ? { partyBuffId: partyBuffChoice.value, noRoundLimit: false, attempts: [] } : null,
+        },
     }
 })
 

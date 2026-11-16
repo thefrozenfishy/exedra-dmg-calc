@@ -23,6 +23,16 @@ _Last updated: 2026-11-16 (2): enemy buff settings; before: 2026-11-16: Over Bre
   Ultimate crit): default 8.86M, DEF 10 stacks 7.39M, 50 -> 4.45M, 99 (and 500, capped) -> 2.99M; not broken
   0.59M, with "DMG taken -80% while break bonus < 300%" off 2.95M. Battle seed 1: 6 stacks after 6 actions; off -> none;
   20 at start -> 26.
+- "Got less in game?" (PvESimulatorPage diagCandidates): no longer suggests effects that can't be missing in battle
+  (`alwaysOn`, user's rule): a passive of the dealer itself or of the stage mode, battle-start timing only, permanent,
+  no start / active condition (e.g. Towering Offense). Other members' abilities and anything conditional stay.
+- "Open team in PvE Simulator" (Highest Dmg Calc, components/TeamRow) handed over only the stage id: the PvE page
+  opened on wave 1 / phase 1 with default target / broken / rate / alive and no enemy buffs, so its Max Damage differed.
+  Now the run's selection (StageEnemySelector `selection.pveSetup`, a PvESetup stage part) goes through the setting
+  `pvePendingStage`; the PvE page applies it once on mount (`openPendingStage` -> `applyStageSetup`, shared with saved
+  setups; same stage, < 1 min old). Probe `scripts/sim/probeEnemyBuffsScore.ts`: EngineTeamScore and the PvE page's
+  Max Damage give the same Ultimate crit on 983550 with and without DEF 30 stacks (8,862,233 / 5,552,786).
+  Not carried: the calc's "Attacker HP when using ultimate" (the PvE page has no such input).
 - Checks: checkFixturesEngine 16/16, app type-check 223 = baseline (none in changed files). No src/engine change.
 
 ## 2026-11-15 (2): bench precalc speed (user's request)

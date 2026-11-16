@@ -654,7 +654,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, markRaw, nextTick, reactive, ref, shallowRef, watch, onBeforeUnmount } from 'vue'
+import { computed, markRaw, nextTick, reactive, ref, shallowRef, watch, onBeforeUnmount, onMounted } from 'vue'
 import { useTeamStore } from '../store/singleTeamStore'
 import { useSetting } from '../store/settingsStore'
 import CharacterEditor from '../components/CharacterEditor.vue'
@@ -1029,6 +1029,7 @@ function diagCandidates(): DiagCandidate[] {
     const out: DiagCandidate[] = []
     for (const e of effectViews.value) {
         if (e.status !== 'used' && e.status !== 'partial') continue
+        if (e.alwaysOn) continue // can't be missing in battle (alwaysOn)
         const who = `${e.casterName} ${e.source}`
         const what = `${e.name}${e.value ? ' ' + e.value : ''}`
         const vortexOff: Record<string, number[]> = {}
@@ -1264,6 +1265,19 @@ function effectStatus(e: MaxDmgEffect): { status: EffectStatus, statusText: stri
         : { status: 'used', statusText: enemyCount === 1 ? 'On the enemy' : `On all ${enemyCount} enemies` }
 }
 
+// An effect that can't be missing in battle (user's rule for "Got less in game?"): a passive of the dealer itself
+// (ability, ascension, crystalis, portrait, support) or of the stage mode, given at battle start, for the whole fight,
+// with no start or active condition (e.g. Towering Offense equipped). Passive states can't be removed by buff removal
+// ([CONFIRMED 3.24] RemoveAllBuffAbilityEffect.IsRemovable 0x1949EF0: origin ActiveSkill only). Another member's
+// abilities stay candidates.
+function alwaysOn(e: MaxDmgEffect): boolean {
+    const d: any = e.detail
+    if (!('passiveSkillDetailMstId' in d)) return false
+    if (e.casterPos !== dealerPos.value && e.source !== 'Stage') return false
+    if (d.startConditionSetIdCsv || d.activeConditionSetIdCsv || (d.turn ?? 0) > 0) return false
+    const timings = String(d.startTimingIdCsv ?? '').split(',').filter(Boolean)
+    return timings.length > 0 && timings.every(t => t === '1')
+}
 const effectRows = computed(() => (maxDmg.value?.effects ?? []).map(e => {
     const count = Math.max(0, Math.min(e.maxStacks, stacks.get(e.key) ?? e.maxStacks))
     return {
@@ -1290,6 +1304,7 @@ const effectRows = computed(() => (maxDmg.value?.effects ?? []).map(e => {
         sources: [e.source],
         startConds: e.detail.startConditionSetIdCsv ? [e.detail.startConditionSetIdCsv] : [] as string[],
         activeConds: e.detail.activeConditionSetIdCsv ? [e.detail.activeConditionSetIdCsv] : [] as string[],
+        alwaysOn: alwaysOn(e),
         ...effectStatus(e),
     }
 }))
@@ -1315,6 +1330,7 @@ const effectViews = computed(() => {
         addUnique(card.activeConds, row.activeConds)
         if (row.description && !card.description.split('\n').includes(row.description)) card.description = card.description ? `${card.description}\n${row.description}` : row.description
         card.forOwner ||= row.forOwner
+        card.alwaysOn &&= row.alwaysOn
         if (STATUS_ORDER[row.status] < STATUS_ORDER[card.status]) { card.status = row.status; card.statusText = row.statusText }
     }
     return out
@@ -1755,15 +1771,9 @@ function currentSetup(): PvESetup {
     }
 }
 
-// Called right after the team's slots were loaded. Staged like importBattle: the stage and team watchers
-// reset the wave, target, decisions and attempts first, then the saved values go in.
-async function applySetup(raw: unknown) {
-    if (!raw) return
-    const s = sanitizePvESetup(raw)
-    if (!stageWaves(s.stageId).length) {
-        toast.warning(`This team's stage (${s.stageId}) isn't in this version's data, so only the team was loaded.`)
-        return
-    }
+// The stage part of a setup: stage, dealer, wave, phase and the per-enemy settings (saved teams, and the Highest Dmg
+// Calc's "Open team in PvE Simulator", which hands over its stage selection: openPendingStage).
+async function applyStageSetup(s: PvESetup) {
     stageId.value = s.stageId
     attackerIndex.value = s.dealer
     await nextTick()
@@ -1775,13 +1785,39 @@ async function applySetup(raw: unknown) {
     if (s.target < wave.value.length) mainTargetIdx.value = s.target
     if (s.broken.length === wave.value.length) broken.value = [...s.broken]
     if (s.breakRate.length === wave.value.length) breakRate.value = s.breakRate.map(r => r ?? undefined)
+    se.enemyBuffs.value = s.enemyBuffs ?? {}
+    if (s.raid) partyBuffId.value = s.raid.partyBuffId
+}
+// The Highest Dmg Calc's "Open team in PvE Simulator" (components/TeamRow): its stage selection, picked up once by the
+// tab it opens (within a minute, same stage).
+const pendingStage = useSetting<(Record<string, unknown> & { at: number }) | null>('pvePendingStage', null)
+async function openPendingStage() {
+    const p = pendingStage.value
+    if (!p) return
+    pendingStage.value = null
+    if (Date.now() - p.at > 60_000) return
+    const s = sanitizePvESetup(p)
+    if (s.stageId !== stageId.value || !stageWaves(s.stageId).length) return
+    await applyStageSetup(s)
+}
+onMounted(() => { void openPendingStage() })
+
+// Called right after the team's slots were loaded. Staged like importBattle: the stage and team watchers
+// reset the wave, target, decisions and attempts first, then the saved values go in.
+async function applySetup(raw: unknown) {
+    if (!raw) return
+    const s = sanitizePvESetup(raw)
+    if (!stageWaves(s.stageId).length) {
+        toast.warning(`This team's stage (${s.stageId}) isn't in this version's data, so only the team was loaded.`)
+        return
+    }
+    await applyStageSetup(s)
     resetEffects()
     s.excluded.forEach(k => excluded.add(k))
     s.included?.forEach(k => included.add(k))
     Object.entries(s.vortexEnemies ?? {}).forEach(([k, v]) => { vortexEnemies[k] = [...v] })
     Object.entries(s.allyTargets ?? {}).forEach(([k, v]) => { allyTargets[k] = [...v] })
     Object.entries(s.stacks).forEach(([k, v]) => stacks.set(k, v))
-    se.enemyBuffs.value = s.enemyBuffs ?? {}
     seed.value = s.seed
     simTurns.value = s.turns
     rngMode.value = s.rngMode

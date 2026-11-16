@@ -307,7 +307,7 @@ Lower = faster but more likely to skip a team that could have closed the gap.
                 </label>
                 <ResultsHeader :optimizeAverageDamage :showSaScore="!!saScoreInputs" />
                 <div class="team-row-wrapper" v-for="(team, idx) in topResults" :key="idx">
-                    <TeamRow :team :weakElements :loading="false" :optimalSubCrys :pveStageId="runStageId"
+                    <TeamRow :team :weakElements :loading="false" :optimalSubCrys :pveStageId="runStageId" :pveSetup="runPveSetup"
                         :saScoreInputs />
                 </div>
 
@@ -316,7 +316,7 @@ Lower = faster but more likely to skip a team that could have closed the gap.
                         <h3>Top Teams for {{ attackerName }}</h3>
                         <ResultsHeader :optimizeAverageDamage :showSaScore="!!saScoreInputs" />
                         <div class="team-row-wrapper" v-for="(team, idx) in teams" :key="idx">
-                            <TeamRow :team :weakElements :loading="false" :optimalSubCrys :pveStageId="runStageId"
+                            <TeamRow :team :weakElements :loading="false" :optimalSubCrys :pveStageId="runStageId" :pveSetup="runPveSetup"
                                 :saScoreInputs />
                         </div>
                     </div>
@@ -385,6 +385,8 @@ const progress = ref<FinalTeam>({})
 const stageRef = ref<InstanceType<typeof StageEnemySelector> | null>(null)
 // the stage of the last run: the result rows open the PvE Simulator on it
 const runStageId = ref<number | undefined>(undefined)
+// the stage selection the run was scored on, handed to the PvE Simulator by "Open team in PvE Simulator" (TeamRow)
+const runPveSetup = ref<Record<string, unknown> | undefined>(undefined)
 
 // Score Attack score: the inputs show while a Score Attack stage is picked, the result rows show the estimate when the
 // last run was on one. Same settings (and formula, models/PvEScore) as the PvE Simulator and single battle editor.
@@ -719,6 +721,7 @@ async function startSimulation() {
     }
     runWeakElements.value = [...stage.weakElements]
     runStageId.value = stage.stageId
+    runPveSetup.value = JSON.parse(JSON.stringify(stage.pveSetup))
     prevObligatoryKioku = [...obligatoryKioku.value]
     prevAttackers = [...attackers.value, ...extraAttackers.value]
     running.value = true
