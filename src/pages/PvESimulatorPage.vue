@@ -96,6 +96,7 @@
             <h2 class="section-title page-section-title">Enemies <span class="title-sub">· wave {{ waveIdx + 1 }}<template v-if="phases.length"> · phase {{ phase }}</template></span>
             </h2>
             <EnemyCards :s="stageView" />
+            <EnemyBuffs :s="stageView" battles />
 
             <template v-for="row in extraEnemyRows" :key="row.title">
                 <h3 class="enemy-row-title">{{ row.title }}</h3>
@@ -694,6 +695,7 @@ import { wikiBattleUrl } from '../utils/wikiBattlePage'
 import { useStageEnemies, enemyView } from '../composables/useStageEnemies'
 import StageWaveRows from '../components/StageWaveRows.vue'
 import EnemyCards from '../components/EnemyCards.vue'
+import EnemyBuffs from '../components/EnemyBuffs.vue'
 
 const team = useTeamStore()
 const stageId = useSetting<number>('pveStageId', 982250)
@@ -886,7 +888,7 @@ function requestMaxDamage() {
 const statsForNerds = useSetting('pveStatsForNerds', false)
 // a vortex's chosen enemies are indexes of the enemies alive: they start over when one dies / comes back
 watch(alive, (a, old) => { if (old && a.length === old.length && a.some((x, i) => x !== old[i])) for (const k of Object.keys(vortexEnemies)) delete vortexEnemies[k] })
-watch([teamKiokus, aliveWave, dealerPos, () => [...excluded], () => [...included], () => JSON.stringify(vortexEnemies), () => JSON.stringify(allyTargets), () => [...stacks], broken, breakRate, mainTargetIdx, partyBuffId], requestMaxDamage, { deep: true, immediate: true })
+watch([teamKiokus, aliveWave, dealerPos, () => [...excluded], () => [...included], () => JSON.stringify(vortexEnemies), () => JSON.stringify(allyTargets), () => [...stacks], broken, breakRate, mainTargetIdx, partyBuffId, () => JSON.stringify(se.enemyBuffs.value)], requestMaxDamage, { deep: true, immediate: true })
 watch(statsForNerds, open => { if (open && !maxDmg.value?.trace) requestMaxDamage() })
 onBeforeUnmount(() => { maxDmgWorker?.terminate(); loadoutPool?.close() })
 const dealer = computed(() => maxDmg.value?.members[dealerPos.value])
@@ -1536,6 +1538,8 @@ function newBattle(): EngineBattle {
     const opts = {
         seed: seed.value, rngMode: rngMode.value, decisions: decisions.value, relaxedPicks: relaxedPicksRun,
         manualTargeting: targetMode.value === 'manual',
+        // every enemy's own buff settings (all waves: the battle plays them all)
+        enemyBuffs: Object.keys(se.enemyBuffs.value).length ? JSON.parse(JSON.stringify(se.enemyBuffs.value)) : undefined,
     }
     if (linkRaid.value) {
         const bossHp = linkRaidBossHp.value && linkRaidBossHp.value > 0 ? Math.min(linkRaidBossHp.value, linkRaidFullHp.value) : undefined
@@ -1603,6 +1607,7 @@ function runSimulation() {
 
 const hasRun = () => battleOutput.value.length > 1 || !!pending.value
 watch([rngMode, targetMode], () => { if (hasRun()) runSimulation(); else buildBattle() })
+watch(() => JSON.stringify(se.enemyBuffs.value), () => { if (hasRun()) runSimulation(); else buildBattle() })
 
 function setSeed(v: number) {
     seed.value = v
@@ -1739,6 +1744,7 @@ function currentSetup(): PvESetup {
         vortexEnemies: JSON.parse(JSON.stringify(vortexEnemies)),
         allyTargets: JSON.parse(JSON.stringify(allyTargets)),
         stacks: Object.fromEntries(stacks),
+        enemyBuffs: JSON.parse(JSON.stringify(se.enemyBuffs.value)),
         control: targetMode.value,
         rngMode: rngMode.value,
         seed: seed.value,
@@ -1775,6 +1781,7 @@ async function applySetup(raw: unknown) {
     Object.entries(s.vortexEnemies ?? {}).forEach(([k, v]) => { vortexEnemies[k] = [...v] })
     Object.entries(s.allyTargets ?? {}).forEach(([k, v]) => { allyTargets[k] = [...v] })
     Object.entries(s.stacks).forEach(([k, v]) => stacks.set(k, v))
+    se.enemyBuffs.value = s.enemyBuffs ?? {}
     seed.value = s.seed
     simTurns.value = s.turns
     rngMode.value = s.rngMode

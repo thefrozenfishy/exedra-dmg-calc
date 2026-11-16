@@ -76,6 +76,9 @@ export interface MaxDmgOptions {
     // engine Max Damage (the stage picker's per-enemy "off"): appearance ids of enemies taken off the field before the
     // battle is evaluated (one unit per entry); the page's enemy list (and the per-enemy options) leaves them out
     removedEnemies?: number[]
+    // engine Max Damage (the stage picker's "Enemy buffs"): per appearance id, the enemy's own buffs turned off or given
+    // N stacks before the skill (battle/EngineEnemyBuffs; only the non-default settings)
+    enemyBuffs?: Record<number, Record<string, { on: boolean, stacks: number }>>
     onlyPos?: number              // evaluate only this member as the attacker (the others get no skills)
     // Ailment states every enemy carries ("CURSE_ATK", "STUN", ...). When set, conditions about ailments are no longer
     // assumed met but checked against these (ailmentConditionsMet), for the team's effects and the damage rows alike.

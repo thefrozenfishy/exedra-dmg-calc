@@ -27,6 +27,9 @@ export interface PvESetup {
     vortexEnemies?: Record<string, number[]> // Max Damage vortex effect key -> the enemy indexes it is put on ([] = off)
     allyTargets?: Record<string, number[]>   // Max Damage single-target ally buff key -> the team positions given it ([] = off)
     stacks: Record<string, number>   // Max Damage stack overrides (MaxDmgEffect.key -> stacks)
+    // the enemies' own buffs turned off / started with N stacks (appearance id -> EnemySelfBuff.key -> setting;
+    // battle/EngineEnemyBuffs), Max Damage and the battle
+    enemyBuffs?: Record<number, Record<string, { on: boolean, stacks: number }>>
     control: PvEControl
     rngMode: RngMode
     seed: number
@@ -106,6 +109,18 @@ export function sanitizePvESetup(raw: unknown): PvESetup {
     const stacks = Object.fromEntries(Object.keys(stacksIn).filter(k => EFFECT_KEY.test(k)).sort().slice(0, MAX_EFFECT_KEYS)
         .map(k => [k, int(stacksIn[k], 0, 999, 0)]))
 
+    const enemyBuffs: NonNullable<PvESetup["enemyBuffs"]> = {}
+    for (const [id, own] of Object.entries(asRecord(s.enemyBuffs)).slice(0, 50)) {
+        if (!/^\d{1,12}$/.test(id)) continue
+        const out: Record<string, { on: boolean, stacks: number }> = {}
+        for (const [k, v] of Object.entries(asRecord(own)).slice(0, 100)) {
+            if (!/^[ps]\d{1,12}$/.test(k)) continue
+            const r = asRecord(v)
+            out[k] = { on: r.on !== false, stacks: int(r.stacks, 0, 999, 0) }
+        }
+        if (Object.keys(out).length) enemyBuffs[Number(id)] = out
+    }
+
     const seen = new Set<number>()
     const decisions: [number, RngDecision][] = []
     for (const entry of asArray(s.decisions)) {
@@ -135,6 +150,7 @@ export function sanitizePvESetup(raw: unknown): PvESetup {
         vortexEnemies,
         allyTargets,
         stacks,
+        enemyBuffs,
         control: s.control === "manual" ? "manual" : "auto",
         rngMode: RNG_MODES.includes(s.rngMode as RngMode) ? s.rngMode as RngMode : "seed",
         seed: int(s.seed, 0, 2 ** 32 - 1, 0),

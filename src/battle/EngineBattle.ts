@@ -10,6 +10,7 @@ import { passiveDetails, skillDetails } from "../utils/helpers"
 import questEnemyAppearanceJson from "../assets/base_data/getQuestEnemyAppearanceMstList.json"
 import { E } from "./engineBundle"
 import { EngineRandom } from "./EngineRandom"
+import { hookEnemyBuffs, type EnemyBuffSettings } from "./EngineEnemyBuffs"
 
 /** The parts of a PvPKioku the engine needs (src/engine/adapter/NetworkUnits.ts reads the rest). */
 export interface EngineKioku {
@@ -56,6 +57,9 @@ export interface EngineBattleOptions {
      *  (allies/enemies `team: []`, no `field`). The bench reads only the events and who acted; building every unit's
      *  buff list after every action was ~11% of a bench run. */
     unitSnapshots?: boolean
+    /** App tools (enemy buff settings, battle/EngineEnemyBuffs): per enemy appearance, its own buffs turned off or
+     *  started with N stacks. */
+    enemyBuffs?: EnemyBuffSettings
 }
 
 /** Display info of one engine unit. */
@@ -103,7 +107,7 @@ export class EngineBattle {
         this.allyKiokus = setup.allies
         this.enemyKiokus = setup.kind === "pvp" ? setup.enemies : []
         E.bindMasterData()
-        this.director = this.random.run(() => EngineBattle.createDirector(setup))
+        this.director = this.random.run(() => EngineBattle.createDirector(setup, { enemyBuffs: opts.enemyBuffs }))
         this.director.commandSender.Subscribe({ IObserver$OnNext: (commands: any[]) => { this.commands.push(...commands) } })
         this.manual = !!opts.manualTargeting
         this.beforeDecision = opts.beforeDecision
@@ -122,7 +126,7 @@ export class EngineBattle {
 
     /** The game director of `setup` after SetupBattleStage (battle-start passives done, nothing acted yet). Call it with
      *  a GameRandom hook installed when the setup may roll (EngineRandom.run). */
-    static createDirector(setup: EngineBattleSetup, opts: { allyPassives?: boolean } = {}): any {
+    static createDirector(setup: EngineBattleSetup, opts: { allyPassives?: boolean, enemyBuffs?: EnemyBuffSettings } = {}): any {
         E.bindMasterData()
         const allies = setup.allies.map((k, i) => E.kiokuToNetworkUnit(k, i + 1))
         // allyPassives false: the allies arrive without passive skills (app-side tools that give effects themselves)
@@ -154,12 +158,14 @@ export class EngineBattle {
         const camp = questCampaign(setup.stageId)
         if (setup.kind === "quest") {
             const d = new E.QuestGameDirector().ctor()
+            if (opts.enemyBuffs) hookEnemyBuffs(d, opts.enemyBuffs)
             d.SetupBattleStage(setup.stageId, 0, provider, camp.upDmg, camp.upBreakPointDmg)
             return d
         }
         if (setup.kind === "multiRaid") {
             const info = multiRaidInfo(setup.stageId)!
             const d = new E.MultiRaidGameDirector().ctor()
+            if (opts.enemyBuffs) hookEnemyBuffs(d, opts.enemyBuffs)
             d.SetupBattleStage(setup.stageId, provider, setup.bossHp ?? EngineBattle.multiRaidBossHp(setup.stageId), [],
                 setup.noRoundLimit ? 0 : info.limitRoundCount, 8.64e15, camp.upDmg, camp.upBreakPointDmg, false)
             return d
@@ -167,6 +173,7 @@ export class EngineBattle {
         const raid = soloRaidInfo(setup.stageId)!
         const party = EngineBattle.soloRaidPartyBuff(setup)
         const d = new E.SoloRaidGameDirector().ctor()
+        if (opts.enemyBuffs) hookEnemyBuffs(d, opts.enemyBuffs)
         d.SetupBattleStageForSoloRaid(setup.stageId, 0, provider, EngineBattle.battleInfoOf(setup.carry), SOLO_RAID_COMMON_CHARGE_PASSIVE,
             raid.season?.soloRaidSeasonBuffMstId ?? 0, party?.soloRaidPartyBuffMstId ?? 0, setup.noRoundLimit ? 0 : raid.limitRoundCount, 8.64e15)
         return d

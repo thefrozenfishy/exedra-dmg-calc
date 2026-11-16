@@ -37,6 +37,7 @@ export interface TeamScoreStage {
     broken: boolean[]
     breakRate: (number | undefined)[]
     removed?: number[]             // appearance ids of the enemies turned off (not in `wave`; MaxDmgOptions.removedEnemies)
+    enemyBuffs?: MaxDmgOptions["enemyBuffs"] // the enemies' own buffs turned off / given N stacks (battle/EngineEnemyBuffs)
     partyBuffId?: number           // Solo Raid: the party buff picked (default the raid's first)
 }
 
@@ -95,6 +96,7 @@ function scoreOnStage(allies: PvPKioku[], sc: TeamScoreScenario, st: TeamScoreSt
         breakRate: st.breakRate,
         mainTargetIdx: st.mainTargetIdx,
         removedEnemies: st.removed,
+        enemyBuffs: st.enemyBuffs,
         partyBuffId: st.partyBuffId,
         onlyPos: 0,
         enemyStates: sc.ailments.map(a => AILMENT_STATE[a]).filter(Boolean),

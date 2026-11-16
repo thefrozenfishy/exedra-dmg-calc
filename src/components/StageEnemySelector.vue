@@ -31,6 +31,7 @@
         </div>
 
         <EnemyCards v-if="view.enemyInfo.length" :s="view" />
+        <EnemyBuffs v-if="view.enemyInfo.length" :s="view" />
     </section>
 </template>
 
@@ -42,6 +43,7 @@ import { computed, reactive } from 'vue'
 import StagePicker from './StagePicker.vue'
 import StageWaveRows from './StageWaveRows.vue'
 import EnemyCards from './EnemyCards.vue'
+import EnemyBuffs from './EnemyBuffs.vue'
 import { soloRaidInfo, multiRaidInfo, questCampaign, SOLO_RAID_COMMON_CHARGE_PASSIVE, type QuestEnemyAppearance } from '../models/PvE'
 import passiveMstJson from '../assets/base_data/getPassiveSkillMstList.json'
 import characterMstJson from '../assets/base_data/getCharacterMstList.json'
@@ -101,6 +103,7 @@ const selection = computed(() => {
         phase: se.phasePos.value,
         wave: JSON.parse(JSON.stringify(se.aliveWave.value)) as QuestEnemyAppearance[],
         removed: o.removedEnemies!,
+        enemyBuffs: o.enemyBuffs,
         mainTargetIdx: o.mainTargetIdx!,
         broken: o.broken!,
         breakRate: o.breakRate!,

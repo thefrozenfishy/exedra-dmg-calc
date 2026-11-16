@@ -212,7 +212,9 @@ function followTypes(effects: MaxDmgEffect[]): Set<string> {
 
 /** The stage's battle at the wave's start with the team's own effects removed. */
 function buildBattle(ctx: Ctx, dealerPos: number, rnd: MaxDamageRandom): Built {
-    const d = EngineBattle.createDirector(ctx.setup)
+    // the page's enemy buff settings (battle/EngineEnemyBuffs): hooked before the stage is set up, so a buff turned off
+    // never lands and the start stacks are on every enemy the wave / phase / summons bring in
+    const d = EngineBattle.createDirector(ctx.setup, { enemyBuffs: ctx.opts.enemyBuffs })
     enterWave(d, ctx.waveIdx, ctx.phase)
     summonInto(d, ctx.enemyApps)
     removeEnemies(d, ctx.opts.removedEnemies ?? [])

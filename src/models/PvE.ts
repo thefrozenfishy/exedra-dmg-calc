@@ -335,3 +335,22 @@ export const skillName = (skillMstId: number) => skillNames.get(skillMstId) ?? `
 export const breakMstOf = (a: QuestEnemyAppearance): BreakMst | undefined => breakMsts.get(a.breakMstId)
 
 export const ELEMENT_KEYS = ["", "fire", "aqua", "forest", "light", "dark", "neutral"] as const
+
+/** App side: every skill id an enemy can use (its skill set, its condition-action rows, and every skill those or its
+ *  passive reach through ADDITIONAL_SKILL_ACT / SWITCH_SKILL / ... details), summons not followed. Whether / when the AI
+ *  uses one is not checked. */
+export function enemyReachableSkillIds(a: QuestEnemyAppearance): number[] {
+    const seen = new Set<number>()
+    const queue = [...(enemySkillSetRows.get(a.enemySkillSetId) ?? []), ...(conditionActionSkills.get(a.enemyConditionSkillSetId) ?? [])]
+    if (a.passiveSkillMstId > 0) for (const d of rawPassiveDetails.get(a.passiveSkillMstId) ?? []) queue.push(...linkedSkills(d))
+    while (queue.length) {
+        const id = queue.shift()!
+        if (seen.has(id)) continue
+        seen.add(id)
+        for (const d of rawSkillDetails.get(id) ?? []) if (d.abilityEffectType !== "SUMMON") queue.push(...linkedSkills(d))
+    }
+    return [...seen]
+}
+/** Raw detail rows (exact ids, as enemies use them) of an enemy's passive / of a skill. */
+export const enemyPassiveDetailRows = (passiveSkillMstId: number): any[] => rawPassiveDetails.get(passiveSkillMstId) ?? []
+export const enemySkillDetailRows = (skillMstId: number): any[] => rawSkillDetails.get(skillMstId) ?? []

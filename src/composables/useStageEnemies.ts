@@ -5,6 +5,7 @@ import { computed, ref, watch, type Ref } from 'vue'
 import { stageWaveMeta, wavePositionIds, enemyName, summonCandidates, breakMstOf, ELEMENT_KEYS, type QuestEnemyAppearance, type ModeChangeInfo } from '../models/PvE'
 import { wavePhases, waveStartUnits } from '../models/PvEBattle'
 import { phaseWave } from '../battle/EngineMaxDamage'
+import { enemySelfBuffs, isDefaultSetting, type EnemyBuffSetting, type EnemyBuffSettings } from '../battle/EngineEnemyBuffs'
 import { Ailment, elementMap, type KiokuElement } from '../types/enums'
 import type { MaxDmgOptions } from '../models/MaxDamage'
 
@@ -116,12 +117,43 @@ export function useStageEnemies(stageId: Ref<number>, waveIdx: Ref<number>, phas
     const weakElements = computed<KiokuElement[]>(() => [...new Set(aliveInfo.value.flatMap(e => e.weak))])
     const ailments = computed<Ailment[]>(() => Object.values(Ailment).filter(a => aliveWave.value.some(e => ((e as any)[PARRY_FIELD[a]] ?? 0) < 1000)))
 
+    // Enemy buffs (battle/EngineEnemyBuffs, components/EnemyBuffs): the states each enemy gives itself, turned off or
+    // started with N stacks. Kept per appearance id (across waves and stages); missing = the game's default.
+    const enemyBuffs = ref<EnemyBuffSettings>({})
+    const buffsOf = (i: number) => wave.value[i] ? enemySelfBuffs(wave.value[i]) : []
+    const buffSetting = (appId: number, key: string): EnemyBuffSetting => enemyBuffs.value[appId]?.[key] ?? { on: true, stacks: 0 }
+    const setBuff = (appId: number, key: string, patch: Partial<EnemyBuffSetting>) => {
+        const next = { ...buffSetting(appId, key), ...patch }
+        const own = { ...(enemyBuffs.value[appId] ?? {}) }
+        if (isDefaultSetting(next)) delete own[key]
+        else own[key] = next
+        const all = { ...enemyBuffs.value }
+        if (Object.keys(own).length) all[appId] = own
+        else delete all[appId]
+        enemyBuffs.value = all
+    }
+    const resetBuffs = () => {
+        const ids = new Set(wave.value.map(a => a.questEnemyAppearanceMstId))
+        enemyBuffs.value = Object.fromEntries(Object.entries(enemyBuffs.value).filter(([id]) => !ids.has(Number(id))))
+    }
+    /** The non-default settings of the field's enemies (plain data, for Max Damage and battles). */
+    const enemyBuffOpts = (): EnemyBuffSettings | undefined => {
+        const out: EnemyBuffSettings = {}
+        for (const a of wave.value) {
+            const own = enemyBuffs.value[a.questEnemyAppearanceMstId]
+            if (own && Object.keys(own).length) out[a.questEnemyAppearanceMstId] = JSON.parse(JSON.stringify(own))
+        }
+        return Object.keys(out).length ? out : undefined
+    }
+    const changedBuffCount = computed(() => wave.value.reduce((n, a) => n + Object.keys(enemyBuffs.value[a.questEnemyAppearanceMstId] ?? {}).length, 0))
+
     /** The per-enemy Max Damage options for `aliveWave` (plain data). */
-    const maxDmgEnemyOpts = (): Pick<MaxDmgOptions, 'broken' | 'breakRate' | 'mainTargetIdx' | 'removedEnemies'> => ({
+    const maxDmgEnemyOpts = (): Pick<MaxDmgOptions, 'broken' | 'breakRate' | 'mainTargetIdx' | 'removedEnemies' | 'enemyBuffs'> => ({
         broken: aliveIdx.value.map(i => !!broken.value[i]),
         breakRate: aliveIdx.value.map(i => breakRate.value[i]),
         mainTargetIdx: Math.max(0, aliveIdx.value.indexOf(mainTargetIdx.value)),
         removedEnemies: [...removed.value],
+        enemyBuffs: enemyBuffOpts(),
     })
 
     const setWave = (i: number) => { waveIdx.value = i }
@@ -133,7 +165,7 @@ export function useStageEnemies(stageId: Ref<number>, waveIdx: Ref<number>, phas
         waveMetas, waves, wavePos, waveMeta, phases, phasePos, phaseTitle, summons,
         wave, waveAddCounts, mainTargetIdx, broken, breakRate, alive, aliveCount, setAlive, setBroken,
         setBreakRate, formLabel, formTag, enemyInfo, aliveIdx, aliveWave, aliveInfo, removed, weakElements, ailments,
-        maxDmgEnemyOpts,
+        maxDmgEnemyOpts, enemyBuffs, buffsOf, buffSetting, setBuff, resetBuffs, enemyBuffOpts, changedBuffCount,
     }
 }
 export type StageEnemies = ReturnType<typeof useStageEnemies>
