@@ -52,6 +52,10 @@ export interface EngineBattleOptions {
     /** App tools (Kioku Grid bench): runs before each manual ally decision, with the deciding unit (before the options
      *  are built, so it can e.g. top up SP). */
     beforeDecision?: (unit: any, battle: EngineBattle) => void
+    /** App tools (Kioku Grid bench): `false` leaves the unit and field snapshots out of every state after the initial one
+     *  (allies/enemies `team: []`, no `field`). The bench reads only the events and who acted; building every unit's
+     *  buff list after every action was ~11% of a bench run. */
+    unitSnapshots?: boolean
 }
 
 /** Display info of one engine unit. */
@@ -108,10 +112,12 @@ export class EngineBattle {
         this.random.run(() => this.director.FlushCommands())
         this.consumeCommands()
         this.initial = EngineBattle.shiftedToFirstActor(this.getCurrentState())
+        this.unitSnapshots = opts.unitSnapshots ?? true
         // GameDirectorBase.ChangeBattlePhase(Start) runs the first act (e.g. a battle-start follow-up): its own entry.
         this.pending = this.report(() => this.director.ChangeBattlePhase(PHASE_START))
     }
     private readonly initial: BattleSnapshot
+    private unitSnapshots = true
     private pending: BattleSnapshot[] = []
 
     /** The game director of `setup` after SetupBattleStage (battle-start passives done, nothing acted yet). Call it with
@@ -382,8 +388,8 @@ export class EngineBattle {
         const cdUnit = cd && cd.countdown > 0 ? d.battleUnitBundle.dic.get(cd.battleUnitId) : undefined
         const actor = this.lastActor
         return {
-            allies: { sp: d.spReferee.allySp, team: this.team(true).map(u => this.unitSnapshot(u)) },
-            enemies: { sp: d.spReferee.enemySp, team: this.team(false).map(u => this.unitSnapshot(u)) },
+            allies: { sp: d.spReferee.allySp, team: this.unitSnapshots ? this.team(true).map(u => this.unitSnapshot(u)) : [] },
+            enemies: { sp: d.spReferee.enemySp, team: this.unitSnapshots ? this.team(false).map(u => this.unitSnapshot(u)) : [] },
             lastActor: actor ? this.info(actor).name : undefined,
             lastTeamIsTeam1: actor ? actor._Team === 0 : undefined,
             lastActorPos: actor ? this.posOf(actor) : undefined,
@@ -395,7 +401,7 @@ export class EngineBattle {
             vanguard: sr && sr.maxSeasonBuffPoint > 0 ? { active: sr.isSeasonBuffActive, point: sr.currentSeasonBuffPoint, maxPoint: sr.maxSeasonBuffPoint, activeMaxPoint: sr.activeMaxSeasonBuffPoint, gauge: sr.activeCurrentSeasonBuffTurnGaugeValue, maxGauge: sr.activeMaxSeasonBuffTurnGaugeValue } : undefined,
             countdown: cdUnit ? { value: cd.countdown, max: cd.maxCountdown, cancelTotal: cd.cancelTotalDamage, cancelMax: cd.cancelMaxTotalDamage, unit: this.info(cdUnit).name } : undefined,
             rngEvents: this.rng.drain(),
-            field: this.fieldSnapshot(),
+            field: this.unitSnapshots ? this.fieldSnapshot() : undefined,
         }
     }
 

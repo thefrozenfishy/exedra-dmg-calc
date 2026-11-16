@@ -384,3 +384,7 @@
   Attackers) made every buff weigh more on non-Attacker dealers (Lilly Candy's fake Breaker bar). The damage gear
   gives the support's stats only (`supportStatsOnly`); the engine adapter adds a support's passive from `k.support`
   on its own, so taking it out of `effects` is not enough. Role bars still differ by the role's average stats.
+- A bench run counts as random (10 seeds) if ANY roll is recorded, and GameDirectorBase.InitializeBattle always rolls
+  the selected ally / enemy targets (label "String target": EngineBattle.nameOf names the string subject by its
+  constructor). EngineBattle.pickTargets passes the referee's selected ally into every SkillRequest, so it does reach
+  the engine: the bench sets it (BenchBattleHooks.selectedAlly) instead of ignoring the roll.

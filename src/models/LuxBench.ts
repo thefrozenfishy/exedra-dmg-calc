@@ -30,7 +30,7 @@ import { KiokuConstants, TargetType, type BattleEvent, type BattleSnapshot, type
 import { Ailment, elementMap, KiokuElement, KiokuRole, LuxMagica } from "../types/enums";
 import { computeMaxDamageEngine } from "../battle/EngineMaxDamage";
 import { E } from "../battle/engineBundle";
-import { AILMENT_STATE, BENCH_BROKEN_RATE, BENCH_DEF, BenchRng, benchBattle, benchPassive, benchSkills, benchStage, benchStyle, keepAilment, keepStates, middleEnemy, type BenchPassiveRow } from "../battle/EngineBench";
+import { AILMENT_STATE, BENCH_BROKEN_RATE, BENCH_DEF, BenchRng, benchBattle, benchPassive, isSetupTargetRoll, benchSkills, benchStage, benchStyle, keepAilment, keepStates, middleEnemy, type BenchPassiveRow } from "../battle/EngineBench";
 import { collectTeamEffects } from "./MaxDamage";
 import { exCrysIds, kitDetails, kitLimits, neutralIdentity } from "./KitLimits";
 
@@ -469,6 +469,10 @@ export function simulatedDealerDamage(allies: PvPKioku[], dealerPos: number, ene
     }
     const battle = benchBattle(allies, stageId, rng, {
         beforeAction: prepare,
+        unitSnapshots: !!opts.onAction, // the run reads only events and who acted (onAction is for debugging)
+        // the player selects the dealer as the ally target, as it aims every ally-targeted skill at the dealer (until v31
+        // the selected ally was InitializeBattle's random pick, averaged over the seeds)
+        selectedAlly: d => [...d.battleUnitBundle.allyList].sort((a: any, b: any) => a._PositionId - b._PositionId)[dealerPos],
         // Refill only when time has moved since the last refill: an extra action at the same moment (a haste to 100%,
         // Tenebrous Arcana's extra action) keeps the SP it has.
         beforeDecision: (unit, b) => {
@@ -536,7 +540,11 @@ export function simulatedDealerDamage(allies: PvPKioku[], dealerPos: number, ene
     }
     // random beyond crits: a crit roll only matters with rolled crits (with expected crits it only sets the IsCritical
     // flag, which nothing in a team without crit reactions reads)
-    if (opts.report) opts.report.random = rng.events.some(e => !opts.expectedCrits || e.kind !== "crit")
+    // The setup's random targets left as picked (who the enemies attack / support) only count when something read them
+    // (watchSetupTargets): unread, every seed plays the same battle, so one battle gives the mean exactly (most runs,
+    // Lux's baselines included, rolled 10 identical battles for those picks alone).
+    if (opts.report) opts.report.random = rng.setupTargetRead
+        || rng.events.some((e, i) => (!opts.expectedCrits || e.kind !== "crit") && !isSetupTargetRoll(rng, e, i))
     const scale = opts.perAv && nextTurn > 0 ? opts.av / nextTurn : 1
     if (opts.sp) opts.sp.cost = spCost * scale
     return total * scale

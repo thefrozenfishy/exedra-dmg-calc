@@ -18,7 +18,7 @@
 // special cases of models/LuxBench.ts.
 import { E } from "./engineBundle"
 import { EngineBattle } from "./EngineBattle"
-import { BattleRng, type RngKind } from "../models/BattleRng"
+import { BattleRng, type RngEvent, type RngKind } from "../models/BattleRng"
 import { seededRng } from "../models/BattleMath"
 import type { QuestEnemyAppearance } from "../models/PvE"
 import type { BattleSnapshot } from "../types/KiokuTypes"
@@ -353,6 +353,10 @@ export type BenchPick = (kind: RngKind, label: string, options: string[], units:
 export class BenchRng extends BattleRng {
     private streams = new Map<string, () => number>()
     private readonly policy: BenchPick
+    /** Rolls made while the director was set up (benchBattle's onSetup): the setup's random targets are among them. */
+    setupEvents = 0
+    /** Whether anything read a target the setup picked at random (watchSetupTargets) once the battle was set up. */
+    setupTargetRead = false
 
     constructor(seed: number, policy: BenchPick) {
         super("seed", seed)
@@ -377,19 +381,60 @@ export interface BenchBattleHooks {
     /** Before each executeNextAction (keep ailments / states on the dummies). */
     beforeAction?: (director: any) => void
     beforeDecision?: (unit: any, battle: EngineBattle) => void
+    /** EngineBattleOptions.unitSnapshots (default true). */
+    unitSnapshots?: boolean
+    /** The ally the player selects at the start (TargetReferee allyFriendTargetId, the default ally target of every
+     *  skill and of "selected ally" follow-ups); without it, the one GameDirectorBase.InitializeBattle picked at random. */
+    selectedAlly?: (director: any) => any
+}
+
+// The targets GameDirectorBase.InitializeBattle picks at random (ChangeTargetAtRandom, OrderBy(Guid.NewGuid())) that the
+// bench leaves as picked: the ally the enemies attack and the enemy the enemies support (the dummies never act, so
+// normally nothing reads them). The player's targets are set by the bench (the middle dummy, BenchBattleHooks.selectedAlly);
+// without selectedAlly the selected ally is watched too.
+const ENEMY_RANDOM_TARGETS = ["enemyAttackTargetId", "enemyFriendTargetId"] as const
+
+/** APP (not game code): turns the setup's random targets into accessors that call `onRead` whenever the engine reads
+ *  them, so a run knows whether those picks could have changed anything. Same values, same engine code.
+ *  GameDirectorBase.CheckTargetUnit reads them before every act only to ask whether the target is still active (else
+ *  it picks a new one, a roll of its own): while every unit is active any pick passes, so those reads don't count. */
+function watchSetupTargets(director: any, fields: readonly string[], onRead: () => void): void {
+    const referee = director.targetReferee
+    let checking = false
+    for (const f of fields) {
+        let v = referee[f]
+        Object.defineProperty(referee, f, { configurable: true, enumerable: true, get: () => { if (!checking) onRead(); return v }, set: x => { v = x } })
+    }
+    const check = director.CheckTargetUnit
+    director.CheckTargetUnit = function (this: any, targetTeam: number) {
+        const b = this.battleUnitBundle
+        if (b.activeList.length !== b.dic.size) onRead() // a unit is gone: whether the pick passes depends on who it is
+        checking = true
+        try { return check.call(this, targetTeam) } finally { checking = false }
+    }
+}
+
+/** A roll of the setup's random targets: a weighted "target" pick made before the battle was set up. EngineBattle.nameOf
+ *  names its subject (a "Ally friend" string) "String", hence the label. */
+export function isSetupTargetRoll(rng: BenchRng, ev: RngEvent, position: number): boolean {
+    return position < rng.setupEvents && ev.kind === "target" && ev.label === "String target"
 }
 
 /** A bench battle on the stage, set up (dummies broken, the player's target on the middle dummy). */
 export function benchBattle(allies: any[], stageId: number, rng: BenchRng, hooks: BenchBattleHooks): EngineBattle {
     return new EngineBattle({ kind: "quest", allies, stageId }, {
-        rng, manualTargeting: true, beforeDecision: hooks.beforeDecision,
+        rng, manualTargeting: true, beforeDecision: hooks.beforeDecision, unitSnapshots: hooks.unitSnapshots,
         // The dummies start unbroken with a 1-point gauge (BreakMst breakPoint 1): the first damaging hit on each breaks
         // it through the game's own break code, so "on enemy break" effects trigger once (Sacred Gift's Weakness, break
         // bonus / SPD buffs). It then stays broken at BENCH_BROKEN_RATE: broken units only recover at their own turn
         // start, and the dummies get none within a run.
         onSetup: d => {
+            rng.setupEvents = rng.events.length
             const main = middleEnemy(d)
             if (main) d.targetReferee.allyAttackTargetId = main._Id // the player taps the middle dummy
+            const ally = hooks.selectedAlly?.(d)
+            if (ally) d.targetReferee.allyFriendTargetId = ally._Id // and selects that ally
+            watchSetupTargets(d, ally ? ENEMY_RANDOM_TARGETS : ["allyFriendTargetId", ...ENEMY_RANDOM_TARGETS], () => { rng.setupTargetRead = true })
             hooks.beforeAction?.(d)
         },
     })
