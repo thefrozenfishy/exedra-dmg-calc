@@ -43,8 +43,16 @@ export const kitDetails = (k: PvPKioku): SkillDetail[] => kitDetailsWithSource(k
 
 export interface KitLimits { elements: KiokuElement[], roles: KiokuRole[], ailments: Ailment[] }
 
+// Ailments whose state itself changes the damage dealt to its holder (Weakness: ATK/DEF -10%). An effect that gives one
+// only does something on enemies that can carry it (many can't), so it counts as limited to that ailment: the plain bar
+// runs with the enemies immune to it, the ailment bar with it on them (LuxBench.benchImmunities), as for kits that check
+// an ailment in their conditions. The damage ailments (BURN/POISON/... _ATK) are not here: their damage is not the
+// dealer's, and they don't change the dealer's hits.
+const DAMAGE_CHANGING_AILMENTS: Ailment[] = [Ailment.WEAKNESS]
+
 /** What one effect is limited to: its TargetElement / TargetRole (damage effects aside, where `element` is the attack
- *  element), the IS_ELEMENT_TYPE / IS_ROLE_TYPE conditions it uses, and the ailments its conditions check. */
+ *  element), the IS_ELEMENT_TYPE / IS_ROLE_TYPE conditions it uses, the ailments its conditions check, and the
+ *  ailment it gives if that one changes damage (DAMAGE_CHANGING_AILMENTS). */
 export function effectLimits(d: SkillDetail): KitLimits {
     const csvs = [d.startConditionSetIdCsv, d.activeConditionSetIdCsv]
     const elements = new Set<KiokuElement>(), roles = new Set<KiokuRole>()
@@ -55,7 +63,9 @@ export function effectLimits(d: SkillDetail): KitLimits {
     const cond = unitTypeConditionValues(csvs)
     cond.elements.forEach(e => elements.add(e as KiokuElement))
     cond.roles.forEach(r => roles.add(r as KiokuRole))
-    return { elements: [...elements], roles: [...roles], ailments: ailmentConditionValues(csvs) }
+    const ailments = new Set(ailmentConditionValues(csvs))
+    for (const a of DAMAGE_CHANGING_AILMENTS) if (d.abilityEffectType === a) ailments.add(a)
+    return { elements: [...elements], roles: [...roles], ailments: [...ailments] }
 }
 
 /** Elements, roles and ailments a kit's effects are limited to (every effect of kitDetails, effectLimits). */

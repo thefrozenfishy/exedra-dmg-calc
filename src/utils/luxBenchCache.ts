@@ -14,8 +14,9 @@ export const LUX_BENCH_VERSION = 31 // 8: expected-crit battles, battle length t
 const STORAGE_KEY = "kiokuGridBenchCache"
 // Bumped (instead of LUX_BENCH_VERSION) when only some characters' numbers changed and the shipped file was redone for
 // them: this browser's cache is dropped, the shipped file stays valid. 1: Tenebrous Arcana's play reads her Magic; break
-// rows carry their SP cost; 2: break runs break each dummy once (on-break effects); 3: break "100% crit" bar.
-const BROWSER_CACHE_REV = 3
+// rows carry their SP cost; 2: break runs break each dummy once (on-break effects); 3: break "100% crit" bar; 4: giving
+// Weakness counts as limited to Weakness (KitLimits.effectLimits): Nine Phases' plain bars run without it, plus a Weakness bar.
+const BROWSER_CACHE_REV = 4
 const STORED_VERSION = `${LUX_BENCH_VERSION}.${BROWSER_CACHE_REV}`
 const MAX_SETUPS = 24 // most recently used setups kept (chart x enemies x levels mode x battle length ...)
 
