@@ -197,6 +197,7 @@ interface Ctx {
     opts: MaxDmgOptions
     mainIdx: number
     allyCount: number
+    ailmentGive: string[]  // ailment states put on every enemy (opts.enemyStates; none with opts.landableAilments)
     follow?: Set<string>   // FOLLOW_CONDITION state types (followTypes)
     // scoreOnly: the battle the skill pickers were read from, built exactly as the member's first crit run builds its
     // own (same hook, nothing mutated since); that run takes it instead of building another (runOnce)
@@ -249,7 +250,7 @@ function buildBattle(ctx: Ctx, dealerPos: number, rnd: MaxDamageRandom): Built {
         for (const u of holders) if (u) giveFieldState(d, u, f.type, f.value1)
     }
     // ailments every enemy carries (opts.enemyStates): their own effect too, not only the conditions about them
-    if (ctx.opts.enemyStates?.length) giveAilmentStates(d, enemyUnits, ctx.opts.enemyStates)
+    if (ctx.ailmentGive.length) giveAilmentStates(d, enemyUnits, ctx.ailmentGive)
     const main = enemies[ctx.mainIdx] ?? enemies.find(Boolean) ?? enemyUnits[0]
     rnd.mainId = main?._Id ?? 0
     const b: Built = { d, dic, allies, enemies, main, dealer: allies[dealerPos], dealerHp: ctx.opts.dealerHpPercent }
@@ -745,9 +746,18 @@ function stageEffectsOf(setup: EngineBattleSetup): StagePassive[][] {
 export function computeMaxDamageEngine(allies: PvPKioku[], stage: EngineMaxDmgStage, enemies: QuestEnemyAppearance[], attackerPos: number, opts: MaxDmgOptions = {}): MaxDmgResult {
     const setup = setupOf(allies, stage.stageId, opts.partyBuffId)
     const mainIdx = Math.min(Math.max(0, opts.mainTargetIdx ?? 0), Math.max(0, enemies.length - 1))
-    const ctx: Ctx = { setup, waveIdx: stage.waveIdx, phase: Math.max(1, stage.phase ?? 1), enemyApps: enemies, opts, mainIdx, allyCount: allies.length }
     const stagePassives = stageEffectsOf(setup)
     const effects = collectTeamEffects(allies, attackerPos, { slipDamage: true, stagePassives })
+    // MaxDmgOptions.landableAilments: only the ailments the team inflicts count (conditions), and they come from the
+    // team's own effects (no generic ailment state on the enemies)
+    let ailmentGive = opts.enemyStates ?? []
+    if (opts.landableAilments) {
+        const inflicted = new Set(effects.filter(e => e.side === "enemy" && e.applies && !opts.excluded?.has(e.key)
+            && !(e.detail.abilityEffectType === "VORTEX_ATK" && opts.vortexEnemies?.[e.key]?.length === 0)).map(e => e.detail.abilityEffectType))
+        opts = { ...opts, enemyStates: opts.landableAilments.filter(t => inflicted.has(t)) }
+        ailmentGive = []
+    }
+    const ctx: Ctx = { setup, waveIdx: stage.waveIdx, phase: Math.max(1, stage.phase ?? 1), enemyApps: enemies, opts, mainIdx, allyCount: allies.length, ailmentGive }
     ctx.follow = followTypes(effects)
     const members: MemberDamage[] = []
     let enemySummary: MaxDmgResult["enemies"] = []

@@ -388,3 +388,7 @@
   the selected ally / enemy targets (label "String target": EngineBattle.nameOf names the string subject by its
   constructor). EngineBattle.pickTargets passes the referee's selected ally into every SkillRequest, so it does reach
   the engine: the bench sets it (BenchBattleHooks.selectedAlly) instead of ignoring the roll.
+
+- Ailment states on the enemies in Max Damage (`enemyStates` -> giveAilmentStates) carry their own effect (Weakness =
+  ATK / DEF -10%) next to the team's own state of that ailment: on real stages use `landableAilments` (only what the
+  team inflicts, no generic state), never the stage's "can land" list as enemyStates (counted Weakness for free, 2026-11-16).

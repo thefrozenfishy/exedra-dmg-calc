@@ -72,7 +72,8 @@ export function scoreTeam(allies: PvPKioku[], sc: TeamScoreScenario, maxOnly = f
         breakRate: enabled.map(e => e.maxBreak),
         mainTargetIdx: mainIdx,
         onlyPos: 0,
-        enemyStates: sc.ailments.map(a => AILMENT_STATE[a]).filter(Boolean),
+        // the ailments toggled on: only those the team inflicts count (MaxDmgOptions.landableAilments)
+        landableAilments: sc.ailments.map(a => AILMENT_STATE[a]).filter(Boolean),
         fieldStates: field,
         dealerHpPercent: sc.attackerHp,
         scoreOnly: true, onlyUltimate: true, trace: false, critOnly,
@@ -99,7 +100,8 @@ function scoreOnStage(allies: PvPKioku[], sc: TeamScoreScenario, st: TeamScoreSt
         enemyBuffs: st.enemyBuffs,
         partyBuffId: st.partyBuffId,
         onlyPos: 0,
-        enemyStates: sc.ailments.map(a => AILMENT_STATE[a]).filter(Boolean),
+        // the ailments that can land on the stage: only those the team inflicts count (MaxDmgOptions.landableAilments)
+        landableAilments: sc.ailments.map(a => AILMENT_STATE[a]).filter(Boolean),
         dealerHpPercent: sc.attackerHp,
         scoreOnly: true, onlyUltimate: true, trace: false, critOnly: maxOnly,
     })

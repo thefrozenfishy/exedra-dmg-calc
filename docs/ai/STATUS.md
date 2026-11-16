@@ -33,6 +33,14 @@ _Last updated: 2026-11-16 (2): enemy buff settings; before: 2026-11-16: Over Bre
   setups; same stage, < 1 min old). Probe `scripts/sim/probeEnemyBuffsScore.ts`: EngineTeamScore and the PvE page's
   Max Damage give the same Ultimate crit on 983550 with and without DEF 30 stacks (8,862,233 / 5,552,786).
   Not carried: the calc's "Attacker HP when using ultimate" (the PvE page has no such input).
+- Highest Dmg Calc vs PvE Simulator, same team (user's report: 34.8M vs 31.4M on 983550): the calc gave every enemy a
+  generic state of every ailment that can land on the stage (giveAilmentStates, with its own effect), so Weakness
+  (ATK / DEF -10%) counted with nobody inflicting it, or twice next to the team's own (Sacred Gift). User's rule:
+  **only what the team can actually apply**. New `MaxDmgOptions.landableAilments` (EngineTeamScore, both paths, and
+  the PvE page): enemyStates = the landable ailments some not-turned-off enemy-side team effect inflicts (for the
+  ailment conditions), and no generic ailment state is given (Ctx.ailmentGive = []). Kioku Grid / Max Burst bench keep
+  `enemyStates` as before. Probe `scripts/sim/probeCalcVsPve.ts` (bench team Light of Reckoning + Sacred Gift / Yuletide
+  Gift / La Danse Macabre / Hollow Woman): calc 10,801,210 -> 9,733,055 = PvE page.
 - Checks: checkFixturesEngine 16/16, app type-check 223 = baseline (none in changed files). No src/engine change.
 
 ## 2026-11-15 (2): bench precalc speed (user's request)

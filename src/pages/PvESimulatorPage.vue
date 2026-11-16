@@ -679,6 +679,7 @@ import { effectDescription, effectName, effectRestriction, effectValue } from '.
 import { actorSkillTypeRestriction } from '../models/BattleConditionParser'
 import { passiveDetailsByMstId, portraits } from '../utils/helpers'
 import { EngineBattle, type RaidCarry } from '../battle/EngineBattle'
+import { AILMENT_STATE } from '../battle/EngineBench'
 import type { MaxDamageMessage, MaxDamageRequest } from '../workers/maxDamageWorker'
 import { newMaxDamageWorker } from '../workers/newMaxDamageWorker'
 import type { PvPKioku } from '../models/PvPKioku'
@@ -854,6 +855,8 @@ function maxDmgOpts(): MaxDmgOptions {
         vortexEnemies: JSON.parse(JSON.stringify(vortexEnemies)),
         allyTargets: JSON.parse(JSON.stringify(allyTargets)),
         ...se.maxDmgEnemyOpts(),
+        // the ailments that can land on the wave: only those the team inflicts count (MaxDmgOptions.landableAilments)
+        landableAilments: se.ailments.value.map(a => AILMENT_STATE[a]).filter(Boolean),
         partyBuffId: isSoloRaidStage(stageId.value) ? partyBuffId.value || undefined : undefined,
     }
 }

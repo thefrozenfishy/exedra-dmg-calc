@@ -83,6 +83,11 @@ export interface MaxDmgOptions {
     // Ailment states every enemy carries ("CURSE_ATK", "STUN", ...). When set, conditions about ailments are no longer
     // assumed met but checked against these (ailmentConditionsMet), for the team's effects and the damage rows alike.
     enemyStates?: string[]
+    // Real stages (PvE Simulator, Highest Dmg Calc; user's rule): the ailment state types that CAN land on the wave.
+    // The enemies count as carrying only those the team itself inflicts (an enemy-side effect of that type that is not
+    // turned off): enemyStates becomes that list for the ailment conditions, and no ailment state is put on the enemies
+    // beyond the team's own effects (the stage's generic one would count Weakness twice, or with nobody inflicting it).
+    landableAilments?: string[]
     // App tools (Best SA Team calculator): states the stage puts on units for the whole fight (stage buffs, buff
     // strength cuts, an enemy's DEF up), given before the team's effects: ally `index` = team position, enemy `index` =
     // the page's enemy list index, "all" = every unit of that side. `value1` per mille as in the data.
