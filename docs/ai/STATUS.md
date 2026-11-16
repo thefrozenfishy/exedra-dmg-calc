@@ -1,6 +1,6 @@
 # Status (update at the end of every session)
 
-_Last updated: 2026-11-15 (2): bench precalc speed; before: 2026-11-15: Kioku Grid extra-bar tooltips (effects only that bar gets), Over Break audit; before: 2026-11-12: game 3.24.0 (Element Drive, Drive break bonuses, Over Break ported; scheduled run on main); before: 2026-11-09: per-enemy "Alive" (PvE Simulator + Highest Dmg Calc share the enemy picker); before: 2026-11-05: Highest Dmg Calc "Adds" (enemies summoned mid-fight) toggles; before: 2026-11-02: Crisis score in the PvE Simulator timeline; before: 2026-10-31: Kioku Grid break chart for every character (not only Breakers); before: 2026-10-30 (2): stage-mode buffs in Max Damage / Highest Dmg Calc, quest buffs, Link Raid EX bonus; before: 2026-10-30: Kioku Grid damage dealer chart "Break" display; before: 2026-10-29 (5): game 3.22.0 (battle code identical, @rva tags moved; branch claude/version-3.22.0); before: 2026-10-29 (3): Best SA Team calculator speed (~60x on a large search); before: 2026-10-29 (2): Kioku Grid "Multiple ascensions", merged equal variant bars, precalculated bench file; before: 2026-10-29: Kioku Grid bench gear + average Attacker self buffs on Lux; before: 2026-10-24 (3): second-generation engine and Fight Solver removed (branch `remove-gen2`); before: 2026-10-24 (battle-start passive order: kit -> portrait -> support -> crys; before: Kioku Grid ailment bars: 112/305/309 conditions, Max Damage enemies carry Weakness/Stun); before: 2026-10-15 (game 3.21.0: dumped + decompiled by Claude on Windows, engine re-ported to 3.21.0; branch claude/version-3.21.0); before: 2026-10-14 (Max Damage + Kioku Grid bench on the 1:1 engine); before: 2026-10-10 (1:1 port in src/engine started); before: 2026-10-03 (passive states per giver, UP_HP_FIXED max HP; earlier: duplicate active-skill states); before: 2026-10-02 (game 3.19.1: version diff + newsletter, Magic Seal, break/notice team conditions, IMM_SLIP_DMG burst; branch claude/version-3.19.1)._
+_Last updated: 2026-11-16: Over Break at its cap in Max Damage / Max Burst; before: 2026-11-15 (2): bench precalc speed; before: 2026-11-15: Kioku Grid extra-bar tooltips (effects only that bar gets), Over Break audit; before: 2026-11-12: game 3.24.0 (Element Drive, Drive break bonuses, Over Break ported; scheduled run on main); before: 2026-11-09: per-enemy "Alive" (PvE Simulator + Highest Dmg Calc share the enemy picker); before: 2026-11-05: Highest Dmg Calc "Adds" (enemies summoned mid-fight) toggles; before: 2026-11-02: Crisis score in the PvE Simulator timeline; before: 2026-10-31: Kioku Grid break chart for every character (not only Breakers); before: 2026-10-30 (2): stage-mode buffs in Max Damage / Highest Dmg Calc, quest buffs, Link Raid EX bonus; before: 2026-10-30: Kioku Grid damage dealer chart "Break" display; before: 2026-10-29 (5): game 3.22.0 (battle code identical, @rva tags moved; branch claude/version-3.22.0); before: 2026-10-29 (3): Best SA Team calculator speed (~60x on a large search); before: 2026-10-29 (2): Kioku Grid "Multiple ascensions", merged equal variant bars, precalculated bench file; before: 2026-10-29: Kioku Grid bench gear + average Attacker self buffs on Lux; before: 2026-10-24 (3): second-generation engine and Fight Solver removed (branch `remove-gen2`); before: 2026-10-24 (battle-start passive order: kit -> portrait -> support -> crys; before: Kioku Grid ailment bars: 112/305/309 conditions, Max Damage enemies carry Weakness/Stun); before: 2026-10-15 (game 3.21.0: dumped + decompiled by Claude on Windows, engine re-ported to 3.21.0; branch claude/version-3.21.0); before: 2026-10-14 (Max Damage + Kioku Grid bench on the 1:1 engine); before: 2026-10-10 (1:1 port in src/engine started); before: 2026-10-03 (passive states per giver, UP_HP_FIXED max HP; earlier: duplicate active-skill states); before: 2026-10-02 (game 3.19.1: version diff + newsletter, Magic Seal, break/notice team conditions, IMM_SLIP_DMG burst; branch claude/version-3.19.1)._
 
 
 ## 2026-11-15 (2): bench precalc speed (user's request)
@@ -16,6 +16,34 @@ _Last updated: 2026-11-15 (2): bench precalc speed; before: 2026-11-15: Kioku Gr
   snapshots (`EngineBattleOptions.unitSnapshots: false`, ~11% of a run). Checked: 54 precalc entries (all three charts,
   1/3/5 enemies, 5t and 15t, A0 and A5) identical to the v31 file, so LUX_BENCH_VERSION stays 31; most characters
   2-5x faster, crit-reacting ones (20 of 119) unchanged.
+
+## 2026-11-16: Over Break at its cap in Max Damage / Max Burst (user's request)
+- User's report: Best SA Team (La Danse Macabre required, A5 max) on Stellar Photo Op Hunt Score Attack gave the
+  Sacred Gift team 54M and the Lilly Candy team 50M. Cause: Max Damage left Element Drive / Over Break out, because
+  `UNIT_STATE_TYPES` (StateAddFilter.ts, Max Damage's list of factory state types) was never updated for 3.24.0.
+- User's rule: whenever the team gives an Over Break effect (any OVER_BREAK_DAMAGE_RECEIVE_RATE_DRIVE kit, now and in
+  the future), count it **at its cap** (the Void Ultimates that build it are assumed to have landed first).
+- `UNIT_STATE_TYPES` += UNIQUE_ELEMENT_DRIVE, OVER_BREAK_DAMAGE_RECEIVE_RATE_DRIVE, DRIVE_UP_BREAK_POINT_DMG_FIXED/_RATIO
+  (now matches UnitStateFactory except STEP_UP_SKILL, which is still missing and was left alone: adding it may change
+  other kits' Max Damage, to decide with the user; UNIQUE_ELEMENT_BREAK kept).
+- `EngineMaxDamage.overBreakAtCap` (after giveEffects, before the skill is launched): on every enemy that holds an
+  active Over Break state, is broken at its break-bonus cap and holds an Element Drive from the same giver (the game's
+  conditions; UnitCondition.Refresh clears the bonus without an active Drive), open the cap (v1/10) and fill the
+  bonus to it. The bonus applies to every hit on the enemy (no attacker check in GetAppliedDamageOfBreakSituation),
+  so a non-Void attacker in a Lilly team gains too, as in battle. Drive level not raised [APPROXIMATION].
+- Probe, stage 983550 (difficulty 50, break cap 300% -> 400%), attacker Light of Reckoning with Scorchin' Summer Spike /
+  Carnival Cuddleboom / La Danse Macabre: + Sacred Gift 12.50M (unchanged), + Overdrive Impulse 11.35M -> 15.13M.
+  Only passive 15082 (Overdrive Impulse) has the effect in today's data.
+- bench-precalc.json: Overdrive Impulse's Fast / Medium entries were redone with the fix; her Slow entries are missing
+  (the page simulates them) - **the user reruns** `npx tsx scripts/sim/benchPrecalc.ts --all --only "Overdrive Impulse"`.
+  No LUX_BENCH_VERSION bump (no other character changes). User: never run the bench precalc yourself (too slow).
+- Checks: checkFixturesEngine 16/16, app type-check 223 = baseline (none in changed files). No src/engine change.
+- Effect list (PvESimulatorPage effectStatus): a state restricted to some skill types (active condition ActorSkillType,
+  e.g. Overdrive Impulse's ascension 2 "battle skill DMG +30%", set 6) was shown as on the dealer even when the reported
+  column is another one (`reach` is filled with every skill type allowed). Now N/A "Only for Battle Skill: not counted
+  in Ultimate". The damage itself was already right (runOnce gives such states only to their columns): probe, Light of
+  Reckoning + Overdrive Impulse / La Danse Macabre / Aqua Tempest / Nine Phases on 983550: Ultimate 5,389,066 with and
+  without it, Battle Skill 2,478,561 vs 2,013,831.
 
 ## 2026-11-15: Kioku Grid extra-bar tooltips, Over Break audit (user's request)
 - Clicking a striped (extra) bar now also lists the character's effects that reach that bar's dealer but not the plain

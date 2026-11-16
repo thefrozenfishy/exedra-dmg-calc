@@ -550,8 +550,8 @@ Ultimates (SpecialAttackAct) and follow-ups: only ExecuteSkill - no TurnStart/Tu
 - Overdrive Impulse (2026-11-15): Spinfluence gives Void Drive (v3 roleBonusExp 3: one Void Breaker SA = max level);
   Assault Chase holds DRIVE_UP_BREAK_POINT_DMG_FIXED (Drive lv 1/2/3: +15/30/50 gauge on SAs) and
   OVER_BREAK_DAMAGE_RECEIVE_RATE_DRIVE 1000/1000/1000 (cap +100, +100 per qualifying SA hit for any role). In a bench
-  battle the first qualifying SA opens the cap and the next one fills it (bonus 100 = broken rate 500 -> 600). Max
-  Damage / Max Burst do not apply these (not unit states). [C]
+  battle the first qualifying SA opens the cap and the next one fills it (bonus 100 = broken rate 500 -> 600). Since
+  2026-11-16 Max Damage / Max Burst count Over Break at its cap whenever the team gives it (app rule, see STATUS). [C]
 
 ## 14. PvP specifics
 

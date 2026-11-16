@@ -2224,6 +2224,15 @@ watch([showBenchCharts, markedCharacters, levelsMode, multiAscensions, fightMode
     display: none;
 }
 
+/* Shared images only show the chart title, the active settings and the bars: no explanation/status/note text,
+   no Recalculate button, no badge, and only the selected ascension chips. */
+.chart-exporting .gain-desc,
+.chart-exporting .beta-badge,
+.chart-exporting .gain-bar-options > button.filter-chip,
+.chart-exporting .fight-mode-row > .filter-chip:not(.active) {
+    display: none;
+}
+
 .chart-exporting .gain-scroll {
     overflow: visible;
     width: max-content;

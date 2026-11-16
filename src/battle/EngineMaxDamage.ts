@@ -504,6 +504,33 @@ function giveEffects(b: Built, list: Given, vortexEnemies?: Record<string, numbe
     return reach
 }
 
+/** App rule (user's choice, 2026-11-16): Over Break counts at its cap in the theoretical max whenever the team gives
+ *  it (any OVER_BREAK_DAMAGE_RECEIVE_RATE_DRIVE kit, e.g. Overdrive Impulse): the Void Ultimates that fill it in battle
+ *  are assumed to have landed first. The game's own conditions on the enemy are kept:
+ *  [CONFIRMED 3.24] OverBreakDamageReceiveRateDriveUnitState.ApplyOverBreakAddition (0x171B070): the enemy holds the
+ *  state (active), is broken at its break-bonus cap (BreakedDamageReceiveRate >= MaxBreakedDamageReceiveRate / 10) and
+ *  holds an Element Drive from the same giver; the first state opens the cap (BattleUnit.AddMaxOverBreakBonus 0xC98800,
+ *  v1/10) and later hits fill the bonus up to it (AddOverBreakBonus 0x13C1440, Min(bonus + add, max)).
+ *  [CONFIRMED 3.24] UnitCondition.Refresh clears it again when no active Element Drive is left, and
+ *  BattleDamageCalculator.GetAppliedDamageOfBreakSituation (0x13BAB60) adds OverBreakBonusValue / 100 to the broken
+ *  rate for every hit on the enemy (no attacker check).
+ *  [APPROXIMATION] the Drive is not raised to its max level (Max Damage reads no Drive level: the Drive's break-gauge
+ *  bonuses don't change damage). Exported for scripts/sim probes. */
+export function overBreakAtCap(enemies: any[]): void {
+    for (const u of enemies) {
+        if (!u || !u._BreakPoint.get_HasBreakPoint() || !u._BreakPoint.get_IsBreak()) continue
+        if (Math.fround(u._BattleParameter._MaxBreakedDamageReceiveRate / 10) > Math.fround(u._BreakedDamageReceiveRate)) continue
+        const states: any[] = u._Condition._StateList
+        for (const st of states) {
+            if (!(st instanceof E.OverBreakDamageReceiveRateDriveUnitState) || !st.IsActive$BattleUnit(u)) continue
+            const drive = states.find(s => s instanceof E.UniqueElementDriveUnitState)
+            if (!drive || drive._UserUnitId !== st._UserUnitId || !drive.IsActive$BattleUnit(u)) continue
+            if (!(0 < u._MaxOverBreakBonusValue)) u.AddMaxOverBreakBonus(st._MaxOverBreakRatio)
+            u.AddOverBreakBonus(u._MaxOverBreakBonusValue)
+        }
+    }
+}
+
 /** Skill objects of the dealer by column. */
 function dealerSkills(dealer: any): { base: any[], switches: any[], followUps: any[] } {
     const set = dealer._SkillSet
@@ -563,6 +590,7 @@ function runOnce(ctx: Ctx, dealerPos: number, pick: SkillPick, crit: boolean, ef
         const type = actorSkillTypeOf(skill)
         const allowed = effects.filter(({ e }) => { const r = actorSkillTypeRestriction(e.detail.activeConditionSetIdCsv); return !r || r.has(type) })
         giveEffects(b, allowed, ctx.opts.vortexEnemies, ctx.opts.allyTargets, ctx.follow)
+        overBreakAtCap(b.enemies)
         const list: any[] = skill.launcher._AbilityEffectList
         const own = list.filter((eff: any, i: number) => {
             if (!keep(i)) return false

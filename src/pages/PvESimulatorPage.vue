@@ -675,6 +675,7 @@ import { isEffectValueType, type MaxDmgEffect, type MaxDmgResult, type MemberDam
 import { buildSlotKioku, buildPvEExport, parsePvEExport, downloadText, exportToText, rekeyPicks, type PvEExport } from '../utils/pvpExport'
 import { describePvESetup, sanitizePvESetup, stagePath, type PvESetup } from '../utils/pveSetup'
 import { effectDescription, effectName, effectRestriction, effectValue } from '../utils/effectText'
+import { actorSkillTypeRestriction } from '../models/BattleConditionParser'
 import { passiveDetailsByMstId, portraits } from '../utils/helpers'
 import { EngineBattle, type RaidCarry } from '../battle/EngineBattle'
 import type { MaxDamageMessage, MaxDamageRequest } from '../workers/maxDamageWorker'
@@ -1194,6 +1195,7 @@ const nerdKioku = computed(() => {
 // ---- buffs & debuffs: where each effect comes from and whether it counts ----
 // 'alt': a rung of a tier ladder left out because another rung of it is used (MaxDmgEffect.tierUsed).
 type EffectStatus = 'used' | 'partial' | 'alt' | 'off' | 'na'
+const SKILL_TYPE_NAME: Record<string, string> = { SpecialAttack: 'Ultimate', ActiveSkill: 'Battle Skill', NormalAttack: 'Basic Attack', AdditionalSkill: 'Follow-up', EtherBlow: 'Ether Blow' }
 const STATUS_ORDER: Record<EffectStatus, number> = { used: 0, partial: 1, alt: 2, off: 3, na: 4 }
 // Sections, in this order: active skills first, then the kit's passives and what's equipped.
 const SOURCE_ORDER = ['Battle Skill', 'Ultimate', 'Basic Attack', 'Switch Skill', 'Follow-up', 'Ability', 'Ascension', 'Crystalis', 'Portrait', 'Support', 'Passive', 'Stage']
@@ -1239,6 +1241,15 @@ function effectStatus(e: MaxDmgEffect): { status: EffectStatus, statusText: stri
             : 'Only one tier is active at a time (its conditions exclude each other)',
     }
     if (!e.reach) return { status: 'off', statusText: 'Set to 0 stacks' }
+    // Max Damage gives a state restricted to some skill types (active condition ActorSkillType, e.g. "on battle skill
+    // use") only to those columns (battle/EngineMaxDamage runOnce); `reach` is filled with every skill type allowed,
+    // so say here when it doesn't count in the column the page reports.
+    const best = dealer.value?.best
+    const skillTypes = actorSkillTypeRestriction(e.detail.activeConditionSetIdCsv)
+    if (best && skillTypes && !skillTypes.has(best.type)) {
+        const names = [...skillTypes].map(t => SKILL_TYPE_NAME[t] ?? t).join(' / ')
+        return { status: 'na', statusText: `Only for ${names}: not counted in ${skillLabel(best)}` }
+    }
     if (e.side === 'ally') {
         return e.reach.dealer
             ? { status: 'used', statusText: `On ${dealerName.value}` }
