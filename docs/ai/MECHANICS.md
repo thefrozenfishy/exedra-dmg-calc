@@ -428,11 +428,13 @@ Ultimates (SpecialAttackAct) and follow-ups: only ExecuteSkill - no TurnStart/Tu
   clearRoundBonusDifficultyRate[diff]). Sum matches in-game result screens. [C] clearRoundBonus = rate*360 -
   floor(rate*AV/1000), fitted to 2 Easy clears (140.963 AV -> 930,596; 179.756 AV -> 930,496); -100/round also fits. [U]
   App: models/PvE.crisisScore, shown per action in the PvE Simulator timeline.
-- Score Attack score (server, ScoreAttack.ScoreInfo; CalculationPointPolicyMst policyType 1), matches 3 result screens:
-  final = DifficultyScore + coef * (floor(dmg / divisor) + (90000 - 5000*rounds)*(EX ? 1.25 : 1) + floor(15000 * HP ratio)).
+- Score Attack score (server, ScoreAttack.ScoreInfo; CalculationPointPolicyMst policyType 1), matches 4 result screens:
+  final = DifficultyScore + coef * (floor(dmg / divisor) + floor((90000 - 5000*rounds) * coef/20) + floor(15000 * HP ratio)).
   DifficultyScore = ScoreAttackStageMst.fixedDifficultyScore || difficultyBonus[difficulty]; coef =
-  difficultyCoefficient[difficulty]/1000 (50 -> 20, EX 51 -> 25). [C] The divisor differs per SA (56, 140, EX 9.5 =
-  divideDamageBonus/1000) and is not in client data; EX round x1.25 from one screen. [U] App: models/PvEScore.
+  difficultyCoefficient[difficulty]/1000 (50 -> 20, EX 51 -> 25, 30 -> 6.25). [C] The divisor differs per SA (56, 140,
+  17, EX 9.5 = divideDamageBonus/1000) and is not in client data. Round bonus scales with coef/20 (r50 x1, EX x1.25,
+  r30 4 rounds -> 21,875). HP: the result screen shows the % rounded up, the score floors the real ratio (53% shown -> 7,800). [U]
+  App: models/PvEScore (whole-number hpPercent = the shown %, scored as (d-1)%; fractional = exact ratio).
 
 ## 12. Solo Raid (BattleType 9, SoloRaidGameDirector)
 

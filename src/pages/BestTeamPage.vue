@@ -93,7 +93,7 @@ Lower = faster but more likely to skip a team that could have closed the gap.
                         <span>{{ saStageScore.difficultyScore.toLocaleString() }} · ×{{ saStageScore.coefficient.toFixed(2) }}</span>
                     </div>
                     <label class="field">
-                        <span class="field-label">HP remaining (%)</span>
+                        <span class="field-label" title="As shown on the result screen (rounded up there; the score uses it rounded down)">HP remaining (%)</span>
                         <input v-model.number="hpPercentTeam" type="number" step="1" min="0" max="100" />
                     </label>
                     <label class="field">
@@ -407,7 +407,7 @@ watch(() => stageRef.value?.selection?.stageId, (id, old) => {
 const saScoreInputs = computed<ScoreAttackScoreInputs | undefined>(() =>
     runStageId.value !== undefined && getScoreAttackStage(runStageId.value)
         ? (st => ({ difficultyScore: st?.difficultyScore ?? difficultyScore.value, scoreMultiplier: scoreMultiplier.value, turns: saTurns.value,
-            hpPercent: hpPercentTeam.value, coefficient: st?.coefficient, roundScale: st?.roundScale }))(scoreAttackStageScore(runStageId.value))
+            hpPercent: hpPercentTeam.value, coefficient: st?.coefficient }))(scoreAttackStageScore(runStageId.value))
         : undefined)
 const saStageScore = computed(() => { const id = stageRef.value?.selection?.stageId; return id !== undefined ? scoreAttackStageScore(id) : undefined })
 

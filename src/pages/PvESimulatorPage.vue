@@ -305,7 +305,7 @@
                             title="To find: check the final score screen. This changes for each difficulty">
                             <span class="field-label">Difficulty score</span>
                             <input v-model.number="difficultyScore" type="number" /></label>
-                        <label class="field"><span class="field-label">HP remaining (%)</span>
+                        <label class="field"><span class="field-label" title="As shown on the result screen (rounded up there; the score uses it rounded down)">HP remaining (%)</span>
                             <input v-model.number="hpPercentTeam" type="number" step="1" min="0" max="100" /></label>
                         <label class="field"><span class="field-label">Turns</span>
                             <input v-model.number="saTurns" type="number" step="1" min="1" max="16" /></label>
@@ -1417,7 +1417,7 @@ const saStageScore = computed(() => scoreAttackStageScore(stageId.value))
 const saInputs = computed<ScoreAttackScoreInputs>(() => {
     const st = saStageScore.value
     return { difficultyScore: st ? st.difficultyScore : difficultyScore.value, scoreMultiplier: scoreMultiplier.value, turns: saTurns.value,
-        hpPercent: hpPercentTeam.value, coefficient: st?.coefficient ?? 20, roundScale: st?.roundScale ?? 1 }
+        hpPercent: hpPercentTeam.value, coefficient: st?.coefficient ?? 20 }
 })
 const saScore = computed(() => scoreAttackScoreParts(saDamage.value, saInputs.value).final.toLocaleString())
 const saScoreTitle = computed(() => {

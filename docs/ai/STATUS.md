@@ -206,7 +206,9 @@ _Last updated: 2026-11-18: enemy buff settings shared + persistent; before: 2026
 - clearRoundBonus fit [UNCERTAIN]: rate*360 - floor(rate*AV/1000) reproduces both user screenshots (Graffiti Witch Easy,
   1,251,596 at 140.963 AV / 1,251,496 at 179.756 AV, probe scripts/sim/.probe-crisis-av.ts / .probe-crisis-score.ts).
   A slow clear (round 4, ~400 AV) separates it from a -100/round rule (929,926 vs 930,296).
-- Score Attack: formula fitted to 3 user result screens (Sayaka r50, Box Witch EX, a rank 50 event SA), see MECHANICS.md.
+- Score Attack: formula fitted to 4 user result screens (Sayaka r50, Box Witch EX, a rank 50 event SA, Stellar Photo Op
+  Hunt r30), see MECHANICS.md. 2026-11-18: round bonus was 90000-5000r on every non-EX rank (only right at x20); now x coef/20
+  (replaces the EX x1.25 special case). Whole-number HP % input = the rounded-up display, scored at d-1 (100 stays); fractional = exact ratio.
   models/PvEScore.scoreAttackStageScore fills Difficulty score + multiplier (x20 / x25) from master data on SA stages
   (PvE Simulator, Best Team Finder); the damage divisor ("Score multiplier") stays manual. Probe .probe-sa-score.ts.
 - Fixtures 16/16, app type-check 222 (none in changed files). No src/engine change.
