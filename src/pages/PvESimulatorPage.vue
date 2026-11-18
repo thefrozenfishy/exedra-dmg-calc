@@ -1860,6 +1860,13 @@ const saved = useSavedTeams({
     },
     saveHint: 'The team, stage, settings and every decision are saved to this team automatically.',
 })
+// Enemy buffs: a new (unsaved) team uses the setting shared with the Highest Dmg Calc; a saved team keeps its own (from
+// its setup), so loading or editing one never changes the shared ones. Switched synchronously, before the saved-team
+// watchers compare the setup with the team.
+watch(() => saved.currentTeam.value?.id ?? '', (id, old) => {
+    if (id && id === old) return
+    se.setBuffsLocal(!!id, id ? sanitizePvESetup(saved.currentTeam.value!.extra ?? {}).enemyBuffs ?? {} : undefined)
+}, { immediate: true, flush: 'sync' })
 </script>
 
 <style scoped>

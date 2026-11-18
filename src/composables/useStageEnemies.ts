@@ -2,6 +2,7 @@
 // wave, boss phase, adds summoned mid-fight, and per enemy alive / target / broken / broken rate. Both pages score Max
 // Damage against `aliveWave` with `maxDmgEnemyOpts()` (battle/EngineMaxDamage).
 import { computed, ref, watch, type Ref } from 'vue'
+import { useSetting } from '../store/settingsStore'
 import { stageWaveMeta, wavePositionIds, enemyName, summonCandidates, breakMstOf, ELEMENT_KEYS, type QuestEnemyAppearance, type ModeChangeInfo } from '../models/PvE'
 import { wavePhases, waveStartUnits } from '../models/PvEBattle'
 import { phaseWave } from '../battle/EngineMaxDamage'
@@ -118,8 +119,21 @@ export function useStageEnemies(stageId: Ref<number>, waveIdx: Ref<number>, phas
     const ailments = computed<Ailment[]>(() => Object.values(Ailment).filter(a => aliveWave.value.some(e => ((e as any)[PARRY_FIELD[a]] ?? 0) < 1000)))
 
     // Enemy buffs (battle/EngineEnemyBuffs, components/EnemyBuffs): the states each enemy gives itself, turned off or
-    // started with N stacks. Kept per appearance id (across waves and stages); missing = the game's default.
-    const enemyBuffs = ref<EnemyBuffSettings>({})
+    // started with N stacks. Kept per appearance id; missing = the game's default. One setting shared by the PvE
+    // Simulator and the Highest Dmg Calc (user's rule: set it once for the stage on either page, it holds on the other,
+    // across reloads; another enemy has its own). A page can switch to its own copy (setBuffsLocal): the PvE Simulator
+    // while a saved team is loaded uses that team's settings and leaves the shared ones alone.
+    const sharedBuffs = useSetting<EnemyBuffSettings>('enemyBuffSettings', {})
+    const localBuffs = ref<EnemyBuffSettings>({})
+    const buffsLocal = ref(false)
+    const enemyBuffs = computed<EnemyBuffSettings>({
+        get: () => buffsLocal.value ? localBuffs.value : sharedBuffs.value,
+        set: v => { if (buffsLocal.value) localBuffs.value = v; else sharedBuffs.value = v },
+    })
+    const setBuffsLocal = (local: boolean, init?: EnemyBuffSettings) => {
+        if (local) localBuffs.value = JSON.parse(JSON.stringify(init ?? sharedBuffs.value))
+        buffsLocal.value = local
+    }
     const buffsOf = (i: number) => wave.value[i] ? enemySelfBuffs(wave.value[i]) : []
     const buffSetting = (appId: number, key: string): EnemyBuffSetting => enemyBuffs.value[appId]?.[key] ?? { on: true, stacks: 0 }
     const setBuff = (appId: number, key: string, patch: Partial<EnemyBuffSetting>) => {
@@ -165,7 +179,7 @@ export function useStageEnemies(stageId: Ref<number>, waveIdx: Ref<number>, phas
         waveMetas, waves, wavePos, waveMeta, phases, phasePos, phaseTitle, summons,
         wave, waveAddCounts, mainTargetIdx, broken, breakRate, alive, aliveCount, setAlive, setBroken,
         setBreakRate, formLabel, formTag, enemyInfo, aliveIdx, aliveWave, aliveInfo, removed, weakElements, ailments,
-        maxDmgEnemyOpts, enemyBuffs, buffsOf, buffSetting, setBuff, resetBuffs, enemyBuffOpts, changedBuffCount,
+        maxDmgEnemyOpts, enemyBuffs, setBuffsLocal, buffsOf, buffSetting, setBuff, resetBuffs, enemyBuffOpts, changedBuffCount,
     }
 }
 export type StageEnemies = ReturnType<typeof useStageEnemies>
