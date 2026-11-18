@@ -627,11 +627,18 @@ export class EngineBattle {
         const pendingAct = this.pendingDecisionAct()
         if (pendingAct) return this.decide(pendingAct)
         const cur = d.turnActSystem.actReferee.currentAct
-        const betweenTurns = (cur == null || cur.IsExecuted) && d.turnActSystem.actReferee.actList.length === 0
-        if (this.manual && !this.ultimateWindowPassed && betweenTurns) {
+        const actList = d.turnActSystem.actReferee.actList
+        const betweenTurns = (cur == null || cur.IsExecuted) && actList.length === 0
+        // between two steps of an enemy combo the client can also register an ultimate: ActReferee.AddActToListAndSort
+        // puts it before the undecided next step ([CONFIRMED 3.19] ActReferee.CanBeInterruptedBySpecialAttackAct
+        // (0x193BEF0): an opposing ComboTurnUnitAct with ActionStep > 1 is interruptible). Ally combo steps are
+        // decisions, where decide() already offers the ready ultimates.
+        const next = actList[0]
+        const midEnemyCombo = cur != null && cur.IsExecuted && next instanceof E.ComboTurnUnitAct && next._ActionStep >= 2 && next.actUnitTeam !== 0
+        if (this.manual && !this.ultimateWindowPassed && (betweenTurns || midEnemyCombo)) {
             const ready = this.readyUltimates()
             if (ready.length) {
-                const i = this.rng.pick("action", "Between actions: fire an ultimate?", ["Continue", ...ready.map(u => `Ultimate: ${this.unitLabel(u)}`)])
+                const i = this.rng.pick("action", midEnemyCombo ? "Between combo actions: fire an ultimate?" : "Between actions: fire an ultimate?", ["Continue", ...ready.map(u => `Ultimate: ${this.unitLabel(u)}`)])
                 if (i <= 0) this.ultimateWindowPassed = true
                 else return this.report(() => this.registerUltimate(ready[i - 1]))
             }

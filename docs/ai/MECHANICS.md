@@ -118,6 +118,11 @@ Ultimates (SpecialAttackAct) and follow-ups: only ExecuteSkill - no TurnStart/Tu
   0x14a5dd0) or checks the Vanguard, so an ultimate that wipes the minions doesn't end the turn: they come back and
   the turn unit still acts (in-game 2026-10-07, fixture pve-rose-garden-own-ult-refill.json). [C][G]
   TS `useAttackOrSkill` (`resetGauge` before the first performAction), `chooseAllyAction` -> `betweenActsHook`.
+- **Ultimate between enemy combo steps.** Each TimeForward runs one act, so the client can register an ultimate after
+  an enemy combo step: `ActReferee.AddActToListAndSort` 0x193B810 puts it before the next, undecided
+  ComboTurnUnitAct because `CanBeInterruptedBySpecialAttackAct` 0x193BEF0 is true for an opposing combo step with
+  ActionStep > 1 (not for step 1). [C 3.19] App: `EngineBattle.step` offers "Between combo actions: fire an
+  ultimate?" when the next queued act is such a step (ally combo steps are decisions; `decide` offers ultimates).
 - `PassiveSkill.Triggering` 0x14a2c20: for a timing, every living unit on **both teams** runs its passives, then
   every living unit runs AfterProcess (9). Ends with `ResetZoneStatePatternMstId` on every unit. [C] TS `fireTiming`.
 - Skill passed per pass: `ActExecutor.TurnBegin` (0x17e1b30) / TurnEnd call `PassiveSkill.Triggering(gd, 3|6, actor,
