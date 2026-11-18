@@ -30,6 +30,7 @@ export interface PvESetup {
     // the enemies' own buffs turned off / started with N stacks (appearance id -> EnemySelfBuff.key -> setting;
     // battle/EngineEnemyBuffs), Max Damage and the battle
     enemyBuffs?: Record<number, Record<string, { on: boolean, stacks: number }>>
+    ailmentsOff?: string[]           // Max Damage: ailments the team inflicts turned off (they missed), state types
     control: PvEControl
     rngMode: RngMode
     seed: number
@@ -151,6 +152,7 @@ export function sanitizePvESetup(raw: unknown): PvESetup {
         allyTargets,
         stacks,
         enemyBuffs,
+        ailmentsOff: [...new Set(asArray(s.ailmentsOff).filter((t): t is string => typeof t === "string" && /^[A-Z_]{2,40}$/.test(t)))].sort().slice(0, 10),
         control: s.control === "manual" ? "manual" : "auto",
         rngMode: RNG_MODES.includes(s.rngMode as RngMode) ? s.rngMode as RngMode : "seed",
         seed: int(s.seed, 0, 2 ** 32 - 1, 0),

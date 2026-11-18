@@ -597,6 +597,8 @@ function runOnce(ctx: Ctx, dealerPos: number, pick: SkillPick, crit: boolean, ef
         const list: any[] = skill.launcher._AbilityEffectList
         const own = list.filter((eff: any, i: number) => {
             if (!keep(i)) return false
+            // the dealer's own row inflicting an ailment turned off on the page (it missed)
+            if (ctx.opts.ailmentsOff?.includes(eff._EffectType)) return false
             const r = actorSkillTypeRestriction(eff._ActiveConditionSetIdCsv)
             if (r && !r.has(type)) return false
             if (ctx.opts.enemyStates && !ailmentConditionsMet([eff._StartConditionSetIdCsv, eff._ActiveConditionSetIdCsv], ctx.opts.enemyStates, ctx.enemyApps.length)) return false
@@ -754,7 +756,8 @@ export function computeMaxDamageEngine(allies: PvPKioku[], stage: EngineMaxDmgSt
     if (opts.landableAilments) {
         const inflicted = new Set(effects.filter(e => e.side === "enemy" && e.applies && !opts.excluded?.has(e.key)
             && !(e.detail.abilityEffectType === "VORTEX_ATK" && opts.vortexEnemies?.[e.key]?.length === 0)).map(e => e.detail.abilityEffectType))
-        opts = { ...opts, enemyStates: opts.landableAilments.filter(t => inflicted.has(t)) }
+        const missed = new Set(opts.ailmentsOff ?? [])
+        opts = { ...opts, enemyStates: opts.landableAilments.filter(t => inflicted.has(t) && !missed.has(t)) }
         ailmentGive = []
     }
     const ctx: Ctx = { setup, waveIdx: stage.waveIdx, phase: Math.max(1, stage.phase ?? 1), enemyApps: enemies, opts, mainIdx, allyCount: allies.length, ailmentGive }
@@ -782,6 +785,8 @@ export function computeMaxDamageEngine(allies: PvPKioku[], stage: EngineMaxDmgSt
             if (chosen) return chosen.length === 0
             const allies = isAllyTargetBuff(e) && e.allyGroup ? opts.allyTargets?.[e.allyGroup] : undefined
             if (allies) return allies.length === 0 || !!opts.excluded?.has(e.key)
+            // an ailment turned off on the page (it missed): none of its effects land
+            if (opts.ailmentsOff?.includes(e.detail.abilityEffectType)) return true
             return opts.excluded?.has(e.key) || (vortexOffByDefault(e, pos) && !opts.included?.has(e.key))
         }
         const stacksOf = (e: MaxDmgEffect) => offOf(e) ? 0 : Math.max(0, Math.min(e.maxStacks, opts.stacks?.get(e.key) ?? e.maxStacks))

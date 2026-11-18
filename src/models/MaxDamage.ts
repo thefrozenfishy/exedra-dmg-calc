@@ -88,6 +88,10 @@ export interface MaxDmgOptions {
     // turned off): enemyStates becomes that list for the ailment conditions, and no ailment state is put on the enemies
     // beyond the team's own effects (the stage's generic one would count Weakness twice, or with nobody inflicting it).
     landableAilments?: string[]
+    // PvE page (user's toggle "the ailment missed"): ailment state types the team inflicts but that are NOT on the
+    // enemies: every effect of that type (the team's and the dealer's own skill rows) is left out, and conditions about
+    // it fail (it is not in enemyStates). Used with landableAilments.
+    ailmentsOff?: string[]
     // App tools (Best SA Team calculator): states the stage puts on units for the whole fight (stage buffs, buff
     // strength cuts, an enemy's DEF up), given before the team's effects: ally `index` = team position, enemy `index` =
     // the page's enemy list index, "all" = every unit of that side. `value1` per mille as in the data.

@@ -147,7 +147,7 @@ function loadoutBatch(msg: LoadoutScoreBatch) {
 
 export interface VariantContext extends LoadoutContext { slots: TeamSlot[] }
 /** On top of the page's choices: these keys off, these vortexes on these enemies, these stack counts. */
-export interface VariantChange { excluded?: string[], vortexEnemies?: Record<string, number[]>, stacks?: [string, number][] }
+export interface VariantChange { excluded?: string[], vortexEnemies?: Record<string, number[]>, stacks?: [string, number][], ailmentsOff?: string[] }
 /** The dealer's columns (skills + switch skill, as `label` / `name`): damage per enemy, every hit a crit and none. */
 export interface VariantColumn { label: string, name?: string, perEnemy: { normal: number, crit: number }[] }
 export interface VariantBatch { kind: "variant", batch: number, context?: VariantContext, jobs: { id: number, change: VariantChange }[] }
@@ -162,6 +162,7 @@ function scoreVariant(change: VariantChange, c: VariantContext): VariantColumn[]
     for (const [k, n] of change.stacks ?? []) stacks.set(k, n)
     const opts: MaxDmgOptions = {
         ...c.opts, excluded, stacks, vortexEnemies: { ...c.opts.vortexEnemies, ...change.vortexEnemies },
+        ailmentsOff: [...new Set([...(c.opts.ailmentsOff ?? []), ...(change.ailmentsOff ?? [])])],
         onlyPos: c.dealerPos, scoreOnly: true, trace: false,
     }
     const result = computeMaxDamageEngine(c.slots.map(loadoutKioku), { stageId: c.stageId, waveIdx: c.waveIdx, phase: c.phase }, c.wave, c.dealerPos, opts)

@@ -56,9 +56,10 @@ const SIZE_PENALTY = 0.0002  // per missing effect, in |ln ratio|: of two subset
 export const MATCH = 0.0005  // relative difference that counts as the same number (the game shows whole numbers)
 
 export function mergeChanges(changes: VariantChange[]): VariantChange {
-    const out: Required<VariantChange> = { excluded: [], vortexEnemies: {}, stacks: [] }
+    const out: Required<VariantChange> = { excluded: [], vortexEnemies: {}, stacks: [], ailmentsOff: [] }
     for (const c of changes) {
         out.excluded.push(...(c.excluded ?? []))
+        out.ailmentsOff.push(...(c.ailmentsOff ?? []))
         Object.assign(out.vortexEnemies, c.vortexEnemies)
         out.stacks.push(...(c.stacks ?? []))
     }

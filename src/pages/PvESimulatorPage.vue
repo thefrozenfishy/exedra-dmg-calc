@@ -381,7 +381,7 @@
                     's' }}
                     on the enemies</span>
                 <span v-if="effectCounts.off" class="legend legend-off">{{ effectCounts.off }} turned off</span>
-                <button v-if="excluded.size || included.size || stacks.size || Object.keys(vortexEnemies).length || Object.keys(allyTargets).length" type="button" class="link-btn" @click="resetEffects">Reset
+                <button v-if="excluded.size || included.size || stacks.size || ailmentsOff.size || Object.keys(vortexEnemies).length || Object.keys(allyTargets).length" type="button" class="link-btn" @click="resetEffects">Reset
                     to the defaults</button>
                 <span v-if="effectCounts.support && showSupportBuffs" class="legend legend-support">{{ effectCounts.support }}
                     support buff{{ effectCounts.support === 1 ? '' : 's' }}</span>
@@ -395,6 +395,17 @@
                     dealerName
                     }} or the enemies
                 </label>
+            </div>
+
+            <!-- ailments the team inflicts: turn one off when it missed (MaxDmgOptions.ailmentsOff) -->
+            <div v-if="teamAilments.length" class="ailment-row">
+                <span class="ailment-row-label" title="Ailments your team inflicts that can land on these enemies. Turn one off when it missed: its effects and everything that needs it on the enemies stop counting.">Ailments on the enemies</span>
+                <button v-for="a in teamAilments" :key="a.type" type="button" class="chip ailment-chip" :class="{ active: a.on }"
+                    :title="a.on ? `${a.label} is on the enemies: click if it missed (its effects and everything that needs it stop counting)` : `${a.label} missed: click to put it back`"
+                    @click="toggleAilment(a.type)">
+                    <img :src="`/exedra-dmg-calc/aliments/${a.label}.png`" :alt="a.label" class="ailment-icon" @error="($event.target as HTMLImageElement).style.display = 'none'" />
+                    <span :class="{ struck: !a.on }">{{ a.label }}</span>
+                </button>
             </div>
 
             <div v-for="sec in effectSections" :key="sec.source" class="fx-section">
@@ -676,10 +687,11 @@ import { isEffectValueType, type MaxDmgEffect, type MaxDmgResult, type MemberDam
 import { buildSlotKioku, buildPvEExport, parsePvEExport, downloadText, exportToText, rekeyPicks, type PvEExport } from '../utils/pvpExport'
 import { describePvESetup, sanitizePvESetup, stagePath, type PvESetup } from '../utils/pveSetup'
 import { effectDescription, effectName, effectRestriction, effectValue } from '../utils/effectText'
-import { actorSkillTypeRestriction } from '../models/BattleConditionParser'
+import { actorSkillTypeRestriction, ailmentConditionValues } from '../models/BattleConditionParser'
 import { passiveDetailsByMstId, portraits } from '../utils/helpers'
 import { EngineBattle, type RaidCarry } from '../battle/EngineBattle'
 import { AILMENT_STATE } from '../battle/EngineBench'
+import { Ailment } from '../types/enums'
 import type { MaxDamageMessage, MaxDamageRequest } from '../workers/maxDamageWorker'
 import { newMaxDamageWorker } from '../workers/newMaxDamageWorker'
 import type { PvPKioku } from '../models/PvPKioku'
@@ -785,6 +797,46 @@ const vortexEnemies = reactive<Record<string, number[]>>({})
 // A single-target ally buff (range 1) given to chosen allies (effect key -> team positions, [] = off) instead of the
 // dealer only: another member's vortex / DoT damage uses that member's own buffs.
 const allyTargets = reactive<Record<string, number[]>>({})
+// Ailments the team inflicts that are turned off (they missed): Max Damage leaves out every effect of that ailment and
+// everything that needs it on the enemies (MaxDmgOptions.ailmentsOff). Ailment state types ("CURSE_ATK", "WEAKNESS").
+const ailmentsOff = reactive(new Set<string>())
+const AILMENT_OF_STATE = Object.fromEntries(Object.entries(AILMENT_STATE).map(([a, t]) => [t, a as Ailment])) as Record<string, Ailment>
+const ailmentText = (a: Ailment) => a === Ailment.WOUND ? 'Bleed' : a.charAt(0) + a.slice(1).toLowerCase()
+// the ailments some member inflicts that can land on the wave (the row of toggles)
+const teamAilments = computed(() => {
+    const landable = new Set(se.ailments.value.map(a => AILMENT_STATE[a]))
+    const types = new Set((maxDmg.value?.effects ?? []).filter(e => e.side === 'enemy' && landable.has(e.detail.abilityEffectType)).map(e => e.detail.abilityEffectType))
+    return [...types].map(t => ({ type: t, ailment: AILMENT_OF_STATE[t], label: ailmentText(AILMENT_OF_STATE[t]), on: !ailmentsOff.has(t) }))
+})
+const toggleAilment = (t: string) => { if (ailmentsOff.has(t)) ailmentsOff.delete(t); else ailmentsOff.add(t) }
+// the ailment turned off that an effect is, or needs on the enemies
+function missedAilmentTypeOf(e: MaxDmgEffect): string | undefined {
+    if (!ailmentsOff.size) return undefined
+    if (ailmentsOff.has(e.detail.abilityEffectType)) return e.detail.abilityEffectType
+    const needs = ailmentConditionValues([e.detail.startConditionSetIdCsv, e.detail.activeConditionSetIdCsv]).find(a => ailmentsOff.has(AILMENT_STATE[a]))
+    if (needs) return AILMENT_STATE[needs]
+    if (/^UNIQUE_/.test(e.detail.abilityEffectType)) {
+        const text = effectDescription(e.detail)
+        return [...ailmentsOff].find(t => AILMENT_WORD[AILMENT_OF_STATE[t]]?.test(text))
+    }
+    return undefined
+}
+const missedAilmentOf = (e: MaxDmgEffect) => { const t = missedAilmentTypeOf(e); return t && !/^UNIQUE_/.test(e.detail.abilityEffectType) ? ailmentText(AILMENT_OF_STATE[t]) : undefined }
+// A unique debuff / buff whose text is a "when cursed" effect (e.g. Bebe-O'-Lantern's Candyholic, 12091003: "When
+// cursed, decreases DEF by 15% ..."): with the ailment off that effect never happens, so the card shows off (user's
+// call). The numbers already agree: the effect itself lives in other rows (her ability's 150381004 / 150381005, active
+// condition "Candyholic + Curse"), which are off; the unique state stays given, as its own marker feeds effects that
+// don't need the ailment (e.g. "while a Candyholic enemy is present", 150381002).
+const AILMENT_WORD: Partial<Record<Ailment, RegExp>> = {
+    [Ailment.CURSE]: /\bcurse/i, [Ailment.BURN]: /\bburn/i, [Ailment.POISON]: /\bpoison/i, [Ailment.WOUND]: /\bbleed/i,
+    [Ailment.STUN]: /\bstun/i, [Ailment.WEAKNESS]: /\bweaken/i, [Ailment.VORTEX]: /\bvortex/i,
+}
+function withUniqueNote(e: MaxDmgEffect, st: { status: EffectStatus, statusText: string }) {
+    if (st.status !== 'used' || !ailmentsOff.size || !/^UNIQUE_/.test(e.detail.abilityEffectType)) return st
+    const text = effectDescription(e.detail)
+    const a = [...ailmentsOff].map(t => AILMENT_OF_STATE[t]).find(a => a && AILMENT_WORD[a]?.test(text))
+    return a ? { status: 'off' as EffectStatus, statusText: `Needs ${ailmentText(a)} on the enemies, which is turned off above: click to put it back` } : st
+}
 const isOffByDefault = (k: string) => !!maxDmg.value?.effects.find(x => x.key === k)?.defaultOff
 // A rung of a tier ladder (MaxDmgEffect.tier, one rung counts at a time; the engine uses the rung that gives the most
 // damage): clicking the rung in use turns the whole ladder off; clicking any other rung uses that one only.
@@ -821,7 +873,7 @@ const setStacks = (k: string, v: number, max: number) => {
     if (n === max) stacks.delete(k); else stacks.set(k, n)
 }
 const resetEffects = () => {
-    excluded.clear(); included.clear(); stacks.clear()
+    excluded.clear(); included.clear(); stacks.clear(); ailmentsOff.clear()
     for (const k of Object.keys(vortexEnemies)) delete vortexEnemies[k]
     for (const k of Object.keys(allyTargets)) delete allyTargets[k]
 }
@@ -857,6 +909,7 @@ function maxDmgOpts(): MaxDmgOptions {
         ...se.maxDmgEnemyOpts(),
         // the ailments that can land on the wave: only those the team inflicts count (MaxDmgOptions.landableAilments)
         landableAilments: se.ailments.value.map(a => AILMENT_STATE[a]).filter(Boolean),
+        ailmentsOff: [...ailmentsOff],
         partyBuffId: isSoloRaidStage(stageId.value) ? partyBuffId.value || undefined : undefined,
     }
 }
@@ -891,7 +944,7 @@ function requestMaxDamage() {
 const statsForNerds = useSetting('pveStatsForNerds', false)
 // a vortex's chosen enemies are indexes of the enemies alive: they start over when one dies / comes back
 watch(alive, (a, old) => { if (old && a.length === old.length && a.some((x, i) => x !== old[i])) for (const k of Object.keys(vortexEnemies)) delete vortexEnemies[k] })
-watch([teamKiokus, aliveWave, dealerPos, () => [...excluded], () => [...included], () => JSON.stringify(vortexEnemies), () => JSON.stringify(allyTargets), () => [...stacks], broken, breakRate, mainTargetIdx, partyBuffId, () => JSON.stringify(se.enemyBuffs.value)], requestMaxDamage, { deep: true, immediate: true })
+watch([teamKiokus, aliveWave, dealerPos, () => [...excluded], () => [...included], () => JSON.stringify(vortexEnemies), () => JSON.stringify(allyTargets), () => [...stacks], broken, breakRate, mainTargetIdx, partyBuffId, () => JSON.stringify(se.enemyBuffs.value), () => [...ailmentsOff]], requestMaxDamage, { deep: true, immediate: true })
 watch(statsForNerds, open => { if (open && !maxDmg.value?.trace) requestMaxDamage() })
 onBeforeUnmount(() => { maxDmgWorker?.terminate(); loadoutPool?.close() })
 const dealer = computed(() => maxDmg.value?.members[dealerPos.value])
@@ -1030,6 +1083,11 @@ const diagBaseText = computed(() => {
 // fewer stacks (1, and half).
 function diagCandidates(): DiagCandidate[] {
     const out: DiagCandidate[] = []
+    // an ailment the team inflicts that missed: everything of it and everything that needs it
+    for (const a of teamAilments.value) if (a.on) out.push({
+        id: `ailment:${a.type}`, group: `ailment:${a.type}`, side: 'enemy', bucket: `ailment|${a.type}`,
+        label: `${a.label} missed (not on the enemies)`, change: { ailmentsOff: [a.type] },
+    })
     for (const e of effectViews.value) {
         if (e.status !== 'used' && e.status !== 'partial') continue
         if (e.alwaysOn) continue // can't be missing in battle (alwaysOn)
@@ -1089,6 +1147,7 @@ function applyDiagnosis(r: DiagnosisRow<DiagCandidate>) {
     for (const k of c.excluded ?? []) { excluded.add(k); included.delete(k) }
     for (const [k, v] of Object.entries(c.vortexEnemies ?? {})) vortexEnemies[k] = v
     for (const [k, n] of c.stacks ?? []) stacks.set(k, n)
+    for (const t of c.ailmentsOff ?? []) ailmentsOff.add(t)
     toast.info(`Turned off: ${r.missing.map(m => m.label).join(', ')}`, { position: toast.POSITION.TOP_RIGHT, icon: false })
 }
 
@@ -1223,6 +1282,8 @@ function effectStatus(e: MaxDmgEffect): { status: EffectStatus, statusText: stri
         if (excluded.has(e.key)) return { status: 'off', statusText: 'Turned off: click to turn on' }
         return { status: 'used', statusText: `On ${e.casterName}: its vortex / DoT damage uses its own ATK and DMG buffs` }
     }
+    const missed = missedAilmentOf(e)
+    if (missed) return { status: 'off', statusText: ailmentsOff.has(e.detail.abilityEffectType) ? `${missed} is turned off above (it missed): click to put it back` : `Needs ${missed} on the enemies, which is turned off above: click to put it back` }
     if (!e.applies) {
         return e.side === 'ally'
             ? { status: 'na', statusText: `Only affects ${e.casterName} itself` }
@@ -1308,7 +1369,9 @@ const effectRows = computed(() => (maxDmg.value?.effects ?? []).map(e => {
         startConds: e.detail.startConditionSetIdCsv ? [e.detail.startConditionSetIdCsv] : [] as string[],
         activeConds: e.detail.activeConditionSetIdCsv ? [e.detail.activeConditionSetIdCsv] : [] as string[],
         alwaysOn: alwaysOn(e),
-        ...effectStatus(e),
+        ...withUniqueNote(e, effectStatus(e)),
+        // off because of an ailment turned off above: clicking the card puts that ailment back
+        ailmentOff: missedAilmentTypeOf(e),
     }
 }))
 // Effects that feed one state in battle (MaxDmgEffect.blendGroup: one stack counter, e.g. an ATK +2% (max 15 stacks)
@@ -1334,6 +1397,7 @@ const effectViews = computed(() => {
         if (row.description && !card.description.split('\n').includes(row.description)) card.description = card.description ? `${card.description}\n${row.description}` : row.description
         card.forOwner ||= row.forOwner
         card.alwaysOn &&= row.alwaysOn
+        card.ailmentOff ??= row.ailmentOff
         if (STATUS_ORDER[row.status] < STATUS_ORDER[card.status]) { card.status = row.status; card.statusText = row.statusText }
     }
     return out
@@ -1342,6 +1406,7 @@ type EffectView = (typeof effectViews.value)[number]
 
 // A card's click: one effect as before; a merged card turns all its effects on or off together.
 function toggleCard(e: EffectView) {
+    if (e.ailmentOff && e.status === 'off') return toggleAilment(e.ailmentOff)
     if (e.keys.length === 1) return toggleEffect(e.key)
     const on = e.status === 'off'
     for (const k of e.keys) {
@@ -1764,6 +1829,7 @@ function currentSetup(): PvESetup {
         allyTargets: JSON.parse(JSON.stringify(allyTargets)),
         stacks: Object.fromEntries(stacks),
         enemyBuffs: JSON.parse(JSON.stringify(se.enemyBuffs.value)),
+        ailmentsOff: [...ailmentsOff],
         control: targetMode.value,
         rngMode: rngMode.value,
         seed: seed.value,
@@ -1821,6 +1887,7 @@ async function applySetup(raw: unknown) {
     Object.entries(s.vortexEnemies ?? {}).forEach(([k, v]) => { vortexEnemies[k] = [...v] })
     Object.entries(s.allyTargets ?? {}).forEach(([k, v]) => { allyTargets[k] = [...v] })
     Object.entries(s.stacks).forEach(([k, v]) => stacks.set(k, v))
+    s.ailmentsOff?.forEach(t => ailmentsOff.add(t))
     seed.value = s.seed
     simTurns.value = s.turns
     rngMode.value = s.rngMode
@@ -2941,6 +3008,29 @@ watch(() => saved.currentTeam.value?.id ?? '', (id, old) => {
 }
 
 /* ── Buffs & debuffs (card style of the Single Battle Calculator's "Buffs Received") ── */
+.ailment-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 0.4rem 0.6rem;
+    margin: -0.25rem 0 1rem;
+}
+
+.ailment-row-label {
+    font-size: 0.8rem;
+    color: var(--muted);
+}
+
+.ailment-icon {
+    width: 16px;
+    height: 16px;
+}
+
+.ailment-chip .struck {
+    text-decoration: line-through;
+}
+
 .effects-summary {
     display: flex;
     flex-wrap: wrap;
