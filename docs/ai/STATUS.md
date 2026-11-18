@@ -11,7 +11,11 @@ _Last updated: 2026-11-18: enemy buff settings shared + persistent; before: 2026
 - PvE Simulator with a saved team loaded: its own copy (`setBuffsLocal`, initialized from the team's saved setup,
   switched with a sync watcher on `saved.currentTeam` id before the saved-team watchers compare), so loading / editing
   a saved team never changes the shared settings. A new (unsaved) team uses the shared ones.
-- Checks: app type-check 223 = baseline. Not checked in a browser.
+- components/EnemyBuffs.vue redone (user's request): always shown (no collapsible), centred title / hint, one column
+  per enemy in its position's column (as EnemyCards), one card per buff in the Buffs & Debuffs card style (amber;
+  click = on / off, ON/OFF pill, start stacks / "Active at start" in the foot). EnemySelfBuff.trigger is now just the
+  timing words, `triggerConditional` says whether it needs its start conditions.
+- Checks: app type-check 223 = baseline. Not checked in a browser (no dev server reachable).
 
 ## 2026-11-16 (2): enemy buff settings on the PvE Simulator + Highest Dmg Calc (user's request)
 - Why: Score Attack 31 (Lunar Excavator Witch, passive 7090005) gains DEF +2% / SPD +1.5% per stack (max 99) each time

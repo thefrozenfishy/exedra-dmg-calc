@@ -16,7 +16,7 @@ import { passiveBase } from "../utils/helpers"
 // Not listed (user's call): states players don't think of as buffs. COMBO = the enemy's extra actions per turn.
 const HIDDEN = new Set(["COMBO"])
 const ORIGIN_ACTIVE = 1, ORIGIN_PASSIVE = 2
-const TIMING: Record<string, string> = { "1": "battle start", "2": "wave start", "3": "turn start", "4": "attack start", "5": "attack end", "6": "turn end", "7": "wave end" }
+const TIMING: Record<string, string> = { "1": "battle start", "2": "wave start", "3": "the start of a turn", "4": "the start of an attack", "5": "the end of an attack", "6": "the end of a turn", "7": "the end of a wave" }
 
 export interface EnemySelfBuff {
     key: string               // "p<detailId>" / "s<detailId>"
@@ -33,7 +33,8 @@ export interface EnemySelfBuff {
     removable: boolean        // buff removal can take it off (skill-given IBuff)
     source: string            // passive / skill name
     sourceDesc: string
-    trigger: string           // "battle start", "attack end (conditional)", "skill"
+    trigger: string           // passives: when it is given ("the end of an attack"); skills: ""
+    triggerConditional: boolean // passives: given only when its start conditions hold
     detail: any               // the raw detail row
 }
 export interface EnemyBuffSetting { on: boolean, stacks: number }
@@ -80,11 +81,12 @@ export function enemySelfBuffs(a: QuestEnemyAppearance): EnemySelfBuff[] {
         const timings = String(row.startTimingIdCsv ?? "").split(",").filter(Boolean)
         const atEntry = passive && !row.startConditionSetIdCsv && timings.length > 0 && timings.every(t => t === "1" || t === "2")
         const conditional = !!row.activeConditionSetIdCsv
-        const trigger = passive ? timings.map(t => TIMING[t] ?? `timing ${t}`).join(" / ") + (row.startConditionSetIdCsv ? " (when its conditions are met)" : "") : "when it uses the skill"
+        const trigger = passive ? timings.map(t => TIMING[t] ?? `timing ${t}`).join(" / ") : ""
         out.push({
             key: `${passive ? "p" : "s"}${detailId}`, detailId, passive, type: row.abilityEffectType, value1: row.value1,
             accum, maxStacks: accum ? row.value2 : 1, turn: row.turn ?? 0, atEntry, conditional,
-            removable: !passive && isBuffState(row, false), source, sourceDesc, trigger, detail: row,
+            removable: !passive && isBuffState(row, false), source, sourceDesc, trigger,
+            triggerConditional: passive && !!row.startConditionSetIdCsv, detail: row,
         })
     }
     if (a.passiveSkillMstId > 0) {

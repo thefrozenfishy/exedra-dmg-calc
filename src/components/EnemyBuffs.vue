@@ -1,63 +1,67 @@
 <template>
-    <details v-if="groups.length" class="enemy-buffs">
-        <summary>
-            <span class="summary-title">Enemy buffs</span>
-            <span class="summary-sub">{{ s.changedBuffCount ? `${s.changedBuffCount} changed` : 'as in the game' }}</span>
-            <button v-if="s.changedBuffCount" type="button" class="reset" @click.prevent="s.resetBuffs()">Reset</button>
-        </summary>
-        <p class="hint">
-            The buffs each enemy gives itself. By default everything is as in the game: <b>Max Damage</b> counts the ones
-            it has from the start, and the ones it gains during the fight (e.g. stacks each time it's hit) are at 0
-            <template v-if="battles">; the <b>battle simulator</b> plays them as they come</template>. Turn one off to leave
-            it out<template v-if="battles"> (in the battle it never lands)</template>, or give it start stacks if your
-            team can't avoid feeding it.
-            <span class="tag removable">Removable</span> buff removal can take it off;
-            <span class="tag fixed">Not removable</span> from a passive (or not a buff), stays.
+    <div v-if="groups.length" class="enemy-buffs">
+        <div class="eb-head">
+            <h3 class="eb-title">Enemy buffs</h3>
+            <span class="eb-count">{{ s.changedBuffCount ? `${s.changedBuffCount} changed` : 'as in the game' }}</span>
+            <button v-if="s.changedBuffCount" type="button" class="link-btn" @click="s.resetBuffs()">Reset to the defaults</button>
+        </div>
+        <p class="eb-hint">
+            The buffs each enemy gives itself. <b>Max Damage</b> counts the ones it has from the start; the ones it gains
+            during the fight (like stacks each time it's hit) are at 0 unless you give it start
+            stacks<template v-if="battles">, and the <b>battle simulator</b> plays them as they come</template>.
+            Click one to turn it off<template v-if="battles"> (in the battle it never lands)</template>.
+            Shared with the {{ battles ? 'Highest Dmg Calc' : 'PvE Simulator' }} for the same enemy.
         </p>
-        <div class="groups">
-            <div v-for="g in groups" :key="g.app.questEnemyAppearanceMstId" class="group" :class="{ dead: !g.alive }">
-                <div class="group-title">{{ g.name }}<span v-if="!g.alive" class="muted"> · not alive</span></div>
-                <div v-for="b in g.buffs" :key="b.key" class="buff" :class="{ off: !setting(g, b).on }">
-                    <label class="chip" :class="{ active: setting(g, b).on }" :title="setting(g, b).on ? 'Turn off: the enemy never has this buff' : 'Turn back on'">
-                        <input type="checkbox" :checked="setting(g, b).on"
-                            @change="s.setBuff(g.id, b.key, { on: ($event.target as HTMLInputElement).checked })" />
-                        {{ setting(g, b).on ? 'On' : 'Off' }}
-                    </label>
-                    <div class="buff-main">
-                        <div class="buff-name">
-                            {{ effectName(b.type) }}<span v-if="valueText(b)" class="value"> {{ valueText(b) }}</span>
-                            <span v-if="b.accum" class="muted"> per stack, max {{ b.maxStacks }}</span>
-                            <span v-if="b.turn > 0" class="muted"> · {{ b.turn }} turn{{ b.turn > 1 ? 's' : '' }}</span>
-                        </div>
-                        <div class="buff-meta">
-                            <span class="tag" :title="b.sourceDesc">{{ b.passive ? 'Passive' : 'Skill' }} · {{ b.source }}</span>
-                            <span class="tag" :class="b.removable ? 'removable' : 'fixed'"
-                                :title="b.removable ? 'Given by a skill: buff removal takes it off' : b.passive ? 'Given by a passive: buff removal can\'t take it off' : 'Not a buff that buff removal can take off'">
-                                {{ b.removable ? 'Removable' : 'Not removable' }}</span>
-                            <span class="muted trigger">{{ b.atEntry ? 'from the start' : b.trigger }}<template v-if="b.conditional"> · only while its condition holds</template></span>
-                        </div>
+        <div class="eb-grid">
+            <div v-for="g in groups" :key="g.id" class="eb-col" :class="[`pos-${g.position}`, { dead: !g.alive }]">
+                <div class="eb-col-head">
+                    <img class="eb-thumb" :src="enemyImage(g.enemyMstId)" :alt="g.name" @error="hideImg" />
+                    <span class="eb-enemy" :title="g.name">{{ g.name }}</span>
+                </div>
+                <div v-for="b in g.buffs" :key="b.key" class="eb-card" :class="{ off: !setting(g, b).on }"
+                    :title="`${b.type}\nClick to turn ${setting(g, b).on ? 'off' : 'on'}`"
+                    @click="s.setBuff(g.id, b.key, { on: !setting(g, b).on })">
+                    <div class="eb-effect">
+                        <span class="eb-name">{{ effectName(b.type) }}</span>
+                        <span v-if="valueText(b)" class="eb-value">{{ valueText(b) }}</span>
                     </div>
-                    <label v-if="!b.atEntry && setting(g, b).on && b.accum" class="stacks"
-                        :title="`Stacks the enemy already has when the fight starts (0-${b.maxStacks})`">
-                        Start stacks
-                        <input class="num" type="number" min="0" :max="b.maxStacks" :value="setting(g, b).stacks"
-                            @change="setStacks(g, b, ($event.target as HTMLInputElement).value)" />
-                    </label>
-                    <label v-else-if="!b.atEntry && setting(g, b).on" class="chip" :class="{ active: setting(g, b).stacks > 0 }"
-                        title="The enemy already has this buff when the fight starts">
-                        <input type="checkbox" :checked="setting(g, b).stacks > 0"
-                            @change="s.setBuff(g.id, b.key, { stacks: ($event.target as HTMLInputElement).checked ? 1 : 0 })" />
-                        Active at start
-                    </label>
+                    <div class="eb-desc">
+                        <template v-if="b.accum">Per stack, up to {{ b.maxStacks }}. </template>
+                        <template v-if="b.turn > 0">{{ b.turn }} turn{{ b.turn > 1 ? 's' : '' }}. </template>
+                        {{ b.atEntry ? 'Has it from the start' : b.passive ? `Gains it at ${b.trigger}${b.triggerConditional ? ' when its conditions are met' : ''}` : 'Gains it when it uses the skill' }}<template v-if="b.conditional">, active only while its condition holds</template>.
+                    </div>
+                    <div class="eb-meta">
+                        <span class="eb-tag" :title="b.sourceDesc">{{ b.passive ? 'Passive' : 'Skill' }}: {{ b.source }}</span>
+                        <span class="eb-tag" :class="b.removable ? 'removable' : 'fixed'"
+                            :title="b.removable ? 'Given by a skill: buff removal takes it off' : b.passive ? 'Given by a passive: buff removal can\'t take it off' : 'Not a buff that buff removal can take off'">
+                            {{ b.removable ? 'Removable' : 'Not removable' }}</span>
+                    </div>
+                    <div class="eb-foot">
+                        <label v-if="!b.atEntry && setting(g, b).on && b.accum" class="eb-stacks" @click.stop
+                            :title="`Stacks it already has when the fight starts (0-${b.maxStacks})`">
+                            Start stacks
+                            <input class="num" type="number" min="0" :max="b.maxStacks" :value="setting(g, b).stacks"
+                                @change="setStacks(g, b, ($event.target as HTMLInputElement).value)" />
+                            / {{ b.maxStacks }}
+                        </label>
+                        <label v-else-if="!b.atEntry && setting(g, b).on" class="eb-stacks" @click.stop
+                            title="It already has this buff when the fight starts">
+                            <input type="checkbox" :checked="setting(g, b).stacks > 0"
+                                @change="s.setBuff(g.id, b.key, { stacks: ($event.target as HTMLInputElement).checked ? 1 : 0 })" />
+                            Active at start
+                        </label>
+                        <span class="eb-switch">{{ setting(g, b).on ? 'On' : 'Off' }}</span>
+                    </div>
                 </div>
             </div>
         </div>
-    </details>
+    </div>
 </template>
 
 <script setup lang="ts">
 // The enemies' own buffs (battle/EngineEnemyBuffs) on the PvE Simulator and the Highest Dmg Calc, under the enemy
-// cards, collapsed by default: per buff on / off and start stacks (composables/useStageEnemies enemyBuffs).
+// cards: one column per enemy (in its position's column, like the enemy cards), one card per buff in the style of the
+// Buffs & Debuffs cards. Click = on / off; start stacks (composables/useStageEnemies enemyBuffs, shared by both pages).
 import { computed, type UnwrapNestedRefs } from 'vue'
 import type { StageEnemies } from '../composables/useStageEnemies'
 import { enemyName } from '../models/PvE'
@@ -66,16 +70,20 @@ import type { EnemySelfBuff } from '../battle/EngineEnemyBuffs'
 
 const props = defineProps<{ s: UnwrapNestedRefs<StageEnemies>, battles?: boolean }>()
 
-// one group per distinct enemy on the field (the same appearance twice shares its settings)
+// one column per distinct enemy on the field (the same appearance twice shares its settings), at its first position
 const groups = computed(() => {
     const seen = new Set<number>()
-    const out: { id: number, app: any, name: string, alive: boolean, buffs: EnemySelfBuff[] }[] = []
+    const out: { id: number, enemyMstId: number, name: string, position?: number, alive: boolean, buffs: EnemySelfBuff[] }[] = []
     props.s.wave.forEach((a, i) => {
         const id = a.questEnemyAppearanceMstId
         if (seen.has(id)) return
         seen.add(id)
         const buffs = props.s.buffsOf(i)
-        if (buffs.length) out.push({ id, app: a, name: enemyName(a), alive: props.s.wave.some((x, j) => x.questEnemyAppearanceMstId === id && props.s.alive[j]), buffs })
+        if (!buffs.length) return
+        out.push({
+            id, enemyMstId: a.enemyMstId, name: enemyName(a), position: props.s.enemyInfo[i]?.position,
+            alive: props.s.wave.some((x, j) => x.questEnemyAppearanceMstId === id && props.s.alive[j]), buffs,
+        })
     })
     return out
 })
@@ -85,166 +93,233 @@ function setStacks(g: { id: number }, b: EnemySelfBuff, raw: string) {
     const n = Math.max(0, Math.min(b.maxStacks, Math.trunc(Number(raw) || 0)))
     props.s.setBuff(g.id, b.key, { stacks: n })
 }
+const hideImg = (ev: Event) => { (ev.target as HTMLImageElement).style.visibility = 'hidden' }
+const enemyImage = (enemyMstId: number) => `/exedra-dmg-calc/enemy/${enemyMstId}_thumbnail.png`
 </script>
 
 <style scoped>
 .enemy-buffs {
-    margin-top: 0.75rem;
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 0.5rem 0.75rem;
-    background: rgba(255, 255, 255, 0.02);
+    container-type: inline-size;
+    width: 100%;
+    margin-top: 1.25rem;
 }
 
-summary {
-    cursor: pointer;
+.eb-head {
     display: flex;
-    align-items: center;
-    gap: 0.6rem;
-    list-style: revert;
+    justify-content: center;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 0.4rem 0.75rem;
 }
 
-.summary-title {
-    font-weight: 600;
+.eb-title {
+    margin: 0;
+    font-size: 1rem;
+    color: var(--accent-soft);
 }
 
-.summary-sub,
-.muted {
+.eb-count {
+    font-size: 0.8rem;
+    color: var(--muted);
+}
+
+.link-btn {
+    background: none;
+    border: none;
+    padding: 0;
+    font: inherit;
+    font-size: 0.8rem;
+    color: var(--accent);
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.eb-hint {
     color: var(--muted);
     font-size: 0.8rem;
+    line-height: 1.45;
+    text-align: center;
+    max-width: 820px;
+    margin: 0.35rem auto 0.75rem;
 }
 
-.reset {
-    margin-left: auto;
-    font: inherit;
-    font-size: 0.75rem;
-    padding: 0.1rem 0.6rem;
-    border-radius: 999px;
-    border: 1px solid var(--border);
-    background: transparent;
-    color: var(--muted);
-    cursor: pointer;
+/* same columns as the enemy cards (EnemyCards): at most 5, each enemy above its position while 5 fit */
+.eb-grid {
+    display: grid;
+    gap: 1rem 2rem;
+    grid-template-columns: repeat(auto-fill, minmax(max(170px, calc((100% - 4 * 2rem) / 5)), 1fr));
+    align-items: start;
 }
 
-.hint {
-    font-size: 0.78rem;
-    color: var(--muted);
-    margin: 0.5rem 0;
-    line-height: 1.5;
+@container (min-width: 978px) {
+    .eb-col.pos-1 { grid-column: 1; }
+    .eb-col.pos-2 { grid-column: 2; }
+    .eb-col.pos-3 { grid-column: 3; }
+    .eb-col.pos-4 { grid-column: 4; }
+    .eb-col.pos-5 { grid-column: 5; }
 }
 
-.groups {
+.eb-col {
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
+    gap: 0.5rem;
+    min-width: 0;
 }
 
-.group.dead {
-    opacity: 0.55;
+.eb-col.dead {
+    opacity: 0.45;
+    filter: grayscale(1);
 }
 
-.group-title {
-    font-weight: 600;
-    margin-bottom: 0.3rem;
-}
-
-.buff {
+.eb-col-head {
     display: flex;
     align-items: center;
-    gap: 0.6rem;
-    padding: 0.35rem 0;
-    border-top: 1px solid rgba(255, 255, 255, 0.05);
-    flex-wrap: wrap;
+    gap: 0.4rem;
+    min-width: 0;
 }
 
-.buff.off .buff-main {
-    opacity: 0.5;
+.eb-thumb {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+    background: rgba(0, 0, 0, 0.25);
+}
+
+.eb-enemy {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-light, var(--text));
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* the Buffs & Debuffs card (PvESimulatorPage .fx-card), in the enemy's colour */
+.eb-card {
+    --fx: #ffb74d;
+    --fx-bg: rgba(200, 120, 20, 0.14);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 0.45rem 0.6rem;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-left: 3px solid var(--fx);
+    background: var(--fx-bg);
+    font-size: 0.8rem;
+    text-align: left;
+    cursor: pointer;
+    transition: background 0.12s, border-color 0.12s, opacity 0.12s;
+}
+
+.eb-card:hover {
+    filter: brightness(1.15);
+}
+
+.eb-card.off {
+    --fx: rgba(255, 255, 255, 0.2);
+    --fx-bg: rgba(255, 255, 255, 0.02);
+    opacity: 0.6;
+}
+
+.eb-card.off .eb-name,
+.eb-card.off .eb-value {
     text-decoration: line-through;
 }
 
-.buff-main {
-    flex: 1;
-    min-width: 200px;
-}
-
-.buff-name {
-    font-size: 0.85rem;
-}
-
-.value {
-    font-weight: 600;
-}
-
-.buff-meta {
+.eb-effect {
     display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 0.5rem;
+}
+
+.eb-name {
+    font-weight: 600;
+    color: var(--fx);
+}
+
+.eb-value {
+    font-weight: 700;
+    color: var(--fx);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+}
+
+.eb-desc {
+    font-size: 0.74rem;
+    color: var(--muted);
+    line-height: 1.35;
+}
+
+.eb-meta {
+    display: flex;
+    gap: 0.3rem;
     flex-wrap: wrap;
-    gap: 0.35rem;
-    align-items: center;
-    margin-top: 0.15rem;
 }
 
-.trigger {
-    font-size: 0.72rem;
-}
-
-.tag {
-    font-size: 0.68rem;
+.eb-tag {
+    font-size: 0.66rem;
     border: 1px solid var(--border);
     border-radius: 999px;
     padding: 0 0.45rem;
     color: var(--muted);
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
     white-space: nowrap;
 }
 
-.tag.removable {
+.eb-tag.removable {
     color: var(--success);
     border-color: var(--success);
 }
 
-.tag.fixed {
-    color: var(--danger, #e57373);
-    border-color: var(--danger, #e57373);
+.eb-tag.fixed {
+    color: var(--danger);
+    border-color: var(--danger);
 }
 
-.chip {
+.eb-foot {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.3rem 0.6rem;
+}
+
+.eb-switch {
+    margin-left: auto;
+    font-size: 0.66rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--fx);
+    border: 1px solid var(--fx);
+    border-radius: 999px;
+    padding: 0 0.45rem;
+}
+
+.eb-stacks {
     display: inline-flex;
     align-items: center;
     gap: 0.3rem;
-    padding: 0.15rem 0.6rem;
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    font-size: 0.78rem;
-    cursor: pointer;
+    font-size: 0.72rem;
     color: var(--muted);
-    user-select: none;
-}
-
-.chip input {
-    display: none;
-}
-
-.chip.active {
-    background: var(--accent-glow);
-    border-color: var(--border-strong);
-    color: var(--accent);
-}
-
-.stacks {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.35rem;
-    font-size: 0.78rem;
-    color: var(--muted);
+    cursor: default;
 }
 
 .num {
-    width: 4.5em;
-    padding: 0.15rem 0.3rem;
-    border-radius: 8px;
+    width: 3.6em;
+    padding: 0.1rem 0.3rem;
+    border-radius: 6px;
     border: 1px solid var(--border);
     background: rgba(255, 255, 255, 0.05);
     color: var(--text);
     font: inherit;
-    font-size: 0.78rem;
+    font-size: 0.75rem;
 }
 </style>
