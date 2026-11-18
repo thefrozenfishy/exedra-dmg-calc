@@ -1,10 +1,15 @@
 <template>
     <div v-if="groups.length" class="enemy-buffs">
         <div class="eb-head">
-            <h3 class="eb-title">Enemy buffs</h3>
+            <button type="button" class="eb-toggle" :aria-expanded="!collapsed" :title="collapsed ? 'Show the enemy buffs' : 'Hide the enemy buffs'"
+                @click="collapsed = !collapsed">
+                <span class="eb-chevron" :class="{ closed: collapsed }">▾</span>
+                <h3 class="eb-title">Enemy buffs</h3>
+            </button>
             <span class="eb-count">{{ s.changedBuffCount ? `${s.changedBuffCount} changed` : 'as in the game' }}</span>
             <button v-if="s.changedBuffCount" type="button" class="link-btn" @click="s.resetBuffs()">Reset to the defaults</button>
         </div>
+        <template v-if="!collapsed">
         <p class="eb-hint">
             The buffs each enemy gives itself. <b>Max Damage</b> counts the ones it has from the start; the ones it gains
             during the fight (like stacks each time it's hit) are at 0 unless you give it start
@@ -12,12 +17,13 @@
             Click one to turn it off<template v-if="battles"> (in the battle it never lands)</template>.
             Shared with the {{ battles ? 'Highest Dmg Calc' : 'PvE Simulator' }} for the same enemy.
         </p>
-        <div class="eb-grid">
+        <div class="eb-grid" :class="{ single: groups.length === 1 }">
             <div v-for="g in groups" :key="g.id" class="eb-col" :class="[`pos-${g.position}`, { dead: !g.alive }]">
                 <div class="eb-col-head">
                     <img class="eb-thumb" :src="enemyImage(g.enemyMstId)" :alt="g.name" @error="hideImg" />
                     <span class="eb-enemy" :title="g.name">{{ g.name }}</span>
                 </div>
+                <div class="eb-cards">
                 <div v-for="b in g.buffs" :key="b.key" class="eb-card" :class="{ off: !setting(g, b).on }"
                     :title="`${b.type}\nClick to turn ${setting(g, b).on ? 'off' : 'on'}`"
                     @click="s.setBuff(g.id, b.key, { on: !setting(g, b).on })">
@@ -53,8 +59,10 @@
                         <span class="eb-switch">{{ setting(g, b).on ? 'On' : 'Off' }}</span>
                     </div>
                 </div>
+                </div>
             </div>
         </div>
+        </template>
     </div>
 </template>
 
@@ -67,8 +75,11 @@ import type { StageEnemies } from '../composables/useStageEnemies'
 import { enemyName } from '../models/PvE'
 import { effectName, effectValue } from '../utils/effectText'
 import type { EnemySelfBuff } from '../battle/EngineEnemyBuffs'
+import { useSetting } from '../store/settingsStore'
 
 const props = defineProps<{ s: UnwrapNestedRefs<StageEnemies>, battles?: boolean }>()
+// expanded by default; the user's collapse / expand is kept (both pages)
+const collapsed = useSetting<boolean>('enemyBuffsCollapsed', false)
 
 // one column per distinct enemy on the field (the same appearance twice shares its settings), at its first position
 const groups = computed(() => {
@@ -110,6 +121,28 @@ const enemyImage = (enemyMstId: number) => `/exedra-dmg-calc/enemy/${enemyMstId}
     align-items: baseline;
     flex-wrap: wrap;
     gap: 0.4rem 0.75rem;
+}
+
+.eb-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    background: none;
+    border: none;
+    padding: 0;
+    font: inherit;
+    color: inherit;
+    cursor: pointer;
+}
+
+.eb-chevron {
+    color: var(--accent-soft);
+    font-size: 0.9rem;
+    transition: transform 0.15s;
+}
+
+.eb-chevron.closed {
+    transform: rotate(-90deg);
 }
 
 .eb-title {
@@ -157,6 +190,27 @@ const enemyImage = (enemyMstId: number) => `/exedra-dmg-calc/enemy/${enemyMstId}
     .eb-col.pos-3 { grid-column: 3; }
     .eb-col.pos-4 { grid-column: 4; }
     .eb-col.pos-5 { grid-column: 5; }
+}
+
+/* one enemy: the full width, its cards side by side */
+.eb-grid.single {
+    grid-template-columns: 1fr;
+}
+
+.eb-grid.single .eb-col {
+    grid-column: 1 / -1;
+}
+
+.eb-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.eb-grid.single .eb-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    align-items: stretch;
 }
 
 .eb-col {

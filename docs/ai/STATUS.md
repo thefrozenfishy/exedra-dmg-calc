@@ -15,6 +15,8 @@ _Last updated: 2026-11-18: enemy buff settings shared + persistent; before: 2026
   per enemy in its position's column (as EnemyCards), one card per buff in the Buffs & Debuffs card style (amber;
   click = on / off, ON/OFF pill, start stacks / "Active at start" in the foot). EnemySelfBuff.trigger is now just the
   timing words, `triggerConditional` says whether it needs its start conditions.
+- Then: collapsible again (chevron on the title), expanded by default, the state kept in the setting
+  `enemyBuffsCollapsed` (both pages); a single enemy spans the full width with its cards side by side.
 - Checks: app type-check 223 = baseline. Not checked in a browser (no dev server reachable).
 
 ## 2026-11-16 (2): enemy buff settings on the PvE Simulator + Highest Dmg Calc (user's request)
