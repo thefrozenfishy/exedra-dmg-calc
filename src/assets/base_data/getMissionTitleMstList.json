@@ -210,36 +210,6 @@
         "title": "Sorana Magica Bingo Missions"
     },
     {
-        "completeAppealDescription": "Get Magica Stone x1,000!",
-        "featuredRewardResourceName": "",
-        "isRewardGuideTarget": true,
-        "missionCampaignGroupMstId": 0,
-        "missionTitleMstId": 2027,
-        "prevMissionTitleMstId": 0,
-        "priority": 90,
-        "title": "Exedra Quest Chapter 1 Part II Act II Release Celebration Bingo Missions"
-    },
-    {
-        "completeAppealDescription": "Get Magica Stone x1,000!",
-        "featuredRewardResourceName": "",
-        "isRewardGuideTarget": true,
-        "missionCampaignGroupMstId": 0,
-        "missionTitleMstId": 2028,
-        "prevMissionTitleMstId": 2027,
-        "priority": 90,
-        "title": "Exedra Quest Chapter 1 Part II Act II Release Celebration Bingo Missions"
-    },
-    {
-        "completeAppealDescription": "Get Magica Stone x1,000!",
-        "featuredRewardResourceName": "",
-        "isRewardGuideTarget": true,
-        "missionCampaignGroupMstId": 0,
-        "missionTitleMstId": 2029,
-        "prevMissionTitleMstId": 2028,
-        "priority": 90,
-        "title": "Exedra Quest Chapter 1 Part II Act II Release Celebration Bingo Missions"
-    },
-    {
         "completeAppealDescription": "Get Magica Stone x500!",
         "featuredRewardResourceName": "",
         "isRewardGuideTarget": true,
@@ -298,26 +268,6 @@
         "prevMissionTitleMstId": 2034,
         "priority": 180,
         "title": "Halloween Campaign Bingo Missions Part 2"
-    },
-    {
-        "completeAppealDescription": "Get 2,000,000 A-Q Chips!",
-        "featuredRewardResourceName": "",
-        "isRewardGuideTarget": false,
-        "missionCampaignGroupMstId": 0,
-        "missionTitleMstId": 2038,
-        "prevMissionTitleMstId": 0,
-        "priority": 160,
-        "title": "Weekly Bingo Missions Week 2"
-    },
-    {
-        "completeAppealDescription": "Get Magia Grimoire x30!",
-        "featuredRewardResourceName": "",
-        "isRewardGuideTarget": false,
-        "missionCampaignGroupMstId": 0,
-        "missionTitleMstId": 2039,
-        "prevMissionTitleMstId": 2038,
-        "priority": 160,
-        "title": "Weekly Bingo Missions Week 2"
     },
     {
         "completeAppealDescription": "Get Player EXP Quest Rank 2 Play Ticket x3!",
@@ -458,56 +408,6 @@
         "prevMissionTitleMstId": 0,
         "priority": 10,
         "title": "Main Quest Clear Missions"
-    },
-    {
-        "completeAppealDescription": "",
-        "featuredRewardResourceName": "",
-        "isRewardGuideTarget": false,
-        "missionCampaignGroupMstId": 0,
-        "missionTitleMstId": 5163,
-        "prevMissionTitleMstId": 0,
-        "priority": 96,
-        "title": "[Redux] Forever Halloween Night Part I Event Missions"
-    },
-    {
-        "completeAppealDescription": "",
-        "featuredRewardResourceName": "",
-        "isRewardGuideTarget": false,
-        "missionCampaignGroupMstId": 0,
-        "missionTitleMstId": 5164,
-        "prevMissionTitleMstId": 0,
-        "priority": 97,
-        "title": "[Redux] Forever Halloween Night Part I Event Memorial Medal Missions"
-    },
-    {
-        "completeAppealDescription": "",
-        "featuredRewardResourceName": "",
-        "isRewardGuideTarget": false,
-        "missionCampaignGroupMstId": 0,
-        "missionTitleMstId": 5165,
-        "prevMissionTitleMstId": 0,
-        "priority": 99,
-        "title": "[Redux] Forever Halloween Night Part II Event Missions"
-    },
-    {
-        "completeAppealDescription": "",
-        "featuredRewardResourceName": "",
-        "isRewardGuideTarget": false,
-        "missionCampaignGroupMstId": 0,
-        "missionTitleMstId": 5166,
-        "prevMissionTitleMstId": 0,
-        "priority": 100,
-        "title": "[Redux] Forever Halloween Night Part II Event Memorial Medal Missions"
-    },
-    {
-        "completeAppealDescription": "",
-        "featuredRewardResourceName": "",
-        "isRewardGuideTarget": false,
-        "missionCampaignGroupMstId": 0,
-        "missionTitleMstId": 5167,
-        "prevMissionTitleMstId": 0,
-        "priority": 10007,
-        "title": "Exedra Quest Clear Missions"
     },
     {
         "completeAppealDescription": "",

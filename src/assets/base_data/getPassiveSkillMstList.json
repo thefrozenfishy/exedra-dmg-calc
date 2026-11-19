@@ -40672,7 +40672,7 @@
     {
         "conditionElement": 0,
         "conditionRole": 0,
-        "description": "Guaranteed to stop all enemies.<br>Grants 2 actions.<br>Greatly decreases incoming break gauge depletion from non-Breakers.<br><br>Decreases own DMG taken and increases break gauge depletion RES based on Magic value.<br>On ally break, consumes a small amount of own HP and consumes 1 Magic.<br><br>Increases SPD with each passing turn.<br>When an enemy not aligned with the user's elemental weakness takes an action, delays all enemies' action order.",
+        "description": "Grants 2 actions.<br>Greatly decreases incoming break gauge depletion from non-Breakers.<br><br>Decreases own DMG taken and increases break gauge depletion RES based on Magic value.<br>On ally break, consumes a small amount of own HP and consumes 1 Magic.<br><br>Increases SPD with each passing turn.<br>When an enemy not aligned with the user's elemental weakness takes an action, delays all enemies' action order.",
         "level": 1,
         "name": "Ability VI",
         "passiveSkillMstId": 7050001,

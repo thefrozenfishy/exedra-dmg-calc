@@ -277,5 +277,23 @@
         "max": 120,
         "releaseTime": "1990-01-01T00:00:00+09:00",
         "steamAchievementMstId": 31
+    },
+    {
+        "achievementValueType": 1,
+        "apiName": "10060_party_power",
+        "conditionId": 0,
+        "conditionType": 4,
+        "max": 1000,
+        "releaseTime": "1990-01-01T00:00:00+09:00",
+        "steamAchievementMstId": 32
+    },
+    {
+        "achievementValueType": 1,
+        "apiName": "10070_puellapictura_rank",
+        "conditionId": 0,
+        "conditionType": 5,
+        "max": 2,
+        "releaseTime": "1990-01-01T00:00:00+09:00",
+        "steamAchievementMstId": 33
     }
 ]
