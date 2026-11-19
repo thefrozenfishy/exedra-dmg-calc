@@ -405,6 +405,24 @@ export function critConditionUsed(csvs: (string | undefined)[]): boolean {
     return false
 }
 
+/** [BENCH] Whether any of these condition sets could play out differently when the enemies' broken damage rate (or the
+ *  damage dealt) changes: the broken rate itself (21, 206, 207: BattleUnitConditionChecker / BattleUnitTeamConditionChecker
+ *  read BreakedDamageReceiveRate) or a damage amount above "any damage" (101 DMG, 304 TOTAL_DAMAGE, 305
+ *  ABILITY_EFFECT_AND_DAMAGE with a value above 1; 102 DMG_RATIO always). 22 / 108 / 308 ("at the cap") don't count: the
+ *  bench dummies sit at their cap at every rate. Used by LuxBench to get every "max break" bar from one battle. */
+export function breakRateConditionUsed(csvs: (string | undefined)[]): boolean {
+    for (const setId of csvs.flatMap(csv => (csv ?? "").split(","))) {
+        for (const condId of (battleConditionSets[setId]?.battleConditionMstIdCsv ?? "").split(",")) {
+            const c = battleConditions[condId]
+            if (!c) continue
+            if ([21, 102, 206, 207].includes(c.compareContent)) return true
+            if (c.compareContent === 101 || c.compareContent === 304) { if (!(Number(c.compareValue) <= 1)) return true }
+            if (c.compareContent === 305) { if (!(Number(String(c.compareValue).split(",")[1]) <= 1)) return true }
+        }
+    }
+    return false
+}
+
 export function ailmentConditionValues(csvs: (string | undefined)[]): Ailment[] {
     const found = new Set<Ailment>()
     for (const setId of csvs.flatMap(csv => (csv ?? "").split(","))) {

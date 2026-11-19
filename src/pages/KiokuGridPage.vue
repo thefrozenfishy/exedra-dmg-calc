@@ -341,8 +341,8 @@
                                 </span>
                                 <span v-if="bar.spLabel" class="gain-sp" title="SP the rotation costs per 100 AV">{{ bar.spLabel }}</span>
 
-                                <div v-if="bar.tags.length" class="gain-tag-icons">
-                                    <template v-for="tag in bar.tags" :key="`${tag.kind}:${tag.value}`">
+                                <div v-if="bar.iconTags.length || bar.breakLabel" class="gain-tag-icons">
+                                    <template v-for="tag in bar.iconTags" :key="`${tag.kind}:${tag.value}`">
                                         <span v-if="tag.icons && tag.icons.length > 1" class="gain-tag-icon gain-tag-split"
                                             :title="tag.value" role="img" :aria-label="tag.value">
                                             <img v-for="(icon, i) in tag.icons" :key="icon" :src="icon" alt=""
@@ -356,6 +356,8 @@
                                         </span>
                                         <img v-else class="gain-tag-icon" :src="tag.icon" :alt="tag.value" :title="tag.value" />
                                     </template>
+                                    <span v-if="bar.breakLabel" class="gain-break"
+                                        :title="`Enemy max break ${bar.breakLabel}%`">{{ bar.breakLabel }}%</span>
                                 </div>
                             </div>
                         </div>
@@ -737,7 +739,7 @@ const toKioku = (c: Character, targetContext?: ChartTargetContext): ScoreAttackK
     )
 }
 
-type ContextKind = "element" | "role" | "ailment" | "noConsume" | "crit"
+type ContextKind = "element" | "role" | "ailment" | "noConsume" | "crit" | "maxBreak"
 
 interface DealerTag {
     kind: ContextKind
@@ -752,6 +754,7 @@ interface DealerContext {
     ailment?: Ailment
     noConsume?: boolean
     crit?: boolean // break chart: the whole team at 100% crit rate
+    maxBreak?: number // buff chart, Over Break kits: the enemies' max break (broken damage rate, %); undefined = 500
     tags: DealerTag[]
 }
 
@@ -776,7 +779,9 @@ const makeTag = (kind: ContextKind, value: string): DealerTag => ({
                     ? `/exedra-dmg-calc/aliments/${capitalize(value)}.png`
                     : kind === "crit"
                         ? `/exedra-dmg-calc/archetypes/crit.png` // the Crit archetype's icon
-                        : `/exedra-dmg-calc/no-consume.png`,
+                        : kind === "maxBreak"
+                            ? "" // shown as its number (GainRow.breakLabel), not an icon
+                            : `/exedra-dmg-calc/no-consume.png`,
 })
 
 const makeContext = (
@@ -785,18 +790,21 @@ const makeContext = (
     ailment?: Ailment,
     noConsume = false,
     crit = false,
+    maxBreak?: number,
 ): DealerContext => ({
     element,
     role,
     ailment,
     noConsume,
     crit,
+    maxBreak,
     tags: [
         element !== undefined ? makeTag("element", element) : null,
         role !== undefined ? makeTag("role", role) : null,
         ailment !== undefined ? makeTag("ailment", ailment) : null,
         noConsume ? makeTag("noConsume", "No 1 time buffs") : null,
         crit ? makeTag("crit", "100% crit") : null,
+        maxBreak !== undefined ? makeTag("maxBreak", String(maxBreak)) : null,
     ].filter((tag): tag is DealerTag => tag !== null),
 })
 
@@ -807,6 +815,7 @@ const contextKey = (context: DealerContext): string =>
         context.ailment ?? null,
         context.noConsume ?? false,
         context.crit ?? false,
+        context.maxBreak ?? null,
     ])
 
 type Metric = "max" | "avg"
@@ -822,6 +831,7 @@ interface GainRow {
     sp?: number // break chart: SP the rotation costs per 100 AV
     ascension?: string // the ascension(s) the bar was calculated at, shown on the icon ("3", or "0-2" for merged bars)
     plain?: Pick<GainRow, "maxGain" | "avgGain"> // extra bars: the character's plain bar (for the tooltip's difference)
+    breakLabel?: string // buff chart, Over Break kits: the enemies' max break this bar is at, shown under the icon
 }
 
 interface CharGainResult {
@@ -886,8 +896,10 @@ const buildCharGainResult = (
     const noneGain = gainByContext.get(NONE_CONTEXT_KEY)
     if (!noneGain) return null
 
+    // A max break tag always stays (its bar is about that rate); a max break bar equal to the same bar at 500% is folded.
     const meaningfulTagsFor = (g: GainLike): DealerTag[] =>
         g.dealer.tags.filter(tag => {
+            if (tag.kind === "maxBreak") return true
             const reducedContext: DealerContext = {
                 ...g.dealer.context,
                 [tag.kind]: undefined,
@@ -905,6 +917,10 @@ const buildCharGainResult = (
     for (const g of gains) {
         if (g.dealer.tags.length === 0) continue
         if (Math.abs(gainOf(g) - gainOf(noneGain)) < 1) continue
+        if (g.dealer.context.maxBreak !== undefined) {
+            const at500 = gainByContext.get(contextKey({ ...g.dealer.context, maxBreak: undefined }))
+            if (at500 && Math.abs(gainOf(g) - gainOf(at500)) < 1) continue
+        }
 
         const meaningfulTags = meaningfulTagsFor(g)
         if (!meaningfulTags.length) continue
@@ -920,7 +936,21 @@ const buildCharGainResult = (
         }
     }
 
-    return { main: toRow(noneGain, []), variants: [...variantMap.values()] }
+    return labelMaxBreaks({ main: toRow(noneGain, []), variants: [...variantMap.values()] })
+}
+
+/** Over Break kits (buff chart): every bar with a max break bar of the same identity shows its rate under the icon,
+ *  the one at the bench's usual rate as "500". */
+const BENCH_PLAIN_MAX_BREAK = 500 // the bench dummies' usual broken rate (EngineBench BENCH_BROKEN_RATE; LuxBench is worker-only)
+const labelMaxBreaks = (r: CharGainResult): CharGainResult => {
+    const others = (row: GainRow) => row.tags.filter(t => t.kind !== "maxBreak").map(t => `${t.kind}:${t.value}`).join("|")
+    const withBreak = new Set([r.main, ...r.variants].filter(row => row.tags.some(t => t.kind === "maxBreak")).map(others))
+    if (!withBreak.size) return r
+    const label = (row: GainRow): GainRow => {
+        const tag = row.tags.find(t => t.kind === "maxBreak")
+        return tag ? { ...row, breakLabel: tag.value } : withBreak.has(others(row)) ? { ...row, breakLabel: String(BENCH_PLAIN_MAX_BREAK) } : row
+    }
+    return { main: label(r.main), variants: r.variants.map(label) }
 }
 
 // Turns rows of { character, tags, gain } into everything the bar chart template needs.
@@ -947,13 +977,13 @@ const buildBarChart = (
     const span = max - min || 1
 
     const bars = sorted.map(row => {
-        const { ch, tags, gain: value, maxGain, avgGain, critRate, sp, ascension } = row
+        const { ch, tags, gain: value, maxGain, avgGain, critRate, sp, ascension, breakLabel } = row
         const gain = Number.isFinite(value) ? value : top
         return {
         id: `${idPrefix}${ch.id}:${tags.map(t => `${t.kind}-${t.value}`).join("|") || "none"}${ascension !== undefined ? `:A${ascension}` : ""}`,
 
         name: (tags.length
-            ? `${ch.name} (${tags.map(t => t.value).join("/")})`
+            ? `${ch.name} (${tags.map(t => t.kind === "maxBreak" ? `max break ${t.value}%` : t.value).join("/")})`
             : ch.name) + (ascension !== undefined ? ` A${ascension}` : ""),
 
         charId: ch.id,
@@ -969,9 +999,12 @@ const buildBarChart = (
         ascension,
         // break chart: the SP cost per 100 AV under the icon
         spLabel: sp !== undefined ? sp.toFixed(2) : "",
+        breakLabel: breakLabel ?? "",
+        iconTags: tags.filter(t => t.icon),
         variant: tags.length > 0,
         label: format(value),
-        title: [title({ avgGain, maxGain, critRate, sp }, titleLabel), note?.(row)].filter(Boolean).join("\n\n"),
+        title: [title({ avgGain, maxGain, critRate, sp }, titleLabel),
+            breakLabel ? `Enemies broken at their max break of ${breakLabel}% damage taken.` : "", note?.(row)].filter(Boolean).join("\n\n"),
 
         style: gain < 0
             ? {
@@ -1077,9 +1110,9 @@ const runBench = (kind: BenchChartKind, { fresh = false } = {}) => {
         return
     }
 
-    const identityKey = (r: BenchRow) => contextKey(makeContext(r.element, r.role, r.ailment, false, r.crit))
+    const identityKey = (r: BenchRow) => contextKey(makeContext(r.element, r.role, r.ailment, false, r.crit, r.maxBreak))
     const setMax = (id: number, rows: BenchRow[]) => results.set(id, rows.map(r => ({
-        context: makeContext(r.element, r.role, r.ailment, false, r.crit),
+        context: makeContext(r.element, r.role, r.ailment, false, r.crit, r.maxBreak),
         maxGain: r.gain,
         critRate: r.critRate,
         sp: r.sp,
@@ -1254,6 +1287,7 @@ const mergeEqualVariants = (rows: GainRow[]): GainRow[] => {
     const out = [...plain]
     for (let list of groups.values()) {
         for (let j = 0; j < list[0].tags.length; j++) {
+            if (list[0].tags[j].kind === "maxBreak") continue // different rates are different bars
             const buckets = new Map<string, GainRow[]>()
             for (const r of list) {
                 const other = r.tags.map((t, i) => i === j ? "" : t.value).join("|")
@@ -1469,6 +1503,7 @@ const benchCharts = computed(() => [
             enemyDamageText(),
             VARIANT_TEXT(`an element or role the kit is limited to (or both: e.g. a Forest Attacker), an ailment on the enemies (its icon), or an ailment together with one of those`),
             `${AILMENT_TEXT} A bonus can show in one metric only: crit rate and procs (chains, follow-ups) don't change Max Burst, and Max Burst counts every buff as already applied.`,
+            `Over Break (e.g. Overdrive Impulse) adds a fixed bonus on top of the enemy's max break, so it is worth more against a low max break than a high one: such characters are also tested against enemies with a max break of 300%, 700% and 900% (broken at that cap from the start), and the number under the icon is the max break of that bar (the usual bars are at 500%). Their max break bars are left out where they don't differ from the same bar at 500% by at least 1.`,
             benchAverageDmg.value
                 ? `Be aware: additional damage and vortex scale on the ATK of the character giving them, not on the damage dealer's, and the damage dealer is ${LuxMagica} with average stats, so they weigh more here than they would on an Attacker with higher ATK.`
                 : ``,
@@ -2542,6 +2577,20 @@ watch([showBenchCharts, markedCharacters, levelsMode, multiAscensions, fightMode
 
 .gain-asc-badge.high {
     color: palegreen;
+}
+
+.gain-break {
+    /* same box as the tag icons (28px), the number centered in it */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 28px;
+    min-width: 28px;
+    font-size: 0.6rem;
+    font-weight: bold;
+    line-height: 1;
+    color: var(--text);
+    white-space: nowrap;
 }
 
 .gain-tag-icons {

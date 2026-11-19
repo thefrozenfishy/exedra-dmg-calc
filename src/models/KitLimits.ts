@@ -68,6 +68,16 @@ export function effectLimits(d: SkillDetail): KitLimits {
     return { elements: [...elements], roles: [...roles], ailments: [...ailments] }
 }
 
+/** The buff chart's "max break" bars (LuxBench supportIdentities): the dummies' broken damage rate (initial = max, %)
+ *  for kits with Over Break. Over Break adds a fixed bonus on top of the enemy's broken-rate cap
+ *  ([CONFIRMED 3.24] BattleDamageCalculator.GetAppliedDamageOfBreakSituation 0x13BAB60: + OverBreakBonusValue / 100), so
+ *  the damage it adds relative to the rest depends on that cap. 500 is the bench's usual rate (the plain bars). */
+export const BENCH_MAX_BREAKS = [300, 500, 700, 900] as const
+
+/** Whether the kit gives Over Break (OVER_BREAK_DAMAGE_RECEIVE_RATE_DRIVE, e.g. Overdrive Impulse). */
+export const kitHasOverBreak = (k: PvPKioku): boolean =>
+    kitDetails(k).some(d => d.abilityEffectType === "OVER_BREAK_DAMAGE_RECEIVE_RATE_DRIVE")
+
 /** Elements, roles and ailments a kit's effects are limited to (every effect of kitDetails, effectLimits). */
 export function kitLimits(k: PvPKioku): KitLimits {
     const elements = new Set<KiokuElement>(), roles = new Set<KiokuRole>(), ailments = new Set<Ailment>()

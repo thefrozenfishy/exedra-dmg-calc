@@ -120,6 +120,17 @@ export const archetypeRules: ArchetypeRule[] = [
     { id: "ailment_remove", label: "Ailment Remove", match: e => e.abilityEffectType === "REMOVE_ALL_ABNORMAL" },
     { id: "buff_remove", label: "Buff Remove", match: e => e.abilityEffectType === "REMOVE_ALL_BUFF" },
     { id: "debuff_remove", label: "Debuff Remove", match: e => e.abilityEffectType === "REMOVE_ALL_DEBUFF" },
+    // Over Break: the enemy's broken damage rate past its cap (OverBreakDamageReceiveRateDriveUnitState, e.g. Overdrive Impulse)
+    { id: "overbreak", label: "Over Break", match: e => e.abilityEffectType === "OVER_BREAK_DAMAGE_RECEIVE_RATE_DRIVE" },
+    // Break gauge depletion up for the team: "break gauge depletion taken" debuffs on enemies (UP_RCV_BREAK_POINT_DMG_RATIO,
+    // Direction=Negative, any range), or break gauge depletion buffs on allies (UP_GIV / CPN_UP_GIV), range > 0 only:
+    // a unit's buff on itself (range -1, e.g. a Breaker's own UP_GIV_BREAK_POINT_DMG_FIXED) does not count.
+    {
+        id: "bgd_up",
+        label: "Break Gauge Depletion Up",
+        match: e => e.abilityEffectType === "UP_RCV_BREAK_POINT_DMG_RATIO"
+            || (e.range > 0 && /^(CPN_)?UP_GIV_BREAK_POINT_DMG_(RATIO|FIXED)$/.test(e.abilityEffectType)),
+    },
 ]
 
 const cache = new Map<number, ArchetypeRule[]>()

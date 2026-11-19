@@ -23,7 +23,7 @@ import { PvPKioku } from "./PvPKioku";
 import { Kioku } from "./Kioku";
 import { BattleType } from "../types/enums"
 import type { RngMode } from "./BattleRng";
-import { actorSkillTypeRestriction, critConditionUsed, unitCountConditionsMet } from "./BattleConditionParser";
+import { actorSkillTypeRestriction, breakRateConditionUsed, critConditionUsed, unitCountConditionsMet } from "./BattleConditionParser";
 import type { QuestEnemyAppearance } from "./PvE";
 import { kiokuData, passiveDetails, skillDetailsByMstId } from "../utils/helpers";
 import { KiokuConstants, TargetType, type BattleEvent, type BattleSnapshot, type KiokuArgs, type SkillDetail } from "../types/KiokuTypes";
@@ -32,7 +32,7 @@ import { computeMaxDamageEngine } from "../battle/EngineMaxDamage";
 import { E } from "../battle/engineBundle";
 import { AILMENT_STATE, BENCH_BROKEN_RATE, BENCH_DEF, BenchRng, benchBattle, benchPassive, isSetupTargetRoll, benchSkills, benchStage, benchStyle, keepAilment, keepStates, middleEnemy, type BenchPassiveRow } from "../battle/EngineBench";
 import { collectTeamEffects } from "./MaxDamage";
-import { exCrysIds, kitDetails, kitLimits, neutralIdentity } from "./KitLimits";
+import { BENCH_MAX_BREAKS, exCrysIds, kitDetails, kitHasOverBreak, kitLimits, neutralIdentity } from "./KitLimits";
 
 export { BENCH_BROKEN_RATE, BENCH_DEF }
 // "Infinite" SP: topped up to this whenever time moves forward. Truly endless SP never ends a chain of battle skills
@@ -49,7 +49,9 @@ export function benchEnemies(count: number): QuestEnemyAppearance[] {
  *  value, `undefined` included: such a unit matches no element (or role) restriction, like the legacy charts'
  *  "no context" Lux. `ailment` is not about the unit: every enemy carries that ailment for the whole run. */
 // crit: the break chart's "100% crit" bar (every ally crits on every hit, SimOptions.teamCrit)
-export interface BenchIdentity { element?: KiokuElement, role?: KiokuRole, ailment?: Ailment, crit?: boolean }
+// maxBreak: the dummies' broken damage rate in % (their max; default BENCH_BROKEN_RATE), the buff chart's "max break"
+// bars of Over Break kits (BENCH_MAX_BREAKS)
+export interface BenchIdentity { element?: KiokuElement, role?: KiokuRole, ailment?: Ailment, crit?: boolean, maxBreak?: number }
 
 const enemyStatesOf = (ailment?: Ailment): string[] => ailment ? [AILMENT_STATE[ailment]] : []
 
@@ -279,14 +281,14 @@ const ailmentOfType = (type: string): Ailment | undefined =>
  *  carries it and the team's ailment conditions are checked against it (the other conditions count as met).
  *  `immune`: ailments the enemies cannot carry (benchImmunities, as in Average Damage): the team's effects that give
  *  them are left out (Max Damage gives every effect as landed, so the dummies' parry alone would not stop them). */
-export function ultimateDamage(allies: PvPKioku[], dealerPos: number, enemyCount: number, ailment?: Ailment, immune: Ailment[] = []): { damage: number, critChance: number } {
-    const { stageId, enemies } = benchStage(enemyCount, immune)
+export function ultimateDamage(allies: PvPKioku[], dealerPos: number, enemyCount: number, ailment?: Ailment, immune: Ailment[] = [], maxBreak = BENCH_BROKEN_RATE): { damage: number, critChance: number } {
+    const { stageId, enemies } = benchStage(enemyCount, immune, false, maxBreak)
     const excluded = immune.length ? new Set(collectTeamEffects(allies, dealerPos, { slipDamage: true })
         .filter(e => immune.includes(ailmentOfType(e.detail.abilityEffectType)!)).map(e => e.key)) : undefined
     const result = computeMaxDamageEngine(allies, { stageId, waveIdx: 0 }, enemies, dealerPos, {
         battleType: BattleType.Solo,
         broken: enemies.map(() => true),
-        breakRate: enemies.map(() => BENCH_BROKEN_RATE),
+        breakRate: enemies.map(() => maxBreak),
         mainTargetIdx: Math.trunc(enemyCount / 2),
         onlyPos: dealerPos,
         enemyStates: enemyStatesOf(ailment),
@@ -303,6 +305,11 @@ export interface SimOptions {
     infiniteSp?: boolean // the allies' SP is refilled before every turn, see SP_REFILL (bench-only, not a game rule)
     ailment?: Ailment   // every enemy carries this ailment for the whole run
     immune?: Ailment[]  // ailments that never land on the enemies (100% parry on the dummies), see benchImmunities
+    maxBreak?: number   // the dummies' broken damage rate in % (initial = max), default BENCH_BROKEN_RATE
+    // [BENCH] Filled with the dealer's damage at these other broken rates (%), from this same battle: every hit it lands
+    // on a broken dummy rescaled by (rate' + Over Break) / (rate + Over Break), see trackBrokenHits. Only valid when the
+    // team plays the same at every rate (breakRateSafe); damage runs only. Scaled like the result (perAv).
+    altBreaks?: { rates: number[], totals: number[] }
     // APP MOD (not game code): every hit deals its expected crit damage (runtime.AppMods.expectedCritDamage)
     expectedCrits?: boolean
     onAction?: (state: BattleSnapshot, elapsed: number) => void  // every counted action (debugging)
@@ -380,6 +387,48 @@ function trackSp(onAdd: (user: any, sp: number) => void): () => void {
     return () => { for (const f of undo.reverse()) f() }
 }
 
+/** [BENCH] Instrumentation, not game code: every hit `isDealer` lands on a broken dummy, with the broken rate and the
+ *  Over Break bonus it was computed at. Both are read just before the call, as the game's first step reads them:
+ *  [CONFIRMED 3.24] BattleDamageCalculator.GetAttackDamageResult (0x13BADF0) / GetSlipDamageValue (0x13BF200) start with
+ *  GetAppliedDamageOfBreakSituation (0x13BAB60): damage x (BreakedDamageReceiveRate + OverBreakBonusValue) / 100; every
+ *  later step is a multiplication up to the final Ceiling (and Max(1), shields, barriers: none on the dummies), so the
+ *  hit at another rate is this one x (rate' + bonus) / (rate + bonus) [APPROXIMATION: the Ceiling, < 1 per hit].
+ *  Returns the undo. */
+function trackBrokenHits(isDealer: (u: any) => boolean, onHit: (damage: number, rate: number, bonus: number) => void): () => void {
+    const C = E.BattleDamageCalculator as any
+    const attack = C.GetAttackDamageResult, slip = C.GetSlipDamageValue
+    const brokenState = (d: any) => d?._BreakPoint?.get_HasBreakPoint() && d._BreakPoint.get_IsBreak()
+        ? { rate: d._BreakedDamageReceiveRate as number, bonus: Math.max(0, d._OverBreakBonusValue ?? 0) as number } : undefined
+    const sum = (list: any[] | undefined) => (list ?? []).reduce((a, x) => a + x._DamageValue, 0)
+    C.GetAttackDamageResult = function (this: any, a: any, d: any, ...rest: any[]) {
+        const st = isDealer(a) ? brokenState(d) : undefined
+        const notice = attack.call(this, a, d, ...rest)
+        if (st) onHit(sum(notice?.Damages) + sum(notice?.BarrierDamages), st.rate, st.bonus)
+        return notice
+    }
+    C.GetSlipDamageValue = function (this: any, a: any, d: any, ...rest: any[]) {
+        const st = isDealer(a) ? brokenState(d) : undefined
+        const v = slip.call(this, a, d, ...rest)
+        if (st) onHit(v, st.rate, st.bonus)
+        return v
+    }
+    return () => { C.GetAttackDamageResult = attack; C.GetSlipDamageValue = slip }
+}
+
+/** [BENCH] Whether a team plays the same battle at every dummy broken rate, so that one battle gives every "max break"
+ *  bar (SimOptions.altBreaks): no condition of any unit reads the broken rate or a damage amount
+ *  (breakRateConditionUsed), and no vortex (its pop counts in the popping hit's damage, but is computed for its owner).
+ *  Otherwise each rate is its own battle. */
+const breakSafeCache = new WeakMap<PvPKioku, boolean>()
+function breakRateSafe(team: PvPKioku[]): boolean {
+    return team.every(k => {
+        let v = breakSafeCache.get(k)
+        if (v === undefined) breakSafeCache.set(k, v = !kitDetails(k).some(d => d.abilityEffectType === "VORTEX_ATK"
+            || breakRateConditionUsed([d.startConditionSetIdCsv, d.activeConditionSetIdCsv])))
+        return v
+    })
+}
+
 // How players actually run some kits, where the bench's default play (Battle Skill whenever there is SP, ally-target
 // skills on the dealer) is unrealistic.
 //   Tenebrous Arcana: her Battle Skill gives 1 Magic and an extra action, her Ultimate 3 Magic, and her Basic Attack
@@ -419,7 +468,7 @@ const PLAY_PATTERNS: Record<string, {
  *  that never runs out, plus what its on-break effects add. */
 export function simulatedDealerDamage(allies: PvPKioku[], dealerPos: number, enemyCount: number, opts: SimOptions): number {
     const breakRun = opts.measure === "break"
-    const { stageId } = benchStage(enemyCount, opts.immune ?? [], breakRun)
+    const { stageId } = benchStage(enemyCount, opts.immune ?? [], breakRun, opts.maxBreak)
     const nameOf = (u: any) => allies[u._PositionId - 1]?.name
     let director: any
     const allyUnits = () => [...director.battleUnitBundle.allyList].sort((a: any, b: any) => a._PositionId - b._PositionId)
@@ -498,6 +547,12 @@ export function simulatedDealerDamage(allies: PvPKioku[], dealerPos: number, ene
     let spCost = 0
     const untrack = opts.sp ? trackSp((user, sp) => { if (user === dealerUnit()) spCost -= sp }) : undefined
     const untrackBreak = breakRun ? trackBreak((attacker, v) => { if (attacker === dealerUnit()) total += v }) : undefined
+    // other broken rates: the difference each counted hit would make there (altBreaks)
+    const altRates = !breakRun ? opts.altBreaks?.rates ?? [] : []
+    let altDelta = altRates.map(() => 0)
+    const untrackRates = altRates.length ? trackBrokenHits(u => u === dealerUnit(), (dmg, rate, bonus) => {
+        altRates.forEach((r, i) => { altDelta[i] += dmg * ((r + bonus) / (rate + bonus) - 1) })
+    }) : undefined
     try {
     // A vortex pops inside the hit that sets it off; the engine reports it with that hit (its attacker), not as its
     // owner's damage [APPROXIMATION vs the old bench, which moved it to the owner].
@@ -516,12 +571,13 @@ export function simulatedDealerDamage(allies: PvPKioku[], dealerPos: number, ene
     let nextTurn = 0
     while (!battle.isOver) {
         prepare(director)
-        const spBefore = spCost, totalBefore = total
+        const spBefore = spCost, totalBefore = total, altBefore = [...altDelta]
         const states = battle.executeNextAction()
         if (!states.length) break
         if (battle.elapsed > opts.av) {
             spCost = spBefore // the action past the run doesn't count
             total = totalBefore
+            altDelta = altBefore
             if (states.some(isDealerTurn)) nextTurn = battle.elapsed
             break
         }
@@ -529,6 +585,7 @@ export function simulatedDealerDamage(allies: PvPKioku[], dealerPos: number, ene
     }
     untrack?.()
     untrackBreak?.()
+    untrackRates?.()
     // Per-AV rate: play on (counting nothing) to the dealer's first own turn past the run.
     if (opts.perAv && !nextTurn) {
         while (!battle.isOver && battle.elapsed < opts.av * 3) {
@@ -547,17 +604,19 @@ export function simulatedDealerDamage(allies: PvPKioku[], dealerPos: number, ene
         || rng.events.some((e, i) => (!opts.expectedCrits || e.kind !== "crit") && !isSetupTargetRoll(rng, e, i))
     const scale = opts.perAv && nextTurn > 0 ? opts.av / nextTurn : 1
     if (opts.sp) opts.sp.cost = spCost * scale
+    if (opts.altBreaks) opts.altBreaks.totals = altRates.map((_, i) => (total + altDelta[i]) * scale)
     return total * scale
     } finally {
         untrack?.()
         untrackBreak?.()
+        untrackRates?.()
         mods.expectedCritDamage = savedMod
     }
 }
 
 // ── The two Kioku Grid charts ──
 
-const identityKey = (id: BenchIdentity) => `${id.element ?? "-"}/${id.role ?? "-"}/${id.ailment ?? "-"}${id.crit ? "/crit" : ""}`
+const identityKey = (id: BenchIdentity) => `${id.element ?? "-"}/${id.role ?? "-"}/${id.ailment ?? "-"}${id.crit ? "/crit" : ""}${id.maxBreak && id.maxBreak !== BENCH_BROKEN_RATE ? `/b${id.maxBreak}` : ""}`
 
 /** Max Burst and Average Damage: an ailment the kit reacts to is a question of whether the enemies CAN carry it, not of who puts it
  *  there. A run without that ailment makes the enemies immune to it, so a kit that applies it itself and reacts to it
@@ -641,43 +700,79 @@ export class LuxBenchCharts {
     // (runtime.AppMods.expectedCritDamage, not game code): one battle gives the average; `seeds` battles only when
     // something else in it is random (proc chances, random targets).
     // `spOut`: filled with the dealer's SP cost over the run, averaged the same way.
-    private simTotal(team: PvPKioku[], enemies: number, ailment?: Ailment, immune: Ailment[] = [], measure: SimOptions["measure"] = "damage", spOut?: { cost: number }, teamCrit = false): number {
+    // `alt`: also the dealer's damage at these other broken rates, from the same battles (SimOptions.altBreaks).
+    private simTotal(team: PvPKioku[], enemies: number, ailment?: Ailment, immune: Ailment[] = [], measure: SimOptions["measure"] = "damage", spOut?: { cost: number }, teamCrit = false, maxBreak?: number, alt?: { rates: number[], totals: number[] }): number {
         const expectedCrits = !team.some(k => kitReactsToCrits(k))
-        const base = { av: this.opts.av, infiniteSp: this.opts.infiniteSp, expectedCrits, ailment, immune, perAv: true, measure, teamCrit }
+        const base = { av: this.opts.av, infiniteSp: this.opts.infiniteSp, expectedCrits, ailment, immune, perAv: true, measure, teamCrit, maxBreak }
         const report = { random: false }
         const sp = { cost: 0 }
-        let total = simulatedDealerDamage(team, 0, enemies, { ...base, seed: 0, report, sp: spOut && sp })
+        const altRun = alt && { rates: alt.rates, totals: [] as number[] }
+        let total = simulatedDealerDamage(team, 0, enemies, { ...base, seed: 0, report, sp: spOut && sp, altBreaks: altRun })
         let spTotal = sp.cost
+        const altSum = altRun ? [...altRun.totals] : []
         if (!report.random) {
             if (spOut) spOut.cost = spTotal
+            if (alt) alt.totals = altSum
             return total
         }
         for (let seed = 1; seed < this.opts.seeds; seed++) {
-            total += simulatedDealerDamage(team, 0, enemies, { ...base, seed, sp: spOut && sp })
+            total += simulatedDealerDamage(team, 0, enemies, { ...base, seed, sp: spOut && sp, altBreaks: altRun })
             spTotal += sp.cost
+            altRun?.totals.forEach((v, i) => { altSum[i] += v })
         }
         if (spOut) spOut.cost = spTotal / this.opts.seeds
+        if (alt) alt.totals = altSum.map(v => v / this.opts.seeds)
         return total / this.opts.seeds
     }
 
-    private cachedUlt(key: string, team: () => PvPKioku[], enemies: number, ailment?: Ailment, immune: Ailment[] = []) {
+    /** The dealer's average damage at each of these dummy broken rates: one set of battles at BENCH_BROKEN_RATE with the
+     *  others rescaled from it when the team plays the same at every rate (breakRateSafe), else battles per rate. */
+    private simBreaks(team: PvPKioku[], enemies: number, ailment: Ailment | undefined, immune: Ailment[], rates: number[]): Map<number, number> {
+        const out = new Map<number, number>()
+        if (!breakRateSafe(team)) {
+            for (const r of rates) out.set(r, this.simTotal(team, enemies, ailment, immune, "damage", undefined, false, r))
+            return out
+        }
+        const alt = { rates: rates.filter(r => r !== BENCH_BROKEN_RATE), totals: [] as number[] }
+        out.set(BENCH_BROKEN_RATE, this.simTotal(team, enemies, ailment, immune, "damage", undefined, false, BENCH_BROKEN_RATE, alt))
+        alt.rates.forEach((r, i) => out.set(r, alt.totals[i]))
+        return out
+    }
+
+    private cachedUlt(key: string, team: () => PvPKioku[], enemies: number, ailment?: Ailment, immune: Ailment[] = [], maxBreak?: number) {
         key += `:${[...immune].sort().join(",")}`
         let v = this.ultBase.get(key)
-        if (!v) this.ultBase.set(key, v = ultimateDamage(team(), 0, enemies, ailment, immune))
+        if (!v) this.ultBase.set(key, v = ultimateDamage(team(), 0, enemies, ailment, immune, maxBreak))
         return v
     }
 
-    private cachedSim(key: string, team: () => PvPKioku[], enemies: number, ailment?: Ailment, immune: Ailment[] = []) {
+    // cachedSim for every rate at once (simBreaks); `keyOf(rate)` is cachedSim's key of that rate
+    private cachedSimBreaks(keyOf: (rate: number) => string, team: () => PvPKioku[], enemies: number, ailment: Ailment | undefined, immune: Ailment[], rates: number[]): Map<number, number> {
+        const key = (r: number) => `${keyOf(r)}:${[...immune].sort().join(",")}`
+        if (rates.some(r => !this.simBase.has(key(r)))) {
+            for (const [r, v] of this.simBreaks(team(), enemies, ailment, immune, rates)) this.simBase.set(key(r), v)
+        }
+        return new Map(rates.map(r => [r, this.simBase.get(key(r))!]))
+    }
+
+    private cachedSim(key: string, team: () => PvPKioku[], enemies: number, ailment?: Ailment, immune: Ailment[] = [], maxBreak?: number) {
         key += `:${[...immune].sort().join(",")}`
         let v = this.simBase.get(key)
-        if (v === undefined) this.simBase.set(key, v = this.simTotal(team(), enemies, ailment, immune))
+        if (v === undefined) this.simBase.set(key, v = this.simTotal(team(), enemies, ailment, immune, "damage", undefined, false, maxBreak))
         return v
     }
 
     /** Dealer identities to test a support in: none, then each element / role / element+role its kit is limited to, then
-     *  each ailment its kit reacts to, alone and with each of those elements / roles. */
+     *  each ailment its kit reacts to, alone and with each of those elements / roles. A kit with Over Break (kitHasOverBreak)
+     *  has every one of those again at each other max break rate (BENCH_MAX_BREAKS; the plain ones are at 500%). */
     supportIdentities(x: PvPKioku): BenchIdentity[] {
         const { elements, roles, ailments } = kitRestrictions(x)
+        const ids = this.supportIdentitiesAt(elements, roles, ailments)
+        if (!kitHasOverBreak(x)) return ids
+        return [...ids, ...BENCH_MAX_BREAKS.filter(b => b !== BENCH_BROKEN_RATE).flatMap(maxBreak => ids.map(id => ({ ...id, maxBreak })))]
+    }
+
+    private supportIdentitiesAt(elements: KiokuElement[], roles: KiokuRole[], ailments: Ailment[]): BenchIdentity[] {
         const unit: BenchIdentity[] = [
             {},
             ...elements.map(element => ({ element })),
@@ -703,7 +798,7 @@ export class LuxBenchCharts {
     // A tested identity as the dealer actually is: untested parts replaced by the neutral ones.
     private resolve(id: BenchIdentity, x: PvPKioku): BenchIdentity {
         const n = this.neutral(x)
-        return { element: id.element ?? n.element, role: id.role ?? n.role, ailment: id.ailment }
+        return { element: id.element ?? n.element, role: id.role ?? n.role, ailment: id.ailment, maxBreak: id.maxBreak }
     }
 
     supportMax(x: PvPKioku, enemies = 1, ids = this.supportIdentities(x)): BenchRow[] {
@@ -711,19 +806,33 @@ export class LuxBenchCharts {
         return ids.map(id => {
             const dealer = this.dealer(this.resolve(id, x), enemies)
             const immune = benchImmunities(kitAilments, id.ailment)
-            const base = this.cachedUlt(`s:${enemies}:${identityKey(this.resolve(id, x))}`, () => this.team(dealer), enemies, id.ailment, immune)
-            const v = ultimateDamage(this.team(dealer, x), 0, enemies, id.ailment, immune)
+            const base = this.cachedUlt(`s:${enemies}:${identityKey(this.resolve(id, x))}`, () => this.team(dealer), enemies, id.ailment, immune, id.maxBreak)
+            const v = ultimateDamage(this.team(dealer, x), 0, enemies, id.ailment, immune, id.maxBreak)
             return { ...id, gain: pctGain(v.damage, base.damage), critRate: v.critChance }
         })
     }
 
     supportAvg(x: PvPKioku, enemies = 1, ids = this.supportIdentities(x)): BenchRow[] {
         const kitAilments = kitRestrictions(x).ailments
+        // the "max break" bars of one identity (maxBreak aside) come from one set of battles (simBreaks)
+        const plainKey = (id: BenchIdentity) => identityKey({ ...id, maxBreak: undefined })
+        const ratesOf = new Map<string, number[]>()
+        for (const id of ids) ratesOf.set(plainKey(id), [...(ratesOf.get(plainKey(id)) ?? []), id.maxBreak ?? BENCH_BROKEN_RATE])
+        const withX = new Map<string, Map<number, number>>()
         return ids.map(id => {
             const dealer = this.dealer(this.resolve(id, x), enemies)
             const immune = benchImmunities(kitAilments, id.ailment)
-            const base = this.cachedSim(`s:${enemies}:${identityKey(this.resolve(id, x))}`, () => this.team(dealer), enemies, id.ailment, immune)
-            return { ...id, gain: pctGain(this.simTotal(this.team(dealer, x), enemies, id.ailment, immune), base) }
+            const rates = ratesOf.get(plainKey(id))!
+            if (rates.length < 2) {
+                const base = this.cachedSim(`s:${enemies}:${identityKey(this.resolve(id, x))}`, () => this.team(dealer), enemies, id.ailment, immune, id.maxBreak)
+                return { ...id, gain: pctGain(this.simTotal(this.team(dealer, x), enemies, id.ailment, immune, "damage", undefined, false, id.maxBreak), base) }
+            }
+            const rate = id.maxBreak ?? BENCH_BROKEN_RATE
+            const at = (r: number): BenchIdentity => ({ ...id, maxBreak: r === BENCH_BROKEN_RATE ? undefined : r })
+            const base = this.cachedSimBreaks(r => `s:${enemies}:${identityKey(this.resolve(at(r), x))}`, () => this.team(dealer), enemies, id.ailment, immune, rates)
+            let mine = withX.get(plainKey(id))
+            if (!mine) withX.set(plainKey(id), mine = this.simBreaks(this.team(dealer, x), enemies, id.ailment, immune, rates))
+            return { ...id, gain: pctGain(mine.get(rate)!, base.get(rate)!) }
         })
     }
 

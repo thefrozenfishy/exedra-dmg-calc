@@ -36,6 +36,7 @@ const BENCH_SPD = 1                    // the lowest SPD: first turn after 10,00
 const BENCH_ENEMY_MST_ID = 990000001
 const BENCH_BREAK_MST_ID = 990000001
 const BENCH_GAUGE_BREAK_MST_ID = 990000002
+const BENCH_RATE_BREAK_MST_BASE = 990010000 // + rate * 2 (+1 for the gauge table)
 // [BENCH] The break chart's gauge: out of reach within a run (like the HP), so every hit removes its full break value
 // (BreakPoint.Decrease removes none while broken). The bench breaks each dummy once on purpose (LuxBench
 // simulatedDealerDamage: 1 point left at the dealer's first decision, recovered right after).
@@ -64,25 +65,34 @@ function addBaseRecords() {
         enemyUniqueId: BENCH_ENEMY_MST_ID, iconResourceName: "", isCollectionDisp: false, isNoVisualDeath: false, modelPrefabName: "",
         name: "Dummy", releaseTime: "2024-01-01T00:00:00+09:00", runesName: "", size: 0, unlockType: 0, unlockValue: 0,
     }])
+}
+
+// [BENCH] Break tables by broken rate: initial = max (no increase), so a broken dummy sits at its cap from the start
+// (what Over Break needs, OverBreakDamageReceiveRateDriveUnitState.ApplyOverBreakAddition). BENCH_BROKEN_RATE keeps the
+// original ids; the other rates (the buff chart's "max break" bars, BENCH_MAX_BREAKS) get their own.
+const breakMsts = new Set<number>()
+function breakMstId(rate: number, gauge: boolean): number {
+    const id = rate === BENCH_BROKEN_RATE ? (gauge ? BENCH_GAUGE_BREAK_MST_ID : BENCH_BREAK_MST_ID) : BENCH_RATE_BREAK_MST_BASE + rate * 2 + (gauge ? 1 : 0)
+    if (breakMsts.has(id)) return id
+    breakMsts.add(id)
     E.addMasterRecords(E.BreakMstModel, [{
-        breakMstId: BENCH_BREAK_MST_ID, breakPoint: 1, breakPointRecoveryPerTurn: 0, breakTurnGaugeSlowRatio: 0,
-        breakedDamageReceiveRateIncreaseRate: 0, initialBreakedDamageReceiveRate: BENCH_BROKEN_RATE * 10, maxBreakedDamageReceiveRate: BENCH_BROKEN_RATE * 10,
-    }, {
-        breakMstId: BENCH_GAUGE_BREAK_MST_ID, breakPoint: BENCH_BREAK_GAUGE, breakPointRecoveryPerTurn: 0, breakTurnGaugeSlowRatio: 0,
-        breakedDamageReceiveRateIncreaseRate: 0, initialBreakedDamageReceiveRate: BENCH_BROKEN_RATE * 10, maxBreakedDamageReceiveRate: BENCH_BROKEN_RATE * 10,
+        breakMstId: id, breakPoint: gauge ? BENCH_BREAK_GAUGE : 1, breakPointRecoveryPerTurn: 0, breakTurnGaugeSlowRatio: 0,
+        breakedDamageReceiveRateIncreaseRate: 0, initialBreakedDamageReceiveRate: rate * 10, maxBreakedDamageReceiveRate: rate * 10,
     }])
+    return id
 }
 
 const stages = new Map<string, { stageId: number, enemies: QuestEnemyAppearance[] }>()
 
 /** The bench stage with `count` dummies (immune to `immune`): its id and the dummies' appearance rows (wave order;
  *  the middle one is the main target). `gauge`: the break chart's dummies, with a break gauge that never runs out
- *  (BENCH_BREAK_GAUGE) instead of the 1-point one. */
-export function benchStage(count: number, immune: readonly Ailment[] = [], gauge = false): { stageId: number, enemies: QuestEnemyAppearance[] } {
-    const key = `${count}:${[...immune].sort().join(",")}${gauge ? ":gauge" : ""}`
+ *  (BENCH_BREAK_GAUGE) instead of the 1-point one. `brokenRate`: the dummies' broken damage rate in % (initial = max). */
+export function benchStage(count: number, immune: readonly Ailment[] = [], gauge = false, brokenRate = BENCH_BROKEN_RATE): { stageId: number, enemies: QuestEnemyAppearance[] } {
+    const key = `${count}:${[...immune].sort().join(",")}${gauge ? ":gauge" : ""}${brokenRate !== BENCH_BROKEN_RATE ? `:b${brokenRate}` : ""}`
     let s = stages.get(key)
     if (s) return s
     addBaseRecords()
+    const breakId = breakMstId(brokenRate, gauge)
     const stageId = BENCH_STAGE_BASE + stages.size * 10 + count
     const parry = Object.fromEntries(Object.values(PARRY_FIELD).map(f => [f, 0]))
     for (const a of immune) parry[PARRY_FIELD[a]] = 1000
@@ -90,7 +100,7 @@ export function benchStage(count: number, immune: readonly Ailment[] = [], gauge
     const enemies = Array.from({ length: count }, (_, i) => ({
         questEnemyAppearanceMstId: stageId * 10 + i, questStageMstId: stageId, enemyMstId: BENCH_ENEMY_MST_ID, wave: 0,
         atk: 0, def: BENCH_DEF, hp: BENCH_HP, speed: BENCH_SPD, criticalRate: 0, criticalDamageRate: 0, effectHitRate: 0, effectParryRate: 0,
-        breakMstId: gauge ? BENCH_GAUGE_BREAK_MST_ID : BENCH_BREAK_MST_ID, passiveSkillMstId: 0, enemySkillSetId: 0, enemyConditionSkillSetId: 0, healRate: 0,
+        breakMstId: breakId, passiveSkillMstId: 0, enemySkillSetId: 0, enemyConditionSkillSetId: 0, healRate: 0,
         hpGaugeCount: 0, startHpGaugeCount: 0, isMainTargetEnemy: i === main, isSkipDeathMotion: false, conditionType: 0, conditionValue: 0,
         summonId: 0, linkHpWeight: 0, modeChangeEffectTxt: "",
         // weak to every element, no resistances or element modifiers
