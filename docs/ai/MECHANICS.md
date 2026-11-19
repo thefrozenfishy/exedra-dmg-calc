@@ -138,7 +138,12 @@ Ultimates (SpecialAttackAct) and follow-ups: only ExecuteSkill - no TurnStart/Tu
   queued/running; else an `AdditionalTurnUnitAct` goes to the end of the act list. It is a TurnUnitActBase: only
   ExecuteSkill (no TurnBegin/TurnEnd, no gauge reset - `ResetTurnGaugeBeforeTurnUnitActExecute` takes TurnUnitAct).
   `CanBeInterruptedBySpecialAttackAct` 0x18e9040 is false for it, so ultimates queued later go after it (in game the
-  player can't ult before it). [C] TS `KiokuState.queueAdditionalTurn`, `PvPBattle.runQueuedAdditionalTurn` (before
+  player can't ult before it). All of SpecialAttackAct / AdditionalTurnUnitAct / TurnUnitAct have priority 0
+  (TurnEnd -100, AdditionalSkillAct 50), and `AddActToListAndSort` 0x193B810 puts a new act after every act of equal
+  priority unless it is an ultimate in front of an interruptible one. So the extra turn goes behind ultimates that
+  are **already queued** when it is added: ult A (prompt) pushes the break bonus to max while ult B is queued behind
+  it -> B, the pending TurnUnitAct, then the extra turn, then TurnEnd. An ult registered after the A4 fired goes
+  after the extra turn. [C 3.19] TS `KiokuState.queueAdditionalTurn`, `PvPBattle.runQueuedAdditionalTurn` (before
   ultimates), `PvPTeam.runAdditionalTurn`. Until 2026-10-07 the extra turn went to the targets (enemies for ally A4s,
   allies for the 99 enemy uses). RE_ACTION_TURN_UNIT_ACT (0x18fd2a0): a ReActionTurnUnitAct per target, no cool time,
   interruptible by ultimates; TS still runs it right after the action (`pendingBonusTurns`) [~].
