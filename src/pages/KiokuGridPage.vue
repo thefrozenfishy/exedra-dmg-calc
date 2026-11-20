@@ -165,7 +165,7 @@
                                                         :class="ch._borderClass" />
                                                 </a>
                                                 <div class="axis-info-badge level-badge"
-                                                    :class="{ low: ch.ascension < 2, mid: 2 <= ch.ascension && ch.ascension < 5, high: ch.ascension === 5 }"
+                                                    :class="ascTierClass(ch.ascension, ch.role)"
                                                     v-if="infoAxisKey === 'ascension'">
                                                     {{ ch.ascension === -1 ? "X" : `A${ch.ascension}` }}
                                                 </div>
@@ -336,7 +336,7 @@
                                         :src="`/exedra-dmg-calc/kioku_images/${bar.charId}_thumbnail.png`"
                                         :alt="bar.name" />
                                     <span v-if="bar.ascension !== undefined" class="gain-asc-badge"
-                                        :class="ascBadgeClass(bar.ascension)"
+                                        :class="ascBadgeClass(bar.ascension, virtualRoleBase(bar.vRole))"
                                         :title="`Calculated at A${bar.ascension}`">{{ bar.ascension }}</span>
                                 </span>
                                 <span v-if="bar.spLabel" class="gain-sp" title="SP the rotation costs per 100 AV">{{ bar.spLabel }}</span>
@@ -1308,10 +1308,13 @@ const mergeEqualVariants = (rows: GainRow[]): GainRow[] => {
     return out
 }
 
-const ascBadgeClass = (label: string) => {
-    const a = Number(label.split("-").pop()) // a merged bar ("0-2") is coloured by its highest ascension
-    return { low: a < 2, mid: 2 <= a && a < 5, high: a === 5 }
+/** Ascension colour tier: Attackers are red A0-2, blue A3-4, green A5; every other role red A0-1, blue A2-3, green A4+. */
+const ascTierClass = (a: number, role: string) => {
+    const [midFrom, highFrom] = role === KiokuRole.Attacker ? [3, 5] : [2, 4]
+    return { low: a < midFrom, mid: midFrom <= a && a < highFrom, high: a >= highFrom }
 }
+const ascBadgeClass = (label: string, role: string) =>
+    ascTierClass(Number(label.split("-").pop()), role) // a merged bar ("0-2") is coloured by its highest ascension
 
 /** "Multiple ascensions": one bar per ascension and dealer identity (main bar / element, role, ailment variant), with
  *  neighbouring selected ascensions merged into one bar ("0-2") while the bar shows the same value. */
