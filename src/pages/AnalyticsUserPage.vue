@@ -213,7 +213,8 @@ function prettyMetadata(row: AnalyticsRow): string {
 // Accepts either a full user_id (uuid) or a 5-character friend code.
 // Friend codes need a lookup since analytics.user_id stores the uuid, not the
 // public code, and public.users can't be read cross-account without the RPC
-// from 0019_get_user_id_by_friend_id.sql.
+// from 0019_get_user_id_by_friend_id.sql. Since 0026 that RPC and the analytics reads only return rows for
+// accounts listed in public.app_admins.
 async function resolveInput(raw: string): Promise<string> {
     const trimmed = raw.trim()
     if (!trimmed) throw new Error('Enter a friend code or user ID')
