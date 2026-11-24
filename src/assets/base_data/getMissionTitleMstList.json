@@ -64,16 +64,6 @@
         "featuredRewardResourceName": "",
         "isRewardGuideTarget": true,
         "missionCampaignGroupMstId": 0,
-        "missionTitleMstId": 1032,
-        "prevMissionTitleMstId": 0,
-        "priority": 1,
-        "title": "Link Raid Season Missions"
-    },
-    {
-        "completeAppealDescription": "",
-        "featuredRewardResourceName": "",
-        "isRewardGuideTarget": true,
-        "missionCampaignGroupMstId": 0,
         "missionTitleMstId": 1033,
         "prevMissionTitleMstId": 0,
         "priority": 1,
@@ -368,16 +358,6 @@
         "prevMissionTitleMstId": 0,
         "priority": 1,
         "title": "Dollhouse Missions"
-    },
-    {
-        "completeAppealDescription": "",
-        "featuredRewardResourceName": "",
-        "isRewardGuideTarget": false,
-        "missionCampaignGroupMstId": 0,
-        "missionTitleMstId": 5132,
-        "prevMissionTitleMstId": 0,
-        "priority": 1,
-        "title": "Welcome Back Missions"
     },
     {
         "completeAppealDescription": "",
