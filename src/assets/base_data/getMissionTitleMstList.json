@@ -260,26 +260,6 @@
         "title": "Halloween Campaign Bingo Missions Part 2"
     },
     {
-        "completeAppealDescription": "Get Player EXP Quest Rank 2 Play Ticket x3!",
-        "featuredRewardResourceName": "",
-        "isRewardGuideTarget": false,
-        "missionCampaignGroupMstId": 0,
-        "missionTitleMstId": 2040,
-        "prevMissionTitleMstId": 0,
-        "priority": 160,
-        "title": "Weekly Bingo Missions Week 3"
-    },
-    {
-        "completeAppealDescription": "Get Prism Core x2!",
-        "featuredRewardResourceName": "",
-        "isRewardGuideTarget": false,
-        "missionCampaignGroupMstId": 0,
-        "missionTitleMstId": 2041,
-        "prevMissionTitleMstId": 2040,
-        "priority": 160,
-        "title": "Weekly Bingo Missions Week 3"
-    },
-    {
         "completeAppealDescription": "Get 5 Prism Orbs!",
         "featuredRewardResourceName": "",
         "isRewardGuideTarget": false,
