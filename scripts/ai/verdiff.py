@@ -28,7 +28,7 @@ Run from the repo root (in the Cowork VM: cd $HOME/mnt/exedra-dmg-calc). Full pr
                                                  unpack_version.sh copies; the old version's copy is diffed when present)
                                                  all of the above into <dir>/report.md + report.json
 """
-import json, os, re, sys, struct, hashlib, subprocess, tempfile, collections, datetime
+import json, os, re, sys, struct, hashlib, subprocess, tempfile, collections, datetime, atexit, shutil
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.abspath(os.path.join(HERE, "..", ".."))
@@ -269,6 +269,7 @@ def mst_dir(ref):
     if os.path.isdir(ref):
         return ref
     tmp = tempfile.mkdtemp(prefix=f"mst_{re.sub(r'[^A-Za-z0-9]', '_', ref)}_")
+    atexit.register(shutil.rmtree, tmp, True)  # ~100 MB base_data copy per ref; the VM session disk is small
     subprocess.run(f'git -C "{REPO}" archive "{ref}" {BASE_REL} | tar -x -C "{tmp}"', shell=True, check=True)
     return os.path.join(tmp, BASE_REL)
 

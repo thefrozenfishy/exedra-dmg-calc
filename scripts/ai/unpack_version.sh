@@ -21,6 +21,7 @@ VER=$(python3 -c "import re,sys; d=open(sys.argv[1],'rb').read(); m=[x.decode() 
 BIN=$HOME/senbei-linux
 cp "$UNP/tools/senbei-linux" "$BIN" && chmod +x "$BIN"
 TMP=$(mktemp -d)
+trap 'rm -rf "$TMP"' EXIT   # ~140 MB of unpacked dlls per run; the VM session disk is small and shared
 LOG="$TMP/senbei-$(date +%Y%m%d-%H%M%S).log"
 for f in GameAssembly.dll baselib.dll MadokaExedra.exe; do
   "$BIN" "$STEAM/$f" --out "$TMP" --no-log --no-pause -q >> "$LOG" 2>&1
