@@ -24,7 +24,13 @@ TMP=$(mktemp -d)
 trap 'rm -rf "$TMP"' EXIT   # ~140 MB of unpacked dlls per run; the VM session disk is small and shared
 LOG="$TMP/senbei-$(date +%Y%m%d-%H%M%S).log"
 for f in GameAssembly.dll baselib.dll MadokaExedra.exe; do
-  "$BIN" "$STEAM/$f" --out "$TMP" --no-log --no-pause -q >> "$LOG" 2>&1
+  "$BIN" "$STEAM/$f" --out "$TMP" --no-log --no-pause -q >> "$LOG" 2>&1 || true
+  # 3.25.0: baselib.dll ships without Crackproof ("not a Crackproof-protected file", exit 1): keep the plain file
+  # under the .unpack name so verdiff bin still compares it. GameAssembly must always unpack.
+  u="$TMP/${f%.*}.unpack.${f##*.}"
+  if [ ! -f "$u" ] && [ "$f" != GameAssembly.dll ]; then
+    cp "$STEAM/$f" "$u"; echo "$f: no Senbei output (not protected?), copied as is" >> "$LOG"
+  fi
 done
 ls "$TMP"/GameAssembly.unpack.dll "$TMP"/baselib.unpack.dll "$TMP"/MadokaExedra.unpack.exe > /dev/null
 DEST="$UNP/$VER"
