@@ -25,13 +25,13 @@ export class CorrelationEffect {
     get ElementDamageRatio(): float { return this.get_ElementDamageRatio(); }
     get TotalDamageRatio(): float { return this.get_TotalDamageRatio(); }
     get DamageType(): CorrelationDamageType { return this.get_DamageType(); }
-    /** @rva 0x88D9E0  public float get_ElementDamageRatio() { } */
+    /** @rva 0x8909E0  public float get_ElementDamageRatio() { } */
     get_ElementDamageRatio(): float { return this._ElementDamageRatio; /* auto-property */ }
-    /** @rva 0x88D9D0  public float get_TotalDamageRatio() { } */
+    /** @rva 0x8909D0  public float get_TotalDamageRatio() { } */
     get_TotalDamageRatio(): float { return this._TotalDamageRatio; /* auto-property */ }
-    /** @rva 0x769820  public CorrelationDamageType get_DamageType() { } */
+    /** @rva 0x76C820  public CorrelationDamageType get_DamageType() { } */
     get_DamageType(): CorrelationDamageType { return this._DamageType; /* auto-property */ }
-    /** @rva 0x14D3C50  public void .ctor(BattleUnit attacker, BattleUnit defender, TargetElementType attackElement = 0) { } */
+    /** @rva 0x15057D0  public void .ctor(BattleUnit attacker, BattleUnit defender, TargetElementType attackElement = 0) { } */
     ctor$BattleUnit_BattleUnit_TargetElementType(attacker: BattleUnit, defender: BattleUnit, attackElement: TargetElementType = 0 as TargetElementType): this {
         this._ElementDamageRatio = CorrelationEffect.DamageRatioDefault;
         if (attacker._BattleParameter instanceof CharacterParameter && attackElement !== 0 && CorrelationEffect.IsMatchWeakElement(attackElement, defender._WeakElements)) { // inlined in the game
@@ -48,13 +48,13 @@ export class CorrelationEffect {
         this._TotalDamageRatio = this._ElementDamageRatio;
         return this;
     }
-    /** @rva 0x14D3BB0  public static bool IsMatchWeakElement(TargetElementType attackElement, ElementType[] weakElements) { } */
+    /** @rva 0x1505730  public static bool IsMatchWeakElement(TargetElementType attackElement, ElementType[] weakElements) { } */
     static IsMatchWeakElement(attackElement: TargetElementType, weakElements: ElementType[]): boolean {
         if (attackElement === 0 || weakElements == null) return false;
         for (let i = 0; i < weakElements.length; i++) if ((weakElements[i] as number) === (attackElement as number)) return true;
         return false;
     }
-    /** @rva 0x14D3AB0  private CorrelationDamageType GetDamageType(BattleUnit attacker, BattleUnit defender, TargetElementType attackElement) { } */
+    /** @rva 0x1505630  private CorrelationDamageType GetDamageType(BattleUnit attacker, BattleUnit defender, TargetElementType attackElement) { } */
     GetDamageType(attacker: BattleUnit, defender: BattleUnit, attackElement: TargetElementType): CorrelationDamageType {
         if (attacker._BattleParameter instanceof CharacterParameter && attackElement !== 0) {
             const weakElements = defender._WeakElements;
@@ -62,7 +62,7 @@ export class CorrelationEffect {
         }
         return 0 as CorrelationDamageType;
     }
-    /** @rva 0x14D3C00  private static void .cctor() { } */
+    /** @rva 0x1505780  private static void .cctor() { } */
     static cctor(): void {
         CorrelationEffect.DamageRatioDefault = 1; // 0x3F800000
         CorrelationEffect.DamageRatioElementStrong = f32(1.2); // 0x3F99999A

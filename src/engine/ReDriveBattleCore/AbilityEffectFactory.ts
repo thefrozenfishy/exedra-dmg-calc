@@ -61,12 +61,12 @@ import type { AbilityEffectInfo } from "./AbilityEffectInfo";
 export class AbilityEffectFactory {
     /** 0x0 private static readonly Dictionary<string, Func<AbilityEffectInfo, AbilityEffectBase>> createDic */
     static createDic: Dictionary<string, ((a0: AbilityEffectInfo) => AbilityEffectBase)> = null!;
-    /** @rva 0x129FBC0  public static bool CanCreate(string effectType) { } */
+    /** @rva 0x12CF500  public static bool CanCreate(string effectType) { } */
     static CanCreate(effectType: string): boolean {
         runCctor(AbilityEffectFactory);
         return AbilityEffectFactory.createDic.has(effectType);
     }
-    /** @rva 0x129FC40  public static AbilityEffectBase Create(AbilityEffectInfo info, bool isIncludeDeadUnitInTarget) { } */
+    /** @rva 0x12CF580  public static AbilityEffectBase Create(AbilityEffectInfo info, bool isIncludeDeadUnitInTarget) { } */
     static Create(info: AbilityEffectInfo, isIncludeDeadUnitInTarget: boolean): AbilityEffectBase {
         runCctor(AbilityEffectFactory);
         if (UnitStateFactory.CanCreate(info.EffectType)) {
@@ -77,7 +77,7 @@ export class AbilityEffectFactory {
         if (!AbilityEffectFactory.createDic.has(info.EffectType)) return null!;
         return AbilityEffectFactory.createDic.get(info.EffectType)!(info);
     }
-    /** @rva 0x129FEA0  private static void .cctor() { } */
+    /** @rva 0x12CF7E0  private static void .cctor() { } */
     static cctor(): void {
         // lazy (runCctor): the lambdas construct classes that import this module
         const dic = new Map<string, (info: AbilityEffectInfo) => AbilityEffectBase>();

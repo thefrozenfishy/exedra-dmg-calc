@@ -35,19 +35,19 @@ export abstract class UniqueLvUnitStateBase extends UniqueUnitStateBase {  // im
     get StateIconNumber(): int { return this.get_StateIconNumber(); }
     get IsShowZeroIfZero(): boolean { return this.get_IsShowZeroIfZero(); }
     get IsMaxLv(): boolean { return this.get_IsMaxLv(); }
-    /** @rva 0x826790  public int get_Lv() { } */
+    /** @rva 0x829790  public int get_Lv() { } */
     get_Lv(): int { return this._Lv; /* auto-property */ }
-    /** @rva 0x827190  public void set_Lv(int value) { } */
+    /** @rva 0x82A190  public void set_Lv(int value) { } */
     set_Lv(value: int): void { this._Lv = value; /* auto-property */ }
-    /** @rva 0xA0A1F0  public int get_HitCounter() { } */
+    /** @rva 0xA0A1C0  public int get_HitCounter() { } */
     get_HitCounter(): int { return this._HitCounter; /* auto-property */ }
-    /** @rva 0xA0A2A0  public void set_HitCounter(int value) { } */
+    /** @rva 0xA0A270  public void set_HitCounter(int value) { } */
     set_HitCounter(value: int): void { this._HitCounter = value; /* auto-property */ }
-    /** @rva 0x75A630  public int get_UniqueStateLevelMstGroupId() { } */
+    /** @rva 0x75D630  public int get_UniqueStateLevelMstGroupId() { } */
     get_UniqueStateLevelMstGroupId(): int { return this._UniqueStateLevelMstGroupId; /* auto-property */ }
-    /** @rva 0x75A900  public void set_UniqueStateLevelMstGroupId(int value) { } */
+    /** @rva 0x75D900  public void set_UniqueStateLevelMstGroupId(int value) { } */
     set_UniqueStateLevelMstGroupId(value: int): void { this._UniqueStateLevelMstGroupId = value; /* auto-property */ }
-    /** @rva 0x17277A0  public List<UniqueStateLevelMstModel> get_LvMstList() { } */
+    /** @rva 0x174F5F0  public List<UniqueStateLevelMstModel> get_LvMstList() { } */
     get_LvMstList(): List<UniqueStateLevelMstModel> {
         if (this.lvMstListCache == null) {
             this.lvMstListCache = [...BattleMstReaderBase.get_Instance<UniqueStateLevelMstModel, UniqueStateLevelMstRecord, int>(UniqueStateLevelMstModel)
@@ -55,24 +55,24 @@ export abstract class UniqueLvUnitStateBase extends UniqueUnitStateBase {  // im
         }
         return this.lvMstListCache;
     }
-    /** @rva 0x1727910  public int get_MaxLv() { } */
+    /** @rva 0x174F760  public int get_MaxLv() { } */
     get_MaxLv(): int {
         if (this.get_LvMstList() != null && this.get_LvMstList().length > 0) {
             return Math.max(...this.get_LvMstList().map(m => m.record.level)); // <>c.b__16_0 (Max: throws on empty)
         }
         return 1;
     }
-    /** @rva 0x826790 slot 27  public int get_StateIconNumber() { } */
+    /** @rva 0x829790 slot 27  public int get_StateIconNumber() { } */
     get_StateIconNumber(): int { return this._Lv; /* asm: mov eax, dword ptr [rcx + 0x98]; ret */ }
-    /** @rva 0x73C0C0 slot 28  public bool get_IsShowZeroIfZero() { } */
+    /** @rva 0x73F0C0 slot 28  public bool get_IsShowZeroIfZero() { } */
     get_IsShowZeroIfZero(): boolean { return false; /* asm: xor al, al; ret */ }
-    /** @rva 0x1727030  protected void .ctor() { } */
+    /** @rva 0x174EE80  protected void .ctor() { } */
     ctor(): this {
         this._Lv = 1;
         super.ctor();
         return this;
     }
-    /** @rva 0x1727130  public void .ctor(AbilityEffectInfo info) { } */
+    /** @rva 0x174EF80  public void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
         this._Lv = 1;
         this.iconName = "";
@@ -81,7 +81,7 @@ export abstract class UniqueLvUnitStateBase extends UniqueUnitStateBase {  // im
         this._UniqueStateLevelMstGroupId = info._EffectValue2;
         return this;
     }
-    /** @rva 0x1727480  protected bool TryCountUp() { } */
+    /** @rva 0x174F2D0  protected bool TryCountUp() { } */
     TryCountUp(): boolean {
         if (this.get_LvMstList() == null) return false;
         if (this.get_LvMstList().length === 0) return false;
@@ -97,17 +97,17 @@ export abstract class UniqueLvUnitStateBase extends UniqueUnitStateBase {  // im
         }
         return false;
     }
-    /** @rva 0x17273C0  public int GetRequiredHitCount() { } */
+    /** @rva 0x174F210  public int GetRequiredHitCount() { } */
     GetRequiredHitCount(): int {
         const model = this.LvMstList.find(m => this.$GetRequiredHitCount$b__24_0(m)) ?? null; // FirstOrDefault
         if (model == null) return 0;
         return model.record.conditionCount;
     }
-    /** @rva 0x1727610  public bool get_IsMaxLv() { } */
+    /** @rva 0x174F460  public bool get_IsMaxLv() { } */
     get_IsMaxLv(): boolean {
         return this._Lv >= this.get_MaxLv(); // get_MaxLv inlined in the game (no level rows: MaxLv 1)
     }
-    /** @rva 0x17272B0 slot 29  public virtual bool Blend(UnitStateBase injectUnitState) { } */
+    /** @rva 0x174F100 slot 29  public virtual bool Blend(UnitStateBase injectUnitState) { } */
     Blend(injectUnitState: UnitStateBase): boolean {
         if (injectUnitState.constructor !== this.constructor) return false; // GetType() != GetType()
         if (!(injectUnitState instanceof UniqueLvUnitStateBase)) return false;
@@ -116,9 +116,9 @@ export abstract class UniqueLvUnitStateBase extends UniqueUnitStateBase {  // im
         this.IsExemptPassingTurnOnce = injectUnitState.IsExemptPassingTurnOnce;
         return true;
     }
-    /** @rva 0x17275F0  private bool <get_LvMstList>b__14_0(UniqueStateLevelMstRecord r) { } */
+    /** @rva 0x174F440  private bool <get_LvMstList>b__14_0(UniqueStateLevelMstRecord r) { } */
     $get_LvMstList$b__14_0(r: UniqueStateLevelMstRecord): boolean { return r.groupId === this._UniqueStateLevelMstGroupId; }
-    /** @rva 0x17275C0  private bool <GetRequiredHitCount>b__24_0(UniqueStateLevelMstModel m) { } */
+    /** @rva 0x174F410  private bool <GetRequiredHitCount>b__24_0(UniqueStateLevelMstModel m) { } */
     $GetRequiredHitCount$b__24_0(m: UniqueStateLevelMstModel): boolean {
         return m.record.level === this.Lv + 1;
     }

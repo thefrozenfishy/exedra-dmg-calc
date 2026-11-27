@@ -11,22 +11,22 @@ import type { ReceiveSlipDamageUnitStateBase } from "./ReceiveSlipDamageUnitStat
 // ---- ReDriveBattleCore.UnitState.DownGiveSlipDamageRatioUnitStateBase  (TypeDefIndex 605, public abstract class) ----
 export abstract class DownGiveSlipDamageRatioUnitStateBase extends DownGiveSlipDamageUnitStateBase {
     get DownRatio(): Decimal { return this.get_DownRatio(); }
-    /** @rva 0x1716410  public Decimal get_DownRatio() { } */
+    /** @rva 0x173E300  public Decimal get_DownRatio() { } */
     get_DownRatio(): Decimal {
         return Decimal.fromFloat(this._UpdateableEffectValue).div(Decimal.fromInt(10)); // (decimal)float / 10m
     }
-    /** @rva 0x1716400  protected void .ctor() { } */
+    /** @rva 0x173E2F0  protected void .ctor() { } */
     ctor(): this {
         super.ctor();
         return this;
     }
-    /** @rva 0x15F2080  public void .ctor(AbilityEffectInfo info) { } */
+    /** @rva 0x1625880  public void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
         super.ctor$AbilityEffectInfo(info);
         this._UpdateableEffectValue = f32(info._EffectValue1);
         return this;
     }
-    /** @rva 0x1716220 slot 32  public override Decimal GetSlipDamageVariationValue(ReceiveSlipDamageUnitStateBase state, BattleUnit attackUnit, BattleUnit defenseUnit, Decimal damageValue, Decimal processingValue) { } */
+    /** @rva 0x173E110 slot 32  public override Decimal GetSlipDamageVariationValue(ReceiveSlipDamageUnitStateBase state, BattleUnit attackUnit, BattleUnit defenseUnit, Decimal damageValue, Decimal processingValue) { } */
     GetSlipDamageVariationValue(state: ReceiveSlipDamageUnitStateBase, attackUnit: BattleUnit, defenseUnit: BattleUnit, damageValue: Decimal, processingValue: Decimal): Decimal {
         if (!this.IsTarget(state)) return Decimal.Zero; // vslot 31
         return processingValue.mul(Decimal.fromFloat(this._UpdateableEffectValue).div(Decimal.fromInt(10)).div(Decimal.fromInt(100))).neg();

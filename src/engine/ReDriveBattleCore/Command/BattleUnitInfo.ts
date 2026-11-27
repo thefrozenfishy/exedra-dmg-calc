@@ -60,53 +60,53 @@ export class BattleUnitInfo {
     get BreakedDamageReceiveRate(): int { return this.get_BreakedDamageReceiveRate(); }
     set BreakedDamageReceiveRate(v: int) { this.set_BreakedDamageReceiveRate(v); }
     get IsCharacter(): boolean { return this.get_IsCharacter(); }
-    /** @rva 0x73C4F0  public int get_BattleUnitId() { } */
+    /** @rva 0x73F4F0  public int get_BattleUnitId() { } */
     get_BattleUnitId(): int { return this._BattleUnitId; /* auto-property */ }
-    /** @rva 0x73FD00  public void set_BattleUnitId(int value) { } */
+    /** @rva 0x742D00  public void set_BattleUnitId(int value) { } */
     set_BattleUnitId(value: int): void { this._BattleUnitId = value; /* auto-property */ }
-    /** @rva 0x809350  public int get_Position() { } */
+    /** @rva 0x80C350  public int get_Position() { } */
     get_Position(): int { return this._Position; /* auto-property */ }
-    /** @rva 0x809540  public void set_Position(int value) { } */
+    /** @rva 0x80C540  public void set_Position(int value) { } */
     set_Position(value: int): void { this._Position = value; /* auto-property */ }
-    /** @rva 0x739E90  public BattleUnitStructure get_Structure() { } */
+    /** @rva 0x73CE90  public BattleUnitStructure get_Structure() { } */
     get_Structure(): BattleUnitStructure { return this._Structure; /* auto-property */ }
-    /** @rva 0x73CAB0  public void set_Structure(BattleUnitStructure value) { } */
+    /** @rva 0x73FAB0  public void set_Structure(BattleUnitStructure value) { } */
     set_Structure(value: BattleUnitStructure): void { this._Structure = value; /* auto-property */ }
-    /** @rva 0x764D70  public int get_QuestEnemyAppearanceMstId() { } */
+    /** @rva 0x767D70  public int get_QuestEnemyAppearanceMstId() { } */
     get_QuestEnemyAppearanceMstId(): int { return this._QuestEnemyAppearanceMstId; /* auto-property */ }
-    /** @rva 0x8A8230  public void set_QuestEnemyAppearanceMstId(int value) { } */
+    /** @rva 0x8AB230  public void set_QuestEnemyAppearanceMstId(int value) { } */
     set_QuestEnemyAppearanceMstId(value: int): void { this._QuestEnemyAppearanceMstId = value; /* auto-property */ }
-    /** @rva 0x760830  public BattleUnit.TeamType get_Team() { } */
+    /** @rva 0x763830  public BattleUnit.TeamType get_Team() { } */
     get_Team(): BattleUnit_TeamType { return this._Team; /* auto-property */ }
-    /** @rva 0x760840  public void set_Team(BattleUnit.TeamType value) { } */
+    /** @rva 0x763840  public void set_Team(BattleUnit.TeamType value) { } */
     set_Team(value: BattleUnit_TeamType): void { this._Team = value; /* auto-property */ }
-    /** @rva 0x7697A0  public int get_HP() { } */
+    /** @rva 0x76C7A0  public int get_HP() { } */
     get_HP(): int { return this._HP; /* auto-property */ }
-    /** @rva 0x8A8250  public void set_HP(int value) { } */
+    /** @rva 0x8AB250  public void set_HP(int value) { } */
     set_HP(value: int): void { this._HP = value; /* auto-property */ }
-    /** @rva 0x864530  public int get_EP() { } */
+    /** @rva 0x867530  public int get_EP() { } */
     get_EP(): int { return this._EP; /* auto-property */ }
-    /** @rva 0x8A8260  public void set_EP(int value) { } */
+    /** @rva 0x8AB260  public void set_EP(int value) { } */
     set_EP(value: int): void { this._EP = value; /* auto-property */ }
-    /** @rva 0x764D60  public int get_BP() { } */
+    /** @rva 0x767D60  public int get_BP() { } */
     get_BP(): int { return this._BP; /* auto-property */ }
-    /** @rva 0x87A5A0  public void set_BP(int value) { } */
+    /** @rva 0x87D5A0  public void set_BP(int value) { } */
     set_BP(value: int): void { this._BP = value; /* auto-property */ }
-    /** @rva 0x9078B0  public bool get_ShowCountPointAll() { } */
+    /** @rva 0x90A8B0  public bool get_ShowCountPointAll() { } */
     get_ShowCountPointAll(): boolean { return this._ShowCountPointAll; /* auto-property */ }
-    /** @rva 0x907980  public void set_ShowCountPointAll(bool value) { } */
+    /** @rva 0x90A990  public void set_ShowCountPointAll(bool value) { } */
     set_ShowCountPointAll(value: boolean): void { this._ShowCountPointAll = value; /* auto-property */ }
-    /** @rva 0x764DA0  public int get_BreakPoint() { } */
+    /** @rva 0x767DA0  public int get_BreakPoint() { } */
     get_BreakPoint(): int { return this._BreakPoint; /* auto-property */ }
-    /** @rva 0x8A82B0  public void set_BreakPoint(int value) { } */
+    /** @rva 0x8AB2B0  public void set_BreakPoint(int value) { } */
     set_BreakPoint(value: int): void { this._BreakPoint = value; /* auto-property */ }
-    /** @rva 0x8F9EF0  public int get_BreakedDamageReceiveRate() { } */
+    /** @rva 0x8FCEF0  public int get_BreakedDamageReceiveRate() { } */
     get_BreakedDamageReceiveRate(): int { return this._BreakedDamageReceiveRate; /* auto-property */ }
-    /** @rva 0x907840  public void set_BreakedDamageReceiveRate(int value) { } */
+    /** @rva 0x90A840  public void set_BreakedDamageReceiveRate(int value) { } */
     set_BreakedDamageReceiveRate(value: int): void { this._BreakedDamageReceiveRate = value; /* auto-property */ }
-    /** @rva 0x7365E0  public void .ctor() { } */
+    /** @rva 0x7395E0  public void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
-    /** @rva 0x182E1E0  public void .ctor(BattleUnit unit) { } */
+    /** @rva 0x1852D70  public void .ctor(BattleUnit unit) { } */
     ctor$BattleUnit(unit: BattleUnit): this {
         this._BattleUnitId = unit.Id;
         this._Position = unit.PositionId;
@@ -147,9 +147,9 @@ export class BattleUnitInfo {
         this._ShowCountPointAll = this.CheckShowCountPointAll(unit);
         return this;
     }
-    /** @rva 0x182E750  public bool get_IsCharacter() { } */
+    /** @rva 0x18532E0  public bool get_IsCharacter() { } */
     get_IsCharacter(): boolean { return this._QuestEnemyAppearanceMstId === 0; /* asm: cmp dword ptr [rcx + 0x20], 0; sete al */ }
-    /** @rva 0x182DBF0  private bool CheckShowCountPointAll(BattleUnit unit) { } */
+    /** @rva 0x1852780  private bool CheckShowCountPointAll(BattleUnit unit) { } */
     CheckShowCountPointAll(unit: BattleUnit): boolean {
         let result = false;
         const passiveTypes: List<string> = [];

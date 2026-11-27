@@ -31,34 +31,34 @@ export class CommandBeginTurn extends CommandBase {
     set CurrentWave(v: int) { this.set_CurrentWave(v); }
     get DeltaActionTime(): float { return this.get_DeltaActionTime(); }
     set DeltaActionTime(v: float) { this.set_DeltaActionTime(v); }
-    /** @rva 0xDA57E0 slot 4  public override CommandType GetCommandType() { } */
+    /** @rva 0xDC7000 slot 4  public override CommandType GetCommandType() { } */
     GetCommandType(): CommandType { return 4 as CommandType; /* asm: mov eax, 4; ret */ }
-    /** @rva 0x739E90  public TurnActOrderUnitInfo get_TurnActOrderUnitInfo() { } */
+    /** @rva 0x73CE90  public TurnActOrderUnitInfo get_TurnActOrderUnitInfo() { } */
     get_TurnActOrderUnitInfo(): TurnActOrderUnitInfo { return this._TurnActOrderUnitInfo; /* auto-property */ }
-    /** @rva 0x73CAB0  public void set_TurnActOrderUnitInfo(TurnActOrderUnitInfo value) { } */
+    /** @rva 0x73FAB0  public void set_TurnActOrderUnitInfo(TurnActOrderUnitInfo value) { } */
     set_TurnActOrderUnitInfo(value: TurnActOrderUnitInfo): void { this._TurnActOrderUnitInfo = value; /* auto-property */ }
-    /** @rva 0x73C9E0  public List<CommandBeginTurn.ActiveSkillInfo> get_ActiveSkillInfoList() { } */
+    /** @rva 0x73F9E0  public List<CommandBeginTurn.ActiveSkillInfo> get_ActiveSkillInfoList() { } */
     get_ActiveSkillInfoList(): List<CommandBeginTurn_ActiveSkillInfo> { return this._ActiveSkillInfoList; /* auto-property */ }
-    /** @rva 0x73CA50  public void set_ActiveSkillInfoList(List<CommandBeginTurn.ActiveSkillInfo> value) { } */
+    /** @rva 0x73FA50  public void set_ActiveSkillInfoList(List<CommandBeginTurn.ActiveSkillInfo> value) { } */
     set_ActiveSkillInfoList(value: List<CommandBeginTurn_ActiveSkillInfo>): void { this._ActiveSkillInfoList = value; /* auto-property */ }
-    /** @rva 0x7697A0  public int get_CurrentRound() { } */
+    /** @rva 0x76C7A0  public int get_CurrentRound() { } */
     get_CurrentRound(): int { return this._CurrentRound; /* auto-property */ }
-    /** @rva 0x8A8250  public void set_CurrentRound(int value) { } */
+    /** @rva 0x8AB250  public void set_CurrentRound(int value) { } */
     set_CurrentRound(value: int): void { this._CurrentRound = value; /* auto-property */ }
-    /** @rva 0x864530  public int get_CurrentWave() { } */
+    /** @rva 0x867530  public int get_CurrentWave() { } */
     get_CurrentWave(): int { return this._CurrentWave; /* auto-property */ }
-    /** @rva 0x8A8260  public void set_CurrentWave(int value) { } */
+    /** @rva 0x8AB260  public void set_CurrentWave(int value) { } */
     set_CurrentWave(value: int): void { this._CurrentWave = value; /* auto-property */ }
-    /** @rva 0x971AA0  public float get_DeltaActionTime() { } */
+    /** @rva 0x9A7190  public float get_DeltaActionTime() { } */
     get_DeltaActionTime(): float { return this._DeltaActionTime; /* auto-property */ }
-    /** @rva 0x971B10  public void set_DeltaActionTime(float value) { } */
+    /** @rva 0x9A7200  public void set_DeltaActionTime(float value) { } */
     set_DeltaActionTime(value: float): void { this._DeltaActionTime = value; /* auto-property */ }
-    /** @rva 0x1831250  public void .ctor() { } */
+    /** @rva 0x1855DE0  public void .ctor() { } */
     ctor(): this {
         this._ActiveSkillInfoList = [];
         return this;
     }
-    /** @rva 0x18310A0  public void .ctor(BattleUnit currentTurnUnit, TurnActOrderUnitInfo turnActOrderUnitInfo, int currentRound, int currentWave, float deltaActionTime) { } */
+    /** @rva 0x1855C30  public void .ctor(BattleUnit currentTurnUnit, TurnActOrderUnitInfo turnActOrderUnitInfo, int currentRound, int currentWave, float deltaActionTime) { } */
     ctor$BattleUnit_TurnActOrderUnitInfo_int_int_float(currentTurnUnit: BattleUnit, turnActOrderUnitInfo: TurnActOrderUnitInfo, currentRound: int, currentWave: int, deltaActionTime: float): this {
         this._ActiveSkillInfoList = [];
         this._TurnActOrderUnitInfo = turnActOrderUnitInfo;
@@ -83,13 +83,13 @@ export class CommandBeginTurn_ActiveSkillInfo {
     _ActiveSkillId: int = 0;
     get ActiveSkillId(): int { return this.get_ActiveSkillId(); }
     set ActiveSkillId(v: int) { this.set_ActiveSkillId(v); }
-    /** @rva 0x73C4F0  public int get_ActiveSkillId() { } */
+    /** @rva 0x73F4F0  public int get_ActiveSkillId() { } */
     get_ActiveSkillId(): int { return this._ActiveSkillId; /* auto-property */ }
-    /** @rva 0x73FD00  public void set_ActiveSkillId(int value) { } */
+    /** @rva 0x742D00  public void set_ActiveSkillId(int value) { } */
     set_ActiveSkillId(value: int): void { this._ActiveSkillId = value; /* auto-property */ }
-    /** @rva 0x7365E0  public void .ctor() { } */
+    /** @rva 0x7395E0  public void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
-    /** @rva 0x18298A0  public void .ctor(ActiveSkillBase activeSkill, BattleUnit unit) { } */
+    /** @rva 0x184E430  public void .ctor(ActiveSkillBase activeSkill, BattleUnit unit) { } */
     ctor$ActiveSkillBase_BattleUnit(activeSkill: ActiveSkillBase, unit: BattleUnit): this {
         if (activeSkill != null) this._ActiveSkillId = activeSkill.Id;
         return this;

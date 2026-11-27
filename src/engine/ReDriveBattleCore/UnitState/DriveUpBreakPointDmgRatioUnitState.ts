@@ -11,20 +11,20 @@ export class DriveUpBreakPointDmgRatioUnitState extends DriveUpBreakPointDamageU
     /** 0x90 protected float upRatio */
     upRatio: float = 0;
     get UpRatio(): float { return this.get_UpRatio(); }
-    /** @rva 0x75A560  public float get_UpRatio() { } */
+    /** @rva 0x75D560  public float get_UpRatio() { } */
     get_UpRatio(): float { return this.upRatio; /* field 0x90 */ }
-    /** @rva 0x1715C30  protected void .ctor() { } */
+    /** @rva 0x173DB20  protected void .ctor() { } */
     ctor(): this {
         super.ctor();
         return this;
     }
-    /** @rva 0x17173A0  public void .ctor(AbilityEffectInfo info) { } */
+    /** @rva 0x173F290  public void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
         super.ctor$AbilityEffectInfo(info);
         this.upRatio = f32(f32(info._EffectValue2) / 10); // per-mille -> %
         return this;
     }
-    /** @rva 0x17172A0 slot 28  protected override Decimal GetUpValue(Decimal damageValue) { } */
+    /** @rva 0x173F190 slot 28  protected override Decimal GetUpValue(Decimal damageValue) { } */
     GetUpValue(damageValue: Decimal): Decimal {
         return damageValue.mul(Decimal.fromFloat(this.upRatio).div(Decimal.fromInt(100))); // damageValue * ((decimal)upRatio / 100)
     }

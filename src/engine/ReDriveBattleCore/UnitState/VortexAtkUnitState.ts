@@ -10,14 +10,14 @@ import { f32 } from "../../runtime";
 
 // ---- ReDriveBattleCore.UnitState.VortexAtkUnitState  (TypeDefIndex 518, public class) ----
 export class VortexAtkUnitState extends VortexUnitStateBase {
-    /** @rva 0x160DBC0 slot 32  protected override Nullable<ReceiveSlipDamageUnitStateBase.ParameterType> get_DamageType() { } */
+    /** @rva 0x16413C0 slot 32  protected override Nullable<ReceiveSlipDamageUnitStateBase.ParameterType> get_DamageType() { } */
     get_DamageType(): Nullable<ReceiveSlipDamageUnitStateBase_ParameterType> { return 0 as ReceiveSlipDamageUnitStateBase_ParameterType; /* new Nullable<ParameterType>(Atk) */ }
-    /** @rva 0x15F2E30  protected void .ctor() { } */
+    /** @rva 0x1626630  protected void .ctor() { } */
     ctor(): this {
         super.ctor();
         return this;
     }
-    /** @rva 0x160DB40  public void .ctor(AbilityEffectInfo info) { } */
+    /** @rva 0x1641340  public void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
         super.ctor$AbilityEffectInfo(info);
         this._UpdateableEffectValue = f32(info._EffectValue1);

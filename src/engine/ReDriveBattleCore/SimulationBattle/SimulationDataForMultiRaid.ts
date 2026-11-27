@@ -14,14 +14,14 @@ export class SimulationDataForMultiRaid {
     set BonusPassiveSkillMstIds(v: List<int>) { this.set_BonusPassiveSkillMstIds(v); }
     get RoundLimit(): int { return this.get_RoundLimit(); }
     set RoundLimit(v: int) { this.set_RoundLimit(v); }
-    /** @rva 0x736C50  public List<int> get_BonusPassiveSkillMstIds() { } */
+    /** @rva 0x739C50  public List<int> get_BonusPassiveSkillMstIds() { } */
     get_BonusPassiveSkillMstIds(): List<int> { return this._BonusPassiveSkillMstIds; /* auto-property */ }
-    /** @rva 0x736C60  public void set_BonusPassiveSkillMstIds(List<int> value) { } */
+    /** @rva 0x739C60  public void set_BonusPassiveSkillMstIds(List<int> value) { } */
     set_BonusPassiveSkillMstIds(value: List<int>): void { this._BonusPassiveSkillMstIds = value; /* auto-property */ }
-    /** @rva 0x769820  public int get_RoundLimit() { } */
+    /** @rva 0x76C820  public int get_RoundLimit() { } */
     get_RoundLimit(): int { return this._RoundLimit; /* auto-property */ }
-    /** @rva 0x8A8240  public void set_RoundLimit(int value) { } */
+    /** @rva 0x8AB240  public void set_RoundLimit(int value) { } */
     set_RoundLimit(value: int): void { this._RoundLimit = value; /* auto-property */ }
-    /** @rva 0x7365E0  public void .ctor() { } */
+    /** @rva 0x7395E0  public void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
 }

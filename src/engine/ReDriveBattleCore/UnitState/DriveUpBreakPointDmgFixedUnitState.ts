@@ -11,20 +11,20 @@ export class DriveUpBreakPointDmgFixedUnitState extends DriveUpBreakPointDamageU
     /** 0x90 protected int upFixed */
     upFixed: int = 0;
     get UpFixed(): int { return this.get_UpFixed(); }
-    /** @rva 0x907E00  public int get_UpFixed() { } */
+    /** @rva 0xA0A030  public int get_UpFixed() { } */
     get_UpFixed(): int { return this.upFixed; /* field 0x90 */ }
-    /** @rva 0x1715C30  protected void .ctor() { } */
+    /** @rva 0x173DB20  protected void .ctor() { } */
     ctor(): this {
         super.ctor();
         return this;
     }
-    /** @rva 0x1717260  public void .ctor(AbilityEffectInfo info) { } */
+    /** @rva 0x173F150  public void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
         super.ctor$AbilityEffectInfo(info);
         this.upFixed = info._EffectValue2;
         return this;
     }
-    /** @rva 0x17171F0 slot 28  protected override Decimal GetUpValue(Decimal damageValue) { } */
+    /** @rva 0x173F0E0 slot 28  protected override Decimal GetUpValue(Decimal damageValue) { } */
     GetUpValue(damageValue: Decimal): Decimal {
         return Decimal.fromInt(this.upFixed); // (decimal)upFixed
     }

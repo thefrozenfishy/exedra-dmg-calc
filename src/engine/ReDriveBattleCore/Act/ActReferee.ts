@@ -28,13 +28,13 @@ export class ActReferee {
     turnActHistory: List<ActBase> = null!;
     /** 0x28 private int lastActId */
     lastActId: int = 0;
-    /** @rva 0x193C050  public void Clear() { } */
+    /** @rva 0x19678B0  public void Clear() { } */
     Clear(): void {
         this.actList.length = 0;
         this.turnActHistory.length = 0;
         this.currentAct = null!;
     }
-    /** @rva 0x193C8A0  public bool ShiftNextAct() { } */
+    /** @rva 0x1968100  public bool ShiftNextAct() { } */
     ShiftNextAct(): boolean {
         if (this.currentAct != null) {
             this.turnActHistory.push(this.currentAct);
@@ -45,7 +45,7 @@ export class ActReferee {
         this.actList.splice(0, 1);
         return true;
     }
-    /** @rva 0x193BC60  public void AddDefaultUnitTurnActs(BattleUnit turnUnit) { } */
+    /** @rva 0x19674C0  public void AddDefaultUnitTurnActs(BattleUnit turnUnit) { } */
     AddDefaultUnitTurnActs(turnUnit: BattleUnit): void {
         const begin = new TurnBeginAct().ctor();
         begin.actUnitId = turnUnit.Id;
@@ -63,7 +63,7 @@ export class ActReferee {
         end.id = this.GetNewActId();
         this.AddActToListAndSort(end);
     }
-    /** @rva 0x193BAA0  public void AddComboUnitTurnActs(BattleUnit turnUnit, int actionNum) { } */
+    /** @rva 0x1967300  public void AddComboUnitTurnActs(BattleUnit turnUnit, int actionNum) { } */
     AddComboUnitTurnActs(turnUnit: BattleUnit, actionNum: int): void {
         const begin = new TurnBeginAct().ctor();
         begin.actUnitId = turnUnit.Id;
@@ -84,7 +84,7 @@ export class ActReferee {
         end.id = this.GetNewActId();
         this.AddActToListAndSort(end);
     }
-    /** @rva 0x193B9F0  public void AddAct(SpecialAttackAct act) { } */
+    /** @rva 0x1967250  public void AddAct(SpecialAttackAct act) { } */
     AddAct$SpecialAttackAct(act: SpecialAttackAct): void {
         act.id = this.GetNewActId();
         // an interruptible current act goes back to the front of its priority group; the ultimate runs now
@@ -95,12 +95,12 @@ export class ActReferee {
         }
         this.AddActToListAndSort(act);
     }
-    /** @rva 0x193BA70  public void AddAct(ActBase act) { } */
+    /** @rva 0x19672D0  public void AddAct(ActBase act) { } */
     AddAct$ActBase(act: ActBase): void {
         act.id = this.GetNewActId();
         this.AddActToListAndSort(act);
     }
-    /** @rva 0x193C4B0  public bool RemoveUnitSpecialAttackAct(int unitId) { } */
+    /** @rva 0x1967D10  public bool RemoveUnitSpecialAttackAct(int unitId) { } */
     RemoveUnitSpecialAttackAct(unitId: int): boolean {
         if (this.currentAct instanceof SpecialAttackAct && this.currentAct.actUnitId === unitId) {
             this.currentAct = null!;
@@ -108,7 +108,7 @@ export class ActReferee {
         }
         return removeAll(this.actList, act => act instanceof SpecialAttackAct && act.actUnitId === unitId) > 0;
     }
-    /** @rva 0x193C980  public void UpdateActOrder(List<BattleUnit> activeUnitList) { } */
+    /** @rva 0x19681E0  public void UpdateActOrder(List<BattleUnit> activeUnitList) { } */
     UpdateActOrder(activeUnitList: List<BattleUnit>): void {
         // <UpdateActOrder>b__0 0x1903c70: drop acts of units that left, ultimates whose gauge is no longer full,
         // and additional skills aimed at a unit that left
@@ -121,18 +121,18 @@ export class ActReferee {
             return false;
         });
     }
-    /** @rva 0x193C0F0  public List<ActOrderUnitInfo> GetActOrderUnitInfoList() { } */
+    /** @rva 0x1967950  public List<ActOrderUnitInfo> GetActOrderUnitInfoList() { } */
     GetActOrderUnitInfoList(): List<ActOrderUnitInfo> {
         return [this.currentAct, ...this.actList].map(act => new ActOrderUnitInfo().ctor$ActBase(act));
     }
-    /** @rva 0x193C260  public List<ActBase> GetTurnActList() { } */
+    /** @rva 0x1967AC0  public List<ActBase> GetTurnActList() { } */
     GetTurnActList(): List<ActBase> {
         const list = [...this.turnActHistory];
         list.push(this.currentAct);
         list.push(...this.actList);
         return list;
     }
-    /** @rva 0x193B810  private void AddActToListAndSort(ActBase newAct, bool isAddAtFrontIfSamePriority = False) { } */
+    /** @rva 0x1967070  private void AddActToListAndSort(ActBase newAct, bool isAddAtFrontIfSamePriority = False) { } */
     AddActToListAndSort(newAct: ActBase, isAddAtFrontIfSamePriority: boolean = false): void {
         if (this.actList.length === 0) {
             this.actList.push(newAct);
@@ -152,7 +152,7 @@ export class ActReferee {
         }
         this.actList.splice(index, 0, newAct);
     }
-    /** @rva 0x193BEF0  private static bool CanBeInterruptedBySpecialAttackAct(ActBase checkAct, BattleUnit.TeamType specialAttackUnitTeam) { } */
+    /** @rva 0x1967750  private static bool CanBeInterruptedBySpecialAttackAct(ActBase checkAct, BattleUnit.TeamType specialAttackUnitTeam) { } */
     static CanBeInterruptedBySpecialAttackAct(checkAct: ActBase, specialAttackUnitTeam: BattleUnit_TeamType): boolean {
         if (!(checkAct instanceof SkillDecisionActBase) || checkAct.IsDecided) return false;
         if (!checkAct.IsCanInterrupt) return false;
@@ -161,16 +161,16 @@ export class ActReferee {
         if (checkAct instanceof ComboTurnUnitAct) return checkAct.ActionStep > 1;
         return false;
     }
-    /** @rva 0x193C250  private int GetNewActId() { } */
+    /** @rva 0x1967AB0  private int GetNewActId() { } */
     GetNewActId(): int {
         return ++this.lastActId;
     }
-    /** @rva 0x193C370  public bool IsUnitSpecialAttackActRegistered(int unitId) { } */
+    /** @rva 0x1967BD0  public bool IsUnitSpecialAttackActRegistered(int unitId) { } */
     IsUnitSpecialAttackActRegistered(unitId: int): boolean {
         if (this.currentAct instanceof SpecialAttackAct && this.currentAct.actUnitId === unitId) return true;
         return this.actList.some(act => act instanceof SpecialAttackAct && act.actUnitId === unitId);
     }
-    /** @rva 0x193BDE0  public static bool CanBeInterruptedByAutoSpecialAttack(ActBase checkAct, BattleUnit.TeamType specialAttackUnitTeam) { } */
+    /** @rva 0x1967640  public static bool CanBeInterruptedByAutoSpecialAttack(ActBase checkAct, BattleUnit.TeamType specialAttackUnitTeam) { } */
     static CanBeInterruptedByAutoSpecialAttack(checkAct: ActBase, specialAttackUnitTeam: BattleUnit_TeamType): boolean {
         if (checkAct.Priority < ActBase_Define.DefaultPriority) return true;
         if (checkAct instanceof TurnUnitAct && checkAct.actUnitTeam === specialAttackUnitTeam) return true;
@@ -189,7 +189,7 @@ export class ActReferee {
         if (!(actBase instanceof TAct$)) return false;
         return actBase.actUnitId === unitId;
     }
-    /** @rva 0x193C5F0  public void SetRandomTarget(List<BattleUnit> targetUnitList, Dictionary<int, BattleUnit> battleUnitDic) { } */
+    /** @rva 0x1967E50  public void SetRandomTarget(List<BattleUnit> targetUnitList, Dictionary<int, BattleUnit> battleUnitDic) { } */
     SetRandomTarget(targetUnitList: List<BattleUnit>, battleUnitDic: Dictionary<int, BattleUnit>): void {
         for (const act of this.actList) {
             const unit = battleUnitDic.get(act.targetUnitId);
@@ -198,7 +198,7 @@ export class ActReferee {
             }
         }
     }
-    /** @rva 0x193CA60  public void .ctor() { } */
+    /** @rva 0x19682C0  public void .ctor() { } */
     ctor(): this {
         this.actList = [];
         this.turnActHistory = [];

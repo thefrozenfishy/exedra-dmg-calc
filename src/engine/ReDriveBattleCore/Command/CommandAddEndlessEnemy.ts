@@ -16,15 +16,15 @@ export class CommandAddEndlessEnemy extends CommandBase {
     _AddEnemyInfos: AddEnemyInfo[] = null!;
     get AddEnemyInfos(): AddEnemyInfo[] { return this.get_AddEnemyInfos(); }
     set AddEnemyInfos(v: AddEnemyInfo[]) { this.set_AddEnemyInfos(v); }
-    /** @rva 0x1048350 slot 4  public override CommandType GetCommandType() { } */
+    /** @rva 0x1097640 slot 4  public override CommandType GetCommandType() { } */
     GetCommandType(): CommandType { return 7 as CommandType; /* asm: mov eax, 7; ret */ }
-    /** @rva 0x739E90  public AddEnemyInfo[] get_AddEnemyInfos() { } */
+    /** @rva 0x73CE90  public AddEnemyInfo[] get_AddEnemyInfos() { } */
     get_AddEnemyInfos(): AddEnemyInfo[] { return this._AddEnemyInfos; /* auto-property */ }
-    /** @rva 0x73CAB0  public void set_AddEnemyInfos(AddEnemyInfo[] value) { } */
+    /** @rva 0x73FAB0  public void set_AddEnemyInfos(AddEnemyInfo[] value) { } */
     set_AddEnemyInfos(value: AddEnemyInfo[]): void { this._AddEnemyInfos = value; /* auto-property */ }
-    /** @rva 0x7365E0  public void .ctor() { } */
+    /** @rva 0x7395E0  public void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
-    /** @rva 0x1830D60  public void .ctor(in List<BattleUnit> enemyUnitList) { } */
+    /** @rva 0x18558F0  public void .ctor(in List<BattleUnit> enemyUnitList) { } */
     ctor$ListBattleUnit(enemyUnitList: List<BattleUnit>): this {
         const infos: List<AddEnemyInfo> = [];
         if (enemyUnitList == null) return this;

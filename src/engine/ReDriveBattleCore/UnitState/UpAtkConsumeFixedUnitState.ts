@@ -11,20 +11,20 @@ import { UpAttackConsumeUnitStateBase } from "./UpAttackConsumeUnitStateBase";
 // ---- ReDriveBattleCore.UnitState.UpAtkConsumeFixedUnitState  (TypeDefIndex 753, public class) ----
 export class UpAtkConsumeFixedUnitState extends UpAttackConsumeUnitStateBase {
     get UpFixed(): float { return this.get_UpFixed(); }
-    /** @rva 0xC987F0  public float get_UpFixed() { } */
+    /** @rva 0xCB8FA0  public float get_UpFixed() { } */
     get_UpFixed(): float { return this._UpdateableEffectValue; /* asm: movss xmm0, dword ptr [rcx + 0x88]; ret */ }
-    /** @rva 0x1715C30  protected void .ctor() { } */
+    /** @rva 0x173DB20  protected void .ctor() { } */
     ctor(): this {
         this._IconName = "";
         return this;
     }
-    /** @rva 0x15F8010  public void .ctor(AbilityEffectInfo info) { } */
+    /** @rva 0x162B810  public void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
         super.ctor$AbilityEffectInfo(info);
         this._UpdateableEffectValue = f32(info._EffectValue1);
         return this;
     }
-    /** @rva 0x17296E0 slot 36  protected override Decimal GetAtkVariationValueIfRemainCount(BattleUnit unit, Decimal processingValue) { } */
+    /** @rva 0x1751530 slot 36  protected override Decimal GetAtkVariationValueIfRemainCount(BattleUnit unit, Decimal processingValue) { } */
     GetAtkVariationValueIfRemainCount(unit: BattleUnit, processingValue: Decimal): Decimal {
         return Decimal.fromFloat(this._UpdateableEffectValue);
     }

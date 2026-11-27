@@ -13,22 +13,22 @@ export class DwnRecoveryEpRateRatioRatioUnitState extends DwnRecoveryEpRateRatio
     _DownRatio: float = 0;
     get DownRatio(): float { return this.get_DownRatio(); }
     set DownRatio(v: float) { this.set_DownRatio(v); }
-    /** @rva 0x75A560  public float get_DownRatio() { } */
+    /** @rva 0x75D560  public float get_DownRatio() { } */
     get_DownRatio(): float { return this._DownRatio; /* auto-property */ }
-    /** @rva 0x75A810  public void set_DownRatio(float value) { } */
+    /** @rva 0x75D810  public void set_DownRatio(float value) { } */
     set_DownRatio(value: float): void { this._DownRatio = value; /* auto-property */ }
-    /** @rva 0x1715C30  protected void .ctor() { } */
+    /** @rva 0x173DB20  protected void .ctor() { } */
     ctor(): this {
         super.ctor();
         return this;
     }
-    /** @rva 0x1718B10  public void .ctor(AbilityEffectInfo info) { } */
+    /** @rva 0x1740A00  public void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
         super.ctor$AbilityEffectInfo(info);
         this._DownRatio = f32(f32(info._EffectValue1) / 10);
         return this;
     }
-    /** @rva 0x1718AF0 slot 30  public override float GetRecoveryEpRateRatioVariationValue(BattleUnit unit, float processingValue) { } */
+    /** @rva 0x17409E0 slot 30  public override float GetRecoveryEpRateRatioVariationValue(BattleUnit unit, float processingValue) { } */
     GetRecoveryEpRateRatioVariationValue(unit: BattleUnit, processingValue: float): float {
         return -f32(f32(processingValue * this._DownRatio) / 100);
     }

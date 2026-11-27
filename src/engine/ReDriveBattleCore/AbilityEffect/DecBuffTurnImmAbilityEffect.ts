@@ -8,21 +8,21 @@ import { AbilityEffectBase_TargetSideType } from "./AbilityEffectBase";
 
 // ---- ReDriveBattleCore.AbilityEffect.DecBuffTurnImmAbilityEffect  (TypeDefIndex 1152, public class) ----
 export class DecBuffTurnImmAbilityEffect extends ChangeBuffDebuffTurnAbilityEffectBase {
-    /** @rva 0x73C0C0 slot 8  public override bool get_IsTurnAdd() { } */
+    /** @rva 0x73F0C0 slot 8  public override bool get_IsTurnAdd() { } */
     get_IsTurnAdd(): boolean { return false; /* asm: xor al, al; ret */ }
-    /** @rva 0x775830 slot 10  public override bool get_IsTargetBuff() { } */
+    /** @rva 0x778830 slot 10  public override bool get_IsTargetBuff() { } */
     get_IsTargetBuff(): boolean { return true; /* asm: mov al, 1; ret */ }
-    /** @rva 0x1943500 slot 12  public override string get_DisplayEffectType() { } */
+    /** @rva 0x196ED60 slot 12  public override string get_DisplayEffectType() { } */
     get_DisplayEffectType(): string {
         return "eff_cmn_act_debuff_appear_001";
     }
-    /** @rva 0x193CB10  protected void .ctor() { } */
+    /** @rva 0x1968370  protected void .ctor() { } */
     ctor(): this {
         this._DisplayEffectType = "";
         super.ctor();
         return this;
     }
-    /** @rva 0x193CC20  public void .ctor(AbilityEffectInfo info) { } */
+    /** @rva 0x1968480  public void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
         this._DisplayEffectType = "";
         super.ctor$AbilityEffectInfo(info);

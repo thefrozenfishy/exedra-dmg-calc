@@ -10,19 +10,19 @@ import { AbilityEffectBase_TargetSideType } from "./AbilityEffectBase";
 
 // ---- ReDriveBattleCore.AbilityEffect.LoseEpRatioAbilityEffect  (TypeDefIndex 1191, public class) ----
 export class LoseEpRatioAbilityEffect extends LoseEpAbilityEffectBase {
-    /** @rva 0x193E3E0  protected void .ctor() { } */
+    /** @rva 0x1969C40  protected void .ctor() { } */
     ctor(): this {
         super.ctor();
         return this;
     }
-    /** @rva 0x1947790  public void .ctor(AbilityEffectInfo info) { } */
+    /** @rva 0x1972FF0  public void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
         super.ctor$AbilityEffectInfo(info);
         this._TargetSide = 1 as AbilityEffectBase_TargetSideType;
         this.effectValue = info._EffectValue1;
         return this;
     }
-    /** @rva 0x1947FA0 slot 8  public override int GetLosePoint(BattleUnit targetUnit) { } */
+    /** @rva 0x1973800 slot 8  public override int GetLosePoint(BattleUnit targetUnit) { } */
     GetLosePoint(targetUnit: BattleUnit): int {
         return trunc(f32(f32(this.effectValue * targetUnit._MaxEP) / 1000));
     }

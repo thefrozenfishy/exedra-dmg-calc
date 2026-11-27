@@ -12,23 +12,23 @@ import { AbilityEffectBase_TargetSideType } from "./AbilityEffectBase";
 
 // ---- ReDriveBattleCore.AbilityEffect.RevivalAbilityEffectBase  (TypeDefIndex 1211, public abstract class) ----
 export abstract class RevivalAbilityEffectBase extends AbilityEffectBase {
-    /** @rva 0x193E3E0  protected void .ctor() { } */
+    /** @rva 0x1969C40  protected void .ctor() { } */
     ctor(): this {
         super.ctor();
         return this;
     }
-    /** @rva 0x194BAA0  public void .ctor(AbilityEffectInfo info) { } */
+    /** @rva 0x1977300  public void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
         super.ctor$AbilityEffectInfo(info);
         this._TargetSide = 0 as AbilityEffectBase_TargetSideType;
         this._IsIncludeDeadUnitInTarget = true;
         return this;
     }
-    /** @rva 0x194B830 slot 6  public override List<BattleUnit> GetAIFilteredTargets(BattleUnit userUnit, List<BattleUnit> targetUnitList, SkillType skillType, GameDirectorBase gameDirector) { } */
+    /** @rva 0x1977090 slot 6  public override List<BattleUnit> GetAIFilteredTargets(BattleUnit userUnit, List<BattleUnit> targetUnitList, SkillType skillType, GameDirectorBase gameDirector) { } */
     GetAIFilteredTargets(userUnit: BattleUnit, targetUnitList: List<BattleUnit>, skillType: SkillType, gameDirector: GameDirectorBase): List<BattleUnit> {
         return targetUnitList.filter(unit => unit.get_IsDead()); // <>c.b__2_0
     }
-    /** @rva 0x194B960 slot 7  public override int SelectTargetInAIAction(BattleUnit userUnit, List<BattleUnit> targetUnitList) { } */
+    /** @rva 0x19771C0 slot 7  public override int SelectTargetInAIAction(BattleUnit userUnit, List<BattleUnit> targetUnitList) { } */
     SelectTargetInAIAction(userUnit: BattleUnit, targetUnitList: List<BattleUnit>): int {
         const unit = orderByNewGuid(targetUnitList, "target", [userUnit, this])[0] ?? null; // OrderBy(b__3_0 Guid.NewGuid()).FirstOrDefault()
         if (unit != null) return unit._Id;

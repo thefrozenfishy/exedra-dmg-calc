@@ -30,28 +30,28 @@ export class UniqueElementDriveUnitState extends UniqueLvUnitStateBase {  // imp
     get INeutralState$DontRemoveOnPassiveSkillUserLeaveBattle(): boolean { return this.get_INeutralState$DontRemoveOnPassiveSkillUserLeaveBattle(); }
     get INeutralState$DontRemoveOnUserUnitDeath(): boolean { return this.get_INeutralState$DontRemoveOnUserUnitDeath(); }
     get TargetLvUpType(): ILvUp_LvUpType { return this.get_TargetLvUpType(); }
-    /** @rva 0x7E7AD0 slot 6  public override UnitStateBase.DirectionType get_Direction() { } */
+    /** @rva 0x7EAAD0 slot 6  public override UnitStateBase.DirectionType get_Direction() { } */
     get_Direction(): UnitStateBase_DirectionType { return 2 as UnitStateBase_DirectionType; /* asm: mov eax, 2; ret (Neutral) */ }
-    /** @rva 0x75FB30 slot 32  private AbilityEffectBase.TargetSideType ReDriveBattleCore.UnitState.INeutralState.get_TargetSide() { } */
+    /** @rva 0x762B30 slot 32  private AbilityEffectBase.TargetSideType ReDriveBattleCore.UnitState.INeutralState.get_TargetSide() { } */
     get_INeutralState$TargetSide(): AbilityEffectBase_TargetSideType { return 1 as AbilityEffectBase_TargetSideType; /* asm: mov eax, 1; ret */ }
-    /** @rva 0x775830 slot 33  private bool ReDriveBattleCore.UnitState.INeutralState.get_DontRemoveOnPassiveSkillUserLeaveBattle() { } */
+    /** @rva 0x778830 slot 33  private bool ReDriveBattleCore.UnitState.INeutralState.get_DontRemoveOnPassiveSkillUserLeaveBattle() { } */
     get_INeutralState$DontRemoveOnPassiveSkillUserLeaveBattle(): boolean { return true; /* asm: mov al, 1; ret */ }
-    /** @rva 0x775830 slot 34  private bool ReDriveBattleCore.UnitState.INeutralState.get_DontRemoveOnUserUnitDeath() { } */
+    /** @rva 0x778830 slot 34  private bool ReDriveBattleCore.UnitState.INeutralState.get_DontRemoveOnUserUnitDeath() { } */
     get_INeutralState$DontRemoveOnUserUnitDeath(): boolean { return true; /* asm: mov al, 1; ret */ }
-    /** @rva 0x1727030  protected void .ctor() { } */
+    /** @rva 0x174EE80  protected void .ctor() { } */
     ctor(): this {
         super.ctor(); // UniqueLvUnitStateBase..ctor (same RVA)
         return this;
     }
-    /** @rva 0x1727050  public void .ctor(AbilityEffectInfo info) { } */
+    /** @rva 0x174EEA0  public void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
         super.ctor$AbilityEffectInfo(info); // Lv = 1, iconName = "", UnitStateBase..ctor, pattern = EffectValue1, level group = EffectValue2 (inlined in the game)
         this.roleBonusExp = info._EffectValue3;
         return this;
     }
-    /** @rva 0x7E7AD0 slot 30  public ILvUp.LvUpType get_TargetLvUpType() { } */
+    /** @rva 0x7EAAD0 slot 30  public ILvUp.LvUpType get_TargetLvUpType() { } */
     get_TargetLvUpType(): ILvUp_LvUpType { return 2 as ILvUp_LvUpType; /* asm: mov eax, 2; ret (AfterActiveSkill) */ }
-    /** @rva 0x1726ED0 slot 31  public void LvUpProcess(BattleUnit userUnit, BattleUnit targetUnit, int skillMstId) { } */
+    /** @rva 0x174ED20 slot 31  public void LvUpProcess(BattleUnit userUnit, BattleUnit targetUnit, int skillMstId) { } */
     LvUpProcess(userUnit: BattleUnit, targetUnit: BattleUnit, skillMstId: int): void {
         const skillMst = BattleMstReaderBase.get_Instance<SkillMstModel, SkillMstRecord, int>(SkillMstModel).GetModelByKey(skillMstId); // IBattleMstReader slot 0
         if (skillMst == null) return;
@@ -69,7 +69,7 @@ export class UniqueElementDriveUnitState extends UniqueLvUnitStateBase {  // imp
             exp--;
         } while (exp !== 0);
     }
-    /** @rva 0x1726B50 slot 21  public override bool CanAddTo(BattleUnit unit) { } */
+    /** @rva 0x174E9A0 slot 21  public override bool CanAddTo(BattleUnit unit) { } */
     CanAddTo(unit: BattleUnit): boolean {
         // <>c__DisplayClass15_0 { unit }
         const states = unit.Condition.StateList.filter((s): s is UniqueElementDriveUnitState => s instanceof UniqueElementDriveUnitState) // OfType
@@ -77,7 +77,7 @@ export class UniqueElementDriveUnitState extends UniqueLvUnitStateBase {  // imp
         if (states.length === 0) return true; // !Any()
         return states[0]._UserUnitId === this._UserUnitId; // First()
     }
-    /** @rva 0x1726CE0 slot 23  public override List<BattleUnit> GetAIFilteredTargets(BattleUnit userUnit, List<BattleUnit> targetUnitList, SkillType skillType, RangeType effectRange, GameDirectorBase gameDirector) { } */
+    /** @rva 0x174EB30 slot 23  public override List<BattleUnit> GetAIFilteredTargets(BattleUnit userUnit, List<BattleUnit> targetUnitList, SkillType skillType, RangeType effectRange, GameDirectorBase gameDirector) { } */
     GetAIFilteredTargets(userUnit: BattleUnit, targetUnitList: List<BattleUnit>, skillType: SkillType, effectRange: RangeType, gameDirector: GameDirectorBase): List<BattleUnit> {
         return targetUnitList
             .filter(unit => !unit.get_IsDead()) // <>c.b__16_0

@@ -31,26 +31,26 @@ export class OverBreakDamageReceiveRateDriveUnitState extends UnitStateBase {  /
     set RoleAdditionRatio(v: float) { this.set_RoleAdditionRatio(v); }
     get OtherRoleAdditionRatio(): float { return this.get_OtherRoleAdditionRatio(); }
     set OtherRoleAdditionRatio(v: float) { this.set_OtherRoleAdditionRatio(v); }
-    /** @rva 0x75FB30 slot 6  public override UnitStateBase.DirectionType get_Direction() { } */
+    /** @rva 0x762B30 slot 6  public override UnitStateBase.DirectionType get_Direction() { } */
     get_Direction(): UnitStateBase_DirectionType { return 1 as UnitStateBase_DirectionType; /* asm: mov eax, 1; ret (Negative) */ }
-    /** @rva 0xC987F0  public float get_MaxOverBreakRatio() { } */
+    /** @rva 0xCB8FA0  public float get_MaxOverBreakRatio() { } */
     get_MaxOverBreakRatio(): float { return this._MaxOverBreakRatio; /* auto-property */ }
-    /** @rva 0xC98800  public void set_MaxOverBreakRatio(float value) { } */
+    /** @rva 0xCB8FB0  public void set_MaxOverBreakRatio(float value) { } */
     set_MaxOverBreakRatio(value: float): void { this._MaxOverBreakRatio = value; /* auto-property */ }
-    /** @rva 0x899710  public float get_RoleAdditionRatio() { } */
+    /** @rva 0x89C710  public float get_RoleAdditionRatio() { } */
     get_RoleAdditionRatio(): float { return this._RoleAdditionRatio; /* auto-property */ }
-    /** @rva 0x89A540  public void set_RoleAdditionRatio(float value) { } */
+    /** @rva 0x89D540  public void set_RoleAdditionRatio(float value) { } */
     set_RoleAdditionRatio(value: float): void { this._RoleAdditionRatio = value; /* auto-property */ }
-    /** @rva 0x75A560  public float get_OtherRoleAdditionRatio() { } */
+    /** @rva 0x75D560  public float get_OtherRoleAdditionRatio() { } */
     get_OtherRoleAdditionRatio(): float { return this._OtherRoleAdditionRatio; /* auto-property */ }
-    /** @rva 0x75A810  public void set_OtherRoleAdditionRatio(float value) { } */
+    /** @rva 0x75D810  public void set_OtherRoleAdditionRatio(float value) { } */
     set_OtherRoleAdditionRatio(value: float): void { this._OtherRoleAdditionRatio = value; /* auto-property */ }
-    /** @rva 0x1715C30  protected void .ctor() { } */
+    /** @rva 0x173DB20  protected void .ctor() { } */
     ctor(): this {
         super.ctor();
         return this;
     }
-    /** @rva 0x171B360  public void .ctor(AbilityEffectInfo info) { } */
+    /** @rva 0x1743250  public void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
         super.ctor$AbilityEffectInfo(info);
         this._MaxOverBreakRatio = f32(f32(info._EffectValue1) / 10); // per-mille -> % points of BreakedDamageReceiveRate
@@ -58,12 +58,12 @@ export class OverBreakDamageReceiveRateDriveUnitState extends UnitStateBase {  /
         this._OtherRoleAdditionRatio = f32(f32(info._EffectValue3) / 10);
         return this;
     }
-    /** @rva 0x171B280  private float GetAdditionRatio(BattleUnit userUnit) { } */
+    /** @rva 0x1743170  private float GetAdditionRatio(BattleUnit userUnit) { } */
     GetAdditionRatio(userUnit: BattleUnit): float {
         if (userUnit.IsMatch$TargetRoleType(this._TargetRole)) return this._RoleAdditionRatio;
         return this._OtherRoleAdditionRatio;
     }
-    /** @rva 0x171B070  public bool ApplyOverBreakAddition(BattleUnit targetUnit, BattleUnit userUnit, ActiveSkillBase triggeringSkill) { } */
+    /** @rva 0x1742F60  public bool ApplyOverBreakAddition(BattleUnit targetUnit, BattleUnit userUnit, ActiveSkillBase triggeringSkill) { } */
     ApplyOverBreakAddition(targetUnit: BattleUnit, userUnit: BattleUnit, triggeringSkill: ActiveSkillBase): boolean {
         if (!this.IsActive$BattleUnit(targetUnit) || triggeringSkill == null) return false;
         if (!(triggeringSkill instanceof SpecialAttack)) return false;
@@ -79,7 +79,7 @@ export class OverBreakDamageReceiveRateDriveUnitState extends UnitStateBase {  /
         targetUnit.AddMaxOverBreakBonus(this._MaxOverBreakRatio);
         return 0 < targetUnit._MaxOverBreakBonusValue; // true only on the hit that opens the over-break cap
     }
-    /** @rva 0x171B2D0 slot 24  public override AISkillTargetSelector.UnitFilterFuncOrder GetUnitFilterFuncOrder(BattleUnit userUnit, IEnumerable<BattleUnit> candidateUnits) { } */
+    /** @rva 0x17431C0 slot 24  public override AISkillTargetSelector.UnitFilterFuncOrder GetUnitFilterFuncOrder(BattleUnit userUnit, IEnumerable<BattleUnit> candidateUnits) { } */
     GetUnitFilterFuncOrder(userUnit: BattleUnit, candidateUnits: IEnumerable<BattleUnit>): AISkillTargetSelector_UnitFilterFuncOrder {
         const list: List<(a0: IEnumerable<BattleUnit>) => IEnumerable<BattleUnit>> = [];
         return new AISkillTargetSelector_UnitFilterFuncOrder().ctor$ListFuncIEnumerableBattleUnitIEnumerableBattleUnit(list);

@@ -16,28 +16,28 @@ export class DwnHateUnitState extends HateUnitStateBase {
     _DownWeight: int = 0;
     get DownWeight(): int { return this.get_DownWeight(); }
     set DownWeight(v: int) { this.set_DownWeight(v); }
-    /** @rva 0x1718220 slot 7  public override string get_IconName() { } */
+    /** @rva 0x1740110 slot 7  public override string get_IconName() { } */
     get_IconName(): string {
         return "battle_icon_dwn_hate";
     }
-    /** @rva 0x9077B0  public int get_DownWeight() { } */
+    /** @rva 0x90A7B0  public int get_DownWeight() { } */
     get_DownWeight(): int { return this._DownWeight; /* auto-property */ }
-    /** @rva 0x907830  public void set_DownWeight(int value) { } */
+    /** @rva 0x90A830  public void set_DownWeight(int value) { } */
     set_DownWeight(value: int): void { this._DownWeight = value; /* auto-property */ }
-    /** @rva 0x1715C30  protected void .ctor() { } */
+    /** @rva 0x173DB20  protected void .ctor() { } */
     ctor(): this {
         this._IconName = "";
         return this;
     }
-    /** @rva 0x15F0E30  public void .ctor(AbilityEffectInfo info) { } */
+    /** @rva 0x1624630  public void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
         super.ctor$AbilityEffectInfo(info);
         this._DownWeight = info._EffectValue1;
         return this;
     }
-    /** @rva 0x1717FB0 slot 26  public override int GetHateVariationWeight() { } */
+    /** @rva 0x173FEA0 slot 26  public override int GetHateVariationWeight() { } */
     GetHateVariationWeight(): int { return -this._DownWeight; }
-    /** @rva 0x1717FC0 slot 24  public override AISkillTargetSelector.UnitFilterFuncOrder GetUnitFilterFuncOrder(BattleUnit userUnit, IEnumerable<BattleUnit> candidateUnits) { } */
+    /** @rva 0x173FEB0 slot 24  public override AISkillTargetSelector.UnitFilterFuncOrder GetUnitFilterFuncOrder(BattleUnit userUnit, IEnumerable<BattleUnit> candidateUnits) { } */
     GetUnitFilterFuncOrder(userUnit: BattleUnit, candidateUnits: IEnumerable<BattleUnit>): AISkillTargetSelector_UnitFilterFuncOrder {
         const list: List<(a0: IEnumerable<BattleUnit>) => IEnumerable<BattleUnit>> = [];
         list.push(AISkillTargetSelector.UnitFilterByMainTarget);

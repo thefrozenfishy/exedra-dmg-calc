@@ -22,26 +22,26 @@ export class UnitTurnGauge {
     get GaugeValue(): float { return this.get_GaugeValue(); }
     set GaugeValue(v: float) { this.set_GaugeValue(v); }
     get BaseValue(): float { return this.get_BaseValue(); }
-    /** @rva 0x73C4F0  public int get_Id() { } */
+    /** @rva 0x73F4F0  public int get_Id() { } */
     get_Id(): int { return this._Id; /* auto-property */ }
-    /** @rva 0x73FD00  public void set_Id(int value) { } */
+    /** @rva 0x742D00  public void set_Id(int value) { } */
     set_Id(value: int): void { this._Id = value; /* auto-property */ }
-    /** @rva 0x88D9D0  public float get_GaugeValue() { } */
+    /** @rva 0x8909D0  public float get_GaugeValue() { } */
     get_GaugeValue(): float { return this._GaugeValue; /* auto-property */ }
-    /** @rva 0x88D9F0  public void set_GaugeValue(float value) { } */
+    /** @rva 0x8909F0  public void set_GaugeValue(float value) { } */
     set_GaugeValue(value: float): void { this._GaugeValue = value; /* auto-property */ }
-    /** @rva 0x160B650  public float get_BaseValue() { } */
+    /** @rva 0x163EE50  public float get_BaseValue() { } */
     get_BaseValue(): float {
         return f32(UnitTurnGauge.RawGaugeResetValue / this.speed);
     }
-    /** @rva 0x160B3C0  public void Reset(BattleUnit unit) { } */
+    /** @rva 0x163EBC0  public void Reset(BattleUnit unit) { } */
     Reset(unit: BattleUnit): void {
         this.speed = unit.GetProcessedSpeed();
         this.TurnOrderPriority = 0;
         this._GaugeValue = f32(UnitTurnGauge.RawGaugeResetValue / this.speed);
         this._Id = unit.Id;
     }
-    /** @rva 0x160B2A0  public float DecreaseGaugeValue(float decreaseValue, int turnOrderPriority, bool isTurnShiftDecrease = False) { } */
+    /** @rva 0x163EAA0  public float DecreaseGaugeValue(float decreaseValue, int turnOrderPriority, bool isTurnShiftDecrease = False) { } */
     DecreaseGaugeValue(decreaseValue: float, turnOrderPriority: int, isTurnShiftDecrease: boolean = false): float {
         const before = this._GaugeValue;
         const after = decreaseValue <= before ? f32(before - decreaseValue) : 0;
@@ -49,7 +49,7 @@ export class UnitTurnGauge {
         this._GaugeValue = after;
         return f32(after - before);
     }
-    /** @rva 0x160B1B0  public float AddGaugeValue(float rate, int turnOrderPriority) { } */
+    /** @rva 0x163E9B0  public float AddGaugeValue(float rate, int turnOrderPriority) { } */
     AddGaugeValue(rate: float, turnOrderPriority: int): float {
         const before = this._GaugeValue;
         // helper 0xca5f40 (inlined elsewhere): Math.Max(gauge + base * rate, 0f)
@@ -58,7 +58,7 @@ export class UnitTurnGauge {
         this.TurnOrderPriority = turnOrderPriority;
         return f32(after - before);
     }
-    /** @rva 0x160B520  public float SubtractGaugeValue(float rate, int turnOrderPriority) { } */
+    /** @rva 0x163ED20  public float SubtractGaugeValue(float rate, int turnOrderPriority) { } */
     SubtractGaugeValue(rate: float, turnOrderPriority: int): float {
         const before = this._GaugeValue;
         const after = Math.max(f32(f32(f32(UnitTurnGauge.RawGaugeResetValue / this.speed) * -rate) + before), 0);
@@ -66,7 +66,7 @@ export class UnitTurnGauge {
         this.TurnOrderPriority = turnOrderPriority;
         return f32(after - before);
     }
-    /** @rva 0x160B460  public float SetSpeedAndUpdateGaugeValue(float newSpeed) { } */
+    /** @rva 0x163EC60  public float SetSpeedAndUpdateGaugeValue(float newSpeed) { } */
     SetSpeedAndUpdateGaugeValue(newSpeed: float): float {
         if (this.speed === newSpeed) return 0; // Single.Equals
         const oldSpeed = this.speed;
@@ -76,23 +76,23 @@ export class UnitTurnGauge {
         this._GaugeValue = after;
         return f32(after - before);
     }
-    /** @rva 0x160B330  public static float GetNewTurnGaugeValueBySpeedVariation(float originalGaugeValue, float originalSpeed, float newSpeed) { } */
+    /** @rva 0x163EB30  public static float GetNewTurnGaugeValueBySpeedVariation(float originalGaugeValue, float originalSpeed, float newSpeed) { } */
     static GetNewTurnGaugeValueBySpeedVariation(originalGaugeValue: float, originalSpeed: float, newSpeed: float): float {
         return f32(f32(originalSpeed / newSpeed) * originalGaugeValue);
     }
-    /** @rva 0x160B2D0  public static float GetBaseValueOfSpeed(float speed) { } */
+    /** @rva 0x163EAD0  public static float GetBaseValueOfSpeed(float speed) { } */
     static GetBaseValueOfSpeed(speed: float): float {
         return f32(UnitTurnGauge.RawGaugeResetValue / speed);
     }
-    /** @rva 0x160B340  public static float GetResultGaugeValueOfRateVariation(float gaugeValue, float baseValue, float rate) { } */
+    /** @rva 0x163EB40  public static float GetResultGaugeValueOfRateVariation(float gaugeValue, float baseValue, float rate) { } */
     static GetResultGaugeValueOfRateVariation(gaugeValue: float, baseValue: float, rate: float): float {
         let v = f32(f32(baseValue * rate) + gaugeValue);
         if (v <= 0 && !Number.isNaN(v)) v = 0;
         return v;
     }
-    /** @rva 0x7365E0  public void .ctor() { } */
+    /** @rva 0x7395E0  public void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
-    /** @rva 0x160B610  private static void .cctor() { } */
+    /** @rva 0x163EE10  private static void .cctor() { } */
     static cctor(): void {
         UnitTurnGauge.RawGaugeResetValue = 10000;
     }

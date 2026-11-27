@@ -26,22 +26,22 @@ export abstract class CommandExecuteActBase extends CommandBase {
     set GainSoloRaidBuffPointNoticeList(v: List<GainSoloRaidBuffPointNotice>) { this.set_GainSoloRaidBuffPointNoticeList(v); }
     get TurnActOrderUnitInfo(): TurnActOrderUnitInfo { return this.get_TurnActOrderUnitInfo(); }
     set TurnActOrderUnitInfo(v: TurnActOrderUnitInfo) { this.set_TurnActOrderUnitInfo(v); }
-    /** @rva 0x769820  public int get_ActUnitId() { } */
+    /** @rva 0x76C820  public int get_ActUnitId() { } */
     get_ActUnitId(): int { return this._ActUnitId; /* auto-property */ }
-    /** @rva 0x8A8240  public void set_ActUnitId(int value) { } */
+    /** @rva 0x8AB240  public void set_ActUnitId(int value) { } */
     set_ActUnitId(value: int): void { this._ActUnitId = value; /* auto-property */ }
-    /** @rva 0x73C9E0  public List<AffectedUnitNotice> get_AffectedUnitNoticeList() { } */
+    /** @rva 0x73F9E0  public List<AffectedUnitNotice> get_AffectedUnitNoticeList() { } */
     get_AffectedUnitNoticeList(): List<AffectedUnitNotice> { return this._AffectedUnitNoticeList; /* auto-property */ }
-    /** @rva 0x73CA50  public void set_AffectedUnitNoticeList(List<AffectedUnitNotice> value) { } */
+    /** @rva 0x73FA50  public void set_AffectedUnitNoticeList(List<AffectedUnitNotice> value) { } */
     set_AffectedUnitNoticeList(value: List<AffectedUnitNotice>): void { this._AffectedUnitNoticeList = value; /* auto-property */ }
-    /** @rva 0x73CEA0  public List<GainSoloRaidBuffPointNotice> get_GainSoloRaidBuffPointNoticeList() { } */
+    /** @rva 0x73FEA0  public List<GainSoloRaidBuffPointNotice> get_GainSoloRaidBuffPointNoticeList() { } */
     get_GainSoloRaidBuffPointNoticeList(): List<GainSoloRaidBuffPointNotice> { return this._GainSoloRaidBuffPointNoticeList; /* auto-property */ }
-    /** @rva 0x73CF10  public void set_GainSoloRaidBuffPointNoticeList(List<GainSoloRaidBuffPointNotice> value) { } */
+    /** @rva 0x73FF10  public void set_GainSoloRaidBuffPointNoticeList(List<GainSoloRaidBuffPointNotice> value) { } */
     set_GainSoloRaidBuffPointNoticeList(value: List<GainSoloRaidBuffPointNotice>): void { this._GainSoloRaidBuffPointNoticeList = value; /* auto-property */ }
-    /** @rva 0x73CF00  public TurnActOrderUnitInfo get_TurnActOrderUnitInfo() { } */
+    /** @rva 0x73FF00  public TurnActOrderUnitInfo get_TurnActOrderUnitInfo() { } */
     get_TurnActOrderUnitInfo(): TurnActOrderUnitInfo { return this._TurnActOrderUnitInfo; /* auto-property */ }
-    /** @rva 0x73CF30  public void set_TurnActOrderUnitInfo(TurnActOrderUnitInfo value) { } */
+    /** @rva 0x73FF30  public void set_TurnActOrderUnitInfo(TurnActOrderUnitInfo value) { } */
     set_TurnActOrderUnitInfo(value: TurnActOrderUnitInfo): void { this._TurnActOrderUnitInfo = value; /* auto-property */ }
-    /** @rva 0x7365E0  protected void .ctor() { } */
+    /** @rva 0x7395E0  protected void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
 }

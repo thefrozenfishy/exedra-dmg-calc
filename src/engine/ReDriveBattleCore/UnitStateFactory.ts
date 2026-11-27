@@ -156,23 +156,23 @@ export class UnitStateFactory {
     /** 0x0 private static readonly Dictionary<string, Func<AbilityEffectInfo, UnitStateBase>> createDic */
     static createDic: Dictionary<string, ((a0: AbilityEffectInfo) => UnitStateBase)> = null!;
     static get AbilityEffectTypeList(): List<string> { return UnitStateFactory.get_AbilityEffectTypeList(); }
-    /** @rva 0x160B120  public static List<string> get_AbilityEffectTypeList() { } */
+    /** @rva 0x163E920  public static List<string> get_AbilityEffectTypeList() { } */
     static get_AbilityEffectTypeList(): List<string> {
         runCctor(UnitStateFactory);
         return [...UnitStateFactory.createDic.keys()];
     }
-    /** @rva 0x1607190  public static bool CanCreate(string effectType) { } */
+    /** @rva 0x163A990  public static bool CanCreate(string effectType) { } */
     static CanCreate(effectType: string): boolean {
         runCctor(UnitStateFactory);
         return UnitStateFactory.createDic.has(effectType);
     }
-    /** @rva 0x1607210  public static UnitStateBase Create(AbilityEffectInfo info) { } */
+    /** @rva 0x163AA10  public static UnitStateBase Create(AbilityEffectInfo info) { } */
     static Create(info: AbilityEffectInfo): UnitStateBase {
         runCctor(UnitStateFactory);
         if (!UnitStateFactory.createDic.has(info.EffectType)) return null!;
         return UnitStateFactory.createDic.get(info.EffectType)!(info);
     }
-    /** @rva 0x1607340  private static void .cctor() { } */
+    /** @rva 0x163AB40  private static void .cctor() { } */
     static cctor(): void {
         // lazy (runCctor): the lambdas construct classes that import this module
         const dic = new Map<string, (info: AbilityEffectInfo) => UnitStateBase>();

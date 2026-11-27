@@ -43,29 +43,29 @@ export abstract class ActiveSkillBase {
     set Name(v: string) { this.set_Name(v); }
     get ConsumeSP(): int { return this.get_ConsumeSP(); }
     set ConsumeSP(v: int) { this.set_ConsumeSP(v); }
-    /** @rva 0x73C4F0  public int get_Id() { } */
+    /** @rva 0x73F4F0  public int get_Id() { } */
     get_Id(): int { return this._Id; /* auto-property */ }
-    /** @rva 0x73FD00  public void set_Id(int value) { } */
+    /** @rva 0x742D00  public void set_Id(int value) { } */
     set_Id(value: int): void { this._Id = value; /* auto-property */ }
-    /** @rva 0x809350  public int get_UniqueId() { } */
+    /** @rva 0x80C350  public int get_UniqueId() { } */
     get_UniqueId(): int { return this._UniqueId; /* auto-property */ }
-    /** @rva 0x809540  public void set_UniqueId(int value) { } */
+    /** @rva 0x80C540  public void set_UniqueId(int value) { } */
     set_UniqueId(value: int): void { this._UniqueId = value; /* auto-property */ }
-    /** @rva 0x769820  public int get_Level() { } */
+    /** @rva 0x76C820  public int get_Level() { } */
     get_Level(): int { return this._Level; /* auto-property */ }
-    /** @rva 0x8A8240  public void set_Level(int value) { } */
+    /** @rva 0x8AB240  public void set_Level(int value) { } */
     set_Level(value: int): void { this._Level = value; /* auto-property */ }
-    /** @rva 0x73C9E0  public string get_Name() { } */
+    /** @rva 0x73F9E0  public string get_Name() { } */
     get_Name(): string { return this._Name; /* auto-property */ }
-    /** @rva 0x73CA50  public void set_Name(string value) { } */
+    /** @rva 0x73FA50  public void set_Name(string value) { } */
     set_Name(value: string): void { this._Name = value; /* auto-property */ }
-    /** @rva 0x7697A0  public int get_ConsumeSP() { } */
+    /** @rva 0x76C7A0  public int get_ConsumeSP() { } */
     get_ConsumeSP(): int { return this._ConsumeSP; /* auto-property */ }
-    /** @rva 0x8A8250  public void set_ConsumeSP(int value) { } */
+    /** @rva 0x8AB250  public void set_ConsumeSP(int value) { } */
     set_ConsumeSP(value: int): void { this._ConsumeSP = value; /* auto-property */ }
-    /** @rva 0x7365E0  protected void .ctor() { } */
+    /** @rva 0x7395E0  protected void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
-    /** @rva 0x13B37B0  public void .ctor(int skillMstId) { } */
+    /** @rva 0x13E4410  public void .ctor(int skillMstId) { } */
     ctor$int(skillMstId: int): this {
         const skillMst = BattleMstReaderBase.get_Instance<SkillMstModel, SkillMstRecord, int>(SkillMstModel).GetModelByKey(skillMstId);
         const details = SkillDetailMstReader.GetDetailModelsByMstId(skillMstId);
@@ -79,7 +79,7 @@ export abstract class ActiveSkillBase {
         this.launcher = new AbilityEffectLauncher().ctor$ListAbilityEffectInfo_SkillType_int(infos, skillMst.Type, skillMst.SkillMstId);
         return this;
     }
-    /** @rva 0x13B3960  public void .ctor(int id, int uniqueId, int level, string name, int consumeSp) { } */
+    /** @rva 0x13E45C0  public void .ctor(int id, int uniqueId, int level, string name, int consumeSp) { } */
     ctor$int_int_int_string_int(id: int, uniqueId: int, level: int, name: string, consumeSp: int): this {
         this._Name = name;
         this._Id = id;
@@ -88,7 +88,7 @@ export abstract class ActiveSkillBase {
         this._ConsumeSP = consumeSp;
         return this;
     }
-    /** @rva 0x13B39C0  public void .ctor(SkillMstModel skillMst, List<SkillDetailMstModel> skillDetailMstList) { } */
+    /** @rva 0x13E4620  public void .ctor(SkillMstModel skillMst, List<SkillDetailMstModel> skillDetailMstList) { } */
     ctor$SkillMstModel_ListSkillDetailMstModel(skillMst: SkillMstModel, skillDetailMstList: List<SkillDetailMstModel>): this {
         if (skillMst == null) return this;
         this._Id = skillMst.SkillMstId;
@@ -100,7 +100,7 @@ export abstract class ActiveSkillBase {
         this.launcher = new AbilityEffectLauncher().ctor$ListAbilityEffectInfo_SkillType_int(infos, skillMst.Type, skillMst.SkillMstId);
         return this;
     }
-    /** @rva 0x13B3510  protected AffectedUnitNoticeBundle Triggering(GameDirectorBase gameDirector, int attackTargetId, BattleUnit userUnit, int selectFriendUnitId) { } */
+    /** @rva 0x13E4170  protected AffectedUnitNoticeBundle Triggering(GameDirectorBase gameDirector, int attackTargetId, BattleUnit userUnit, int selectFriendUnitId) { } */
     Triggering(gameDirector: GameDirectorBase, attackTargetId: int, userUnit: BattleUnit, selectFriendUnitId: int): AffectedUnitNoticeBundle {
         const noticeBundle = new AffectedUnitNoticeBundle().ctor();
         if (gameDirector == null) return noticeBundle;
@@ -121,9 +121,9 @@ export abstract class ActiveSkillBase {
     }
     /** @rva -1 slot 4  public abstract AffectedUnitNoticeBundle Execute(GameDirectorBase gameDirector, int attackTargetId, BattleUnit userUnit, int selectFriendUnitId, bool isForcedAct = False); */
     abstract Execute(gameDirector: GameDirectorBase, attackTargetId: int, userUnit: BattleUnit, selectFriendUnitId: int, isForcedAct?: boolean /* = False */): AffectedUnitNoticeBundle;
-    /** @rva 0xD79950  public List<AbilityEffectBase> GetAbilityEffectList() { } */
+    /** @rva 0xD97A10  public List<AbilityEffectBase> GetAbilityEffectList() { } */
     GetAbilityEffectList(): List<AbilityEffectBase> { return this.launcher.AbilityEffectList; }
-    /** @rva 0x13B3230  public ActiveSkillBase.TargetSideType GetSkillTargetSideType() { } */
+    /** @rva 0x13E3E90  public ActiveSkillBase.TargetSideType GetSkillTargetSideType() { } */
     GetSkillTargetSideType(): ActiveSkillBase_TargetSideType {
         const list = this.launcher.AbilityEffectList;
         if (list.every(x => x.TargetSide === 1)) return 1 as ActiveSkillBase_TargetSideType;  // <GetSkillTargetSideType>b__29_0

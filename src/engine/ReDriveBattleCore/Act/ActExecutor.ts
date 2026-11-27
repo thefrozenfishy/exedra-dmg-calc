@@ -45,7 +45,7 @@ import type { GameDirectorBase } from "../GameDirectorBase";
 
 // ---- ReDriveBattleCore.Act.ActExecutor  (TypeDefIndex 1119, public static class) ----
 export class ActExecutor {
-    /** @rva 0x1939E50  public static CommandExecuteActBase Execute(ActBase act, GameDirectorBase gameDirector) { } */
+    /** @rva 0x19656B0  public static CommandExecuteActBase Execute(ActBase act, GameDirectorBase gameDirector) { } */
     static Execute(act: ActBase, gameDirector: GameDirectorBase): CommandExecuteActBase {
         const teamTargetUnitId = gameDirector.GetTeamTargetUnitIdOfUnit$int(act.actUnitId);
         if (act instanceof TurnBeginAct) return ActExecutor.TurnBegin(act, gameDirector);
@@ -68,7 +68,7 @@ export class ActExecutor {
         }
         return null!;
     }
-    /** @rva 0x193B480  public static ActExecutor.ValidateActionType ValidateCanExecuteAct(ActBase act, GameDirectorBase gameDirector) { } */
+    /** @rva 0x1966CE0  public static ActExecutor.ValidateActionType ValidateCanExecuteAct(ActBase act, GameDirectorBase gameDirector) { } */
     static ValidateCanExecuteAct(act: ActBase, gameDirector: GameDirectorBase): ActExecutor_ValidateActionType {
         const unit = gameDirector.GetTargetBattleUnit(act.actUnitId);
         const turnUnitAct = act instanceof TurnUnitActBase ? act : null;
@@ -98,7 +98,7 @@ export class ActExecutor {
         }
         return ActExecutor_ValidateActionType.Success;
     }
-    /** @rva 0x193A8C0  public static CommandExecuteCommonAct TurnBegin(TurnBeginAct act, GameDirectorBase gameDirector) { } */
+    /** @rva 0x1966120  public static CommandExecuteCommonAct TurnBegin(TurnBeginAct act, GameDirectorBase gameDirector) { } */
     static TurnBegin(act: TurnBeginAct, gameDirector: GameDirectorBase): CommandExecuteCommonAct {
         let bundle = new AffectedUnitNoticeBundle().ctor();
         const unit = gameDirector.battleUnitDic.get(act.actUnitId)!;
@@ -133,7 +133,7 @@ export class ActExecutor {
         gameDirector.ActiveUnitList.forEach(u => u.UpdateParameter()); // <TurnBegin>b__3_1
         return CommandExecuteCommonAct.CreateByTurnBegin(act.actUnitId, noticeList, continuousRecoveryInfo, bundle.GainSoloRaidBuffPointNoticeList);
     }
-    /** @rva 0x193AE90  private static CommandExecuteCommonAct TurnEnd(TurnEndAct act, GameDirectorBase gameDirector) { } */
+    /** @rva 0x19666F0  private static CommandExecuteCommonAct TurnEnd(TurnEndAct act, GameDirectorBase gameDirector) { } */
     static TurnEnd(act: TurnEndAct, gameDirector: GameDirectorBase): CommandExecuteCommonAct {
         let bundle = PassiveSkill.Triggering$6(gameDirector, ProcessTiming.TurnEnd, gameDirector.battleUnitDic.get(act.actUnitId)!, null!, null!, null!);
         const unit = gameDirector.battleUnitDic.get(act.actUnitId)!;
@@ -157,13 +157,13 @@ export class ActExecutor {
         gameDirector.ActiveUnitList.forEach(u => u.UpdateParameter()); // <TurnEnd>b__4_1
         return CommandExecuteCommonAct.CreateByTurnEnd(act.actUnitId, noticeList);
     }
-    /** @rva 0x193A800  public static void ResetTurnGaugeBeforeTurnUnitActExecute(TurnUnitAct act, GameDirectorBase gameDirector) { } */
+    /** @rva 0x1966060  public static void ResetTurnGaugeBeforeTurnUnitActExecute(TurnUnitAct act, GameDirectorBase gameDirector) { } */
     static ResetTurnGaugeBeforeTurnUnitActExecute(act: TurnUnitAct, gameDirector: GameDirectorBase): void {
         if (act instanceof ComboTurnUnitAct && act.ActionStep >= 2) return; // only the first combo step resets the gauge
         const unit = gameDirector.battleUnitDic.get(act.actUnitId)!;
         unit.TurnGauge.Reset(unit);
     }
-    /** @rva 0x1938CB0  private static CommandExecuteActBase ExecuteSkill(GameDirectorBase gameDirector, int unitId, int skillMstId, int targetUnitId, int selectFriendUnitId = 0, bool isForcedAct = False) { } */
+    /** @rva 0x1964510  private static CommandExecuteActBase ExecuteSkill(GameDirectorBase gameDirector, int unitId, int skillMstId, int targetUnitId, int selectFriendUnitId = 0, bool isForcedAct = False) { } */
     static ExecuteSkill(gameDirector: GameDirectorBase, unitId: int, skillMstId: int, targetUnitId: int, selectFriendUnitId: int = 0, isForcedAct: boolean = false): CommandExecuteActBase {
         const spReferee = gameDirector.spReferee;
         const unit = gameDirector.battleUnitDic.get(unitId)!;
@@ -215,7 +215,7 @@ export class ActExecutor {
         gameDirector.unitBrain.AddAppliedEffectTypes(skill.GetAbilityEffectList().map(e => e.EffectType), unit.Team); // b__6_1 (3.21.0: no longer inlined)
         return command;
     }
-    /** @rva 0x19387D0  private static CommandExecuteActBase ExecuteHpGaugeRevive(GameDirectorBase gameDirector, int unitId) { } */
+    /** @rva 0x1964030  private static CommandExecuteActBase ExecuteHpGaugeRevive(GameDirectorBase gameDirector, int unitId) { } */
     static ExecuteHpGaugeRevive(gameDirector: GameDirectorBase, unitId: int): CommandExecuteActBase {
         const unit = gameDirector.GetTargetBattleUnit(unitId);
         const noticeList: AffectedUnitNotice[] = [];
@@ -238,7 +238,7 @@ export class ActExecutor {
         command.AffectedUnitNoticeList = noticeList;
         return command;
     }
-    /** @rva 0x1938AB0  private static CommandExecuteActBase ExecuteModeChange(GameDirectorBase gameDirector, int unitId) { } */
+    /** @rva 0x1964310  private static CommandExecuteActBase ExecuteModeChange(GameDirectorBase gameDirector, int unitId) { } */
     static ExecuteModeChange(gameDirector: GameDirectorBase, unitId: int): CommandExecuteActBase {
         if (!(gameDirector instanceof SoloGameDirectorBase)) return null!;
         gameDirector.modeChangeReferee.ExecuteModeChange();
@@ -256,7 +256,7 @@ export class ActExecutor {
         command.ChangedQuestEnemyAppearanceMstId = info.QuestEnemyAppearanceMstId;
         return command;
     }
-    /** @rva 0x19383E0  private static ContinuousRecoveryInfo ContinuousRecoveryProcess(BattleUnit currentTurnUnit) { } */
+    /** @rva 0x1963C40  private static ContinuousRecoveryInfo ContinuousRecoveryProcess(BattleUnit currentTurnUnit) { } */
     static ContinuousRecoveryProcess(currentTurnUnit: BattleUnit): ContinuousRecoveryInfo {
         const states = currentTurnUnit.Condition.GetUnitStateList(ContinuousRecoveryUnitState)
             .filter(s => s.IsActive$BattleUnit(currentTurnUnit)); // <ContinuousRecoveryProcess>b__0 0x14aa020

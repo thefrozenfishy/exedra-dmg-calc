@@ -9,18 +9,18 @@ import { RegainUnitStateBase } from "./RegainUnitStateBase";
 
 // ---- ReDriveBattleCore.UnitState.RegainAtkUnitState  (TypeDefIndex 653, public class) ----
 export class RegainAtkUnitState extends RegainUnitStateBase {
-    /** @rva 0x1715C30  public void .ctor() { } */
+    /** @rva 0x173DB20  public void .ctor() { } */
     ctor(): this {
         this._IconName = "";
         return this;
     }
-    /** @rva 0x15F4E10  public void .ctor(AbilityEffectInfo info) { } */
+    /** @rva 0x1628610  public void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
         super.ctor$AbilityEffectInfo(info);
         this.recoveryRatio = info._EffectValue1;
         this.recoveryFixed = info._EffectValue2;
         return this;
     }
-    /** @rva 0x171F220 slot 26  public override Decimal GetParameterValue(BattleUnit sourceUnit) { } */
+    /** @rva 0x1747070 slot 26  public override Decimal GetParameterValue(BattleUnit sourceUnit) { } */
     GetParameterValue(sourceUnit: BattleUnit): Decimal { return sourceUnit.GetProcessedAtkDecimal(); }
 }

@@ -11,22 +11,22 @@ import { f32 } from "../../runtime";
 // ---- ReDriveBattleCore.UnitState.UpAbnormalHitRateRatioUnitState  (TypeDefIndex 744, public class) ----
 export class UpAbnormalHitRateRatioUnitState extends UpAbnormalHitRateUnitStateBase {
     get UpRatio(): float { return this.get_UpRatio(); }
-    /** @rva 0x15F8340  public float get_UpRatio() { } */
+    /** @rva 0x162BB40  public float get_UpRatio() { } */
     get_UpRatio(): float {
         return f32(this._UpdateableEffectValue / 10);
     }
-    /** @rva 0x1715C30  protected void .ctor() { } */
+    /** @rva 0x173DB20  protected void .ctor() { } */
     ctor(): this {
         this._IconName = "";
         return this;
     }
-    /** @rva 0x15F8010  public void .ctor(AbilityEffectInfo info) { } */
+    /** @rva 0x162B810  public void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
         super.ctor$AbilityEffectInfo(info);
         this._UpdateableEffectValue = f32(info._EffectValue1);
         return this;
     }
-    /** @rva 0x15F8340 slot 30  public override float GetAbnormalHitRateVariationValue(BattleUnit unit, float processingValue) { } */
+    /** @rva 0x162BB40 slot 30  public override float GetAbnormalHitRateVariationValue(BattleUnit unit, float processingValue) { } */
     GetAbnormalHitRateVariationValue(unit: BattleUnit, processingValue: float): float {
         return f32(this._UpdateableEffectValue / 10);
     }

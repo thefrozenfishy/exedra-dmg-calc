@@ -104,103 +104,103 @@ export class CommandInitialize extends CommandBase {
     set ModeChangeCurrentStep(v: int) { this.set_ModeChangeCurrentStep(v); }
     get GameSituationData(): GameSituationData { return this.get_GameSituationData(); }
     set GameSituationData(v: GameSituationData) { this.set_GameSituationData(v); }
-    /** @rva 0xF065C0 slot 4  public override CommandType GetCommandType() { } */
+    /** @rva 0xF24EC0 slot 4  public override CommandType GetCommandType() { } */
     GetCommandType(): CommandType { return 13 as CommandType; /* asm: mov eax, 0xd; ret */ }
-    /** @rva 0x739E90  public BattleUnitInfo[] get_UnitInfoArray() { } */
+    /** @rva 0x73CE90  public BattleUnitInfo[] get_UnitInfoArray() { } */
     get_UnitInfoArray(): BattleUnitInfo[] { return this._UnitInfoArray; /* auto-property */ }
-    /** @rva 0x73CAB0  public void set_UnitInfoArray(BattleUnitInfo[] value) { } */
+    /** @rva 0x73FAB0  public void set_UnitInfoArray(BattleUnitInfo[] value) { } */
     set_UnitInfoArray(value: BattleUnitInfo[]): void { this._UnitInfoArray = value; /* auto-property */ }
-    /** @rva 0x764D70  public int get_AllyAttackTargetId() { } */
+    /** @rva 0x767D70  public int get_AllyAttackTargetId() { } */
     get_AllyAttackTargetId(): int { return this._AllyAttackTargetId; /* auto-property */ }
-    /** @rva 0x8A8230  public void set_AllyAttackTargetId(int value) { } */
+    /** @rva 0x8AB230  public void set_AllyAttackTargetId(int value) { } */
     set_AllyAttackTargetId(value: int): void { this._AllyAttackTargetId = value; /* auto-property */ }
-    /** @rva 0x760830  public int get_AllyFriendTargetId() { } */
+    /** @rva 0x763830  public int get_AllyFriendTargetId() { } */
     get_AllyFriendTargetId(): int { return this._AllyFriendTargetId; /* auto-property */ }
-    /** @rva 0x760840  public void set_AllyFriendTargetId(int value) { } */
+    /** @rva 0x763840  public void set_AllyFriendTargetId(int value) { } */
     set_AllyFriendTargetId(value: int): void { this._AllyFriendTargetId = value; /* auto-property */ }
-    /** @rva 0x7697A0  public int get_EnemyAttackTargetId() { } */
+    /** @rva 0x76C7A0  public int get_EnemyAttackTargetId() { } */
     get_EnemyAttackTargetId(): int { return this._EnemyAttackTargetId; /* auto-property */ }
-    /** @rva 0x8A8250  public void set_EnemyAttackTargetId(int value) { } */
+    /** @rva 0x8AB250  public void set_EnemyAttackTargetId(int value) { } */
     set_EnemyAttackTargetId(value: int): void { this._EnemyAttackTargetId = value; /* auto-property */ }
-    /** @rva 0x864530  public int get_EnemyFriendTargetId() { } */
+    /** @rva 0x867530  public int get_EnemyFriendTargetId() { } */
     get_EnemyFriendTargetId(): int { return this._EnemyFriendTargetId; /* auto-property */ }
-    /** @rva 0x8A8260  public void set_EnemyFriendTargetId(int value) { } */
+    /** @rva 0x8AB260  public void set_EnemyFriendTargetId(int value) { } */
     set_EnemyFriendTargetId(value: int): void { this._EnemyFriendTargetId = value; /* auto-property */ }
-    /** @rva 0x764D60  public int get_AllySp() { } */
+    /** @rva 0x767D60  public int get_AllySp() { } */
     get_AllySp(): int { return this._AllySp; /* auto-property */ }
-    /** @rva 0x87A5A0  public void set_AllySp(int value) { } */
+    /** @rva 0x87D5A0  public void set_AllySp(int value) { } */
     set_AllySp(value: int): void { this._AllySp = value; /* auto-property */ }
-    /** @rva 0x764D50  public int get_EnemySp() { } */
+    /** @rva 0x767D50  public int get_EnemySp() { } */
     get_EnemySp(): int { return this._EnemySp; /* auto-property */ }
-    /** @rva 0x8A82A0  public void set_EnemySp(int value) { } */
+    /** @rva 0x8AB2A0  public void set_EnemySp(int value) { } */
     set_EnemySp(value: int): void { this._EnemySp = value; /* auto-property */ }
-    /** @rva 0x764DA0  public int get_MaxWave() { } */
+    /** @rva 0x767DA0  public int get_MaxWave() { } */
     get_MaxWave(): int { return this._MaxWave; /* auto-property */ }
-    /** @rva 0x8A82B0  public void set_MaxWave(int value) { } */
+    /** @rva 0x8AB2B0  public void set_MaxWave(int value) { } */
     set_MaxWave(value: int): void { this._MaxWave = value; /* auto-property */ }
-    /** @rva 0x8F9EF0  public int get_CurrentWave() { } */
+    /** @rva 0x8FCEF0  public int get_CurrentWave() { } */
     get_CurrentWave(): int { return this._CurrentWave; /* auto-property */ }
-    /** @rva 0x907840  public void set_CurrentWave(int value) { } */
+    /** @rva 0x90A840  public void set_CurrentWave(int value) { } */
     set_CurrentWave(value: int): void { this._CurrentWave = value; /* auto-property */ }
-    /** @rva 0x907A80  public bool get_IsForcedAutomatic() { } */
+    /** @rva 0x90AAA0  public bool get_IsForcedAutomatic() { } */
     get_IsForcedAutomatic(): boolean { return this._IsForcedAutomatic; /* auto-property */ }
-    /** @rva 0x907AC0  public void set_IsForcedAutomatic(bool value) { } */
+    /** @rva 0x90AAE0  public void set_IsForcedAutomatic(bool value) { } */
     set_IsForcedAutomatic(value: boolean): void { this._IsForcedAutomatic = value; /* auto-property */ }
-    /** @rva 0xA09330  public bool get_IsSeasonBuffActive() { } */
+    /** @rva 0xA09220  public bool get_IsSeasonBuffActive() { } */
     get_IsSeasonBuffActive(): boolean { return this._IsSeasonBuffActive; /* auto-property */ }
-    /** @rva 0xA09340  public void set_IsSeasonBuffActive(bool value) { } */
+    /** @rva 0xA09230  public void set_IsSeasonBuffActive(bool value) { } */
     set_IsSeasonBuffActive(value: boolean): void { this._IsSeasonBuffActive = value; /* auto-property */ }
-    /** @rva 0x907AA0  public int get_CurrentSeasonBuffPoint() { } */
+    /** @rva 0x90AAC0  public int get_CurrentSeasonBuffPoint() { } */
     get_CurrentSeasonBuffPoint(): int { return this._CurrentSeasonBuffPoint; /* auto-property */ }
-    /** @rva 0x907AE0  public void set_CurrentSeasonBuffPoint(int value) { } */
+    /** @rva 0x90AB00  public void set_CurrentSeasonBuffPoint(int value) { } */
     set_CurrentSeasonBuffPoint(value: int): void { this._CurrentSeasonBuffPoint = value; /* auto-property */ }
-    /** @rva 0x85A810  public int get_MaxSeasonBuffPoint() { } */
+    /** @rva 0x85D810  public int get_MaxSeasonBuffPoint() { } */
     get_MaxSeasonBuffPoint(): int { return this._MaxSeasonBuffPoint; /* auto-property */ }
-    /** @rva 0x907C30  public void set_MaxSeasonBuffPoint(int value) { } */
+    /** @rva 0x90AC50  public void set_MaxSeasonBuffPoint(int value) { } */
     set_MaxSeasonBuffPoint(value: int): void { this._MaxSeasonBuffPoint = value; /* auto-property */ }
-    /** @rva 0x881CD0  public int get_ActiveMaxSeasonBuffPoint() { } */
+    /** @rva 0x884CD0  public int get_ActiveMaxSeasonBuffPoint() { } */
     get_ActiveMaxSeasonBuffPoint(): int { return this._ActiveMaxSeasonBuffPoint; /* auto-property */ }
-    /** @rva 0x907AF0  public void set_ActiveMaxSeasonBuffPoint(int value) { } */
+    /** @rva 0x90AB10  public void set_ActiveMaxSeasonBuffPoint(int value) { } */
     set_ActiveMaxSeasonBuffPoint(value: int): void { this._ActiveMaxSeasonBuffPoint = value; /* auto-property */ }
-    /** @rva 0xEF2310  public float get_ActiveCurrentSeasonBuffTurnGaugeValue() { } */
+    /** @rva 0xF144F0  public float get_ActiveCurrentSeasonBuffTurnGaugeValue() { } */
     get_ActiveCurrentSeasonBuffTurnGaugeValue(): float { return this._ActiveCurrentSeasonBuffTurnGaugeValue; /* auto-property */ }
-    /** @rva 0x1832080  public void set_ActiveCurrentSeasonBuffTurnGaugeValue(float value) { } */
+    /** @rva 0x1856C10  public void set_ActiveCurrentSeasonBuffTurnGaugeValue(float value) { } */
     set_ActiveCurrentSeasonBuffTurnGaugeValue(value: float): void { this._ActiveCurrentSeasonBuffTurnGaugeValue = value; /* auto-property */ }
-    /** @rva 0x8A8210  public int get_ActiveMaxSeasonBuffTurnGaugeValue() { } */
+    /** @rva 0x8AB210  public int get_ActiveMaxSeasonBuffTurnGaugeValue() { } */
     get_ActiveMaxSeasonBuffTurnGaugeValue(): int { return this._ActiveMaxSeasonBuffTurnGaugeValue; /* auto-property */ }
-    /** @rva 0x8A82E0  public void set_ActiveMaxSeasonBuffTurnGaugeValue(int value) { } */
+    /** @rva 0x8AB2E0  public void set_ActiveMaxSeasonBuffTurnGaugeValue(int value) { } */
     set_ActiveMaxSeasonBuffTurnGaugeValue(value: int): void { this._ActiveMaxSeasonBuffTurnGaugeValue = value; /* auto-property */ }
-    /** @rva 0x73DC40  public LinkHpType get_LinkHpType() { } */
+    /** @rva 0x740C40  public LinkHpType get_LinkHpType() { } */
     get_LinkHpType(): LinkHpType { return this._LinkHpType; /* auto-property */ }
-    /** @rva 0x73DDF0  public void set_LinkHpType(LinkHpType value) { } */
+    /** @rva 0x740DF0  public void set_LinkHpType(LinkHpType value) { } */
     set_LinkHpType(value: LinkHpType): void { this._LinkHpType = value; /* auto-property */ }
-    /** @rva 0x73DA10  public string get_LinkHpName() { } */
+    /** @rva 0x740A10  public string get_LinkHpName() { } */
     get_LinkHpName(): string { return this._LinkHpName; /* auto-property */ }
-    /** @rva 0x73DA50  public void set_LinkHpName(string value) { } */
+    /** @rva 0x740A50  public void set_LinkHpName(string value) { } */
     set_LinkHpName(value: string): void { this._LinkHpName = value; /* auto-property */ }
-    /** @rva 0x907790  public int get_CurrentLinkHp() { } */
+    /** @rva 0x90A790  public int get_CurrentLinkHp() { } */
     get_CurrentLinkHp(): int { return this._CurrentLinkHp; /* auto-property */ }
-    /** @rva 0x9077F0  public void set_CurrentLinkHp(int value) { } */
+    /** @rva 0x90A7F0  public void set_CurrentLinkHp(int value) { } */
     set_CurrentLinkHp(value: int): void { this._CurrentLinkHp = value; /* auto-property */ }
-    /** @rva 0x85D0F0  public int get_MaxLinkHp() { } */
+    /** @rva 0x8600F0  public int get_MaxLinkHp() { } */
     get_MaxLinkHp(): int { return this._MaxLinkHp; /* auto-property */ }
-    /** @rva 0x907800  public void set_MaxLinkHp(int value) { } */
+    /** @rva 0x90A800  public void set_MaxLinkHp(int value) { } */
     set_MaxLinkHp(value: int): void { this._MaxLinkHp = value; /* auto-property */ }
-    /** @rva 0x73DA20  public List<ModeChangeReferee.ModeChangeInfo> get_ModeChangeInfoList() { } */
+    /** @rva 0x740A20  public List<ModeChangeReferee.ModeChangeInfo> get_ModeChangeInfoList() { } */
     get_ModeChangeInfoList(): List<ModeChangeReferee_ModeChangeInfo> { return this._ModeChangeInfoList; /* auto-property */ }
-    /** @rva 0x73DA60  public void set_ModeChangeInfoList(List<ModeChangeReferee.ModeChangeInfo> value) { } */
+    /** @rva 0x740A60  public void set_ModeChangeInfoList(List<ModeChangeReferee.ModeChangeInfo> value) { } */
     set_ModeChangeInfoList(value: List<ModeChangeReferee_ModeChangeInfo>): void { this._ModeChangeInfoList = value; /* auto-property */ }
-    /** @rva 0x908570  public int get_ModeChangeCurrentStep() { } */
+    /** @rva 0x90B610  public int get_ModeChangeCurrentStep() { } */
     get_ModeChangeCurrentStep(): int { return this._ModeChangeCurrentStep; /* auto-property */ }
-    /** @rva 0x9085C0  public void set_ModeChangeCurrentStep(int value) { } */
+    /** @rva 0x90B660  public void set_ModeChangeCurrentStep(int value) { } */
     set_ModeChangeCurrentStep(value: int): void { this._ModeChangeCurrentStep = value; /* auto-property */ }
-    /** @rva 0x73DD80  public GameSituationData get_GameSituationData() { } */
+    /** @rva 0x740D80  public GameSituationData get_GameSituationData() { } */
     get_GameSituationData(): GameSituationData { return this._GameSituationData; /* auto-property */ }
-    /** @rva 0x73DF70  public void set_GameSituationData(GameSituationData value) { } */
+    /** @rva 0x740F70  public void set_GameSituationData(GameSituationData value) { } */
     set_GameSituationData(value: GameSituationData): void { this._GameSituationData = value; /* auto-property */ }
-    /** @rva 0x7365E0  public void .ctor() { } */
+    /** @rva 0x7395E0  public void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
-    /** @rva 0x1831FF0  public void .ctor(BattleUnitInfo[] battleUnitInfoArray, int allyAttackTargetId, int allyFriendTargetId, int enemyAttackTargetId, int enemyFriendTargetId, int allySp, int enemySp, bool isForcedAutomatic, GameSituationData gameSituationData) { } */
+    /** @rva 0x1856B80  public void .ctor(BattleUnitInfo[] battleUnitInfoArray, int allyAttackTargetId, int allyFriendTargetId, int enemyAttackTargetId, int enemyFriendTargetId, int allySp, int enemySp, bool isForcedAutomatic, GameSituationData gameSituationData) { } */
     ctor$BattleUnitInfo_int_int_int_int_int_int_bool_GameSituationData(battleUnitInfoArray: BattleUnitInfo[], allyAttackTargetId: int, allyFriendTargetId: int, enemyAttackTargetId: int, enemyFriendTargetId: int, allySp: int, enemySp: int, isForcedAutomatic: boolean, gameSituationData: GameSituationData): this {
         this._UnitInfoArray = battleUnitInfoArray;
         this._EnemyAttackTargetId = enemyAttackTargetId;
@@ -213,12 +213,12 @@ export class CommandInitialize extends CommandBase {
         this._GameSituationData = gameSituationData;
         return this;
     }
-    /** @rva 0x1831FE0  public void SetWave(int maxWave, int currentWave) { } */
+    /** @rva 0x1856B70  public void SetWave(int maxWave, int currentWave) { } */
     SetWave(maxWave: int, currentWave: int): void {
         this._MaxWave = maxWave;
         this._CurrentWave = currentWave;
     }
-    /** @rva 0x1831FB0  public void SetSoloRaidBuffInfo(bool isSeasonBuffActive, int currentSeasonBuffPoint, int maxSeasonBuffPoint, int activeMaxSeasonBuffPoint, float activeCurrentSeasonBuffTurnGaugeValue, int activeMaxSeasonBuffTurnGaugeValue) { } */
+    /** @rva 0x1856B40  public void SetSoloRaidBuffInfo(bool isSeasonBuffActive, int currentSeasonBuffPoint, int maxSeasonBuffPoint, int activeMaxSeasonBuffPoint, float activeCurrentSeasonBuffTurnGaugeValue, int activeMaxSeasonBuffTurnGaugeValue) { } */
     SetSoloRaidBuffInfo(isSeasonBuffActive: boolean, currentSeasonBuffPoint: int, maxSeasonBuffPoint: int, activeMaxSeasonBuffPoint: int, activeCurrentSeasonBuffTurnGaugeValue: float, activeMaxSeasonBuffTurnGaugeValue: int): void {
         this._ActiveMaxSeasonBuffPoint = activeMaxSeasonBuffPoint;
         this._ActiveMaxSeasonBuffTurnGaugeValue = activeMaxSeasonBuffTurnGaugeValue;
@@ -227,14 +227,14 @@ export class CommandInitialize extends CommandBase {
         this._CurrentSeasonBuffPoint = currentSeasonBuffPoint;
         this._MaxSeasonBuffPoint = maxSeasonBuffPoint;
     }
-    /** @rva 0x1831F40  public void SetLinkHp(LinkHpType linkHpType, string linkHpName, int currentLinkHp, int maxLinkHp) { } */
+    /** @rva 0x1856AD0  public void SetLinkHp(LinkHpType linkHpType, string linkHpName, int currentLinkHp, int maxLinkHp) { } */
     SetLinkHp(linkHpType: LinkHpType, linkHpName: string, currentLinkHp: int, maxLinkHp: int): void {
         this._LinkHpType = linkHpType;
         this._LinkHpName = linkHpName;
         this._MaxLinkHp = maxLinkHp;
         this._CurrentLinkHp = currentLinkHp;
     }
-    /** @rva 0x1831F80  public void SetModeChangeData(List<ModeChangeReferee.ModeChangeInfo> modeChangeInfoList, int modeChangeCurrentStep) { } */
+    /** @rva 0x1856B10  public void SetModeChangeData(List<ModeChangeReferee.ModeChangeInfo> modeChangeInfoList, int modeChangeCurrentStep) { } */
     SetModeChangeData(modeChangeInfoList: List<ModeChangeReferee_ModeChangeInfo>, modeChangeCurrentStep: int): void {
         this._ModeChangeInfoList = modeChangeInfoList;
         this._ModeChangeCurrentStep = modeChangeCurrentStep;

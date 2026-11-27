@@ -10,19 +10,19 @@ import { AbilityEffectBase_TargetSideType } from "./AbilityEffectBase";
 
 // ---- ReDriveBattleCore.AbilityEffect.RemoveAllAbnormalAbilityEffect  (TypeDefIndex 1205, public class) ----
 export class RemoveAllAbnormalAbilityEffect extends RemoveStateAbilityEffectBase {
-    /** @rva 0x193E3E0  protected void .ctor() { } */
+    /** @rva 0x1969C40  protected void .ctor() { } */
     ctor(): this {
         super.ctor();
         return this;
     }
-    /** @rva 0x1949CA0  public void .ctor(AbilityEffectInfo info) { } */
+    /** @rva 0x1975500  public void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
         super.ctor$AbilityEffectInfo(info);
         this.maxRemoveCount = info._EffectValue1;
         this._TargetSide = 0 as AbilityEffectBase_TargetSideType;
         return this;
     }
-    /** @rva 0x1949C00 slot 8  public override bool IsRemovable(UnitStateBase state) { } */
+    /** @rva 0x1975460 slot 8  public override bool IsRemovable(UnitStateBase state) { } */
     IsRemovable(state: UnitStateBase): boolean {
         if (state._EffectOrigin !== 1) return false;
         return state instanceof AbnormalUnitStateBase;

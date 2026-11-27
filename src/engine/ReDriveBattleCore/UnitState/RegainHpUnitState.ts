@@ -9,18 +9,18 @@ import { RegainUnitStateBase } from "./RegainUnitStateBase";
 
 // ---- ReDriveBattleCore.UnitState.RegainHpUnitState  (TypeDefIndex 652, public class) ----
 export class RegainHpUnitState extends RegainUnitStateBase {
-    /** @rva 0x1715C30  public void .ctor() { } */
+    /** @rva 0x173DB20  public void .ctor() { } */
     ctor(): this {
         this._IconName = "";
         return this;
     }
-    /** @rva 0x15F4E10  public void .ctor(AbilityEffectInfo info) { } */
+    /** @rva 0x1628610  public void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
         super.ctor$AbilityEffectInfo(info);
         this.recoveryRatio = info._EffectValue1;
         this.recoveryFixed = info._EffectValue2;
         return this;
     }
-    /** @rva 0x171F2A0 slot 26  public override Decimal GetParameterValue(BattleUnit sourceUnit) { } */
+    /** @rva 0x17470F0 slot 26  public override Decimal GetParameterValue(BattleUnit sourceUnit) { } */
     GetParameterValue(sourceUnit: BattleUnit): Decimal { return Decimal.fromInt(sourceUnit._MaxHP); }
 }

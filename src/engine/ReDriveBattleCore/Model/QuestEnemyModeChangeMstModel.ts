@@ -13,20 +13,20 @@ export class QuestEnemyModeChangeMstModel extends MstModelBase<QuestEnemyModeCha
     get Step(): int { return this.get_Step(); }
     get Type(): int { return this.get_Type(); }
     get ThresholdValue(): int { return this.get_ThresholdValue(); }
-    /** @rva 0x171D8A0  public void .ctor(QuestEnemyModeChangeMstRecord record) { } */
+    /** @rva 0x17456F0  public void .ctor(QuestEnemyModeChangeMstRecord record) { } */
     ctor$QuestEnemyModeChangeMstRecord(record: QuestEnemyModeChangeMstRecord): this {
         super.ctor$TRecord(record);
         return this;
     }
-    /** @rva 0x908260  public int get_QuestEnemyModeChangeMstId() { } */
+    /** @rva 0x90B1E0  public int get_QuestEnemyModeChangeMstId() { } */
     get_QuestEnemyModeChangeMstId(): int { return this.record.questEnemyModeChangeMstId; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x901785; mov eax, dword ptr [rax + 0x10]; add rsp, 0x28; ret */ }
-    /** @rva 0x908280  public int get_QuestEnemyAppearanceMstId() { } */
+    /** @rva 0x90B200  public int get_QuestEnemyAppearanceMstId() { } */
     get_QuestEnemyAppearanceMstId(): int { return this.record.questEnemyAppearanceMstId; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x9017a5; mov eax, dword ptr [rax + 0x14]; add rsp, 0x28; ret */ }
-    /** @rva 0x9082A0  public int get_Step() { } */
+    /** @rva 0x90B220  public int get_Step() { } */
     get_Step(): int { return this.record.step; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x902c85; mov eax, dword ptr [rax + 0x18]; add rsp, 0x28; ret */ }
-    /** @rva 0x908240  public int get_Type() { } */
+    /** @rva 0x90B1C0  public int get_Type() { } */
     get_Type(): int { return this.record.type; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x902c65; mov eax, dword ptr [rax + 0x1c]; add rsp, 0x28; ret */ }
-    /** @rva 0xA09270  public int get_ThresholdValue() { } */
+    /** @rva 0xA09160  public int get_ThresholdValue() { } */
     get_ThresholdValue(): int { return this.record.thresholdValue; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0xa0d855; mov eax, dword ptr [rax + 0x20]; add rsp, 0x28; ret */ }
     /** @rva 0x171D790  public static string GetModeChangeAssetName(int questEnemyAppearanceMstId, int step) { } */
     static GetModeChangeAssetName(questEnemyAppearanceMstId: int, step: int): string {

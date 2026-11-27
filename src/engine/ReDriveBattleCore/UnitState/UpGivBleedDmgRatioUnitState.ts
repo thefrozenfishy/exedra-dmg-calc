@@ -10,17 +10,17 @@ import { f32 } from "../../runtime";
 
 // ---- ReDriveBattleCore.UnitState.UpGivBleedDmgRatioUnitState  (TypeDefIndex 792, public class) ----
 export class UpGivBleedDmgRatioUnitState extends UpGiveSlipDamageRatioUnitStateBase {
-    /** @rva 0x1715C30  public void .ctor() { } */
+    /** @rva 0x173DB20  public void .ctor() { } */
     ctor(): this {
         this._IconName = "";
         return this;
     }
-    /** @rva 0x15F8010  public void .ctor(AbilityEffectInfo info) { } */
+    /** @rva 0x162B810  public void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
         super.ctor$AbilityEffectInfo(info);
         this._UpdateableEffectValue = f32(info._EffectValue1);
         return this;
     }
-    /** @rva 0x172DB90 slot 31  public override bool IsTarget(UnitStateBase state) { } */
+    /** @rva 0x17559E0 slot 31  public override bool IsTarget(UnitStateBase state) { } */
     IsTarget(state: UnitStateBase): boolean { return state instanceof BleedUnitStateBase; }
 }

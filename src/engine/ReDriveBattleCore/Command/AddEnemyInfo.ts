@@ -18,19 +18,19 @@ export class AddEnemyInfo {
     set QuestEnemyAppearanceMstId(v: int) { this.set_QuestEnemyAppearanceMstId(v); }
     get PositionId(): int { return this.get_PositionId(); }
     set PositionId(v: int) { this.set_PositionId(v); }
-    /** @rva 0x73C4F0  public int get_BattleUnitId() { } */
+    /** @rva 0x73F4F0  public int get_BattleUnitId() { } */
     get_BattleUnitId(): int { return this._BattleUnitId; /* auto-property */ }
-    /** @rva 0x73FD00  public void set_BattleUnitId(int value) { } */
+    /** @rva 0x742D00  public void set_BattleUnitId(int value) { } */
     set_BattleUnitId(value: int): void { this._BattleUnitId = value; /* auto-property */ }
-    /** @rva 0x809350  public int get_QuestEnemyAppearanceMstId() { } */
+    /** @rva 0x80C350  public int get_QuestEnemyAppearanceMstId() { } */
     get_QuestEnemyAppearanceMstId(): int { return this._QuestEnemyAppearanceMstId; /* auto-property */ }
-    /** @rva 0x809540  public void set_QuestEnemyAppearanceMstId(int value) { } */
+    /** @rva 0x80C540  public void set_QuestEnemyAppearanceMstId(int value) { } */
     set_QuestEnemyAppearanceMstId(value: int): void { this._QuestEnemyAppearanceMstId = value; /* auto-property */ }
-    /** @rva 0x769820  public int get_PositionId() { } */
+    /** @rva 0x76C820  public int get_PositionId() { } */
     get_PositionId(): int { return this._PositionId; /* auto-property */ }
-    /** @rva 0x8A8240  public void set_PositionId(int value) { } */
+    /** @rva 0x8AB240  public void set_PositionId(int value) { } */
     set_PositionId(value: int): void { this._PositionId = value; /* auto-property */ }
-    /** @rva 0x991610  public void .ctor(int id, int mstId, int pos) { } */
+    /** @rva 0x9C6F00  public void .ctor(int id, int mstId, int pos) { } */
     ctor$int_int_int(id: int, mstId: int, pos: int): this {
         this._BattleUnitId = id;
         this._QuestEnemyAppearanceMstId = mstId;

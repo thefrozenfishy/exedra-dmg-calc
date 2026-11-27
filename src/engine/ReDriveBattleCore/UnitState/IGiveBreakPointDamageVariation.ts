@@ -12,7 +12,7 @@ export interface IGiveBreakPointDamageVariation extends IRequiredStateForDecide 
     readonly Addition: AdditionType;
     /** @rva -1 slot 1  public abstract Decimal GetDamageVariationValue(Decimal damageValue, Decimal processingValue); */
     GetDamageVariationValue(damageValue: Decimal, processingValue: Decimal): Decimal;
-    /** @rva 0x1719EB0 slot 2  public virtual Decimal GetDamageVariationValue(Decimal damageValue, Decimal processingValue, IEnumerable<UnitStateBase> defenceUnitStates, SkillType skillType) { } */
+    /** @rva 0x1741DA0 slot 2  public virtual Decimal GetDamageVariationValue(Decimal damageValue, Decimal processingValue, IEnumerable<UnitStateBase> defenceUnitStates, SkillType skillType) { } */
     GetDamageVariationValue$4?(damageValue: Decimal, processingValue: Decimal, defenceUnitStates: IEnumerable<UnitStateBase>, skillType: SkillType): Decimal;
 }
 

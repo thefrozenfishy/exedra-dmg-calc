@@ -117,115 +117,115 @@ export class BattleUnitSituationData {
     set zoneEffectId(v: int) { this.set_zoneEffectId(v); }
     get uniqueLvStateIconDataArray(): BattleUnitSituationData_UniqueLvStateIconData[] { return this.get_uniqueLvStateIconDataArray(); }
     set uniqueLvStateIconDataArray(v: BattleUnitSituationData_UniqueLvStateIconData[]) { this.set_uniqueLvStateIconDataArray(v); }
-    /** @rva 0x73C4F0  public int get_battleUnitDataId() { } */
+    /** @rva 0x73F4F0  public int get_battleUnitDataId() { } */
     get_battleUnitDataId(): int { return this._battleUnitDataId; /* auto-property */ }
-    /** @rva 0x73FD00  public void set_battleUnitDataId(int value) { } */
+    /** @rva 0x742D00  public void set_battleUnitDataId(int value) { } */
     set_battleUnitDataId(value: int): void { this._battleUnitDataId = value; /* auto-property */ }
-    /** @rva 0x809350  public int get_maxHp() { } */
+    /** @rva 0x80C350  public int get_maxHp() { } */
     get_maxHp(): int { return this._maxHp; /* auto-property */ }
-    /** @rva 0x809540  public void set_maxHp(int value) { } */
+    /** @rva 0x80C540  public void set_maxHp(int value) { } */
     set_maxHp(value: int): void { this._maxHp = value; /* auto-property */ }
-    /** @rva 0x769820  public int get_hp() { } */
+    /** @rva 0x76C820  public int get_hp() { } */
     get_hp(): int { return this._hp; /* auto-property */ }
-    /** @rva 0x8A8240  public void set_hp(int value) { } */
+    /** @rva 0x8AB240  public void set_hp(int value) { } */
     set_hp(value: int): void { this._hp = value; /* auto-property */ }
-    /** @rva 0x7FF800  public int get_ep() { } */
+    /** @rva 0x802800  public int get_ep() { } */
     get_ep(): int { return this._ep; /* auto-property */ }
-    /** @rva 0x7FF820  public void set_ep(int value) { } */
+    /** @rva 0x802820  public void set_ep(int value) { } */
     set_ep(value: int): void { this._ep = value; /* auto-property */ }
-    /** @rva 0x764D70  public int get_bp() { } */
+    /** @rva 0x767D70  public int get_bp() { } */
     get_bp(): int { return this._bp; /* auto-property */ }
-    /** @rva 0x8A8230  public void set_bp(int value) { } */
+    /** @rva 0x8AB230  public void set_bp(int value) { } */
     set_bp(value: int): void { this._bp = value; /* auto-property */ }
-    /** @rva 0x760830  public int get_breakPoint() { } */
+    /** @rva 0x763830  public int get_breakPoint() { } */
     get_breakPoint(): int { return this._breakPoint; /* auto-property */ }
-    /** @rva 0x760840  public void set_breakPoint(int value) { } */
+    /** @rva 0x763840  public void set_breakPoint(int value) { } */
     set_breakPoint(value: int): void { this._breakPoint = value; /* auto-property */ }
-    /** @rva 0x7697A0  public int get_breakedDamageReceiveRate() { } */
+    /** @rva 0x76C7A0  public int get_breakedDamageReceiveRate() { } */
     get_breakedDamageReceiveRate(): int { return this._breakedDamageReceiveRate; /* auto-property */ }
-    /** @rva 0x8A8250  public void set_breakedDamageReceiveRate(int value) { } */
+    /** @rva 0x8AB250  public void set_breakedDamageReceiveRate(int value) { } */
     set_breakedDamageReceiveRate(value: int): void { this._breakedDamageReceiveRate = value; /* auto-property */ }
-    /** @rva 0x971B10  public void set_maxOverBreakBonusValue(float value) { } */
+    /** @rva 0x9A7200  public void set_maxOverBreakBonusValue(float value) { } */
     set_maxOverBreakBonusValue(value: float): void { this._maxOverBreakBonusValue = value; /* auto-property */ }
-    /** @rva 0x971AA0  public float get_maxOverBreakBonusValue() { } */
+    /** @rva 0x9A7190  public float get_maxOverBreakBonusValue() { } */
     get_maxOverBreakBonusValue(): float { return this._maxOverBreakBonusValue; /* auto-property */ }
-    /** @rva 0xA10AC0  public void set_overBreakBonusValue(float value) { } */
+    /** @rva 0xA463B0  public void set_overBreakBonusValue(float value) { } */
     set_overBreakBonusValue(value: float): void { this._overBreakBonusValue = value; /* auto-property */ }
-    /** @rva 0xA10A80  public float get_overBreakBonusValue() { } */
+    /** @rva 0xA46370  public float get_overBreakBonusValue() { } */
     get_overBreakBonusValue(): float { return this._overBreakBonusValue; /* auto-property */ }
-    /** @rva 0x764D50  public int get_currentHpGaugeCount() { } */
+    /** @rva 0x767D50  public int get_currentHpGaugeCount() { } */
     get_currentHpGaugeCount(): int { return this._currentHpGaugeCount; /* auto-property */ }
-    /** @rva 0x8A82A0  public void set_currentHpGaugeCount(int value) { } */
+    /** @rva 0x8AB2A0  public void set_currentHpGaugeCount(int value) { } */
     set_currentHpGaugeCount(value: int): void { this._currentHpGaugeCount = value; /* auto-property */ }
-    /** @rva 0x764DA0  public int get_chargePoint() { } */
+    /** @rva 0x767DA0  public int get_chargePoint() { } */
     get_chargePoint(): int { return this._chargePoint; /* auto-property */ }
-    /** @rva 0x8A82B0  public void set_chargePoint(int value) { } */
+    /** @rva 0x8AB2B0  public void set_chargePoint(int value) { } */
     set_chargePoint(value: int): void { this._chargePoint = value; /* auto-property */ }
-    /** @rva 0x8F9EF0  public int get_maxChargePoint() { } */
+    /** @rva 0x8FCEF0  public int get_maxChargePoint() { } */
     get_maxChargePoint(): int { return this._maxChargePoint; /* auto-property */ }
-    /** @rva 0x907840  public void set_maxChargePoint(int value) { } */
+    /** @rva 0x90A840  public void set_maxChargePoint(int value) { } */
     set_maxChargePoint(value: int): void { this._maxChargePoint = value; /* auto-property */ }
-    /** @rva 0x73C8E0  public StateIconData[] get_stateIcons() { } */
+    /** @rva 0x73F8E0  public StateIconData[] get_stateIcons() { } */
     get_stateIcons(): StateIconData[] { return this._stateIcons; /* auto-property */ }
-    /** @rva 0x73CF20  public void set_stateIcons(StateIconData[] value) { } */
+    /** @rva 0x73FF20  public void set_stateIcons(StateIconData[] value) { } */
     set_stateIcons(value: StateIconData[]): void { this._stateIcons = value; /* auto-property */ }
-    /** @rva 0x73C8F0  public string[] get_visualEffectNames() { } */
+    /** @rva 0x73F8F0  public string[] get_visualEffectNames() { } */
     get_visualEffectNames(): string[] { return this._visualEffectNames; /* auto-property */ }
-    /** @rva 0x73CA00  public void set_visualEffectNames(string[] value) { } */
+    /** @rva 0x73FA00  public void set_visualEffectNames(string[] value) { } */
     set_visualEffectNames(value: string[]): void { this._visualEffectNames = value; /* auto-property */ }
-    /** @rva 0x73C910  public string get_visualShaderName() { } */
+    /** @rva 0x73F910  public string get_visualShaderName() { } */
     get_visualShaderName(): string { return this._visualShaderName; /* auto-property */ }
-    /** @rva 0x73CA20  public void set_visualShaderName(string value) { } */
+    /** @rva 0x73FA20  public void set_visualShaderName(string value) { } */
     set_visualShaderName(value: string): void { this._visualShaderName = value; /* auto-property */ }
-    /** @rva 0x800AD0  public bool get_canNotAction() { } */
+    /** @rva 0x803AD0  public bool get_canNotAction() { } */
     get_canNotAction(): boolean { return this._canNotAction; /* auto-property */ }
-    /** @rva 0x800CD0  public void set_canNotAction(bool value) { } */
+    /** @rva 0x803CD0  public void set_canNotAction(bool value) { } */
     set_canNotAction(value: boolean): void { this._canNotAction = value; /* auto-property */ }
-    /** @rva 0x800AF0  public bool get_canNotUseSkill() { } */
+    /** @rva 0x803AF0  public bool get_canNotUseSkill() { } */
     get_canNotUseSkill(): boolean { return this._canNotUseSkill; /* auto-property */ }
-    /** @rva 0x908130  public void set_canNotUseSkill(bool value) { } */
+    /** @rva 0x90B0B0  public void set_canNotUseSkill(bool value) { } */
     set_canNotUseSkill(value: boolean): void { this._canNotUseSkill = value; /* auto-property */ }
-    /** @rva 0xD28750  public bool get_canNotUseSpecialAttack() { } */
+    /** @rva 0xBA3A00  public bool get_canNotUseSpecialAttack() { } */
     get_canNotUseSpecialAttack(): boolean { return this._canNotUseSpecialAttack; /* auto-property */ }
-    /** @rva 0xD28800  public void set_canNotUseSpecialAttack(bool value) { } */
+    /** @rva 0xBA3A90  public void set_canNotUseSpecialAttack(bool value) { } */
     set_canNotUseSpecialAttack(value: boolean): void { this._canNotUseSpecialAttack = value; /* auto-property */ }
-    /** @rva 0xD28740  public bool get_isAbnormalState() { } */
+    /** @rva 0xBA3A10  public bool get_isAbnormalState() { } */
     get_isAbnormalState(): boolean { return this._isAbnormalState; /* auto-property */ }
-    /** @rva 0xD287F0  public void set_isAbnormalState(bool value) { } */
+    /** @rva 0xBA3AA0  public void set_isAbnormalState(bool value) { } */
     set_isAbnormalState(value: boolean): void { this._isAbnormalState = value; /* auto-property */ }
-    /** @rva 0x75A4F0  public int get_barrierEndurance() { } */
+    /** @rva 0x75D4F0  public int get_barrierEndurance() { } */
     get_barrierEndurance(): int { return this._barrierEndurance; /* auto-property */ }
-    /** @rva 0x75A7A0  public void set_barrierEndurance(int value) { } */
+    /** @rva 0x75D7A0  public void set_barrierEndurance(int value) { } */
     set_barrierEndurance(value: int): void { this._barrierEndurance = value; /* auto-property */ }
-    /** @rva 0x8A8200  public int get_maxBarrierEndurance() { } */
+    /** @rva 0x8AB200  public int get_maxBarrierEndurance() { } */
     get_maxBarrierEndurance(): int { return this._maxBarrierEndurance; /* auto-property */ }
-    /** @rva 0x8A82D0  public void set_maxBarrierEndurance(int value) { } */
+    /** @rva 0x8AB2D0  public void set_maxBarrierEndurance(int value) { } */
     set_maxBarrierEndurance(value: int): void { this._maxBarrierEndurance = value; /* auto-property */ }
-    /** @rva 0x8A8220  public int get_countPoint() { } */
+    /** @rva 0x8AB220  public int get_countPoint() { } */
     get_countPoint(): int { return this._countPoint; /* auto-property */ }
-    /** @rva 0x8A82F0  public void set_countPoint(int value) { } */
+    /** @rva 0x8AB2F0  public void set_countPoint(int value) { } */
     set_countPoint(value: int): void { this._countPoint = value; /* auto-property */ }
-    /** @rva 0x907790  public int get_maxCountPoint() { } */
+    /** @rva 0x90A790  public int get_maxCountPoint() { } */
     get_maxCountPoint(): int { return this._maxCountPoint; /* auto-property */ }
-    /** @rva 0x9077F0  public void set_maxCountPoint(int value) { } */
+    /** @rva 0x90A7F0  public void set_maxCountPoint(int value) { } */
     set_maxCountPoint(value: int): void { this._maxCountPoint = value; /* auto-property */ }
-    /** @rva 0x85D0F0  public int get_zoneStack() { } */
+    /** @rva 0x8600F0  public int get_zoneStack() { } */
     get_zoneStack(): int { return this._zoneStack; /* auto-property */ }
-    /** @rva 0x907800  public void set_zoneStack(int value) { } */
+    /** @rva 0x90A800  public void set_zoneStack(int value) { } */
     set_zoneStack(value: int): void { this._zoneStack = value; /* auto-property */ }
-    /** @rva 0x8F0C70  public int get_maxZoneStack() { } */
+    /** @rva 0x8F3C70  public int get_maxZoneStack() { } */
     get_maxZoneStack(): int { return this._maxZoneStack; /* auto-property */ }
-    /** @rva 0x907820  public void set_maxZoneStack(int value) { } */
+    /** @rva 0x90A820  public void set_maxZoneStack(int value) { } */
     set_maxZoneStack(value: int): void { this._maxZoneStack = value; /* auto-property */ }
-    /** @rva 0x8E76A0  public int get_zoneEffectId() { } */
+    /** @rva 0x8EA6A0  public int get_zoneEffectId() { } */
     get_zoneEffectId(): int { return this._zoneEffectId; /* auto-property */ }
-    /** @rva 0x87E2F0  public void set_zoneEffectId(int value) { } */
+    /** @rva 0x8812F0  public void set_zoneEffectId(int value) { } */
     set_zoneEffectId(value: int): void { this._zoneEffectId = value; /* auto-property */ }
-    /** @rva 0x73DC60  public BattleUnitSituationData.UniqueLvStateIconData[] get_uniqueLvStateIconDataArray() { } */
+    /** @rva 0x740C60  public BattleUnitSituationData.UniqueLvStateIconData[] get_uniqueLvStateIconDataArray() { } */
     get_uniqueLvStateIconDataArray(): BattleUnitSituationData_UniqueLvStateIconData[] { return this._uniqueLvStateIconDataArray; /* auto-property */ }
-    /** @rva 0x73DE10  public void set_uniqueLvStateIconDataArray(BattleUnitSituationData.UniqueLvStateIconData[] value) { } */
+    /** @rva 0x740E10  public void set_uniqueLvStateIconDataArray(BattleUnitSituationData.UniqueLvStateIconData[] value) { } */
     set_uniqueLvStateIconDataArray(value: BattleUnitSituationData_UniqueLvStateIconData[]): void { this._uniqueLvStateIconDataArray = value; /* auto-property */ }
-    /** @rva 0x7365E0  public void .ctor() { } */
+    /** @rva 0x7395E0  public void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
 }
 
@@ -255,30 +255,30 @@ export class BattleUnitSituationData_UniqueLvStateIconData {
     set TargetElement(v: TargetElementType) { this.set_TargetElement(v); }
     set Kind(v: UniqueLvStateKind) { this.set_Kind(v); }
     get Kind(): UniqueLvStateKind { return this.get_Kind(); }
-    /** @rva 0x73C4F0  public int get_Lv() { } */
+    /** @rva 0x73F4F0  public int get_Lv() { } */
     get_Lv(): int { return this._Lv; /* auto-property */ }
-    /** @rva 0x73FD00  public void set_Lv(int value) { } */
+    /** @rva 0x742D00  public void set_Lv(int value) { } */
     set_Lv(value: int): void { this._Lv = value; /* auto-property */ }
-    /** @rva 0x809350  public int get_HitCounter() { } */
+    /** @rva 0x80C350  public int get_HitCounter() { } */
     get_HitCounter(): int { return this._HitCounter; /* auto-property */ }
-    /** @rva 0x809540  public void set_HitCounter(int value) { } */
+    /** @rva 0x80C540  public void set_HitCounter(int value) { } */
     set_HitCounter(value: int): void { this._HitCounter = value; /* auto-property */ }
-    /** @rva 0x769820  public int get_RequiredCount() { } */
+    /** @rva 0x76C820  public int get_RequiredCount() { } */
     get_RequiredCount(): int { return this._RequiredCount; /* auto-property */ }
-    /** @rva 0x8A8240  public void set_RequiredCount(int value) { } */
+    /** @rva 0x8AB240  public void set_RequiredCount(int value) { } */
     set_RequiredCount(value: int): void { this._RequiredCount = value; /* auto-property */ }
-    /** @rva 0x7FF800  public int get_UniqueStatePatternMstId() { } */
+    /** @rva 0x802800  public int get_UniqueStatePatternMstId() { } */
     get_UniqueStatePatternMstId(): int { return this._UniqueStatePatternMstId; /* auto-property */ }
-    /** @rva 0x7FF820  public void set_UniqueStatePatternMstId(int value) { } */
+    /** @rva 0x802820  public void set_UniqueStatePatternMstId(int value) { } */
     set_UniqueStatePatternMstId(value: int): void { this._UniqueStatePatternMstId = value; /* auto-property */ }
-    /** @rva 0x764D70  public TargetElementType get_TargetElement() { } */
+    /** @rva 0x767D70  public TargetElementType get_TargetElement() { } */
     get_TargetElement(): TargetElementType { return this._TargetElement; /* auto-property */ }
-    /** @rva 0x8A8230  public void set_TargetElement(TargetElementType value) { } */
+    /** @rva 0x8AB230  public void set_TargetElement(TargetElementType value) { } */
     set_TargetElement(value: TargetElementType): void { this._TargetElement = value; /* auto-property */ }
-    /** @rva 0x760840  public void set_Kind(UniqueLvStateKind value) { } */
+    /** @rva 0x763840  public void set_Kind(UniqueLvStateKind value) { } */
     set_Kind(value: UniqueLvStateKind): void { this._Kind = value; /* auto-property */ }
-    /** @rva 0x760830  public UniqueLvStateKind get_Kind() { } */
+    /** @rva 0x763830  public UniqueLvStateKind get_Kind() { } */
     get_Kind(): UniqueLvStateKind { return this._Kind; /* auto-property */ }
-    /** @rva 0x7365E0  public void .ctor() { } */
+    /** @rva 0x7395E0  public void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
 }
