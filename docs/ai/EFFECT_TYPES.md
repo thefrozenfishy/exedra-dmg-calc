@@ -1,6 +1,6 @@
 # Effect types: data usage vs engine coverage (GENERATED - do not edit)
 
-Built from `main @ b36b2b11 2026-11-14` + uncommitted src/models changes. Regenerate after switching branches or changing the engine: `python3 scripts/ai/xq.py build`. Details for one type: `python3 scripts/ai/xq.py effect <TYPE>`.
+Built from `main @ c6303d06 2026-11-27`. Regenerate after switching branches or changing the engine: `python3 scripts/ai/xq.py build`. Details for one type: `python3 scripts/ai/xq.py effect <TYPE>`.
 
 - **kiokus** = collectable kiokus (getStyleMstList) whose kit uses it (all levels, id*100+lvl keys, follow-ups followed).
 - **stages** = quest stages whose enemies use it (skill sets + enemy passives).
@@ -177,7 +177,7 @@ Built from `main @ b36b2b11 2026-11-14` + uncommitted src/models changes. Regene
 | LOSE_BP_FIXED | LoseBpFixedAbilityEffect | 0 | 0 | - |  |  |
 | LOSE_EP_FIXED | LoseEpFixedAbilityEffect | 0 | 11 | **MISSING** |  |  |
 | LOSE_EP_RATIO | LoseEpRatioAbilityEffect | 0 | 454 | **MISSING** |  |  |
-| OVER_BREAK_DAMAGE_RECEIVE_RATE_DRIVE | OverBreakDamageReceiveRateDriveUnitState | 1 | 0 | yes | effectText.ts | Overdrive Impulse |
+| OVER_BREAK_DAMAGE_RECEIVE_RATE_DRIVE | OverBreakDamageReceiveRateDriveUnitState | 1 | 0 | yes | KiokuArchetypes.ts, KitLimits.ts, effectText.ts | Overdrive Impulse |
 | POISON_ATK | PoisonAtkUnitState | 2 | 201 | **LISTED ONLY** |  | Atomo Arrabbiato, My Creations |
 | POISON_BREAK |  | 0 | 0 | - |  |  |
 | POISON_DEF | PoisonDefUnitState | 0 | 1 | **LISTED ONLY** |  |  |
@@ -203,7 +203,7 @@ Built from `main @ b36b2b11 2026-11-14` + uncommitted src/models changes. Regene
 | STEP_UP_SKILL | StepUpSkillUnitState | 1 | 0 | yes | KiokuArchetypes.ts | Venusta Dissonanza |
 | STUN | StunUnitState | 1 | 403 | yes | EffectSide.ts | Ultra Great Big Hammer |
 | SUMMON | SummonAbilityEffect | 0 | 412 | yes | PvE.ts |  |
-| SWITCH_SKILL | SwitchSkillUnitState | 10 | 0 | yes | KiokuArchetypes.ts | Absolute Venus, Falsified Phenomena, Final Fatebloom |
+| SWITCH_SKILL | SwitchSkillUnitState | 10 | 0 | yes | KiokuArchetypes.ts, effectText.ts | Absolute Venus, Falsified Phenomena, Final Fatebloom |
 | TRIG_COUNTER_ATTACK |  | 0 | 0 | - |  |  |
 | TSUBAME_CORE | TsubameCoreUnitState | 1 | 0 | yes | effectText.ts | Luce della Speranza |
 | TSUBAME_LINK | TsubameLinkUnitState | 1 | 0 | yes | KiokuArchetypes.ts, effectText.ts | Luce della Speranza |
@@ -276,7 +276,7 @@ Built from `main @ b36b2b11 2026-11-14` + uncommitted src/models changes. Regene
 | UP_NMATK_RATIO |  | 0 | 0 | - |  |  |
 | UP_NMDEF_FIXED |  | 0 | 0 | - |  |  |
 | UP_NMDEF_RATIO |  | 0 | 0 | - |  |  |
-| UP_RCV_BREAK_POINT_DMG_RATIO | UpRcvBreakPointDmgRatioUnitState | 4 | 0 | yes | EffectSide.ts, effectText.ts | Atomo Arrabbiato, La Danse Macabre, Melodia Appassionata |
+| UP_RCV_BREAK_POINT_DMG_RATIO | UpRcvBreakPointDmgRatioUnitState | 4 | 0 | yes | EffectSide.ts, KiokuArchetypes.ts, effectText.ts | Atomo Arrabbiato, La Danse Macabre, Melodia Appassionata |
 | UP_RCV_CTD_RATIO | UpRcvCtdRatioUnitState | 1 | 0 | **MISSING** |  | Pumpkin Death Squall |
 | UP_RCV_CTR_RATIO | UpRcvCtrRatioUnitState | 8 | 0 | yes | effectText.ts | Assault Paranoia, Atomo Arrabbiato, Final Fatebloom |
 | UP_RCV_DMG_FIXED |  | 0 | 0 | - |  |  |
@@ -296,7 +296,7 @@ Built from `main @ b36b2b11 2026-11-14` + uncommitted src/models changes. Regene
 | UP_WEAK_ELEMENT_DMG_ACCUM_RATIO | UpWeakElementDmgAccumRatioUnitState | 1 | 0 | yes | effectText.ts | Evoluzione Presente |
 | UP_WEAK_ELEMENT_DMG_CONSUME_RATIO | UpWeakElementDmgConsumeRatioUnitState | 0 | 0 | - |  |  |
 | UP_WEAK_ELEMENT_DMG_RATIO | UpWeakElementDmgRatioUnitState | 35 | 0 | yes | EffectSide.ts, effectText.ts | A Tale of Cherry Blossoms, Aqua Tempest, Buon Natale Grazioso |
-| VORTEX_ATK | VortexAtkUnitState | 1 | 0 | yes | EffectSide.ts, EngineBestTeam.ts, effectText.ts | Melodia Appassionata |
+| VORTEX_ATK | VortexAtkUnitState | 1 | 0 | yes | EffectSide.ts, EngineBestTeam.ts, LuxBench.ts, effectText.ts | Melodia Appassionata |
 | WEAKNESS | WeaknessUnitState | 2 | 515 | yes | EffectSide.ts, KitLimits.ts, effectText.ts | Nine Phases, Sacred Gift |
 | ZONE_EXPAND | ZoneExpandAbilityEffect | 5 | 0 | **LISTED ONLY** |  | Evoluzione Presente, Falsified Phenomena, Floral Ironspike |
 | ZONE_RELEASE | ZoneReleaseAbilityEffect | 0 | 0 | - |  |  |

@@ -1,0 +1,126 @@
+<title>Exedra 3.25.0 Dispatch</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: single reading column like the earlier dispatches; plum accent this time (a menus-and-events patch), green for "live", amber for "not active yet". */
+:root {
+  --bg: #f7f5f8; --surface: #ffffff; --fg: #1d1a20; --muted: #615a68; --line: #e3dde8;
+  --accent: #7a3d82; --accent-soft: #f1e4f3; --ok: #2f7d55; --ok-soft: #e1f2e8; --warn: #9a5b06; --warn-soft: #fbefd9;
+  --display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #151218; --surface: #1e1a22; --fg: #ece6f0; --muted: #ab9fb4; --line: #342d3b;
+  --accent: #d9a0e0; --accent-soft: #35243a; --ok: #6fcf9b; --ok-soft: #1c3127; --warn: #f0b45c; --warn-soft: #3a2c16; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #151218; --surface: #1e1a22; --fg: #ece6f0; --muted: #ab9fb4; --line: #342d3b;
+  --accent: #d9a0e0; --accent-soft: #35243a; --ok: #6fcf9b; --ok-soft: #1c3127; --warn: #f0b45c; --warn-soft: #3a2c16; color-scheme: dark }
+body { background: var(--bg); color: var(--fg); font: 15px/1.6 var(--body); }
+.wrap { max-width: 720px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 40px 72px; display: flex; flex-direction: column; gap: 36px; }
+h1, h2, h3 { font-family: var(--display); text-wrap: balance; margin: 0; line-height: 1.15; }
+h1 { font-size: clamp(30px, 6vw, 44px); font-weight: 700; letter-spacing: -0.01em; }
+h2 { font-size: 24px; font-weight: 700; }
+h3 { font-size: 18px; font-weight: 700; }
+p { margin: 0; }
+section { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+.eyebrow { font: 500 12px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--accent); }
+.lede { font-size: 17px; color: var(--muted); max-width: 62ch; }
+.tldr { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 16px 18px; display: flex; flex-direction: column; gap: 8px; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 18px 20px; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.head { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: baseline; }
+.chip { font: 500 12px var(--mono); background: var(--accent-soft); color: var(--accent); border-radius: 4px; padding: 1px 7px; white-space: nowrap; }
+.chip.live { background: var(--ok-soft); color: var(--ok); }
+.chip.soon { background: var(--warn-soft); color: var(--warn); }
+.tip { border-left: 3px solid var(--accent); padding: 2px 0 2px 12px; color: var(--muted); font-size: 14px; }
+ul { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 6px; }
+.item { border-top: 1px solid var(--line); padding-top: 12px; display: flex; flex-direction: column; gap: 4px; }
+footer { color: var(--muted); font-size: 13px; border-top: 1px solid var(--line); padding-top: 16px; }
+</style>
+
+<div class="wrap">
+  <header style="display:flex;flex-direction:column;gap:14px">
+    <div class="eyebrow">Madoka Exedra · patch notes from the files · 27 Nov 2026</div>
+    <h1>Version 3.25.0: scratch cards, a new shop and Kioku ticket exchange</h1>
+    <p class="lede">3.25.0 is a menus-and-events patch. Combat rules are exactly the same as in 3.24.0. The new client brings a scratch-card event, a rebuilt shop, a ticket exchange for home-screen cosmetics, bonus picks on wish-list banners and a new filter system. Several of these wait for a start time set by the server.</p>
+  </header>
+
+  <div class="tldr">
+    <h3>In short</h3>
+    <ul>
+      <li><b>Battles</b>: no rule changes. Damage, buffs, conditions and auto-battle work as in 3.24.0.</li>
+      <li><b>Scratch cards</b>: a new event type with cards to scratch, line rewards and missions.</li>
+      <li><b>Shop</b>: new tabs for recommended items, sales, Magia Stones and subscriptions.</li>
+      <li><b>Kioku tickets</b>: exchange them for home backgrounds, music and character models.</li>
+      <li><b>Summons</b>: pick a bonus Kioku on wish-list banners.</li>
+      <li><b>Story</b>: the client is ready for a Kazumi Magica story, with Normal, Hard and Nightmare unlocks.</li>
+    </ul>
+  </div>
+
+  <section id="scratch">
+    <div class="eyebrow">New event type</div>
+    <div class="card">
+      <div class="head"><h2>Scratch cards</h2><span class="chip soon">not active yet</span></div>
+      <ul>
+        <li>You get cards made of cells. Scratch one cell at a time, or use <b>Scratch all</b> to open every cell on the card at once.</li>
+        <li>Cells line up like a bingo card. The card shows when you are one cell away from a line ("reach") and when a line is complete, and lines give rewards.</li>
+        <li>Some cards are random. The screen counts how many cards you have left to open.</li>
+        <li>The event has its own missions and exchange tickets. A badge on the home screen shows when you can scratch.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="shop">
+    <div class="eyebrow">Menus</div>
+    <div class="card">
+      <div class="head"><h2>New shop</h2><span class="chip soon">from a set date</span></div>
+      <p>The shop gets a new layout with the tabs <b>Recommended</b>, <b>Sale</b>, <b>Magia Stones</b> and <b>Subscriptions</b>. It switches over at a release time set by the server, so the old shop stays until then.</p>
+      <ul>
+        <li>Subscriptions list their bonuses, such as monthly mission rewards and higher drop counts, with what each bonus applies to.</li>
+        <li>Sold-out items stay in the list and are marked as sold out.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="tickets">
+    <div class="eyebrow">Exchange</div>
+    <div class="card">
+      <div class="head"><h2>Kioku ticket exchange</h2></div>
+      <p>Kioku tickets get their own exchange screen. Its tabs are <b>2D backgrounds</b>, <b>3D backgrounds</b>, <b>Music</b>, <b>Models</b>, <b>Limited</b> and <b>Other</b>. You can play a music track before you exchange for it, and each tab has filters.</p>
+    </div>
+  </section>
+
+  <section id="wishlist">
+    <div class="eyebrow">Summons</div>
+    <div class="card">
+      <div class="head"><h2>Bonus Kioku on wish-list banners</h2></div>
+      <p>Wish-list banners can come with a bonus Kioku that you choose yourself. Depending on the banner, you confirm the pick for free or pay with summon tickets, Magia Stones or paid Magia Stones. You can change or cancel the pick later, and some banners offer it only until you get the pick-up.</p>
+    </div>
+  </section>
+
+  <section id="filters">
+    <div class="eyebrow">Quality of life</div>
+    <div class="card">
+      <div class="head"><h2>New filters everywhere</h2></div>
+      <p>The sort and filter pop-ups were rebuilt. You can now filter by series and team (Magia Record teams included), role, element, rarity, enemy type and unlock status. The game saves your choices per list: Kioku, portraits, rental and support Kioku, Crisis, the gallery and the home-screen settings. Link Raid help requests are filtered by category now.</p>
+    </div>
+  </section>
+
+  <section id="more">
+    <div class="eyebrow">Also in 3.25.0</div>
+    <div class="item"><h3>Story</h3><p>The client is ready for a <b>Kazumi Magica</b> story map, with Normal, Hard and Nightmare unlocks and its own release time, plus a new series with its own release time.</p></div>
+    <div class="item"><h3>Step-Up skills</h3><p>The skill button follows the current Step-Up level and the SP it will cost, also during auto battle. Switched skill buttons go back to normal when their turn is over.</p></div>
+    <div class="item"><h3>Crisis</h3><p>The boss info on the Crisis stage screen has a countdown timer.</p></div>
+    <div class="item"><h3>Score Attack</h3><p>Story-event Score Attacks follow a schedule and show a "not started yet" message before they open.</p></div>
+    <div class="item"><h3>Phones</h3><p>Taps can give vibration feedback, and the game handles split-screen mode.</p></div>
+  </section>
+
+  <section id="calc">
+    <div class="eyebrow">exedra-dmg-calc</div>
+    <h2>Simulator status</h2>
+    <p>The simulator now runs on version 3.25.0. The battle code did not change, so every result stays the same as on 3.24.0. New kioku and events from the next data download will be added once it arrives.</p>
+  </section>
+
+  <footer>Read from the 3.25.0 game files on 27 Nov 2026. The game data for this version had not been downloaded yet.</footer>
+</div>

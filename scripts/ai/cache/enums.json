@@ -618,6 +618,10 @@
 "1": "Temporary",
 "2": "Permanent"
 },
+"CardStatus": {
+"1": "Opened",
+"2": "Completed"
+},
 "ConsumeType": {
 "1": "FreePlay",
 "2": "Gem"
@@ -990,6 +994,14 @@
 "234": "StyleRentalExplanation",
 "235": "SoloRaidPracticeRemoved",
 "236": "MultiRaidAddExMode",
+"237": "StoryKazumiUnlock",
+"238": "StoryKazumiUnlockEffected",
+"239": "StoryKazumiHardUnlock",
+"240": "StoryKazumiHardUnlockEffected",
+"241": "StoryKazumiNightmareUnlock",
+"242": "StoryKazumiNightmareUnlockEffected",
+"243": "KazumiNormalUnLocked",
+"244": "KazumiNormalUnLockedEffected",
 "300": "FinishTutorialWallBannerEffected",
 "301": "NamaeStoryEpisode02Unlocked",
 "302": "NamaeStoryEpisode02UnlockedEffected",
@@ -1020,6 +1032,8 @@
 "327": "NamaeStoryEpisode14UnlockedEffected",
 "328": "NamaeStoryEpisode15Unlocked",
 "329": "NamaeStoryEpisode15UnlockedEffected",
+"330": "NamaeStoryEpisode16Unlocked",
+"331": "NamaeStoryEpisode16UnlockedEffected",
 "353": "AlternativeStoryUnlock",
 "354": "AlternativeStoryUnlockEffected",
 "355": "StoryEventArchiveUnlock202604",
@@ -1042,6 +1056,8 @@
 "417": "LoginCheckForStorySoranaUnlock",
 "418": "LoginCheckForSoranaNormalUnLocked",
 "419": "LoginCheckForSoranaNormalPart2UnLocked",
+"420": "LoginCheckForStoryKazumiUnlock",
+"421": "LoginCheckForKazumiNormalUnLocked",
 "490": "ConvertDollhouseCollectionCreatedTime",
 "491": "ConvertMainStoryTutorialUnlock",
 "492": "CharacterHeartObjectRewardChanges",

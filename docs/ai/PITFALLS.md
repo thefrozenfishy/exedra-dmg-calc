@@ -396,3 +396,5 @@
 - Ailment states on the enemies in Max Damage (`enemyStates` -> giveAilmentStates) carry their own effect (Weakness =
   ATK / DEF -10%) next to the team's own state of that ailment: on real stages use `landableAilments` (only what the
   team inflicts, no generic state), never the stage's "can land" list as enemyStates (counted Weakness for free, 2026-11-16).
+- Since 3.25.0 `baselib.dll` is not Crackproof-protected: Senbei exits 1 ("not a Crackproof-protected file"). unpack_version.sh
+  copies the plain file as `baselib.unpack.dll`, so `verdiff bin` shows its size change as CODE CHANGED once (3.24.0 -> 3.25.0).

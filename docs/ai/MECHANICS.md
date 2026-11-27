@@ -7,6 +7,8 @@
 3.19.1 (2026-09-27) has byte-identical GameAssembly code: every RVA here is valid for both (docs/versions/3.19.1).
 3.22.0 (2026-10-29): battle logic identical to 3.21.0, only the layout moved; src/engine @rva tags are 3.22.0
 (`ledger.py --apply-moves`). RVAs quoted below stay those of the version they name (docs/versions/3.22.0).
+3.25.0 (2026-11-27): battle logic identical to 3.24.0 again (12 "changed" ReDriveBattleCore methods, all the same code
+under `decdiff --ignore-offsets --loose`); src/engine @rva tags are 3.25.0 (docs/versions/3.25.0).
 
 Every line is from the decompile unless tagged. **[C]** confirmed in code, **[D]** from master data,
 **[G]** confirmed by an in-game fixture, **[?]** inferred/unverified. RVAs are for 3.19.0 (`xq rva`, `xq fn`).
