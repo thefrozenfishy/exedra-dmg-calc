@@ -12,6 +12,10 @@
 - Condition csv = OR of sets. The engine once ANDed them everywhere.
 - Enemy `criticalRate`/`criticalDamageRate` are per-mille: 100 = +10 %, not +100 %.
 - `kiokuData` is a dict keyed by name, not a list. It is built from the Mst tables in `utils/helpers.ts`; `kioku_data.json` only has `obtain`/`permaDate`/`heartphial` (don't read stats or kit ids from it). When syncing base_data, copy getStyle*/getCharacterMstList too, or new kiokus get no level-cap stats.
+- **Link Raid / Crisis levels are not in QuestStageMst.** Every Link Raid and Crisis `QuestStageMst.difficulty` is 1;
+  the level is `MultiRaidStageMst.difficulty` (1-20, EX = `multiRaidConfig.exModeDifficulty` 21) / `SoloRaidStageMst
+  .difficulty`. Reading the QuestStage one gave every Link Raid level the Lvl. 1-12 quest buff (2026-11-27). Season-wide
+  data that is really per stage (the EX bonus) must be scoped by that difficulty too.
 - Condition SET ids (the csv in detail rows, `xq cond 1671`) and CONDITION ids (the `[cond 966]` rows inside a set,
   `xq cond c966`) are different id spaces.
 

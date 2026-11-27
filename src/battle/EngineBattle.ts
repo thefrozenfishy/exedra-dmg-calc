@@ -190,7 +190,8 @@ export class EngineBattle {
      *  PassiveSkillInfo lists. Each passive's own role / element condition is still the engine's
      *  (BattleUnit.GetPassiveSkills 0x1395AB0).
      *  - Link Raid: the season's battle bonus passives on every ally (source Bonus 5), and the EX character bonus
-     *    passive on the allies whose character is in the run's EX list (source Bonus 5). [UNCERTAIN: server side]
+     *    passive on the allies whose character is in the run's EX list (source Bonus 5), on the EX stage only
+     *    (multiRaidInfo: MultiRaidStageMst.difficulty == exModeDifficulty 21). [UNCERTAIN: server side]
      *  - Solo Raid: the same list SoloRaidBuffReferee.AddSoloRaidBuffToUnit gives the enemies: common 8 (Vanguard base
      *    points), season 6 (execution phase, Vanguard activation phase, charge), party 7 (buff, charge). */
     static stagePassives(setup: EngineBattleSetup): { passiveSkillMstId: number, source: number }[][] {
